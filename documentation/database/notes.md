@@ -44,6 +44,7 @@ _(requests off will not allow requests for partial days)_
 | int     | startTime |
 | int     | stopTime  |
 | set     | weekdays  |
+| string  | location _(front, kitchen, janitor)_ |
 | string  | color     |
 
 | availability _(employee-shift)_| |
