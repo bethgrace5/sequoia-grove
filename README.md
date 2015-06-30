@@ -26,8 +26,8 @@ Schedule of Implememtation
 Possible Application Expansion
 --
 * Catering
-  * track orders in program: enter orders, view previous orders, organize by day/time/customer, verify delivery schedule, type specific notes or requests
-  * print categorized checklists: total order construction, sandwiches only, bakerly only, customer pickup or delivery schedule
+  * track orders in program: enter orders, view previous orders, organize by day/time/customer, verify delivery schedule, type special notes or requests
+  * print categorized checklists: total order construction, sandwiches only, bakery only, customer pickup or delivery schedule
 * Supervisor Information Manual: maintain updated information including: important phone numbers, list of store accounts, what to do in given situations (example: hot water not working usually means restart pilot light), bulletin notes, 
 
 License
