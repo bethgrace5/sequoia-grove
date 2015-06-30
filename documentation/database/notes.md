@@ -12,29 +12,29 @@ notes on tables for database
 | string    | phoneNumber     |
 | boolean   | isTraining      |
 
-_(requests off will not allow requests for partial days_
 | requestsOff |                 |
 | :-----------|:----------------|
 | int         | id              | 
 | int         | requestedBy (employeeId) |
 | int         | grantedBy (employeeId)   |
 | date        | day              |
+(requests off will not allow requests for partial days)
 
 | role   |       |
 | :------|:------|
 | int    | id    |
 | string | role  |
 
+| position|              |     |
+| :-------|:-------------|:----|
+| int     | id           |     |
+| int     | employeeId   |     |
+| int     | roleId       |     |
+| date    | dateAcquired |     |
+| date    | dateRemoved  |     |
+| int     | rank         |(primary, secondary, etc.) |
+| int     | daysPerWeek  |(restrict number of days this employee works this position per week) |
 _(employee-role)_
-| position|              |
-| :-------|:-------------|
-| int     | id           |
-| int     | employeeId   |
-| int     | roleId       |
-| date    | dateAcquired |
-| date    | dateRemoved  |
-| int     | rank         |(primary, secondary, etc.)
-| int     | daysPerWeek  |(restrict number of days this employee works this position per week)
 
 | shift   |           |
 | :------ |:--------- |
@@ -43,28 +43,28 @@ _(employee-role)_
 | int     | startTime |
 | int     | stopTime  |
 
-_(employee-shift)_
 | availability|              |
 | :---------- |:------------ |
 | int         | employeeId   |
 | int         | shiftId      |
 | int         | daysPerWeek  |
 | int         | hoursPerWeek |
+_(employee-shift)_
 
-_(scheduled deliveries more than once per week are entered as separate entries per day)_
 | weeklyDeliveries |         |
 | :--------------- |:------- |
 | int              | id      |
 | string           | title   |
 | string           | weekday |
+_(scheduled deliveries more than once per week are entered as separate entries per day)_
 
-_(match employees to scheduled shifts) - TODO: research better ways to organize schedule_
 | scheduledShift |            |
 | :------------- |:---------- |
 | int            | id         |
 | int            | employeeId |
 | int            | shiftId    |
 | date           | day        |
+_(match employees to scheduled shifts) - TODO: research better ways to organize schedule_
 
 TODO:system login information?
 
