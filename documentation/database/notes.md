@@ -13,7 +13,7 @@ notes on tables for database
 | boolean   | isTraining      |
 
 _(requests off will not allow requests for partial days_
-| requestsOff |
+| requestsOff |                 |
 | :-----------|:----------------|
 | int         | id              | 
 | int         | requestedBy (employeeId) |
