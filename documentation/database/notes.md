@@ -42,8 +42,9 @@ _(requests off will not allow requests for partial days)_
 | int     | roleId    |
 | int     | startTime |
 | int     | stopTime  |
+| set     | weekdays  |
 
-| availability _(employee-shift)_|              |
+| availability _(employee-shift)_| |
 | :---------- |:------------ |
 | int         | employeeId   |
 | int         | shiftId      |
