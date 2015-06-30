@@ -18,14 +18,14 @@ notes on tables for database
 | int         | requestedBy (employeeId) |
 | int         | grantedBy (employeeId)   |
 | date        | day              |
-(requests off will not allow requests for partial days)
+_(requests off will not allow requests for partial days)_
 
 | role   |       |
 | :------|:------|
 | int    | id    |
 | string | role  |
 
-| position|              |     |
+| position _(employee-role)_|              |     |
 | :-------|:-------------|:----|
 | int     | id           |     |
 | int     | employeeId   |     |
@@ -34,7 +34,7 @@ notes on tables for database
 | date    | dateRemoved  |     |
 | int     | rank         |(primary, secondary, etc.) |
 | int     | daysPerWeek  |(restrict number of days this employee works this position per week) |
-_(employee-role)_
+
 
 | shift   |           |
 | :------ |:--------- |
@@ -43,13 +43,13 @@ _(employee-role)_
 | int     | startTime |
 | int     | stopTime  |
 
-| availability|              |
+| availability _(employee-shift)_|              |
 | :---------- |:------------ |
 | int         | employeeId   |
 | int         | shiftId      |
 | int         | daysPerWeek  |
 | int         | hoursPerWeek |
-_(employee-shift)_
+
 
 | weeklyDeliveries |         |
 | :--------------- |:------- |
