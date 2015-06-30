@@ -1,16 +1,16 @@
 notes on tables to refine for database
 
-| employee | |
-| :---------|:----------|
-| int | id |
-| string | firstname |
-| string | lastname |
-| date | dateEmployed |
-| date | dateUnemployed |
-| date | birthday |
-| int | maxHoursPerWeek |
-| string | phoneNumber |
-| boolean | isTraining |
+| employee  |
+| :---------|:----------------|
+| int       | id              |
+| string    | firstname       |
+| string    | lastname        |
+| date      | dateEmployed    |
+| date      | dateUnemployed  |
+| date      | birthday        |
+| int       | maxHoursPerWeek |
+| string    | phoneNumber     |
+| boolean   | isTraining      |
 
 * requestsOff 
 (requests off will not allow requests for partial days)
