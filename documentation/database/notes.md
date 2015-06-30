@@ -1,6 +1,6 @@
 notes on tables to refine for database
 
-| employee  |
+| employee  |                 |
 | :---------|:----------------|
 | int       | id              |
 | string    | firstname       |
