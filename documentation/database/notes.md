@@ -44,6 +44,7 @@ _(requests off will not allow requests for partial days)_
 | int     | startTime |
 | int     | stopTime  |
 | set     | weekdays  |
+| string  | color     |
 
 | availability _(employee-shift)_| |
 | :---------- |:------------ |
@@ -58,6 +59,7 @@ _(requests off will not allow requests for partial days)_
 | int              | id      |
 | string           | title   |
 | string           | weekday |
+| string           | color   |
 _(scheduled deliveries more than once per week are entered as separate entries per day)_
 
 | scheduledShift |            |
