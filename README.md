@@ -4,7 +4,7 @@ Senior Project required for bachelor's degree of computer science at California 
 
 Purpose
 --
-* Assist and automate creation of weekly schedules tailored to [Sequoia Sandwich Company](https://www.sequoiasandwich.com)
+* Assist and automate creation of weekly schedules tailored to [Sequoia Sandwich Company](www.sequoiasandwich.com/)
 
 Schedule of Implememtation
 --
