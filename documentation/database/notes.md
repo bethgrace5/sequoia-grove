@@ -6,12 +6,13 @@ notes on tables for database
 | string    | firstname       |
 | string    | lastname        |
 | date      | dateEmployed    |
-| date      | dateUnemployed  |
+| date      | dateUnemployed _shows as previous employee in application_  |
 | date      | birthday        |
 | int       | maxHoursPerWeek |
 | string    | phoneNumber     |
 | boolean   | isTraining      |
-
+| boolean   | removed _hidden from application_ |
+ 
 | requestsOff |                 |
 | :-----------|:----------------|
 | int         | id              | 
