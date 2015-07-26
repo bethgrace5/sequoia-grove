@@ -2,7 +2,7 @@ notes on tables for database
 
 | employee  |                 |
 | :---------|:----------------|
-| int       | id              |
+| int       | employeeID      |
 | string    | firstname       |
 | string    | lastname        |
 | date      | dateEmployed    |
@@ -10,8 +10,6 @@ notes on tables for database
 | date      | birthday        |
 | int       | maxHoursPerWeek |
 | string    | phoneNumber     |
-| boolean   | isTraining      |
-| boolean   | removed _hidden from application_ |
  
 | requestsOff |                 |
 | :-----------|:----------------|
@@ -23,7 +21,7 @@ _(requests off will not allow requests for partial days)_
 
 | role   |       |
 | :------|:------|
-| int    | id    |
+| int    | employeeID |
 | string | role  |
 
 | position _(employee-role)_|              |     |
