@@ -1,13 +1,10 @@
-/node_modules
 /dist
-/.tmp
-/.sass-cache
-/bower_components
+web-service-front-end/bower_components
+web-service-front-end/node_modules
+
+*.sass-cache
+*.tmp
 
 *.DS_Store
-.bowerrc
-.editorconfig
-.gitattributes
-.jshintrc
-.travis.yml
-.yo-rc.json
+*.swp
+
