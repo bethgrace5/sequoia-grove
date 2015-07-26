@@ -177,6 +177,5 @@ Composite
 
 Label the entity types with attributes, relationship types,
 multiplicities.
-https://raw.githubusercontent.com/bethgrace5/sequoia-grove/development/documentation/database/ER_Diagram.png
 
 ![alt text](../ER_Diagram.png)
