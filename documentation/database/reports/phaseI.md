@@ -101,6 +101,12 @@ Itemized descriptions of Entity and Relationship Sets
     Employee:Shift m:n - many employees may be available for many shifts
     participation constraint - at least one employee must be available for each shift
 
+    (can two columns have the same name?)
+    Relationship Cannot_Work_With(
+        employeeID integer [foreign key],
+        employeeID integer [foreign key])
+    Employee:Employee 1:1 - some employees cannot work well with others
+
 1.5 User Groups are defined by Employee Roles
 In descending order of privelage are: managers (branch manager and store owner),
 shift supervisors, and all other employees (cashiers, janitors, food prep...)
