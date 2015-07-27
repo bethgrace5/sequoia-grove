@@ -40,14 +40,12 @@ Itemized descriptions of Entity and Relationship Sets
         dateUnemployed  date    [attribute],
         birthday        date    [attribute],
         maxHoursPerWeek integer [attribute],
-        phoneNumber     string  [attribute])
+        primary_phone   string  [attribute],
+        secondary_phone string  [attribute])
 
     Entity Role(
         RoleID     Integer [primary key],
-        EmployeeID integer [foreign key],
-        ShiftID    integer [foreign key],
         Title      string  [attribute])
-        Location   string  [attribute]) (front or kitchen)
 
     Entity Shift(
         ShiftID     integer [primary key],
@@ -74,16 +72,16 @@ Itemized descriptions of Entity and Relationship Sets
         EmployeeID     integer [foreign key].
         RoleID         integer [foreign key].
         is_training    boolean [attribute],
-        dateAcquired   date    [attribute].
-        dateRemoved    date    [attribute].
-        rank           date    [attribute].
+        date_acquired  date    [attribute].
+        date_removed   date    [attribute].
+        is_primary     boolean [attribute].
         maxDaysPerWeek date    [attribute])
     Employee:Role n:m - employees may have many different roles, a role may be occupied by many different employees
     participation constraint (total) all employee must have at least one role,
     (for example, an employee may be trained as a salad and hot sandwich prep, and there are several employees that might be
     sandwich preps or salad preps)
 
-    Relationship Which_Works(
+    Relationship Has_Shifts(
         roleID  integer [foreign key])
         shiftID integer [foreign key],
     Role:Shift 1:1 one shift is occupied by one role
