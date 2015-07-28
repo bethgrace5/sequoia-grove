@@ -1,5 +1,5 @@
 
-Dashboard Manager
+Dashboard
 ==
 
 Purpose
@@ -10,5 +10,7 @@ Modules
 
 Wireframes
 --
-View Name
+Manager 
 ![alt text](../views/dashboard-manager.png)
+Employee
+![alt text](../views/dashboard-employee.png)
