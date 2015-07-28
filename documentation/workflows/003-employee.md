@@ -1,5 +1,5 @@
 
-Employee Availibility
+Employee
 ==
 
 Purpose
@@ -10,5 +10,9 @@ Modules
 
 Wireframes
 --
-View Name
+Edit Employee Info
+![alt text](../views/employee-edit.png)
+
+Edit Availibility
 ![alt text](../views/employee-availibility.png)
+
