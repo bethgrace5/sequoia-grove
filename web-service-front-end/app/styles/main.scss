@@ -15,15 +15,57 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
+#main-content {
+  height: 400px;
+  background-color: $gray;
+  color: white;
+}
+
+.nav-tabs {
+  background-color: $gray-dark;
+  border-radius: 9px 9px 0px 0px;
+}
+.nav-tabs>li{
+  float: right;
+}
+.tab-content{
+  height: 300px;
+  background-color: $gray-lighter;
+  color: black;
+  padding:5px;
+}
+.nav-tabs a {
+  color: white;
+  //border: medium none;
+}
+.nav-tabs > li > a:hover {
+  //background-color: $gray !important;
+  //border: medium none;
+  //border-radius: 0;
+  color: black;
+}
+
 .browsehappy {
   margin: 0.2em 0;
   background: #ccc;
   color: #000;
   padding: 0.2em 0;
 }
+.navbar .divider-vertical {
+  height: 50px;
+  margin: 0 9px;
+  border-right: 1px solid #ffffff;
+  border-left: 1px solid #f2f2f2;
+}
+
+.navbar-inverse .divider-vertical {
+  border-right-color: #222222;
+  border-left-color: #111111;
+}
 
 body {
   padding: 0;
+  background-color: $gray;
 }
 
 a:focus {
