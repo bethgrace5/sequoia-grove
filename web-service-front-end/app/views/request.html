@@ -1,0 +1,24 @@
+<div class="container">
+  <p class="lead">
+    Request View
+  </p>
+  <div ng-show="user.type === 'manager'">
+      <ul class="nav nav-tabs">
+          <li role="presentation" ng-class="{active: activeTab == 'pending'}"
+              ng-click="activeTab='info'"><a href="#/request">Pending</a></li>
+
+          <li role="presentation" ng-class="{active: activeTab == 'history'}"
+              ng-click="activeTab='info'"><a href="#/request">History</a></li>
+
+          <li role="presentation" ng-class="{active: activeTab == 'myRequests'}"
+              ng-click="activeTab='info'"><a href="#/request">My Requests</a></li>
+      </ul>
+  </div>
+
+  <div ng-hide="user.type === 'manager'">
+      <p>
+        My Requests
+      </p>
+
+  </div>
+</div>

@@ -48,12 +48,13 @@ Itemized descriptions of Entity and Relationship Sets
         Title      string  [attribute])
 
     Entity Shift(
-        ShiftID     integer [primary key],
-        EmployeeID  integer [foreign key],
-        RoleID      Integer [foreign key],
-        time_start  time    [attribute],
-        time_end    time    [attribute],
-        weekdays    set     [multivalued attribute])
+        ShiftID        integer [primary key],
+        RoleID         Integer [foreign key],
+        title          string  [attribute],
+        weekday_start  time    [attribute],
+        weekday_end    time    [attribute],
+        weekend_start  time    [attribute],
+        weekend_end    time    [attribute])
 
     Entity Delivery(
         deliveryID   integer  [primary key],
