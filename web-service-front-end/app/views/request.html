@@ -6,13 +6,13 @@
   <div ng-show="user.type === 'manager'">
       <ul class="nav nav-tabs">
           <li role="presentation" ng-class="{active: activeTab == 'pending'}"
-              ng-click="activeTab='pending'"><a href="#/request">Pending</a></li>
+          ng-click="activeTab='pending'"><a href="#/request">{{'REQUEST_TAB_PENDING' | translate}}</a></li>
 
           <li role="presentation" ng-class="{active: activeTab == 'history'}"
-              ng-click="activeTab='history'"><a href="#/request">History</a></li>
+          ng-click="activeTab='history'"><a href="#/request">{{'REQUEST_TAB_HISTORY' | translate}}</a></li>
 
           <li role="presentation" ng-class="{active: activeTab == 'myRequests'}"
-              ng-click="activeTab='myRequests'"><a href="#/request">My Requests</a></li>
+          ng-click="activeTab='myRequests'"><a href="#/request">{{'REQUEST_TAB_MY_REQUESTS' | translate}}</a></li>
       </ul>
       <div class="tab-content">
           <div ng-show="activeTab=='pending'" class="tab-pane active">

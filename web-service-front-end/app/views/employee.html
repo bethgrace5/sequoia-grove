@@ -6,10 +6,10 @@
   <div>
       <ul class="nav nav-tabs">
           <li role="presentation" ng-class="{active: activeTab == 'info'}"
-              ng-click="activeTab='info'"><a href="#/employee">Info</a></li>
+          ng-click="activeTab='info'"><a href="#/employee">{{'EMPLOYEE_TAB_INFO' | translate}}</a></li>
 
           <li role="presentation" ng-class="{active: activeTab == 'availability'}"
-              ng-click="activeTab='availability'"><a href="#/employee">Availibility</a></li>
+          ng-click="activeTab='availability'"><a href="#/employee">{{'EMPLOYEE_TAB_AVAILIBILITY' | translate}}</a></li>
       </ul>
       <div class="tab-content">
           <div ng-show="activeTab=='info'" class="tab-pane active">

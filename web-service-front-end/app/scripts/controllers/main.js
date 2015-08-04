@@ -13,15 +13,7 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'home';
     $scope.user = { firstname: "Purple", lastname: "Pancakes", type: "manager" };
-
     localStorageService.set('SequoiaGrove.user', $scope.user);
-    console.log(localStorageService.get('SequoiaGrove.user').type);
-
-
-    var lang = localStorageService.get('SequoiaGrove.lang');
-    if (lang !== null) {
-      $translate.use(lang);
-    }
 
     $scope.changeLanguage = function (langKey) {
       $translate.use(langKey);

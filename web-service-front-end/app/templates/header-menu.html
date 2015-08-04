@@ -12,7 +12,7 @@
           <span class="icon-bar"></span>
         </button>
         <a ng-click="activeTab='home'" class="navbar-brand" href="#/dashboard">Sequoia Grove</a>
-        <p class="navbar-text">Signed in as {{user.firstname}} {{user.lastname}}</p>
+        <p class="navbar-text">{{'HEADER_SIGNED_IN_AS' | translate}} {{user.firstname}} {{user.lastname}}</p>
       </div>
 
       <!-- navigation menu -->
@@ -20,17 +20,17 @@
         <ul class="nav navbar-nav">
             <li class="divider-vertical"></li>
             <li role="presentation" ng-class="{active: activeTab == 'home'}"
-                ng-click="activeTab='home'"><a href="#/dashboard">Home</a></li>
+            ng-click="activeTab='home'"><a href="#/dashboard">{{'HEADER_TAB_HOME' | translate}}</a></li>
 
             <li role="presentation" ng-class="{active: activeTab == 'requests'}"
-                ng-click="activeTab='requests'"><a href="#/request">Requests</a></li>
+            ng-click="activeTab='requests'"><a href="#/request">{{'HEADER_TAB_REQUESTS' | translate}}</a></li>
 
             <!-- manager only options -->
             <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'scheduling'}"
-                ng-click="activeTab='scheduling'"><a href="#/schedule">Scheduling</a></li>
+            ng-click="activeTab='scheduling'"><a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a></li>
 
             <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'employee'}"
-                ng-click="activeTab='employee'"><a href="#/employee">Employees</a></li>
+            ng-click="activeTab='employee'"><a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a></li>
         </ul>
       </div>
 
