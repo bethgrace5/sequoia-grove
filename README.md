@@ -14,7 +14,6 @@ Schedule of Implememtation
   * Scaffolding/User Interface: the layout of where to visually place components the user sees when the application is operational
   * Hook User Interface to Database
   * Back End: setup with API for front end to use
-  * Scaffolding/User Interface: the layout of where to visually place components the user sees when the application is operational
 
 * Winter 2016 Senior Seminar (CMPS 490A)
   * Security: authentication, user permissions, secure routes, etc.
@@ -24,7 +23,7 @@ Schedule of Implememtation
   * Maintenance: document and fix any bugs that surface
 
 * Winter 2016 Senior Seminar II (CMPS 490B)
-
+  * TODO
   
 * Winter 2016 Senior Seminar II (CMPS 490B)
 Possible Application Expansion
