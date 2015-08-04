@@ -33,6 +33,7 @@ module.exports = function(config) {
       'bower_components/angular-touch/angular-touch.js',
       'bower_components/angular-translate/angular-translate.js',
       'bower_components/angular-local-storage/dist/angular-local-storage.js',
+      'bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js',
       'bower_components/angular-mocks/angular-mocks.js',
       // endbower
       "app/scripts/**/*.js",

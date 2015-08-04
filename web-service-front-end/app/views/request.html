@@ -16,16 +16,13 @@
       </ul>
       <div class="tab-content">
           <div ng-show="activeTab=='pending'" class="tab-pane active">
-              <p class="lead"> edit pending requests directive </p>
-              <!-- <edit-pending-requests></edit-pending-requests> -->
+              <request-pending></request-pending>
           </div>
           <div ng-show="activeTab=='history'" class="tab-pane active">
-              <p class="lead"> view request history directive </p>
-              <!-- <view-request-history></view-request-history> -->
+              <request-history></request-history>
           </div>
           <div ng-show="activeTab=='myRequests'" class="tab-pane active">
-              <p class="lead"> user requests directive </p>
-              <!-- <user-requests></user-requests> -->
+              <request-submit></request-submit>
           </div>
       </div>
   </div>

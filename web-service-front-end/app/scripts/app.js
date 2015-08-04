@@ -51,18 +51,22 @@ angular
       });
 
       /* Translations */
-      $translateProvider
-        .translations('en', {
-          ABOUTUS: 'About',
-          BUTTON_LANG_SP: 'Spanish',
-          BUTTON_LANG_EN: 'English'
-        })
-        .translations('sp', {
-          ABOUTUS: 'Acerca De',
-          BUTTON_LANG_SP: 'Español',
-          BUTTON_LANG_EN: 'Inglés'
-        })
-        .preferredLanguage('en');
+      $translateProvider.useStaticFilesLoader({
+          prefix: 'i18n/locale-',
+          suffix: '.json'
+      });
+
+      /* change language to browser's primary content language */
+      $translateProvider.determinePreferredLanguage( function() {
+          var language = window.navigator.languages[0];
+          console.log(language.substring(0,2));
+          if(language.substring(0,2) === "es") {
+              return "es";
+          }
+          else {
+              return "en";
+          }
+      });
 
       /* LocalStorage */
         localStorageServiceProvider

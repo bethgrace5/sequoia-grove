@@ -19,20 +19,16 @@
       </ul>
       <div class="tab-content">
           <div ng-show="activeTab=='schedule'" class="tab-pane active">
-              <p class="lead"> edit schedule directive </p>
-              <!-- <edit-schedule></edit-schedule> -->
+              <schedule-edit></schedule-edit>
           </div>
           <div ng-show="activeTab=='history'" class="tab-pane active">
-              <p class="lead"> published schedule directive </p>
-              <!-- <published-schedule></published-schedule> -->
+              <schedule-view></schedule-view>
           </div>
           <div ng-show="activeTab=='deliveries'" class="tab-pane active">
-              <p class="lead"> edit deliveries directive </p>
-              <!-- <edit-deliveries></edit-deliveries> -->
+              <schedule-delivery-edit></schedule-delivery-edit>
           </div>
           <div ng-show="activeTab=='shifts'" class="tab-pane active">
-              <p class="lead"> edit shifts directive </p>
-              <!-- <edit-shifts></edit-shifts> -->
+              <schedule-shift-edit></schedule-shift-edit>
           </div>
       </div>
   </div>

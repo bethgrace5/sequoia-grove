@@ -20,52 +20,11 @@
     <![endif]-->
 
     <!-- Header -->
-    <div class="header">
-      <div class="navbar navbar-inverse" role="navigation">
-        <div class="container-fluid">
-          <div class="navbar-header">
-
-            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
-              <span class="sr-only">Toggle navigation</span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-              <span class="icon-bar"></span>
-            </button>
-
-            <a ng-click="activeTab='home'" class="navbar-brand" href="#/dashboard">Sequoia Grove</a>
-            <p class="navbar-text">Signed in as {{user.firstname}} {{user.lastname}}</p>
-          </div>
-
-          <!-- navigation menu -->
-          <div class="collapse navbar-collapse" id="js-navbar-collapse">
-            <ul class="nav navbar-nav">
-                <li class="divider-vertical"></li>
-                <li role="presentation" ng-class="{active: activeTab == 'home'}"
-                    ng-click="activeTab='home'"><a href="#/dashboard">Home</a></li>
-
-                <li role="presentation" ng-class="{active: activeTab == 'requests'}"
-                    ng-click="activeTab='requests'"><a href="#/request">Requests</a></li>
-
-                <!-- manager only options -->
-                <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'scheduling'}"
-                    ng-click="activeTab='scheduling'"><a href="#/schedule">Scheduling</a></li>
-
-                <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'employee'}"
-                    ng-click="activeTab='employee'"><a href="#/employee">Employees</a></li>
-            </ul>
-          </div>
-
-        </div>
-      </div>
-    </div>
+    <header-menu></header-menu>
 
     <div id="main-content" class="container-fluid" ng-view=""></div>
 
-    <div class="footer">
-      <div class="container">
-        <p><span class="glyphicon glyphicon-heart"></span> footer content </p>
-      </div>
-    </div>
+    <footer-menu></footer-menu>
 
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
@@ -92,6 +51,7 @@
     <script src="bower_components/angular-touch/angular-touch.js"></script>
     <script src="bower_components/angular-translate/angular-translate.js"></script>
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
@@ -104,6 +64,17 @@
         <script src="scripts/controllers/main.js"></script>
         <script src="scripts/controllers/request.js"></script>
         <script src="scripts/controllers/schedule.js"></script>
+        <script src="scripts/directives/header-menu.js"></script>
+        <script src="scripts/directives/footer-menu.js"></script>
+        <script src="scripts/directives/schedule-edit.js"></script>
+        <script src="scripts/directives/schedule-shift-edit.js"></script>
+        <script src="scripts/directives/schedule-delivery-edit.js"></script>
+        <script src="scripts/directives/schedule-view.js"></script>
+        <script src="scripts/directives/employee-availibility.js"></script>
+        <script src="scripts/directives/employee-info.js"></script>
+        <script src="scripts/directives/request-history.js"></script>
+        <script src="scripts/directives/request-pending.js"></script>
+        <script src="scripts/directives/request-submit.js"></script>
         <!-- endbuild -->
 </body>
 </html>

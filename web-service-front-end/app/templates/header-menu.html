@@ -1,0 +1,40 @@
+
+<!-- Header -->
+<div class="header">
+  <div class="navbar navbar-inverse" role="navigation">
+    <div class="container-fluid">
+
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#js-navbar-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a ng-click="activeTab='home'" class="navbar-brand" href="#/dashboard">Sequoia Grove</a>
+        <p class="navbar-text">Signed in as {{user.firstname}} {{user.lastname}}</p>
+      </div>
+
+      <!-- navigation menu -->
+      <div class="collapse navbar-collapse" id="js-navbar-collapse">
+        <ul class="nav navbar-nav">
+            <li class="divider-vertical"></li>
+            <li role="presentation" ng-class="{active: activeTab == 'home'}"
+                ng-click="activeTab='home'"><a href="#/dashboard">Home</a></li>
+
+            <li role="presentation" ng-class="{active: activeTab == 'requests'}"
+                ng-click="activeTab='requests'"><a href="#/request">Requests</a></li>
+
+            <!-- manager only options -->
+            <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'scheduling'}"
+                ng-click="activeTab='scheduling'"><a href="#/schedule">Scheduling</a></li>
+
+            <li ng-show="user.type=='manager'" role="presentation" ng-class="{active: activeTab == 'employee'}"
+                ng-click="activeTab='employee'"><a href="#/employee">Employees</a></li>
+        </ul>
+      </div>
+
+    </div>
+  </div>
+</div>
+
