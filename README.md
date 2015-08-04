@@ -40,5 +40,5 @@ License
 
 Collaborators
 --
-* Bethany Armitage
-* ...
+* [Beth](https://github.com/bethgrace5)
+* [Sunny](https://github.com/jsumal)
