@@ -9,9 +9,14 @@
  */
 angular.module('sequoiaGroveApp')
   .controller('MainCtrl', function (
-          $scope, $rootScope, $route, $translate, localStorageService) {
+      $scope,
+      $rootScope,
+      $route,
+      $translate,
+      $location,
+      localStorageService) {
 
-    $scope.activeTab = 'home';
+
     $scope.user = { firstname: "Purple", lastname: "Pancakes", type: "manager" };
     localStorageService.set('SequoiaGrove.user', $scope.user);
 
@@ -19,4 +24,20 @@ angular.module('sequoiaGroveApp')
       $translate.use(langKey);
       localStorageService.set('SequoiaGrove.lang', langKey);
     };
+
+    // set active tab to
+    $scope.changeTab = function(tab) {
+        var path = $location.path();
+        var length = path.length;
+        if(tab == path.substring(0,length)) {
+            return "active";
+        }
+        else {
+            return "";
+        }
+    }
+
+    // set tab to home on page load
+    $scope.changeTab('/dashboard');
+
   });

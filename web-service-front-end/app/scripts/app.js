@@ -22,6 +22,9 @@ angular
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider) {
     $routeProvider
       .when('/', {
+          redirectTo: '/dashboard'
+      })
+      .when('/login', {
         templateUrl: 'views/login.html',
         controller: 'LoginCtrl',
         controllerAs: 'login'
