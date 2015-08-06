@@ -1,0 +1,20 @@
+
+.carsFrame{
+    width: 600px;
+    margin: 0 auto;
+}
+.carsFrame img{
+    width: 600px;
+}
+#button_container{
+    margin: 0 auto;
+    width: 380px;
+}
+.btn-xlarge {
+    padding: 18px 28px;
+    font-size: 70px;
+    line-height: normal;
+    -webkit-border-radius: 8px;
+    -moz-border-radius: 8px;
+    border-radius: 8px;
+}
