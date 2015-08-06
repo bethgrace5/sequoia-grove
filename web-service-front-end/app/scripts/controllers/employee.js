@@ -10,4 +10,26 @@
 angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($scope) {
       $scope.activeTab = 'info';
+      $scope.name = "sunny";
+
+      $scope.changeName = function () {
+          if ($scope.name == "sunny") {
+              $scope.name = "beth";
+          }
+          else {
+              $scope.name = "sunny";
+          }
+
+      }
+
+
+      $scope.seeName = function () {
+          return $scope.name;
+      }
+
+
+
+
+
+
   });
