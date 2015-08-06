@@ -9,8 +9,7 @@
  *
  * Main module of the application.
  */
-angular .module('sequoiaGroveApp')
-    .controller('carsCtrl', function($scope, $htttp) {
+angular.module('sequoiaGroveApp').controller('carsCtrl', function($scope, $http) {
         alert('cars!!');
 
     //the first asynchronous request will be the page #1

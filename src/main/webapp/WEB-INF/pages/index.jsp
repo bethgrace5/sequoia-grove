@@ -28,8 +28,7 @@
     <link rel="stylesheet" href="css/style.css">
     <!-- endbuild -->
   </head>
-  <!--<body ng-controller="carsCtrl"> -->
-  <body>
+  <body ng-controller="carsCtrl">
     <!--[if lte IE 8]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -42,6 +41,9 @@
 
     <!-- sample view -->
         <div class="carsFrame">
+    <p>
+    test: {{test}}
+    </p>
             <!-- JSTL: This part is used to load just the first 3 cars-->
             <c:forEach var="car" items="${cars.carList}">
             <div class="carsFrame">
