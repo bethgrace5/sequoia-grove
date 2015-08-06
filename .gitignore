@@ -1,4 +1,5 @@
 /dist
+/target
 web-service-front-end/bower_components
 web-service-front-end/node_modules
 

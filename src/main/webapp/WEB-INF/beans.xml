@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+<bean id="Cars" class="com.sequoiagrove.model.Cars">
+    <property name="carList">
+        <list>
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car1.jpg"/>
+                <property name="name" value="Porsche 911"/>
+            </bean>
+
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car2.jpg"/>
+                <property name="name" value="Classic 1"/>
+            </bean>
+
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car3.jpg"/>
+                <property name="name" value="Classic 2"/>
+            </bean>
+
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car4.jpg"/>
+                <property name="name" value="Lexus Concept"/>
+            </bean>
+
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car5.jpg"/>
+                <property name="name" value="Kia Ray"/>
+            </bean>
+
+            <bean class="com.sequoiagrove.model.Car">
+                <property name="src" value="images/car6.jpg"/>
+                <property name="name" value="Renault Alpine"/>
+            </bean>
+        </list>
+    </property>
+</bean>
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </beans>
+
