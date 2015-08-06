@@ -1,7 +1,7 @@
 /dist
 /target
-web-service-front-end/bower_components
-web-service-front-end/node_modules
+*/bower_components
+*/node_modules
 
 *.sass-cache
 *.tmp
