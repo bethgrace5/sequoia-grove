@@ -1,5 +1,6 @@
 /dist
 /target
+/src/main/webapp/resources/bower_components
 */bower_components
 */node_modules
 
