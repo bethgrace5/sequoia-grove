@@ -25,6 +25,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <script src="js/app.js"></script><!-- our controller -->
+    <script src="js/controllers/cars.js"></script><!-- our controller -->
     <link rel="stylesheet" href="css/style.css">
     <!-- endbuild -->
   </head>

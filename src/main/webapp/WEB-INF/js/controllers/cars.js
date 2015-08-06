@@ -1,14 +1,6 @@
 
 'use strict';
 
-/**
- * @ngdoc overview
- * @name sequoiaGroveApp
- * @description
- * # sequoiaGroveApp
- *
- * Main module of the application.
- */
 angular.module('sequoiaGroveApp').controller('carsCtrl', function($scope, $http) {
         alert('cars!!');
 
@@ -32,7 +24,7 @@ angular.module('sequoiaGroveApp').controller('carsCtrl', function($scope, $http)
             }).success(function (data, status, headers, config) {
                 //data contains the model which is send it by the Spring controller in JSON format
                 //$scope.cars.push is the way to add new cars into $scope.cars array
-                for(i=0; i< data.carList.length; i++) {
+                for(var i=0; i< data.carList.length; i++) {
                     $scope.cars.push(data.carList[i]);
                     console.log(data.carList[i]);
                 }
