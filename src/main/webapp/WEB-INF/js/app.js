@@ -46,7 +46,7 @@ angular.module('sequoiaGroveApp', [
       });
 
 
-      /* Translations 
+      /* Translations */
       $translateProvider.useStaticFilesLoader({
           prefix: 'i18n/locale-',
           suffix: '.json'
@@ -63,7 +63,6 @@ angular.module('sequoiaGroveApp', [
               return "en";
           }
       });
-      */
 
       /* LocalStorage */
         localStorageServiceProvider

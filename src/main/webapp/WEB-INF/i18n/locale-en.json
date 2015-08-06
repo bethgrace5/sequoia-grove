@@ -1,0 +1,17 @@
+{
+  "HEADER_SIGNED_IN_AS": "Signed in as",
+  "HEADER_TAB_HOME": "Home",
+  "HEADER_TAB_REQUESTS": "Requests",
+  "HEADER_TAB_SCHEDULING": "Scheduling",
+  "HEADER_TAB_EMPLOYEES": "Employees",
+  "REQUEST_TAB_PENDING": "Pending",
+  "REQUEST_TAB_HISTORY": "History",
+  "REQUEST_TAB_MY_REQUESTS": "My Requests",
+  "EMPLOYEE_TAB_INFO": "Info",
+  "EMPLOYEE_TAB_AVAILIBILITY": "Availibility",
+  "SCHEDULE_TAB_SCHEDULE": "Schedule",
+  "SCHEDULE_TAB_HISTORY": "History",
+  "SCHEDULE_TAB_DELIVERIES": "Deliveries",
+  "SCHEDULE_TAB_SHIFTS": "Shifts",
+  "FOOTER_TRANSLATE": "Translate"
+}
