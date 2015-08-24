@@ -21,10 +21,10 @@ angular.module('sequoiaGroveApp', [
         controller: 'LoginCtrl',
         controllerAs: 'login'
       })
-      .when('/dashboard', {
-        templateUrl: 'views/dashboard.html',
-        controller: 'DashboardCtrl',
-        controllerAs: 'dashboard'
+      .when('/home', {
+        templateUrl: 'views/home.html',
+        controller: 'HomeCtrl',
+        controllerAs: 'home'
       })
       .when('/schedule', {
         templateUrl: 'views/schedule.html',

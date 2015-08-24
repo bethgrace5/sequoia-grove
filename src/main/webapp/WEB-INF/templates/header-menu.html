@@ -11,7 +11,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand changeTab('/dashboard')" href="#/dashboard">Sequoia Grove</a>
+        <a class="navbar-brand changeTab('/home')" href="#/home">Sequoia Grove</a>
         <p class="navbar-text">{{'HEADER_SIGNED_IN_AS' | translate}} {{user.firstname}} {{user.lastname}}</p>
       </div>
 
@@ -21,7 +21,7 @@
             <li class="divider-vertical"></li>
 
             <!-- all user options -->
-            <li role="presentation" ng-class="changeTab('/dashboard')"><a href="#/dashboard">{{'HEADER_TAB_HOME' | translate}}</a></li>
+            <li role="presentation" ng-class="changeTab('/home')"><a href="#/home">{{'HEADER_TAB_HOME' | translate}}</a></li>
             <li role="presentation" ng-class="changeTab('/request')"><a href="#/request">{{'HEADER_TAB_REQUESTS' | translate}}</a></li>
 
             <!-- manager only options -->

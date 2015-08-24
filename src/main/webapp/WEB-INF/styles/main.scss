@@ -17,25 +17,23 @@ $brand-danger:  #d9534f;
 
 #main-content {
   height: 400px;
-  background-color: $gray;
+  background-color: gray;
   color: white;
 }
 
 .nav-tabs {
-  background-color: $gray-dark;
-  border-radius: 9px 9px 0px 0px;
 }
 .nav-tabs>li{
   float: right;
 }
 .tab-content{
   height: 300px;
-  background-color: $gray-lighter;
   color: black;
   padding:5px;
 }
 .nav-tabs a {
-  color: white;
+  //background-color: grey !important;
+  color: black;
   //border: medium none;
 }
 .nav-tabs > li > a:hover {
