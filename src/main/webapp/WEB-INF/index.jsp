@@ -12,6 +12,7 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
+    <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css'>
     <link rel="stylesheet" href="styles/main.scss">
     <!-- endbuild -->
   </head>
@@ -26,6 +27,8 @@
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
+    <script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>

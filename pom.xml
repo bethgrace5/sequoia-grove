@@ -68,7 +68,6 @@
             <version>2.2.4</version>
         </dependency>
 
-        <!-- Bootstrap
         <dependency>
             <groupId>org.webjars</groupId>
             <artifactId>bootstrap</artifactId>
@@ -86,7 +85,6 @@
             <artifactId>jquery</artifactId>
             <version>2.1.1</version>
         </dependency>
-        -->
     </dependencies>
     <build>
         <finalName>sequoiagrove</finalName>
@@ -97,6 +95,31 @@
                 <artifactId>maven-jetty-plugin</artifactId>
                 <version>7.0.0.pre5</version>
             </plugin>
+
+            <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <executions>
+                        <execution>
+                            <id>unpack</id>
+                            <phase>compile</phase>
+                            <goals>
+                                <goal>unpack</goal>
+                            </goals>
+                            <configuration>
+                                <artifactItems>
+                                    <artifactItem>
+                                        <groupId>org.webjars</groupId>
+                                        <artifactId>bootstrap</artifactId>
+                                        <overWrite>false</overWrite>
+                                        <outputDirectory>${project.build.directory}/classes</outputDirectory>
+                                        <excludes>**/maven/**, **/*.MF</excludes>
+                                    </artifactItem>
+                                </artifactItems>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
         </plugins>
 
     </build>

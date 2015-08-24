@@ -16,6 +16,8 @@
     <mvc:resources mapping="/views/**" location="/WEB-INF/views/"/>
     <mvc:resources mapping="/i18n/**" location="/WEB-INF/i18n/"/>
     <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
 
     <!---->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
