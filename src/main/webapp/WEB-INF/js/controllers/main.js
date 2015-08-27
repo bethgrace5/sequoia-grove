@@ -38,6 +38,6 @@ angular.module('sequoiaGroveApp')
     }
 
     // set tab to home on page load
-    $scope.changeTab('/dashboard');
+    //$scope.changeTab('/home');
 
   });

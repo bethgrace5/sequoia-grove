@@ -2,13 +2,13 @@
 
 /**
  * @ngdoc function
- * @name sequoiaGroveApp.controller:MainCtrl
+ * @name sequoiaGroveApp.controller:HomeCtrl
  * @description
- * # MainCtrl
+ * # HomeCtrl
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('DashboardCtrl', function () {
+  .controller('HomeCtrl', function () {
     this.awesomeThings = [
       'HTML5 Boilerplate',
       'AngularJS',
