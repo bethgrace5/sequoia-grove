@@ -15,12 +15,31 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
+
 #main-content {
   height: 400px;
   background-color: gray;
   color: white;
 }
 
+// Schedule View
+.schedule-view-header {
+    padding: 0 1em ;
+}
+.schedule-view-button {
+    width: 120px;
+    margin: 0 0.5em;
+}
+.day-title {
+    font-size: 1.3em;
+    color: #336699;
+    margin: 0 0 5px 0;
+}
+.schedule-times {
+    color: blue;
+}
+
+// Nav Tab Content
 .nav-tabs {
 }
 .nav-tabs>li{
@@ -43,12 +62,7 @@ $brand-danger:  #d9534f;
   color: black;
 }
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
+// Header Nav Bar
 .navbar .divider-vertical {
   height: 50px;
   margin: 0 9px;

@@ -1,5 +1,102 @@
-<div class="container">
-    <img src="img/schedule.png" class="img-responsive" alt="" width="300" height="250"> 
+<div class="hidden-xs">
+
+    <!-- date labels -->
+    <div class="row day-title">
+        <div class="col-sm-3"> <!-- gap on the left --> </div>
+        <div class="col-sm-1"> 7-Sept    </div>
+        <div class="col-sm-1"> 8-Sept   </div>
+        <div class="col-sm-1"> 9-Sept </div>
+        <div class="col-sm-1"> 10-Sept  </div>
+        <div class="col-sm-1"> 11-Sept    </div>
+        <div class="col-sm-1">           </div>
+        <div class="col-sm-1"> 12-Sept  </div>
+        <div class="col-sm-1"> 13-Sept    </div>
+    </div>
+
+    <!-- weekdayday labels -->
+    <div class="row day-title">
+        <div class="col-sm-3"> <!-- gap on the left --> </div>
+        <div class="col-sm-1"> Monday    </div>
+        <div class="col-sm-1"> Tuesday   </div>
+        <div class="col-sm-1"> Wednesday </div>
+        <div class="col-sm-1"> Thursday  </div>
+        <div class="col-sm-1"> Friday    </div>
+        <div class="col-sm-1">           </div>
+        <div class="col-sm-1"> Saturday  </div>
+        <div class="col-sm-1"> Sunday    </div>
+    </div>
+
+    <!-- deliveries -->
+    <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
+        <div class="row">
+            <div ng-repeat="day in delivery.days">
+                <!-- gap on the left -->
+                <div class="col-sm-3" ng-show="$index==0""col-sm-2"> </div>
+
+                <!-- gap between weekdays and weekend days -->
+                <div ng-show="$index==5"> <div class="col-sm-1"> </div> </div>
+
+                <!-- delivery this day -->
+                <div ng-show="day">
+                    <div class="col-sm-1">
+                        {{delivery.title}}
+                    </div>
+                </div>
+
+                <!-- no delivery this day -->
+                <div ng-hide="day">
+                    <div class="col-sm-1">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- shifts -->
+    <div ng-repeat="shift in currentSchedule">
+        <hr/>
+        <div class="row">
+            <div class="col-sm-2" > 
+                {{shift.title}} 
+            </div>
+            <!-- weekday times -->
+            <div class="col-sm-1 schedule-times" > 
+                {{shift.weekdayStart}}-{{shift.weekdayEnd}}
+            </div>
+
+            <div ng-repeat="sch in shift.scheduled">
+            <!-- weekend times -->
+            <div ng-show="$index==5"> 
+                <div class="col-sm-1 schedule-times"> 
+                {{shift.weekendStart}}-{{shift.weekendEnd}}
+                </div> 
+            </div>
+            <!-- delivery this day -->
+            <div class="col-sm-1">
+                {{sch}}
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+    <hr/>
+    <!-- Download and Print Options -->
+    <div class="row">
+        <div class="col-sm-12">
+            <form>
+                <button class="btn btn-default pull-right schedule-view-button">
+                    <div > Download </div>
+                </button>
+                <button class="btn btn-default pull-right schedule-view-button">
+                    <div > Print </div>
+                </button>
+            </form>
+        </div>
+    </div>
+    <br/>
+
 </div>
+
 
 

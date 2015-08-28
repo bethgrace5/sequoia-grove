@@ -1,3 +1,33 @@
 <div class="container-fluid">
+    <!-- schedule header and options-->
+    <div class="row hidden-xs">
+        <div class="col-sm-12 pull-right">
+            <p class="lead">
+            Week of Month Day
+            </p>
+        </div>
+        <div class="col-sm-12">
+            <form class="pull-right">
+                <button class="btn btn-default schedule-view-button" ng-click="highlightUser=!highlightUser">
+                    <div ng-hide="highlightUser"> highlight me </div>
+                    <div ng-show="highlightUser"> clear highlights </div>
+                </button>
+                <button class="btn btn-default schedule-view-button" ng-click="showDeliveries=!showDeliveries">
+                    <div ng-hide="showDeliveries"> show deliveries </div>
+                    <div ng-show="showDeliveries"> hide deliveries </div>
+                </button>
+                <select>
+                    <option>All</option>
+                    <option>Front</option>
+                    <option>Kitchen</option>
+                    <option>Janitor</option>
+                </select>
+            </form>
+        </div>
+        <div class="schedule-view-header">
+        <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
+        </div>
+    </div>
+
     <schedule-view></schedule-view>
 </div>
