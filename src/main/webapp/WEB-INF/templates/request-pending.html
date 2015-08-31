@@ -19,9 +19,6 @@
     <div class="col-sm-1">
         <p> Total Days </p>
     </div>
-    <div class="col-sm-1">
-        <p> Status </p>
-    </div>
 </div>
 
 <div  ng-repeat="request in previousRequests">
@@ -39,19 +36,16 @@
         <div class="col-sm-1">
             <p> {{request.totalDays}} </p>
         </div>
-        <div class="col-sm-1">
-            <p> {{request.status}} </p>
-        </div>
         <div class="col-sm-2">
             <button class="btn btn-success">
                 Approve
-                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
         </div>
         <div class="col-sm-2">
             <button class="btn btn-danger">
                 Deny
-                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </button>
         </div>
     </div>

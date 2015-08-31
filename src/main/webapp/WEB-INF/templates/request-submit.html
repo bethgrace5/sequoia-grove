@@ -9,13 +9,14 @@
             <!-- will be a datepicker -->
             <input placeholder="End Date">
 
-            <button class="btn btn-default">
+            <button class="btn btn-primary">
                 <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
                 Submit
             </button>
         </form>
     </div>
 </div>
+<hr/>
 
 <div class="row request-title">
     <div class="col-sm-2">
@@ -44,7 +45,15 @@
             <p> {{request.totalDays}} </p>
         </div>
         <div class="col-sm-2">
-            <p> {{request.status}} </p>
+            <div ng-show="request.status=='pending'">
+                <h3><span class="label label-warning">pending</span></h3>
+            </div>
+            <div ng-show="request.status=='approved'">
+                <h3><span class="label label-success">approved</span></h3>
+            </div>
+            <div ng-show="request.status=='denied'">
+                <h3><span class="label label-danger">denied</span></h3>
+            </div>
         </div>
     </div>
 </div>
