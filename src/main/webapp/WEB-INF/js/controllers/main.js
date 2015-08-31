@@ -16,6 +16,7 @@ angular.module('sequoiaGroveApp')
       $location,
       localStorageService) {
 
+
     // Sample Data as JSON
     $scope.user = { firstname: "John", lastname: "Pancakes", type: "manager" };
 

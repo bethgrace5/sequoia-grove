@@ -1,3 +1,59 @@
-<p class="lead">
-    Edit Pending Request Template
-</p>
+<div class="row">
+    <div class="col-sm-12">
+        <p class="lead">
+            Edit Pending Request Template
+        </p>
+    </div>
+</div>
+
+<div class="row request-title">
+    <div class="col-sm-1">
+        <p> Employee </p>
+    </div>
+    <div class="col-sm-2">
+        <p> Start Date </p>
+    </div>
+    <div class="col-sm-2">
+        <p> End Date </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Total Days </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Status </p>
+    </div>
+</div>
+
+<div  ng-repeat="request in previousRequests">
+    <br/>
+    <div class="row">
+        <div class="col-sm-1">
+            <p> {{request.employee}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.startDate}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.endDate}} </p>
+        </div>
+        <div class="col-sm-1">
+            <p> {{request.totalDays}} </p>
+        </div>
+        <div class="col-sm-1">
+            <p> {{request.status}} </p>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-success">
+                Approve
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <button class="btn btn-danger">
+                Deny
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+            </button>
+        </div>
+    </div>
+</div>
+

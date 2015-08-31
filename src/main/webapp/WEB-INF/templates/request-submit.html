@@ -1,3 +1,51 @@
-<p class="lead">
-    User Request Template
-</p>
+<div class="row">
+    <div class="col-sm-12">
+        <p class="lead">
+            My Requests
+        </p>
+        <form>
+            <!-- will be a datepicker -->
+            <input placeholder="Start Date">
+            <!-- will be a datepicker -->
+            <input placeholder="End Date">
+
+            <button class="btn btn-default">
+                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+                Submit
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row request-title">
+    <div class="col-sm-2">
+        <p> Start Date </p>
+    </div>
+    <div class="col-sm-2">
+        <p> End Date </p>
+    </div>
+    <div class="col-sm-2">
+        <p> Total Days </p>
+    </div>
+    <div class="col-sm-2">
+        <p> Status </p>
+    </div>
+</div>
+
+<div  ng-repeat="request in previousRequests">
+    <div class="row">
+        <div class="col-sm-2">
+            <p> {{request.startDate}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.endDate}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.totalDays}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.status}} </p>
+        </div>
+    </div>
+</div>
+

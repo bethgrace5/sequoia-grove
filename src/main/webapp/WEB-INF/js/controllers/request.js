@@ -10,13 +10,14 @@
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope) {
 
-    $scope.user = { type: "manager" };
-    $scope.activeTab = 'pending';
-
-
-    this.awesomeThings = [
-      'HTML5 Boilerplate',
-      'AngularJS',
-      'Karma'
+    $scope.previousRequests = [
+      { employee: "John", startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending"},
+      { employee: "Emma", startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending"},
+      { employee: "Emma", startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending"},
+      { employee: "Andy", startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending"},
+      { employee: "Sawyer", startDate: "May 20", endDate: "May 20", totalDays: "1", status: "granted"},
+      { employee: "Blue", startDate: "May 15", endDate: "May 15", totalDays: "1", status: "denied"}
     ];
+
+
   });
