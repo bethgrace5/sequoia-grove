@@ -1,33 +1,70 @@
 <div class="container-fluid">
-    <!-- schedule header and options-->
+
     <div class="row hidden-xs">
-        <div class="col-sm-12 pull-right">
-            <p class="lead">
-            Week of Month Day
-            </p>
-        </div>
         <div class="col-sm-12">
-            <form class="pull-right">
-                <button class="btn btn-default schedule-view-button" ng-click="highlightUser=!highlightUser">
-                    <div ng-hide="highlightUser"> highlight me </div>
-                    <div ng-show="highlightUser"> clear highlights </div>
-                </button>
+
+            <form class="pull-left">
                 <button class="btn btn-default schedule-view-button" ng-click="showDeliveries=!showDeliveries">
                     <div ng-hide="showDeliveries"> show deliveries </div>
                     <div ng-show="showDeliveries"> hide deliveries </div>
                 </button>
-                <select>
-                    <option>All</option>
-                    <option>Front</option>
-                    <option>Kitchen</option>
-                    <option>Janitor</option>
-                </select>
+                <button class="btn btn-default schedule-view-button" ng-click="highlight=!highlight">
+                    <div ng-hide="highlight"> highlight me </div>
+                    <div ng-show="highlight"> unhighlight me </div>
+                </button>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-default dropdown-toggle schedule-view-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Showing: {{type}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a ng-click="type='all'">all</a></li>
+                        <li><a ng-click="type='mine'">mine</a></li>
+                        <li><a ng-click="type='front'">front</a></li>
+                        <li><a ng-click="type='kitchen'">kitchen</a></li>
+                        <li><a ng-click="type='janitor'">janitor</a></li>
+                    </ul>
+                </div>
             </form>
-        </div>
-        <div class="schedule-view-header">
-        <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
+            <form class="pull-right">
+                <!-- Download and Print Options -->
+                <button class="btn btn-default schedule-view-button">
+                    Download
+                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+                </button>
+                <button class="btn btn-default schedule-view-button">
+                    Print
+                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+                </button>
+            </form>
+
         </div>
     </div>
 
-    <schedule-view></schedule-view>
+    <div class="panel panel-default">
+        <div class="panel-body">
+
+            <div class="row hidden-xs">
+                <!-- schedule header and options-->
+                <div class="col-sm-12 pull-right">
+                    <p class="lead">
+                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="next()">
+                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    </button>
+                        Week of Month Day
+                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="next()">
+                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    </button>
+                    </p>
+                </div>
+
+                <div class="schedule-view-header">
+                    <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
+                </div>
+
+                </div>
+                <schedule-view></schedule-view>
+            </div>
+
+        </div>
+    </div>
 </div>

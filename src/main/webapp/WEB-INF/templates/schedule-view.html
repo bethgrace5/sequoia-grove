@@ -1,29 +1,29 @@
 <div class="hidden-xs">
 
     <!-- date labels -->
-    <div class="row day-title">
+    <div class="row">
         <div class="col-sm-3"> <!-- gap on the left --> </div>
-        <div class="col-sm-1"> 7-Sept    </div>
-        <div class="col-sm-1"> 8-Sept   </div>
-        <div class="col-sm-1"> 9-Sept </div>
-        <div class="col-sm-1"> 10-Sept  </div>
-        <div class="col-sm-1"> 11-Sept    </div>
+        <div class="col-sm-1 day-title"> 7-Sept    </div>
+        <div class="col-sm-1 day-title"> 8-Sept   </div>
+        <div class="col-sm-1 day-title-wed"> 9-Sept </div>
+        <div class="col-sm-1 day-title"> 10-Sept  </div>
+        <div class="col-sm-1 day-title"> 11-Sept    </div>
         <div class="col-sm-1">           </div>
-        <div class="col-sm-1"> 12-Sept  </div>
-        <div class="col-sm-1"> 13-Sept    </div>
+        <div class="col-sm-1 day-title"> 12-Sept  </div>
+        <div class="col-sm-1 day-title"> 13-Sept    </div>
     </div>
 
     <!-- weekdayday labels -->
-    <div class="row day-title">
+    <div class="row">
         <div class="col-sm-3"> <!-- gap on the left --> </div>
-        <div class="col-sm-1"> Monday    </div>
-        <div class="col-sm-1"> Tuesday   </div>
-        <div class="col-sm-1"> Wednesday </div>
-        <div class="col-sm-1"> Thursday  </div>
-        <div class="col-sm-1"> Friday    </div>
+        <div class="col-sm-1 day-title"> Monday    </div>
+        <div class="col-sm-1 day-title"> Tuesday   </div>
+        <div class="col-sm-1 day-title-wed"> Wednesday </div>
+        <div class="col-sm-1 day-title"> Thursday  </div>
+        <div class="col-sm-1 day-title"> Friday    </div>
         <div class="col-sm-1">           </div>
-        <div class="col-sm-1"> Saturday  </div>
-        <div class="col-sm-1"> Sunday    </div>
+        <div class="col-sm-1 day-title"> Saturday  </div>
+        <div class="col-sm-1 day-title"> Sunday    </div>
     </div>
 
     <!-- deliveries -->
@@ -53,9 +53,9 @@
     </div>
 
     <!-- shifts -->
-    <div ng-repeat="shift in currentSchedule">
+    <div ng-repeat="shift in schedule1">
+        <div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)">
         <hr/>
-        <div class="row">
             <div class="col-sm-2" > 
                 {{shift.title}} 
             </div>
@@ -71,30 +71,20 @@
                 {{shift.weekendStart}}-{{shift.weekendEnd}}
                 </div> 
             </div>
-            <!-- delivery this day -->
+            <!-- person working this shift -->
             <div class="col-sm-1">
+                <div class="highlighted" ng-show="highlight && user.firstname==sch">
                 {{sch}}
+                </div>
+                <div ng-hide="highlight && user.firstname==sch">
+                {{sch}}
+                </div>
             </div>
             </div>
 
         </div>
     </div>
 
-    <hr/>
-    <!-- Download and Print Options -->
-    <div class="row">
-        <div class="col-sm-12">
-            <form>
-                <button class="btn btn-default pull-right schedule-view-button">
-                    <div > Download </div>
-                </button>
-                <button class="btn btn-default pull-right schedule-view-button">
-                    <div > Print </div>
-                </button>
-            </form>
-        </div>
-    </div>
-    <br/>
 
 </div>
 

@@ -30,7 +30,6 @@
     <script type="text/javascript" src="webjars/jquery/2.1.1/jquery.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.js"></script>
     <script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-    <script src="bower_components/bootstrap-sass-official/assets/javascripts/bootstrap.js"></script>
     <script src="bower_components/angular/angular.js"></script>
     <script src="bower_components/angular-animate/angular-animate.js"></script>
     <script src="bower_components/angular-cookies/angular-cookies.js"></script>

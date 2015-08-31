@@ -27,42 +27,62 @@ $brand-danger:  #d9534f;
     padding: 0 1em ;
 }
 .schedule-view-button {
-    width: 120px;
     margin: 0 0.5em;
+    width: 140px;
 }
 .day-title {
-    font-size: 1.3em;
+    min-width: 90px;
+    font-size: 1.2em;
     color: #336699;
-    margin: 0 0 5px 0;
+    padding: 0 0 5px 0;
+}
+.day-title-wed {
+    min-width: 100px;
+    font-size: 1.2em;
+    color: #336699;
+    padding: 0 0 5px 0;
 }
 .schedule-times {
+    color: #336699;
+}
+.highlighted {
+    background-color: yellow;
+}
+.week-nav-button {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    color: grey;
+    border: none;
+}
+.week-nav-button:focus {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: grey;
+    border: none;
+}
+.week-nav-button:hover {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
     color: blue;
+    border: none;
+}
+.week-nav-button:active {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: blue;
+    border: none;
 }
 
-// Nav Tab Content
-.nav-tabs {
-}
-.nav-tabs>li{
-  float: right;
-}
-.tab-content{
-  height: 300px;
-  color: black;
-  padding:5px;
-}
-.nav-tabs a {
-  //background-color: grey !important;
-  color: black;
-  //border: medium none;
-}
-.nav-tabs > li > a:hover {
-  //background-color: $gray !important;
-  //border: medium none;
-  //border-radius: 0;
-  color: black;
-}
-
-// Header Nav Bar
 .navbar .divider-vertical {
   height: 50px;
   margin: 0 9px;
