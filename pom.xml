@@ -93,7 +93,7 @@
             <plugin>
                 <groupId>org.mortbay.jetty</groupId>
                 <artifactId>maven-jetty-plugin</artifactId>
-                <version>7.0.0.pre5</version>
+                <version>6.1.10</version>
             </plugin>
 
             <plugin>
@@ -124,4 +124,3 @@
 
     </build>
 </project>
-
