@@ -1,5 +1,6 @@
-Phase I ([Instructions](http://www.cs.csub.edu/~hwang/CS342/342_phase1.txt))
+Phase I 
 --
+([Instructions](http://www.cs.csub.edu/~hwang/CS342/342_phase1.txt))
 Fact-Finding Techniques and Information Gathering
 
 1.1 The Sequoia Sandwhich Company is a local popular high quality delicatessen
