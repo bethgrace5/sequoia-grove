@@ -11,8 +11,8 @@ along with options to add beverages, chips and side salads.
 There are currently four locations:
 Downtown, southwest, rosedale, and the Fresno/Clovis area.
 
-1.2 The fact-finding methods used to gather the data was about four years
-past experience of working for the company, as well as facts collected
+1.2 The fact-finding methods used to gather the data was gathered by prior
+experience of working for the company, as well as facts collected
 from the website. The operations on the data will be handled by the
 person in charge of scheduling which is usually the branch manager at
 the location. The database will be used to generate reports consisting
