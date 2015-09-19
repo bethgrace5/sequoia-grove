@@ -1,4 +1,4 @@
-Phase I
+Phase I ([Instructions](http://www.cs.csub.edu/~hwang/CS342/342_phase1.txt)
 --
 Fact-Finding Techniques and Information Gathering
 
