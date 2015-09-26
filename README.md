@@ -1,6 +1,6 @@
 Sequoia Grove
 ==
-Senior Project required for bachelor's degree of computer science at California State University, Bakersfield (CSUB)
+Databases projct, which will become senior project required for bachelor's degree of computer science at California State University, Bakersfield (CSUB)
 
 Purpose
 --
