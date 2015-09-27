@@ -13,5 +13,12 @@
   "SCHEDULE_TAB_HISTORY": "Historia",
   "SCHEDULE_TAB_DELIVERIES": "Entregas",
   "SCHEDULE_TAB_SHIFTS": "Turno de",
+  "SCHEDULE_VIEW_MONDAY": "lunes",
+  "SCHEDULE_VIEW_TUESDAY": "martes",
+  "SCHEDULE_VIEW_WEDNESDAY": "miercoles",
+  "SCHEDULE_VIEW_THURSDAY": "jueves",
+  "SCHEDULE_VIEW_FRIDAY": "viernes",
+  "SCHEDULE_VIEW_SATURDAY": "sabado",
+  "SCHEDULE_VIEW_SUNDAY": "domingo",
   "FOOTER_TRANSLATE": "Traducir"
 }

@@ -2,23 +2,14 @@
   <p class="lead">
     Employee View
   </p>
-
-  <div>
-      <ul class="nav nav-tabs">
-          <li role="presentation" ng-class="{active: activeTab == 'info'}"
-          ng-click="activeTab='info'"><a href="#/employee">{{'EMPLOYEE_TAB_INFO' | translate}}</a></li>
-
-          <li role="presentation" ng-class="{active: activeTab == 'availability'}"
-          ng-click="activeTab='availability'"><a href="#/employee">{{'EMPLOYEE_TAB_AVAILIBILITY' | translate}}</a></li>
-      </ul>
-      <div class="tab-content">
-          <div ng-show="activeTab=='info'" class="tab-pane active">
+      <div class="panel panel-default">
+          <div class="panel-body">
               <employee-info></employee-info>
           </div>
-
-          <div ng-show="activeTab=='availability'" class="tab-pane active">
+      </div>
+      <div class="panel panel-default">
+          <div class="panel-body">
               <employee-availibility></employee-availibility>
           </div>
       </div>
-  </div>
 </div>

@@ -9,15 +9,15 @@
     <context:component-scan base-package="com.sequoiagrove.controller" />
 
     <mvc:annotation-driven />
-    <mvc:resources mapping="/images/**" location="/WEB-INF/images/"/>
-    <mvc:resources mapping="/styles/**" location="/WEB-INF/styles/"/>
-    <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
+    <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
     <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/"/>
-    <mvc:resources mapping="/views/**" location="/WEB-INF/views/"/>
-    <mvc:resources mapping="/i18n/**" location="/resources/i18n/"/>
-    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
+    <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
+    <mvc:resources mapping="/img/**"       location="/resources/img/"/>
+    <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
-    <mvc:resources mapping="/webjars/**" location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
 
     <!---->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">

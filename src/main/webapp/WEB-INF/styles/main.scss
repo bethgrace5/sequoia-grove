@@ -15,40 +15,73 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
+
 #main-content {
   height: 400px;
   background-color: gray;
   color: white;
 }
 
-.nav-tabs {
+// Schedule View
+.schedule-view-header {
+    padding: 0 1em ;
 }
-.nav-tabs>li{
-  float: right;
+.schedule-view-button {
+    margin: 0 0.5em;
+    width: 140px;
 }
-.tab-content{
-  height: 300px;
-  color: black;
-  padding:5px;
+.day-title {
+    font-size: 1.2em;
+    color: #336699;
+    padding: 0 0 5px 0;
 }
-.nav-tabs a {
-  //background-color: grey !important;
-  color: black;
-  //border: medium none;
+.day-title-wed {
+    min-width: 100px;
+    font-size: 1.2em;
+    color: #336699;
+    padding: 0 0 5px 0;
 }
-.nav-tabs > li > a:hover {
-  //background-color: $gray !important;
-  //border: medium none;
-  //border-radius: 0;
-  color: black;
+.schedule-times {
+    color: #336699;
+}
+.highlighted {
+    background-color: yellow;
+}
+.week-nav-button {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    color: grey;
+    border: none;
+}
+.week-nav-button:focus {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: grey;
+    border: none;
+}
+.week-nav-button:hover {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: blue;
+    border: none;
+}
+.week-nav-button:active {
+    box-shadow: none;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    outline: none;
+    background-color: transparent;
+    color: blue;
+    border: none;
 }
 
-.browsehappy {
-  margin: 0.2em 0;
-  background: #ccc;
-  color: #000;
-  padding: 0.2em 0;
-}
 .navbar .divider-vertical {
   height: 50px;
   margin: 0 9px;
@@ -59,6 +92,10 @@ $brand-danger:  #d9534f;
 .navbar-inverse .divider-vertical {
   border-right-color: #222222;
   border-left-color: #111111;
+}
+.request-title {
+  font-size: 1.2em;
+  color: #336699;
 }
 
 body {

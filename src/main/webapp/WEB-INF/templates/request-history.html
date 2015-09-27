@@ -1,3 +1,50 @@
-<p class="lead">
-    View Request History Template
-</p>
+<div class="row">
+    <div class="col-sm-12">
+        <p class="lead">
+            Request History
+        </p>
+    </div>
+</div>
+
+<div class="row request-title">
+    <div class="col-sm-1">
+        <p> Employee </p>
+    </div>
+    <div class="col-sm-2">
+        <p> Start Date </p>
+    </div>
+    <div class="col-sm-2">
+        <p> End Date </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Total Days </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Status </p>
+    </div>
+</div>
+
+<div  ng-repeat="request in previousRequests">
+    <br/>
+    <div class="row">
+        <div class="col-sm-1">
+            <p> {{request.employee}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.startDate}} </p>
+        </div>
+        <div class="col-sm-2">
+            <p> {{request.endDate}} </p>
+        </div>
+        <div class="col-sm-1">
+            <p> {{request.totalDays}} </p>
+        </div>
+        <div class="col-sm-1">
+            <p> {{request.status}} </p>
+        </div>
+        <div class="col-sm-3">
+            Approved by: %supervisor%
+        </div>
+    </div>
+</div>
+

@@ -13,8 +13,7 @@ angular.module('sequoiaGroveApp', [
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider) {
     $routeProvider
       .when('/', {
-        controller: 'MainCtrl',
-        controllerAs: 'main'
+        redirectTo: '/home'
       })
       .when('/login', {
         templateUrl: 'views/login.html',
@@ -42,7 +41,7 @@ angular.module('sequoiaGroveApp', [
         controllerAs: 'request'
       })
       .otherwise({
-        redirectTo: '/'
+        redirectTo: '/home'
       });
 
 

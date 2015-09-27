@@ -1,3 +1,105 @@
-<p class="lead">
-    Published Schedule Template
-</p>
+<div class="hidden-xs">
+
+    <!-- date labels -->
+    <div class="row">
+        <div class="col-sm-3"> <!-- gap on the left --> </div>
+        <div class="col-sm-1 day-title"> 7-Sept    </div>
+        <div class="col-sm-1 day-title"> 8-Sept   </div>
+        <div class="col-sm-1 day-title-wed"> 9-Sept </div>
+        <div class="col-sm-1 day-title"> 10-Sept  </div>
+        <div class="col-sm-1 day-title"> 11-Sept    </div>
+        <div class="col-sm-1">           </div>
+        <div class="col-sm-1 day-title"> 12-Sept  </div>
+        <div class="col-sm-1 day-title"> 13-Sept    </div>
+    </div>
+
+    <!-- weekdayday labels
+    <div class="row">
+        <div class="col-sm-3">  gap on the left  </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title-wed"> {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
+        <div class="col-sm-1">           </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
+    </div>
+    -->
+
+    <div class="row">
+        <div class="col-sm-3"> <!-- gap on the left --> </div>
+        <div class="col-sm-1 day-title"> Monday </div>
+        <div class="col-sm-1 day-title"> Tuesday</div>
+        <div class="col-sm-1 day-title-wed"> Wednesday </div>
+        <div class="col-sm-1 day-title"> Thursday </div>
+        <div class="col-sm-1 day-title"> Friday </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-1 day-title"> Saturday </div>
+        <div class="col-sm-1 day-title"> Sunday </div>
+    </div>
+
+    <!-- deliveries -->
+    <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
+        <div class="row">
+            <div ng-repeat="day in delivery.days">
+                <!-- gap on the left -->
+                <div class="col-sm-3" ng-show="$index==0""col-sm-2"> </div>
+
+                <!-- gap between weekdays and weekend days -->
+                <div ng-show="$index==5"> <div class="col-sm-1"> </div> </div>
+
+                <!-- delivery this day -->
+                <div ng-show="day">
+                    <div class="col-sm-1 delivery-title">
+                        {{delivery.title}}
+                    </div>
+                </div>
+
+                <!-- no delivery this day -->
+                <div ng-hide="day">
+                    <div class="col-sm-1 delivery-title">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- shifts -->
+    <div ng-repeat="shift in schedule1">
+        <div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)">
+        <hr/>
+            <div class="col-sm-2" > 
+                {{shift.title}} 
+            </div>
+            <!-- weekday times -->
+            <div class="col-sm-1 schedule-times" > 
+                {{shift.weekdayStart}}-{{shift.weekdayEnd}}
+            </div>
+
+            <div ng-repeat="sch in shift.scheduled">
+            <!-- weekend times -->
+            <div ng-show="$index==5"> 
+                <div class="col-sm-1 schedule-times"> 
+                {{shift.weekendStart}}-{{shift.weekendEnd}}
+                </div> 
+            </div>
+            <!-- person working this shift -->
+            <div class="col-sm-1">
+                <div class="highlighted" ng-show="highlight && user.firstname==sch">
+                {{sch}}
+                </div>
+                <div ng-hide="highlight && user.firstname==sch">
+                {{sch}}
+                </div>
+            </div>
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+
+
+
