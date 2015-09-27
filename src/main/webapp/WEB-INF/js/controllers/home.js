@@ -8,9 +8,13 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('HomeCtrl', function ($scope) {
+  .controller('HomeCtrl', function ($scope, $translate) {
     $scope.showDeliveries = false;
-    $scope.highlight = true;
+    $scope.highlight = false;
+
+    $scope.$on('translate', function(event, data) {
+    }); 
+
 
     // types are: all, user, front, kitchen, janitor
     $scope.type = 'all';

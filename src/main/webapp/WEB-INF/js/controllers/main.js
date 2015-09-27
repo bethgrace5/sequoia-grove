@@ -18,13 +18,18 @@ angular.module('sequoiaGroveApp')
 
 
     // Sample Data as JSON
-    $scope.user = { firstname: "John", lastname: "Pancakes", type: "manager" };
+    $scope.user1 = { firstname: "John", lastname: "theManager", type: "manager" };
+    $scope.user2 = { firstname: "Smith", lastname: "theEmployee", type: "employee" };
+    $scope.lang = 'en';
+    $scope.user = $scope.user1;
 
     localStorageService.set('SequoiaGrove.user', $scope.user);
 
     $scope.changeLanguage = function (langKey) {
       $translate.use(langKey);
+      $scope.lang = langKey;
       localStorageService.set('SequoiaGrove.lang', langKey);
+      $scope.$broadcast('translate');
     };
 
     // set active tab to

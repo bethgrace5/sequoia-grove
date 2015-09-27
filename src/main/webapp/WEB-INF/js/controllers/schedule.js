@@ -8,10 +8,9 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('ScheduleCtrl', function ($scope) {
+  .controller('ScheduleCtrl', function ($scope, $rootScope, $translate) {
     $scope.activeTab = 'schedule';
     $scope.newDelivery = '';
-
     $scope.removeDelivery = function(index) {
       // remove delivery from dummy list for now
       $scope.deliveries.splice(index, 1);

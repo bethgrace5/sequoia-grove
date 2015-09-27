@@ -13,17 +13,30 @@
         <div class="col-sm-1 day-title"> 13-Sept    </div>
     </div>
 
-    <!-- weekdayday labels -->
+    <!-- weekdayday labels
+    <div class="row">
+        <div class="col-sm-3">  gap on the left  </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title-wed"> {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
+        <div class="col-sm-1">           </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
+        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
+    </div>
+    -->
+
     <div class="row">
         <div class="col-sm-3"> <!-- gap on the left --> </div>
-        <div class="col-sm-1 day-title"> Monday    </div>
-        <div class="col-sm-1 day-title"> Tuesday   </div>
+        <div class="col-sm-1 day-title"> Monday </div>
+        <div class="col-sm-1 day-title"> Tuesday</div>
         <div class="col-sm-1 day-title-wed"> Wednesday </div>
-        <div class="col-sm-1 day-title"> Thursday  </div>
-        <div class="col-sm-1 day-title"> Friday    </div>
-        <div class="col-sm-1">           </div>
-        <div class="col-sm-1 day-title"> Saturday  </div>
-        <div class="col-sm-1 day-title"> Sunday    </div>
+        <div class="col-sm-1 day-title"> Thursday </div>
+        <div class="col-sm-1 day-title"> Friday </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-1 day-title"> Saturday </div>
+        <div class="col-sm-1 day-title"> Sunday </div>
     </div>
 
     <!-- deliveries -->
@@ -38,14 +51,14 @@
 
                 <!-- delivery this day -->
                 <div ng-show="day">
-                    <div class="col-sm-1">
+                    <div class="col-sm-1 delivery-title">
                         {{delivery.title}}
                     </div>
                 </div>
 
                 <!-- no delivery this day -->
                 <div ng-hide="day">
-                    <div class="col-sm-1">
+                    <div class="col-sm-1 delivery-title">
                     </div>
                 </div>
             </div>
