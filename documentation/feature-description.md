@@ -91,8 +91,7 @@ View past schedules (Manager only)
 
 ---
 Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
-
-*(in progress..)*
+![alt text](views/screenshot-schedule-delivery-edit.png)
 
 ---
 Edit shifts - add/delete shifts, edit shift hours (Manager only)
