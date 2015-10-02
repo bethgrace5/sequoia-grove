@@ -69,13 +69,13 @@ employed for the company, not counting any past lengths of employment.
 Screenshots
 --
 *  View the current schedule (Employee and Manager) manager options shown on toolbar at the top
-![alt text](../views/screenshot-home.png)
+![alt text](views/screenshot-home.png)
 *  submit requests off, and view status of your previous submissions (Employee and Manager)
-![alt text](../views/screenshot-request-submit.png)
+![alt text](views/screenshot-request-submit.png)
 *  Approve or Deny the status of requests submitted (Manager)
-![alt text](../views/screenshot-request-pending.png)
+![alt text](views/screenshot-request-pending.png)
 *  View the history and status of all requests submitted by all employees (Manager only)
-![alt text](../views/screenshot-request-history.png)
+![alt text](views/screenshot-request-history.png)
 *  Edit/Create current and future schedules (Manager only)
 **in progress..**
 *  View past schedules (Manager only)
