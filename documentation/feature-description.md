@@ -4,10 +4,10 @@ Feature Description
 
 ### User Access levels
 There are only two levels of users for the system, regular employees, and manager
-employees. *employee* refers to a regular employee and *manager* refers to a manager
+employees. **employee** refers to a regular employee and **manager** refers to a manager
 employee. In practice, a manager in the company is usually the owner, or branch manager.
 A supervisor is considered a regular employee and not a manager. There are no 
-special user privelages for supverisors, so supervisors will be considered as *employees*.
+special user privelages for supverisors, so supervisors will be considered as **employees**.
 
 Employees will be using the system to view the current schedule, submit requests
 for days off, and view the status of their own requests previously submitted.
@@ -68,24 +68,33 @@ employed for the company, not counting any past lengths of employment.
 
 Screenshots
 --
-*  View the current schedule (Employee and Manager) manager options shown on toolbar at the top
+View the current schedule (Employee and Manager) manager options shown on toolbar at the top
 ![alt text](views/screenshot-home.png)
-*  submit requests off, and view status of your previous submissions (Employee and Manager)
+---
+submit requests off, and view status of your previous submissions (Employee and Manager)
 ![alt text](views/screenshot-request-submit.png)
-*  Approve or Deny the status of requests submitted (Manager)
+---
+Approve or Deny the status of requests submitted (Manager)
 ![alt text](views/screenshot-request-pending.png)
-*  View the history and status of all requests submitted by all employees (Manager only)
+---
+View the history and status of all requests submitted by all employees (Manager only)
 ![alt text](views/screenshot-request-history.png)
-*  Edit/Create current and future schedules (Manager only)
-**in progress..**
-*  View past schedules (Manager only)
-**in progress..**
-*  Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
-**in progress..**
-*  Edit shifts - add/delete shifts, edit shift hours (Manager only)
-**in progress..**
-*  Create employees, edit their information, edit their roles (Manager only)
-**in progress..**
-*  Edit employee availability
-**in progress..**
+---
+Edit/Create current and future schedules (Manager only)
+_in progress.._
+---
+View past schedules (Manager only)
+_in progress.._
+---
+Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
+_in progress.._
+---
+Edit shifts - add/delete shifts, edit shift hours (Manager only)
+_in progress.._
+---
+Create employees, edit their information, edit their roles (Manager only)
+_in progress.._
+---
+Edit employee availability
+_in progress.._
 
