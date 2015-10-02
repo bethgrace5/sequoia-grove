@@ -85,22 +85,27 @@ Edit/Create current and future schedules (Manager only)
 
 ---
 View past schedules (Manager only)
+
 *(in progress..)*
 
 ---
 Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
+
 *(in progress..)*
 
 ---
 Edit shifts - add/delete shifts, edit shift hours (Manager only)
+
 *(in progress..)*
 
 ---
 Create employees, edit their information, edit their roles (Manager only)
+
 *(in progress..)*
 
 ---
 Edit employee availability
+
 *(in progress..)*
 
 
