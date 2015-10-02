@@ -96,7 +96,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "Thor",
           saturday: "Batman",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "open support",
         role: "supervisor",
@@ -128,7 +128,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "front",
         role: "cashier",
@@ -140,9 +140,9 @@ angular.module('sequoiaGroveApp')
         scheduled: {
           monday: "Xyla",
           tuesday: "Go Out",
-          wednesday: "The People",
-          thursday: "Always Shout",
-          friday: "There goes",
+          wednesday: "People",
+          thursday: "Shout",
+          friday: "goes",
           saturday: "John",
           sunday: "John"}
       },
@@ -160,7 +160,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "meat",
         role: "coldPrep",
@@ -175,7 +175,7 @@ angular.module('sequoiaGroveApp')
           wednesday: "",
           thursday: "",
           friday: "",
-          saturday: "John Jacob",
+          saturday: "John",
           sunday: "Smith"}
       },
       { title: "salads",
@@ -192,7 +192,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "soups",
         role: "kitchen",
@@ -208,7 +208,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "cakes",
         role: "bakery",
@@ -224,7 +224,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "open janitor",
         role: "janitor",
@@ -306,7 +306,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "front",
         role: "cashier",
@@ -319,8 +319,8 @@ angular.module('sequoiaGroveApp')
           monday: "Xyla",
           tuesday: "Go Out",
           wednesday: "John",
-          thursday: "Always Shout",
-          friday: "There goes",
+          thursday: "Shout",
+          friday: "goes",
           saturday: "John",
           sunday: "Smith"}
       },
@@ -338,7 +338,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "meat",
         role: "coldPrep",
@@ -370,7 +370,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "soups",
         role: "kitchen",
@@ -386,7 +386,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "cakes",
         role: "bakery",
@@ -402,7 +402,7 @@ angular.module('sequoiaGroveApp')
           thursday: "Smith",
           friday: "His Name",
           saturday: "Is My",
-          sunday: "Name Too"}
+          sunday: "Name "}
       },
       { title: "open janitor",
         role: "janitor",
