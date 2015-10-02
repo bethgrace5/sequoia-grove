@@ -81,6 +81,7 @@ View the history and status of all requests submitted by all employees (Manager 
 ![alt text](views/screenshot-request-history.png)
 ---
 Edit/Create current and future schedules (Manager only)
+
 *(in progress..)*
 
 ---
