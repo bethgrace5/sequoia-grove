@@ -33,6 +33,10 @@ angular.module('sequoiaGroveApp')
       }
     }
 
+    $scope.alteredTitle = '';
 
+    $scope.changeShift = function() {
+
+    }
 
   });

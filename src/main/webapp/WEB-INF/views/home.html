@@ -26,6 +26,18 @@
                     </ul>
                 </div>
                 -->
+                <div class="btn-group" dropdown is-open=true>
+                    <button type="button" id="narrowView" class="btn btn-default schedule-view-button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Showing: {{type}} <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="narrowView">
+                        <li role="menuitem"><a ng-click="type='all'">all</a></li>
+                        <li role="menuitem"><a ng-click="type='mine'">mine</a></li>
+                        <li role="menuitem"><a ng-click="type='front'">front</a></li>
+                        <li role="menuitem"><a ng-click="type='kitchen'">kitchen</a></li>
+                        <li role="menuitem"><a ng-click="type='janitor'">janitor</a></li>
+                    </ul>
+                </div>
             </form>
             <form class="pull-right">
                 <!-- Download and Print Options -->
