@@ -81,20 +81,20 @@ View the history and status of all requests submitted by all employees (Manager 
 ![alt text](views/screenshot-request-history.png)
 ---
 Edit/Create current and future schedules (Manager only)
-_in progress.._
+*(in progress..)*
 ---
 View past schedules (Manager only)
-_in progress.._
+*(in progress..)*
 ---
 Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
-_in progress.._
+*(in progress..)*
 ---
 Edit shifts - add/delete shifts, edit shift hours (Manager only)
-_in progress.._
+*(in progress..)*
 ---
 Create employees, edit their information, edit their roles (Manager only)
-_in progress.._
+*(in progress..)*
 ---
 Edit employee availability
-_in progress.._
+*(in progress..)*
 
