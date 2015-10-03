@@ -46,7 +46,6 @@
 
     <!-- build:js({.tmp,app}) scripts/scripts.js -->
     <script src="js/app.js"></script><!-- our controller -->
-    <script src="js/controllers/about.js"></script>
     <script src="js/controllers/home.js"></script>
     <script src="js/controllers/employee.js"></script>
     <script src="js/controllers/login.js"></script>
