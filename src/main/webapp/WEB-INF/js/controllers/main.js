@@ -80,361 +80,327 @@ angular.module('sequoiaGroveApp')
             sunday:    false }
       }];
 
-    //sample schedule object array
-    $scope.schedule1 = [
-      { title: "open store",
-        role: "supervisor",
-        type: "front",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "John",
-          tuesday: "Jacob",
-          wednesday: "Thor",
-          thursday: "Smith",
-          friday: "Thor",
-          saturday: "Batman",
-          sunday: "Name "}
+    // sample employee list
+    $scope.employees = [
+      { name: "John", roles:["janitor"], 
+        availibility:[
+          // janitor shifts
+          { shiftid: "13", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "14", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "open support",
-        role: "supervisor",
-        type: "front",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Thor",
-          tuesday: "Sawyer",
-          wednesday: "John",
-          thursday: "John",
-          friday: "John",
-          saturday: "Rohn",
-          sunday: "Smith"}
-      },
-      { title: "register 1",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:00",
-        weekendStart: "8:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Elton",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
-      },
-      { title: "front",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:00",
-        weekendStart: "8:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Xyla",
-          tuesday: "Go Out",
-          wednesday: "People",
-          thursday: "Shout",
-          friday: "goes",
-          saturday: "John",
-          sunday: "John"}
-      },
-      { title: "front",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:30",
-        weekendStart: "8:00",
-        weekendEnd: "3:30",
-        scheduled: {
-          monday: "Smith",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
-      },
-      { title: "meat",
-        role: "coldPrep",
-        type: "front",
-        weekdayStart: "",
-        weekdayEnd: "",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "",
-          tuesday: "",
-          wednesday: "",
-          thursday: "",
-          friday: "",
-          saturday: "John",
-          sunday: "Smith"}
-      },
-      { title: "salads",
-        role: "kitchen",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Alfred",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
-      },
-      { title: "soups",
-        role: "kitchen",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Amela",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
-      },
-      { title: "cakes",
-        role: "bakery",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Cara",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
-      },
-      { title: "open janitor",
-        role: "janitor",
-        type: "janitor",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Yellow",
-          tuesday: "Yellow",
-          wednesday: "Yellow",
-          thursday: "Blue",
-          friday: "Blue",
-          saturday: "Blue",
-          sunday: "Green"}
-      },
-      { title: "close janitor",
-        role: "janitor",
-        type: "janitor",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Blue",
-          tuesday: "Blue",
-          wednesday: "Green",
-          thursday: "Green",
-          friday: "Green",
-          saturday: "Yellow",
-          sunday: "Yellow"}
-    }];
 
-    $scope.schedule2 = [
-      { title: "open store",
-        role: "supervisor",
-        type: "front",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Thor",
-          tuesday: "John",
-          wednesday: "Jacob",
-          thursday: "Sawyer",
-          friday: "Thor",
-          saturday: "Batman",
-          sunday: "Blue"}
+      { name: "Sue", roles:["janitor", "coldPrep"], 
+        availibility:[
+          // cold prep shifts
+          { shiftid: "6",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          // janitor shifts
+          { shiftid: "13", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "14", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "open support",
-        role: "supervisor",
-        type: "front",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Batman",
-          tuesday: "Thor",
-          wednesday: "Cara",
-          thursday: "Jacob",
-          friday: "Elton",
-          saturday: "Smith",
-          sunday: "John"}
+
+      { name: "Eli", roles:["coldPrep"], 
+        availibility:[
+          // cold prep shifts
+          { shiftid: "6",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "register 1",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:00",
-        weekendStart: "8:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Elton",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
+
+      { name: "Mark", roles:["coldPrep"], 
+        availibility:[
+          // cold prep shifts
+          { shiftid: "6",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "front",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:00",
-        weekendStart: "8:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Xyla",
-          tuesday: "Go Out",
-          wednesday: "John",
-          thursday: "Shout",
-          friday: "goes",
-          saturday: "John",
-          sunday: "Smith"}
+
+      { name: "Sandy", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "front",
-        role: "cashier",
-        type: "front",
-        weekdayStart: "8:00",
-        weekdayEnd: "3:30",
-        weekendStart: "8:00",
-        weekendEnd: "3:30",
-        scheduled: {
-          monday: "Smith",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
+
+      { name: "Danny", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "meat",
-        role: "coldPrep",
-        type: "front",
-        weekdayStart: "",
-        weekdayEnd: "",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "",
-          tuesday: "",
-          wednesday: "",
-          thursday: "",
-          friday: "",
-          saturday: "John Jacob",
-          sunday: "Smith"}
+
+      { name: "Heidi", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "salads",
-        role: "kitchen",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Alfred",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
+
+      { name: "Debra", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "soups",
-        role: "kitchen",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Amela",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
+
+      { name: "Lynne", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
       },
-      { title: "cakes",
-        role: "bakery",
-        type: "kitchen",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Cara",
-          tuesday: "Jacob",
-          wednesday: "Jingleheimer",
-          thursday: "Smith",
-          friday: "His Name",
-          saturday: "Is My",
-          sunday: "Name "}
+
+      { name: "Dawn", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
       },
-      { title: "open janitor",
-        role: "janitor",
-        type: "janitor",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Green",
-          tuesday: "Green",
-          wednesday: "Green",
-          thursday: "Blue",
-          friday: "Yellow ",
-          saturday: "John",
-          sunday: "Green"}
+
+      { name: "Shawn", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
       },
-      { title: "close janitor",
-        role: "janitor",
-        type: "janitor",
-        weekdayStart: "6:00",
-        weekdayEnd: "2:00",
-        weekendStart: "7:00",
-        weekendEnd: "3:00",
-        scheduled: {
-          monday: "Blue",
-          tuesday: "Blue",
-          wednesday: "Blue",
-          thursday: "Green",
-          friday: "Green",
-          saturday: "Yellow",
-          sunday: "Yellow"}
-    }];
+
+      { name: "Lawn", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+
+      { name: "Tracie", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+
+      { name: "Bela", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+
+      { name: "Cassie", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+
+      { name: "Frank", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+
+      { name: "George", roles:["kitchen"], 
+        availibility:[
+          // kitchen shifts
+          { shiftid: "8",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "9",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "10",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "11",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+        ]
+      },
+    ];
+
+    $scope.shifts = [
+      { id: "1", title: "open store",   role: "supervisor", type: "front",   weekdayStart: "6:00", weekdayEnd: "2:00", weekendStart: "7:00", weekendEnd: "3:00" },
+      { id: "2", title: "open support", role: "supervisor", type: "front",   weekdayStart: "6:00", weekdayEnd: "2:00", weekendStart: "7:00", weekendEnd: "3:00" },
+      { id: "3", title: "register 1",   role: "cashier",    type: "front",   weekdayStart: "8:00", weekdayEnd: "3:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "4", title: "register 2",   role: "cashier",    type: "front",   weekdayStart: "8:00", weekdayEnd: "3:30", weekendStart: "8:00", weekendEnd: "3:30" },
+      { id: "5", title: "mid-morning",  role: "cashier",    type: "front",   weekdayStart: "9:00", weekdayEnd: "2:00", weekendStart: "9:00", weekendEnd: "3:00" },
+      { id: "6", title: "meat",         role: "coldPrep",   type: "front",   weekdayStart: "6:00", weekdayEnd: "2:00", weekendStart: "7:00", weekendEnd: "3:00" },
+      { id: "7", title: "cheese",       role: "coldPrep",   type: "front",   weekdayStart: "6:00", weekdayEnd: "2:00", weekendStart: "7:00", weekendEnd: "3:00" },
+      { id: "8", title: "bakery",       role: "kitchen",    type: "kitchen", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "9", title: "soups",        role: "kitchen",    type: "kitchen", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "10", title: "salads",      role: "kitchen",    type: "kitchen", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "11", title: "hot sandwich",role: "kitchen",    type: "kitchen", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "12", title: "hot sandwich",role: "kitchen",    type: "kitchen", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "13", title: "opening janitor", role: "janitor",    type: "janitor", weekdayStart: "7:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" },
+      { id: "14", title: "closing janitor",role: "janitor",    type: "janitor", weekdayStart: "3:00", weekdayEnd: "2:00", weekendStart: "8:00", weekendEnd: "3:00" }];
+
+    $scope.currentSchedule = [
+    { date: "Sept-7",  
+      weekday: "monday",
+      scheduled:[
+        {shiftid: "1",  name: "person"},
+        {shiftid: "2",  name: "person"},
+        {shiftid: "3",  name: "person"},
+        {shiftid: "4",  name: "person"},
+        {shiftid: "5",  name: "person"},
+        {shiftid: "6",  name: "person"},
+        {shiftid: "7",  name: "person"},
+        {shiftid: "8",  name: "person"},
+        {shiftid: "9",  name: "person"},
+        {shiftid: "10", name: "person"},
+        {shiftid: "11", name: "person"},
+        {shiftid: "12", name: "person"},
+        {shiftid: "13", name: "person"},
+        {shiftid: "14", name: "person"}
+       ]
+    },
+    { date: "Sept-8",  
+       weekday: "tuesday",
+       scheduled:[
+         {shiftid: "1",  name: "person"},
+         {shiftid: "2",  name: "person"},
+         {shiftid: "3",  name: "person"},
+         {shiftid: "4",  name: "person"},
+         {shiftid: "5",  name: "person"},
+         {shiftid: "6",  name: "person"},
+         {shiftid: "7",  name: "person"},
+         {shiftid: "8",  name: "person"},
+         {shiftid: "9",  name: "person"},
+         {shiftid: "10", name: "person"},
+         {shiftid: "11", name: "person"},
+         {shiftid: "12", name: "person"},
+         {shiftid: "13", name: "person"},
+         {shiftid: "14", name: "person"}
+       ],
+    },
+    { date: "Sept-9",
+       weekday: "wednesday",
+       scheduled:[
+         {shiftid: "1",  name: "person"},
+         {shiftid: "2",  name: "person"},
+         {shiftid: "3",  name: "person"},
+         {shiftid: "4",  name: "person"},
+         {shiftid: "5",  name: "person"},
+         {shiftid: "6",  name: "person"},
+         {shiftid: "7",  name: "person"},
+         {shiftid: "8",  name: "person"},
+         {shiftid: "9",  name: "person"},
+         {shiftid: "10", name: "person"},
+         {shiftid: "11", name: "person"},
+         {shiftid: "12", name: "person"},
+         {shiftid: "13", name: "person"},
+         {shiftid: "14", name: "person"}
+       ]
+    },
+    { date: "Sept-10",
+       weekday: "thursday",
+       scheduled:[
+         { shiftid: "1",  name: "person" },
+         { shiftid: "2",  name: "person" },
+         { shiftid: "3",  name: "person" },
+         { shiftid: "4",  name: "person" },
+         { shiftid: "5",  name: "person" },
+         { shiftid: "6",  name: "person" },
+         { shiftid: "7",  name: "person" },
+         { shiftid: "8",  name: "person" },
+         { shiftid: "9",  name: "person" },
+         { shiftid: "10", name: "person" },
+         { shiftid: "11", name: "person" },
+         { shiftid: "12", name: "person" },
+         { shiftid: "13", name: "person" },
+         { shiftid: "14", name: "person" }
+       ]
+    },
+    { date: "Sept-11",
+       weekday: "friday",
+       scheduled:[
+         { shiftid: "1",  name: "person" },
+         { shiftid: "2",  name: "person" },
+         { shiftid: "3",  name: "person" },
+         { shiftid: "4",  name: "person" },
+         { shiftid: "5",  name: "person" },
+         { shiftid: "6",  name: "person" },
+         { shiftid: "7",  name: "person" },
+         { shiftid: "8",  name: "person" },
+         { shiftid: "9",  name: "person" },
+         { shiftid: "10", name: "person" },
+         { shiftid: "11", name: "person" },
+         { shiftid: "12", name: "person" },
+         { shiftid: "13", name: "person" },
+         { shiftid: "14", name: "person" }
+       ]
+    },
+    { date: "Sept-12",
+       weekday: "saturday",
+       scheduled:[
+         { shiftid: "1",  name: "person" },
+         { shiftid: "2",  name: "person" },
+         { shiftid: "3",  name: "person" },
+         { shiftid: "4",  name: "person" },
+         { shiftid: "5",  name: "person" },
+         { shiftid: "6",  name: "person" },
+         { shiftid: "7",  name: "person" },
+         { shiftid: "8",  name: "person" },
+         { shiftid: "9",  name: "person" },
+         { shiftid: "10", name: "person" },
+         { shiftid: "11", name: "person" },
+         { shiftid: "12", name: "person" },
+         { shiftid: "13", name: "person" },
+         { shiftid: "14", name: "person" }
+       ]
+    },
+    { date: "Sept-13",
+       weekday: "sunday",
+       scheduled:[
+         { shiftid: "1",  name: "person" },
+         { shiftid: "2",  name: "person" },
+         { shiftid: "3",  name: "person" },
+         { shiftid: "4",  name: "person" },
+         { shiftid: "5",  name: "person" },
+         { shiftid: "6",  name: "person" },
+         { shiftid: "7",  name: "person" },
+         { shiftid: "8",  name: "person" },
+         { shiftid: "9",  name: "person" },
+         { shiftid: "10", name: "person" },
+         { shiftid: "11", name: "person" },
+         { shiftid: "12", name: "person" },
+         { shiftid: "13", name: "person" },
+         { shiftid: "14", name: "person" }
+       ]
+    }
+    ];
 
 });

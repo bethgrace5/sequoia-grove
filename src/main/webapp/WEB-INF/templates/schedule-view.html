@@ -2,27 +2,23 @@
 
     <!-- date labels -->
     <div class="row">
-        <div class="col-sm-3"> <!-- gap on the left --> </div>
-        <div class="col-sm-1 day-title"> 7-Sept    </div>
-        <div class="col-sm-1 day-title"> 8-Sept   </div>
-        <div class="col-sm-1 day-title-wed"> 9-Sept </div>
-        <div class="col-sm-1 day-title"> 10-Sept  </div>
-        <div class="col-sm-1 day-title"> 11-Sept    </div>
-        <div class="col-sm-1">           </div>
-        <div class="col-sm-1 day-title"> 12-Sept  </div>
-        <div class="col-sm-1 day-title"> 13-Sept    </div>
+        <div class="col-sm-1 col-sm-offset-3 day-title"> {{currentSchedule[0].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[1].date}} </div>
+        <div class="col-sm-1 day-title-wed">             {{currentSchedule[2].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[3].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[4].date}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{currentSchedule[5].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[6].date}} </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-3">  <!-- gap on the left -->  </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title-wed"> {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
-        <div class="col-sm-1">           </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
+        <div class="col-sm-1 col-sm-offset-3 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title-wed">             {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
     </div>
 
     <!-- deliveries -->
@@ -52,34 +48,61 @@
     </div>
 
     <!-- shifts -->
-    <div ng-repeat="shift in schedule1">
+    <div ng-repeat="shift in shifts">
         <div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)">
         <hr/>
-            <div class="col-sm-2" > 
+
+            <!-- shift title -->
+            <div class="col-sm-2 col-sm-offset-0" > 
                 {{shift.title}} 
             </div>
-            <!-- weekday times -->
-            <div class="col-sm-1 schedule-times" > 
+
+        <!-- weekday times -->
+            <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
                 {{shift.weekdayStart}}-{{shift.weekdayEnd}}
             </div>
 
-            <div ng-repeat="sch in shift.scheduled">
-            <!-- weekend times -->
-            <div ng-show="$index==5"> 
-                <div class="col-sm-1 schedule-times"> 
+            <!-- Monday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[0].scheduled[$index].name}}
+            </div>
+
+            <!-- Tuesday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[1].scheduled[$index].name}}
+            </div>
+
+            <!-- Wednesday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[2].scheduled[$index].name}}
+            </div>
+
+            <!-- Thursday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[3].scheduled[$index].name}}
+            </div>
+
+            <!-- Friday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[4].scheduled[$index].name}}
+            </div>
+
+        <!-- weekend times -->
+            <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
                 {{shift.weekendStart}}-{{shift.weekendEnd}}
-                </div> 
             </div>
-            <!-- person working this shift -->
-            <div class="col-sm-1">
-                <div class="highlighted" ng-show="highlight && user.firstname==sch">
-                {{sch}}
-                </div>
-                <div ng-hide="highlight && user.firstname==sch">
-                {{sch}}
-                </div>
+
+            <!-- Saturday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[5].scheduled[$index].name}}
             </div>
+
+            <!-- Sunday -->
+            <div class="col-sm-1 col-sm-offset-0 " > 
+                {{currentSchedule[6].scheduled[$index].name}}
             </div>
+
+
 
         </div>
     </div>
