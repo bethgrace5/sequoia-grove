@@ -403,4 +403,13 @@ angular.module('sequoiaGroveApp')
     }
     ];
 
+    $scope.roleList = [
+      {role: "Supervisor"},
+      {role: "Cashier"},
+      {role: "Cold Prep"},
+      {role: "Kitchen"},
+      {role: "Bakery"},
+      {role: "Janitor"},
+    ]
+
 });
