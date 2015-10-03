@@ -35,8 +35,6 @@ angular.module('sequoiaGroveApp')
 
     $scope.alteredTitle = '';
 
-    $scope.changeShift = function() {
-
-    }
+    $scope.changeShift = function() {}
 
   });

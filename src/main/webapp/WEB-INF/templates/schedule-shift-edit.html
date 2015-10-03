@@ -35,59 +35,38 @@
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="primary-role-dropdown">
-                    <li><a ng-click="type=''">%role1%</a></li>
-                    <li><a ng-click="type=''">%role2%</a></li>
-                    <li><a ng-click="type=''">%role3%</a></li>
+                    <li ng-repeat="item in roleList">{{item.role}}</li>
                 </ul>
             </div>
         </div>
-        <div class="col-sm-2">
-            <div class="dropdown">
-                <button id="weekday-start-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select Time
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="weekday-start-dropdown">
-                    <li><a ng-click="type=''">6:00</a></li>
-                    <li><a ng-click="type=''">6:30</a></li>
-                </ul>
-            </div>
+        <div class="col-sm-1">
+            <input type="text" class="form-control" ng-click="weekdayStart" placeholder="0:00">
         </div>
-        <div class="col-sm-2">
-            <div class="dropdown">
-                <button id="weekday-end-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select Time
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="weekday-end-dropdown">
-                    <li><a ng-click="type=''">6:00</a></li>
-                    <li><a ng-click="type=''">6:30</a></li>
-                </ul>
-            </div>
+        <div class="col-sm-1 col-sm-offset-1">
+            <input type="text" class="form-control" ng-click="weekdayEnd" placeholder="0:00">
         </div>
-        <div class="col-sm-2">
-            <div class="dropdown">
-                <button id="weekend-start-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select Time
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="weekend-start-dropdown">
-                    <li><a ng-click="type=''">6:00</a></li>
-                    <li><a ng-click="type=''">6:30</a></li>
-                </ul>
-            </div>
+        <div class="col-sm-1 col-sm-offset-1">
+            <input type="text" class="form-control" ng-click="weekendStart" placeholder="0:00">
         </div>
-        <div class="col-sm-2">
-            <div class="dropdown">
-                <button id="weekend-end-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    Select Time
-                    <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" aria-labelledby="weekend-end-dropdown">
-                    <li><a ng-click="type=''">6:00</a></li>
-                    <li><a ng-click="type=''">6:30</a></li>
-                </ul>
-            </div>
+        <div class="col-sm-1 col-sm-offset-1">
+            <input type="text" class="form-control" ng-click="weekendEnd" placeholder="0:00">
         </div>
     </form>
+</div>
+<hr class="divider-horizontal"/>
+<div class="row request-title">
+    <div class="col-sm-2">
+        <p>Title</p>
+    </div>
+    <div class="col-sm-2">
+        <p>Primary Role</p>
+    </div>
+    <div class="col-sm-2">
+        <p>Weekday Hours</p>
+    </div>
+    <div class="col-sm-2">
+        <p>Weekend Hours</p>
+    </div>
+</div>
+<div class="row">
 </div>
