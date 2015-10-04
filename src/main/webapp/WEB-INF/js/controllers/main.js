@@ -108,6 +108,21 @@ angular.module('sequoiaGroveApp')
           { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
+      { name: "Carl", roles:["coldPrep"], 
+        availibility:[
+          // cold prep shifts
+          { shiftid: "6",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
+      },
+      { name: "Bekka", roles:["coldPrep"], 
+        availibility:[
+          // cold prep shifts
+          { shiftid: "6",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
+      },
+
 
       { name: "Mark", roles:["coldPrep"], 
         availibility:[
@@ -117,7 +132,7 @@ angular.module('sequoiaGroveApp')
         ]
       },
 
-      { name: "Sandy", roles:["cashier"], 
+      { name: "Sandy", roles:["cashier, supervisor"], 
         availibility:[
           // cashier shifts
           { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
@@ -126,7 +141,15 @@ angular.module('sequoiaGroveApp')
         ]
       },
 
-      { name: "Danny", roles:["cashier"], 
+      { name: "Danny", roles:["cashier, supervisor"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
+      },
+      { name: "Jimmy", roles:["supervisor"], 
         availibility:[
           // cashier shifts
           { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
@@ -135,7 +158,7 @@ angular.module('sequoiaGroveApp')
         ]
       },
 
-      { name: "Heidi", roles:["cashier"], 
+      { name: "Sky", roles:["cashier"], 
         availibility:[
           // cashier shifts
           { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
@@ -144,7 +167,7 @@ angular.module('sequoiaGroveApp')
         ]
       },
 
-      { name: "Debra", roles:["cashier"], 
+      { name: "Zin", roles:["cashier"], 
         availibility:[
           // cashier shifts
           { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
@@ -154,6 +177,22 @@ angular.module('sequoiaGroveApp')
       },
 
       { name: "Lynne", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
+      },
+      { name: "Minnie", roles:["cashier"], 
+        availibility:[
+          // cashier shifts
+          { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "4",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
+          { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
+        ]
+      },
+      { name: "Mickey", roles:["cashier"], 
         availibility:[
           // cashier shifts
           { shiftid: "3",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
@@ -271,13 +310,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-7",  
       weekday: "monday",
       scheduled:[
-        {shiftid: "1",  name: "person"},
-        {shiftid: "2",  name: "person"},
-        {shiftid: "3",  name: "person"},
-        {shiftid: "4",  name: "person"},
-        {shiftid: "5",  name: "person"},
-        {shiftid: "6",  name: "person"},
-        {shiftid: "7",  name: "person"},
+        {shiftid: "1",  name: "Sandy"},
+        {shiftid: "2",  name: "Danny"},
+        {shiftid: "3",  name: "Sky"},
+        {shiftid: "4",  name: "Zin"},
+        {shiftid: "5",  name: "Lynne"},
+        {shiftid: "6",  name: "Eli"},
+        {shiftid: "7",  name: "Mark"},
         {shiftid: "8",  name: "person"},
         {shiftid: "9",  name: "person"},
         {shiftid: "10", name: "person"},
@@ -290,13 +329,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-8",  
        weekday: "tuesday",
        scheduled:[
-         {shiftid: "1",  name: "person"},
-         {shiftid: "2",  name: "person"},
-         {shiftid: "3",  name: "person"},
-         {shiftid: "4",  name: "person"},
-         {shiftid: "5",  name: "person"},
-         {shiftid: "6",  name: "person"},
-         {shiftid: "7",  name: "person"},
+         {shiftid: "1",  name: "Sandy"},
+         {shiftid: "2",  name: "Danny"},
+         {shiftid: "3",  name: "Zin"},
+         {shiftid: "4",  name: "Sky"},
+         {shiftid: "5",  name: "Lynne"},
+         {shiftid: "6",  name: "Eli"},
+         {shiftid: "7",  name: "Mark"},
          {shiftid: "8",  name: "person"},
          {shiftid: "9",  name: "person"},
          {shiftid: "10", name: "person"},
@@ -309,13 +348,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-9",
        weekday: "wednesday",
        scheduled:[
-         {shiftid: "1",  name: "person"},
-         {shiftid: "2",  name: "person"},
-         {shiftid: "3",  name: "person"},
-         {shiftid: "4",  name: "person"},
-         {shiftid: "5",  name: "person"},
-         {shiftid: "6",  name: "person"},
-         {shiftid: "7",  name: "person"},
+         {shiftid: "1",  name: "Danny"},
+         {shiftid: "2",  name: "Jimmy"},
+         {shiftid: "3",  name: "Zin"},
+         {shiftid: "4",  name: "Sky"},
+         {shiftid: "5",  name: "Lynne"},
+         {shiftid: "6",  name: "Carl"},
+         {shiftid: "7",  name: "Bekka"},
          {shiftid: "8",  name: "person"},
          {shiftid: "9",  name: "person"},
          {shiftid: "10", name: "person"},
@@ -328,13 +367,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-10",
        weekday: "thursday",
        scheduled:[
-         { shiftid: "1",  name: "person" },
-         { shiftid: "2",  name: "person" },
-         { shiftid: "3",  name: "person" },
-         { shiftid: "4",  name: "person" },
-         { shiftid: "5",  name: "person" },
-         { shiftid: "6",  name: "person" },
-         { shiftid: "7",  name: "person" },
+         { shiftid: "1",  name: "Jimmy" },
+         { shiftid: "2",  name: "Sandy" },
+         { shiftid: "3",  name: "Minnie" },
+         { shiftid: "4",  name: "Mickey" },
+         { shiftid: "5",  name: "Zin" },
+         { shiftid: "6",  name: "Bekka" },
+         { shiftid: "7",  name: "Eli" },
          { shiftid: "8",  name: "person" },
          { shiftid: "9",  name: "person" },
          { shiftid: "10", name: "person" },
@@ -347,13 +386,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-11",
        weekday: "friday",
        scheduled:[
-         { shiftid: "1",  name: "person" },
-         { shiftid: "2",  name: "person" },
-         { shiftid: "3",  name: "person" },
-         { shiftid: "4",  name: "person" },
-         { shiftid: "5",  name: "person" },
-         { shiftid: "6",  name: "person" },
-         { shiftid: "7",  name: "person" },
+         { shiftid: "1",  name: "Sandy" },
+         { shiftid: "2",  name: "Danny" },
+         { shiftid: "3",  name: "Minnie" },
+         { shiftid: "4",  name: "Mickey" },
+         { shiftid: "5",  name: "Zin" },
+         { shiftid: "6",  name: "Mark" },
+         { shiftid: "7",  name: "Carl" },
          { shiftid: "8",  name: "person" },
          { shiftid: "9",  name: "person" },
          { shiftid: "10", name: "person" },
@@ -366,13 +405,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-12",
        weekday: "saturday",
        scheduled:[
-         { shiftid: "1",  name: "person" },
-         { shiftid: "2",  name: "person" },
-         { shiftid: "3",  name: "person" },
-         { shiftid: "4",  name: "person" },
-         { shiftid: "5",  name: "person" },
-         { shiftid: "6",  name: "person" },
-         { shiftid: "7",  name: "person" },
+         { shiftid: "1",  name: "Danny" },
+         { shiftid: "2",  name: "Jimmy" },
+         { shiftid: "3",  name: "Sky" },
+         { shiftid: "4",  name: "Mickey" },
+         { shiftid: "5",  name: "Minnie" },
+         { shiftid: "6",  name: "Eli" },
+         { shiftid: "7",  name: "Bekka" },
          { shiftid: "8",  name: "person" },
          { shiftid: "9",  name: "person" },
          { shiftid: "10", name: "person" },
@@ -385,13 +424,13 @@ angular.module('sequoiaGroveApp')
     { date: "Sept-13",
        weekday: "sunday",
        scheduled:[
-         { shiftid: "1",  name: "person" },
-         { shiftid: "2",  name: "person" },
-         { shiftid: "3",  name: "person" },
-         { shiftid: "4",  name: "person" },
-         { shiftid: "5",  name: "person" },
-         { shiftid: "6",  name: "person" },
-         { shiftid: "7",  name: "person" },
+         { shiftid: "1",  name: "Jimmy" },
+         { shiftid: "2",  name: "Sandy" },
+         { shiftid: "3",  name: "Zin" },
+         { shiftid: "4",  name: "Lynne" },
+         { shiftid: "5",  name: "Minnie" },
+         { shiftid: "6",  name: "Eli" },
+         { shiftid: "7",  name: "Carl" },
          { shiftid: "8",  name: "person" },
          { shiftid: "9",  name: "person" },
          { shiftid: "10", name: "person" },
