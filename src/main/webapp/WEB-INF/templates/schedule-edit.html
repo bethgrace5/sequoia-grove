@@ -2,53 +2,78 @@
 
     <!-- date labels -->
     <div class="row">
-        <div class="col-sm-2"> <!-- gap on the left --> </div>
-        <div class="col-sm-1 day-title"> 7-Sept    </div>
-        <div class="col-sm-1 day-title"> 8-Sept   </div>
-        <div class="col-sm-1 day-title-wed"> 9-Sept </div>
-        <div class="col-sm-1 day-title"> 10-Sept  </div>
-        <div class="col-sm-1 day-title"> 11-Sept    </div>
-        <div class="col-sm-1">           </div>
-        <div class="col-sm-1 day-title"> 12-Sept  </div>
-        <div class="col-sm-1 day-title"> 13-Sept    </div>
+        <div class="col-sm-1 col-sm-offset-2 day-title"> {{currentSchedule[0].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[1].date}} </div>
+        <div class="col-sm-1 day-title-wed">             {{currentSchedule[2].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[3].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[4].date}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{currentSchedule[5].date}} </div>
+        <div class="col-sm-1 day-title">                 {{currentSchedule[6].date}} </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-2">  <!-- gap on the left -->  </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title-wed"> {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
-        <div class="col-sm-1">           </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
-        <div class="col-sm-1 day-title"> {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
+        <div class="col-sm-1 col-sm-offset-2 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title-wed">             {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
+        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
     </div>
 
 
     <!-- shifts -->
-    <div ng-repeat="shift in schedule1">
+    <div ng-repeat="shift in shifts">
         <div class="row">
             <div class="col-sm-1" > 
                 {{shift.title}} 
             </div>
-            <!-- weekday times -->
+
+        <!-- weekday times -->
             <div class="col-sm-1 schedule-times" > 
                 {{shift.weekdayStart}}-{{shift.weekdayEnd}}
             </div>
 
-            <div ng-repeat="sch in shift.scheduled">
-            <!-- weekend times -->
-            <div ng-show="$index==5"> 
-                <div class="col-sm-1 schedule-times"> 
+            <!-- Monday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[0].scheduled[$index].name">
+            </div>
+
+            <!-- Tuesday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[1].scheduled[$index].name">
+            </div>
+
+            <!-- Wednesday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[2].scheduled[$index].name">
+            </div>
+
+            <!-- Thursday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[3].scheduled[$index].name">
+            </div>
+
+            <!-- Friday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[4].scheduled[$index].name">
+            </div>
+
+        <!-- weekend times -->
+            <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
                 {{shift.weekendStart}}-{{shift.weekendEnd}}
-                </div> 
             </div>
-            <!-- person working this shift -->
-            <div class="col-sm-1 schedule-edit">
-                <input type="text" class="form-control schedule-edit-input" ng-model="sch">
+
+            <!-- Saturday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[5].scheduled[$index].name">
             </div>
+
+            <!-- Sunday -->
+            <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
+                <input select-on-click type="text" class="form-control schedule-edit-input" ng-model="currentSchedule[6].scheduled[$index].name">
             </div>
+
 
         </div>
     </div>

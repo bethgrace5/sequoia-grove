@@ -43,13 +43,15 @@ $brand-danger:  #d9534f;
   -ms-transition: all 0.10s ease-in-out;
   -o-transition: all 0.10s ease-in-out;
   outline: none;
-    border: 1px solid #DDDDDD;
+  border: 1px solid #DDDDDD;
 }
 .schedule-edit-input:focus{
   background-color: #ccffff;
-
   box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   border: 1px solid rgba(81, 203, 238, 1);
+}
+.schedule-edit-input::selection {
+  background: transparent; /* WebKit/Blink Browsers */
 }
 .day-title {
   font-size: 1.2em;
