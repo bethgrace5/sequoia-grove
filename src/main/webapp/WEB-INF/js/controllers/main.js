@@ -49,36 +49,10 @@ angular.module('sequoiaGroveApp')
 
     // sample delivery object array
     $scope.deliveries = [
-      { title: "Alpha",
-        days: {
-          monday:    true,
-          tuesday:   true,
-          wednesday: true,
-          thursday:  true,
-          friday:    true,
-          saturday:  true,
-          sunday:    false }
-      },
-      { title: "Pepsi",
-        days: {
-          monday:    true,
-          tuesday:   false,
-          wednesday: false,
-          thursday:  false,
-          friday:    false,
-          saturday:  false,
-          sunday:    false }
-      },
-      { title: "Sysco",
-          days: {
-            monday:    false,
-            tuesday:   true,
-            wednesday: false,
-            thursday:  true,
-            friday:    false,
-            saturday:  true,
-            sunday:    false }
-      }];
+      { title: "Alpha", days: { monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: false } },
+      { title: "Pepsi", days: { monday: true, tuesday: false, wednesday: false, thursday: false, friday: false, saturday: false, sunday: false } },
+      { title: "Sysco", days: { monday: false, tuesday: true, wednesday: false, thursday: true, friday: false, saturday: true, sunday: false } }
+    ];
 
     // sample employee list
     $scope.employees = [
@@ -89,7 +63,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "14", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Sue", roles:["janitor", "coldPrep"], 
         availibility:[
           // cold prep shifts
@@ -100,7 +73,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "14", monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Eli", roles:["coldPrep"], 
         availibility:[
           // cold prep shifts
@@ -122,8 +94,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
-
       { name: "Mark", roles:["coldPrep"], 
         availibility:[
           // cold prep shifts
@@ -131,7 +101,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "7",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Sandy", roles:["cashier, supervisor"], 
         availibility:[
           // cashier shifts
@@ -140,7 +109,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Danny", roles:["cashier, supervisor"], 
         availibility:[
           // cashier shifts
@@ -157,7 +125,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Sky", roles:["cashier"], 
         availibility:[
           // cashier shifts
@@ -166,7 +133,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Zin", roles:["cashier"], 
         availibility:[
           // cashier shifts
@@ -175,7 +141,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Lynne", roles:["cashier"], 
         availibility:[
           // cashier shifts
@@ -200,7 +165,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "5",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true }
         ]
       },
-
       { name: "Dawn", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -211,7 +175,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Shawn", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -222,7 +185,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Lawn", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -233,7 +195,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Tracie", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -244,7 +205,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Bela", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -255,7 +215,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Cassie", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -266,7 +225,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "Frank", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
@@ -277,7 +235,6 @@ angular.module('sequoiaGroveApp')
           { shiftid: "12",  monday: true, tuesday: true, wednesday: true, thursday: true, friday: true, saturday: true, sunday: true },
         ]
       },
-
       { name: "George", roles:["kitchen"], 
         availibility:[
           // kitchen shifts
