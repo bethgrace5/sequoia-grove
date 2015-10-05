@@ -77,13 +77,7 @@
         </div>
 
 
-        <div class=" btn-group-vertical" role="group"> 
-          <ul>
-            <div ng-repeat = "employee in employees">
-                <li ng-click="selectName(employee.name)" class="btn btn-default schedule-edit-employee-list">{{employee.name}}</li>
-            </div>
-          </ul>
-        </div>
+        <employee-list></employee-list>
 
 
 </div>
