@@ -21,11 +21,9 @@ angular.module('sequoiaGroveApp')
 
           $http({  
             url: '/sequoiagrove/employees',
-            method: "GET",
-            headers: {'Content-Type': 'application/x-www-form-urlencoded'}  
+            method: "GET"
           }).success(function (data, status, headers, config) {  
-              $scope.greeting = data;
-              console.log($scope.greeting);
+              console.log(data);
 
           }).error(function (data, status, headers, config) {  
               //alert(status);  

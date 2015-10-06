@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 
@@ -17,10 +18,11 @@ public class EmployeeRESTController
 {
     @RequestMapping(value="/", method = RequestMethod.GET)
         public String goHome(ModelMap model) {
-            return "index";
+            return "/WEB-INF/index.jsp";
         }
 
-    @RequestMapping(value = "/employees")
+    //@RequestMapping(value = "/employees")
+    /*
         public @ResponseBody EmployeeListVO getAllEmployees()
         {
             EmployeeListVO employees = new EmployeeListVO();
@@ -36,15 +38,30 @@ public class EmployeeRESTController
 
             return employees;
         }
-    /*
+        */
+    private EmployeeListVO getEmployeesCollection()
+    {
+        EmployeeListVO employees = new EmployeeListVO();
 
-        @RequestMapping(value = "/employees")
-            public String getAllEmployeesJSON(Model model)
-            {
-                model.addAttribute("employees", getEmployeesCollection());
-                return "jsonTemplate";
-            }
-            */
+        EmployeeVO empOne = new EmployeeVO(1,"Lokesh","Gupta","howtodoinjava@gmail.com");
+        EmployeeVO empTwo = new EmployeeVO(2,"Amit","Singhal","asinghal@yahoo.com");
+        EmployeeVO empThree = new EmployeeVO(3,"Kirti","Mishra","kmishra@gmail.com");
+
+
+        employees.getEmployees().add(empOne);
+        employees.getEmployees().add(empTwo);
+        employees.getEmployees().add(empThree);
+
+        return employees;
+    }
+
+
+    @RequestMapping(value = "/employees")
+        public String getAllEmployeesJSON(Model model)
+        {
+            model.addAttribute("employees", getEmployeesCollection());
+            return "jsonTemplate";
+        }
 
     @RequestMapping(value = "/employees/{id}")
         public ResponseEntity<EmployeeVO> getEmployeeById (@PathVariable("id") int id)
