@@ -9,10 +9,7 @@
     <context:component-scan base-package="com.sequoiagrove.controller" />
     <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
     <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"> </bean>
-
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-    </bean>
-         
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> </bean>
 
     <mvc:annotation-driven />
     <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
@@ -24,11 +21,5 @@
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
     <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
-
-
-
-    <!-- Including beans 
-    <import resource="beans.xml" />
-    -->
 
 </beans>
