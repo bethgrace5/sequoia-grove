@@ -20,7 +20,7 @@ angular.module('sequoiaGroveApp')
       $scope.getMessage = function() {
 
           $http({  
-            url: '${pageContext.request.contextPath}/load/1',
+            url: '/sequoiagrove/employees',
             method: "GET",
             headers: {'Content-Type': 'application/x-www-form-urlencoded'}  
           }).success(function (data, status, headers, config) {  
