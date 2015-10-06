@@ -44,4 +44,33 @@ import javax.xml.bind.annotation.XmlRootElement;
             return "EmployeeVO [id=" + id + ", firstName=" + firstName
                 + ", lastName=" + lastName + ", email=" + email + "]";
         }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    public String getFirstname() {
+        return firstName;
+    }
+
+    public void setFirstname(String firstName) {
+        this.firstName = firstName;
+    }
+    public String getLastname() {
+        return lastName;
+    }
+
+    public void setLastname(String lastName) {
+        this.lastName = lastName;
+    }
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 }
