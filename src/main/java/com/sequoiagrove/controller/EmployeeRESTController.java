@@ -1,5 +1,8 @@
 package com.sequoiagrove.controller;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -10,7 +13,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 
-import com.sequoiagrove.model.EmployeeListVO;
 import com.sequoiagrove.model.EmployeeVO;
 
 @Controller
@@ -21,36 +23,17 @@ public class EmployeeRESTController
             return "/WEB-INF/index.jsp";
         }
 
-    //@RequestMapping(value = "/employees")
-    /*
-        public @ResponseBody EmployeeListVO getAllEmployees()
-        {
-            EmployeeListVO employees = new EmployeeListVO();
-
-            EmployeeVO empOne = new EmployeeVO(1,"Lokesh","Gupta","howtodoinjava@gmail.com");
-            EmployeeVO empTwo = new EmployeeVO(2,"Amit","Singhal","asinghal@yahoo.com");
-            EmployeeVO empThree = new EmployeeVO(3,"Kirti","Mishra","kmishra@gmail.com");
-
-
-            employees.getEmployees().add(empOne);
-            employees.getEmployees().add(empTwo);
-            employees.getEmployees().add(empThree);
-
-            return employees;
-        }
-        */
-    private EmployeeListVO getEmployeesCollection()
+    private ArrayList<EmployeeVO> getEmployeesCollection()
     {
-        EmployeeListVO employees = new EmployeeListVO();
+        ArrayList<EmployeeVO> employees = new ArrayList<EmployeeVO>();
 
         EmployeeVO empOne = new EmployeeVO(1,"Lokesh","Gupta","howtodoinjava@gmail.com");
         EmployeeVO empTwo = new EmployeeVO(2,"Amit","Singhal","asinghal@yahoo.com");
         EmployeeVO empThree = new EmployeeVO(3,"Kirti","Mishra","kmishra@gmail.com");
 
-
-        employees.getEmployees().add(empOne);
-        employees.getEmployees().add(empTwo);
-        employees.getEmployees().add(empThree);
+        employees.add(empOne);
+        employees.add(empTwo);
+        employees.add(empThree);
 
         return employees;
     }

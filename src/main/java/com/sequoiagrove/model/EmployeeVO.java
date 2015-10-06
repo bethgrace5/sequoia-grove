@@ -1,15 +1,19 @@
 package com.sequoiagrove.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class EmployeeVO implements Serializable
 {
-    private static final long serialVersionUID = 1L;
+    //private static final long serialVersionUID = 1L;
 
         private Integer id;
         private String firstName;
         private String lastName;
         private String email;
+        private List<EmployeeVO> employees = new ArrayList<EmployeeVO>();
+
 
     public EmployeeVO(Integer id, String firstName, String lastName, String email) {
         super();
@@ -58,5 +62,13 @@ public class EmployeeVO implements Serializable
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public List<EmployeeVO> getEmployees() {
+        return employees;
+    }
+
+    public void setEmployees(List<EmployeeVO> employees) {
+        this.employees = employees;
     }
 }
