@@ -9,12 +9,37 @@
  */
 angular.module('sequoiaGroveApp')
   .controller('MainCtrl', function (
+      $http,
       $scope,
       $rootScope,
       $route,
       $translate,
       $location,
       localStorageService) {
+
+      $scope.getMessage = function() {
+
+          $http({  
+            url: '${pageContext.request.contextPath}/load/1',
+            method: "GET",
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'}  
+          }).success(function (data, status, headers, config) {  
+              $scope.greeting = data;
+              console.log($scope.greeting);
+
+          }).error(function (data, status, headers, config) {  
+              //alert(status);  
+          });
+      }
+
+          //$http.get('/example-request').
+              //success(function(data) {
+          //$scope.greeting = data;
+          //console.log($scope.greeting);
+        //});
+      //}
+
+      $scope.getMessage();
 
 
     // Sample Data as JSON
