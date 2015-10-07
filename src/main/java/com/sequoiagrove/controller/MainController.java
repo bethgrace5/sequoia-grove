@@ -7,8 +7,7 @@ import org.springframework.stereotype.Controller;
 
 
 @Controller
-public class MainController
-{
+public class MainController {
     @RequestMapping(value="/", method = RequestMethod.GET)
         public String goHome(ModelMap model) {
             return "/WEB-INF/index.jsp";

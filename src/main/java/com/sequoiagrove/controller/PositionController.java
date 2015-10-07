@@ -12,8 +12,7 @@ import com.sequoiagrove.dao.PositionDAO;
 public class PositionController {
 
     @RequestMapping(value = "/positions")
-        public String getAllPositions(Model model)
-        {
+        public String getAllPositions(Model model) {
             model.addAttribute("positions", PositionDAO.getPosition());
             return "jsonTemplate";
         }

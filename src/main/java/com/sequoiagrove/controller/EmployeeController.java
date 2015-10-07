@@ -18,26 +18,21 @@ public class EmployeeController
 {
 
     @RequestMapping(value = "/employees")
-        public String getAllEmployeesJSON(Model model)
-        {
-            model.addAttribute("employees", EmployeeDAO.getEmployee());
+        public String getAllEmployeesJSON(Model model) {
+            model.addAttribute("employees", EmployeeDAO.getEmployee(0));
             return "jsonTemplate";
         }
 
-    @RequestMapping(value = "/availability/{id}")
-        public String getEmployeeAvailability(Model model, @PathVariable("id") int id)
-        {
-            model.addAttribute("employees", EmployeeDAO.getEmployeeAvailability(id));
+    @RequestMapping(value = "/employees/availability/{id}")
+        public String getEmployeeAvailability(Model model, @PathVariable("id") int id) {
+            model.addAttribute("availability", EmployeeDAO.getEmployeeAvailability(id));
             return "jsonTemplate";
         }
 
     @RequestMapping(value = "/employees/{id}")
-        public ResponseEntity<Employee> getEmployeeById (@PathVariable("id") int id)
-        {
-            if (id <= 3) {
-                Employee employee = new Employee(1,"firstname","lastnmae");
-                return new ResponseEntity<Employee>(employee, HttpStatus.OK);
-            }
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        public ResponseEntity<Employee> getEmployeeById (@PathVariable("id") int id) {
+            return new ResponseEntity<Employee>(EmployeeDAO.getEmployee(id).get(0), HttpStatus.OK);
+
+            //return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
 }

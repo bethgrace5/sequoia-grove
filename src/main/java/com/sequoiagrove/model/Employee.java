@@ -39,7 +39,6 @@ public class Employee extends User{
     public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id) {
 
         HashMap<String, Boolean> availabilityMap = new HashMap<String, Boolean>();
-        availabilityMap.put("id",        ((availabilityString.charAt(0) == '1')? true: false));
         availabilityMap.put("monday",    ((availabilityString.charAt(0) == '1')? true: false));
         availabilityMap.put("tuesday",   ((availabilityString.charAt(1) == '1')? true: false));
         availabilityMap.put("wednesday", ((availabilityString.charAt(2) == '1')? true: false));

@@ -24,7 +24,7 @@ angular.module('sequoiaGroveApp')
             method: "GET"
           }).success(function (data, status, headers, config) {  
               $scope.employees = data.employees;
-              $log.debug(data);
+              //$log.debug(data);
 
           }).error(function (data, status, headers, config) {  
               $log.error(status + " Error obtaining employee data: " + data);
@@ -49,7 +49,7 @@ angular.module('sequoiaGroveApp')
             method: "GET"
           }).success(function (data, status, headers, config) {  
               $scope.shifts = data.shifts;
-              $log.debug(data.shifts);
+              //$log.debug(data.shifts);
 
           }).error(function (data, status, headers, config) {  
               $log.error(status + " Error obtaining shift data: " + data);
@@ -62,10 +62,35 @@ angular.module('sequoiaGroveApp')
             method: "GET"
           }).success(function (data, status, headers, config) {  
               $scope.deliveries = data.deliveries;
-              $log.debug(data.deliveries);
+              //$log.debug(data.deliveries);
 
           }).error(function (data, status, headers, config) {  
               $log.error(status + " Error obtaining delivery data: " + data);
+          });
+      }
+
+      $scope.getAvailability = function() {
+          $http({  
+            url: '/sequoiagrove/employees/availability/1',
+            method: "GET"
+          }).success(function (data, status, headers, config) {  
+              $scope.availability = data.availability;
+              //$log.debug(data);
+
+          }).error(function (data, status, headers, config) {  
+              $log.error(status + " Error obtaining availability data: " + data);
+          });
+      }
+      $scope.getEmployee = function() {
+          $http({  
+            url: '/sequoiagrove/employees/2',
+            method: "GET"
+          }).success(function (data, status, headers, config) {  
+              $scope.employee1 = data;
+              //$log.debug(data);
+
+          }).error(function (data, status, headers, config) {  
+              $log.error(status + " Error obtaining employe id:1 data: " + data);
           });
       }
 
@@ -73,6 +98,8 @@ angular.module('sequoiaGroveApp')
       $scope.getPositions();
       $scope.getShifts();
       $scope.getDeliveries();
+      $scope.getAvailability();
+      $scope.getEmployee();
 
 
     // Sample Data as JSON
