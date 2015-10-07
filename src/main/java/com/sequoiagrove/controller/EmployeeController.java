@@ -24,6 +24,13 @@ public class EmployeeController
             return "jsonTemplate";
         }
 
+    @RequestMapping(value = "/availability/{id}")
+        public String getEmployeeAvailability(Model model, @PathVariable("id") int id)
+        {
+            model.addAttribute("employees", EmployeeDAO.getEmployeeAvailability(id));
+            return "jsonTemplate";
+        }
+
     @RequestMapping(value = "/employees/{id}")
         public ResponseEntity<Employee> getEmployeeById (@PathVariable("id") int id)
         {

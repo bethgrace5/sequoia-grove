@@ -3,6 +3,8 @@ package com.sequoiagrove.model;
 import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
 
 import com.sequoiagrove.model.Position;
 
@@ -33,6 +35,21 @@ public class Employee extends User{
         //return "Employee [id=" + id + ", firstName=" + firstName
             //+ ", lastName=" + lastName + ", email=" + email + "]";
     //}
+
+    public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id) {
+
+        HashMap<String, Boolean> availabilityMap = new HashMap<String, Boolean>();
+        availabilityMap.put("id",        ((availabilityString.charAt(0) == '1')? true: false));
+        availabilityMap.put("monday",    ((availabilityString.charAt(0) == '1')? true: false));
+        availabilityMap.put("tuesday",   ((availabilityString.charAt(1) == '1')? true: false));
+        availabilityMap.put("wednesday", ((availabilityString.charAt(2) == '1')? true: false));
+        availabilityMap.put("thursday",  ((availabilityString.charAt(3) == '1')? true: false));
+        availabilityMap.put("friday",    ((availabilityString.charAt(4) == '1')? true: false));
+        availabilityMap.put("saturday",  ((availabilityString.charAt(5) == '1')? true: false));
+        availabilityMap.put("sunday",    ((availabilityString.charAt(6) == '1')? true: false));
+
+        return availabilityMap;
+    }
 
 
 
