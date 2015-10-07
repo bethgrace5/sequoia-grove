@@ -27,7 +27,7 @@ angular.module('sequoiaGroveApp')
               $log.debug(data);
 
           }).error(function (data, status, headers, config) {  
-              $log.error(status + "Error obtaining employee data: " + data);
+              $log.error(status + " Error obtaining employee data: " + data);
           });
       }
 
@@ -39,7 +39,7 @@ angular.module('sequoiaGroveApp')
               $scope.positions = data.positions;
 
           }).error(function (data, status, headers, config) {  
-              $log.error(status + "Error obtaining position data: " + data);
+              $log.error(status + " Error obtaining position data: " + data);
           });
       }
 
@@ -52,13 +52,27 @@ angular.module('sequoiaGroveApp')
               $log.debug(data.shifts);
 
           }).error(function (data, status, headers, config) {  
-              $log.error(status + "Error obtaining shift data: " + data);
+              $log.error(status + " Error obtaining shift data: " + data);
+          });
+      }
+
+      $scope.getDeliveries = function() {
+          $http({  
+            url: '/sequoiagrove/deliveries',
+            method: "GET"
+          }).success(function (data, status, headers, config) {  
+              $scope.deliveries = data.deliveries;
+              $log.debug(data.deliveries);
+
+          }).error(function (data, status, headers, config) {  
+              $log.error(status + " Error obtaining delivery data: " + data);
           });
       }
 
       $scope.getEmployees();
       $scope.getPositions();
       $scope.getShifts();
+      $scope.getDeliveries();
 
 
     // Sample Data as JSON
@@ -90,39 +104,6 @@ angular.module('sequoiaGroveApp')
 
     // set tab to home on page load
     $scope.changeTab('/home');
-
-    // sample delivery object array
-    $scope.deliveries = [
-      { title: "Alpha",
-        days: {
-          monday:    true,
-          tuesday:   true,
-          wednesday: true,
-          thursday:  true,
-          friday:    true,
-          saturday:  true,
-          sunday:    false }
-      },
-      { title: "Pepsi",
-        days: {
-          monday:    true,
-          tuesday:   false,
-          wednesday: false,
-          thursday:  false,
-          friday:    false,
-          saturday:  false,
-          sunday:    false }
-      },
-      { title: "Sysco",
-          days: {
-            monday:    false,
-            tuesday:   true,
-            wednesday: false,
-            thursday:  true,
-            friday:    false,
-            saturday:  true,
-            sunday:    false }
-      }];
 
 
     $scope.currentSchedule = [
