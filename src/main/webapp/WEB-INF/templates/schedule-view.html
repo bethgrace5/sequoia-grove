@@ -21,7 +21,8 @@
         <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
     </div>
 
-    <!-- deliveries -->
+    <!-- deliveries TODO since this is out of order now, I need to 
+        specify which weekdays show-->
     <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
         <div class="row">
             <div ng-repeat="day in delivery.days">
