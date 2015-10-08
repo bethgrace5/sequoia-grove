@@ -1,19 +1,32 @@
 
 package com.sequoiagrove.model;
-import java.util.Date;
+import java.sql.Time;
 
 public class Shift {
     int id;
+    int positionId;
     String title; 
-    Date weekdayStart;
-    Date weekdayEnd;
-    Date weekendStart;
-    Date weekendEnd;
+    Time weekdayStart;
+    Time weekdayEnd;
+    Time weekendStart;
+    Time weekendEnd;
 
     public Shift(){}
-    public Shift(int id, String title) {
+    public Shift(int id, String title, int positionId, Time weekdayStart, Time weekdayEnd, Time weekendStart, Time weekendEnd) {
+        this.weekdayStart = weekdayStart;
+        this.weekdayEnd = weekdayEnd;
+        this.weekendStart = weekendStart;
+        this.weekendEnd = weekendEnd;
         this.id = id;
+        this.positionId = positionId;
         this.title = title;
+    }
+
+@Override
+    public String toString() {
+        return "Shift [id=" + id + ", title=" + title + ", weekdayStart=" + 
+            weekdayStart + ", weekdayEnd=" + weekendStart + ", weekendEnd=" + 
+            weekendEnd + "]";
     }
 
     public int getId() {
@@ -24,6 +37,14 @@ public class Shift {
         this.id = id;
     }
 
+    public int getPositionId() {
+        return positionId;
+    }
+
+    public void setPositionId(int id) {
+        this.positionId = positionId;
+    }
+
     public String getTitle() {
         return title;
     }
@@ -32,35 +53,35 @@ public class Shift {
         this.title = title;
     }
 
-    public Date getWeekdayStart() {
+    public Time getWeekdayStart() {
         return weekdayStart;
     }
 
-    public void setWeekdayStart(Date weekdayStart) {
+    public void setWeekdayStart(Time weekdayStart) {
         this.weekdayStart = weekdayStart;
     }
 
-    public Date getWeekdayEnd() {
+    public Time getWeekdayEnd() {
         return weekdayEnd;
     }
 
-    public void setWeekdayEnd(Date weekdayEnd) {
+    public void setWeekdayEnd(Time weekdayEnd) {
         this.weekdayEnd = weekdayEnd;
     }
 
-    public Date getWeekendStart() {
+    public Time getWeekendStart() {
         return weekendStart;
     }
 
-    public void setWeekendStart(Date weekendStart) {
+    public void setWeekendStart(Time weekendStart) {
         this.weekendStart = weekendStart;
     }
 
-    public Date getWeekendEnd() {
+    public Time getWeekendEnd() {
         return weekendEnd;
     }
 
-    public void setWeekendEnd(Date weekendEnd) {
+    public void setWeekendEnd(Time weekendEnd) {
         this.weekendEnd = weekendEnd;
     }
 }

@@ -10,7 +10,8 @@ angular.module('sequoiaGroveApp', [
     'pascalprecht.translate',
     'LocalStorageModule'
   ])
-  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider) {
+  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
+              $logProvider, $compileProvider) {
     $routeProvider
       .when('/', {
         redirectTo: '/home'
@@ -54,7 +55,6 @@ angular.module('sequoiaGroveApp', [
       // change language to browser's primary content language
       $translateProvider.determinePreferredLanguage( function() {
           var language = window.navigator.languages[0];
-          console.log(language.substring(0,2));
           if(language.substring(0,2) === "es") {
               return "es";
           }
@@ -68,4 +68,10 @@ angular.module('sequoiaGroveApp', [
           .setPrefix('SequoiaGrove')
           .setStorageType('localStorage')
           .setNotify(true, true);
+
+      /* Logging */
+      $logProvider.debugEnabled(true);
+
+      /* Increase application performance when false, default is true */
+      $compileProvider.debugInfoEnabled(true);
   });
