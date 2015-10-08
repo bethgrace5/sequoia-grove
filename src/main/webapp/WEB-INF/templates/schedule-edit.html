@@ -30,7 +30,7 @@
 
             <!-- weekday times -->
                 <div class="col-sm-1 schedule-times" > 
-                    {{shift.weekdayStart}}-{{shift.weekdayEnd}}
+                    {{shift.weekdayStart | limitTo:5}}-{{shift.weekdayEnd | limitTo:5}}
                 </div>
 
                 <!-- Monday -->
@@ -60,7 +60,7 @@
 
             <!-- weekend times -->
                 <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                    {{shift.weekendStart}}-{{shift.weekendEnd}}
+                    {{shift.weekendStart | limitTo:5}}-{{shift.weekendEnd | limitTo:5}}
                 </div>
 
                 <!-- Saturday -->
@@ -76,7 +76,9 @@
         </div>
 
 
+        <!--
         <employee-list></employee-list>
+        -->
 
 
 </div>

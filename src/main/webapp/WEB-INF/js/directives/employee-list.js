@@ -1,16 +1,12 @@
 'use strict';
 
-angular.module('sequoiaGroveApp').directive('employeeList', function() {
+angular.module('sequoiaGroveApp').directive('employeeList', ['$window',function($window) {
   return {
     restrict: 'E',
-    templateUrl: 'templates/employee-list.html'
+    templateUrl: 'templates/employee-list.html',
     link: function (scope, element, attrs) {
-    element.on('click', function () {
-      if (!$window.getSelection().toString()) {
-        // Required for mobile Safari
-        this.setSelectionRange(0, this.value.length)
-            }
-          });
-        
-    };
-});
+      element.on('click', function () {
+      });
+    }
+  }
+}]);
