@@ -5,6 +5,7 @@
 */node_modules
 node_modules/*
 .gitignore
+*.properties
 
 *.sass-cache
 *.tmp
