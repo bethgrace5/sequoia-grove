@@ -32,7 +32,18 @@ $brand-danger:  #d9534f;
 }
 .schedule-edit{
   padding: 0;
+  border-radius: 5px;
 }
+.schedule-edit-employee-list {
+  width: 100px;
+}
+
+/* the selected name */
+.schedule-edit-highlight {
+  background-color: #CCFFFF;
+}
+
+/* schedule input box */
 .schedule-edit-input{
   padding: 2px;
   color: transparent;
@@ -43,14 +54,53 @@ $brand-danger:  #d9534f;
   -ms-transition: all 0.10s ease-in-out;
   -o-transition: all 0.10s ease-in-out;
   outline: none;
-    border: 1px solid #DDDDDD;
+  border: 1px solid #DDD;
 }
 .schedule-edit-input:focus{
-  background-color: #ccffff;
-
   box-shadow: 0 0 5px rgba(81, 203, 238, 1);
   border: 1px solid rgba(81, 203, 238, 1);
 }
+.schedule-edit-input::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+
+/* highlignt name schedule edit schedule input box */
+.schedule-edit-input-highlight{
+}
+.schedule-edit-input-highlight:focus{
+  box-shadow: 0 0 5px #00CCFF;
+  border: 1px solid #00CCFF;
+}
+.schedule-edit-input-highlight::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+
+/* error on edit schedule input box */
+.schedule-edit-input-error{
+  text-shadow: 1px 0px 0px #CC0000;
+}
+.schedule-edit-input-error:focus{
+  box-shadow: 0 0 5px rgba(204, 0, 0, 1);
+  border: 1px solid rgba(204, 0, 0, 0.7);
+  background-color: #FFCCCC;
+}
+.schedule-edit-input-error::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+
+/* warning on edit schedule input box */
+.schedule-edit-input-warn{
+  text-shadow: 1px 0px 0px #CF8600;
+}
+.schedule-edit-input-warn:focus{
+  box-shadow: 0 0 5px rgba(255, 204, 0, 1);
+  border: 1px solid rgba(255, 204, 0, 0.7);
+  background-color: #FFFFCC;
+}
+.schedule-edit-input-warn::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+
 .day-title {
   font-size: 1.2em;
   color: #336699;
@@ -63,6 +113,8 @@ $brand-danger:  #d9534f;
   padding: 0 0 5px 0;
 }
 .schedule-times {
+  margin:0 auto;
+  padding:0;
   color: #336699;
 }
 .highlighted {

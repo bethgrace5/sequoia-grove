@@ -10,7 +10,12 @@
 angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function ($scope, $rootScope, $translate) {
     $scope.activeTab = 'schedule';
+    $scope.selectedName = '';
+
+
     $scope.newDelivery = '';
+
+
     $scope.removeDelivery = function(index) {
       // remove delivery from dummy list for now
       $scope.deliveries.splice(index, 1);
@@ -31,6 +36,38 @@ angular.module('sequoiaGroveApp')
           })
           $scope.newDelivery = '';
       }
+    }
+
+
+    $scope.selectName = function(name) {
+      $scope.selectedName = name;
+    }
+
+    // validation for schedule edit input
+    $scope.inputStatus = function(name, weekday, shiftId) {
+      var style = 'form-control schedule-edit-input';
+
+      if (name == $scope.selectedName) {
+        style += ' schedule-edit-highlight';
+      }
+
+
+
+
+      // apply an error
+      if (weekday=='monday' && shiftId == '3') {
+        style += ' schedule-edit-input-error';
+      }
+      // apply a warning
+      else if(weekday=='thursday' && shiftId == '2') {
+        style += ' schedule-edit-input-warn';
+      }
+      // no warnings or errors
+      else {
+        style += ' schedule-edit-input-highlight';
+      }
+
+      return style;
     }
 
     $scope.alteredTitle = '';

@@ -11,19 +11,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
 
-import com.sequoiagrove.model.Delivery;
-import com.sequoiagrove.dao.DeliveryDAO;
+import com.sequoiagrove.model.Week;
+//import com.sequoiagrove.dao.WeekDAO;
 
 
 @Controller
-public class DeliveryController {
+public class WeekController {
 
-    @RequestMapping(value = "/deliveries")
-        public String getAllEmployeesJSON(Model model) {
-            model.addAttribute("deliveries", DeliveryDAO.getDelivery());
-            return "jsonTemplate";
-        }
+    //@RequestMapping(value = "/week/{date}")
+        //public ResponseEntity<Employee> getWeek(@PathVariable("date") Date startingMonday) {
+            //return new ResponseEntity<Employee>(EmployeeDAO.getWeek(startingMonday), HttpStatus.OK);
 
+            //return new ResponseEntity(HttpStatus.NOT_FOUND);
+        //}
 
 }
 

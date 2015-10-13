@@ -63,6 +63,8 @@
     <script src="js/directives/request-history.js"></script>
     <script src="js/directives/request-pending.js"></script>
     <script src="js/directives/request-submit.js"></script>
+    <script src="js/directives/select-on-click.js"></script>
+    <script src="js/directives/employee-list.js"></script>
     <!-- endbuild -->
 
 </body>

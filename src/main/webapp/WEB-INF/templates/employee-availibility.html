@@ -1,3 +1,78 @@
-<p class="lead">
-    Edit Employee Availibility Template
-</p>
+<div class="row">
+    <div class="col-sm-3">
+        <p class="lead">
+            Edit Employee Availibility
+        </p>
+    </div>
+    <div class="col-sm-3">
+        <form ng-submit="addDelivery()">
+            <input type="text" ng-model="newDelivery" placeholder="new delivery..."/>
+            <button type="button" class="btn btn-success" ng-click="addDelivery()">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+        </form>
+    </div>
+</div>
+
+<div class="row request-title">
+    <div class="col-sm-1">
+    </div>
+    <div class="col-sm-2">
+        <p> Company </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Monday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Tuesday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Wednesday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Thursday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Friday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Saturday </p>
+    </div>
+    <div class="col-sm-1">
+        <p> Sunday </p>
+    </div>
+</div>
+
+<div  ng-repeat="delivery in deliveries">
+    <div class="row">
+        <div class="col-sm-1">
+            <button type="button" class="btn btn-danger" ng-click="removeDelivery($index)">
+                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+        </div>
+        <div class="col-sm-2">
+            <p> {{delivery.title}} </p>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.monday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.tuesday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.wednesday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.thursday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.friday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.saturday">
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox" ng-model="delivery.days.sunday">
+        </div>
+    </div>
+</div>

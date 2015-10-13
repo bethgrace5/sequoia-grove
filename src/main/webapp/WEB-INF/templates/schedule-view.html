@@ -21,7 +21,8 @@
         <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
     </div>
 
-    <!-- deliveries -->
+    <!-- deliveries TODO since this is out of order now, I need to 
+        specify which weekdays show-->
     <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
         <div class="row">
             <div ng-repeat="day in delivery.days">
@@ -59,7 +60,7 @@
 
         <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                {{shift.weekdayStart}}-{{shift.weekdayEnd}}
+                {{shift.weekdayStart | limitTo: 5}}-{{shift.weekdayEnd | limitTo: 5}}
             </div>
 
             <!-- Monday -->
@@ -89,7 +90,7 @@
 
         <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                {{shift.weekendStart}}-{{shift.weekendEnd}}
+                {{shift.weekendStart | limitTo: 5}}-{{shift.weekendEnd | limitTo: 5}}
             </div>
 
             <!-- Saturday -->
@@ -101,7 +102,6 @@
             <div class="col-sm-1 col-sm-offset-0 " > 
                 {{currentSchedule[6].scheduled[$index].name}}
             </div>
-
 
 
         </div>

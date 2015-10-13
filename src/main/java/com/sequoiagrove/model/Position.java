@@ -1,12 +1,17 @@
 
 package com.sequoiagrove.model;
 
-public class Role {
+public class Position {
     int id;
     String title; 
 
-    public Role(){}
-    public Role(int id, String title) {
+@Override
+    public String toString() {
+        return "Position [id=" + id + ", title=" + title + "]";
+    }
+
+    public Position(){}
+    public Position(int id, String title) {
         this.id = id;
         this.title = title;
     }
