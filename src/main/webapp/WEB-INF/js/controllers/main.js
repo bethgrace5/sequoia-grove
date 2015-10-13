@@ -19,81 +19,94 @@ angular.module('sequoiaGroveApp')
       localStorageService) {
 
       $scope.getEmployees = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/employees',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.employees = data.employees;
               //$log.debug(data);
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining employee data: " + data);
           });
       }
 
       $scope.getPositions = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/positions',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.positions = data.positions;
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining position data: " + data);
           });
       }
 
       $scope.getShifts = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/shifts',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.shifts = data.shifts;
               //$log.debug(data.shifts);
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining shift data: " + data);
           });
       }
 
       $scope.getDeliveries = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/deliveries',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.deliveries = data.deliveries;
               //$log.debug(data.deliveries);
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining delivery data: " + data);
           });
       }
 
       $scope.getAvailability = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/employees/availability/1',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.availability = data.availability;
               //$log.debug(data);
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining availability data: " + data);
           });
       }
       $scope.getEmployee = function() {
-          $http({  
+          $http({
             url: '/sequoiagrove/employees/2',
             method: "GET"
-          }).success(function (data, status, headers, config) {  
+          }).success(function (data, status, headers, config) {
               $scope.employee1 = data;
               //$log.debug(data);
 
-          }).error(function (data, status, headers, config) {  
+          }).error(function (data, status, headers, config) {
               $log.error(status + " Error obtaining employe id:1 data: " + data);
           });
       }
+      $scope.getHotel = function() {
+          $http({
+            url: '/sequoiagrove/hotel',
+            method: "GET"
+          }).success(function (data, status, headers, config) {
+              $scope.hotel = data;
+              $log.debug(data);
 
+          }).error(function (data, status, headers, config) {
+              $log.error(status + " Error obtaining hotel data: " + data);
+          });
+      }
+
+      $scope.getHotel();
       $scope.getEmployees();
       $scope.getPositions();
       $scope.getShifts();
@@ -134,7 +147,7 @@ angular.module('sequoiaGroveApp')
 
 
     $scope.currentSchedule = [
-    { date: "Sept-7",  
+    { date: "Sept-7",
       weekday: "monday",
       scheduled:[
         {shiftid: "1",  name: "Sandy"},
@@ -153,7 +166,7 @@ angular.module('sequoiaGroveApp')
         {shiftid: "14", name: "person"}
        ]
     },
-    { date: "Sept-8",  
+    { date: "Sept-8",
        weekday: "tuesday",
        scheduled:[
          {shiftid: "1",  name: "Sandy"},

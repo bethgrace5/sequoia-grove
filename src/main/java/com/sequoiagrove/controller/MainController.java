@@ -16,11 +16,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class MainController {
 
     private static DataSource dataSource;
-    private JdbcTemplate jdbcTemplate;
+    private static JdbcTemplate jdbcTemplate;
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String goHome(ModelMap model) {
-        listHotels();
         return "/WEB-INF/index.jsp";
     }
 
@@ -31,7 +30,7 @@ public class MainController {
         System.out.println("setting jdbc template");
     }
 
-    public JdbcTemplate getJdbcTemplate() {
+    public static JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
 
