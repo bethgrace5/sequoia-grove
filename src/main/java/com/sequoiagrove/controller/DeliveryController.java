@@ -1,6 +1,8 @@
 package com.sequoiagrove.controller;
 
 import java.sql.SQLException;
+import java.util.List;
+import java.util.ArrayList;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,17 +36,16 @@ public class DeliveryController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         int rowCount = jdbcTemplate.queryForObject("select count(*) from HOTEL", Integer.class);
 
-        /*
-        jdbcTemplate.query(
+        List<String> stringList = jdbcTemplate.query(
             "select * from hotel",
             new RowMapper<String>() {
-                mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    System.out.println(rs);
+                public String mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    String str = new String(rs.getString("hname"));
+                    return str;
                 }
         });
-        */
 
-        model.addAttribute("hotel", rowCount);
+        model.addAttribute("name", stringList);
         return "jsonTemplate";
 
         /*

@@ -1,6 +1,12 @@
 <div class="container-fluid">
-    <div class="row">
-        {{hotel}}
+    <div class="panel panel-default">
+        <div class="panel-body">
+            <div class="row" ng-repeat="h in hotel.name track by $index">
+                <div class="col-sm-2">
+                {{h}}
+                </div>
+            </div>
+        </div>
     </div>
 
     <div class="row hidden-xs">
