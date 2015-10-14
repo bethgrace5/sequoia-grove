@@ -26,10 +26,10 @@ import com.sequoiagrove.controller.MainController;
 public class DeliveryController {
 
     @RequestMapping(value = "/deliveries")
-        public String getAllEmployeesJSON(Model model) {
-            model.addAttribute("deliveries", DeliveryDAO.getDelivery());
-            return "jsonTemplate";
-        }
+    public String getAllEmployeesJSON(Model model) {
+        model.addAttribute("deliveries", DeliveryDAO.getDelivery());
+        return "jsonTemplate";
+    }
 
     @RequestMapping(value = "/hotel")
     public String listHotels(Model model){
