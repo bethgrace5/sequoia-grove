@@ -51,8 +51,6 @@ public class Day {
 
     public void setHoliday(String type) {
         // a day may be a full or half holiday, 
-        // depending upon the type, shifts will be marked
-        // as filled by holiday
     }
 
     public Date getDate() {

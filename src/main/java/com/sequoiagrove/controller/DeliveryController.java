@@ -34,13 +34,14 @@ public class DeliveryController {
     @RequestMapping(value = "/hotel")
     public String listHotels(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        int rowCount = jdbcTemplate.queryForObject("select count(*) from HOTEL", Integer.class);
+        int rowCount = jdbcTemplate.queryForObject("select count(*) from BAJS_EMPLOYEE", Integer.class);
 
         List<String> stringList = jdbcTemplate.query(
-            "select * from hotel",
+            "select * from BAJS_EMPLOYEE",
+            //"select * from hotel",
             new RowMapper<String>() {
                 public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    String str = new String(rs.getString("hname"));
+                    String str = new String(rs.getString("first_name"));
                     return str;
                 }
         });

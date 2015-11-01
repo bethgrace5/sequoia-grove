@@ -18,6 +18,55 @@ angular.module('sequoiaGroveApp')
       $log,
       localStorageService) {
 
+      $scope.today = '';
+      $scope.date = {
+        monday:"",
+        tuesday:"",
+        wednesday:"",
+        thursday:"",
+        friday:"",
+        saturday:"",
+        sunday:"",
+      };
+
+
+    var showSchedule = function(mondayDate) {
+        var today = new Date();
+
+        // decide which weekday it is today.
+        var currentIndex = today.getDay(); // 0 is Sunday
+        var dd = today.getDate();
+        var mm = today.getMonth(); //January is 0!
+
+        switch(mm) {
+            case 0:  mm = "Jan"; break;
+            case 1:  mm = "Feb"; break;
+            case 2:  mm = "March"; break;
+            case 3:  mm = "April"; break;
+            case 4:  mm = "May"; break;
+            case 5:  mm = "June"; break;
+            case 6:  mm = "July"; break;
+            case 7:  mm = "Aug"; break;
+            case 8:  mm = "Sept"; break;
+            case 9:  mm = "Oct"; break;
+            case 10: mm = "Nov"; break;
+            case 11: mm = "Dec"; break;
+        }
+
+        $scope.date.monday    = mm+'-'+(dd-currentIndex+1);
+        $scope.date.tuesday   = mm+'-'+(dd-currentIndex+2);
+        $scope.date.wednesday = mm+'-'+(dd-currentIndex+3);
+        $scope.date.thursday  = mm+'-'+(dd-currentIndex+4);
+        $scope.date.friday    = mm+'-'+(dd-currentIndex+5);
+        $scope.date.saturday  = mm+'-'+(dd-currentIndex+6);
+        $scope.date.sunday    = mm+'-'+(dd-currentIndex+7);
+
+        // get me a schedule which has all employees 
+
+    }
+
+    showSchedule();
+
       $scope.getEmployees = function() {
           $http({
             url: '/sequoiagrove/employees',
