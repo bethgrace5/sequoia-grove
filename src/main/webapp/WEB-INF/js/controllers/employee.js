@@ -4,7 +4,7 @@
  * Employee Controller
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $scope) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope) {
     $scope.activeTab = 'info';
     $scope.times = {
       // start times start at the earlist shift start and increment by half 
@@ -67,62 +67,85 @@ angular.module('sequoiaGroveApp')
       phoneNumber:"",
       clockNumber:"",
       avail:
-      { mon:[ ],
-        tue:[ ],
-        wed:[ ],
-        thu:[ ],
-        fri:[ ],
-        sat:[ ],
-        sun:[ ]
+      { mon:[],
+        tue:[],
+        wed:[],
+        thu:[],
+        fri:[],
+        sat:[],
+        sun:[]
       }
     },
 
     ];
     $scope.current = 0;
 
-    $scope.newAvail = {day:"", start:"", end:""};
+    $scope.newAvail = {day:'', start:'', end:''};
 
     // add a new availability time for an employee
     $scope.addAvail = function() {
       var day = $scope.newAvail.day;
-      var start = $scope.newAvail.start;
+      var st = $scope.newAvail.start;
       var end = $scope.newAvail.end;
-      
+
       // make sure all fields are filled in
-      if (day!='' && start!='' && end!='' ) {
-        $scope.newAvail.day='';
-        $scope.newAvail.start='';
-        $scope.newAvail.end='';
+      if (day!='' && st!='' && end!='' ) {
+        // reset availability input
+        $scope.newAvail = {day:'', start:'', end:''};
+
+        var newTimes = {
+          start:{disp:st.disp, val:st.val}, 
+          end:{disp:end.disp, val:end.val}
+        };
+
+        // TODO send new availability to back end
+
         // TODO, setup the selection of available times to not include times
         // encompassed by their current availability times. possibly limit
         // the number of availability objects to two per day?
- 
-        // TODO send new availability to back end
+
         // TODO order availabilities in front end by start time
 
         // update front end
-        if (day=='mon') {
-          $scope.employees[$scope.current].avail.mon.push( {start:start, end:end});
-        }
-        else if (day=='tue') {
-          $scope.employees[$scope.current].avail.tue.push( {start:start, end:end});
-        }
-        else if (day=='wed') {
-          $scope.employees[$scope.current].avail.wed.push( {start:start, end:end});
-        }
-        else if (day=='thu') {
-          $scope.employees[$scope.current].avail.thu.push( {start:start, end:end});
-        }
-        else if (day=='fri') {
-          $scope.employees[$scope.current].avail.fri.push( {start:start, end:end});
-        }
-        else if (day=='sat') {
-          $scope.employees[$scope.current].avail.sat.push( {start:start, end:end});
-        }
-        else if (day=='sun') {
-          $scope.employees[$scope.current].avail.sun.push( {start:start, end:end});
-        }
+        if (day=='mon') { $scope.employees[$scope.current].avail.mon.push(newTimes); }
+        else if (day=='tue') { $scope.employees[$scope.current].avail.tue.push(newTimes); }
+        else if (day=='wed') { $scope.employees[$scope.current].avail.wed.push(newTimes); }
+        else if (day=='thu') { $scope.employees[$scope.current].avail.thu.push(newTimes); }
+        else if (day=='fri') { $scope.employees[$scope.current].avail.fri.push(newTimes); }
+        else if (day=='sat') { $scope.employees[$scope.current].avail.sat.push(newTimes); }
+        else if (day=='sun') { $scope.employees[$scope.current].avail.sun.push(newTimes); }
 
+      }
+
+    }
+
+    // click existing day to populate input with that day
+    $scope.setNewAvailDay = function(day) {
+      // there's not often the case where the same day has multiple
+      // availabilities
+      //$scope.newAvail.day=day;
+    }
+
+    // click existing imes to populate input with those times
+    $scope.setNewAvailTimes = function(start, end ) {
+      var stTimeLen = $scope.times.start.length;
+      var edTimeLen = $scope.times.end.length;
+      var i=0;
+
+      // find this item in start times and set start input as it
+      for(i=0;i<stTimeLen; i++) {
+        if (start == $scope.times.start[i].val) {
+          $scope.newAvail.start = $scope.times.start[i];
+          break;
+        }
+      }
+
+      // find this item in end times and set end input as it
+      for(i=0; i<edTimeLen; i++) {
+        if (end == $scope.times.end[i].val) {
+          $scope.newAvail.end = $scope.times.end[i];
+          break;
+        }
       }
 
     }

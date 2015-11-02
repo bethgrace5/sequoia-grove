@@ -1,3 +1,27 @@
-<p class="lead">
-    Edit Employee Info
-</p>
+<div class="row">
+  <div class="col-sm-3">
+    <p class="lead">
+        Edit Employee Info
+    </p>
+  </div>
+</div>
+
+<div class="request-title">
+
+  <!-- Add New Availability for Current Employee -->
+  <div class="row">
+    <div class="col-sm-4">
+      <form ng-submit="updateEmployee()">
+        <!-- TODO set selected values so the fields aren't just blank fields -->
+        <select type="text" class="" ng-model="newAvail.day" placeholder="Start">
+        </select>
+
+
+      </form>
+    </div>
+    <div class="col-sm-1">
+          <button type="button" class="btn btn-success" ng-click="addAvail()">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
+    </div>
+  </div>
