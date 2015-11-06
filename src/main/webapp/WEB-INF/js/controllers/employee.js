@@ -6,9 +6,18 @@
 angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($http, $log, $scope) {
     $scope.activeTab = 'info';
+    $scope.positions = [
+      {name: "Cashier"},
+      {name: "Supervisor"},
+      {name: "Cold Prep"},
+      {name: "Janitor"},
+      {name: "Kitchen"},
+      {name: "Kitchen Supervisor"}
+    ]
     $scope.times = {
       // start times start at the earlist shift start and increment by half 
       // hours until the end of the lastest starting shift
+      // TODO have a smarter way to populate this list
       start:[
         {disp:"5:00 AM", val:"0500"},
         {disp:"5:30 AM", val:"0530"},
@@ -37,6 +46,7 @@ angular.module('sequoiaGroveApp')
       ],
       // end times start at the earlist shift end and increment by half 
       // hours until the end of the lastest ending shift
+      // TODO have a smarter way to populate this list
       end:[
         {disp:"1:00 PM", val:"1300"},
         {disp:"1:30 PM", val:"1330"},

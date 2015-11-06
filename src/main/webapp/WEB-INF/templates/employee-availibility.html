@@ -1,16 +1,9 @@
-<div class="row">
-    <div class="col-sm-3">
-        <p class="lead">
-            Edit Employee Availibility
-        </p>
-    </div>
-</div>
 
 <div class="request-title">
 
   <!-- Add New Availability for Current Employee -->
   <div class="row">
-    <div class="col-sm-2">
+    <div class="col-sm-2 col-sm-offset-1">
       <p> Add Availability </p>
     </div>
     <div class="col-sm-4">
@@ -39,13 +32,12 @@
     </div>
   </div>
 
-  <hr/>
 
 
     <!-- Monday Availabiliy -->
     <div ng-repeat="mon in employees[current].avail.mon" class="row">
       <div ng-click="setNewAvailDay('mon')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Monday: </p>
         </div>
       </div>
@@ -66,7 +58,7 @@
     <!-- Tuesday Availabiliy -->
     <div ng-repeat="tue in employees[current].avail.tue" class="row">
       <div ng-click="setNewAvailDay('tue')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Tuesday: </p>
         </div>
       </div>
@@ -87,7 +79,7 @@
     <!-- Wednesday Availabiliy -->
     <div ng-repeat="wed in employees[current].avail.wed" class="row">
       <div ng-click="setNewAvailDay('wed')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Wednesday: </p>
         </div>
       </div>
@@ -108,7 +100,7 @@
     <!-- Thursday Availabiliy -->
     <div ng-repeat="thu in employees[current].avail.thu" class="row">
       <div ng-click="setNewAvailDay('thu')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Thursday: </p>
         </div>
       </div>
@@ -129,7 +121,7 @@
     <!-- Friday Availabiliy -->
     <div ng-repeat="fri in employees[current].avail.fri" class="row">
       <div ng-click="setNewAvailDay('fri')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Friday: </p>
         </div>
       </div>
@@ -150,8 +142,8 @@
     <!-- Saturday Availabiliy -->
     <div ng-repeat="sat in employees[current].avail.sat" class="row">
       <div ng-click="setNewAvailDay('sat')">
-        <div class="col-sm-1">
-          <p ng-show="$index==0"> Monday: </p>
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Saturday: </p>
         </div>
       </div>
       <div ng-click="setNewAvailTimes(sat.start.val, sat.end.val)">
@@ -171,7 +163,7 @@
     <!-- Sunday Availabiliy -->
     <div ng-repeat="sun in employees[current].avail.sun" class="row">
       <div ng-click="setNewAvailDay('sun')">
-        <div class="col-sm-1">
+        <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Sunday: </p>
         </div>
       </div>

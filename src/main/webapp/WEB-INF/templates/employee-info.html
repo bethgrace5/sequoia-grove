@@ -1,27 +1,85 @@
 <div class="row">
   <div class="col-sm-3">
     <p class="lead">
-        Edit Employee Info
+        Employee Info
     </p>
   </div>
 </div>
 
+<!-- Employee Info -->
 <div class="request-title">
-
-  <!-- Add New Availability for Current Employee -->
-  <div class="row">
-    <div class="col-sm-4">
-      <form ng-submit="updateEmployee()">
-        <!-- TODO set selected values so the fields aren't just blank fields -->
-        <select type="text" class="" ng-model="newAvail.day" placeholder="Start">
-        </select>
-
-
-      </form>
+  <form ng-submit="updateEmployee()">
+    <div class="row">
+      <div class="col-sm-1 col-sm-offset-1">
+        <span> Name: </span>
+      </div>
+      <div class="col-sm-3">
+        <input ng-model="employees[current].firstName" placeholder="First"/>
+      </div>
+      <div class="col-sm-5">
+        <input ng-model="employees[current].lastName" placeholder="Last"/>
+      </div>
+      <div clas="col-sm-2">
+        <span>Clock Number:</span>
+        <input class="clock-input" type="text" ng-model="employees[current].clockNumber" placeholder="#">
+      </div>
     </div>
-    <div class="col-sm-1">
-          <button type="button" class="btn btn-success" ng-click="addAvail()">
-              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-          </button>
+    
+    <div class="row">
+      <div class="col-sm-1 col-sm-offset-1">
+        <span>Birthday:</span>
+      </div>
+      <div class="col-sm-3">
+        <!-- will be a datepicker -->
+        <input placeholder="MM/DD/YYYY"/>
+      </div>
+      <div class="col-sm-2 col-sm-offset-5">
+        <span>Manager:</span>
+        <input type="checkbox" ng-model="employees[current].isManager">
+      </div>
+    </div>
+  </form>
+</div>
+
+<hr/>
+
+<!-- Employee Availability -->
+<div class="row">
+  <div class="col-sm-12">
+    <p class="lead"> Availability </p>
+  </div>
+</div>
+<employee-availibility></employee-availibility>
+<hr/>
+
+<!-- Employee Positions -->
+<div class="row">
+  <div class="col-sm-4">
+    <p class="lead"> Positions </p>
+  </div>
+</div>
+<div class="request-title">
+  <div class="row">
+    <div class="col-sm-3 col-sm-offset-1">
+      <p> Add Position</p>
+    </div>
+    <div class="col-sm-2 col-sm-offset-1">
+        <select  ng-model="" ng-options="option.disp for option in times.start"/>
     </div>
   </div>
+</div>
+
+
+<hr/>
+
+<!-- Employment History -->
+<div class="row">
+  <div class="col-sm-4">
+    <p class="lead"> Employment History </p>
+
+
+
+
+  </div>
+</div>
+
