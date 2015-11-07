@@ -13,8 +13,7 @@ public class Employee extends User{
     int maxHoursPerWeek;
     String firstname;
     String lastname;
-    String primaryPhone;
-    String secondaryPhone;
+    String phone;
     Date dateEmployed;
     Date dateUnemployed;;
     Date birthday;
@@ -96,20 +95,12 @@ public class Employee extends User{
         this.lastname = lastname;
     }
 
-    public String getPrimaryPhone() {
-        return primaryPhone;
+    public String getPhone() {
+        return phone;
     }
 
-    public void setPrimaryPhone(String primaryPhone) {
-        this.primaryPhone = primaryPhone;
-    }
-
-    public String getSecondaryPhone() {
-        return secondaryPhone;
-    }
-
-    public void setSecondaryPhone(String secondaryPhone) {
-        this.secondaryPhone = secondaryPhone;
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public Date getDateEmployed() {

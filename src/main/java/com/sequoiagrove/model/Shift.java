@@ -1,87 +1,111 @@
 
 package com.sequoiagrove.model;
-import java.sql.Time;
+import java.sql.Date;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 public class Shift {
-    int id;
-    int positionId;
-    String title; 
-    Time weekdayStart;
-    Time weekdayEnd;
-    Time weekendStart;
-    Time weekendEnd;
+    int sid;
+    int eid;
+    int pid;
+    Date day;
+    String ename; 
+    String tname; 
+    int wd_st;
+    int wd_ed;
+    int we_st;
+    int we_ed;
 
     public Shift(){}
-    public Shift(int id, String title, int positionId, Time weekdayStart, Time weekdayEnd, Time weekendStart, Time weekendEnd) {
-        this.weekdayStart = weekdayStart;
-        this.weekdayEnd = weekdayEnd;
-        this.weekendStart = weekendStart;
-        this.weekendEnd = weekendEnd;
-        this.id = id;
-        this.positionId = positionId;
-        this.title = title;
+    public Shift(int sid, int eid, int pid, Date day, String ename, String tname, int wd_st, int wd_ed, int we_st, int we_ed) {
+        this.sid = sid;
+        this.eid = eid;
+        this.pid = pid;
+        this.day = day;
+        this.tname = tname;
+        this.ename = ename;
+        this.wd_st = wd_st;
+        this.wd_ed = wd_ed;
+        this.we_st = we_st;
+        this.we_ed = we_ed;
     }
 
-@Override
-    public String toString() {
-        return "Shift [id=" + id + ", title=" + title + ", weekdayStart=" + 
-            weekdayStart + ", weekdayEnd=" + weekendStart + ", weekendEnd=" + 
-            weekendEnd + "]";
+    public int getSid() {
+        return sid;
     }
 
-    public int getId() {
-        return id;
+    public void setSid(int sid) {
+        this.sid = sid;
+    }
+    public int getEid() {
+        return eid;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setEid(int id) {
+        this.eid = eid;
     }
 
-    public int getPositionId() {
-        return positionId;
+    public int getPid() {
+        return pid;
     }
 
-    public void setPositionId(int id) {
-        this.positionId = positionId;
+    public void setDay(Date day) {
+        this.day = day;
     }
 
-    public String getTitle() {
-        return title;
+    public Date getDay() {
+        return day;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setPid(int id) {
+        this.pid = pid;
     }
 
-    public Time getWeekdayStart() {
-        return weekdayStart;
+    public String getEname() {
+        return ename;
     }
 
-    public void setWeekdayStart(Time weekdayStart) {
-        this.weekdayStart = weekdayStart;
+    public void setEname(String ename) {
+        this.ename = ename;
     }
 
-    public Time getWeekdayEnd() {
-        return weekdayEnd;
+    public String getTname() {
+        return tname;
     }
 
-    public void setWeekdayEnd(Time weekdayEnd) {
-        this.weekdayEnd = weekdayEnd;
+    public void setTname(String tname) {
+        this.tname = tname;
     }
 
-    public Time getWeekendStart() {
-        return weekendStart;
+    public int getWd_st() {
+        return wd_st;
     }
 
-    public void setWeekendStart(Time weekendStart) {
-        this.weekendStart = weekendStart;
+    public void setWd_st(int wd_st) {
+        this.wd_st = wd_st;
     }
 
-    public Time getWeekendEnd() {
-        return weekendEnd;
+    public int getWd_ed() {
+        return wd_ed;
     }
 
-    public void setWeekendEnd(Time weekendEnd) {
-        this.weekendEnd = weekendEnd;
+    public void setWd_ed(int wd_ed) {
+        this.wd_ed = wd_ed;
+    }
+
+    public int getWe_st() {
+        return we_st;
+    }
+
+    public void setWe_st(int we_st) {
+        this.we_st = we_st;
+    }
+
+    public int getWe_ed() {
+        return we_ed;
+    }
+
+    public void setWe_ed(int we_ed) {
+        this.we_ed = we_ed;
     }
 }

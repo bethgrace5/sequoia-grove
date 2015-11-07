@@ -1,4 +1,3 @@
-
 package com.sequoiagrove.model;
 
 import java.util.Date;

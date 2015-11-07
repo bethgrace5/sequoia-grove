@@ -1,7 +1,7 @@
 
 package com.sequoiagrove.model;
 
-import java.util.Date;
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -9,15 +9,15 @@ import java.util.HashMap;
 
 
 public class Day {
-    Date date;
-    String weekday;
-    HashMap<Employee, Shift> day = new HashMap<Employee, Shift>();
-
+    //Date date;
+    //String weekday;
+    //HashMap<Employee, Shift> day = new HashMap<Employee, Shift>();
+/*
     public Day(){}
     public Day(Date date, String weekday) {
         this.date = date;
         this.weekday = weekday;
-        setShifts();
+        //setShifts();
     }
 
     public void setShifts() {
@@ -67,4 +67,5 @@ public class Day {
     public void setDay(HashMap<Employee, Shift> day) {
         this.day = day;
     }
+    */
 }

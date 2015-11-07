@@ -13,6 +13,7 @@ public class ShiftDAO {
 
         ArrayList<Shift> shifts = new ArrayList<Shift>();
 
+        /*
         shifts.add(new Shift(1, "open store", 1, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
         shifts.add(new Shift(2, "open support", 1, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
         shifts.add(new Shift(3, "register 1", 2, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
@@ -27,6 +28,7 @@ public class ShiftDAO {
         shifts.add(new Shift(12, "hot sandwich", 4, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
         shifts.add(new Shift(13, "opening janitor", 6, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
         shifts.add(new Shift(14, "closing janitor", 6, new Time(7, 0, 0), new Time(7, 0, 0), new Time(15, 0, 0), new Time(15, 0, 0)));
+        */
 
         return shifts;
     }
