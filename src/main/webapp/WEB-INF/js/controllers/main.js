@@ -18,36 +18,31 @@ angular.module('sequoiaGroveApp')
       $log,
       localStorageService) {
 
-  $scope.today = '';
+    // container for displaying the date header on the calendar
+  $scope.date = { mon:{}, tue:{}, wed:{}, thu:{}, fri:{}, sat:{}, sun:{} };
 
-  $scope.date = {
-    monday:{},
-    tuesday:{},
-    wednesday:{},
-    thursday:{},
-    friday:{},
-    saturday:{},
-    sunday:{},
-  };
-
-  var showSchedule = function(mondayDate) {
-    var today = new Date();
+  // set initial schedule header for current week
+  // this puts the correct date for each day of the week, and the 
+  // month for the schedule
+  var setScheduleHeader = function() {
+    $scope.today = new Date();
     // decide which weekday it is today.
-    var currentIndex = today.getDay(); // 0 is Sunday
-    var dd = today.getDate();
-    var mm = today.getMonth(); //January is 0!
-    var yyyy = today.getFullYear();
+    var currentIndex = $scope.today.getDay(); // 0 is Sunday
+    var dd = $scope.today.getDate();
+    //TODO deal with the edge case where the month changes mid week
+    var mm = $scope.today.getMonth(); //January is 0!
+    //TODO deal with the edge case where the year changes mid week
+    var yyyy = $scope.today.getFullYear();
 
-    // set the date string as numbers for queries
-    $scope.date.monday.val    = (mm+1) + '-'+ (dd + currentIndex+1-10) + '-' + yyyy;
-    $scope.date.tuesday.val   = (mm+1) + '-'+ (dd + currentIndex+2-10) + '-' + yyyy;
-    $scope.date.wednesday.val = (mm+1) + '-'+ (dd + currentIndex+3-10) + '-' + yyyy;
-    $scope.date.thursday.val  = (mm+1) + '-'+ (dd + currentIndex+4-10) + '-' + yyyy;
-    $scope.date.friday.val    = (mm+1) + '-'+ (dd + currentIndex+5-10) + '-' + yyyy;
-    $scope.date.saturday.val  = (mm+1) + '-'+ (dd + currentIndex+6-10) + '-' + yyyy;
-    $scope.date.sunday.val    = (mm+1) + '-'+ (dd + currentIndex+7-10) + '-' + yyyy;
+    $scope.date.mon.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+1));
+    $scope.date.tue.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+2));
+    $scope.date.wed.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+3));
+    $scope.date.thu.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+4));
+    $scope.date.fri.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+5));
+    $scope.date.sat.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+6));
+    $scope.date.sun.val = new Date(yyyy + '-' + (mm+1) + '-'+ (dd - currentIndex+7));
 
-    // set the month number as word
+    // set the month number as english word
     switch(mm) {
       case 0:  mm = "Jan"; break;
       case 1:  mm = "Feb"; break;
@@ -62,19 +57,16 @@ angular.module('sequoiaGroveApp')
       case 10: mm = "Nov"; break;
       case 11: mm = "Dec"; break;
     }
-
-    // set the date string with text for display on view
-    $scope.date.monday.disp    = mm+'-'+(dd-currentIndex+1);
-    $scope.date.tuesday.disp   = mm+'-'+(dd-currentIndex+2);
-    $scope.date.wednesday.disp = mm+'-'+(dd-currentIndex+3);
-    $scope.date.thursday.disp  = mm+'-'+(dd-currentIndex+4);
-    $scope.date.friday.disp    = mm+'-'+(dd-currentIndex+5);
-    $scope.date.saturday.disp  = mm+'-'+(dd-currentIndex+6);
-    $scope.date.sunday.disp    = mm+'-'+(dd-currentIndex+7);
-
+    // set the date string with entlish text for display on view
+    $scope.date.mon.disp = mm+'-'+(dd-currentIndex+1);
+    $scope.date.tue.disp = mm+'-'+(dd-currentIndex+2);
+    $scope.date.wed.disp = mm+'-'+(dd-currentIndex+3);
+    $scope.date.thu.disp = mm+'-'+(dd-currentIndex+4);
+    $scope.date.fri.disp = mm+'-'+(dd-currentIndex+5);
+    $scope.date.sat.disp = mm+'-'+(dd-currentIndex+6);
+    $scope.date.sun.disp = mm+'-'+(dd-currentIndex+7);
   }
-
-  showSchedule();
+  setScheduleHeader();
 
     $scope.getEmployees = function() {
       $http({
@@ -107,7 +99,8 @@ angular.module('sequoiaGroveApp')
         method: "GET"
       }).success(function (data, status, headers, config) {
           $scope.shifts = data.shifts;
-          //$log.debug(data.shifts);
+          $log.debug(data);
+          $scope.sid = data.sid;
 
       }).error(function (data, status, headers, config) {
           $log.error(status + " Error obtaining shift data: " + data);
@@ -164,21 +157,57 @@ angular.module('sequoiaGroveApp')
       });
     }
 
+    // get all the info about who is scheduled for which positions
+    // for the given schedule
     $scope.getSchedule = function() {
+      //FIXME for now we're just sending monday, but it will need to 
+      //accept a paramter in order to switch weeks
+
+      //TODO check that we're sending a MONDAY for the query -
+      //javascripts Date.getDay() will return the index of the day,
+      //we need 1 for MONDAY
+
+      $log.debug($scope.date.mon);
+      // getDate() returns the day of the month (0-31)
+      var dd = $scope.date.mon.val.getDate();
+      //TODO deal with the edge case where the month changes mid week
+      var mm = $scope.date.mon.val.getMonth(); //January is 0!
+      //TODO deal with the edge case where the year changes mid week
+      var yyyy = $scope.date.mon.val.getFullYear();
+
+      // the back end relies on the substring for day being two characters
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      // the back end relies on the substring for month being two characters
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+
+      // add 1 to month, because Jan is 0
+      var dateString = (mm+1) + "-" + dd + "-" + yyyy;
+      $log.debug(dateString);
+
+        // accepts date in form MM/DD/YYYY
         $http({
-          url: '/sequoiagrove/schedule/week/'+$scope.date.monday.val,
+          url: '/sequoiagrove/schedule/week/' + dateString,
           method: "GET"
         }).success(function (data, status, headers, config) {
-          $log.debug(data);
-          /*
-          var day = new Date (data.schedule[0].day);
-          $log.debug(day);
+          //$log.debug(data.mon);
 
-            $scope.sch = { date:day, scheduled:{
+            $scope.sch = { 
               mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[]
-              } 
             };
 
+            $scope.sch.mon = data.mon;
+            $scope.sch.tue = data.mon;
+            $scope.sch.wed = data.mon;
+            $scope.sch.thu = data.mon;
+            $scope.sch.fri = data.mon;
+            $scope.sch.sat = data.mon;
+            $scope.sch.sun = data.mon;
+
+            /*
             data.schedule.forEach(function(value, index, ar) {
               $log.debug(value.sid);
               $scope.sch.scheduled.mon.push(
@@ -191,6 +220,7 @@ angular.module('sequoiaGroveApp')
                   "wd_ed":value.wd_st
                 });
             });
+            */
 
 
             $log.debug($scope.sch);

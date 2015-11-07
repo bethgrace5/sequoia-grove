@@ -18,13 +18,6 @@ import java.util.ArrayList;
 @Controller
 public class ShiftController {
 
-  @RequestMapping(value = "/shifts")
-    public String getAllPositions(Model model)
-    {
-        //model.addAttribute("shifts", ShiftDAO.getShift());
-        return "jsonTemplate";
-    }
-
     // Get a week starting on the supplied parameter, which
     // is a monday. The front end makes it a monday, but it would
     // be good to also check that it is a monday here.
@@ -36,6 +29,8 @@ public class ShiftController {
 
         List<Shift> shifts = null;
 
+        // FIXME maybe seach for the delimiters instead of having to
+        // make sure the substring is setup correctly in the front end
         int mm = Integer.parseInt(start.substring(0, 2));
         int dd = Integer.parseInt(start.substring(3, 5));
         int yyyy = Integer.parseInt(start.substring(6, 10));
@@ -53,13 +48,6 @@ public class ShiftController {
           dayString[i] = mm + "/" + dayString[i] + "/" + yyyy;
 
         }
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[0] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[1] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[2] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[3] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[4] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[5] +"', 'mm/dd/yyyy')");
-        System.out.println("select * from BAJS_SCHEDULE where day=to_date('" +dayString[6] +"', 'mm/dd/yyyy')");
 
         for (int i=0; i<7; i++) {
           shifts = jdbcTemplate.query(
@@ -81,7 +69,6 @@ public class ShiftController {
                       return shift;
                   }
           });
-          System.out.println(shifts.size());
 
           switch(i) {
             case 0:
@@ -112,37 +99,25 @@ public class ShiftController {
     }
 
 
-    /*
-    // get all the shifts by id and name for a given day
-    @RequestMapping(value = "/schedule/week/{start}")
-    public String listHotels(Model model, @PathVariable("start") String start){
+    // get all of the possible shift ids
+    @RequestMapping(value = "/shifts")
+    public String listShiftIds(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        List<Shift> shifts = jdbcTemplate.query(
-            "select * from BAJS_SCHEDULE where day=to_date('11/05/2014', 'mm/dd/yyyy')",
-            new RowMapper<Shift>() {
-                public Shift mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Shift shift = new Shift(
-                        rs.getInt("sid"),
-                        rs.getInt("eid"),
-                        rs.getInt("pid"),
-                        rs.getDate("day"),
-                        rs.getString("name"),
-                        rs.getString("tname"),
-                        rs.getInt("wd_st"),
-                        rs.getInt("wd_ed"),
-                        rs.getInt("we_st"),
-                        rs.getInt("we_ed")
-                    );
-                    
-                    return shift;
+        List<Integer> sidList = jdbcTemplate.query(
+            "select s.id as sid, s.position_id as pid, s.task_name as tname" +
+              "from bajs_shift s",
+            new RowMapper<Integer>() {
+                public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    Integer sid = new Integer(rs.getInt("sid"));
+                    return sid;
                 }
         });
-        model.addAttribute(shifts);
+        model.addAttribute("sid", sidList);
         return "jsonTemplate";
+
     }
 
-    */
 
 }
 
