@@ -6,8 +6,7 @@
 node_modules/*
 .gitignore
 *.properties
-*sqlplus.sh*
-*saveAll*
+*.sh*
 
 *.sass-cache
 *.tmp
