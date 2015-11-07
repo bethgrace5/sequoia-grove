@@ -2,13 +2,13 @@
 
     <!-- date labels -->
     <div class="row">
-        <div class="col-sm-1 col-sm-offset-3 day-title"> {{date.monday}} </div>
-        <div class="col-sm-1 day-title">                 {{date.tuesday}} </div>
-        <div class="col-sm-1 day-title-wed">             {{date.wednesday}} </div>
-        <div class="col-sm-1 day-title">                 {{date.thursday}} </div>
-        <div class="col-sm-1 day-title">                 {{date.friday}} </div>
-        <div class="col-sm-1 col-sm-offset-1 day-title"> {{date.saturday}} </div>
-        <div class="col-sm-1 day-title">                 {{date.sunday}} </div>
+        <div class="col-sm-1 col-sm-offset-3 day-title"> {{date.monday.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.tuesday.disp}} </div>
+        <div class="col-sm-1 day-title-wed">             {{date.wednesday.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.thursday.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.friday.disp}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{date.saturday.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.sunday.disp}} </div>
     </div>
 
     <div class="row">
@@ -49,23 +49,24 @@
     </div>
 
     <!-- shifts -->
-    <div ng-repeat="shift in shifts">
-        <div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)">
+    <div ng-repeat="s in sch.scheduled">
+      <!--<div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)"> -->
+      <div class="row">
         <hr/>
 
             <!-- shift title -->
             <div class="col-sm-2 col-sm-offset-0" > 
-                {{shift.title}} 
+                {{s.tname}} 
             </div>
 
         <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                {{shift.weekdayStart | limitTo: 5}}-{{shift.weekdayEnd | limitTo: 5}}
+                {{s.wd_st | limitTo: 5}}-{{s.wd_ed | limitTo: 5}}
             </div>
 
             <!-- Monday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[0].scheduled[$index].name}}
+              {{s.monday.ename}}
             </div>
 
             <!-- Tuesday -->
