@@ -12,8 +12,6 @@ from bajs_shift s;
 
 
 
-
-
 /* All of the employee names scheduled for the given day
 with the task name, and shift hours for weekends and weekdays */
 
