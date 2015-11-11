@@ -61,9 +61,9 @@
 
             <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-              <div ng-show="t.wd_st != 0">
+              <!--<div ng-show="t.wd_st != 0">-->
                 {{t.wd_st | limitTo: 5}}-{{t.wd_ed | limitTo: 5}}
-              </div>
+                <!--</div>-->
             </div>
 
             <!-- Monday -->
@@ -83,9 +83,9 @@
 
             <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-              <div ng-show="t.we_st != 0">
-                {{t.we_ed | limitTo: 5}}-{{t.we_ed | limitTo: 5}}
-              </div>
+              <!--<div ng-show="t.we_st != 0">-->
+                {{t.we_st}}-{{t.we_ed}}
+              <!--</div>-->
             </div>
 
             <!-- Saturday -->
