@@ -1,6 +1,11 @@
+/* views */
+drop view  BAJS_SCH_TEMPLATE;
 drop view  BAJS_TRAINING_EMP;
 drop view  BAJS_STD_EMP;
 drop view  BAJS_SCHEDULE;
+drop view  BAJS_SCH_HIST;
+
+/* base tables */
 drop table BAJS_HOLIDAY;
 drop table BAJS_USER;
 drop table BAJS_WEEKDAY_HOURS;
@@ -11,8 +16,10 @@ drop table BAJS_SOLD_IN;
 drop table BAJS_USED_IN;
 drop table BAJS_MENU_ITEM;
 drop table BAJS_IS_SCHEDULED_FOR;
-drop table BAJS_SHIFT;
+drop table BAJS_NEW_SHIFT;
+drop table BAJS_HOURS;
 drop table BAJS_HAS_POSITION;
+drop table BAJS_SHIFT;
 drop table BAJS_POSITION;
 drop table BAJS_EMPLOYMENT_HISTORY;
 drop table BAJS_CANNOT_WORK_WITH;
@@ -22,4 +29,8 @@ drop table BAJS_DELIVERED_BY;
 drop table BAJS_TRANSACTION;
 drop table BAJS_INGREDIENT;
 drop table BAJS_SUPPLIER;
+
+/* packages */
+drop package BAJS_PKG;
+
 purge recyclebin;

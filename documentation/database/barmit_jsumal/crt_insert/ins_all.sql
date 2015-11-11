@@ -1,3 +1,4 @@
+@ins/ins_hours.sql;
 @ins/ins_employee.sql;
 @ins/ins_availability.sql;
 @ins/ins_cannot_work_with.sql;
@@ -6,6 +7,7 @@
 @ins/ins_delivered_by.sql;
 @ins/ins_employment_history.sql;
 @ins/ins_position.sql;
+@ins/ins_new_shift.sql;
 @ins/ins_shift.sql;
 @ins/ins_has_position.sql;
 @ins/ins_is_scheduled_for.sql;

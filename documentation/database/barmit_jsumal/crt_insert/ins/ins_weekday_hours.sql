@@ -3,11 +3,10 @@
     shift_id, start_hour, end_hour
 */
 
-/* morning front shifts 
-insert into BAJS_WEEKDAY_HOURS values(  1, 0600, 1400);
-*/
-insert into BAJS_WEEKDAY_HOURS values(  2, 0700, 1500);
+/* morning front shifts */
 /*
+insert into BAJS_WEEKDAY_HOURS values(  1, 0600, 1400);
+insert into BAJS_WEEKDAY_HOURS values(  2, 0700, 1500);
 insert into BAJS_WEEKDAY_HOURS values(  3, 0800, 1500);
 */
 insert into BAJS_WEEKDAY_HOURS values(  4, 0800, 1530);

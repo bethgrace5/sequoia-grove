@@ -5,9 +5,7 @@
 
 /* morning front shifts */
 insert into BAJS_WEEKEND_HOURS values(  1, 0700, 1500);
-/*
 insert into BAJS_WEEKEND_HOURS values(  2, 0700, 1500);
-*/
 insert into BAJS_WEEKEND_HOURS values(  3, 0800, 1500);
 insert into BAJS_WEEKEND_HOURS values(  4, 0800, 1530);
 insert into BAJS_WEEKEND_HOURS values(  5, 1100, 1600);
@@ -19,8 +17,10 @@ insert into BAJS_WEEKEND_HOURS values(  9, 0700, 1500);
 /* evening front shifts */
 insert into BAJS_WEEKEND_HOURS values( 10, 1200, 2030);
 insert into BAJS_WEEKEND_HOURS values( 11, 1300, 2030);
+/*
 insert into BAJS_WEEKEND_HOURS values( 12, 1500, 2030);
 insert into BAJS_WEEKEND_HOURS values( 13, 1500, 2030);
+*/
 insert into BAJS_WEEKEND_HOURS values( 14, 1600, 2000);
 
 /* morning kitchen shifts */

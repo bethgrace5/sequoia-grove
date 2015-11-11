@@ -7,4 +7,5 @@ create table BAJS_SHIFT (
 	PCTFree 5
 	PCTUSED 15
 	TABLESPACE CS342
+
 /

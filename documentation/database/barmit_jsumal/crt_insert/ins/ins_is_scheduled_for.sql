@@ -104,7 +104,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(18, 6 , to_date('11/05/2015', 'mm/dd/yy
 insert into BAJS_IS_SCHEDULED_FOR values(39, 7 , to_date('11/05/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(12, 8 , to_date('11/05/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(11, 9 , to_date('11/05/2015', 'mm/dd/yyyy'));
-insert into BAJS_IS_SCHEDULED_FOR values( 2, 10, to_date('11/05/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 10, to_date('11/05/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(10, 11, to_date('11/05/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(19, 12, to_date('11/05/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 13, to_date('11/05/2015', 'mm/dd/yyyy'));

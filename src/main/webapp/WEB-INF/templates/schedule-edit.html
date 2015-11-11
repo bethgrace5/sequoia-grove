@@ -1,14 +1,14 @@
 <div class="hidden-xs">
 
-        <div class="row">
-            <div class="col-sm-1 col-sm-offset-3 day-title"> {{currentSchedule[0].date}} </div>
-            <div class="col-sm-1 day-title">                 {{currentSchedule[1].date}} </div>
-            <div class="col-sm-1 day-title-wed">             {{currentSchedule[2].date}} </div>
-            <div class="col-sm-1 day-title">                 {{currentSchedule[3].date}} </div>
-            <div class="col-sm-1 day-title">                 {{currentSchedule[4].date}} </div>
-            <div class="col-sm-1 col-sm-offset-1 day-title"> {{currentSchedule[5].date}} </div>
-            <div class="col-sm-1 day-title">                 {{currentSchedule[6].date}} </div>
-        </div>
+    <div class="row">
+        <div class="col-sm-1 col-sm-offset-3 day-title"> {{date.mon.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.tue.disp}} </div>
+        <div class="col-sm-1 day-title-wed">             {{date.wed.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.thu.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.fri.disp}} </div>
+        <div class="col-sm-1 col-sm-offset-1 day-title"> {{date.sat.disp}} </div>
+        <div class="col-sm-1 day-title">                 {{date.sun.disp}} </div>
+    </div>
 
         <div class="row">
             <div class="col-sm-1 col-sm-offset-3 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
@@ -22,15 +22,15 @@
 
 
         <!-- shifts -->
-        <div ng-repeat="shift in shifts">
+        <div ng-repeat="shift in template">
             <div class="row">
                 <div class="col-sm-2" > 
-                    {{shift.title}} 
+                    {{shift.tname}} 
                 </div>
 
             <!-- weekday times -->
                 <div class="col-sm-1 schedule-times" > 
-                    {{shift.weekdayStart | limitTo:5}}-{{shift.weekdayEnd | limitTo:5}}
+                  {{shift.wd_st}}-{{shift.wd_ed}}
                 </div>
 
                 <!-- Monday -->
@@ -60,7 +60,7 @@
 
             <!-- weekend times -->
                 <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                    {{shift.weekendStart | limitTo:5}}-{{shift.weekendEnd | limitTo:5}}
+                    {{shift.we_st}}-{{shift.we_ed}}
                 </div>
 
                 <!-- Saturday -->

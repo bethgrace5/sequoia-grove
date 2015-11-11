@@ -1,21 +1,24 @@
-
 package com.sequoiagrove.model;
 import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-public class ShiftList {
+// All of the CURRENT existing shifts with their weekday/weekend hours
+// The shifts do not yet store the date range they existed as a shift,
+// so getting the history will be difficult
+
+public class ScheduleTemplate {
     int sid;
     int pid;
+    String tname; 
+    String location;
     int wd_st;
     int wd_ed;
     int we_st;
     int we_ed;
-    String tname;
-    String location;
 
-    public ShiftList(){}
-    public ShiftList(int sid, int pid, String location, String tname, int wd_st, int wd_ed, int we_st, int we_ed) {
+    public ScheduleTemplate(){}
+    public ScheduleTemplate(int sid, int pid, String location, String tname, int wd_st, int wd_ed, int we_st, int we_ed) {
         this.sid = sid;
         this.pid = pid;
         this.tname = tname;
@@ -37,7 +40,6 @@ public class ShiftList {
     public int getPid() {
         return pid;
     }
-
 
     public void setPid(int id) {
         this.pid = pid;

@@ -49,59 +49,90 @@
     </div>
 
     <!-- shifts -->
-    <div ng-repeat="s in sid">
+    <div ng-repeat="t in template">
       <!--<div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)"> -->
       <div class="row">
         <hr/>
 
             <!-- shift title -->
             <div class="col-sm-2 col-sm-offset-0" > 
-                {{s.tname}} 
+                {{t.tname}} 
             </div>
 
         <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                {{s.wd_st | limitTo: 5}}-{{s.wd_ed | limitTo: 5}}
+              <div ng-show="t.wd_st != 0">
+                {{t.wd_st | limitTo: 5}}-{{t.wd_ed | limitTo: 5}}
+              </div>
             </div>
 
             <!-- Monday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-              {{s.monday.ename}}
+              <div ng-show="t.wd_st != 0">
+
+              <div ng-repeat = "day in sch.mon">
+                <div ng-show = "day.sid == t.sid">
+                  {{day.ename}}
+                </div>
+              </div>
+
+
+              </div>
             </div>
 
             <!-- Tuesday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[1].scheduled[$index].name}}
+              <div ng-show="t.wd_st != 0">
+              {{t.sid}}
+              {{date.tue.val.getDay()}}
+              </div>
             </div>
 
             <!-- Wednesday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[2].scheduled[$index].name}}
+              <div ng-show="t.wd_st != 0">
+              {{t.sid}}
+              {{date.wed.val.getDay()}}
+              </div>
             </div>
 
             <!-- Thursday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[3].scheduled[$index].name}}
+              <div ng-show="t.wd_st != 0">
+              {{t.sid}}
+              {{date.thu.val.getDay()}}
+              </div>
             </div>
 
             <!-- Friday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[4].scheduled[$index].name}}
+              <div ng-show="t.wd_st != 0">
+              {{t.sid}}
+              {{date.fri.val.getDay()}}
+              </div>
             </div>
 
         <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                {{shift.weekendStart | limitTo: 5}}-{{shift.weekendEnd | limitTo: 5}}
+              <div ng-show="t.we_st != 0">
+                {{t.we_ed | limitTo: 5}}-{{t.we_ed | limitTo: 5}}
+              </div>
             </div>
 
             <!-- Saturday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[5].scheduled[$index].name}}
+              <div ng-show="t.we_st != 0">
+              {{t.sid}}
+              {{date.sat.val.getDay()}}
+              </div>
             </div>
 
             <!-- Sunday -->
             <div class="col-sm-1 col-sm-offset-0 " > 
-                {{currentSchedule[6].scheduled[$index].name}}
+              <div ng-show="t.we_st != 0">
+              {{t.sid}}
+              {{date.sun.val.getDay()}}
+              </div>
             </div>
 
 
