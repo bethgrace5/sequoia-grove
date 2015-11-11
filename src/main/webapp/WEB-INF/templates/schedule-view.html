@@ -59,7 +59,7 @@
                 {{t.tname}} 
             </div>
 
-        <!-- weekday times -->
+            <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
               <div ng-show="t.wd_st != 0">
                 {{t.wd_st | limitTo: 5}}-{{t.wd_ed | limitTo: 5}}
@@ -67,52 +67,21 @@
             </div>
 
             <!-- Monday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.wd_st != 0">
-
-              <div ng-repeat = "day in sch.mon">
-                <div ng-show = "day.sid == t.sid">
-                  {{day.ename}}
-                </div>
-              </div>
-
-
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.mon}} </div>
 
             <!-- Tuesday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.wd_st != 0">
-              {{t.sid}}
-              {{date.tue.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.tue}} </div>
 
             <!-- Wednesday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.wd_st != 0">
-              {{t.sid}}
-              {{date.wed.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.wed}} </div>
 
             <!-- Thursday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.wd_st != 0">
-              {{t.sid}}
-              {{date.thu.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.thu}} </div>
 
             <!-- Friday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.wd_st != 0">
-              {{t.sid}}
-              {{date.fri.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.fri}} </div>
 
-        <!-- weekend times -->
+            <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
               <div ng-show="t.we_st != 0">
                 {{t.we_ed | limitTo: 5}}-{{t.we_ed | limitTo: 5}}
@@ -120,20 +89,10 @@
             </div>
 
             <!-- Saturday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.we_st != 0">
-              {{t.sid}}
-              {{date.sat.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.sat}} </div>
 
             <!-- Sunday -->
-            <div class="col-sm-1 col-sm-offset-0 " > 
-              <div ng-show="t.we_st != 0">
-              {{t.sid}}
-              {{date.sun.val.getDay()}}
-              </div>
-            </div>
+            <div class="col-sm-1 col-sm-offset-0 "> {{t.sun}} </div>
 
 
         </div>

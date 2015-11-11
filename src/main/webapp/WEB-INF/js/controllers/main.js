@@ -133,7 +133,27 @@ angular.module('sequoiaGroveApp')
           $log.error(status + " Error obtaining employe id:1 data: " + data);
       });
     }
+
+    // TODO supply beginning monday as input here,
+    // then here back end will calculate the rest of the weekdays to sunday
     $scope.getScheduleTemplate = function() {
+    /*
+      var dd = $scope.date.mon.val.getDate();
+      var mm = $scope.date.mon.val.getMonth(); //January is 0!
+      var yyyy = $scope.date.mon.val.getFullYear();
+
+      // the back end relies on the substring for day being two characters
+      if (dd < 10) {
+        dd = '0' + dd;
+      }
+      // the back end relies on the substring for month being two characters
+      if (mm < 10) {
+        mm = '0' + mm;
+      }
+      // add 1 to month, because Jan is 0
+      var dateString = (mm+1) + "-" + dd + "-" + yyyy;
+      $log.debug(dateString);
+      */
       $http({
         url: '/sequoiagrove/schedule/template',
         method: "GET"
@@ -146,77 +166,7 @@ angular.module('sequoiaGroveApp')
       });
     }
 
-    // get all the info about who is scheduled for which positions
-    // for the given schedule
-    $scope.getSchedule = function() {
-      //FIXME for now we're just sending monday, but it will need to 
-      //accept a paramter in order to switch weeks
 
-      //TODO check that we're sending a MONDAY for the query -
-      //javascripts Date.getDay() will return the index of the day,
-      //we need 1 for MONDAY
-
-      //$log.debug($scope.date.mon);
-      // getDate() returns the day of the month (0-31)
-      var dd = $scope.date.mon.val.getDate();
-      //TODO deal with the edge case where the month changes mid week
-      var mm = $scope.date.mon.val.getMonth(); //January is 0!
-      //TODO deal with the edge case where the year changes mid week
-      var yyyy = $scope.date.mon.val.getFullYear();
-
-      // the back end relies on the substring for day being two characters
-      if (dd < 10) {
-        dd = '0' + dd;
-      }
-      // the back end relies on the substring for month being two characters
-      if (mm < 10) {
-        mm = '0' + mm;
-      }
-
-      // add 1 to month, because Jan is 0
-      var dateString = (mm+1) + "-" + dd + "-" + yyyy;
-      $log.debug(dateString);
-
-        // accepts date in form MM/DD/YYYY
-        $http({
-          //url: '/sequoiagrove/schedule/week/' + dateString,
-          url: '/sequoiagrove/schedule/week/' + '11-02-2015',
-          method: "GET"
-        }).success(function (data, status, headers, config) {
-          //$log.debug(data.mon);
-
-            $scope.sch = { 
-              mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[]
-            };
-
-            $scope.sch.mon = data.mon;
-            $scope.sch.tue = data.tue;
-            $scope.sch.wed = data.wed;
-            $scope.sch.thu = data.thu;
-            $scope.sch.fri = data.fri;
-            $scope.sch.sat = data.sat;
-            $scope.sch.sun = data.sun;
-
-            /*
-            data.schedule.forEach(function(value, index, ar) {
-              $log.debug(value.sid);
-              $scope.sch.scheduled.mon.push(
-                { "sid": value.sid, 
-                  "name":value.ename, 
-                  "ename":value.ename,
-                });
-            });
-            */
-
-
-            $log.debug(data);
-
-        }).error(function (data, status, headers, config) {
-            $log.error(status + " Error obtaining schedule data: " + data);
-        });
-    }
-
-    $scope.getSchedule();
     $scope.getScheduleTemplate();
     $scope.getEmployees();
     $scope.getPositions();

@@ -8,7 +8,7 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('ScheduleCtrl', function ($scope, $rootScope, $translate) {
+  .controller('ScheduleCtrl', function ($scope, $rootScope, $translate, $log) {
     $scope.activeTab = 'schedule';
     $scope.selectedName = '';
 
@@ -40,6 +40,7 @@ angular.module('sequoiaGroveApp')
 
 
     $scope.selectName = function(name) {
+      $log.debug(name);
       $scope.selectedName = name;
     }
 

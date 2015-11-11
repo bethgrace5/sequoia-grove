@@ -22,56 +22,78 @@
 
 
         <!-- shifts -->
-        <div ng-repeat="shift in template">
+        <div ng-repeat="t in template">
             <div class="row">
                 <div class="col-sm-2" > 
-                    {{shift.tname}} 
+                    {{t.tname}} 
                 </div>
 
             <!-- weekday times -->
                 <div class="col-sm-1 schedule-times" > 
-                  {{shift.wd_st}}-{{shift.wd_ed}}
+                  {{t.wd_st}}-{{t.wd_ed}}
                 </div>
 
                 <!-- Monday -->
                 <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                    <input select-on-click ng-click="selectName(currentSchedule[0].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[0].scheduled[$index].name, 'monday', shift.id)" ng-model="currentSchedule[0].scheduled[$index].name">
+                  <input select-on-click ng-click="selectName(t.mon)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.mon, 'monday', t.id)" 
+                  ng-model="t.mon">
                 </div>
 
                 <!-- Tuesday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[1].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[1].scheduled[$index].name, 'tuesday', shift.id)" ng-model="currentSchedule[1].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.tue)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.tue, 'tuesday', t.id)" 
+                  ng-model="t.tue">
                 </div>
 
                 <!-- Wednesday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[2].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[2].scheduled[$index].name,'wednesday', shift.id)" ng-model="currentSchedule[2].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.wed)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.wed, 'wednesday', t.id)" 
+                  ng-model="t.wed">
                 </div>
 
                 <!-- Thursday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[3].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[3].scheduled[$index].name,'thursday', shift.id)" ng-model="currentSchedule[3].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.thu)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.thu, 'thursday', t.id)" 
+                  ng-model="t.thu">
                 </div>
 
                 <!-- Friday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[4].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[4].scheduled[$index].name,'friday', shift.id)" ng-model="currentSchedule[4].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.fri)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.fri, 'friday', t.id)" 
+                  ng-model="t.fri">
                 </div>
 
             <!-- weekend times -->
                 <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                    {{shift.we_st}}-{{shift.we_ed}}
+                    {{t.we_st}}-{{t.we_ed}}
                 </div>
 
                 <!-- Saturday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[5].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[5].scheduled[$index].name,'saturday', shift.id)" ng-model="currentSchedule[5].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.sat)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.sat, 'saturday', t.id)" 
+                  ng-model="t.sat">
                 </div>
 
                 <!-- Sunday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit" > 
-                    <input select-on-click ng-click="selectName(currentSchedule[6].scheduled[$index].name)" ng-disabled=false type="text" ng-class="inputStatus( currentSchedule[6].scheduled[$index].name,'sunday', shift.id)" ng-model="currentSchedule[6].scheduled[$index].name">
+                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+                  <input select-on-click ng-click="selectName(t.sun)" 
+                  ng-disabled=false type="text" 
+                  ng-class="inputStatus(t.sun, 'sunday', t.id)" 
+                  ng-model="t.sun">
                 </div>
+
             </div>
         </div>
 

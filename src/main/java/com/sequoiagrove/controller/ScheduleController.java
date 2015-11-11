@@ -29,8 +29,7 @@ public class ScheduleController {
     @RequestMapping(value = "/schedule/template")
     public String getScheduleTemplate(Model model) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-
+        /*
         List<ScheduleTemplate> schTempList = jdbcTemplate.query(
             "select * from bajs_sch_template order by location, wd_st, we_st",
             new RowMapper<ScheduleTemplate>() {
@@ -49,6 +48,33 @@ public class ScheduleController {
                 }
           });
         List<ScheduleTemplate> weekendList = new ArrayList();
+        */
+
+        List<ScheduleTemplate> schTempList = jdbcTemplate.query(
+          "select * from table(bajs_pkg.get_schedule('02/11/2015', '03/11/2015', " +
+          " '04/11/2015', '05/11/2015', '06/11/2015', '07/11/2015', '08/11/2015'))",
+          
+            new RowMapper<ScheduleTemplate>() {
+                public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
+                    ScheduleTemplate schTmp = new ScheduleTemplate(
+                          rs.getInt("sid"), 
+                          rs.getString("location"),
+                          rs.getString("tname"), 
+                          rs.getInt("wd_st"),
+                          rs.getInt("wd_ed"),
+                          rs.getInt("we_st"),
+                          rs.getInt("we_ed"),
+                          rs.getString("mon"), 
+                          rs.getString("tue"), 
+                          rs.getString("wed"), 
+                          rs.getString("thu"), 
+                          rs.getString("fri"), 
+                          rs.getString("sat"), 
+                          rs.getString("sun"));
+
+                    return schTmp;
+                }
+          });
 
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
