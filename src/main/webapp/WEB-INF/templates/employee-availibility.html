@@ -1,76 +1,184 @@
-<div class="row">
-    <div class="col-sm-3">
-        <p class="lead">
-            Edit Employee Availibility
-        </p>
-    </div>
-</div>
 
 <div class="request-title">
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Monday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
+
+  <!-- Add New Availability for Current Employee -->
+  <div class="row">
+    <div class="col-sm-2 col-sm-offset-1">
+      <p> Add Availability </p>
     </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Tuesday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
+    <div class="col-sm-4">
+      <form ng-submit="addDelivery()">
+        <!-- TODO set selected values so the fields aren't just blank fields -->
+        <select type="text" class="" ng-model="newAvail.day" placeholder="Start">
+          <option value="mon">Monday</option>
+          <option value="tue">Tuesday</option>
+          <option value="wed">Wednesday</option>
+          <option value="thu">Thursday</option>
+          <option value="fri">Friday</option>
+          <option value="sat">Saturday</option>
+          <option value="sun">Sunday</option>
+        </select>
+        <select class="avail-edit-select" ng-model="newAvail.start" placeholder="Start"
+          ng-options="option.disp for option in times.start"/>
+          - 
+        <select class="avail-edit-select" ng-model="newAvail.end" placeholder="End"
+          ng-options="option.disp for option in times.end"/>
+      </form>
     </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Wednesday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
+    <div class="col-sm-1">
+          <button type="button" class="btn btn-success" ng-click="addAvail()">
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+          </button>
     </div>
-    <div class="row">
+  </div>
+
+
+
+    <!-- Monday Availabiliy -->
+    <div ng-repeat="mon in employees[current].avail.mon" class="row">
+      <div ng-click="setNewAvailDay('mon')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Monday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(mon.start.val, mon.end.val)">
         <div class="col-sm-2">
-            <p> Thursday: </p>
+          <span> {{mon.start.disp}} - {{mon.end.disp}} </span>
         </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Friday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Saturday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-2">
-            <p> Sunday: </p>
-        </div>
-        <div class="col-sm-6">
-            <input type="text" ng-model="newDelivery" placeholder="Start"/> - 
-            <input type="text" ng-model="newDelivery" placeholder="End"/>
-        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('mon', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
     </div>
 
+
+    <!-- Tuesday Availabiliy -->
+    <div ng-repeat="tue in employees[current].avail.tue" class="row">
+      <div ng-click="setNewAvailDay('tue')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Tuesday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(tue.start.val, tue.end.val)">
+        <div class="col-sm-2">
+          <span> {{tue.start.disp}} - {{tue.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('tue', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Wednesday Availabiliy -->
+    <div ng-repeat="wed in employees[current].avail.wed" class="row">
+      <div ng-click="setNewAvailDay('wed')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Wednesday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(wed.start.val, wed.end.val)">
+        <div class="col-sm-2">
+          <span> {{wed.start.disp}} - {{wed.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('wed', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Thursday Availabiliy -->
+    <div ng-repeat="thu in employees[current].avail.thu" class="row">
+      <div ng-click="setNewAvailDay('thu')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Thursday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(thu.start.val, thu.end.val)">
+        <div class="col-sm-2">
+          <span> {{thu.start.disp}} - {{thu.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('thu', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Friday Availabiliy -->
+    <div ng-repeat="fri in employees[current].avail.fri" class="row">
+      <div ng-click="setNewAvailDay('fri')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Friday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(fri.start.val, fri.end.val)">
+        <div class="col-sm-2">
+          <span> {{fri.start.disp}} - {{fri.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('fri', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Saturday Availabiliy -->
+    <div ng-repeat="sat in employees[current].avail.sat" class="row">
+      <div ng-click="setNewAvailDay('sat')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Saturday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(sat.start.val, sat.end.val)">
+        <div class="col-sm-2">
+          <span> {{sat.start.disp}} - {{sat.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('sat', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
+
+
+    <!-- Sunday Availabiliy -->
+    <div ng-repeat="sun in employees[current].avail.sun" class="row">
+      <div ng-click="setNewAvailDay('sun')">
+        <div class="col-sm-1 col-sm-offset-1">
+          <p ng-show="$index==0"> Sunday: </p>
+        </div>
+      </div>
+      <div ng-click="setNewAvailTimes(sun.start.val, sun.end.val)">
+        <div class="col-sm-2">
+          <span> {{sun.start.disp}} - {{sun.end.disp}} </span>
+        </div>
+      </div>
+      <div class="col-sm-1">
+        <!-- remove availability -->
+        <button type="button" class="btn btn-danger" ng-click="remAvail('sun', $index)">
+          <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+      </div>
+    </div>
 
 </div>
 

@@ -7,6 +7,19 @@
 
     <!--Setting the context-->
     <context:component-scan base-package="com.sequoiagrove.controller" />
+    <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
+
+    <mvc:annotation-driven />
+    <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
+    <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/"/>
+    <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
+    <mvc:resources mapping="/img/**"       location="/resources/img/"/>
+    <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>
+    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
+
     <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
     <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"> </bean>
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> </bean>
@@ -23,17 +36,5 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
-
-    <mvc:annotation-driven />
-    <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
-    <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/"/>
-    <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
-    <mvc:resources mapping="/img/**"       location="/resources/img/"/>
-    <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
-    <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
-    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
 
 </beans>
