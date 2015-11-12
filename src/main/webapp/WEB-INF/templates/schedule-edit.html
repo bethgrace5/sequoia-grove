@@ -1,106 +1,87 @@
+
 <div class="hidden-xs">
+<schedule-header></schedule-header>
 
+  <!-- shifts -->
+  <div ng-repeat="t in template">
     <div class="row">
-        <div class="col-sm-1 col-sm-offset-3 day-title"> {{date.mon.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.tue.disp}} </div>
-        <div class="col-sm-1 day-title-wed">             {{date.wed.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.thu.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.fri.disp}} </div>
-        <div class="col-sm-1 col-sm-offset-1 day-title"> {{date.sat.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.sun.disp}} </div>
+      <div class="col-sm-2" > 
+        {{t.tname}} 
+      </div>
+
+  <!-- weekday times -->
+      <div class="col-sm-1 schedule-times" > 
+        {{t.wd_st}}-{{t.wd_ed}}
+      </div>
+
+      <!-- Monday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.mon)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.mon, 'monday', t.id)" 
+        ng-model="t.mon">
+      </div>
+
+      <!-- Tuesday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.tue)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.tue, 'tuesday', t.id)" 
+        ng-model="t.tue">
+      </div>
+
+      <!-- Wednesday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.wed)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.wed, 'wednesday', t.id)" 
+        ng-model="t.wed">
+      </div>
+
+      <!-- Thursday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.thu)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.thu, 'thursday', t.id)" 
+        ng-model="t.thu">
+      </div>
+
+      <!-- Friday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.fri)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.fri, 'friday', t.id)" 
+        ng-model="t.fri">
+      </div>
+
+  <!-- weekend times -->
+      <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
+        {{t.we_st}}-{{t.we_ed}}
+      </div>
+
+      <!-- Saturday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.sat)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.sat, 'saturday', t.id)" 
+        ng-model="t.sat">
+      </div>
+
+      <!-- Sunday -->
+      <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
+        <input select-on-click ng-click="selectName(t.sun)" 
+        ng-disabled=false type="text" 
+        ng-class="inputStatus(t.sun, 'sunday', t.id)" 
+        ng-model="t.sun">
+      </div>
+
     </div>
-
-        <div class="row">
-            <div class="col-sm-1 col-sm-offset-3 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
-            <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
-            <div class="col-sm-1 day-title-wed">             {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
-            <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
-            <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
-            <div class="col-sm-1 col-sm-offset-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
-            <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
-        </div>
+  </div>
 
 
-        <!-- shifts -->
-        <div ng-repeat="t in template">
-            <div class="row">
-                <div class="col-sm-2" > 
-                    {{t.tname}} 
-                </div>
-
-            <!-- weekday times -->
-                <div class="col-sm-1 schedule-times" > 
-                  {{t.wd_st}}-{{t.wd_ed}}
-                </div>
-
-                <!-- Monday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.mon)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.mon, 'monday', t.id)" 
-                  ng-model="t.mon">
-                </div>
-
-                <!-- Tuesday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.tue)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.tue, 'tuesday', t.id)" 
-                  ng-model="t.tue">
-                </div>
-
-                <!-- Wednesday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.wed)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.wed, 'wednesday', t.id)" 
-                  ng-model="t.wed">
-                </div>
-
-                <!-- Thursday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.thu)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.thu, 'thursday', t.id)" 
-                  ng-model="t.thu">
-                </div>
-
-                <!-- Friday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.fri)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.fri, 'friday', t.id)" 
-                  ng-model="t.fri">
-                </div>
-
-            <!-- weekend times -->
-                <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-                    {{t.we_st}}-{{t.we_ed}}
-                </div>
-
-                <!-- Saturday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.sat)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.sat, 'saturday', t.id)" 
-                  ng-model="t.sat">
-                </div>
-
-                <!-- Sunday -->
-                <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-                  <input select-on-click ng-click="selectName(t.sun)" 
-                  ng-disabled=false type="text" 
-                  ng-class="inputStatus(t.sun, 'sunday', t.id)" 
-                  ng-model="t.sun">
-                </div>
-
-            </div>
-        </div>
-
-
-        <!--
-        <employee-list></employee-list>
-        -->
+  <!--
+  <employee-list></employee-list>
+  -->
 
 
 </div>

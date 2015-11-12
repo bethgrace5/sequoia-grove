@@ -9,14 +9,17 @@
  */
 angular.module('sequoiaGroveApp')
   .controller('MainCtrl', function (
-      $http,
-      $scope,
-      $rootScope,
-      $route,
-      $translate,
-      $location,
-      $log,
-      localStorageService) {
+    $http,
+    $scope,
+    $rootScope,
+    $route,
+    $translate,
+    $location,
+    $log,
+    localStorageService) 
+  {
+
+  $log.debug(moment({hour:16, minute:10}).format('h:mm a'));
 
   // Sample Data for current logged in user
   $scope.user1 = { firstname: "John", lastname: "theManager", type: "manager" };

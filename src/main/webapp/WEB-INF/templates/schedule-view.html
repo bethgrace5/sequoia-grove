@@ -1,52 +1,6 @@
+<schedule-header></schedule-header>
+
 <div class="hidden-xs">
-
-    <!-- date labels -->
-    <div class="row">
-        <div class="col-sm-1 col-sm-offset-3 day-title"> {{date.mon.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.tue.disp}} </div>
-        <div class="col-sm-1 day-title-wed">             {{date.wed.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.thu.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.fri.disp}} </div>
-        <div class="col-sm-1 col-sm-offset-1 day-title"> {{date.sat.disp}} </div>
-        <div class="col-sm-1 day-title">                 {{date.sun.disp}} </div>
-    </div>
-
-    <div class="row">
-        <div class="col-sm-1 col-sm-offset-3 day-title"> {{'SCHEDULE_VIEW_MONDAY' | translate}} </div>
-        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_TUESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title-wed">             {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </div>
-        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
-        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_FRIDAY' | translate}} </div>
-        <div class="col-sm-1 col-sm-offset-1 day-title"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
-        <div class="col-sm-1 day-title">                 {{'SCHEDULE_VIEW_SUNDAY' | translate}} </div>
-    </div>
-
-    <!-- deliveries TODO since this is out of order now, I need to 
-        specify which weekdays show-->
-    <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
-        <div class="row">
-            <div ng-repeat="day in delivery.days">
-                <!-- gap on the left -->
-                <div class="col-sm-3" ng-show="$index==0""col-sm-2"> </div>
-
-                <!-- gap between weekdays and weekend days -->
-                <div ng-show="$index==5"> <div class="col-sm-1"> </div> </div>
-
-                <!-- delivery this day -->
-                <div ng-show="day">
-                    <div class="col-sm-1 delivery-title">
-                        {{delivery.title}}
-                    </div>
-                </div>
-
-                <!-- no delivery this day -->
-                <div ng-hide="day">
-                    <div class="col-sm-1 delivery-title">
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- shifts -->
     <div ng-repeat="t in template">

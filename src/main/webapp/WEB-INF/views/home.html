@@ -58,29 +58,7 @@
 
     <div class="panel panel-default">
         <div class="panel-body">
-
-            <div class="row hidden-xs">
-                <!-- schedule header and options-->
-                <div class="col-sm-12 pull-right">
-                    <p class="lead">
-                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek('subtract')">
-                        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    </button>
-                    Week of {{date.mon.disp}}
-                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek('add')">
-                        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    </button>
-                    </p>
-                </div>
-
-                <div class="schedule-view-header">
-                    <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
-                </div>
-
-                </div>
-                <schedule-view></schedule-view>
-            </div>
-
+            <schedule-view></schedule-view>
         </div>
     </div>
 </div>
