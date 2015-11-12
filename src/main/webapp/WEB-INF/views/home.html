@@ -63,11 +63,11 @@
                 <!-- schedule header and options-->
                 <div class="col-sm-12 pull-right">
                     <p class="lead">
-                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="next()">
+                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek(-7)">
                         <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
                     </button>
                     Week of {{date.mon.disp}}
-                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="next()">
+                    <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek(+7)">
                         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
                     </button>
                     </p>

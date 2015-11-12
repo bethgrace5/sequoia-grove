@@ -11,8 +11,6 @@ angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function ($scope, $rootScope, $translate, $log) {
     $scope.activeTab = 'schedule';
     $scope.selectedName = '';
-
-
     $scope.newDelivery = '';
 
 
@@ -21,6 +19,7 @@ angular.module('sequoiaGroveApp')
       $scope.deliveries.splice(index, 1);
     }
 
+    // add delivery to front end
     $scope.addDelivery = function() {
       if ($scope.newDelivery != '') {
           $scope.deliveries.push(
@@ -40,7 +39,6 @@ angular.module('sequoiaGroveApp')
 
 
     $scope.selectName = function(name) {
-      $log.debug(name);
       $scope.selectedName = name;
     }
 
@@ -51,8 +49,6 @@ angular.module('sequoiaGroveApp')
       if (name == $scope.selectedName) {
         style += ' schedule-edit-highlight';
       }
-
-
 
 
       // apply an error

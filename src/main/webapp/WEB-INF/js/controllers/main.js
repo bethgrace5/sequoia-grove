@@ -18,47 +18,105 @@ angular.module('sequoiaGroveApp')
       $log,
       localStorageService) {
 
-    // container for displaying the date header on the calendar
+  // container for displaying the date header
+  // each day has a human readable display string, and a date type attribute value
   $scope.date = { mon:{}, tue:{}, wed:{}, thu:{}, fri:{}, sat:{}, sun:{} };
+  $scope.currentWeek  = new Date();
 
   // set initial schedule header for current week
   // this puts the correct date for each day of the week, and the 
   // month for the schedule
-  var setScheduleHeader = function() {
-    $scope.today = new Date();
-    // decide which weekday it is today.
-    var currentIndex = $scope.today.getDay(); // 0 is Sunday
-    var dd = $scope.today.getDate();
-    //TODO deal with the edge case where the month changes mid week
-    var mm = $scope.today.getMonth(); //January is 0!
-    //TODO deal with the edge case where the year changes mid week
-    var yyyy = $scope.today.getFullYear();
+   $scope.setScheduleHeader = function(date) {
+    $log.debug(date);
 
-    // set date object value
-    $scope.date.mon.val = new Date(); $scope.date.mon.val.setDate(dd-currentIndex+1);
-    $scope.date.tue.val = new Date(); $scope.date.tue.val.setDate(dd-currentIndex+2);
-    $scope.date.wed.val = new Date(); $scope.date.wed.val.setDate(dd-currentIndex+3);
-    $scope.date.thu.val = new Date(); $scope.date.thu.val.setDate(dd-currentIndex+4);
-    $scope.date.fri.val = new Date(); $scope.date.fri.val.setDate(dd-currentIndex+5);
-    $scope.date.sat.val = new Date(); $scope.date.sat.val.setDate(dd-currentIndex+6);
-    $scope.date.sun.val = new Date(); $scope.date.sun.val.setDate(dd-currentIndex+7);
+    // decide which weekday it is
+    var currentIndex = date.getDay(); // 0 is Sunday
+    var dd = date.getDate();
 
-    // set the month number as english word
-    switch(mm) {
-      case 0:  mm = "Jan"; break;
-      case 1:  mm = "Feb"; break;
-      case 2:  mm = "March"; break;
-      case 3:  mm = "April"; break;
-      case 4:  mm = "May"; break;
-      case 5:  mm = "June"; break;
-      case 6:  mm = "July"; break;
-      case 7:  mm = "Aug"; break;
-      case 8:  mm = "Sept"; break;
-      case 9:  mm = "Oct"; break;
-      case 10: mm = "Nov"; break;
-      case 11: mm = "Dec"; break;
+    // set this past monday date correctly
+    $scope.date.mon.val = new Date(); $scope.date.mon.val.setDate( dd - currentIndex+1);
+
+    // add days to monday to get the rest of the weekdays
+    // javascript's date library takes care of where months and years change
+    // when the days being added to monday changes the month or year
+    $scope.date.tue.val = new Date(); $scope.date.tue.val.setDate($scope.date.mon.val.getDate()+1);
+    $scope.date.wed.val = new Date(); $scope.date.wed.val.setDate($scope.date.mon.val.getDate()+2);
+    $scope.date.thu.val = new Date(); $scope.date.thu.val.setDate($scope.date.mon.val.getDate()+3);
+    $scope.date.fri.val = new Date(); $scope.date.fri.val.setDate($scope.date.mon.val.getDate()+4);
+    $scope.date.sat.val = new Date(); $scope.date.sat.val.setDate($scope.date.mon.val.getDate()+5);
+    $scope.date.sun.val = new Date(); $scope.date.sun.val.setDate($scope.date.mon.val.getDate()+6);
+
+    // get a human readable month for display with specific 
+    // abbreviations for the month
+    var months = [
+      $scope.date.mon.val.getMonth(),
+      $scope.date.tue.val.getMonth(),
+      $scope.date.wed.val.getMonth(),
+      $scope.date.thu.val.getMonth(),
+      $scope.date.fri.val.getMonth(),
+      $scope.date.sat.val.getMonth(),
+      $scope.date.sun.val.getMonth()
+    ]
+    $log.debug(months);
+    // the index of the month
+    var thisMonthNumber = months[0];
+    var nextMonthNumber = months[0];
+
+    // the readable name of the month
+    var thisMonthTitle = '';
+    var nextMonthTitle = '';
+
+    var nextMonthIndex = 0;
+
+    for(var i=1; i< 7; i++) {
+      // the month changed mid week
+      if (months[i] != thisMonthNumber) {
+        nextMonthIndex = i;
+        break;
+      }
     }
+
+    // set this month number as english word
+    switch(thisMonthNumber) {
+      case 0:  thisMonthTitle = "Jan";   nextMonthTitle = "Feb";   break;
+      case 1:  thisMonthTitle = "Feb";   nextMonthTitle = "March"; break;
+      case 2:  thisMonthTitle = "March"; nextMonthTitle = "April"; break;
+      case 3:  thisMonthTitle = "April"; nextMonthTitle = "May";   break;
+      case 4:  thisMonthTitle = "May";   nextMonthTitle = "June";  break;
+      case 5:  thisMonthTitle = "June";  nextMonthTitle = "July";  break;
+      case 6:  thisMonthTitle = "July";  nextMonthTitle = "Aug";   break;
+      case 7:  thisMonthTitle = "Aug";   nextMonthTitle = "Sept";  break;
+      case 8:  thisMonthTitle = "Sept";  nextMonthTitle = "Oct";   break;
+      case 9:  thisMonthTitle = "Oct";   nextMonthTitle = "Nov";   break;
+      case 10: thisMonthTitle = "Nov";   nextMonthTitle = "Dec";   break;
+      case 11: thisMonthTitle = "Dec";   nextMonthTitle = "Jan";   break;
+    }
+
+    // the month changed mid week, get the english word for it
+      switch(nextMonthIndex) {
+        case 1: $scope.date.tue.disp = nextMonthTitle+'-'+($scope.date.tue.val.getDate());
+        case 2: $scope.date.wed.disp = nextMonthTitle+'-'+($scope.date.wed.val.getDate());
+        case 3: $scope.date.thu.disp = nextMonthTitle+'-'+($scope.date.thu.val.getDate());
+        case 4: $scope.date.fri.disp = nextMonthTitle+'-'+($scope.date.fri.val.getDate());
+        case 5: $scope.date.sat.disp = nextMonthTitle+'-'+($scope.date.sat.val.getDate());
+        case 6: $scope.date.sun.disp = nextMonthTitle+'-'+($scope.date.sun.val.getDate());
+      }
+
+    $log.debug(nextMonthIndex);
+    // set the current month title for days that weren't changed already to next month
+      switch(nextMonthIndex) {
+        // The month did change mid week, set the days before the month change as their values
+        case 0: $scope.date.sun.disp = thisMonthTitle+'-'+($scope.date.sun.val.getDate());
+        case 6: $scope.date.sat.disp = thisMonthTitle+'-'+($scope.date.sat.val.getDate());
+        case 5: $scope.date.fri.disp = thisMonthTitle+'-'+($scope.date.fri.val.getDate());
+        case 4: $scope.date.thu.disp = thisMonthTitle+'-'+($scope.date.thu.val.getDate());
+        case 3: $scope.date.wed.disp = thisMonthTitle+'-'+($scope.date.wed.val.getDate());
+        case 2: $scope.date.tue.disp = thisMonthTitle+'-'+($scope.date.tue.val.getDate());
+        case 1: $scope.date.mon.disp = thisMonthTitle+'-'+($scope.date.mon.val.getDate());
+      }
+
     // set the date string with entlish text for display on view
+    /*
     $scope.date.mon.disp = mm+'-'+(dd-currentIndex+1);
     $scope.date.tue.disp = mm+'-'+(dd-currentIndex+2);
     $scope.date.wed.disp = mm+'-'+(dd-currentIndex+3);
@@ -66,10 +124,20 @@ angular.module('sequoiaGroveApp')
     $scope.date.fri.disp = mm+'-'+(dd-currentIndex+5);
     $scope.date.sat.disp = mm+'-'+(dd-currentIndex+6);
     $scope.date.sun.disp = mm+'-'+(dd-currentIndex+7);
+    */
 
-  $log.debug($scope.date);
   }
-  setScheduleHeader();
+  $scope.setScheduleHeader(new Date ($scope.currentWeek));
+
+  $scope.changeWeek = function(changeBy) {
+
+    // increment or decrement the currently viewed week
+    $scope.currentWeek = new Date($scope.currentWeek.getDate() + changeBy);
+    // change schedule header to this week
+    $scope.setScheduleHeader($scope.currentWeek);
+
+    //TODO call to get that schedule from the back end
+  }
 
     $scope.getEmployees = function() {
       $http({
