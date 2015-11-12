@@ -19,23 +19,16 @@ angular.module('sequoiaGroveApp')
     // types are: all, user, front, kitchen, janitor
     $scope.type = 'all';
 
-    $scope.filterByType = function (type, scheduled, user) {
+    $scope.filterByType = function (thisType, user, mon, tue, wed, thu, fri, sat, sun) {
         if ($scope.type == 'all') {
             return true;
         }
-        else if ($scope.type==type) {
+        else if ($scope.type==thisType) {
             return true;
         }
         else if ($scope.type=='mine') {
-            console.log(scheduled.monday + ", " + user);
-            console.log(scheduled.monday == user);
-            if ( (scheduled.monday    == user) ||
-                 (scheduled.tuesday   == user) ||
-                 (scheduled.wednesday == user) ||
-                 (scheduled.thursday  == user) ||
-                 (scheduled.friday    == user) ||
-                 (scheduled.saturday  == user) ||
-                 (scheduled.sunday    == user)) {
+          if (mon == user || tue == user || wed == user || thu == user ||
+                fri == user || sat == user || sun == user) {
                 return true;
             }
             else {

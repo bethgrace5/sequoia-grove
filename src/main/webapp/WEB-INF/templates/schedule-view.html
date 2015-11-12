@@ -1,12 +1,12 @@
 <schedule-header></schedule-header>
+<br/>
 
 <div class="hidden-xs">
 
     <!-- shifts -->
     <div ng-repeat="t in template">
-      <!--<div class="row" ng-show="filterByType(shift.type, shift.scheduled, user.firstname)"> -->
-      <div class="row">
-        <hr/>
+      <div class="row schedule-view-row" 
+        ng-show="filterByType(t.location, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 
             <!-- shift title -->
             <div class="col-sm-2 col-sm-offset-0" > 
@@ -21,19 +21,39 @@
             </div>
 
             <!-- Monday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.mon}} </div>
+            <div class="col-sm-1 col-sm-offset-0"> 
+              <div ng-class="{true:'highlighted', false:''}[(t.mon==user.firstname) && highlight]">
+                {{t.mon}} 
+              </div>
+            </div>
 
             <!-- Tuesday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.tue}} </div>
+            <div class="col-sm-1 col-sm-offset-0"> 
+              <div ng-class="{true:'highlighted', false:''}[(t.tue==user.firstname) && highlight]">
+              {{t.tue}} 
+              </div>
+            </div>
 
             <!-- Wednesday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.wed}} </div>
+            <div class="col-sm-1 col-sm-offset-0"> 
+              <div ng-class="{true:'highlighted', false:''}[(t.wed==user.firstname) && highlight]">
+              {{t.wed}} 
+              </div>
+            </div>
 
             <!-- Thursday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.thu}} </div>
+            <div class="col-sm-1 col-sm-offset-0"> 
+              <div ng-class="{true:'highlighted', false:''}[(t.thu==user.firstname) && highlight]">
+              {{t.thu}} 
+              </div>
+            </div>
 
             <!-- Friday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.fri}} </div>
+            <div class="col-sm-1 col-sm-offset-0"> 
+              <div ng-class="{true:'highlighted', false:''}[(t.fri==user.firstname) && highlight]">
+              {{t.fri}} 
+              </div>
+            </div>
 
             <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
@@ -43,10 +63,18 @@
             </div>
 
             <!-- Saturday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.sat}} </div>
+            <div class="col-sm-1 col-sm-offset-0 "> 
+              <div ng-class="{true:'highlighted', false:''}[(t.sat==user.firstname) && highlight]">
+              {{t.sat}} 
+              </div>
+            </div>
 
             <!-- Sunday -->
-            <div class="col-sm-1 col-sm-offset-0 "> {{t.sun}} </div>
+            <div class="col-sm-1 col-sm-offset-0 "> 
+              <div ng-class="{true:'highlighted', false:''}[(t.sun==user.firstname) && highlight]">
+              {{t.sun}} 
+              </div>
+            </div>
 
 
         </div>

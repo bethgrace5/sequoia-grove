@@ -48,6 +48,8 @@ angular.module('sequoiaGroveApp')
           return "";
       }
   }
+  // highlight name
+  $scope.highlight = false;
 
   // container for displaying the date header
   // val 'YYYY-MM-DD' format, disp 'MMM-D' format
