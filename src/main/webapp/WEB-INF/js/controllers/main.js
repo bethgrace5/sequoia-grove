@@ -20,123 +20,87 @@ angular.module('sequoiaGroveApp')
 
   // container for displaying the date header
   // each day has a human readable display string, and a date type attribute value
-  $scope.date = { mon:{}, tue:{}, wed:{}, thu:{}, fri:{}, sat:{}, sun:{} };
-  $scope.currentWeek  = new Date();
+  $scope.date = { 
+    mon:{val:(new Date()), disp:''}, 
+    tue:{val:(new Date()), disp:''}, 
+    wed:{val:(new Date()), disp:''}, 
+    thu:{val:(new Date()), disp:''}, 
+    fri:{val:(new Date()), disp:''}, 
+    sat:{val:(new Date()), disp:''}, 
+    sun:{val:(new Date()), disp:''}};
+  $scope.currentDay  = new Date();
 
   // set initial schedule header for current week
   // this puts the correct date for each day of the week, and the 
   // month for the schedule
-   $scope.setScheduleHeader = function(date) {
-    $log.debug(date);
+   $scope.setScheduleHeader = function() {
+     var daysAgo = 0;
+     var dayName = moment().format('dddd');
+     var mondayDateString = '';
 
-    // decide which weekday it is
-    var currentIndex = date.getDay(); // 0 is Sunday
-    var dd = date.getDate();
+     //Figure out how many days ago monday was
+     while(dayName != 'Monday') {
+       daysAgo++;
+       dayName = moment().subtract(daysAgo, 'days').format('dddd');
+       mondayDateString = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+     }
 
-    // set this past monday date correctly
-    $scope.date.mon.val = new Date(); $scope.date.mon.val.setDate( dd - currentIndex+1);
+     // setup Monday
+     $scope.date.mon.val = mondayDateString;
+     $scope.date.mon.disp = moment().subtract(daysAgo, 'days').format('MMM-D');
 
-    // add days to monday to get the rest of the weekdays
-    // javascript's date library takes care of where months and years change
-    // when the days being added to monday changes the month or year
-    $scope.date.tue.val = new Date(); $scope.date.tue.val.setDate($scope.date.mon.val.getDate()+1);
-    $scope.date.wed.val = new Date(); $scope.date.wed.val.setDate($scope.date.mon.val.getDate()+2);
-    $scope.date.thu.val = new Date(); $scope.date.thu.val.setDate($scope.date.mon.val.getDate()+3);
-    $scope.date.fri.val = new Date(); $scope.date.fri.val.setDate($scope.date.mon.val.getDate()+4);
-    $scope.date.sat.val = new Date(); $scope.date.sat.val.setDate($scope.date.mon.val.getDate()+5);
-    $scope.date.sun.val = new Date(); $scope.date.sun.val.setDate($scope.date.mon.val.getDate()+6);
+     // use Monday to setup the rest of the weekdays
+     $scope.date.tue.val  = moment(mondayDateString, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+     $scope.date.tue.disp = moment(mondayDateString).add(1, 'days').format('MMM-D');
 
-    // get a human readable month for display with specific 
-    // abbreviations for the month
-    var months = [
-      $scope.date.mon.val.getMonth(),
-      $scope.date.tue.val.getMonth(),
-      $scope.date.wed.val.getMonth(),
-      $scope.date.thu.val.getMonth(),
-      $scope.date.fri.val.getMonth(),
-      $scope.date.sat.val.getMonth(),
-      $scope.date.sun.val.getMonth()
-    ]
-    $log.debug(months);
-    // the index of the month
-    var thisMonthNumber = months[0];
-    var nextMonthNumber = months[0];
+     $scope.date.wed.val  = moment(mondayDateString, 'YYYY-MM-DD').add(2, 'days').format('YYYY-MM-DD');
+     $scope.date.wed.disp = moment(mondayDateString).add(2, 'days').format('MMM-D');
 
-    // the readable name of the month
-    var thisMonthTitle = '';
-    var nextMonthTitle = '';
+     $scope.date.thu.val  = moment(mondayDateString, 'YYYY-MM-DD').add(3, 'days').format('YYYY-MM-DD');
+     $scope.date.thu.disp = moment(mondayDateString).add(3, 'days').format('MMM-D');
 
-    var nextMonthIndex = 0;
+     $scope.date.fri.val  = moment(mondayDateString, 'YYYY-MM-DD').add(4, 'days').format('YYYY-MM-DD');
+     $scope.date.fri.disp = moment(mondayDateString).add(4, 'days').format('MMM-D');
 
-    for(var i=1; i< 7; i++) {
-      // the month changed mid week
-      if (months[i] != thisMonthNumber) {
-        nextMonthIndex = i;
-        break;
-      }
-    }
+     $scope.date.sat.val  = moment(mondayDateString, 'YYYY-MM-DD').add(5, 'days').format('YYYY-MM-DD');
+     $scope.date.sat.disp = moment(mondayDateString).add(5, 'days').format('MMM-D');
 
-    // set this month number as english word
-    switch(thisMonthNumber) {
-      case 0:  thisMonthTitle = "Jan";   nextMonthTitle = "Feb";   break;
-      case 1:  thisMonthTitle = "Feb";   nextMonthTitle = "March"; break;
-      case 2:  thisMonthTitle = "March"; nextMonthTitle = "April"; break;
-      case 3:  thisMonthTitle = "April"; nextMonthTitle = "May";   break;
-      case 4:  thisMonthTitle = "May";   nextMonthTitle = "June";  break;
-      case 5:  thisMonthTitle = "June";  nextMonthTitle = "July";  break;
-      case 6:  thisMonthTitle = "July";  nextMonthTitle = "Aug";   break;
-      case 7:  thisMonthTitle = "Aug";   nextMonthTitle = "Sept";  break;
-      case 8:  thisMonthTitle = "Sept";  nextMonthTitle = "Oct";   break;
-      case 9:  thisMonthTitle = "Oct";   nextMonthTitle = "Nov";   break;
-      case 10: thisMonthTitle = "Nov";   nextMonthTitle = "Dec";   break;
-      case 11: thisMonthTitle = "Dec";   nextMonthTitle = "Jan";   break;
-    }
-
-    // the month changed mid week, get the english word for it
-      switch(nextMonthIndex) {
-        case 1: $scope.date.tue.disp = nextMonthTitle+'-'+($scope.date.tue.val.getDate());
-        case 2: $scope.date.wed.disp = nextMonthTitle+'-'+($scope.date.wed.val.getDate());
-        case 3: $scope.date.thu.disp = nextMonthTitle+'-'+($scope.date.thu.val.getDate());
-        case 4: $scope.date.fri.disp = nextMonthTitle+'-'+($scope.date.fri.val.getDate());
-        case 5: $scope.date.sat.disp = nextMonthTitle+'-'+($scope.date.sat.val.getDate());
-        case 6: $scope.date.sun.disp = nextMonthTitle+'-'+($scope.date.sun.val.getDate());
-      }
-
-    $log.debug(nextMonthIndex);
-    // set the current month title for days that weren't changed already to next month
-      switch(nextMonthIndex) {
-        // The month did change mid week, set the days before the month change as their values
-        case 0: $scope.date.sun.disp = thisMonthTitle+'-'+($scope.date.sun.val.getDate());
-        case 6: $scope.date.sat.disp = thisMonthTitle+'-'+($scope.date.sat.val.getDate());
-        case 5: $scope.date.fri.disp = thisMonthTitle+'-'+($scope.date.fri.val.getDate());
-        case 4: $scope.date.thu.disp = thisMonthTitle+'-'+($scope.date.thu.val.getDate());
-        case 3: $scope.date.wed.disp = thisMonthTitle+'-'+($scope.date.wed.val.getDate());
-        case 2: $scope.date.tue.disp = thisMonthTitle+'-'+($scope.date.tue.val.getDate());
-        case 1: $scope.date.mon.disp = thisMonthTitle+'-'+($scope.date.mon.val.getDate());
-      }
-
-    // set the date string with entlish text for display on view
-    /*
-    $scope.date.mon.disp = mm+'-'+(dd-currentIndex+1);
-    $scope.date.tue.disp = mm+'-'+(dd-currentIndex+2);
-    $scope.date.wed.disp = mm+'-'+(dd-currentIndex+3);
-    $scope.date.thu.disp = mm+'-'+(dd-currentIndex+4);
-    $scope.date.fri.disp = mm+'-'+(dd-currentIndex+5);
-    $scope.date.sat.disp = mm+'-'+(dd-currentIndex+6);
-    $scope.date.sun.disp = mm+'-'+(dd-currentIndex+7);
-    */
+     $scope.date.sun.val  = moment(mondayDateString, 'YYYY-MM-DD').add(6, 'days').format('YYYY-MM-DD');
+     $scope.date.sun.disp = moment(mondayDateString).add(6, 'days').format('MMM-D');
 
   }
-  $scope.setScheduleHeader(new Date ($scope.currentWeek));
+  $scope.setScheduleHeader(new Date ($scope.currentDay));
 
-  $scope.changeWeek = function(changeBy) {
+  $scope.changeWeek = function(operation) {
+    var nextMonday; 
 
-    // increment or decrement the currently viewed week
-    $scope.currentWeek = new Date($scope.currentWeek.getDate() + changeBy);
-    // change schedule header to this week
-    $scope.setScheduleHeader($scope.currentWeek);
+    if (operation == 'add') {
+      nextMonday = moment($scope.date.mon.val).add(7, 'days').format('YYYY-MM-DD');
+    }
+    else{
+      nextMonday = moment($scope.date.mon.val).subtract(7, 'days').format('YYYY-MM-DD');
+    }
+    $scope.date.mon.val  = moment(nextMonday, 'YYYY-MM-DD').add(0, 'days').format('YYYY-MM-DD');
+    $scope.date.mon.disp = moment(nextMonday).add(0, 'days').format('MMM-D');
 
-    //TODO call to get that schedule from the back end
+    $scope.date.tue.val  = moment(nextMonday, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
+    $scope.date.tue.disp = moment(nextMonday).add(1, 'days').format('MMM-D');
+
+    $scope.date.wed.val  = moment(nextMonday, 'YYYY-MM-DD').add(2, 'days').format('YYYY-MM-DD');
+    $scope.date.wed.disp = moment(nextMonday).add(2, 'days').format('MMM-D');
+
+    $scope.date.thu.val  = moment(nextMonday, 'YYYY-MM-DD').add(3, 'days').format('YYYY-MM-DD');
+    $scope.date.thu.disp = moment(nextMonday).add(3, 'days').format('MMM-D');
+
+    $scope.date.fri.val  = moment(nextMonday, 'YYYY-MM-DD').add(4, 'days').format('YYYY-MM-DD');
+    $scope.date.fri.disp = moment(nextMonday).add(4, 'days').format('MMM-D');
+
+    $scope.date.sat.val  = moment(nextMonday, 'YYYY-MM-DD').add(5, 'days').format('YYYY-MM-DD');
+    $scope.date.sat.disp = moment(nextMonday).add(5, 'days').format('MMM-D');
+
+    $scope.date.sun.val  = moment(nextMonday, 'YYYY-MM-DD').add(6, 'days').format('YYYY-MM-DD');
+    $scope.date.sun.disp = moment(nextMonday).add(6, 'days').format('MMM-D');
+
   }
 
     $scope.getEmployees = function() {
