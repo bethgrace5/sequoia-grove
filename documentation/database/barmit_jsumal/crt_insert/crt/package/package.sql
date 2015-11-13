@@ -35,7 +35,7 @@ create or replace package body bajs_pkg as
     procedure delete_ingredient (iid number) is
     begin
         delete from bajs_used_in u
-        where u.menu_item_id = iid;
+        where u.ingredient_id = iid;
     end delete_ingredient;
 
     -- Create a new Holiday Record
@@ -72,43 +72,43 @@ create or replace package body bajs_pkg as
               -- Monday
                 select sid, fname as mon
                 from bajs_sch_hist
-                where day = to_date(mon, 'dd/mm/yyyy')
+                where day = to_date(mon, 'dd-mm-yyyy')
             )
             natural join
             ( -- Tuesday
                 select sid, fname as tue
                 from bajs_sch_hist
-                where day = to_date(tue, 'dd/mm/yyyy')
+                where day = to_date(tue, 'dd-mm-yyyy')
             )
             natural join
             ( -- Wednesday
                 select sid, fname as wed
                 from bajs_sch_hist
-                where day = to_date(wed, 'dd/mm/yyyy')
+                where day = to_date(wed, 'dd-mm-yyyy')
             )
             natural join
             ( -- Thursday
                 select sid, fname as thu
                 from bajs_sch_hist
-                where day = to_date(thu, 'dd/mm/yyyy')
+                where day = to_date(thu, 'dd-mm-yyyy')
             )
             natural join
             ( -- Friday
                 select sid, fname as fri
                 from bajs_sch_hist
-                where day = to_date(fri, 'dd/mm/yyyy')
+                where day = to_date(fri, 'dd-mm-yyyy')
             )
             natural join
             ( -- Saturday
                 select sid, fname as sat
                 from bajs_sch_hist
-                where day = to_date(sat, 'dd/mm/yyyy')
+                where day = to_date(sat, 'dd-mm-yyyy')
             )
             natural join
             ( -- Sunday
                 select sid, fname as sun
                 from bajs_sch_hist
-                where day = to_date(sun, 'dd/mm/yyyy')
+                where day = to_date(sun, 'dd-mm-yyyy')
             )
         )
     ); -- End Cursor Definition

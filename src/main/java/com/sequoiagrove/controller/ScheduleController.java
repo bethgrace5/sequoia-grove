@@ -25,34 +25,28 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class ScheduleController {
 
-  // Get current schedule template (current shifts)
-    @RequestMapping(value = "/schedule/template")
-    public String getScheduleTemplate(Model model) {
+
+  // Get current schedule template (current shifts) dd/mm/yyyy
+    @RequestMapping(value = "/schedule/template/{mon}/{tue}/{wed}/{thu}/{fri}/{sat}/{sun}")
+    public String getScheduleTemplate(Model model, 
+          @PathVariable("mon") String mon,
+          @PathVariable("tue") String tue,
+          @PathVariable("wed") String wed,
+          @PathVariable("thu") String thu,
+          @PathVariable("fri") String fri,
+          @PathVariable("sat") String sat,
+          @PathVariable("sun") String sun ) {
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        /*
-        List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-            "select * from bajs_sch_template order by location, wd_st, we_st",
-            new RowMapper<ScheduleTemplate>() {
-                public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    ScheduleTemplate schTmp = new ScheduleTemplate(
-                          rs.getInt("sid"), 
-                          rs.getInt("pid"),
-                          rs.getString("location"),
-                          rs.getString("tname"), 
-                          rs.getInt("wd_st"),
-                          rs.getInt("wd_ed"),
-                          rs.getInt("we_st"),
-                          rs.getInt("we_ed"));
-
-                    return schTmp;
-                }
-          });
-        List<ScheduleTemplate> weekendList = new ArrayList();
-        */
 
         List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-          "select * from table(bajs_pkg.get_schedule('02/11/2015', '03/11/2015', " +
-          " '04/11/2015', '05/11/2015', '06/11/2015', '07/11/2015', '08/11/2015'))",
+          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" + 
+                                                          tue + "', '" + 
+                                                          wed + "', '" + 
+                                                          thu + "', '" + 
+                                                          fri + "', '" + 
+                                                          sat + "', '" + 
+                                                          sun + "' ))",
           
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {

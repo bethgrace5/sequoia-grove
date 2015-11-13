@@ -22,7 +22,7 @@ angular.module('sequoiaGroveApp')
   $log.debug(moment({hour:16, minute:10}).format('h:mm a'));
 
   // Sample Data for current logged in user
-  $scope.user1 = { firstname: "John", lastname: "theManager", type: "manager" };
+  $scope.user1 = { firstname: "John", lastname: "Doe", type: "manager" };
   $scope.user2 = { firstname: "Smith", lastname: "theEmployee", type: "employee" };
   $scope.user = $scope.user1;
   localStorageService.set('SequoiaGrove.user', $scope.user);
@@ -52,7 +52,7 @@ angular.module('sequoiaGroveApp')
   $scope.highlight = false;
 
   // container for displaying the date header
-  // val 'YYYY-MM-DD' format, disp 'MMM-D' format
+  // val 'DD-MM-YYYY' format, disp 'MMM-D' format
   $scope.date = { 
     mon:{val:'', disp:''}, 
     tue:{val:'', disp:''}, 
@@ -72,7 +72,7 @@ angular.module('sequoiaGroveApp')
     while(dayName != 'Monday') {
       daysAgo++;
       dayName = moment().subtract(daysAgo, 'days').format('dddd');
-      mondayDateString = moment().subtract(daysAgo, 'days').format('YYYY-MM-DD');
+      mondayDateString = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
     }
 
     // Setup Monday
@@ -80,18 +80,26 @@ angular.module('sequoiaGroveApp')
     $scope.date.mon.disp = moment().subtract(daysAgo, 'days').format('MMM-D');
 
     // Use Monday to setup the rest of the weekdays
-    $scope.date.tue.val  = moment(mondayDateString, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    $scope.date.tue.disp = moment(mondayDateString).add(1, 'days').format('MMM-D');
-    $scope.date.wed.val  = moment(mondayDateString, 'YYYY-MM-DD').add(2, 'days').format('YYYY-MM-DD');
-    $scope.date.wed.disp = moment(mondayDateString).add(2, 'days').format('MMM-D');
-    $scope.date.thu.val  = moment(mondayDateString, 'YYYY-MM-DD').add(3, 'days').format('YYYY-MM-DD');
-    $scope.date.thu.disp = moment(mondayDateString).add(3, 'days').format('MMM-D');
-    $scope.date.fri.val  = moment(mondayDateString, 'YYYY-MM-DD').add(4, 'days').format('YYYY-MM-DD');
-    $scope.date.fri.disp = moment(mondayDateString).add(4, 'days').format('MMM-D');
-    $scope.date.sat.val  = moment(mondayDateString, 'YYYY-MM-DD').add(5, 'days').format('YYYY-MM-DD');
-    $scope.date.sat.disp = moment(mondayDateString).add(5, 'days').format('MMM-D');
-    $scope.date.sun.val  = moment(mondayDateString, 'YYYY-MM-DD').add(6, 'days').format('YYYY-MM-DD');
-    $scope.date.sun.disp = moment(mondayDateString).add(6, 'days').format('MMM-D');
+    $scope.date.tue.val  = moment(mondayDateString, 'DD-MM-YYYY').add(1, 'days').format('DD-MM-YYYY');
+    $scope.date.tue.disp = moment(mondayDateString, 'DD-MM-YYYY').add(1, 'days').format('MMM-D');
+    $scope.date.wed.val  = moment(mondayDateString, 'DD-MM-YYYY').add(2, 'days').format('DD-MM-YYYY');
+    $scope.date.wed.disp = moment(mondayDateString, 'DD-MM-YYYY').add(2, 'days').format('MMM-D');
+    $scope.date.thu.val  = moment(mondayDateString, 'DD-MM-YYYY').add(3, 'days').format('DD-MM-YYYY');
+    $scope.date.thu.disp = moment(mondayDateString, 'DD-MM-YYYY').add(3, 'days').format('MMM-D');
+    $scope.date.fri.val  = moment(mondayDateString, 'DD-MM-YYYY').add(4, 'days').format('DD-MM-YYYY');
+    $scope.date.fri.disp = moment(mondayDateString, 'DD-MM-YYYY').add(4, 'days').format('MMM-D');
+    $scope.date.sat.val  = moment(mondayDateString, 'DD-MM-YYYY').add(5, 'days').format('DD-MM-YYYY');
+    $scope.date.sat.disp = moment(mondayDateString, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
+    $scope.date.sun.val  = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
+    $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
+
+    $log.debug($scope.date.mon.val);
+    $log.debug($scope.date.tue.val);
+    $log.debug($scope.date.wed.val);
+    $log.debug($scope.date.thu.val);
+    $log.debug($scope.date.fri.val);
+    $log.debug($scope.date.sat.val);
+    $log.debug($scope.date.sun.val);
   }
 
   // View Next or Previous Week
@@ -100,31 +108,30 @@ angular.module('sequoiaGroveApp')
 
     // Set Monday Next Week
     if (operation == 'add') {
-      nextMonday = moment($scope.date.mon.val).add(7, 'days').format('YYYY-MM-DD');
+      nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
     }
     // Set Monday Previous Week
     else{
-      nextMonday = moment($scope.date.mon.val).subtract(7, 'days').format('YYYY-MM-DD');
+      nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
     }
 
     // Adjust the rest of the weekdays to match Monday
-    $scope.date.mon.val  = moment(nextMonday, 'YYYY-MM-DD').add(0, 'days').format('YYYY-MM-DD');
-    $scope.date.mon.disp = moment(nextMonday).add(0, 'days').format('MMM-D');
-    $scope.date.tue.val  = moment(nextMonday, 'YYYY-MM-DD').add(1, 'days').format('YYYY-MM-DD');
-    $scope.date.tue.disp = moment(nextMonday).add(1, 'days').format('MMM-D');
-    $scope.date.wed.val  = moment(nextMonday, 'YYYY-MM-DD').add(2, 'days').format('YYYY-MM-DD');
-    $scope.date.wed.disp = moment(nextMonday).add(2, 'days').format('MMM-D');
-    $scope.date.thu.val  = moment(nextMonday, 'YYYY-MM-DD').add(3, 'days').format('YYYY-MM-DD');
-    $scope.date.thu.disp = moment(nextMonday).add(3, 'days').format('MMM-D');
-    $scope.date.fri.val  = moment(nextMonday, 'YYYY-MM-DD').add(4, 'days').format('YYYY-MM-DD');
-    $scope.date.fri.disp = moment(nextMonday).add(4, 'days').format('MMM-D');
-    $scope.date.sat.val  = moment(nextMonday, 'YYYY-MM-DD').add(5, 'days').format('YYYY-MM-DD');
-    $scope.date.sat.disp = moment(nextMonday).add(5, 'days').format('MMM-D');
-    $scope.date.sun.val  = moment(nextMonday, 'YYYY-MM-DD').add(6, 'days').format('YYYY-MM-DD');
-    $scope.date.sun.disp = moment(nextMonday).add(6, 'days').format('MMM-D');
+    $scope.date.mon.val  = moment(nextMonday, 'DD-MM-YYYY').add(0, 'days').format('DD-MM-YYYY');
+    $scope.date.mon.disp = moment(nextMonday, 'DD-MM-YYYY').add(0, 'days').format('MMM-D');
+    $scope.date.tue.val  = moment(nextMonday, 'DD-MM-YYYY').add(1, 'days').format('DD-MM-YYYY');
+    $scope.date.tue.disp = moment(nextMonday, 'DD-MM-YYYY').add(1, 'days').format('MMM-D');
+    $scope.date.wed.val  = moment(nextMonday, 'DD-MM-YYYY').add(2, 'days').format('DD-MM-YYYY');
+    $scope.date.wed.disp = moment(nextMonday, 'DD-MM-YYYY').add(2, 'days').format('MMM-D');
+    $scope.date.thu.val  = moment(nextMonday, 'DD-MM-YYYY').add(3, 'days').format('DD-MM-YYYY');
+    $scope.date.thu.disp = moment(nextMonday, 'DD-MM-YYYY').add(3, 'days').format('MMM-D');
+    $scope.date.fri.val  = moment(nextMonday, 'DD-MM-YYYY').add(4, 'days').format('DD-MM-YYYY');
+    $scope.date.fri.disp = moment(nextMonday, 'DD-MM-YYYY').add(4, 'days').format('MMM-D');
+    $scope.date.sat.val  = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('DD-MM-YYYY');
+    $scope.date.sat.disp = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
+    $scope.date.sun.val  = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
+    $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
-    //TODO call back end to get the actual schedule for the corresponding week
-    // use the all the date vals as arguments for http request
+    $scope.getScheduleTemplate();
   }
 
   $scope.getEmployees = function() {
@@ -192,7 +199,14 @@ angular.module('sequoiaGroveApp')
 
   $scope.getScheduleTemplate = function() {
     $http({
-      url: '/sequoiagrove/schedule/template',
+      url: '/sequoiagrove/schedule/template/' +
+            $scope.date.mon.val + '/' +
+            $scope.date.tue.val + '/' +
+            $scope.date.wed.val + '/' +
+            $scope.date.thu.val + '/' +
+            $scope.date.fri.val + '/' +
+            $scope.date.sat.val + '/' +
+            $scope.date.sun.val + '/',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;

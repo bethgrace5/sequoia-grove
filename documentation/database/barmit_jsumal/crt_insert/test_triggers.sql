@@ -27,16 +27,31 @@ select * from bajs_has_position h where employee_id=12;
 select * from bajs_employment_history eh where employee_id=12;
 select * from bajs_cannot_work_with c where employee1_id=12 or employee2_id=12;
 select * from bajs_availability a where employee_id=12;
+
+/*
+    Test change_tid trigger 
+*/
+/*
+select * from bajs_transaction order by id;
+select * from bajs_sold_in order by transaction_id;
+
+update bajs_transaction set id = 9999
+    where id = 9;
+
+select * from bajs_transaction order by id;
+select * from bajs_sold_in order by transaction_id;
 */
 
 /*
-    Test rem_position trigger 
+    Test update_train_emp trigger 
 */
-select * from bajs_has_position where employee_id=28 or employee_id=33;
+/*
+select * from bajs_training_emp order by eid;
 
-update bajs_has_position set date_removed = to_date('12/02/2013', 'mm/dd/yyyy')
-    where employee_id=28 or employee_id=33;
+delete from bajs_training_emp where eid = 6 and pid = 4;
 
-select * from bajs_has_position where employee_id=28 or employee_id=33;
+select * from bajs_training_emp order by eid;
+*/
+
 /
 commit;
