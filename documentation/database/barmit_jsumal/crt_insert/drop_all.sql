@@ -1,3 +1,8 @@
+/* triggers */
+drop trigger BAJS_EMP_DELETE;
+drop trigger BAJS_CHANGE_TID;
+drop trigger BAJS_UPDATE_TRAIN_EMP;
+
 /* views */
 drop view  BAJS_SCH_TEMPLATE;
 drop view  BAJS_TRAINING_EMP;

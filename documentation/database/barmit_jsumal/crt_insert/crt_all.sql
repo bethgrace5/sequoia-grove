@@ -34,5 +34,9 @@
 @crt/package/package.sql
 
 /* triggers */
---@crt/trigger/trigger.sql
+@crt/trigger/emp_delete.sql
+@crt/trigger/before_ins_train.sql
+@crt/trigger/change_tid.sql
+
+commit;
 /

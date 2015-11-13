@@ -13,7 +13,7 @@
     insert into BAJS_NEW_SHIFT values( 2 , 1, 'Support Sup/Staff',    to_date('05/01/2015', 'mm/dd/yyyy'), null, 2, 2);
     insert into BAJS_NEW_SHIFT values( 3 , 2, 'Front (tomatoes)',     to_date('05/01/2015', 'mm/dd/yyyy'), null, 3, 3);
     insert into BAJS_NEW_SHIFT values( 4 , 2, 'Front (dressings)',    to_date('05/01/2015', 'mm/dd/yyyy'), null, 4, 4);
-    insert into BAJS_NEW_SHIFT values( 5 , 2, 'Front (register 1)',   to_date('05/01/2015', 'mm/dd/yyyy'), null, 5, null);
+    insert into BAJS_NEW_SHIFT values( 5 , 2, 'Front (register 1)',   to_date('05/01/2015', 'mm/dd/yyyy'), null, 5, 5);
     insert into BAJS_NEW_SHIFT values( 6,  2, 'Front',                to_date('05/01/2015', 'mm/dd/yyyy'), null, 6, 6);
     insert into BAJS_NEW_SHIFT values( 7 , 10,'Busser',               to_date('05/01/2015', 'mm/dd/yyyy'), null, 7, 7);
     insert into BAJS_NEW_SHIFT values( 8 , 3, 'Cheese',               to_date('05/01/2015', 'mm/dd/yyyy'), null, 8, 2);

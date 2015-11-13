@@ -47,6 +47,9 @@ create or replace package body bajs_pkg as
 
     -- input date strings as 'dd/mm/yyyy' for each corresponding weekday
     -- function expects the correct weekdays in the order of monday to sunday
+
+    -- returns columns (sid, tname, we_st, we_ed, wd_st, wd_ed, mon, tue, wed, thu,
+    --                  fri, sat, sun, location)
     function get_schedule( 
         mon varchar2,
         tue varchar2,

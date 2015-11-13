@@ -30,10 +30,10 @@ insert into BAJS_employee values( 17, 'Sammie', 'Maayan',  0, to_date('12/04/198
 insert into BAJS_employee values( 18, 'Hadley', 'Khurshid',0, to_date('12/04/1982', 'mm/dd/yyyy'), 40, '1234567890', 18 );
 insert into BAJS_employee values( 19, 'Chike',  'Rayan',   0, to_date('12/04/1981', 'mm/dd/yyyy'), 40, '1234567890', 19 );
 insert into BAJS_employee values( 20, 'Udo',    'Hilary',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 20 );
-insert into BAJS_employee values( 21, 'Udo',    'Hilary',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 21 );
+insert into BAJS_employee values( 21, 'Jin',    'Oivind',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 21 );
 
 /* Janitors */
-insert into BAJS_employee values( 22, 'Udo',    'Hilary',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 22 );
+insert into BAJS_employee values( 22, 'Borya',   'Yared',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 22 );
 insert into BAJS_employee values( 23, 'Lenny',  'Teo',     0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 23 );
 
 /* Bakery */
@@ -63,17 +63,17 @@ insert into BAJS_employee values( 38, 'Earl',    'Hearl',  0, to_date('12/04/198
 insert into BAJS_employee values( 39, 'Ash',     'Sash',   0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 39 );
 
 /* Previous Employees */
-insert into BAJS_employee values( 40, 'NEAyden',   'Vijlem', 0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 40 );
-insert into BAJS_employee values( 41, 'NEAlpin',   'Edward', 0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 41 );
-insert into BAJS_employee values( 42, 'NELevi',    'Mattaus',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 42 );
-insert into BAJS_employee values( 43, 'NEVolya',   'Kunibet',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 43 );
-insert into BAJS_employee values( 44, 'NEBoran',   'Thijs',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 44 );
-insert into BAJS_employee values( 45, 'NETheodor', 'Meade',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 45 );
-insert into BAJS_employee values( 46, 'NEIndra',   'Lugel',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 46 );
-insert into BAJS_employee values( 47, 'NELoic',    'Olav',   0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 47 );
-insert into BAJS_employee values( 48, 'NERoel',    'Yuki',   0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 48 );
-insert into BAJS_employee values( 49, 'NECamden',  'Ghassen',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 49 );
-insert into BAJS_employee values( 50, 'NERob',     'Eemen',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 50 );
+insert into BAJS_employee values( 40, 'NE Ayden',   'Vijlem', 0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 40 );
+insert into BAJS_employee values( 41, 'NE Alpin',   'Edward', 0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 41 );
+insert into BAJS_employee values( 42, 'NE Levi',    'Mattaus',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 42 );
+insert into BAJS_employee values( 43, 'NE Volya',   'Kunibet',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 43 );
+insert into BAJS_employee values( 44, 'NE Boran',   'Thijs',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 44 );
+insert into BAJS_employee values( 45, 'NE Theodor', 'Meade',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 45 );
+insert into BAJS_employee values( 46, 'NE Indra',   'Lugel',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 46 );
+insert into BAJS_employee values( 47, 'NE Loic',    'Olav',   0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 47 );
+insert into BAJS_employee values( 48, 'NE Roel',    'Yuki',   0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 48 );
+insert into BAJS_employee values( 49, 'NE Camden',  'Ghassen',0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 49 );
+insert into BAJS_employee values( 50, 'NE Rob',     'Eemen',  0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 50 );
 
 
 commit;
