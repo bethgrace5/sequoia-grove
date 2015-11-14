@@ -5,7 +5,6 @@
 /*
     Test emp_delete trigger 
 */
-/*
 select * from bajs_employee where id=12;
 select * from bajs_user u where employee_id=12;
 select * from bajs_requests_vacation r where requested_by=12 or responded_by=12;

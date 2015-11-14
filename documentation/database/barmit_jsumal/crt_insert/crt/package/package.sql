@@ -111,6 +111,7 @@ create or replace package body bajs_pkg as
                 where day = to_date(sun, 'dd-mm-yyyy')
             )
         )
+        order by wd_st, location, we_st
     ); -- End Cursor Definition
     begin
 
