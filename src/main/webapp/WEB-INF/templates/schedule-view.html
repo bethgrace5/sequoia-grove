@@ -6,7 +6,7 @@
     <!-- shifts -->
     <div ng-repeat="t in template">
       <div class="row schedule-view-row" 
-        ng-show="filterByType(t.location, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
+        ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 
             <!-- shift title -->
             <div class="col-sm-2 col-sm-offset-0" > 

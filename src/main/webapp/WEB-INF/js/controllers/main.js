@@ -127,42 +127,7 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
   }
 
-  $scope.getEmployees = function() {
-    $http({
-      url: '/sequoiagrove/employees',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-      $scope.employees = data.employees;
-      //$log.debug(data);
 
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining employee data: " + data);
-    });
-  }
-
-  $scope.getPositions = function() {
-    $http({
-      url: '/sequoiagrove/position',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.positions = data.positions;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining position data: " + data);
-    });
-  }
-
-  $scope.getLocations = function() {
-    $http({
-      url: '/sequoiagrove/position/location',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.locations = data.locations;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining location data: " + data);
-    });
-  }
 
   $scope.getScheduleTemplate = function() {
     $http({
@@ -188,7 +153,6 @@ angular.module('sequoiaGroveApp')
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
     $scope.getScheduleTemplate();
-    $scope.getPositions();
   }
 
   $scope.init();

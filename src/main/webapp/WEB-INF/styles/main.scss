@@ -50,6 +50,9 @@ $brand-danger:  #d9534f;
   margin: 5px;
 }
 
+// Divider for Select Options
+option.select-hr { border-bottom: 1px dotted #000; }
+
 /* the selected name */
 .schedule-edit-highlight {
   background-color: #CCFFFF;
