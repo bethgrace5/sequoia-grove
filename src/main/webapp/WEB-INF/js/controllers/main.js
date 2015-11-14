@@ -19,8 +19,6 @@ angular.module('sequoiaGroveApp')
     localStorageService) 
 {
 
-  // we can use moment to parse times to display correctly on the front end
-  //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
 
   // Sample Data for current logged in user
   // The logged in user's firstname is what is matched for highlighting
@@ -147,6 +145,12 @@ angular.module('sequoiaGroveApp')
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining hotel data: " + data);
     });
+  }
+
+  $scope.formatTime = function(h, m) {
+    // we can use moment to parse times to display correctly on the front end
+    //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
+    return moment({hour:h, minute:m}).format('h:mm');
   }
 
   // Initialize controller

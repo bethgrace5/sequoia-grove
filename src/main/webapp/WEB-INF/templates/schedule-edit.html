@@ -4,8 +4,8 @@
 
   <!-- shifts -->
   <div ng-repeat="t in template">
-    <div class="row"
-        ng-show="filterByPosition(t.location, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)"> 
+    <div class="row">
+      <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
       <div class="col-sm-2" > 
         {{t.tname}} 
@@ -13,7 +13,7 @@
 
   <!-- weekday times -->
       <div class="col-sm-1 schedule-times" > 
-        {{t.wd_st}}-{{t.wd_ed}}
+        {{formatTime(t.wd_st_h, t.wd_st_m)}} - {{formatTime(t.wd_ed_h, t.wd_ed_m)}}
       </div>
 
       <!-- Monday -->
@@ -58,7 +58,7 @@
 
   <!-- weekend times -->
       <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
-        {{t.we_st}}-{{t.we_ed}}
+        {{formatTime(t.we_st_h, t.we_st_m)}} - {{formatTime(t.we_ed_h, t.we_ed_m)}}
       </div>
 
       <!-- Saturday -->
