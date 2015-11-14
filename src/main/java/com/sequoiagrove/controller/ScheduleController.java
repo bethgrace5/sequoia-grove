@@ -28,7 +28,7 @@ public class ScheduleController {
 
   // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/template/{mon}/{tue}/{wed}/{thu}/{fri}/{sat}/{sun}")
-    public String getScheduleTemplate(Model model, 
+    public String getScheduleTemplate(Model model,
           @PathVariable("mon") String mon,
           @PathVariable("tue") String tue,
           @PathVariable("wed") String wed,
@@ -40,30 +40,31 @@ public class ScheduleController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" + 
-                                                          tue + "', '" + 
-                                                          wed + "', '" + 
-                                                          thu + "', '" + 
-                                                          fri + "', '" + 
-                                                          sat + "', '" + 
+          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" +
+                                                          tue + "', '" +
+                                                          wed + "', '" +
+                                                          thu + "', '" +
+                                                          fri + "', '" +
+                                                          sat + "', '" +
                                                           sun + "' ))",
-          
+
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
-                          rs.getInt("sid"), 
+                          rs.getInt("sid"),
                           rs.getString("location"),
-                          rs.getString("tname"), 
+                          rs.getString("tname"),
+                          rs.getString("position"),
                           rs.getInt("wd_st"),
                           rs.getInt("wd_ed"),
                           rs.getInt("we_st"),
                           rs.getInt("we_ed"),
-                          rs.getString("mon"), 
-                          rs.getString("tue"), 
-                          rs.getString("wed"), 
-                          rs.getString("thu"), 
-                          rs.getString("fri"), 
-                          rs.getString("sat"), 
+                          rs.getString("mon"),
+                          rs.getString("tue"),
+                          rs.getString("wed"),
+                          rs.getString("thu"),
+                          rs.getString("fri"),
+                          rs.getString("sat"),
                           rs.getString("sun"));
 
                     return schTmp;

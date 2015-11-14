@@ -9,8 +9,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class ScheduleTemplate {
     int sid;
-    String tname; 
+    String tname;
     String location;
+    String position;
     int wd_st;
     int wd_ed;
     int we_st;
@@ -25,12 +26,13 @@ public class ScheduleTemplate {
 
     public ScheduleTemplate(){}
     public ScheduleTemplate(
-        int sid, 
-        String location, 
-        String tname, 
-        int wd_st, 
-        int wd_ed, 
-        int we_st, 
+        int sid,
+        String location,
+        String tname,
+        String position,
+        int wd_st,
+        int wd_ed,
+        int we_st,
         int we_ed,
         String mon,
         String tue,
@@ -43,6 +45,7 @@ public class ScheduleTemplate {
             this.sid = sid;
             this.tname = tname;
             this.location = location;
+            this.position = position;
             this.wd_st = wd_st;
             this.wd_ed = wd_ed;
             this.we_st = we_st;
@@ -70,6 +73,14 @@ public class ScheduleTemplate {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
     }
 
     public String getTname() {
