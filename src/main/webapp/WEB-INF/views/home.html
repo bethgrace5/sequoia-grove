@@ -1,4 +1,4 @@
-<div class="container-fluid">
+<div class="container-fluid hidden-print">
 
   <!--
     <div class="panel panel-default">
@@ -24,7 +24,6 @@
                     <div ng-show="showDeliveries"> hide deliveries </div>
                 </button>
               -->
-
                 <!-- highlight logged in user's name -->
                 <button class="btn btn-default schedule-view-button" ng-click="selectLoggedInUser()">
                     <div ng-hide="highlight"> highlight me </div>
@@ -64,9 +63,9 @@
             </form>
 
         </div>
-    </div>
+    </div> <!-- End Schedule Header -->
 
-    <div class="panel panel-default">
+    <div class="panel panel-default hidden-print">
         <div class="panel-body">
             <schedule-view></schedule-view>
         </div>
