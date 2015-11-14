@@ -17,16 +17,17 @@ angular.module('sequoiaGroveApp')
     $location,
     $log,
     localStorageService) 
-  {
+{
 
+  // we can use moment to parse times to display correctly on the front end
   //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
 
   // Sample Data for current logged in user
+  // The logged in user's firstname is what is matched for highlighting
   $scope.user1 = { firstname: "John", lastname: "Doe", type: "manager" };
   $scope.user2 = { firstname: "Smith", lastname: "theEmployee", type: "employee" };
   $scope.user = $scope.user1;
   localStorageService.set('SequoiaGrove.user', $scope.user);
-
 
   // Locale settings
   $scope.lang = 'en';
@@ -127,8 +128,7 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
   }
 
-
-
+  // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
     $http({
       url: '/sequoiagrove/schedule/template/' +
@@ -149,6 +149,7 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // Initialize controller
   $scope.init = function() {
     $scope.changeTab('/home');
     $scope.setScheduleHeader();

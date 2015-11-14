@@ -15,27 +15,29 @@ angular.module('sequoiaGroveApp')
     $translate)
   {
 
-  $scope.showDeliveries = false;
-  $scope.highlight = false;
-
   $scope.$on('translate', function(event, data) {
   }); 
 
+  $scope.showDeliveries = false;
+  $scope.highlight = false;
+  $scope.type = 'all';
+
+  // Change filter type to show - can be 'all', 'mine', a location or a position
   $scope.changeType = function(t) {
-    $log.debug(t);
     $scope.type = t;
   }
 
-
-  // types are: all, me, front, kitchen
-  $scope.type = 'all';
+  // Toggle Highlight of Current Logged in user
+  $scope.selectLoggedInUser = function() {
+    $scope.highlight = !$scope.highlight;
+    // Possibly change the type to 'mine'?
+  }
 
   $scope.filterByType = function (loc, pos, user, mon, tue, wed, thu, fri, sat, sun) {
       if ($scope.type == 'all') {
           return true;
       }
       else if ($scope.type==loc || $scope.type==pos) {
-        $log.debug($scope.type);
           return true;
       }
       else if ($scope.type=='mine') {
@@ -51,9 +53,6 @@ angular.module('sequoiaGroveApp')
       return false;
   }
 
-  $scope.next = function () {
-
-  }
   $scope.getPositions = function() {
     $http({
       url: '/sequoiagrove/position',
@@ -85,7 +84,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
-
 
 
 });
