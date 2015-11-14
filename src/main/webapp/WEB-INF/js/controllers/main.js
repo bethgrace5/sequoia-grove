@@ -19,7 +19,7 @@ angular.module('sequoiaGroveApp')
     localStorageService) 
   {
 
-  $log.debug(moment({hour:16, minute:10}).format('h:mm a'));
+  //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
 
   // Sample Data for current logged in user
   $scope.user1 = { firstname: "John", lastname: "Doe", type: "manager" };
@@ -93,13 +93,6 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.val  = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
-    $log.debug($scope.date.mon.val);
-    $log.debug($scope.date.tue.val);
-    $log.debug($scope.date.wed.val);
-    $log.debug($scope.date.thu.val);
-    $log.debug($scope.date.fri.val);
-    $log.debug($scope.date.sat.val);
-    $log.debug($scope.date.sun.val);
   }
 
   // View Next or Previous Week
@@ -149,7 +142,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.getPositions = function() {
     $http({
-      url: '/sequoiagrove/positions',
+      url: '/sequoiagrove/position',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.positions = data.positions;
@@ -159,41 +152,15 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.getDeliveries = function() {
+  $scope.getLocations = function() {
     $http({
-      url: '/sequoiagrove/deliveries',
+      url: '/sequoiagrove/position/location',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.deliveries = data.deliveries;
-        //$log.debug(data.deliveries);
+        $scope.locations = data.locations;
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining delivery data: " + data);
-    });
-  }
-
-  $scope.getAvailability = function() {
-    $http({
-      url: '/sequoiagrove/employees/availability/1',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.availability = data.availability;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining availability data: " + data);
-    });
-  }
-  $scope.getEmployee = function() {
-    $http({
-      url: '/sequoiagrove/employees/2',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.employee1 = data;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining employe id:1 data: " + data);
+        $log.error(status + " Error obtaining location data: " + data);
     });
   }
 
@@ -221,11 +188,7 @@ angular.module('sequoiaGroveApp')
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
     $scope.getScheduleTemplate();
-    $scope.getEmployees();
     $scope.getPositions();
-    $scope.getDeliveries();
-    $scope.getAvailability();
-    $scope.getEmployee();
   }
 
   $scope.init();

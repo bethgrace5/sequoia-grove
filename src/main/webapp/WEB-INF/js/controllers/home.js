@@ -16,7 +16,7 @@ angular.module('sequoiaGroveApp')
     }); 
 
 
-    // types are: all, user, front, kitchen, janitor
+    // types are: all, me, front, kitchen
     $scope.type = 'all';
 
     $scope.filterByType = function (thisType, user, mon, tue, wed, thu, fri, sat, sun) {
