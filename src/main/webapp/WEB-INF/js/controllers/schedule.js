@@ -66,4 +66,20 @@ angular.module('sequoiaGroveApp')
       }
     }
 
+  // Get The Schedule for the week currently being viewed
+  $scope.getScheduleTemplate = function() {
+    $http({
+      url: '/sequoiagrove/employee',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.employees = data.template;
+        //$log.debug(data);
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining schedule template main: " + data);
+    });
+  }
+
+
+
 });

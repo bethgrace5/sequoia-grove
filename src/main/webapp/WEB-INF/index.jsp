@@ -60,6 +60,7 @@
     <script src="js/directives/header-menu.js"></script>
     <script src="js/directives/footer-menu.js"></script>
     <script src="js/directives/schedule-edit.js"></script>
+    <script src="js/directives/schedule-edit-header.js"></script>
     <script src="js/directives/schedule-header.js"></script>
     <script src="js/directives/schedule-shift-edit.js"></script>
     <script src="js/directives/schedule-delivery-edit.js"></script>

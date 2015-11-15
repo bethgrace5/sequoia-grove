@@ -143,7 +143,7 @@ angular.module('sequoiaGroveApp')
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining hotel data: " + data);
+        $log.error(status + " Error obtaining schedule template main: " + data);
     });
   }
 
