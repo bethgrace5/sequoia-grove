@@ -68,25 +68,96 @@ angular.module('sequoiaGroveApp')
       ]
     }
     $scope.employees=[
-    { id:"0", 
-      firstName:"",
-      lastName:"",
-      isManager:"",
-      birthDate:"",
-      maxHoursPerWeek:"",
-      phoneNumber:"",
-      clockNumber:"",
-      avail:
-      { mon:[],
-        tue:[],
-        wed:[],
-        thu:[],
-        fri:[],
-        sat:[],
-        sun:[]
+      { id:"0", 
+        firstName:"Billy",
+        lastName:"Jean",
+        isManager:"0",
+        birthDate:"01/01/1995",
+        maxHoursPerWeek:"",
+        phoneNumber:"",
+        clockNumber:"",
+        avail:
+        { mon:[],
+          tue:[],
+          wed:[],
+          thu:[],
+          fri:[],
+          sat:[],
+          sun:[]
+        }
+      },
+      { id:"1", 
+        firstName:"Is not",
+        lastName:"My Lover",
+        isManager:"0",
+        birthDate:"02/02/1996",
+        maxHoursPerWeek:"",
+        phoneNumber:"",
+        clockNumber:"",
+        avail:
+        { mon:[],
+          tue:[],
+          wed:[],
+          thu:[],
+          fri:[],
+          sat:[],
+          sun:[]
+        }
+      },
+      { id:"2", 
+        firstName:"She's just",
+        lastName:"A girl",
+        isManager:"1",
+        birthDate:"03/03/1991",
+        maxHoursPerWeek:"",
+        phoneNumber:"",
+        clockNumber:"",
+        avail:
+        { mon:[],
+          tue:[],
+          wed:[],
+          thu:[],
+          fri:[],
+          sat:[],
+          sun:[]
+        }
+      },
+      { id:"3", 
+        firstName:"Who claims",
+        lastName:"That I am",
+        isManager:"0",
+        birthDate:"04/04/1999",
+        maxHoursPerWeek:"",
+        phoneNumber:"",
+        clockNumber:"",
+        avail:
+        { mon:[],
+          tue:[],
+          wed:[],
+          thu:[],
+          fri:[],
+          sat:[],
+          sun:[]
+        }
+      },
+      { id:"4", 
+        firstName:"The",
+        lastName:"One",
+        isManager:"1",
+        birthDate:"05/05/1997",
+        maxHoursPerWeek:"",
+        phoneNumber:"",
+        clockNumber:"",
+        avail:
+        { mon:[],
+          tue:[],
+          wed:[],
+          thu:[],
+          fri:[],
+          sat:[],
+          sun:[]
+        }
       }
-    },
-
     ];
     $scope.current = 0;
 

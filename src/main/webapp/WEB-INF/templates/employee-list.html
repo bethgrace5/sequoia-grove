@@ -1,14 +1,42 @@
-<div class="row">
-    <div class="col-sm-1">
-        <div class=" btn-group-vertical" role="group"> 
-          <ul>
-            <div ng-repeat = "employee in employees">
+<!--div class=" btn-group-vertical" role="group"> 
+  <ul>
+    <div ng-repeat = "employee in employees">
 
-                <!-- <div ng-if"employee.roles. -->
-                <li ng-click="selectName(employee.name)" class="btn btn-default schedule-edit-employee-list">{{employee.firstname}}</li>
+      <? div ng-if"employee.roles. ?>
+      <li ng-click="selectName(employee.name)" class="btn btn-default schedule-edit-employee-list">{{employee.firstname}}</li>
 
-            </div>
-          </ul>
-        </div>
     </div>
+  </ul>
+</div-->
+
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    <p class="lead">
+      Employee List
+    </p>
+  </div>
+  <div class="panel-body">
+    <div class="input-group">
+      <span class="input-group-btn" id="search_emp">
+        <button class="btn btn-default" type="button">
+          <span class="glyphicon glyphicon-search"></span>
+        </button>
+      </span>
+      <input type="text" class="form-control" placeholder="Search...">
+    </div>
+    <div class="list-group">
+      <a href="#" class="list-group-item">
+        Johnny Cage
+      </a>
+      <a href="#" class="list-group-item active">
+        Scorpion
+      </a>
+      <a href="#" class="list-group-item">
+        Sub Zero
+      </a>
+      <a href="#" class="list-group-item">
+        Katana
+      </a>
+    </div>
+  </div>
 </div>
