@@ -80,6 +80,10 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  $scope.showSchedule = function() {
+    $log.debug($scope.template);
+  }
+
 
 
 });
