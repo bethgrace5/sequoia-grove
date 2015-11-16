@@ -1,12 +1,23 @@
     
+
+-- if the date matches an existing date, the name and types are updated
+-- if the date is changed, a new row is created with the day and type added
+
+-- if both are changed, the date is still changed and therefore, it still
+--      creates a new row for the entry
+
+exec bajs_pkg.add_holiday('44/44', 'May Day4', 'full');
+select * from bajs_holiday
+
+    /*
     select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
         mon,     tue,     wed,     thu,     fri,     sat,     sun, 
         mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
     from (
         -- Monday
-        /*  monday gathers the shift information for the week, while subsequent days
-         *  only gather the names for the employees scheduled based on the shift
-         */
+        --  monday gathers the shift information for the week, while subsequent days
+        --  only gather the names for the employees scheduled based on the shift
+        --/
         select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
             s.position, h.fname as mon, h.eid as mon_eid
         from bajs_sch_template s
@@ -76,6 +87,7 @@
     on m_sid = su_sid
     order by wd_st, location, we_st
 
+*/
 
 /
 
