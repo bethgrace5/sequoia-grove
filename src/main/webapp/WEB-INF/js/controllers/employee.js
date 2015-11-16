@@ -13,9 +13,9 @@ angular.module('sequoiaGroveApp')
       {name: "Janitor"},
       {name: "Kitchen"},
       {name: "Kitchen Supervisor"}
-    ]
+    ];
     $scope.times = {
-      // start times start at the earlist shift start and increment by half 
+      // start times start at the earlist shift start and increment by half
       // hours until the end of the lastest starting shift
       // TODO have a smarter way to populate this list
       start:[
@@ -66,42 +66,56 @@ angular.module('sequoiaGroveApp')
         {disp:"8:30 PM", val:"2030"},
         {disp:"9:00 PM", val:"2100"}
       ]
-    }
+    };
     $scope.employees=[
       { id:"0", 
         firstName:"Billy",
         lastName:"Jean",
         isManager:"0",
         birthDate:"01/01/1995",
-        maxHoursPerWeek:"",
-        phoneNumber:"",
-        clockNumber:"",
+        maxHoursPerWeek:"40",
+        phoneNumber:"000-000-0000",
+        clockNumber:"10",
         avail:
-        { mon:[],
-          tue:[],
-          wed:[],
-          thu:[],
-          fri:[],
-          sat:[],
-          sun:[]
+        { mon: [ {startTime:"800", endTime:"2000"}
+          ];
+          tue:[ {startTime:"800", endTime:"2000"}
+          ],
+          wed:[ {startTime:"800", endTime:"2000"}
+          ],
+          thu:[ {startTime:"800", endTime:"2000"}
+          ],
+          fri:[ {startTime:"800", endTime:"2000"}
+          ],
+          sat:[ {startTime:"800", endTime:"2000"}
+          ],
+          sun:[ {startTime:"800", endTime:"2000"}
+          ]
         }
       },
       { id:"1", 
         firstName:"Is not",
         lastName:"My Lover",
-        isManager:"0",
+        isManager:"0"},
         birthDate:"02/02/1996",
-        maxHoursPerWeek:"",
-        phoneNumber:"",
-        clockNumber:"",
+        maxHoursPerWeek:"50"},
+        phoneNumber:"111-111-1111",
+        clockNumber:"11",
         avail:
-        { mon:[],
-          tue:[],
-          wed:[],
-          thu:[],
-          fri:[],
-          sat:[],
-          sun:[]
+        { mon:[ {startTime:"800", endTime:"1900"}
+          ],
+          tue:[ {startTime:"800", endTime:"1900"}
+          ],
+          wed:[ {startTime:"800", endTime:"1900"}
+          ],
+          thu:[ {startTime:"800", endTime:"1900"}
+          ],
+          fri:[ {startTime:"800", endTime:"1900"}
+          ],
+          sat:[ {startTime:"800", endTime:"1900"}
+          ],
+          sun:[ {startTime:"800", endTime:"1900"}
+          ]
         }
       },
       { id:"2", 
@@ -109,35 +123,49 @@ angular.module('sequoiaGroveApp')
         lastName:"A girl",
         isManager:"1",
         birthDate:"03/03/1991",
-        maxHoursPerWeek:"",
-        phoneNumber:"",
-        clockNumber:"",
+        maxHoursPerWeek:"50"},
+        phoneNumber:"222-222-2222",
+        clockNumber:"12",
         avail:
-        { mon:[],
-          tue:[],
-          wed:[],
-          thu:[],
-          fri:[],
-          sat:[],
-          sun:[]
+        { mon:[ {startTime:"800", endTime:"2100"}
+          ],
+          tue:[ {startTime:"800", endTime:"2100"}
+          ],
+          wed:[ {startTime:"800", endTime:"2100"}
+          ],
+          thu:[ {startTime:"800", endTime:"2100"}
+          ],
+          fri:[ {startTime:"800", endTime:"2100"}
+          ],
+          sat:[ {startTime:"800", endTime:"2100"}
+          ],
+          sun:[ {startTime:"800", endTime:"2100"}
+          ]
         }
       },
       { id:"3", 
         firstName:"Who claims",
         lastName:"That I am",
-        isManager:"0",
+        isManager:"0"},
         birthDate:"04/04/1999",
-        maxHoursPerWeek:"",
-        phoneNumber:"",
-        clockNumber:"",
+        maxHoursPerWeek:"40"},
+        phoneNumber:"333-333-3333",
+        clockNumber:"13",
         avail:
-        { mon:[],
-          tue:[],
-          wed:[],
-          thu:[],
-          fri:[],
-          sat:[],
-          sun:[]
+        { mon:[ {startTime:"900", endTime:"2000"}
+          ],
+          tue:[ {startTime:"900", endTime:"2000"}
+          ],
+          wed:[ {startTime:"900", endTime:"2000"}
+          ],
+          thu:[ {startTime:"900", endTime:"2000"}
+          ],
+          fri:[ {startTime:"900", endTime:"2000"}
+          ],
+          sat:[ {startTime:"900", endTime:"2000"}
+          ],
+          sun:[ {startTime:"900", endTime:"2000"}
+          ]
         }
       },
       { id:"4", 
@@ -145,20 +173,191 @@ angular.module('sequoiaGroveApp')
         lastName:"One",
         isManager:"1",
         birthDate:"05/05/1997",
-        maxHoursPerWeek:"",
-        phoneNumber:"",
-        clockNumber:"",
+        maxHoursPerWeek:"40"},
+        phoneNumber:"444-444-4444",
+        clockNumber:"14",
         avail:
-        { mon:[],
-          tue:[],
-          wed:[],
-          thu:[],
-          fri:[],
-          sat:[],
-          sun:[]
+        { mon:[ {startTime:"800", endTime:"1930"}
+          ],
+          tue:[ {startTime:"800", endTime:"1930"}
+          ],
+          wed:[ {startTime:"800", endTime:"1930"}
+          ],
+          thu:[ {startTime:"800", endTime:"1930"}
+          ],
+          fri:[ {startTime:"800", endTime:"1930"}
+          ],
+          sat:[ {startTime:"800", endTime:"1930"}
+          ],
+          sun:[ {startTime:"800", endTime:"1930"}
+          ]
         }
       }
     ];
+/*
+    $scope.employees=[
+      { id:"0", 
+        firstName:"Billy",
+        lastName:"Jean",
+        isManager:"0",
+        birthDate:"01/01/1995",
+        maxHoursPerWeek:"40",
+        phoneNumber:"000-000-0000",
+        clockNumber:"10",
+        avail:
+        { mon:[ startTime:"800",
+                endTime:"2000"
+          ],
+          tue:[ startTime:"800",
+                endTime:"2000"
+          ],
+          wed:[ startTime:"800",
+                endTime:"2000"
+          ],
+          thu:[ startTime:"800",
+                endTime:"2000"
+          ],
+          fri:[ startTime:"800",
+                endTime:"2000"
+          ],
+          sat:[ startTime:"800",
+                endTime:"2000"
+          ],
+          sun:[ startTime:"800",
+                endTime:"2000"
+          ]
+        }
+      },
+      { id:"1", 
+        firstName:"Is not",
+        lastName:"My Lover",
+        isManager:"0",
+        birthDate:"02/02/1996",
+        maxHoursPerWeek:"50",
+        phoneNumber:"111-111-1111",
+        clockNumber:"11",
+        avail:
+        { mon:[ startTime:"800",
+                endTime:"1900"
+          ],
+          tue:[ startTime:"800",
+                endTime:"1900"
+          ],
+          wed:[ startTime:"800",
+                endTime:"1900"
+          ],
+          thu:[ startTime:"800",
+                endTime:"1900"
+          ],
+          fri:[ startTime:"800",
+                endTime:"1900"
+          ],
+          sat:[ startTime:"800",
+                endTime:"1900"
+          ],
+          sun:[ startTime:"800",
+                endTime:"1900"
+          ]
+        }
+      },
+      { id:"2", 
+        firstName:"She's just",
+        lastName:"A girl",
+        isManager:"1",
+        birthDate:"03/03/1991",
+        maxHoursPerWeek:"50",
+        phoneNumber:"222-222-2222",
+        clockNumber:"12",
+        avail:
+        { mon:[ startTime:"800",
+                endTime:"2100"
+          ],
+          tue:[ startTime:"800",
+                endTime:"2100"
+          ],
+          wed:[ startTime:"800",
+                endTime:"2100"
+          ],
+          thu:[ startTime:"800",
+                endTime:"2100"
+          ],
+          fri:[ startTime:"800",
+                endTime:"2100"
+          ],
+          sat:[ startTime:"800",
+                endTime:"2100"
+          ],
+          sun:[ startTime:"800",
+                endTime:"2100"
+          ]
+        }
+      },
+      { id:"3", 
+        firstName:"Who claims",
+        lastName:"That I am",
+        isManager:"0",
+        birthDate:"04/04/1999",
+        maxHoursPerWeek:"40",
+        phoneNumber:"333-333-3333",
+        clockNumber:"13",
+        avail:
+        { mon:[ startTime:"900",
+                endTime:"2000"
+          ],
+          tue:[ startTime:"900",
+                endTime:"2000"
+          ],
+          wed:[ startTime:"900",
+                endTime:"2000"
+          ],
+          thu:[ startTime:"900",
+                endTime:"2000"
+          ],
+          fri:[ startTime:"900",
+                endTime:"2000"
+          ],
+          sat:[ startTime:"900",
+                endTime:"2000"
+          ],
+          sun:[ startTime:"900",
+                endTime:"2000"
+          ]
+        }
+      },
+      { id:"4", 
+        firstName:"The",
+        lastName:"One",
+        isManager:"1",
+        birthDate:"05/05/1997",
+        maxHoursPerWeek:"40",
+        phoneNumber:"444-444-4444",
+        clockNumber:"14",
+        avail:
+        { mon:[ startTime:"800",
+                endTime:"1930"
+          ],
+          tue:[ startTime:"800",
+                endTime:"1930"
+          ],
+          wed:[ startTime:"800",
+                endTime:"1930"
+          ],
+          thu:[ startTime:"800",
+                endTime:"1930"
+          ],
+          fri:[ startTime:"800",
+                endTime:"1930"
+          ],
+          sat:[ startTime:"800",
+                endTime:"1930"
+          ],
+          sun:[ startTime:"800",
+                endTime:"1930"
+          ]
+        }
+      }
+    ];
+*/
     $scope.current = 0;
 
     $scope.newAvail = {day:'', start:'', end:''};
