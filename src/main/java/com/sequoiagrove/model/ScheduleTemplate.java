@@ -3,6 +3,8 @@ import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sequoiagrove.model.Day;
+
 // All of the CURRENT existing shifts with their weekday/weekend hours
 // The shifts do not yet store the date range they existed as a shift,
 // so getting the history will be difficult
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class ScheduleTemplate {
   /* Class Variables */
     int sid;
+    int pid;
     String tname;
     String location;
     String position;
@@ -23,19 +26,21 @@ public class ScheduleTemplate {
     String we_st_m;
     String we_ed_h;
     String we_ed_m;
-    String mon;
-    String tue;
-    String wed;
-    String thu;
-    String fri;
-    String sat;
-    String sun;
+
+    Day mon;
+    Day tue;
+    Day wed;
+    Day thu;
+    Day fri;
+    Day sat;
+    Day sun;
 
   /* Empty Constructor */
     public ScheduleTemplate(){}
   /* Constructor */
     public ScheduleTemplate(
         int sid,
+        int pid,
         String location,
         String tname,
         String position,
@@ -47,14 +52,15 @@ public class ScheduleTemplate {
         String we_st_m,
         String we_ed_h,
         String we_ed_m,
-        String mon,
-        String tue,
-        String wed,
-        String thu,
-        String fri,
-        String sat,
-        String sun) {
+        Day mon,
+        Day tue,
+        Day wed,
+        Day thu,
+        Day fri,
+        Day sat,
+        Day sun) {
             this.sid = sid;
+            this.pid = pid;
             this.tname = tname;
             this.location = location;
             this.position = position;
@@ -82,6 +88,14 @@ public class ScheduleTemplate {
     // set shift id
     public void setSid(int sid) {
         this.sid = sid;
+    }
+    // get position id
+    public int getPid() {
+        return pid;
+    }
+    // set position id
+    public void setPid(int pid) {
+        this.pid = pid;
     }
     // get location
     public String getLocation() {
@@ -182,46 +196,46 @@ public class ScheduleTemplate {
 
 
   /* Days */
-    public String getMon() {
+    public Day getMon() {
         return mon;
     }
-    public void setMon(String mon) {
+    public void setMon(Day mon) {
         this.mon = mon;
     }
-    public String getTue() {
+    public Day getTue() {
         return tue;
     }
-    public void setTue(String tue) {
+    public void setTue(Day tue) {
         this.tue = tue;
     }
-    public String getWed() {
+    public Day getWed() {
         return wed;
     }
-    public void setWed(String wed) {
+    public void setWed(Day wed) {
         this.wed = wed;
     }
-    public String getThu() {
+    public Day getThu() {
         return thu;
     }
-    public void setThu(String thu) {
+    public void setThu(Day thu) {
         this.thu = thu;
     }
-    public String getFri() {
+    public Day getFri() {
         return fri;
     }
-    public void setFri(String fri) {
+    public void setFri(Day fri) {
         this.fri = fri;
     }
-    public String getSat() {
+    public Day getSat() {
         return sat;
     }
-    public void setSat(String sat) {
+    public void setSat(Day sat) {
         this.sat = sat;
     }
-    public String getSun() {
+    public Day getSun() {
         return sun;
     }
-    public void setSun(String sun) {
+    public void setSun(Day sun) {
         this.sun = sun;
     }
 }
