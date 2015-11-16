@@ -78,7 +78,7 @@ angular.module('sequoiaGroveApp')
         clockNumber:"10",
         avail:
         { mon: [ {startTime:"800", endTime:"2000"}
-          ];
+          ],
           tue:[ {startTime:"800", endTime:"2000"}
           ],
           wed:[ {startTime:"800", endTime:"2000"}
@@ -96,9 +96,9 @@ angular.module('sequoiaGroveApp')
       { id:"1", 
         firstName:"Is not",
         lastName:"My Lover",
-        isManager:"0"},
+        isManager:"0",
         birthDate:"02/02/1996",
-        maxHoursPerWeek:"50"},
+        maxHoursPerWeek:"50",
         phoneNumber:"111-111-1111",
         clockNumber:"11",
         avail:
@@ -123,7 +123,7 @@ angular.module('sequoiaGroveApp')
         lastName:"A girl",
         isManager:"1",
         birthDate:"03/03/1991",
-        maxHoursPerWeek:"50"},
+        maxHoursPerWeek:"50",
         phoneNumber:"222-222-2222",
         clockNumber:"12",
         avail:
@@ -146,9 +146,9 @@ angular.module('sequoiaGroveApp')
       { id:"3", 
         firstName:"Who claims",
         lastName:"That I am",
-        isManager:"0"},
+        isManager:"0",
         birthDate:"04/04/1999",
-        maxHoursPerWeek:"40"},
+        maxHoursPerWeek:"40",
         phoneNumber:"333-333-3333",
         clockNumber:"13",
         avail:
@@ -173,7 +173,7 @@ angular.module('sequoiaGroveApp')
         lastName:"One",
         isManager:"1",
         birthDate:"05/05/1997",
-        maxHoursPerWeek:"40"},
+        maxHoursPerWeek:"40",
         phoneNumber:"444-444-4444",
         clockNumber:"14",
         avail:
