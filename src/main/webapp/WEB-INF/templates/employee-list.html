@@ -19,11 +19,11 @@
         <div class="btn btn-default input-group-addon">
           <span class="glyphicon glyphicon-search"></span>
         </div>
-        <input type="text" class="form-control" id="em-search" placeholder="Search...">
+        <input type="text" class="form-control" id="em-search" ng-model="empSearch" placeholder="Search...">
       </div>
     </div>
     <div class="list-group">
-      <div ng-repeat="e in employees">
+      <div ng-repeat="e in employees | filter : empSearch">
         <button ng-click="selectEmployee($index)" class="list-group-item btn btn-default btn-block" ng-class="{'btn-active': current==$index}">
           <div class="pull-left">
             {{e.lastName}}, {{e.firstName}}
