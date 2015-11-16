@@ -12,18 +12,22 @@
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
-    <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css'>
+    <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css' media='screen,print'>
     <link rel="stylesheet" href="styles/main.scss">
     <!-- endbuild -->
   </head>
   <body ng-controller="MainCtrl">
 
-    <header-menu></header-menu>
+    <div class="hidden-print">
+      <header-menu></header-menu>
+    </div>
 
     <!-- main view -->
     <div id="main-content" class="container-fluid" ng-view=""></div>
 
-    <footer-menu></footer-menu>
+    <div class="hidden-print">
+      <footer-menu></footer-menu>
+    </div>
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
@@ -56,6 +60,7 @@
     <script src="js/directives/header-menu.js"></script>
     <script src="js/directives/footer-menu.js"></script>
     <script src="js/directives/schedule-edit.js"></script>
+    <script src="js/directives/schedule-edit-header.js"></script>
     <script src="js/directives/schedule-header.js"></script>
     <script src="js/directives/schedule-shift-edit.js"></script>
     <script src="js/directives/schedule-delivery-edit.js"></script>

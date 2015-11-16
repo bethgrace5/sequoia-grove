@@ -1,11 +1,4 @@
-
-/* All of the employee names scheduled for the given day
-with the task name, and shift hours for weekends and weekdays 
-
-bajs_schedule(sid, eid, pid, day, name, tname, wd_st, wd_ed, we_st, we_ed, location)
-*/
-
-create or replace view bajs_schedule as (
+    
     select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
         mon,     tue,     wed,     thu,     fri,     sat,     sun, 
         mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
@@ -19,8 +12,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('23-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('23-11-2015', 'dd-mm-yyyy')
     )
     full outer join
     (
@@ -29,8 +21,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('24-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('24-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = t_sid
     full outer join
@@ -40,8 +31,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('25-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('25-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = w_sid
     full outer join
@@ -51,8 +41,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('26-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('26-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = th_sid
     full outer join
@@ -62,8 +51,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('27-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('27-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = f_sid
     full outer join
@@ -73,8 +61,7 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('28-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('28-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = sa_sid
     full outer join
@@ -84,12 +71,10 @@ create or replace view bajs_schedule as (
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid 
-        --and h.day = to_date('29-11-2015', 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date('29-11-2015', 'dd-mm-yyyy')
     )
     on m_sid = su_sid
-    --order by wd_st, location, we_st
-)
+    order by wd_st, location, we_st
 
 
 /

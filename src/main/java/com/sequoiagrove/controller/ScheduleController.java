@@ -25,10 +25,9 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class ScheduleController {
 
-
   // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/template/{mon}/{tue}/{wed}/{thu}/{fri}/{sat}/{sun}")
-    public String getScheduleTemplate(Model model, 
+    public String getScheduleTemplate(Model model,
           @PathVariable("mon") String mon,
           @PathVariable("tue") String tue,
           @PathVariable("wed") String wed,
@@ -40,38 +39,92 @@ public class ScheduleController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" + 
-                                                          tue + "', '" + 
-                                                          wed + "', '" + 
-                                                          thu + "', '" + 
-                                                          fri + "', '" + 
-                                                          sat + "', '" + 
+          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" +
+                                                          tue + "', '" +
+                                                          wed + "', '" +
+                                                          thu + "', '" +
+                                                          fri + "', '" +
+                                                          sat + "', '" +
                                                           sun + "' ))",
-          
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
-                          rs.getInt("sid"), 
+                          rs.getInt("sid"),
                           rs.getString("location"),
-                          rs.getString("tname"), 
-                          rs.getInt("wd_st"),
-                          rs.getInt("wd_ed"),
-                          rs.getInt("we_st"),
-                          rs.getInt("we_ed"),
-                          rs.getString("mon"), 
-                          rs.getString("tue"), 
-                          rs.getString("wed"), 
-                          rs.getString("thu"), 
-                          rs.getString("fri"), 
-                          rs.getString("sat"), 
+                          rs.getString("tname"),
+                          rs.getString("position"),
+                          "", // weekday start hour
+                          "", // weekday start minute
+                          "", // weekday end   hour
+                          "", // weekday end   minute
+                          "", // weekend start minute
+                          "", // weekend start minute
+                          "", // weekend end   minute
+                          "", // weekend end   minute
+                          rs.getString("mon"),
+                          rs.getString("tue"),
+                          rs.getString("wed"),
+                          rs.getString("thu"),
+                          rs.getString("fri"),
+                          rs.getString("sat"),
                           rs.getString("sun"));
 
-                    return schTmp;
+                // Get int from result set and return it as a String of length 4
+                String wd_start_str = intToLenFourString(rs.getInt("wd_st"));
+                String wd_end_str   = intToLenFourString(rs.getInt("wd_ed"));
+                String we_start_str = intToLenFourString(rs.getInt("we_st"));
+                String we_end_str   = intToLenFourString(rs.getInt("we_ed"));
+
+                // The first two characters of each string are the hours
+                if (wd_start_str.length() == 4){
+                    // weekday start hour and minutes
+                    schTmp.setWd_st_h(wd_start_str.substring(0,2));
+                    schTmp.setWd_st_m(wd_start_str.substring(2,4));
+
+                    // weekday end hour and minutes
+                    schTmp.setWd_ed_h(wd_end_str.substring(0,2));
+                    schTmp.setWd_ed_m(wd_end_str.substring(2,4));
                 }
+                if (we_start_str.length() == 4){
+                    // weekend start hour and minutes
+                    schTmp.setWe_st_h(we_start_str.substring(0,2));
+                    schTmp.setWe_st_m(we_start_str.substring(2,4));
+
+                    // weekend end hour and minutes
+                    schTmp.setWe_ed_h(we_end_str.substring(0,2));
+                    schTmp.setWe_ed_m(we_end_str.substring(2,4));
+                }
+                return schTmp;
+              }
           });
+
+        // there is no schedule
+        if (schTempList.size() >= 0 ) {
+
+        }
+        //System.out.println(schTempList.size());
 
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
+    }
+
+    // Use String Builder to change int to String, and make
+    // sure they are all 4 characters long
+    public String intToLenFourString(int time) {
+      String ret = "";
+      StringBuilder sb = new StringBuilder();
+      sb.append(ret);
+
+      if (time != 0) {
+        sb.append(time);
+        if (sb.length() < 4) {
+             sb.insert(0, 0);
+        }
+        ret = sb.toString();
+        // clear out string builder
+        sb.delete(0, sb.length());
+      }
+      return ret;
     }
 
 

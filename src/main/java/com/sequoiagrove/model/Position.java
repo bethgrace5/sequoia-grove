@@ -4,16 +4,13 @@ package com.sequoiagrove.model;
 public class Position {
     int id;
     String title; 
-
-@Override
-    public String toString() {
-        return "Position [id=" + id + ", title=" + title + "]";
-    }
+    String location; 
 
     public Position(){}
-    public Position(int id, String title) {
+    public Position(int id, String title, String location) {
         this.id = id;
         this.title = title;
+        this.location = location;
     }
 
     public int getId() {
@@ -30,5 +27,13 @@ public class Position {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

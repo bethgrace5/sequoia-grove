@@ -28,16 +28,12 @@ $brand-danger:  #d9534f;
 }
 .schedule-view-button {
   margin: 0 0.5em;
-  width: 140px;
+  width: 160px;
 }
 .schedule-view-row {
   height: 35px;
   padding: 5px;
-  border-bottom: 1px solid #f6f6f6;
-}
-.schedule-edit{
-  padding: 0;
-  border-radius: 5px;
+  border-bottom: 1px solid #e8e8e8;
 }
 .schedule-edit-employee-list {
   width: 100px;
@@ -50,10 +46,8 @@ $brand-danger:  #d9534f;
   margin: 5px;
 }
 
-/* Employee View */
-#search_emp.glyphicon span {
-  line-height: auto;
-}
+// Divider for Select Options
+option.select-hr { border-bottom: 1px dotted #000; }
 
 /* the selected name */
 .schedule-edit-highlight {
@@ -101,6 +95,18 @@ $brand-danger:  #d9534f;
   border: 1px solid rgba(204, 0, 0, 0.7);
   background-color: #FFCCCC;
 }
+
+.schedule-edit-task-names{
+  font-size: 1em;
+  margin:0 auto;
+}
+.schedule-edit{
+  font-size: 1em;
+  //border: 1px solid #336699;
+  width: 70px;
+  padding: 0;
+  border-radius: 5px;
+}
 .schedule-edit-input-error::selection {
   background: transparent; /* WebKit/Blink Browsers */
 }
@@ -117,6 +123,18 @@ $brand-danger:  #d9534f;
 .schedule-edit-input-warn::selection {
   background: transparent; /* WebKit/Blink Browsers */
 }
+.schedule-edit-day-title {
+  min-width: 60px;
+  font-size: 1em;
+  color: #336699;
+  padding: 0 0 2px 0;
+}
+.schedule-edit-day-title-wed {
+  min-width: 50px;
+  font-size: 1em;
+  color: #336699;
+  padding: 0 7px 2px 0;
+}
 
 .day-title {
   font-size: 1.2em;
@@ -130,8 +148,7 @@ $brand-danger:  #d9534f;
   padding: 0 0 5px 0;
 }
 .schedule-times {
-  margin:0 auto;
-  padding:0;
+  padding: 0;
   color: #336699;
 }
 .highlighted {
