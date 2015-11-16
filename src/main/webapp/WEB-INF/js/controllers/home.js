@@ -53,34 +53,7 @@ angular.module('sequoiaGroveApp')
       return false;
   }
 
-  $scope.getPositions = function() {
-    $http({
-      url: '/sequoiagrove/position',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.positions = data.positions;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining position data: " + data);
-    });
-  }
-
-  $scope.getLocations = function() {
-    $http({
-      url: '/sequoiagrove/position/location',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.locations = data.locations;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining location data: " + data);
-    });
-  }
-
-
   $scope.init = function() {
-    $scope.getPositions();
-    $scope.getLocations();
   }
 
   $scope.init();

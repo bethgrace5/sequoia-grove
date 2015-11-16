@@ -126,6 +126,30 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
   }
 
+  $scope.getPositions = function() {
+    $http({
+      url: '/sequoiagrove/position',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.positions = data.positions;
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
+  $scope.getLocations = function() {
+    $http({
+      url: '/sequoiagrove/position/location',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.locations = data.locations;
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining location data: " + data);
+    });
+  }
+
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
     $http({
@@ -161,6 +185,8 @@ angular.module('sequoiaGroveApp')
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
     $scope.getScheduleTemplate();
+    $scope.getPositions();
+    $scope.getLocations();
   }
 
   $scope.init();
