@@ -11,18 +11,16 @@
 
 <div class="panel panel-primary">
   <div class="panel-heading">
-    <p class="lead">
-      Employee List
-    </p>
+      Employees
   </div>
   <div class="panel-body">
-    <div class="input-group">
-      <span class="input-group-btn" id="search_emp">
-        <button class="btn btn-default" type="button">
+    <div class="form-group">
+      <div class="input-group">
+        <div class="btn btn-default input-group-addon">
           <span class="glyphicon glyphicon-search"></span>
-        </button>
-      </span>
-      <input type="text" class="form-control" placeholder="Search...">
+        </div>
+        <input type="text" class="form-control" id="em-search" placeholder="Search...">
+      </div>
     </div>
     <div class="list-group">
       <!--div ng-repeat="e in employees" ng-show="filterByType(e.firstName, e.lastName)">
