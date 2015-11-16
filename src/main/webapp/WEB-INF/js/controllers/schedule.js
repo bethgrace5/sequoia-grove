@@ -11,21 +11,18 @@ angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function ($scope, $rootScope, $translate, $log) {
 
     $scope.activeTab = 'schedule';
-    $scope.selectedName = '';
+    $scope.selectedId = 0;
     $scope.newDelivery = '';
 
-    // TODO get employee id, and match by id instead of name
-    // for the case that employees may share a name
-    // The id needs to be added as an attribute to each weekday for schedule
-    $scope.selectName = function(name) {
-      $scope.selectedName = name;
+    $scope.selectEid = function(id) {
+      $scope.selectedId = id;
     }
 
     // validation for schedule edit input
-    $scope.inputStatus = function(name, weekday, shiftId) {
+    $scope.inputStatus = function(id, weekday, shiftId) {
       var style = 'form-control schedule-edit-input';
 
-      if (name == $scope.selectedName) {
+      if (id == $scope.selectedId) {
         style += ' schedule-edit-highlight';
       }
       // apply an error
