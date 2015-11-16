@@ -31,9 +31,16 @@
       </div>
       <div class="col-sm-3">
         <!-- will be a datepicker -->
-        <input placeholder="MM/DD/YYYY"/>
+        <input ng-model="employees[current].birthDate" placeholder="MM/DD/YYYY"/>
       </div>
-      <div class="col-sm-2 col-sm-offset-5">
+      <div class="col-sm-1 col-sm-offset-1">
+        <span>Phone:</span>
+      </div>
+      <div class="col-sm-3">
+        <!-- will be a datepicker -->
+        <input ng-model="employees[current].phoneNumber" placeholder="xxx-xxx-xxxx"/>
+      </div>
+      <div class="col-sm-2">
         <span>Manager:</span>
         <input type="checkbox" ng-model="employees[current].isManager">
       </div>

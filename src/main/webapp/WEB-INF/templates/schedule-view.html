@@ -16,12 +16,12 @@
             <!-- weekday times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
               <!--<div ng-show="t.wd_st != 0">-->
-              {{formatTime(t.wd_st_h, t.wd_st_m)}} - {{formatTime(t.wd_ed_h, t.wd_ed_m)}}
+              {{formatTime(t.wd_st_h, t.wd_st_m, false)}} - {{formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
                 <!--</div>-->
             </div>
 
             <!-- Monday -->
-            <div class="col-sm-1 col-sm-offset-0"> 
+            <div class="col-sm-1 col-sm-offset-0">
               <div ng-class="{true:'highlighted', false:''}[(t.mon==user.firstname) && highlight]">
                 {{t.mon}} 
               </div>
@@ -58,7 +58,7 @@
             <!-- weekend times -->
             <div class="col-sm-1 col-sm-offset-0 schedule-times" > 
               <!--<div ng-show="t.we_st != 0">-->
-              {{formatTime(t.we_st_h, t.we_st_m)}} - {{formatTime(t.we_ed_h, t.we_ed_m)}}
+              {{formatTime(t.we_st_h, t.we_st_m, false)}} - {{formatTime(t.we_ed_h, t.we_ed_m, fasle)}}
               <!--</div>-->
             </div>
 

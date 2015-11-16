@@ -195,7 +195,7 @@ angular.module('sequoiaGroveApp')
       }
     ];
 
-    $scope.current = 0;
+    $scope.current;
 
     $scope.newAvail = {day:'', start:'', end:''};
 
@@ -244,26 +244,30 @@ angular.module('sequoiaGroveApp')
     }
 
     // click existing imes to populate input with those times
-    $scope.setNewAvailTimes = function(start, end ) {
-      var stTimeLen = $scope.times.start.length;
-      var edTimeLen = $scope.times.end.length;
-      var i=0;
+    $scope.setNewAvailTimes = function(sH, sM, eH, eM) {
+      var start = moment({hour:sH, minute:sM}).format('h:mm a');
+      var end = moment({hour:eH, minute:eM}).format('h:mm a');
+      $scope.newAvail.start = start;
+      $scope.newAvail.end = end; 
+      //var stTimeLen = $scope.times.start.length;
+      //var edTimeLen = $scope.times.end.length;
+      //var i=0;
 
       // find this item in start times and set start input as it
-      for(i=0;i<stTimeLen; i++) {
+      /*for(i=0;i<stTimeLen; i++) {
         if (start == $scope.times.start[i].val) {
           $scope.newAvail.start = $scope.times.start[i];
           break;
         }
-      }
+      }*/
 
       // find this item in end times and set end input as it
-      for(i=0; i<edTimeLen; i++) {
+      /*for(i=0; i<edTimeLen; i++) {
         if (end == $scope.times.end[i].val) {
           $scope.newAvail.end = $scope.times.end[i];
           break;
         }
-      }
+      }*/
 
     }
 
@@ -318,9 +322,11 @@ angular.module('sequoiaGroveApp')
       */
 
     }
-
     $scope.getAvailability();
 
-
+    $scope.selectEmployee = function(index) {
+      $scope.current = index;
+      $log.debug(index);
+    }
 
   });

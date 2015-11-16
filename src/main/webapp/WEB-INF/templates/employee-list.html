@@ -9,9 +9,9 @@
   </ul>
 </div-->
 
-<div class="panel panel-primary">
+<div class="panel panel-default">
   <div class="panel-heading">
-      Employees
+      <p class="lead emp-header">Employees</p>
   </div>
   <div class="panel-body">
     <div class="form-group">
@@ -24,9 +24,11 @@
     </div>
     <div class="list-group">
       <div ng-repeat="e in employees">
-        <a href="#" class="list-group-item">
-          {{e.lastName}}, {{e.firstName}}
-        </a>
+        <button ng-click="selectEmployee($index)" class="list-group-item btn btn-default btn-block" ng-class="{'btn-active': current==$index}">
+          <div class="pull-left">
+            {{e.lastName}}, {{e.firstName}}
+          </div>
+        </button>
       </div>
     </div>
   </div>

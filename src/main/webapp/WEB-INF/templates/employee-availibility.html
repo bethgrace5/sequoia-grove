@@ -41,9 +41,9 @@
           <p ng-show="$index==0"> Monday: </p>
         </div>
       </div>
-      <div ng-click="setNewAvailTimes(mon.start.val, mon.end.val)">
+      <div ng-click="setNewAvailTimes(mon.startHour, mon.startMin, mon.endHour, mon.endMin)">
         <div class="col-sm-2">
-          <span> {{formatTime(mon.startHour, mon.startMin)}} - {{format(mon.endHour, mon.endMin)}} </span>
+          <span> {{formatTime(mon.startHour, mon.startMin, true)}} - {{formatTime(mon.endHour, mon.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -62,9 +62,9 @@
           <p ng-show="$index==0"> Tuesday: </p>
         </div>
       </div>
-      <div ng-click="setNewAvailTimes(tue.start.val, tue.end.val)">
+      <div ng-click="setNewAvailTimes(tue.startHour, tue.startMin, tue.endHour, tue.endMin)">
         <div class="col-sm-2">
-          <span> {{tue.startTime}} - {{tue.endTime}} </span>
+          <span> {{formatTime(tue.startHour, tue.startMin, true)}} - {{formatTime(tue.endHour, tue.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -85,7 +85,7 @@
       </div>
       <div ng-click="setNewAvailTimes(wed.start.val, wed.end.val)">
         <div class="col-sm-2">
-          <span> {{wed.startTime}} - {{wed.endTime}} </span>
+          <span> {{formatTime(wed.startHour, wed.startMin, true)}} - {{formatTime(wed.endHour, wed.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -106,7 +106,7 @@
       </div>
       <div ng-click="setNewAvailTimes(thu.start.val, thu.end.val)">
         <div class="col-sm-2">
-          <span> {{thu.startTime}} - {{thu.endTime}} </span>
+          <span> {{formatTime(thu.startHour, thu.startMin, true)}} - {{formatTime(thu.endHour, thu.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -127,7 +127,7 @@
       </div>
       <div ng-click="setNewAvailTimes(fri.start.val, fri.end.val)">
         <div class="col-sm-2">
-          <span> {{fri.startTime}} - {{fri.endTime}} </span>
+          <span> {{formatTime(fri.startHour, fri.startMin, true)}} - {{formatTime(fri.endHour, fri.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -148,7 +148,7 @@
       </div>
       <div ng-click="setNewAvailTimes(sat.start.val, sat.end.val)">
         <div class="col-sm-2">
-          <span> {{sat.startTime}} - {{sat.endTime}} </span>
+          <span> {{formatTime(sat.startHour, sat.startMin, true)}} - {{formatTime(sat.endHour, sat.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -169,7 +169,7 @@
       </div>
       <div ng-click="setNewAvailTimes(sun.start.val, sun.end.val)">
         <div class="col-sm-2">
-          <span> {{sun.startTime}} - {{sun.endTime}} </span>
+          <span> {{formatTime(sun.startHour, sun.startMin, true)}} - {{formatTime(sun.endHour, sun.endMin, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
