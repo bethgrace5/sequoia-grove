@@ -102,7 +102,7 @@ public class ScheduleController {
         if (schTempList.size() >= 0 ) {
 
         }
-        System.out.println(schTempList.size());
+        //System.out.println(schTempList.size());
 
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
