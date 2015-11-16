@@ -98,6 +98,12 @@ public class ScheduleController {
               }
           });
 
+        // there is no schedule
+        if (schTempList.size() >= 0 ) {
+
+        }
+        System.out.println(schTempList.size());
+
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
     }
