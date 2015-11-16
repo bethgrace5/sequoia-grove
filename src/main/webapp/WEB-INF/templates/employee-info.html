@@ -71,7 +71,9 @@
       <p> Add Position</p>
     </div>
     <div class="col-sm-2 col-sm-offset-1">
-        <select ng-options="option.disp for option in times.start"/>
+      <select ng-options="p.title for p in positions" ng-model="selectedPos">
+        <option value="">-- Choose Position --</option>
+      </select>
     </div>
   </div>
 </div>

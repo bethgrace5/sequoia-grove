@@ -6,14 +6,6 @@
 angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($http, $log, $scope) {
     $scope.activeTab = 'info';
-    $scope.positions = [
-      {name: "Cashier"},
-      {name: "Supervisor"},
-      {name: "Cold Prep"},
-      {name: "Janitor"},
-      {name: "Kitchen"},
-      {name: "Kitchen Supervisor"}
-    ];
     $scope.times = {
       // start times start at the earlist shift start and increment by half
       // hours until the end of the lastest starting shift
@@ -74,8 +66,16 @@ angular.module('sequoiaGroveApp')
         isManager:"0",
         birthDate:"01/01/1995",
         maxHoursPerWeek:"40",
+        positions:
+        [
+          {title: "Cashier"},
+          {title: "Supervisor"}
+        ],
         phoneNumber:"000-000-0000",
         clockNumber:"10",
+        emplHistory:
+        [
+        ],
         avail:
         { mon: [ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
           ],
@@ -99,8 +99,16 @@ angular.module('sequoiaGroveApp')
         isManager:"0",
         birthDate:"02/02/1996",
         maxHoursPerWeek:"50",
+        positions:
+        [
+          {title: "Cashier"},
+          {title: "Kitchen"}
+        ],
         phoneNumber:"111-111-1111",
         clockNumber:"11",
+        emplHistory:
+        [
+        ],
         avail:
         { mon:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
           ],
@@ -124,8 +132,16 @@ angular.module('sequoiaGroveApp')
         isManager:"1",
         birthDate:"03/03/1991",
         maxHoursPerWeek:"50",
+        positions:
+        [
+          {title: "Cashier"},
+          {title: "Bakery"}
+        ],
         phoneNumber:"222-222-2222",
         clockNumber:"12",
+        emplHistory:
+        [
+        ],
         avail:
         { mon:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
           ],
@@ -149,8 +165,16 @@ angular.module('sequoiaGroveApp')
         isManager:"0",
         birthDate:"04/04/1999",
         maxHoursPerWeek:"40",
+        positions:
+        [
+          {title: "Cashier"},
+          {title: "Cold Prep"}
+        ],
         phoneNumber:"333-333-3333",
         clockNumber:"13",
+        emplHistory:
+        [
+        ],
         avail:
         { mon:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
           ],
@@ -174,6 +198,14 @@ angular.module('sequoiaGroveApp')
         isManager:"1",
         birthDate:"05/05/1997",
         maxHoursPerWeek:"40",
+        emplHistory:
+        [
+        ],
+        positions:
+        [
+          {title: "Cashier"},
+          {title: "Grill"}
+        ],
         phoneNumber:"444-444-4444",
         clockNumber:"14",
         avail:
