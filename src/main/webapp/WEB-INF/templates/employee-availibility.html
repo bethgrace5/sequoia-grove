@@ -43,7 +43,7 @@
       </div>
       <div ng-click="setNewAvailTimes(mon.start.val, mon.end.val)">
         <div class="col-sm-2">
-          <span> {{mon.start.disp}} - {{mon.end.disp}} </span>
+          <span> {{formatTime(mon.startHour, mon.startMin)}} - {{format(mon.endHour, mon.endMin)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -64,7 +64,7 @@
       </div>
       <div ng-click="setNewAvailTimes(tue.start.val, tue.end.val)">
         <div class="col-sm-2">
-          <span> {{tue.start.disp}} - {{tue.end.disp}} </span>
+          <span> {{tue.startTime}} - {{tue.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -85,7 +85,7 @@
       </div>
       <div ng-click="setNewAvailTimes(wed.start.val, wed.end.val)">
         <div class="col-sm-2">
-          <span> {{wed.start.disp}} - {{wed.end.disp}} </span>
+          <span> {{wed.startTime}} - {{wed.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -106,7 +106,7 @@
       </div>
       <div ng-click="setNewAvailTimes(thu.start.val, thu.end.val)">
         <div class="col-sm-2">
-          <span> {{thu.start.disp}} - {{thu.end.disp}} </span>
+          <span> {{thu.startTime}} - {{thu.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -127,7 +127,7 @@
       </div>
       <div ng-click="setNewAvailTimes(fri.start.val, fri.end.val)">
         <div class="col-sm-2">
-          <span> {{fri.start.disp}} - {{fri.end.disp}} </span>
+          <span> {{fri.startTime}} - {{fri.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -148,7 +148,7 @@
       </div>
       <div ng-click="setNewAvailTimes(sat.start.val, sat.end.val)">
         <div class="col-sm-2">
-          <span> {{sat.start.disp}} - {{sat.end.disp}} </span>
+          <span> {{sat.startTime}} - {{sat.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
@@ -169,7 +169,7 @@
       </div>
       <div ng-click="setNewAvailTimes(sun.start.val, sun.end.val)">
         <div class="col-sm-2">
-          <span> {{sun.start.disp}} - {{sun.end.disp}} </span>
+          <span> {{sun.startTime}} - {{sun.endTime}} </span>
         </div>
       </div>
       <div class="col-sm-1">
