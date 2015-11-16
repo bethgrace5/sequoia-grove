@@ -68,11 +68,12 @@ angular.module('sequoiaGroveApp')
     var mondayDateString = '';
 
     //Figure out how many days ago monday was
-    while(dayName != 'Monday') {
+    do {
       daysAgo++;
       dayName = moment().subtract(daysAgo, 'days').format('dddd');
       mondayDateString = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
     }
+    while(dayName != 'Monday');
 
     // Setup Monday
     $scope.date.mon.val = mondayDateString;
