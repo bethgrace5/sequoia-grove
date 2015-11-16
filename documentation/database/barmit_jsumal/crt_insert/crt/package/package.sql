@@ -9,7 +9,35 @@ procedure add_holiday( mmdd varchar2, name varchar2, t varchar2);
 procedure delete_ingredient(iid number);
 
 -- Type Definitions
-type sch_record is table of bajs_schedule%rowtype;
+type sch_record_type 
+is record
+(
+    sid         bajs_is_scheduled_for.shift_id%type,
+    tname       bajs_new_shift.task_name%type,
+    wd_st       bajs_hours.start_hour%type,
+    wd_ed       bajs_hours.end_hour%type,
+    we_st       bajs_hours.start_hour%type,
+    we_ed       bajs_hours.end_hour%type,
+    location    bajs_position.location%type,
+    position    bajs_position.title%type,
+    mon         bajs_employee.first_name%type,
+    tue         bajs_employee.first_name%type,
+    wed         bajs_employee.first_name%type,
+    thu         bajs_employee.first_name%type,
+    fri         bajs_employee.first_name%type,
+    sat         bajs_employee.first_name%type,
+    sun         bajs_employee.first_name%type,
+    mon_eid     bajs_employee.id%type,
+    tue_eid     bajs_employee.id%type,
+    wed_eid     bajs_employee.id%type,
+    thu_eid     bajs_employee.id%type,
+    fri_eid     bajs_employee.id%type,
+    sat_eid     bajs_employee.id%type,
+    sun_eid     bajs_employee.id%type
+
+);
+
+type sch_record is table of sch_record_type;
 
 -- Function Prototypes
 function get_schedule( 
@@ -63,55 +91,84 @@ create or replace package body bajs_pkg as
 
     -- Define Cursor
     cursor temp_cur is 
-    select * from 
     (
-        select * from bajs_sch_template
-        natural join
-        (
-            select * from (
-              -- Monday
-                select sid, fname as mon
-                from bajs_sch_hist
-                where day = to_date(mon, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Tuesday
-                select sid, fname as tue
-                from bajs_sch_hist
-                where day = to_date(tue, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Wednesday
-                select sid, fname as wed
-                from bajs_sch_hist
-                where day = to_date(wed, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Thursday
-                select sid, fname as thu
-                from bajs_sch_hist
-                where day = to_date(thu, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Friday
-                select sid, fname as fri
-                from bajs_sch_hist
-                where day = to_date(fri, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Saturday
-                select sid, fname as sat
-                from bajs_sch_hist
-                where day = to_date(sat, 'dd-mm-yyyy')
-            )
-            natural join
-            ( -- Sunday
-                select sid, fname as sun
-                from bajs_sch_hist
-                where day = to_date(sun, 'dd-mm-yyyy')
-            )
-        )
-        order by wd_st, location, we_st
+    select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
+        mon,     tue,     wed,     thu,     fri,     sat,     sun, 
+        mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
+    from (
+        -- Monday
+        /*  monday gathers the shift information for the week, while subsequent days
+         *  only gather the names for the employees scheduled based on the shift
+         */
+        select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
+            s.position, h.fname as mon, h.eid as mon_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy')
+    )
+    full outer join
+    (
+        -- Tuesday
+        select s.sid as t_sid, h.fname as tue, h.eid as tue_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( tue, 'dd-mm-yyyy')
+    )
+    on m_sid = t_sid
+    full outer join
+    (
+        -- Wednesday
+        select s.sid as w_sid, h.fname as wed, h.eid as wed_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( wed, 'dd-mm-yyyy')
+    )
+    on m_sid = w_sid
+    full outer join
+    (
+        -- Thursday
+        select s.sid as th_sid, h.fname as thu, h.eid as thu_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( thu, 'dd-mm-yyyy')
+    )
+    on m_sid = th_sid
+    full outer join
+    (
+        -- Friday
+        select s.sid as f_sid, h.fname as fri, h.eid as fri_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( fri, 'dd-mm-yyyy')
+    )
+    on m_sid = f_sid
+    full outer join
+    (
+        -- Saturday
+        select s.sid as sa_sid, h.fname as sat, h.eid as sat_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( sat, 'dd-mm-yyyy')
+    )
+    on m_sid = sa_sid
+    full outer join
+    (
+        -- Sunday
+        select s.sid as su_sid, h.fname as sun, h.eid as sun_eid
+        from bajs_sch_template s
+        left outer join
+        bajs_sch_hist h
+        on s.sid=h.sid and h.day = to_date( sun, 'dd-mm-yyyy')
+    )
+    on m_sid = su_sid
+    --order by wd_st, location, we_st
+
     ); -- End Cursor Definition
     begin
 
