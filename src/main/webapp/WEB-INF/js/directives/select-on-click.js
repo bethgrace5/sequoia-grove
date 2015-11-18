@@ -5,12 +5,15 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
   return {
     restrict: 'A',
     scope: false,
-    link: function (scope, element, attrs) {
+    name: '',
+    link: function ($scope, element, attrs) {
       element.on('click', function () {
         if (!$window.getSelection().toString()) {
           // Required for mobile Safari
           this.setSelectionRange(0, this.value.length)
         }
+        name = this.value;
+        console.log(name);
       });
       element.on('keydown', function (e) {
         //console.log(e.keyCode);
@@ -27,7 +30,11 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
         // Backspace Pressed
         if(e.keyCode == 8) {
           // clear input
-          //this.value = '';
+          this.value = this.value.substring(0, this.value.length);
+          //this.click();
+          this.setSelectionRange(this.value.length-1, this.value.length)
+
+          //$log.debug(this.value.substring(0, this.value.length-2));
         }
 
         // Esc Pressed
@@ -55,7 +62,48 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
       element.on('keyup', function (e) {
         // capitalize first letter of the value
         var firstLetter = this.value.charAt(0).toUpperCase();
+        var index = attrs.idx;
+        var day = attrs.day;
         this.value = (firstLetter + this.value.substring(1,this.value.length));
+
+        console.log(this.value);
+
+        if(this.value == '') {
+          console.log('empty');
+
+          if (day == 'mon') {
+            //clear out template value for it
+            $scope.template[index].mon.eid = 0;
+          }
+
+
+        }
+      });
+      element.on('blur', function (e) {
+        var day = attrs.day;
+        var eid = attrs.eid;
+        var sid = attrs.sid;
+        var date = attrs.date;
+        var newName = this.value;
+          console.log($scope.template[attrs.idx]);
+
+          /*
+        if (day == 'mon') {
+          if (newName == '') {
+            //clear out template value for it
+            $scope.template[index].mon.eid = 0;
+          }
+          else {
+            // name is the initial value before element was clicked
+            console.log(newName != name);
+          }
+        }
+        */
+
+
+
+        //$scope.changeId();
+
       });
     }
   };

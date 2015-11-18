@@ -4,6 +4,9 @@
     <div class="col-sm-9">
       <schedule-edit-header></schedule-edit-header>
     </div>
+    <div class="col-sm-3">
+      <!--<employee-list></employee-list>-->
+    </div>
   </div>
 
   <!-- shifts -->
@@ -22,9 +25,17 @@
 
       <!-- Monday -->
       <div class="col-sm-1 col-sm-offset-0  schedule-edit"> 
-        <input select-on-click ng-click="selectEid(t.mon.eid)" 
+        <input 
+        select-on-click
+        eid={{t.mon.eid}}
+        sid={{t.sid}}
+        idx={{$index}}
+        date={{date.mon.val}}
+        day="mon"
+        ng-click="selectEid(t.mon.eid)" 
         ng-disabled=false type="text" 
         ng-class="inputStatus(t.mon.eid, 'monday', t.sid)" 
+        ng-change="changeId(t.mon.eid, t.sid, date.mon.val)"
         ng-model="t.mon.name">
       </div>
 
@@ -84,10 +95,6 @@
     </div>
   </div>
 
-
-  <!--
-  <employee-list></employee-list>
-  -->
 
 
 </div>

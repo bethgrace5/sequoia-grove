@@ -10,21 +10,21 @@ import com.sequoiagrove.model.Position;
 
 public class Employee extends User{
     int id;
-    int maxHoursPerWeek;
+    //int maxHoursPerWeek;
     String firstname;
-    String lastname;
-    String phone;
-    Date dateEmployed;
-    Date dateUnemployed;;
-    Date birthday;
+    //String lastname;
+    //String phone;
+    //Date dateEmployed;
+    //Date dateUnemployed;;
+    //Date birthday;
 
-    List<Position> positions = new ArrayList<Position>();
+    //List<Position> positions = new ArrayList<Position>();
 
     public Employee(){}
-    public Employee(int id, String firstname, String lastname) {
+    public Employee(int id, String firstname/*, String lastname*/) {
         this.id = id;
         this.firstname = firstname;
-        this.lastname = lastname;
+        //this.lastname = lastname;
     }
 
 //TODO implement the rest of toString
@@ -35,6 +35,7 @@ public class Employee extends User{
             //+ ", lastName=" + lastName + ", email=" + email + "]";
     //}
 
+    /*
     public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id) {
 
         HashMap<String, Boolean> availabilityMap = new HashMap<String, Boolean>();
@@ -52,8 +53,7 @@ public class Employee extends User{
 
 
     public List<Position> getPositions() {
-        return positions;
-    }
+        return positions; }
 
     public void setPositions(List<Position> positions) {
         this.positions = positions;
@@ -62,6 +62,7 @@ public class Employee extends User{
     public void addPosition(Position position) {
         this.positions.add(position);
     }
+    */
 
     public int getId() {
         return id;
@@ -70,6 +71,7 @@ public class Employee extends User{
     public void setId(int id) {
         this.id = id;
     }
+    /*
 
     public int getMaxHoursPerWeek() {
         return maxHoursPerWeek;
@@ -78,6 +80,7 @@ public class Employee extends User{
     public void setMaxHoursPerWeek(int maxHoursPerWeek) {
         this.maxHoursPerWeek = maxHoursPerWeek;
     }
+    */
 
     public String getFirstname() {
         return firstname;
@@ -86,6 +89,7 @@ public class Employee extends User{
     public void setFirstname(String firstname) {
         this.firstname = firstname;
     }
+    /*
 
     public String getLastname() {
         return lastname;
@@ -126,4 +130,5 @@ public class Employee extends User{
     public void setBirthday(Date birthday) {
         this.birthday = birthday;
     }
+    */
 }

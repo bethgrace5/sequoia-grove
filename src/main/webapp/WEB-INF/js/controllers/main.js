@@ -68,12 +68,16 @@ angular.module('sequoiaGroveApp')
     var mondayDateString = '';
 
     //Figure out how many days ago monday was
-    do {
-      daysAgo++;
-      dayName = moment().subtract(daysAgo, 'days').format('dddd');
-      mondayDateString = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
+    if (dayName != 'Monday') {
+      while(dayName != 'Monday') {
+        daysAgo++;
+        dayName = moment().subtract(daysAgo, 'days').format('dddd');
+        mondayDateString = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
+      }
     }
-    while(dayName != 'Monday');
+    else {
+      mondayDateString = moment().subtract(0, 'days').format('DD-MM-YYYY');
+    }
 
     // Setup Monday
     $scope.date.mon.val = mondayDateString;
@@ -172,6 +176,20 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // Get All Current Employees with their id
+  $scope.getEmployees = function() {
+    $http({
+      url: '/sequoiagrove/employee',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.employeeSimple = data.employee;
+        //$log.debug(data);
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining schedule template main: " + data);
+    });
+  }
+
   $scope.formatTime = function(h, m, ampm) {
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
@@ -188,8 +206,8 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
     $scope.getPositions();
     $scope.getLocations();
+    $scope.getEmployees();
   }
 
   $scope.init();
-
 });

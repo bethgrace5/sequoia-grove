@@ -6,8 +6,26 @@
 -- if both are changed, the date is still changed and therefore, it still
 --      creates a new row for the entry
 
-exec bajs_pkg.add_holiday('44/44', 'May Day4', 'full');
-select * from bajs_holiday
+--select * from table(bajs_pkg.get_schedule('02-11-2015', '03-11-2015', '04-11-2015', '05-11-2015', '06-11-2015', '07-11-2015', '08-11-2015' ))
+--exec bajs_pkg.add_holiday('44/44', 'May Day4', 'full');
+--select * from bajs_holiday
+
+    --employee_id, shift_id, on_date
+
+        --insert into bajs_is_scheduled_for
+        --values(11, 10, to_date('12/12/1212', 'mm/dd/yyyy'));
+
+exec bajs_pkg.schedule(8, 10, '10-10-2010');
+
+select * from bajs_is_scheduled_for 
+where on_date = to_date('10/10/2010', 'dd-mm-yyyy')
+
+
+        --exception
+        --when DUP_VAL_ON_INDEX then
+            --update bajs_is_scheduled_for
+            --set employee_id = 10
+            --where hdate = mmdd;
 
     /*
     select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
