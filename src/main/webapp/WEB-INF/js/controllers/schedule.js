@@ -24,9 +24,13 @@ angular.module('sequoiaGroveApp')
     $scope.inputStatus = function(id, weekday, shiftId) {
       var style = 'form-control schedule-edit-input';
 
+      // Highlight all occurences of the employee that was clicked
       if (id == $scope.selectedId) {
         style += ' schedule-edit-highlight';
       }
+
+      // Dummy Error/Warning Application
+      /*
       // apply an error
       if (weekday=='monday' && shiftId == '3') {
         style += ' schedule-edit-input-error';
@@ -39,6 +43,7 @@ angular.module('sequoiaGroveApp')
       else {
         style += ' schedule-edit-input-highlight';
       }
+      */
       return style;
     }
 
