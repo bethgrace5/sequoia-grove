@@ -67,9 +67,8 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var index = attrs.idx;
         var newName = this.value;
         var employeeNameExists = false;
+        var newId = 0;
 
-        // The name changed
-        //if (oldName != newName) {
           var len = $scope.employees.length;
           var i = 0;
 
@@ -77,33 +76,69 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           // the employee id for the day
           for(; i<len; i++) {
             if($scope.employees[i].name == newName) {
+              newId = $scope.employees[i].id;
               employeeNameExists = true;
               element.context.classList.remove('schedule-edit-input-warn');
 
               if (attrs.day == 'mon') {
-                $scope.template[index].mon.eid = $scope.employees[i].id;
+                $scope.template[index].mon.eid = newId;
               }
               else if (attrs.day == 'tue') {
-                $scope.template[index].tue.eid = $scope.employees[i].id;
+                $scope.template[index].tue.eid = newId;
               }
               else if (attrs.day == 'wed') {
-                $scope.template[index].wed.eid = $scope.employees[i].id;
+                $scope.template[index].wed.eid = newId;
               }
               else if (attrs.day == 'thu') {
-                $scope.template[index].thu.eid = $scope.employees[i].id;
+                $scope.template[index].thu.eid = newId;
               }
               else if (attrs.day == 'fri') {
-                $scope.template[index].fri.eid = $scope.employees[i].id;
+                $scope.template[index].fri.eid = newId;
               }
               else if (attrs.day == 'sat') {
-                $scope.template[index].sat.eid = $scope.employees[i].id;
+                $scope.template[index].sat.eid = newId;
               }
               else if (attrs.day == 'sun') {
-                $scope.template[index].sun.eid = $scope.employees[i].id;
+                $scope.template[index].sun.eid = newId;
+              }
+
+              i=0;
+              len = $scope.updateShifts.length;
+              var update = true;
+              for(; i<len && update; i++) {
+
+                // check that this shift was not already added to the list
+                if(($scope.updateShifts[i].date == attrs.date)
+                    && ($scope.updateShifts[i].sid == attrs.sid)) {
+
+                  //FIXME this adds the update even if the employee
+                  //was already scheduled for this shift, because the 
+                  //list of scheduled shift updates is always initialized blank,
+                  //possibly add a list of current shifts to compare it to 
+                  //as a simplification from the schedule template, so we're
+                  //not updating the data for no reason
+
+                  // we don't need to add this to the list,
+                  // we need to change the employee id for this shift
+                  update = false;
+                  $scope.updateShifts[i].eid = newId;
+                }
+              }
+
+              // the shift needs to be added to the list of ones to update
+              if (update == true) {
+                $scope.updateShifts.push({
+                  eid: newId,
+                  sid: attrs.sid,
+                  date: attrs.date
+                });
               }
 
               $scope.selectEid($scope.employees[i].id);
               this.click();
+
+              //console.log($scope.updateShifts);
+
             }
           }
 
