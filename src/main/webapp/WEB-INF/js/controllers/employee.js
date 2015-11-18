@@ -64,7 +64,7 @@ angular.module('sequoiaGroveApp')
         firstName:"Billy",
         lastName:"Jean",
         isManager:"0",
-        birthDate:"01/01/1995",
+        birthDate:"01/01/1990",
         maxHoursPerWeek:"40",
         positions:
         [
@@ -97,7 +97,7 @@ angular.module('sequoiaGroveApp')
         firstName:"Is not",
         lastName:"My Lover",
         isManager:"0",
-        birthDate:"02/02/1996",
+        birthDate:"02/02/1992",
         maxHoursPerWeek:"50",
         positions:
         [
@@ -163,7 +163,7 @@ angular.module('sequoiaGroveApp')
         firstName:"Who claims",
         lastName:"That I am",
         isManager:"0",
-        birthDate:"04/04/1999",
+        birthDate:"04/04/1991",
         maxHoursPerWeek:"40",
         positions:
         [
@@ -196,10 +196,12 @@ angular.module('sequoiaGroveApp')
         firstName:"The",
         lastName:"One",
         isManager:"1",
-        birthDate:"05/05/1997",
+        birthDate:"05/05/1993",
         maxHoursPerWeek:"40",
         emplHistory:
         [
+          {start: "06-04-2013", end: "04-02-2014"},
+          {start: "07-04-2014", end: ""}
         ],
         positions:
         [
@@ -228,8 +230,14 @@ angular.module('sequoiaGroveApp')
     ];
 
     $scope.current;
-
     $scope.newAvail = {day:'', start:'', end:''};
+
+    $scope.empDateFormat = function(curDate) {
+      if (curDate=='' || curDate==0 || curDate==null) {
+        return 'Present';
+      }
+      return moment(curDate,'DD-MM-YYYY').format('MMMM Do YYYY');
+    }
 
     // add a new availability time for an employee
     $scope.addAvail = function() {
@@ -238,14 +246,11 @@ angular.module('sequoiaGroveApp')
       var end = $scope.newAvail.end;
 
       // make sure all fields are filled in
-      if (day!='' && st!='' && end!='' ) {
+      if (day!='' && st!='' && end!='') {
         // reset availability input
         $scope.newAvail = {day:'', start:'', end:''};
 
         var newTimes = { startHour:st.valHr, startMin: st.valMin, endHour: end.valHr, endMin: end.valMin};
-          //start:{disp:st.disp, val:st.valHr, val:st.valMin}, 
-          //end:{disp:end.disp, val:end.valHr, val:st.valMin}
-
         // TODO send new availability to back end
 
         // TODO, setup the selection of available times to not include times
@@ -262,6 +267,31 @@ angular.module('sequoiaGroveApp')
         else if (day=='fri') { $scope.employees[$scope.current].avail.fri.push(newTimes); }
         else if (day=='sat') { $scope.employees[$scope.current].avail.sat.push(newTimes); }
         else if (day=='sun') { $scope.employees[$scope.current].avail.sun.push(newTimes); }
+      }
+    }
+
+    $scope.newPos = {};
+    // add a new position for an employee
+    $scope.addPos = function() {
+      var pos = $scope.newPos.title;
+
+      // make sure all fields are filled in
+      if (pos!='') {
+        // reset input
+        $scope.newPos = {};
+
+        var posObj = {title:pos};
+        $log.debug(posObj);
+        // TODO send new availability to back end
+
+        // TODO, setup the selection of available times to not include times
+        // encompassed by their current availability times. possibly limit
+        // the number of availability objects to two per day?
+
+        // TODO order availabilities in front end by start time
+
+        // update front end
+        $scope.employees[$scope.current].positions.push(posObj);
       }
     }
 
@@ -325,6 +355,13 @@ angular.module('sequoiaGroveApp')
         else if (day=='sun') {
           $scope.employees[$scope.current].avail.sun.splice(index, 1);
         }
+    }
+
+    $scope.remPos = function(index) {
+      //TODO remove availability on the back end
+
+      // update front end
+      $scope.employees[$scope.current].positions.splice(index, 1);
     }
 
     $scope.getAvailability = function() {

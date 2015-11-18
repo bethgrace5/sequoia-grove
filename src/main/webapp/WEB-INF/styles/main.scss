@@ -307,3 +307,15 @@ a:focus {
   line-height: 1;
   margin-bottom: 7px;
 }
+.emp-history {
+  display: inline;
+}
+.emp-history-dash {
+  margin: 0px 30px 0px 30px;
+}
+.emp-history-row {
+  margin-top: 15px;
+}
+.emp-history-row:first-of-type {
+  margin-top: 0px;
+}
