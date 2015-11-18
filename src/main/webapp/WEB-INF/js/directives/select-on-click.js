@@ -5,15 +5,14 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
   return {
     restrict: 'A',
     scope: false,
-    name: '',
     link: function ($scope, element, attrs) {
       element.on('click', function () {
         if (!$window.getSelection().toString()) {
           // Required for mobile Safari
           this.setSelectionRange(0, this.value.length)
         }
-        name = this.value;
-        console.log(name);
+        // get name to see if it changes
+        oldName = this.value;
       });
       element.on('keydown', function (e) {
         //console.log(e.keyCode);
@@ -21,20 +20,18 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
         // Enter Pressed
         if(e.keyCode == 13) {
           // deselect the item
-          //this.blur()
+          this.blur()
 
           // send click event so ng-click gets called
-          this.click();
+          //this.click();
         }
 
         // Backspace Pressed
         if(e.keyCode == 8) {
           // clear input
-          this.value = this.value.substring(0, this.value.length);
+          //this.value = this.value.substring(0, this.value.length);
           //this.click();
           this.setSelectionRange(this.value.length-1, this.value.length)
-
-          //$log.debug(this.value.substring(0, this.value.length-2));
         }
 
         // Esc Pressed
@@ -59,51 +56,97 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
         }
 
       });
+
       element.on('keyup', function (e) {
         // capitalize first letter of the value
         var firstLetter = this.value.charAt(0).toUpperCase();
-        var index = attrs.idx;
-        var day = attrs.day;
         this.value = (firstLetter + this.value.substring(1,this.value.length));
 
-        console.log(this.value);
-
-        if(this.value == '') {
-          console.log('empty');
-
-          if (day == 'mon') {
-            //clear out template value for it
-            $scope.template[index].mon.eid = 0;
-          }
-
-
-        }
-      });
-      element.on('blur', function (e) {
-        var day = attrs.day;
-        var eid = attrs.eid;
         var sid = attrs.sid;
         var date = attrs.date;
+        var index = attrs.idx;
         var newName = this.value;
-          console.log($scope.template[attrs.idx]);
+        var employeeNameExists = false;
 
-          /*
-        if (day == 'mon') {
-          if (newName == '') {
-            //clear out template value for it
-            $scope.template[index].mon.eid = 0;
+        // The name changed
+        //if (oldName != newName) {
+          var len = $scope.employees.length;
+          var i = 0;
+
+          // find the matching employee by name, and update
+          // the employee id for the day
+          for(; i<len; i++) {
+            if($scope.employees[i].name == newName) {
+              employeeNameExists = true;
+              element.context.classList.remove('schedule-edit-input-warn');
+
+              if (attrs.day == 'mon') {
+                $scope.template[index].mon.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'tue') {
+                $scope.template[index].tue.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'wed') {
+                $scope.template[index].wed.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'thu') {
+                $scope.template[index].thu.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'fri') {
+                $scope.template[index].fri.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'sat') {
+                $scope.template[index].sat.eid = $scope.employees[i].id;
+              }
+              else if (attrs.day == 'sun') {
+                $scope.template[index].sun.eid = $scope.employees[i].id;
+              }
+
+              $scope.selectEid($scope.employees[i].id);
+              this.click();
+            }
           }
-          else {
-            // name is the initial value before element was clicked
-            console.log(newName != name);
-          }
-        }
-        */
 
+          //$timeout(
+            //function() {
+              // This name does not match any employee in the list
+              // set the id to 0
+              if (employeeNameExists == false) {
+                element.context.classList.add('schedule-edit-input-warn');
 
+                if (attrs.day == 'mon') {
+                  $scope.template[index].mon.eid = 0;
+                }
+                else if (attrs.day == 'tue') {
+                  $scope.template[index].tue.eid = 0;
+                }
+                else if (attrs.day == 'wed') {
+                  $scope.template[index].wed.eid = 0;
+                }
+                else if (attrs.day == 'thu') {
+                  $scope.template[index].thu.eid = 0;
+                }
+                else if (attrs.day == 'fri') {
+                  $scope.template[index].fri.eid = 0;
+                }
+                else if (attrs.day == 'sat') {
+                  $scope.template[index].sat.eid = 0;
+                }
+                else if (attrs.day == 'sun') {
+                  $scope.template[index].sun.eid = 0;
+                }
+              }
 
-        //$scope.changeId();
+            //},
+            //100,
+            //null
+          //)
 
+        //}
+      });
+
+      element.on('blur', function (e) {
+        oldName = this.value;
       });
     }
   };
