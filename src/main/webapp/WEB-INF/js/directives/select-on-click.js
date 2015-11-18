@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', function ($window) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', function ($window, $timeout) {
   return {
     restrict: 'A',
     scope: false,
@@ -107,42 +107,40 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', functio
             }
           }
 
-          //$timeout(
-            //function() {
-              // This name does not match any employee in the list
-              // set the id to 0
+
+            $timeout(
+            function() {
               if (employeeNameExists == false) {
-                element.context.classList.add('schedule-edit-input-warn');
+                // This name does not match any employee in the list
+                // set the id to 0
+                  element.context.classList.add('schedule-edit-input-warn');
 
-                if (attrs.day == 'mon') {
-                  $scope.template[index].mon.eid = 0;
+                  if (attrs.day == 'mon') {
+                    $scope.template[index].mon.eid = 0;
+                  }
+                  else if (attrs.day == 'tue') {
+                    $scope.template[index].tue.eid = 0;
+                  }
+                  else if (attrs.day == 'wed') {
+                    $scope.template[index].wed.eid = 0;
+                  }
+                  else if (attrs.day == 'thu') {
+                    $scope.template[index].thu.eid = 0;
+                  }
+                  else if (attrs.day == 'fri') {
+                    $scope.template[index].fri.eid = 0;
+                  }
+                  else if (attrs.day == 'sat') {
+                    $scope.template[index].sat.eid = 0;
+                  }
+                  else if (attrs.day == 'sun') {
+                    $scope.template[index].sun.eid = 0;
+                  }
                 }
-                else if (attrs.day == 'tue') {
-                  $scope.template[index].tue.eid = 0;
-                }
-                else if (attrs.day == 'wed') {
-                  $scope.template[index].wed.eid = 0;
-                }
-                else if (attrs.day == 'thu') {
-                  $scope.template[index].thu.eid = 0;
-                }
-                else if (attrs.day == 'fri') {
-                  $scope.template[index].fri.eid = 0;
-                }
-                else if (attrs.day == 'sat') {
-                  $scope.template[index].sat.eid = 0;
-                }
-                else if (attrs.day == 'sun') {
-                  $scope.template[index].sun.eid = 0;
-                }
-              }
+              },
+              0
+            )
 
-            //},
-            //100,
-            //null
-          //)
-
-        //}
       });
 
       element.on('blur', function (e) {
