@@ -7,6 +7,7 @@ create or replace package bajs_pkg as
 -- Procedure Prototypes
 procedure add_holiday( mmdd varchar2, n varchar2, t varchar2);
 procedure delete_ingredient(iid number);
+procedure schedule( eid number, sid number, day varchar2);
 
 -- Type Definitions
 type sch_record_type 
@@ -78,16 +79,25 @@ create or replace package body bajs_pkg as
         when matched then update set h.name = s.name
         when not matched then insert (hdate, name, type) values (mmdd, n, t);
         */
-
         insert into bajs_holiday(hdate, name, type) values(mmdd, n, t);
         exception
         when DUP_VAL_ON_INDEX then
             update bajs_holiday
             set name = n, type = t
             where hdate = mmdd;
-
-
     end add_holiday;
+
+    -- Schedule or update is_scheduled_for record
+    procedure schedule( eid number, sid number, day varchar2) is
+    begin
+        insert into bajs_is_scheduled_for(employee_id, shift_id, on_date) 
+        values(eid, sid, to_date(day, 'dd-mm-yyyy'));
+        exception
+        when DUP_VAL_ON_INDEX then
+            update bajs_is_scheduled_for
+            set employee_id = eid
+            where on_date = to_date(day, 'dd-mm-yyyy') and shift_id=sid;
+    end schedule;
 
     -- input date strings as 'dd/mm/yyyy' for each corresponding weekday
     -- function expects the correct weekdays in the order of monday to sunday

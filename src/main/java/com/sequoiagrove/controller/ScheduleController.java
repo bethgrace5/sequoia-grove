@@ -129,6 +129,18 @@ public class ScheduleController {
       return ret;
     }
 
+  // Get current schedule template (current shifts) dd/mm/yyyy
+    @RequestMapping(value = "/schedule/update/{sid}/{eid}/{date}")
+    public String getScheduleTemplate(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("sid") int sid,
+          @PathVariable("date") String date) throws SQLException {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)", eid, sid, date);
+        return "jsonTemplate";
+    }
+
 
 }
 
