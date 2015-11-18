@@ -8,7 +8,7 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('ScheduleCtrl', function ($http, $scope, $rootScope, $translate, $log, $filter) {
+  .controller('ScheduleCtrl', function ($timeout, $http, $scope, $rootScope, $translate, $log, $filter) {
     $scope.activeTab = 'schedule';
     $scope.selectedId = 0;
     $scope.newDelivery = '';
