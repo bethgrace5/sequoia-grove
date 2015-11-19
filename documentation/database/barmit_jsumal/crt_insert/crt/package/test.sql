@@ -1,12 +1,41 @@
     
+
+-- if the date matches an existing date, the name and types are updated
+-- if the date is changed, a new row is created with the day and type added
+
+-- if both are changed, the date is still changed and therefore, it still
+--      creates a new row for the entry
+
+--select * from table(bajs_pkg.get_schedule('02-11-2015', '03-11-2015', '04-11-2015', '05-11-2015', '06-11-2015', '07-11-2015', '08-11-2015' ))
+--exec bajs_pkg.add_holiday('44/44', 'May Day4', 'full');
+--select * from bajs_holiday
+
+    --employee_id, shift_id, on_date
+
+        --insert into bajs_is_scheduled_for
+        --values(11, 10, to_date('12/12/1212', 'mm/dd/yyyy'));
+
+exec bajs_pkg.schedule(8, 10, '10-10-2010');
+
+select * from bajs_is_scheduled_for 
+where on_date = to_date('10/10/2010', 'dd-mm-yyyy')
+
+
+        --exception
+        --when DUP_VAL_ON_INDEX then
+            --update bajs_is_scheduled_for
+            --set employee_id = 10
+            --where hdate = mmdd;
+
+    /*
     select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
         mon,     tue,     wed,     thu,     fri,     sat,     sun, 
         mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
     from (
         -- Monday
-        /*  monday gathers the shift information for the week, while subsequent days
-         *  only gather the names for the employees scheduled based on the shift
-         */
+        --  monday gathers the shift information for the week, while subsequent days
+        --  only gather the names for the employees scheduled based on the shift
+        --/
         select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
             s.position, h.fname as mon, h.eid as mon_eid
         from bajs_sch_template s
@@ -76,6 +105,7 @@
     on m_sid = su_sid
     order by wd_st, location, we_st
 
+*/
 
 /
 

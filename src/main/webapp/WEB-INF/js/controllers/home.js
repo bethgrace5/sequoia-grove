@@ -33,7 +33,7 @@ angular.module('sequoiaGroveApp')
     // Possibly change the type to 'mine'?
   }
 
-  $scope.filterByType = function (loc, pos, user, mon, tue, wed, thu, fri, sat, sun) {
+  $scope.filterByType = function (loc, pos, uid, mon, tue, wed, thu, fri, sat, sun) {
       if ($scope.type == 'all') {
           return true;
       }
@@ -41,8 +41,8 @@ angular.module('sequoiaGroveApp')
           return true;
       }
       else if ($scope.type=='mine') {
-        if (mon == user || tue == user || wed == user || thu == user ||
-              fri == user || sat == user || sun == user) {
+        if (mon.eid == uid || tue.eid == uid || wed.eid == uid || thu.eid == uid ||
+              fri.eid == uid || sat.eid == uid || sun.eid == uid) {
               return true;
           }
           else {

@@ -15,7 +15,7 @@
 
 /* 3 Monday   4 Friday    6 Sunday    5 Tuesday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('10/12/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('10/12/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('10/12/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('10/12/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('10/12/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('10/12/2015', 'mm/dd/yyyy'));
@@ -42,7 +42,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('10/12/2015', 'mm/dd/yy
 
 /* 3 Tuesday   4 Monday    6 Saturday  5 Thursday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('10/13/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('10/13/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('10/13/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('10/13/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('10/13/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('10/13/2015', 'mm/dd/yyyy'));
@@ -69,7 +69,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(23, 24, to_date('10/13/2015', 'mm/dd/yy
 
 /* 3 Wednesday 4 Sunday    6 Monday    5 Friday*/
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('10/14/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('10/14/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('10/14/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(21, 3 , to_date('10/14/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 4 , to_date('10/14/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(19, 5 , to_date('10/14/2015', 'mm/dd/yyyy'));
@@ -96,7 +96,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(11, 24, to_date('10/14/2015', 'mm/dd/yy
 
 /* 3 Thursday  4 Saturday  6 Tuesday   5 Monday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('10/15/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('10/15/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('10/15/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 3 , to_date('10/15/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 4 , to_date('10/15/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 5 , to_date('10/15/2015', 'mm/dd/yyyy'));
@@ -123,7 +123,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(22, 24, to_date('10/15/2015', 'mm/dd/yy
 
 /* 3 Friday    4 Thursday  6 Wednesday 5 Saturday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('10/16/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('10/16/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('10/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('10/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('10/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 5 , to_date('10/16/2015', 'mm/dd/yyyy'));
@@ -970,7 +970,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('11/15/2015', 'mm/dd/yy
 
 /* 7 Monday    6 Sunday    5 Tuesday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('11/16/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/16/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('11/16/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('11/16/2015', 'mm/dd/yyyy'));
@@ -997,7 +997,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('11/16/2015', 'mm/dd/yy
 
 /* 7 Tuesday   6 Friday    5 Wednesday */
 insert into BAJS_IS_SCHEDULED_FOR values( 4, 1 , to_date('11/17/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/17/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/17/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(16, 3 , to_date('11/17/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/17/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 5 , to_date('11/17/2015', 'mm/dd/yyyy'));
@@ -1024,7 +1024,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('11/17/2015', 'mm/dd/yy
 
 /* 7 Wednesday 6 Saturday  5 Thursday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/18/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/18/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/18/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/18/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('11/18/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('11/18/2015', 'mm/dd/yyyy'));
@@ -1051,7 +1051,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(23, 24, to_date('11/18/2015', 'mm/dd/yy
 
 /* 7 Thursday  6 Tuesday   5 Monday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('11/19/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/19/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/19/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 3 , to_date('11/19/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 4 , to_date('11/19/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 5 , to_date('11/19/2015', 'mm/dd/yyyy'));
@@ -1078,7 +1078,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(22, 24, to_date('11/19/2015', 'mm/dd/yy
 
 /* 7 Friday    6 Wednesday 5 Saturday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/20/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/20/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/20/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/20/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/20/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 5 , to_date('11/20/2015', 'mm/dd/yyyy'));
@@ -1161,7 +1161,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(23, 24, to_date('11/22/2015', 'mm/dd/yy
 
 /* 8 Monday    7 Wednesday 6 Saturday  5 Thursday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/23/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/23/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/23/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/23/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('11/23/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('11/23/2015', 'mm/dd/yyyy'));
@@ -1188,7 +1188,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(23, 24, to_date('11/23/2015', 'mm/dd/yy
 
 /* 8 Tuesday   7 Saturday  6 Monday    5 Friday*/
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('11/24/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/24/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/24/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(21, 3 , to_date('11/24/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 4 , to_date('11/24/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(19, 5 , to_date('11/24/2015', 'mm/dd/yyyy'));
@@ -1215,7 +1215,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(11, 24, to_date('11/24/2015', 'mm/dd/yy
 
 /* 8 Wednesday 7 Monday    6 Sunday    5 Tuesday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('11/25/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/25/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/25/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/25/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(15, 4 , to_date('11/25/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 5 , to_date('11/25/2015', 'mm/dd/yyyy'));
@@ -1242,7 +1242,7 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('11/25/2015', 'mm/dd/yy
 
 /* 8 Thursday  7 Tuesday   6 Friday    5 Wednesday */
 insert into BAJS_IS_SCHEDULED_FOR values( 4, 1 , to_date('11/26/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/26/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 2 , to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(16, 3 , to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 5 , to_date('11/26/2015', 'mm/dd/yyyy'));
@@ -1255,11 +1255,11 @@ insert into BAJS_IS_SCHEDULED_FOR values( 9, 11, to_date('11/26/2015', 'mm/dd/yy
 insert into BAJS_IS_SCHEDULED_FOR values(21, 12, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(19, 13, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(18, 14, to_date('11/26/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 6, 15, to_date('11/26/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 6, 15, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(25, 16, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(29, 17, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(33, 18, to_date('11/26/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(37, 25, to_date('11/26/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(37, 25, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(31, 19, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(28, 20, to_date('11/26/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(34, 21, to_date('11/26/2015', 'mm/dd/yyyy'));
@@ -1269,14 +1269,14 @@ insert into BAJS_IS_SCHEDULED_FOR values(12, 24, to_date('11/26/2015', 'mm/dd/yy
 
 /* 8 Friday    7 Thursday  6 Tuesday   5 Monday */
 insert into BAJS_IS_SCHEDULED_FOR values( 1, 1 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 2, 2 , to_date('11/27/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(13, 3 , to_date('11/27/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(14, 4 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(15, 5 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(16, 6 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(38, 7 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 8, 8 , to_date('11/27/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 9, 9 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(15, 5 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(16, 6 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(38, 7 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 8, 8 , to_date('11/27/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 9, 9 , to_date('11/27/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 10, to_date('11/27/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(10, 11, to_date('11/27/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 12, to_date('11/27/2015', 'mm/dd/yyyy'));
@@ -1295,20 +1295,20 @@ insert into BAJS_IS_SCHEDULED_FOR values(11, 23, to_date('11/27/2015', 'mm/dd/yy
 insert into BAJS_IS_SCHEDULED_FOR values(22, 24, to_date('11/27/2015', 'mm/dd/yyyy'));
 
 /* 8 Saturday  7 Sunday    6 Thursday  5 Sunday */
---insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(20, 5 , to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(21, 6 , to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(39, 7 , to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 9, 8 , to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 8, 9 , to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 5, 10, to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 8, 9 , to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 5, 10, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(11, 11, to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(18, 12, to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(18, 12, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 13, to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(19, 14, to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(19, 14, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 7, 15, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(27, 16, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(32, 17, to_date('11/28/2015', 'mm/dd/yyyy'));
@@ -1317,29 +1317,29 @@ insert into BAJS_IS_SCHEDULED_FOR values(37, 25, to_date('11/28/2015', 'mm/dd/yy
 insert into BAJS_IS_SCHEDULED_FOR values(31, 19, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(28, 20, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(30, 21, to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(36, 22, to_date('11/28/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(22, 23, to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(36, 22, to_date('11/28/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(22, 23, to_date('11/28/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(23, 24, to_date('11/28/2015', 'mm/dd/yyyy'));
 
 /* 8 Sunday    7 Friday    6 Wednesday 5 Saturday */
 insert into BAJS_IS_SCHEDULED_FOR values( 3, 1 , to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 4, 2 , to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(20, 5 , to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(21, 6 , to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(14, 3 , to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(13, 4 , to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(20, 5 , to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(21, 6 , to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(39, 7 , to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 9, 8 , to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 8, 9 , to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values( 5, 10, to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(11, 11, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(18, 12, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(18, 12, to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(17, 13, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(19, 14, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values( 7, 15, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(27, 16, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(32, 17, to_date('11/29/2015', 'mm/dd/yyyy'));
---insert into BAJS_IS_SCHEDULED_FOR values(33, 18, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(19, 14, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values( 7, 15, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(27, 16, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(32, 17, to_date('11/29/2015', 'mm/dd/yyyy'));
+insert into BAJS_IS_SCHEDULED_FOR values(33, 18, to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(37, 25, to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(31, 19, to_date('11/29/2015', 'mm/dd/yyyy'));
 insert into BAJS_IS_SCHEDULED_FOR values(28, 20, to_date('11/29/2015', 'mm/dd/yyyy'));

@@ -9,17 +9,17 @@ import java.util.HashMap;
 
 
 public class Day {
-    //Date date;
-    //String weekday;
-    //HashMap<Employee, Shift> day = new HashMap<Employee, Shift>();
-/*
+    String weekday;
+    String name;
+    int eid;
     public Day(){}
-    public Day(Date date, String weekday) {
-        this.date = date;
+    public Day(String weekday, String name, int eid) {
+        this.eid = eid;
+        this.name = name;
         this.weekday = weekday;
-        //setShifts();
     }
 
+    /*
     public void setShifts() {
         // gets all shifts and adds them to the day as empty
         // slots that need to all be filled
@@ -52,20 +52,27 @@ public class Day {
     public void setHoliday(String type) {
         // a day may be a full or half holiday, 
     }
-
-    public Date getDate() {
-        return date;
-    }
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public HashMap<Employee, Shift> getDay() {
-        return day;
-    }
-
-    public void setDay(HashMap<Employee, Shift> day) {
-        this.day = day;
-    }
     */
+
+    public String getWeekday(){
+      return weekday;
+    }
+    public void setWeekday(String weekday){
+      this.weekday = weekday;
+    }
+
+    public String getName(){
+      return name;
+    }
+    public void setName(String name){
+      this.name = name;
+    }
+
+    public int getEid(){
+      return eid;
+    }
+    public void setEid(int name){
+      this.eid = eid;
+    }
+
 }

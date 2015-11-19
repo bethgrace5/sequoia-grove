@@ -6,7 +6,7 @@
     <!-- shifts -->
     <div ng-repeat="t in template">
       <div class="row schedule-view-row" 
-        ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
+        ng-show="filterByType(t.location, t.position, user.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 
             <!-- shift title -->
             <div class="col-sm-2 col-sm-offset-0" > 
@@ -22,36 +22,36 @@
 
             <!-- Monday -->
             <div class="col-sm-1 col-sm-offset-0">
-              <div ng-class="{true:'highlighted', false:''}[(t.mon==user.firstname) && highlight]">
-                {{t.mon}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.mon.eid==user.id) && highlight]">
+                {{t.mon.name}} 
               </div>
             </div>
 
             <!-- Tuesday -->
             <div class="col-sm-1 col-sm-offset-0"> 
-              <div ng-class="{true:'highlighted', false:''}[(t.tue==user.firstname) && highlight]">
-              {{t.tue}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.tue.eid==user.id) && highlight]">
+              {{t.tue.name}} 
               </div>
             </div>
 
             <!-- Wednesday -->
             <div class="col-sm-1 col-sm-offset-0"> 
-              <div ng-class="{true:'highlighted', false:''}[(t.wed==user.firstname) && highlight]">
-              {{t.wed}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.wed.eid==user.id) && highlight]">
+              {{t.wed.name}} 
               </div>
             </div>
 
             <!-- Thursday -->
             <div class="col-sm-1 col-sm-offset-0"> 
-              <div ng-class="{true:'highlighted', false:''}[(t.thu==user.firstname) && highlight]">
-              {{t.thu}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.thu.eid==user.id) && highlight]">
+              {{t.thu.name}} 
               </div>
             </div>
 
             <!-- Friday -->
             <div class="col-sm-1 col-sm-offset-0"> 
-              <div ng-class="{true:'highlighted', false:''}[(t.fri==user.firstname) && highlight]">
-              {{t.fri}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.fri.eid==user.id) && highlight]">
+              {{t.fri.name}} 
               </div>
             </div>
 
@@ -64,15 +64,15 @@
 
             <!-- Saturday -->
             <div class="col-sm-1 col-sm-offset-0 "> 
-              <div ng-class="{true:'highlighted', false:''}[(t.sat==user.firstname) && highlight]">
-              {{t.sat}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.sat.eid==user.id) && highlight]">
+              {{t.sat.name}} 
               </div>
             </div>
 
             <!-- Sunday -->
             <div class="col-sm-1 col-sm-offset-0 "> 
-              <div ng-class="{true:'highlighted', false:''}[(t.sun==user.firstname) && highlight]">
-              {{t.sun}} 
+              <div ng-class="{true:'highlighted', false:''}[(t.sun.eid==user.id) && highlight]">
+              {{t.sun.name}} 
               </div>
             </div>
 

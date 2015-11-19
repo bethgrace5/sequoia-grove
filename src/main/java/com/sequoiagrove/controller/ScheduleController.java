@@ -18,6 +18,7 @@ import org.springframework.jdbc.core.RowMapper;
 import java.sql.ResultSet;
 
 import com.sequoiagrove.model.ScheduleTemplate;
+import com.sequoiagrove.model.Day;
 import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
 
@@ -49,7 +50,8 @@ public class ScheduleController {
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
-                          rs.getInt("sid"),
+                          rs.getInt("sid"), 0,
+                          //rs.getInt("pid"),
                           rs.getString("location"),
                           rs.getString("tname"),
                           rs.getString("position"),
@@ -61,13 +63,13 @@ public class ScheduleController {
                           "", // weekend start minute
                           "", // weekend end   minute
                           "", // weekend end   minute
-                          rs.getString("mon"),
-                          rs.getString("tue"),
-                          rs.getString("wed"),
-                          rs.getString("thu"),
-                          rs.getString("fri"),
-                          rs.getString("sat"),
-                          rs.getString("sun"));
+                          new Day("mon", rs.getString("mon"), rs.getInt("mon_eid")),
+                          new Day("tue", rs.getString("tue"), rs.getInt("tue_eid")),
+                          new Day("wed", rs.getString("wed"), rs.getInt("wed_eid")),
+                          new Day("thu", rs.getString("thu"), rs.getInt("thu_eid")),
+                          new Day("fri", rs.getString("fri"), rs.getInt("fri_eid")),
+                          new Day("sat", rs.getString("sat"), rs.getInt("sat_eid")),
+                          new Day("sun", rs.getString("sun"), rs.getInt("sun_eid")) );
 
                 // Get int from result set and return it as a String of length 4
                 String wd_start_str = intToLenFourString(rs.getInt("wd_st"));
@@ -125,6 +127,18 @@ public class ScheduleController {
         sb.delete(0, sb.length());
       }
       return ret;
+    }
+
+  // Get current schedule template (current shifts) dd/mm/yyyy
+    @RequestMapping(value = "/schedule/update/{sid}/{eid}/{date}")
+    public String getScheduleTemplate(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("sid") int sid,
+          @PathVariable("date") String date) throws SQLException {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)", eid, sid, date);
+        return "jsonTemplate";
     }
 
 

@@ -1,7 +1,9 @@
 <div class="container-fluid">
+  <!--
   <p class="lead">
   Schedule View
   </p>
+  -->
   <!--
       <div class="panel panel-default">
           <div class="panel-body">
@@ -20,11 +22,12 @@
                     <div ng-show="showDeliveries"> hide deliveries </div>
                 </button>
               -->
-                <!-- highlight logged in user's name -->
+                <!-- highlight logged in user's name 
                 <button class="btn btn-default schedule-view-button" ng-click="selectLoggedInUser()">
                     <div ng-hide="highlight"> highlight me </div>
                     <div ng-show="highlight"> unhighlight me </div>
                 </button>
+                -->
 
                 <!-- Filter by User, Location, or Position -->
                 <div class="dropdown pull-left" dropdown is-open=true>
@@ -52,7 +55,8 @@
                 Clear
                 <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
               </button>
-              <button class = "btn btn-default schedule-view-button"> 
+              <button class = "btn btn-default schedule-view-button"
+                ng-click = "showSchedule()"> 
                 Save
                 <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
               </button>
@@ -64,13 +68,6 @@
 
         </div>
     </div> <!-- End Schedule Header -->
-      <div class="row">
-        <div class="col-sm-2 pull-right">
-
-
-        </div>
-      </div>
-
 
       <div class="panel panel-default">
           <div class="panel-body">
