@@ -1,28 +1,45 @@
 <div class="container-fluid">
   <p class="lead">
-    Request View
+    Reports
   </p>
 
+  <div class="panel panel-default chart-panel">
+    <div class="panel-body">
+
+      <div class="chart-container">
+        <canvas id="line"
+          class="chart chart-line"
+          chart-data="data"
+          chart-labels="labels"
+          chart-legend="true"
+          chart-series="series"
+          options="chart-line"
+          chart-click="onClick">
+        </canvas>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+  <!--
   <div class="panel panel-default">
       <div class="panel-body">
           <request-submit></request-submit>
       </div>
   </div>
-
   <div ng-show="user.type === 'manager'">
-
       <div class="panel panel-default">
           <div class="panel-body">
               <request-pending></request-pending>
           </div>
       </div>
-
       <div class="panel panel-default">
           <div class="panel-body">
               <request-history></request-history>
           </div>
       </div>
   </div>
+  -->
 
-
-</div>

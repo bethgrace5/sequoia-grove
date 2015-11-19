@@ -47,6 +47,7 @@
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <script src="bower_components/moment/moment.js"></script>
     <script src="bower_components/Chart.js/src/Chart.Core.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Line.js"></script>
     <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <!--script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- endbower -->
