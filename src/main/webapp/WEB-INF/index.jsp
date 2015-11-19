@@ -66,6 +66,8 @@
     <script src="js/directives/schedule-delivery-edit.js"></script>
     <script src="js/directives/schedule-view.js"></script>
     <script src="js/directives/employee-availibility.js"></script>
+    <script src="js/directives/employee-positions.js"></script>
+    <script src="js/directives/employee-history.js"></script>
     <script src="js/directives/employee-info.js"></script>
     <script src="js/directives/request-history.js"></script>
     <script src="js/directives/request-pending.js"></script>

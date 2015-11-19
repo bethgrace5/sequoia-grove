@@ -40,6 +40,7 @@ $brand-danger:  #d9534f;
 }
 .clock-input {
   width: 40px;
+  margin-left: 10px;
 }
 .avail-edit-select {
   width: 90px;
@@ -298,4 +299,11 @@ a:focus {
 .emp-header {
   padding: 0;
   margin: 0;
+}
+.emp-text-row {
+  margin-bottom: 10px;
+}
+.emp-repeated-row {
+  line-height: 1;
+  margin-bottom: 7px;
 }
