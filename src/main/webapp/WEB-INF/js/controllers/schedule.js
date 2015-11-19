@@ -12,7 +12,10 @@ angular.module('sequoiaGroveApp')
     $scope.activeTab = 'schedule';
     $scope.selectedId = 0;
     $scope.newDelivery = '';
+
+    // shifts that were changed from old shifts and need to be saved to database
     $scope.updateShifts = [];
+
     $scope.employees = [];
 
 
@@ -80,7 +83,7 @@ angular.module('sequoiaGroveApp')
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining schedule template main: " + data);
+        $log.error(status + " Error obtaining emplyees simple : " + data);
     });
   }
 
@@ -117,6 +120,51 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+  $scope.checkIfShiftExists = function(day, eid, sid) {
+              var k=0;
+              len = $scope.updateShifts.length;
+              var update = true;
+              for(; k<len && update; k++) {
+
+                // check that this shift was not already added to the list
+                if(($scope.updateShifts[k].date == attrs.date)
+                    && ($scope.updateShifts[k].sid == attrs.sid)) {
+
+                  // check if this shift already existed 
+                  // before updating
+                  if(attrs.day == 'mon') {
+                    var len= $scope.oldShifts.mon.length;
+                    var j=0;
+                    for(; j<len; j++) {
+                      if(($scope.oldShifts.mon[j].eid == newId)
+                          && ($scope.oldShifts.mon[j].sid == attrs.sid)
+                          && ($scope.oldShifts.mon[j].date == attrs.date)) {
+                        console.log('duplicate!');
+                      }
+                    }
+                  }
+
+                  // we don't need to add this to the list,
+                  // we need to change the employee id for this shift
+                  update = false;
+                  $scope.updateShifts[k].eid = newId;
+                }
+              }
+
+              // the shift needs to be added to the list of ones to update
+              if (update == true) {
+                $scope.updateShifts.push({
+                  eid: newId,
+                  sid: attrs.sid,
+                  date: attrs.date
+                });
+              }
+
+              $scope.selectEid($scope.employees[i].id);
+
+  }
+
 
 
 });
