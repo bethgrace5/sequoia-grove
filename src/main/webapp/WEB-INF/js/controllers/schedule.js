@@ -53,7 +53,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.employees = data.employee;
-        //$log.debug(data);
+        $log.debug(data);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining emplyees simple : " + data);
