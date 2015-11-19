@@ -1,4 +1,3 @@
-
 package com.sequoiagrove.model;
 import java.util.Date;
 import java.util.ArrayList;
@@ -10,14 +9,14 @@ import com.sequoiagrove.model.Position;
 
 public class Employee extends User{
     int id;
-    int maxHoursPerWeek;
-    String firstname;
-    String lastname;
+    int maxHrsWeek;
+    int isManager;
+    String firstName;
+    String lastName;
     String phone;
-    Date dateEmployed;
-    Date dateUnemployed;;
-    Date birthday;
-
+    Date birthDate;
+    List<Date> datesEmployed = new ArrayList<Date>();
+    List<Date> datesUnemployed = new ArrayList<Date>();
     List<Position> positions = new ArrayList<Position>();
 
     public Employee(){}
@@ -35,8 +34,7 @@ public class Employee extends User{
             //+ ", lastName=" + lastName + ", email=" + email + "]";
     //}
 
-    public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id) {
-
+    public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id)    {
         HashMap<String, Boolean> availabilityMap = new HashMap<String, Boolean>();
         availabilityMap.put("monday",    ((availabilityString.charAt(0) == '1')? true: false));
         availabilityMap.put("tuesday",   ((availabilityString.charAt(1) == '1')? true: false));
