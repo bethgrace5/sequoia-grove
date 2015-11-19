@@ -9,13 +9,25 @@
       <div class="chart-container">
         <canvas id="line"
           class="chart chart-line"
-          chart-data="data"
-          chart-labels="labels"
+          chart-data="lineGraph.data"
+          chart-labels="lineGraph.labels"
           chart-legend="true"
-          chart-series="series"
-          options="chart-line"
-          chart-click="onClick">
+          chart-series="lineGraph.series"
+          options="lineGraph.chart-line"
+          chart-click="lineGraph.onClick">
         </canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel panel-default chart-panel">
+    <div class="panel-body">
+
+      <div class="chart-container">
+        <canvas id="doughnut" class="chart chart-doughnut"
+          chart-data="donGraph.data" chart-labels="donGraph.labels">
+        </canvas> 
       </div>
 
     </div>
