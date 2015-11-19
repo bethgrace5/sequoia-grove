@@ -15,9 +15,7 @@ angular.module('sequoiaGroveApp')
 
     // shifts that were changed from old shifts and need to be saved to database
     $scope.updateShifts = [];
-
     $scope.employees = [];
-
 
     $scope.selectEid = function(id) {
       $scope.selectedId = id;
@@ -31,10 +29,8 @@ angular.module('sequoiaGroveApp')
       if (id == $scope.selectedId) {
         style += ' schedule-edit-highlight';
       }
-
       // Dummy Error/Warning Application
-      /*
-      // apply an error
+      /* // apply an error
       if (weekday=='monday' && shiftId == '3') {
         style += ' schedule-edit-input-error';
       }
@@ -45,33 +41,10 @@ angular.module('sequoiaGroveApp')
       // no warnings or errors
       else {
         style += ' schedule-edit-input-highlight';
-      }
-      */
+      } */
       return style;
     }
 
-    $scope.removeDelivery = function(index) {
-      // remove delivery from dummy list for now
-      $scope.deliveries.splice(index, 1);
-    }
-
-    // add delivery to front end
-    $scope.addDelivery = function() {
-      if ($scope.newDelivery != '') {
-          $scope.deliveries.push(
-          { title: $scope.newDelivery,
-            days: {
-              monday:    false,
-              tuesday:   false,
-              wednesday: false,
-              thursday:  false,
-              friday:    false,
-              saturday:  false,
-              sunday:    false}
-          })
-          $scope.newDelivery = '';
-      }
-    }
 
   // Get The Schedule for the week currently being viewed
   $scope.getEmployees = function() {
@@ -87,39 +60,36 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.showSchedule = function() {
-    /*
-    for(; i<len; i++) {
-      sch.push({date: $scope.date.mon.val, sid:$scope.template[0].sid, eid:$scope.template[0].mon.eid});
-      sch.push({date: $scope.date.tue.val, sid:$scope.template[0].sid, eid:$scope.template[0].tue.eid});
-      sch.push({date: $scope.date.wed.val, sid:$scope.template[0].sid, eid:$scope.template[0].wed.eid});
-      sch.push({date: $scope.date.thu.val, sid:$scope.template[0].sid, eid:$scope.template[0].thu.eid});
-      sch.push({date: $scope.date.fri.val, sid:$scope.template[0].sid, eid:$scope.template[0].fri.eid});
-      sch.push({date: $scope.date.sat.val, sid:$scope.template[0].sid, eid:$scope.template[0].sat.eid});
-      sch.push({date: $scope.date.sun.val, sid:$scope.template[0].sid, eid:$scope.template[0].sun.eid});
+
+  $scope.saveSchedule = function() {
+    var i=0;
+    var len = $scope.updateShifts.length;
+
+    for(;i<len; i++) {
+      $http({
+        url: '/sequoiagrove/schedule/update/'+ 
+            $scope.updateShifts[i].sid + '/' + 
+            $scope.updateShifts[i].eid + '/' + 
+            $scope.updateShifts[i].date,
+        method: "POST"
+      }).success(function (data, status, headers, config) {
+          //$log.debug(data);
+          //$log.debug(status);
+
+          if (status == 200) {
+            // clear update shifts list
+            $scope.updateShifts.splice(i, 1);
+          }
+          else {
+            $log.error('Error saving schedule ', status, data);
+          }
+
+      }).error(function (data, status, headers, config) {
+          $log.error(status + " Error saving schedule " + data);
+      });
     }
-    */
-
   }
 
-  $scope.saveSchedule = function(eid, sid, date) {
-    $http({
-      url: '/sequoiagrove/schedule/update/'+ eid + '/' + sid + '/' + date,
-      method: "POST"
-    }).success(function (data, status, headers, config) {
-        $log.debug(data);
-        $log.debug(status);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error saving schedule " + data);
-    });
-  }
-
-  $scope.init = function() {
-    $scope.getEmployees();
-  }
-
-  $scope.init();
 
   // adds the shift to the list that needs to be sent to the database for updating
   // if the shift is already in the list, the employee is changed to the new one
@@ -169,7 +139,6 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.mon[j].eid == eid)
             && ($scope.oldShifts.mon[j].sid == sid)
             && ($scope.oldShifts.mon[j].date == date)) {
-          //$log.debug('duplicate! mon');
           duplicate = true;
         }
       }
@@ -177,7 +146,6 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.tue[j].eid == eid)
             && ($scope.oldShifts.tue[j].sid == sid)
             && ($scope.oldShifts.tue[j].date == date)) {
-          //$log.debug('duplicate! tue');
           duplicate = true;
         }
       }
@@ -185,7 +153,6 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.wed[j].eid == eid)
             && ($scope.oldShifts.wed[j].sid == sid)
             && ($scope.oldShifts.wed[j].date == date)) {
-          //$log.debug('duplicate! wed');
           duplicate = true;
         }
       }
@@ -193,7 +160,6 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.thu[j].eid == eid)
             && ($scope.oldShifts.thu[j].sid == sid)
             && ($scope.oldShifts.thu[j].date == date)) {
-          //$log.debug('duplicate! thu');
           duplicate = true;
         }
       }
@@ -201,7 +167,6 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.fri[j].eid == eid)
             && ($scope.oldShifts.fri[j].sid == sid)
             && ($scope.oldShifts.fri[j].date == date)) {
-          //$log.debug('duplicate! fri');
           duplicate = true;
         }
       }
@@ -209,14 +174,12 @@ angular.module('sequoiaGroveApp')
         if(($scope.oldShifts.sat[j].eid == eid)
             && ($scope.oldShifts.sat[j].sid == sid)
             && ($scope.oldShifts.sat[j].date == date)) {
-          //$log.debug('duplicate! sat');
           duplicate = true; }
       }
       if (day == 'sun') {
         if(($scope.oldShifts.sun[j].eid == eid)
             && ($scope.oldShifts.sun[j].sid == sid)
             && ($scope.oldShifts.sun[j].date == date)) {
-          //$log.debug('duplicate! sun');
           duplicate = true;
         }
       }
@@ -229,17 +192,10 @@ angular.module('sequoiaGroveApp')
       var i=0;
       var existsInUpdateList = false;
       for(; i<updateLen && (existsInUpdateList == false); i++) {
-        //$log.debug($scope.updateShifts[i].date);
-        //$log.debug(date);
-        //$log.debug($scope.updateShifts[i].sid == sid);
 
         // check that this shift was not already added to the update list
         if(($scope.updateShifts[i].date == date)
             && ($scope.updateShifts[i].sid == sid)) {
-
-          //$log.debug('shift exists in update list for eid: ', $scope.updateShifts[i].eid);
-          //$log.debug('changing to eid: ', eid);
-        //$log.debug('update shifts length: ', $scope.updateShifts.length);
 
           // we don't need to add this to the list,
           // we need to change the employee id for this shift
@@ -250,24 +206,19 @@ angular.module('sequoiaGroveApp')
 
       // the shift needs to be added to the list of ones to update
       if (existsInUpdateList == false) {
-        //$log.debug('add new shift to update list for eid: ',eid);
         $scope.updateShifts.push({
           eid: eid,
           sid: sid,
           date: date
         });
-        //$log.debug('update shifts length: ', $scope.updateShifts.length);
       }
     }
-
     // though this was a duplicate in our original list, if it had been
     // previously changed this session, it still would exist in the update
     // list, so it needs to be removed if it exists there.
     if(duplicate == true) {
       $scope.removeFromUpdate(sid, date);
     }
-
-    $log.debug($scope.updateShifts);
     $scope.selectEid(eid);
     return;
   }
@@ -281,15 +232,39 @@ angular.module('sequoiaGroveApp')
       if(($scope.updateShifts[i].date == date)
           && ($scope.updateShifts[i].sid == sid)) {
 
-        //$log.debug('removing item: ', $scope.updateShifts[i].eid);
         $scope.updateShifts.splice(i, 1);
-
         break;
       }
     }
-
   }
 
+  $scope.removeDelivery = function(index) {
+    // remove delivery from dummy list for now
+    $scope.deliveries.splice(index, 1);
+  }
 
+  // add delivery to front end
+  $scope.addDelivery = function() {
+    if ($scope.newDelivery != '') {
+        $scope.deliveries.push(
+        { title: $scope.newDelivery,
+          days: {
+            monday:    false,
+            tuesday:   false,
+            wednesday: false,
+            thursday:  false,
+            friday:    false,
+            saturday:  false,
+            sunday:    false}
+        })
+        $scope.newDelivery = '';
+    }
+  }
+
+  $scope.init = function() {
+    $scope.getEmployees();
+  }
+
+  $scope.init();
 
 });

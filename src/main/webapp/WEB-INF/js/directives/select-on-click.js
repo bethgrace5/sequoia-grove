@@ -44,11 +44,9 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var firstLetter = this.value.charAt(0).toUpperCase();
         this.value = (firstLetter + this.value.substring(1,this.value.length));
 
-        var sid = attrs.sid;
-        var date = attrs.date;
+        // schedule template index
         var index = attrs.idx;
-        var newName = this.value;
-        var employeeNameExists = false;
+        var exists = false;
         var newId = 0;
 
         var len = $scope.employees.length;
@@ -57,9 +55,9 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         // find the matching employee by name, and update
         // the employee id for the template
         for(; i<len; i++) {
-          if($scope.employees[i].name == newName) {
+          if($scope.employees[i].name == this.value) {
             newId = $scope.employees[i].id;
-            employeeNameExists = true;
+            exists = true;
             element.context.classList.remove('schedule-edit-input-warn');
 
             if (attrs.day == 'mon') {
@@ -83,16 +81,16 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             else if (attrs.day == 'sun') {
               $scope.template[index].sun.eid = newId;
             }
-            // since this 
+            // add shift to update list if necessary
             $scope.checkIfShiftExists(attrs.day, newId, attrs.sid)
             this.click();
           }
         }
 
         //$timeout( function() {
-          if (employeeNameExists == false) {
+          if (exists == false) {
             // This name does not match any employee in the list
-            // set the id to 0
+            // set the template id to 0
               element.context.classList.add('schedule-edit-input-warn');
 
               if (attrs.day == 'mon') {

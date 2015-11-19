@@ -132,8 +132,8 @@ public class ScheduleController {
   // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update/{sid}/{eid}/{date}")
     public String getScheduleTemplate(Model model,
-          @PathVariable("eid") int eid,
           @PathVariable("sid") int sid,
+          @PathVariable("eid") int eid,
           @PathVariable("date") String date) throws SQLException {
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();

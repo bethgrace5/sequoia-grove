@@ -161,6 +161,8 @@ angular.module('sequoiaGroveApp')
 
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
+    // clear out old shifts
+    $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
     $http({
       url: '/sequoiagrove/schedule/template/' +
             $scope.date.mon.val + '/' +
@@ -222,7 +224,6 @@ angular.module('sequoiaGroveApp')
             date: $scope.date.sun.val
           });
         }
-        $log.debug($scope.oldShifts);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining schedule template main: " + data);
