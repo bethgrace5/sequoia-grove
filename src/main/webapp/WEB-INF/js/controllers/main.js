@@ -27,6 +27,10 @@ angular.module('sequoiaGroveApp')
   $scope.user = $scope.user1;
   localStorageService.set('SequoiaGrove.user', $scope.user);
 
+  // container of  a simplification of the scheudle template shifts
+  // used to check that updating a shift is making a chage or not
+  $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
@@ -170,6 +174,55 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;
         //$log.debug(data);
+        // initialize a simpler container for checking when updating shifts
+
+        var i=0;
+        var len = $scope.template.length;
+        for(; i<len; i++){
+          // Monday
+          $scope.oldShifts.mon.push({
+            eid: $scope.template[i].mon.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.mon.val
+          });
+          // Tuesday
+          $scope.oldShifts.tue.push({
+            eid: $scope.template[i].tue.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.tue.val
+          });
+          // Wednesday
+          $scope.oldShifts.wed.push({
+            eid: $scope.template[i].wed.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.wed.val
+          });
+          // Thursday
+          $scope.oldShifts.thu.push({
+            eid: $scope.template[i].thu.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.thu.val
+          });
+          // Friday
+          $scope.oldShifts.fri.push({
+            eid: $scope.template[i].fri.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.fri.val
+          });
+          // Saturday
+          $scope.oldShifts.sat.push({
+            eid: $scope.template[i].sat.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.sat.val
+          });
+          // Sunday
+          $scope.oldShifts.sun.push({
+            eid: $scope.template[i].sun.eid,
+            sid: $scope.template[i].sid,
+            date: $scope.date.sun.val
+          });
+        }
+        $log.debug($scope.oldShifts);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining schedule template main: " + data);
