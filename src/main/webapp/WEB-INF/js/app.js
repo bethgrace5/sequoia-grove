@@ -8,7 +8,8 @@ angular.module('sequoiaGroveApp', [
     'ngSanitize',
     'ngTouch',
     'pascalprecht.translate',
-    'LocalStorageModule'
+    'LocalStorageModule',
+    'chart.js'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
               $logProvider, $compileProvider) {

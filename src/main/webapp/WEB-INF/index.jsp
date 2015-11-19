@@ -13,6 +13,7 @@
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css' media='screen,print'>
+    <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
     <link rel="stylesheet" href="styles/main.scss">
     <!-- endbuild -->
   </head>
@@ -45,6 +46,13 @@
     <script src="bower_components/angular-local-storage/dist/angular-local-storage.js"></script>
     <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.js"></script>
     <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Core.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Line.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Doughnut.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Bar.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.Radar.js"></script>
+    <script src="bower_components/Chart.js/src/Chart.PolarArea.js"></script>
+    <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <!--script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
