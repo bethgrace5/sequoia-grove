@@ -55,7 +55,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var i = 0;
 
         // find the matching employee by name, and update
-        // the employee id for the day
+        // the employee id for the template
         for(; i<len; i++) {
           if($scope.employees[i].name == newName) {
             newId = $scope.employees[i].id;
@@ -83,8 +83,9 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             else if (attrs.day == 'sun') {
               $scope.template[index].sun.eid = newId;
             }
-
-            $scope.checkIfShiftExists(attrs.day, attrs.eid, attrs.sid)
+            // since this 
+            $scope.checkIfShiftExists(attrs.day, newId, attrs.sid)
+            this.click();
           }
         }
 
