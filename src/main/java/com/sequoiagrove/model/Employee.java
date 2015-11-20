@@ -6,8 +6,10 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.sequoiagrove.model.Position;
+import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.EmpHistory;
 
-public class Employee extends User{
+public class Employee {
     int id;
     int maxHrsWeek;
     int isManager;
@@ -15,27 +17,35 @@ public class Employee extends User{
     String lastName;
     String phone;
     Date birthDate;
-    List<Date> datesEmployed = new ArrayList<Date>();
-    List<Date> datesUnemployed = new ArrayList<Date>();
+    List<EmpHistory> history = new ArrayList<EmpHistory>();
     List<Position> positions = new ArrayList<Position>();
+    List<Availability> avail = new ArrayList<Availability>();
 
 
     public Employee(){}
-    public Employee(int id, String firstname/*, String lastname*/) {
+    public Employee(
+      int id,
+      int maxHrsWeek,
+      int isManager,
+      String firstName,
+      String lastName,
+      String phone,
+      Date birthDate,
+      List<EmpHistory> history,
+      List<Position> positions,
+      List<Availability> avail
+    ) {
         this.id = id;
-        this.firstname = firstname;
-        //this.lastname = lastname;
+        this.maxHrsWeek = maxHrsWeek;
+        this.isManager = isManager;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.birthDate = birthDate;
+        this.history = history;
+        this.positions = positions;
+        this.avail = avail;
     }
-
-//TODO implement the rest of toString
-//loop through positions list of position objects
-//@Override
-    //public String toString() {
-        //return "Employee [id=" + id + ", firstName=" + firstName
-            //+ ", lastName=" + lastName + ", email=" + email + "]";
-    //}
-
-    public static HashMap<String, Boolean> availabilityToString(String availabilityString, int id){}
 
     public int getId() {
         return id;
@@ -44,32 +54,29 @@ public class Employee extends User{
     public void setId(int id) {
         this.id = id;
     }
-    /*
 
-    public int getMaxHoursPerWeek() {
-        return maxHoursPerWeek;
+    public int getMaxHrsWeek() {
+        return maxHrsWeek;
     }
 
-    public void setMaxHoursPerWeek(int maxHoursPerWeek) {
-        this.maxHoursPerWeek = maxHoursPerWeek;
-    }
-    */
-
-    public String getFirstname() {
-        return firstname;
+    public void setMaxHrsWeek(int maxHrsWeek) {
+        this.maxHrsWeek =maxHrsWeek;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-    /*
-
-    public String getLastname() {
-        return lastname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+    public void setLastName(String lastname) {
+        this.lastName = lastName;
     }
 
     public String getPhone() {
@@ -80,28 +87,33 @@ public class Employee extends User{
         this.phone = phone;
     }
 
-    public Date getDateEmployed() {
-        return dateEmployed;
+    public Date getBirthDate() {
+        return birthDate;
     }
 
-    public void setDateEmployed(Date dateEmployed) {
-        this.dateEmployed = dateEmployed;
+    public void setBirthDate(Date birthDate) {
+        this.birthDate = birthDate;
+    }
+    public List<EmpHistory> getHistory() {
+        return history;
     }
 
-    public Date getDateUnemployed() {
-        return dateUnemployed;
+    public void setHistory(List<EmpHistory> history) {
+        this.history = history;
     }
 
-    public void setDateUnemployed(Date dateUnemployed) {
-        this.dateUnemployed = dateUnemployed;
+    public List<Availability> getAvail() {
+        return avail;
     }
 
-    public Date getBirthday() {
-        return birthday;
+    public void setAvail(List<Availability> avail) {
+        this.avail = avail;
+    }
+    public List<Position> getPositions() {
+        return positions;
     }
 
-    public void setBirthday(Date birthday) {
-        this.birthday = birthday;
+    public void setPositions(List<Position> positions) {
+        this.positions = positions;
     }
-    */
 }
