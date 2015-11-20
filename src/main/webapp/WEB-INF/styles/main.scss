@@ -351,3 +351,7 @@ a:focus {
 .emp-history-row:first-of-type {
   margin-top: 0px;
 }
+.emp-list-wrapper {
+  max-height: 500px;
+  overflow-y: scroll;
+}

@@ -100,7 +100,9 @@ public class EmployeeController
             empList.get(i).setAvail(availMap.get(id));
             empList.get(i).setPositions(posMap.get(id));
         }
-
+        histMap.clear();
+        availMap.clear();
+        posMap.clear();
 
         /*for all emp, find emp_id in hashmap and insert corresponding data*/
         model.addAttribute("employeeInfo", empList);

@@ -242,7 +242,7 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Get All Current Employees with their id
+  // Get Current Employees with their id
   $scope.getEmployeeCurrent = function() {
     $http({
       url: '/sequoiagrove/employee/info/current',
@@ -256,7 +256,7 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Get All Current Employees with their id
+  // Get All Employees with their id
   $scope.getEmployeeAll = function() {
     $http({
       url: '/sequoiagrove/employee/info/all',
