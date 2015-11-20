@@ -392,5 +392,4 @@ angular.module('sequoiaGroveApp')
     $scope.selectEmployee = function(index) {
       $scope.current = index;
     }
-
   });
