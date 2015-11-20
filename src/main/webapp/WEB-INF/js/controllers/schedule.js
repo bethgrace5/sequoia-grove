@@ -34,7 +34,15 @@ angular.module('sequoiaGroveApp')
   }
 
   // Filter employees by selected position
-  $scope.filterEmployees = function(pos) {
+  $scope.filterEmployees = function(eid) {
+    var i=0;
+    var len = $scope.hasPosition.length;
+    $log.debug(len);
+
+    for(; i<len; i++) {
+      $log.debug($scope.hasPosition[i]);
+    }
+
     /*
     if($scope.scheduleEditPosition == 'all') {
       return true;

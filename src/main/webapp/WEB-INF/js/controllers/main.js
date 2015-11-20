@@ -19,15 +19,15 @@ angular.module('sequoiaGroveApp')
     localStorageService) 
 {
 
-
   // Sample Data for current logged in user
   // The logged in user's firstname is what is matched for highlighting
   $scope.user1 = { id:1, firstname: "John", lastname: "Doe", type: "manager" };
   $scope.user2 = { id:2, firstname: "Smith", lastname: "theEmployee", type: "employee" };
   $scope.user = $scope.user1;
   localStorageService.set('SequoiaGrove.user', $scope.user);
-  $scope.employees = [];
-  $scope.employeePositions = [];
+  $scope.currentEmployees = [];
+  $scope.allEmployees = [];
+  $scope.hasPosition = [];
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -153,7 +153,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/position/has',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.hasPositions = data.hasPositions;
+        $scope.hasPosition = data.hasPositions;
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining has position data: " + data);
     });
@@ -243,7 +243,7 @@ angular.module('sequoiaGroveApp')
   }
 
   // Get All Current Employees with their id
-  $scope.getEmployees = function() {
+  $scope.getEmployeeCurrent = function() {
     $http({
       url: '/sequoiagrove/employee/info/current',
       method: "GET"
@@ -257,7 +257,7 @@ angular.module('sequoiaGroveApp')
   }
 
   // Get All Current Employees with their id
-  $scope.getEmployeeInfo = function() {
+  $scope.getEmployeeAll = function() {
     $http({
       url: '/sequoiagrove/employee/info/all',
       method: "GET"
@@ -287,7 +287,8 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
     $scope.getPositions();
     $scope.getLocations();
-    $scope.getEmployees();
+    $scope.getEmployeeCurrent();
+    $scope.getEmployeeAll();
     $scope.getHasPositions();
   }
 

@@ -94,7 +94,7 @@
      <!-- Employee List Panel -->
       <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
           <div class="panel-body">
-            <div ng-repeat="e in employees" class="row" ng-show="filterEmployees(e.positions)">
+            <div ng-repeat="e in currentEmployees" class="row" ng-show="filterEmployees(e.id)">
               <input 
               select-on-click
               ng-class="inputStatus(t.mon.eid, 'monday', t.sid)" type="text"

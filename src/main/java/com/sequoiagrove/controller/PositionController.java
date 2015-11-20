@@ -18,7 +18,7 @@ import com.sequoiagrove.model.Position;
 
 @Controller
 public class PositionController {
-    private HashMap<Integer, ArrayList<Integer>> posMap = new HashMap<Integer, ArrayList<Integer>>();
+    private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
 
     // Get position info including the id, title and location
     @RequestMapping(value = "/position")
@@ -46,6 +46,7 @@ public class PositionController {
     @RequestMapping(value = "/position/has")
     public String getHasPositions(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        HashMap<Integer, ArrayList<Integer>> localMap = new HashMap<Integer, ArrayList<Integer>>();
 
         jdbcTemplate.query(
             "select distinct employee_id as eid, position_id as pid " +
@@ -55,19 +56,22 @@ public class PositionController {
                 public String mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Integer pid = rs.getInt("pid");
                     Integer eid = rs.getInt("eid");
-                    if(posMap.containsKey(pid)) { // key exists, add elem
-                        posMap.get(pid).add(eid);
+                    if(posKeyMap.containsKey(pid)) { // key exists, add elem
+                        posKeyMap.get(pid).add(eid);
                     }
                     else { // key does not exist, add new one plus 1st elem
                         ArrayList<Integer> tempList = new ArrayList<Integer>();
                         tempList.add(eid);
-                        posMap.put(pid, tempList);
+                        posKeyMap.put(pid, tempList);
                     }
                     return "";
                     }
         });
 
-        model.addAttribute("hasPositions", posMap);
+        localMap.putAll(posKeyMap);
+        posKeyMap.clear();
+
+        model.addAttribute("hasPositions", localMap);
         return "jsonTemplate";
     }
     // Get only locations (kitchen and front) <- this shouldn't change ever
