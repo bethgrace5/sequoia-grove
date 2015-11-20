@@ -1,4 +1,3 @@
-
 /*  
  * Package Specification Section
  */
@@ -35,7 +34,6 @@ is record
     fri_eid     bajs_employee.id%type,
     sat_eid     bajs_employee.id%type,
     sun_eid     bajs_employee.id%type
-
 );
 
 type sch_record is table of sch_record_type;
@@ -51,13 +49,11 @@ function get_schedule(
     sun varchar2
 ) return sch_record pipelined;
 
+
 end bajs_pkg;
 /
 
-
-/*
- * Package Body Section
- */
+/* * Package Body Section */
 create or replace package body bajs_pkg as
 
     -- Delete an Ingredent from being used in a menu item by supplying the ingredient id
@@ -197,14 +193,12 @@ create or replace package body bajs_pkg as
 
     ); -- End Cursor Definition
     begin
-
         -- Iterate Cursor to return rows
         for cur_rec in temp_cur loop
         pipe row(cur_rec);
         end loop;
-
     end get_schedule;
-end bajs_pkg;
 
+end bajs_pkg;
 /
 

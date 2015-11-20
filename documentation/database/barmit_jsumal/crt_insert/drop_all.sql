@@ -9,6 +9,7 @@ drop view  BAJS_TRAINING_EMP;
 drop view  BAJS_STD_EMP;
 drop view  BAJS_SCHEDULE;
 drop view  BAJS_SCH_HIST;
+drop view  BAJS_EMP_ALL_INFO;
 
 /* base tables */
 drop table BAJS_HOLIDAY;

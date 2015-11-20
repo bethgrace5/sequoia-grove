@@ -1,111 +1,87 @@
-    
 
--- if the date matches an existing date, the name and types are updated
--- if the date is changed, a new row is created with the day and type added
-
--- if both are changed, the date is still changed and therefore, it still
---      creates a new row for the entry
-
---select * from table(bajs_pkg.get_schedule('02-11-2015', '03-11-2015', '04-11-2015', '05-11-2015', '06-11-2015', '07-11-2015', '08-11-2015' ))
---exec bajs_pkg.add_holiday('44/44', 'May Day4', 'full');
---select * from bajs_holiday
-
-    --employee_id, shift_id, on_date
-
-        --insert into bajs_is_scheduled_for
-        --values(11, 10, to_date('12/12/1212', 'mm/dd/yyyy'));
-
-exec bajs_pkg.schedule(8, 10, '10-10-2010');
-
-select * from bajs_is_scheduled_for 
-where on_date = to_date('10/10/2010', 'dd-mm-yyyy')
+select * from
+(
+ select distinct employee_id, max_hrs_week, is_manager,
+               first_name, last_name, phone_number, birth_date from bajs_emp_all_info
+        ) a
+            join
+            bajs_employment_history h
+            on h.date_unemployed is null and h.employee_id = a.employee_id
 
 
-        --exception
-        --when DUP_VAL_ON_INDEX then
-            --update bajs_is_scheduled_for
-            --set employee_id = 10
-            --where hdate = mmdd;
+/*
+    Test package query to get employee front-end data.
 
-    /*
-    select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
-        mon,     tue,     wed,     thu,     fri,     sat,     sun, 
-        mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
-    from (
-        -- Monday
-        --  monday gathers the shift information for the week, while subsequent days
-        --  only gather the names for the employees scheduled based on the shift
-        --/
-        select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
-            s.position, h.fname as mon, h.eid as mon_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('23-11-2015', 'dd-mm-yyyy')
-    )
-    full outer join
-    (
-        -- Tuesday
-        select s.sid as t_sid, h.fname as tue, h.eid as tue_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('24-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = t_sid
-    full outer join
-    (
-        -- Wednesday
-        select s.sid as w_sid, h.fname as wed, h.eid as wed_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('25-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = w_sid
-    full outer join
-    (
-        -- Thursday
-        select s.sid as th_sid, h.fname as thu, h.eid as thu_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('26-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = th_sid
-    full outer join
-    (
-        -- Friday
-        select s.sid as f_sid, h.fname as fri, h.eid as fri_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('27-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = f_sid
-    full outer join
-    (
-        -- Saturday
-        select s.sid as sa_sid, h.fname as sat, h.eid as sat_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('28-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = sa_sid
-    full outer join
-    (
-        -- Sunday
-        select s.sid as su_sid, h.fname as sun, h.eid as sun_eid
-        from bajs_sch_template s
-        left outer join
-        bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date('29-11-2015', 'dd-mm-yyyy')
-    )
-    on m_sid = su_sid
-    order by wd_st, location, we_st
-
+    Necessary Fields : Format
+    id : int,
+    firstName : string,
+    lastName : string,
+    isManager : int,
+    birthDate : "DD-MM-YYYY",
+    maxHoursPerWeek : int,
+    emplHistory :
+    [
+        start : "DD-MM-YYYY", end : "DD-MM-YYYY",
+        ...
+    ],
+    positions :
+    [
+        title : string
+        ...
+    ],
+    phoneNumber : "xxx-xxx-xxxx",
+    clockNumber : int,
+    avail : {
+        mon :
+        [
+            { startHour: int, startMin: int, endHour: int, endMin: int },
+            ...
+        ]
+        tue : ...
+        wed : ...
+        thu : ...
+        fri : ...
+        sat : ...
+        sun : ...
+    }
 */
 
+/*
+select employee_id, first_name, last_name, is_manager, birth_date, max_hrs_week, phone_number, clock_number, startt, endt, date_employed, date_unemployed, title from
+(
+    (
+        select employee_id, first_name, last_name, is_manager, birth_date, max_hrs_week, phone_number, clock_number, startt, endt, date_employed, date_unemployed from
+        (
+            select * from
+            (
+                select e.id, e.first_name, e.last_name, e.is_manager, e.birth_date, e.max_hrs_week, e.phone_number, e.clock_number, a.startt, a.endt
+                from bajs_employee e
+                full join
+                bajs_availability a
+                on e.id = a.employee_id
+            ) maint
+            full join
+            bajs_employment_history h
+            on h.employee_id = maint.id
+        )
+    ) jd
+    full join
+    (
+        select employee_id as eid, title from
+        (
+            (
+                select distinct employee_id, position_id
+                from bajs_has_position
+            )
+            natural join
+            (
+                select id as position_id, title
+                from bajs_position
+            )
+        )
+    ) pos
+    on jd.employee_id = pos.eid
+)
+order by employee_id
+*/
 /
-

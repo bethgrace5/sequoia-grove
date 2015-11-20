@@ -233,16 +233,17 @@ angular.module('sequoiaGroveApp')
   // Get All Current Employees with their id
   $scope.getEmployees = function() {
     $http({
-      url: '/sequoiagrove/employee',
+      url: '/sequoiagrove/employee/info/current',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.employeeSimple = data.employee;
+        $scope.employees = data.employeeInfo;
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining schedule template main: " + data);
     });
   }
+
 
   $scope.formatTime = function(h, m, ampm) {
     // we can use moment to parse times to display correctly on the front end

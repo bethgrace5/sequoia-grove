@@ -17,7 +17,6 @@ angular.module('sequoiaGroveApp')
 
     // shifts that were changed from old shifts and need to be saved to database
     $scope.updateShifts = [];
-    $scope.employees = [];
 
     $scope.selectEid = function(id) {
       $scope.selectedId = id;
@@ -64,6 +63,7 @@ angular.module('sequoiaGroveApp')
 
 
   // Get The Schedule for the week currently being viewed
+  /*
   $scope.getEmployees = function() {
     $http({
       url: '/sequoiagrove/employee',
@@ -76,6 +76,7 @@ angular.module('sequoiaGroveApp')
         $log.error(status + " Error obtaining emplyees simple : " + data);
     });
   }
+  */
 
   // Get The Schedule for the week currently being viewed
   $scope.getShifts = function() {
@@ -293,7 +294,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init = function() {
-    $scope.getEmployees();
+    //$scope.getEmployees();
     $scope.getShifts();
   }
 

@@ -52,12 +52,23 @@ public class EmployeeController
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/employee/info")
-    public String getAllEmployee(Model model){
+    @RequestMapping(value = "/employee/info/{status}")
+    public String getAllEmployee(Model model, @PathVariable("status") String status) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        // Get All Employees by Default
+        String queryStr = "select distinct employee_id, max_hrs_week, is_manager, " +
+              "first_name, last_name, phone_number, birth_date " +
+              "from bajs_emp_all_info";
 
-        List<Employee> empList = jdbcTemplate.query(
-            "select distinct employee_id, max_hrs_week, is_manager, first_name, last_name, phone_number, birth_date from bajs_emp_all_info",
+        // Get only Current Employees
+        if (status.equals("current")) {
+            queryStr = "select * from (select distinct employee_id, max_hrs_week, is_manager, first_name, " +
+                "last_name, phone_number, birth_date from bajs_emp_all_info) a " +
+                "join bajs_employment_history h " +
+                "on h.date_unemployed is null and h.employee_id = a.employee_id";
+        }
+
+        List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
                     int id = rs.getInt("employee_id");
@@ -82,7 +93,7 @@ public class EmployeeController
         getPositions();
 
         // loop through all employees, and put their corresponding employment history
-        int len = empList.size(); 
+        int len = empList.size();
         for(int i=0; i<len; i++) {
             int id = empList.get(i).getId();
             empList.get(i).setHistory(histMap.get(id));

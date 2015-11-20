@@ -29,6 +29,7 @@
 @crt/view/crt_schedule.sql
 @crt/view/crt_std_emp.sql
 @crt/view/crt_training_emp.sql
+@crt/view/crt_emp_all_info.sql
 
 /* packages */
 @crt/package/package.sql
