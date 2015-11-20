@@ -7,19 +7,21 @@ import java.util.HashMap;
 
 import com.sequoiagrove.model.Position;
 import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.WeeklyAvail;
 import com.sequoiagrove.model.EmpHistory;
 
 public class Employee {
     int id;
     int maxHrsWeek;
     int isManager;
+    int clock;
     String firstName;
     String lastName;
     String phone;
     Date birthDate;
     List<EmpHistory> history = new ArrayList<EmpHistory>();
     List<Position> positions = new ArrayList<Position>();
-    List<Availability> avail = new ArrayList<Availability>();
+    WeeklyAvail avail = new WeeklyAvail();
 
 
     public Employee(){}
@@ -27,17 +29,19 @@ public class Employee {
       int id,
       int maxHrsWeek,
       int isManager,
+      int clock,
       String firstName,
       String lastName,
       String phone,
       Date birthDate,
       List<EmpHistory> history,
       List<Position> positions,
-      List<Availability> avail
+      WeeklyAvail avail
     ) {
         this.id = id;
         this.maxHrsWeek = maxHrsWeek;
         this.isManager = isManager;
+        this.clock = clock;
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
@@ -50,7 +54,6 @@ public class Employee {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
@@ -58,15 +61,27 @@ public class Employee {
     public int getMaxHrsWeek() {
         return maxHrsWeek;
     }
-
     public void setMaxHrsWeek(int maxHrsWeek) {
         this.maxHrsWeek =maxHrsWeek;
+    }
+
+    public int getIsManager() {
+        return isManager;
+    }
+    public void setIsManager(int isManager) {
+        this.isManager = isManager;
+    }
+
+    public int getClock() {
+        return clock;
+    }
+    public void setClock(int clock) {
+        this.clock = clock;
     }
 
     public String getFirstName() {
         return firstName;
     }
-
     public void setFirstName(String firstName) {
         this.firstName = firstName;
     }
@@ -74,7 +89,6 @@ public class Employee {
     public String getLastName() {
         return lastName;
     }
-
     public void setLastName(String lastname) {
         this.lastName = lastName;
     }
@@ -82,7 +96,6 @@ public class Employee {
     public String getPhone() {
         return phone;
     }
-
     public void setPhone(String phone) {
         this.phone = phone;
     }
@@ -90,30 +103,28 @@ public class Employee {
     public Date getBirthDate() {
         return birthDate;
     }
-
     public void setBirthDate(Date birthDate) {
         this.birthDate = birthDate;
     }
+
     public List<EmpHistory> getHistory() {
         return history;
     }
-
     public void setHistory(List<EmpHistory> history) {
         this.history = history;
     }
 
-    public List<Availability> getAvail() {
-        return avail;
-    }
-
-    public void setAvail(List<Availability> avail) {
-        this.avail = avail;
-    }
     public List<Position> getPositions() {
         return positions;
     }
-
     public void setPositions(List<Position> positions) {
         this.positions = positions;
+    }
+
+    public WeeklyAvail getAvail() {
+        return avail;
+    }
+    public void setAvail(WeeklyAvail avail) {
+        this.avail = avail;
     }
 }

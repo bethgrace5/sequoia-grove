@@ -238,7 +238,7 @@ angular.module('sequoiaGroveApp')
         }
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining schedule template main: " + data);
+        $log.error(status + " Error saving update shift schedule: " + data);
     });
   }
 
@@ -252,7 +252,7 @@ angular.module('sequoiaGroveApp')
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining schedule template main: " + data);
+        $log.error(status + " Error obtaining current employee: " + data);
     });
   }
 
@@ -266,7 +266,7 @@ angular.module('sequoiaGroveApp')
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining schedule template main: " + data);
+        $log.error(status + " Error obtaining all employee: " + data);
     });
   }
 

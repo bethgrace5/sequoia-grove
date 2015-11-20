@@ -21,6 +21,7 @@ import com.sequoiagrove.model.EmployeeSimple;
 import com.sequoiagrove.model.Employee;
 import com.sequoiagrove.model.EmpHistory;
 import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.WeeklyAvail;
 import com.sequoiagrove.model.Position;
 import com.sequoiagrove.controller.ScheduleController;
 
@@ -28,7 +29,13 @@ import com.sequoiagrove.controller.ScheduleController;
 public class EmployeeController
 {
     private HashMap<Integer, ArrayList<EmpHistory>> histMap = new HashMap<Integer, ArrayList<EmpHistory>>();
-    private HashMap<Integer, ArrayList<Availability>> availMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availMonMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availTueMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availWedMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availThuMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availFriMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availSatMap = new HashMap<Integer, ArrayList<Availability>>();
+    private HashMap<Integer, ArrayList<Availability>> availSunMap = new HashMap<Integer, ArrayList<Availability>>();
     private HashMap<Integer, ArrayList<Position>> posMap = new HashMap<Integer, ArrayList<Position>>();
     // get all of the possible shift ids
     @RequestMapping(value = "/employee")
@@ -57,7 +64,7 @@ public class EmployeeController
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         // Get All Employees by Default
         String queryStr = "select distinct employee_id, max_hrs_week, is_manager, " +
-              "first_name, last_name, phone_number, birth_date " +
+              "clock_number, first_name, last_name, phone_number, birth_date " +
               "from bajs_emp_all_info";
 
         // Get only Current Employees
@@ -72,17 +79,19 @@ public class EmployeeController
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
                     int id = rs.getInt("employee_id");
+                    WeeklyAvail emptyWeek = new WeeklyAvail();
                     Employee es = new Employee (
                       id,
                       rs.getInt("max_hrs_week"),
                       rs.getInt("is_manager"),
+                      rs.getInt("clock_number"),
                       rs.getString("first_name"),
                       rs.getString("last_name"),
                       rs.getString("phone_number"),
                       rs.getDate("birth_date"),
                       null,
                       null,
-                      null
+                      emptyWeek
                     );
                     return es;
                 }
@@ -97,11 +106,23 @@ public class EmployeeController
         for(int i=0; i<len; i++) {
             int id = empList.get(i).getId();
             empList.get(i).setHistory(histMap.get(id));
-            empList.get(i).setAvail(availMap.get(id));
             empList.get(i).setPositions(posMap.get(id));
+            empList.get(i).getAvail().setMon(availMonMap.get(id));
+            empList.get(i).getAvail().setTue(availTueMap.get(id));
+            empList.get(i).getAvail().setWed(availWedMap.get(id));
+            empList.get(i).getAvail().setThu(availThuMap.get(id));
+            empList.get(i).getAvail().setFri(availFriMap.get(id));
+            empList.get(i).getAvail().setSat(availSatMap.get(id));
+            empList.get(i).getAvail().setSun(availSunMap.get(id));
         }
         histMap.clear();
-        availMap.clear();
+        availMonMap.clear();
+        availTueMap.clear();
+        availWedMap.clear();
+        availThuMap.clear();
+        availFriMap.clear();
+        availSatMap.clear();
+        availSunMap.clear();
         posMap.clear();
 
         /*for all emp, find emp_id in hashmap and insert corresponding data*/
@@ -114,7 +135,7 @@ public class EmployeeController
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         jdbcTemplate.query(
-            "select employee_id, date_employed, date_unemployed from bajs_emp_all_info",
+            "select distinct employee_id, date_employed, date_unemployed from bajs_emp_all_info",
             new RowMapper<EmpHistory>() {
                 public EmpHistory mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Integer id = rs.getInt("employee_id");
@@ -142,33 +163,95 @@ public class EmployeeController
         jdbcTemplate.query(
             "select * from bajs_availability",
             new RowMapper<Availability>() {
-                public Availability mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Integer id = rs.getInt("employee_id");
-                    String startt = ScheduleController.intToLenFourString(rs.getInt("startt"));
-                    String endt = ScheduleController.intToLenFourString(rs.getInt("endt"));
-                    int starthr=0, startmin=0, endhr=0, endmin=0;
-                    if (startt.length() == 4) {
-                        starthr = Integer.parseInt(startt.substring(0,2));
-                        startmin = Integer.parseInt(startt.substring(2,4));
-                    }
-                    if (endt.length() == 4) {
-                        endhr = Integer.parseInt(endt.substring(0,2));
-                        endmin = Integer.parseInt(endt.substring(2,4));
-                    }
-                    Availability avail = new Availability (
-                      rs.getString("day"),
-                      starthr, startmin, endhr, endmin
-                    );
-                    if(availMap.containsKey(id)) { // key exists, add elem
-                        availMap.get(id).add(avail);
+            public Availability mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Integer id = rs.getInt("employee_id");
+                String day = rs.getString("day");
+                String startt = ScheduleController.intToLenFourString(rs.getInt("startt"));
+                String endt = ScheduleController.intToLenFourString(rs.getInt("endt"));
+                int starthr=0, startmin=0, endhr=0, endmin=0;
+                if (startt.length() == 4) {
+                    starthr = Integer.parseInt(startt.substring(0,2));
+                    startmin = Integer.parseInt(startt.substring(2,4));
+                }
+                if (endt.length() == 4) {
+                    endhr = Integer.parseInt(endt.substring(0,2));
+                    endmin = Integer.parseInt(endt.substring(2,4));
+                }
+                Availability avail = new Availability (
+                    starthr, startmin, endhr, endmin
+                );
+                if (day.equals("mon")) {
+                    if (availMonMap.containsKey(id)) { // key exists, add elem
+                        availMonMap.get(id).add(avail);
                     }
                     else { // key does not exist, add new one plus 1st elem
                         ArrayList<Availability> tempList = new ArrayList<Availability>();
                         tempList.add(avail);
-                        availMap.put(id, tempList);
+                        availMonMap.put(id, tempList);
                     }
-                    return avail;
+                }
+                else if (day.equals("tue")) {
+                    if (availTueMap.containsKey(id)) { // key exists, add elem
+                        availTueMap.get(id).add(avail);
                     }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availTueMap.put(id, tempList);
+                    }
+                }
+                else if (day.equals("wed")) {
+                    if (availWedMap.containsKey(id)) { // key exists, add elem
+                        availWedMap.get(id).add(avail);
+                    }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availWedMap.put(id, tempList);
+                    }
+                }
+                else if (day.equals("thu")) {
+                    if (availThuMap.containsKey(id)) { // key exists, add elem
+                        availThuMap.get(id).add(avail);
+                    }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availThuMap.put(id, tempList);
+                    }
+                }
+                else if (day.equals("fri")) {
+                    if (availFriMap.containsKey(id)) { // key exists, add elem
+                        availFriMap.get(id).add(avail);
+                    }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availFriMap.put(id, tempList);
+                    }
+                }
+                else if (day.equals("sat")) {
+                    if (availSatMap.containsKey(id)) { // key exists, add elem
+                        availSatMap.get(id).add(avail);
+                    }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availSatMap.put(id, tempList);
+                    }
+                }
+                else if (day.equals("sun")) {
+                    if (availSunMap.containsKey(id)) { // key exists, add elem
+                        availSunMap.get(id).add(avail);
+                    }
+                    else { // key does not exist, add new one plus 1st elem
+                        ArrayList<Availability> tempList = new ArrayList<Availability>();
+                        tempList.add(avail);
+                        availSunMap.put(id, tempList);
+                    }
+                }
+                return avail;
+            }
         });
     }
 

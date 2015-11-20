@@ -1,6 +1,6 @@
 <div class="request-title">
-  <div class="row emp-repeated-row emp-history-row" ng-repeat="h in employees[current].emplHistory">
-    <div class="col-sm-3 col-sm-offset-1">
+  <div class="row emp-repeated-row emp-history-row" ng-repeat="h in allEmployees[current].history">
+    <div class="col-sm-6 col-sm-offset-1">
       <div class="emp-history">{{empDateFormat(h.start)}}</div>
       <div class="emp-history emp-history-dash">-</div>
       <div class="emp-history">{{empDateFormat(h.end)}}</div>

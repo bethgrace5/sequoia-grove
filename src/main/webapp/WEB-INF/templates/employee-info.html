@@ -6,14 +6,14 @@
         <span> Name: </span>
       </div>
       <div class="col-sm-2">
-        <input class="form-control" ng-model="employees[current].firstName" placeholder="First"/>
+        <input class="form-control" ng-model="allEmployees[current].firstName" placeholder="First"/>
       </div>
       <div class="col-sm-2">
-        <input class="form-control" ng-model="employees[current].lastName" placeholder="Last"/>
+        <input class="form-control" ng-model="allEmployees[current].lastName" placeholder="Last"/>
       </div>
       <div class="col-sm-3">
         <span class="pull-left">Clock Number:</span>
-        <input class="form-control clock-input pull-left clear-both" type="text" ng-model="employees[current].clockNumber" placeholder="#">
+        <input class="form-control clock-input pull-left clear-both" type="text" ng-model="allEmployees[current].clock" placeholder="#">
       </div>
     </div>
 
@@ -23,11 +23,11 @@
       </div>
       <div class="col-sm-2">
         <!-- will be a datepicker -->
-        <input class="form-control" ng-model="employees[current].birthDate" placeholder="MM/DD/YYYY"/>
+        <input class="form-control" ng-model="allEmployees[current].birthDate" placeholder="MM/DD/YYYY"/>
       </div>
       <div class="col-sm-2 col-sm-offset-2">
         <span>Manager</span>
-        <input type="checkbox" g-model="employees[current].isManager">
+        <input type="checkbox" ng-model="allEmployees[current].isManager" ng-true-value="1" ng-false-value="0">
       </div>
     </div>
 
@@ -37,7 +37,7 @@
       </div>
       <div class="col-sm-3">
         <!-- will be a datepicker -->
-        <input class="form-control" ng-model="employees[current].phoneNumber" placeholder="xxx-xxx-xxxx"/>
+        <input class="form-control" ng-model="allEmployees[current].phone" placeholder="xxx-xxx-xxxx"/>
       </div>
     </div>
   </form>

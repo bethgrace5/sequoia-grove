@@ -59,7 +59,7 @@ angular.module('sequoiaGroveApp')
         {disp:"9:00 PM", valHr: 21, valMin: 0}
       ]
     };
-    $scope.employees=[
+    /*$scope.employees=[
       { id:"0", 
         firstName:"Billy",
         lastName:"Jean",
@@ -227,7 +227,7 @@ angular.module('sequoiaGroveApp')
           ]
         }
       }
-    ];
+    ];*/
 
     $scope.current;
     $scope.newAvail = {day:'', start:'', end:''};
@@ -236,7 +236,7 @@ angular.module('sequoiaGroveApp')
       if (curDate=='' || curDate==0 || curDate==null) {
         return 'Present';
       }
-      return moment(curDate,'DD-MM-YYYY').format('MMMM Do YYYY');
+      return moment(curDate,'YYYY-MM-DD').format('MMMM Do, YYYY');
     }
 
     // add a new availability time for an employee
@@ -250,7 +250,7 @@ angular.module('sequoiaGroveApp')
         // reset availability input
         $scope.newAvail = {day:'', start:'', end:''};
 
-        var newTimes = { startHour:st.valHr, startMin: st.valMin, endHour: end.valHr, endMin: end.valMin};
+        var newTimes = { startHr:st.valHr, startMin: st.valMin, endHr: end.valHr, endMin: end.valMin};
         // TODO send new availability to back end
 
         // TODO, setup the selection of available times to not include times
@@ -260,13 +260,13 @@ angular.module('sequoiaGroveApp')
         // TODO order availabilities in front end by start time
 
         // update front end
-        if (day=='mon') { $scope.employees[$scope.current].avail.mon.push(newTimes); }
-        else if (day=='tue') { $scope.employees[$scope.current].avail.tue.push(newTimes); }
-        else if (day=='wed') { $scope.employees[$scope.current].avail.wed.push(newTimes); }
-        else if (day=='thu') { $scope.employees[$scope.current].avail.thu.push(newTimes); }
-        else if (day=='fri') { $scope.employees[$scope.current].avail.fri.push(newTimes); }
-        else if (day=='sat') { $scope.employees[$scope.current].avail.sat.push(newTimes); }
-        else if (day=='sun') { $scope.employees[$scope.current].avail.sun.push(newTimes); }
+        if (day=='mon') { $scope.allEmployees[$scope.current].avail.mon.push(newTimes); }
+        else if (day=='tue') { $scope.allEmployees[$scope.current].avail.tue.push(newTimes); }
+        else if (day=='wed') { $scope.allEmployees[$scope.current].avail.wed.push(newTimes); }
+        else if (day=='thu') { $scope.allEmployees[$scope.current].avail.thu.push(newTimes); }
+        else if (day=='fri') { $scope.allEmployees[$scope.current].avail.fri.push(newTimes); }
+        else if (day=='sat') { $scope.allEmployees[$scope.current].avail.sat.push(newTimes); }
+        else if (day=='sun') { $scope.allEmployees[$scope.current].avail.sun.push(newTimes); }
       }
     }
 
@@ -280,7 +280,7 @@ angular.module('sequoiaGroveApp')
         // reset input
         $scope.newPos = {};
 
-        var posObj = {title:pos};
+        var posObj = {id:null, title:pos, "location":null};
         $log.debug(posObj);
         // TODO send new availability to back end
 
@@ -291,7 +291,7 @@ angular.module('sequoiaGroveApp')
         // TODO order availabilities in front end by start time
 
         // update front end
-        $scope.employees[$scope.current].positions.push(posObj);
+        $scope.allEmployees[$scope.current].positions.push(posObj);
       }
     }
 
@@ -335,25 +335,25 @@ angular.module('sequoiaGroveApp')
 
       // update front end
         if (day=='mon') {
-          $scope.employees[$scope.current].avail.mon.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.mon.splice(index, 1);
         }
         else if (day=='tue') {
-          $scope.employees[$scope.current].avail.tue.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.tue.splice(index, 1);
         }
         else if (day=='wed') {
-          $scope.employees[$scope.current].avail.wed.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.wed.splice(index, 1);
         }
         else if (day=='thu') {
-          $scope.employees[$scope.current].avail.thu.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.thu.splice(index, 1);
         }
         else if (day=='fri') {
-          $scope.employees[$scope.current].avail.fri.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.fri.splice(index, 1);
         }
         else if (day=='sat') {
-          $scope.employees[$scope.current].avail.sat.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.sat.splice(index, 1);
         }
         else if (day=='sun') {
-          $scope.employees[$scope.current].avail.sun.splice(index, 1);
+          $scope.allEmployees[$scope.current].avail.sun.splice(index, 1);
         }
     }
 
@@ -361,7 +361,7 @@ angular.module('sequoiaGroveApp')
       //TODO remove availability on the back end
 
       // update front end
-      $scope.employees[$scope.current].positions.splice(index, 1);
+      $scope.allEmployees[$scope.current].positions.splice(index, 1);
     }
 
     $scope.getAvailability = function() {
@@ -389,7 +389,15 @@ angular.module('sequoiaGroveApp')
     }
     $scope.getAvailability();
 
-    $scope.selectEmployee = function(index) {
-      $scope.current = index;
+    $scope.selectEmployee = function(id) {
+      id = id+"";
+      var length = $scope.allEmployees.length;
+      for(var i = 0; i < length; i++) {
+        var curid = $scope.allEmployees[i].id+"";
+        if (curid==id) {
+          $scope.current = i;
+          return;
+        }
+      }
     }
   });

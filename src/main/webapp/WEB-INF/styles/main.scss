@@ -22,6 +22,10 @@ $brand-danger:  #d9534f;
   color: white;
 }
 
+/*.ng-cloak {
+  display: none !important;
+}*/
+
 .chart-panel {
   width: 650px;
 }
@@ -61,10 +65,6 @@ $brand-danger:  #d9534f;
 }
 .schedule-edit-employee-list {
   width: 100px;
-}
-.clock-input {
-  width: 40px;
-  margin-left: 10px;
 }
 .avail-edit-select {
   width: 90px;
@@ -328,6 +328,10 @@ a:focus {
 }
 
 /* Employee List Styling */
+.clock-input {
+  width: 45px;
+  margin-left: 10px;
+}
 .emp-header {
   padding: 0;
   margin: 0;
