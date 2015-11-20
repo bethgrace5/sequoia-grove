@@ -35,6 +35,18 @@ $brand-danger:  #d9534f;
 .schedule-view-header {
   padding: 0 1em ;
 }
+.position-button-bar {
+  margin: 0 auto;
+}
+.position-button {
+  margin: 0.6em;
+  min-width: 5em;
+  border: none;
+}
+.position-button-active {
+  background-color: yellow;
+}
+
 .schedule-view-button {
   margin: 0 0.5em;
   width: 160px;

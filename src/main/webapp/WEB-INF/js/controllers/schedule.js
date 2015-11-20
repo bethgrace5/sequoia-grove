@@ -13,12 +13,29 @@ angular.module('sequoiaGroveApp')
     $scope.selectedId = 0;
     $scope.newDelivery = '';
 
+    $scope.scheduleEditPosition = 'all';
+
     // shifts that were changed from old shifts and need to be saved to database
     $scope.updateShifts = [];
     $scope.employees = [];
 
     $scope.selectEid = function(id) {
       $scope.selectedId = id;
+    }
+
+    $scope.switchPos = function(pos) {
+      $log.debug(pos);
+      $scope.scheduleEditPosition = pos;
+    }
+
+    $scope.filterSchedule = function(pos) {
+      if($scope.scheduleEditPosition == 'all') {
+        return true;
+      }
+      else if(pos == $scope.scheduleEditPosition) {
+        return true;
+      }
+      return false;
     }
 
     // validation for schedule edit input
@@ -53,6 +70,20 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.employees = data.employee;
+        $log.debug(data);
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining emplyees simple : " + data);
+    });
+  }
+
+  // Get The Schedule for the week currently being viewed
+  $scope.getShifts = function() {
+    $http({
+      url: '/sequoiagrove/shift',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.shifts = data.shift;
         $log.debug(data);
 
     }).error(function (data, status, headers, config) {
@@ -263,6 +294,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.init = function() {
     $scope.getEmployees();
+    $scope.getShifts();
   }
 
   $scope.init();

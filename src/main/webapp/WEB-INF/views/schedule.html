@@ -69,6 +69,21 @@
         </div>
     </div> <!-- End Schedule Header -->
 
+    <!-- Filter/ Narrow Schedule by location/shift -->
+    <div class="position-button-bar">
+      <div ng-repeat="pos in positions">
+        <button class="btn btn-default btn-small pull-left clear-both position-button"
+                ng-show = "$index == 0"
+                ng-click="switchPos('all')">
+                All
+        </button>
+        <button class="btn btn-default btn-small pull-left clear-both position-button"
+          ng-click="switchPos(pos.title)">
+          {{pos.title}}
+        </button>
+      </div>
+    </div>
+
      <!-- Schedule Edit Panel -->
       <div class="panel panel-default schedule-edit-panel pull-left">
           <div class="panel-body">
@@ -79,7 +94,11 @@
      <!-- Employee List Panel -->
       <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
           <div class="panel-body">
-            <schedule-employee-list></schedule-employee-list>
+            <div ng-repeat="e in employees" class="row" ng-show="filterSchedule(e.title)">
+              <div ng-click="selectEmployee($index)" class="col-sm-12" >
+                {{e.name}}
+              </div>
+            </div>
           </div>
       </div>
       <!--

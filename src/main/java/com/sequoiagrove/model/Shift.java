@@ -6,28 +6,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class Shift {
     int sid;
-    int eid;
     int pid;
-    Date day;
-    String ename; 
     String tname; 
-    int wd_st;
-    int wd_ed;
-    int we_st;
-    int we_ed;
+    String pname; 
+    //int wd_st;
+    //int wd_ed;
+    //int we_st;
+    //int we_ed;
 
     public Shift(){}
-    public Shift(int sid, int eid, int pid, Date day, String ename, String tname, int wd_st, int wd_ed, int we_st, int we_ed) {
+    public Shift(int sid, int pid, String tname, String pname /*,int wd_st, int wd_ed, int we_st, int we_ed*/) {
         this.sid = sid;
-        this.eid = eid;
         this.pid = pid;
-        this.day = day;
         this.tname = tname;
-        this.ename = ename;
+        this.pname = pname;
+        /*
         this.wd_st = wd_st;
         this.wd_ed = wd_ed;
         this.we_st = we_st;
         this.we_ed = we_ed;
+        */
     }
 
     public int getSid() {
@@ -37,36 +35,13 @@ public class Shift {
     public void setSid(int sid) {
         this.sid = sid;
     }
-    public int getEid() {
-        return eid;
-    }
-
-    public void setEid(int id) {
-        this.eid = eid;
-    }
 
     public int getPid() {
         return pid;
     }
 
-    public void setDay(Date day) {
-        this.day = day;
-    }
-
-    public Date getDay() {
-        return day;
-    }
-
     public void setPid(int id) {
         this.pid = pid;
-    }
-
-    public String getEname() {
-        return ename;
-    }
-
-    public void setEname(String ename) {
-        this.ename = ename;
     }
 
     public String getTname() {
@@ -77,6 +52,14 @@ public class Shift {
         this.tname = tname;
     }
 
+    public String getPname() {
+        return pname;
+    }
+
+    public void setPname(String pname) {
+        this.pname = pname;
+    }
+    /*
     public int getWd_st() {
         return wd_st;
     }
@@ -108,4 +91,5 @@ public class Shift {
     public void setWe_ed(int we_ed) {
         this.we_ed = we_ed;
     }
+    */
 }
