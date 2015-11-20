@@ -36,6 +36,7 @@
             <!-- manager only options -->
             <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/employee')"><a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a></li>
             <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/schedule')"><a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a></li>
+            <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/data')"><a href="#/request">Data</a></li>
 
         </ul>
       </div>

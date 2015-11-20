@@ -1,28 +1,57 @@
 <div class="container-fluid">
   <p class="lead">
-    Request View
+    Reports
   </p>
 
+  <div class="panel panel-default chart-panel">
+    <div class="panel-body">
+
+      <div class="chart-container">
+        <canvas id="line"
+          class="chart chart-line"
+          chart-data="lineGraph.data"
+          chart-labels="lineGraph.labels"
+          chart-legend="true"
+          chart-series="lineGraph.series"
+          options="lineGraph.chart-line"
+          chart-click="lineGraph.onClick">
+        </canvas>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="panel panel-default chart-panel">
+    <div class="panel-body">
+
+      <div class="chart-container">
+        <canvas id="doughnut" class="chart chart-doughnut"
+          chart-data="donGraph.data" chart-labels="donGraph.labels">
+        </canvas> 
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+  <!--
   <div class="panel panel-default">
       <div class="panel-body">
           <request-submit></request-submit>
       </div>
   </div>
-
   <div ng-show="user.type === 'manager'">
-
       <div class="panel panel-default">
           <div class="panel-body">
               <request-pending></request-pending>
           </div>
       </div>
-
       <div class="panel panel-default">
           <div class="panel-body">
               <request-history></request-history>
           </div>
       </div>
   </div>
+  -->
 
-
-</div>
