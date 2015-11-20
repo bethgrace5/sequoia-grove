@@ -26,6 +26,8 @@ angular.module('sequoiaGroveApp')
   $scope.user2 = { id:2, firstname: "Smith", lastname: "theEmployee", type: "employee" };
   $scope.user = $scope.user1;
   localStorageService.set('SequoiaGrove.user', $scope.user);
+  $scope.employees = [];
+  $scope.employeePositions = [];
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -141,9 +143,19 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.positions = data.positions;
-
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
+  $scope.getHasPositions = function() {
+    $http({
+      url: '/sequoiagrove/position/has',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.hasPositions = data.hasPositions;
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining has position data: " + data);
     });
   }
 
@@ -236,7 +248,21 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/employee/info/current',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.employees = data.employeeInfo;
+        $scope.currentEmployees = data.employeeInfo;
+        //$log.debug(data);
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining schedule template main: " + data);
+    });
+  }
+
+  // Get All Current Employees with their id
+  $scope.getEmployeeInfo = function() {
+    $http({
+      url: '/sequoiagrove/employee/info/all',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.allEmployees = data.employeeInfo;
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
@@ -262,6 +288,7 @@ angular.module('sequoiaGroveApp')
     $scope.getPositions();
     $scope.getLocations();
     $scope.getEmployees();
+    $scope.getHasPositions();
   }
 
   $scope.init();

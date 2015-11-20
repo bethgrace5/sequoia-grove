@@ -55,7 +55,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         // find the matching employee by name, and update
         // the employee id for the template
         for(; i<len; i++) {
-          if($scope.employees[i].name == this.value) {
+          if($scope.employees[i].firstName == this.value) {
             newId = $scope.employees[i].id;
             exists = true;
             element.context.classList.remove('schedule-edit-input-warn');

@@ -50,8 +50,8 @@ public class ScheduleController {
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
-                          rs.getInt("sid"), 0,
-                          //rs.getInt("pid"),
+                          rs.getInt("sid"),
+                          rs.getInt("pid"),
                           rs.getString("location"),
                           rs.getString("tname"),
                           rs.getString("position"),
@@ -104,7 +104,6 @@ public class ScheduleController {
         if (schTempList.size() >= 0 ) {
 
         }
-        //System.out.println(schTempList.size());
 
         model.addAttribute("template", schTempList);
         return "jsonTemplate";

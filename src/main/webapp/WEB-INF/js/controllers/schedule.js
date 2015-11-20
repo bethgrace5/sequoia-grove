@@ -8,75 +8,84 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp')
-  .controller('ScheduleCtrl', function ($timeout, $http, $scope, $rootScope, $translate, $log, $filter) {
-    $scope.activeTab = 'schedule';
-    $scope.selectedId = 0;
-    $scope.newDelivery = '';
+  .controller('ScheduleCtrl', function (
+        $filter,
+        $http, 
+        $log, 
+        $rootScope, 
+        $scope, 
+        $timeout, 
+        $translate) {
 
-    $scope.scheduleEditPosition = 'all';
+  $scope.activeTab = 'schedule';
+  $scope.selectedId = 0;
+  $scope.newDelivery = '';
+  $scope.scheduleEditPositionId = 0;
 
-    // shifts that were changed from old shifts and need to be saved to database
-    $scope.updateShifts = [];
+  // shifts that were changed from old shifts and need to be saved to database
+  $scope.updateShifts = [];
 
-    $scope.selectEid = function(id) {
-      $scope.selectedId = id;
-    }
-
-    $scope.switchPos = function(pos) {
-      $log.debug(pos);
-      $scope.scheduleEditPosition = pos;
-    }
-
-    $scope.filterSchedule = function(pos) {
-      if($scope.scheduleEditPosition == 'all') {
-        return true;
-      }
-      else if(pos == $scope.scheduleEditPosition) {
-        return true;
-      }
-      return false;
-    }
-
-    // validation for schedule edit input
-    $scope.inputStatus = function(id, weekday, shiftId) {
-      var style = 'form-control schedule-edit-input';
-
-      // Highlight all occurences of the employee that was clicked
-      if (id == $scope.selectedId) {
-        style += ' schedule-edit-highlight';
-      }
-      // Dummy Error/Warning Application
-      /* // apply an error
-      if (weekday=='monday' && shiftId == '3') {
-        style += ' schedule-edit-input-error';
-      }
-      // apply a warning
-      else if(weekday=='thursday' && shiftId == '2') {
-        style += ' schedule-edit-input-warn';
-      }
-      // no warnings or errors
-      else {
-        style += ' schedule-edit-input-highlight';
-      } */
-      return style;
-    }
-
-
-  // Get The Schedule for the week currently being viewed
-  /*
-  $scope.getEmployees = function() {
-    $http({
-      url: '/sequoiagrove/employee',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.employees = data.employee;
-        $log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining emplyees simple : " + data);
-    });
+  $scope.selectEid = function(id) {
+    $scope.selectedId = id;
   }
-  */
+
+  $scope.switchPos = function(pos) {
+    $scope.scheduleEditPositionId = pos;
+  }
+
+  // Filter employees by selected position
+  $scope.filterEmployees = function(pos) {
+    /*
+    if($scope.scheduleEditPosition == 'all') {
+      return true;
+    }
+    var len = pos.length;
+    var i = 0;
+    for(; i<len; i++) {
+      if(pos[i].title == $scope.scheduleEditPosition) {
+        return true;
+      }
+    }
+    return false;
+    */
+    return true;
+  }
+
+  // Filter schedule by selected position
+  $scope.filterSchedule = function(pid) {
+    if($scope.scheduleEditPositionId == 0) {
+      return true;
+    }
+    if(pid == $scope.scheduleEditPositionId) {
+      return true;
+    }
+    return false;
+  }
+
+  // validation for schedule edit input
+  $scope.inputStatus = function(id, weekday, shiftId) {
+    var style = 'form-control schedule-edit-input';
+
+    // Highlight all occurences of the employee that was clicked
+    if (id == $scope.selectedId) {
+      style += ' schedule-edit-highlight';
+    }
+    // Dummy Error/Warning Application
+    /* // apply an error
+    if (weekday=='monday' && shiftId == '3') {
+      style += ' schedule-edit-input-error';
+    }
+    // apply a warning
+    else if(weekday=='thursday' && shiftId == '2') {
+      style += ' schedule-edit-input-warn';
+    }
+    // no warnings or errors
+    else {
+      style += ' schedule-edit-input-highlight';
+    } */
+    return style;
+  }
+
 
   // Get The Schedule for the week currently being viewed
   $scope.getShifts = function() {
@@ -85,7 +94,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.shifts = data.shift;
-        $log.debug(data);
+        //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining emplyees simple : " + data);
@@ -93,6 +102,7 @@ angular.module('sequoiaGroveApp')
   }
 
 
+  // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
     var i=0;
     var len = $scope.updateShifts.length;
@@ -107,7 +117,6 @@ angular.module('sequoiaGroveApp')
       }).success(function (data, status, headers, config) {
           //$log.debug(data);
           //$log.debug(status);
-
           if (status == 200) {
             // clear update shifts list
             $scope.updateShifts.splice(i, 1);
@@ -115,7 +124,6 @@ angular.module('sequoiaGroveApp')
           else {
             $log.error('Error saving schedule ', status, data);
           }
-
       }).error(function (data, status, headers, config) {
           $log.error(status + " Error saving schedule " + data);
       });
