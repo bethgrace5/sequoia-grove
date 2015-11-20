@@ -5,121 +5,127 @@
   </p>
   -->
   <!--
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <schedule-delivery-edit></schedule-delivery-edit>
-          </div>
-      </div>
-  -->
-
-    <div class="row hidden-xs">
-        <div class="col-sm-12">
-
-            <div class="pull-left">
-              <!--
-                <button ng-hide="deliveries.length<=0" class="btn btn-default schedule-view-button" ng-click="showDeliveries=!showDeliveries">
-                    <div ng-hide="showDeliveries"> show deliveries </div>
-                    <div ng-show="showDeliveries"> hide deliveries </div>
-                </button>
-              -->
-                <!-- highlight logged in user's name 
-                <button class="btn btn-default schedule-view-button" ng-click="selectLoggedInUser()">
-                    <div ng-hide="highlight"> highlight me </div>
-                    <div ng-show="highlight"> unhighlight me </div>
-                </button>
-                -->
-
-                <!-- Filter by User, Location, or Position -->
-                <div class="dropdown pull-left" dropdown is-open=true>
-                  <button type="button" id="dropDownMenu1" class="btn btn-default schedule-view-button" data-toggle="dropdown" 
-                    aria-haspopup="true" aria-expanded="true">
-                    Import <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
-                    <li role="menuitem"><a ng-click="type='all'">Last Week</a></li>
-                    <li role="menuitem"><a ng-click="type='mine'">Mine</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Locations</li>
-                    <li ng-repeat = "loc in locations" value ="{{loc}}"><a ng-click="changeType(loc)">{{loc}}</a> </li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Positions</li>
-                    <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
-                  </ul>
-                </div>
-
-            </div>
-
-            <form class="pull-right">
-                <!-- Download and Print Options -->
-              <button class = "btn btn-default schedule-view-button"> 
-                Clear
-                <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
-              </button>
-              <button class = "btn btn-default schedule-view-button"
-                ng-click = "saveSchedule()"> 
-                Save
-                <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
-              </button>
-              <button class = "btn btn-default schedule-view-button"> 
-                Publish
-                <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
-              </button>
-            </form>
-
-        </div>
-    </div> <!-- End Schedule Header -->
-
-    <!-- Filter/ Narrow Schedule by location/shift -->
-    <div class="position-button-bar">
-      <div ng-repeat="pos in positions">
-        <button class="btn btn-default btn-small pull-left clear-both position-button"
-                ng-show = "$index == 0"
-                ng-click="switchPos(0)">
-                All
-        </button>
-        <button class="btn btn-default btn-small pull-left clear-both position-button"
-          ng-click="switchPos(pos.id)">
-          {{pos.title}}
-        </button>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <schedule-delivery-edit></schedule-delivery-edit>
       </div>
     </div>
+  -->
 
-     <!-- Schedule Edit Panel -->
-      <div class="panel panel-default schedule-edit-panel pull-left">
-          <div class="panel-body">
-              <schedule-edit></schedule-edit>
-          </div>
+  <div class="row hidden-xs">
+    <div class="col-sm-12">
+      <div class="pull-left">
+        <!--
+          <button ng-hide="deliveries.length<=0" class="btn btn-default schedule-view-button" ng-click="showDeliveries=!showDeliveries">
+            <div ng-hide="showDeliveries"> show deliveries </div>
+            <div ng-show="showDeliveries"> hide deliveries </div>
+          </button>
+        -->
+          <!-- highlight logged in user's name
+          <button class="btn btn-default schedule-view-button" ng-click="selectLoggedInUser()">
+            <div ng-hide="highlight"> highlight me </div>
+            <div ng-show="highlight"> unhighlight me </div>
+          </button>
+          -->
+        <!-- Filter by User, Location, or Position -->
+        <div class="dropdown pull-left" dropdown is-open=true>
+          <button type="button" id="dropDownMenu1" class="btn btn-default schedule-view-button" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            Import <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
+            <li role="menuitem"><a ng-click="type='all'">Last Week</a></li>
+            <li role="menuitem"><a ng-click="type='mine'">Mine</a></li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">Locations</li>
+            <li ng-repeat = "loc in locations" value ="{{loc}}"><a ng-click="changeType(loc)">{{loc}}</a> </li>
+            <li role="separator" class="divider"></li>
+            <li class="dropdown-header">Positions</li>
+            <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
+          </ul>
+        </div>
       </div>
 
-     <!-- Employee List Panel -->
-      <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
-          <div class="panel-body">
-            <div ng-repeat="e in currentEmployees" class="row" ng-show="filterEmployees(e.id)">
-              <input 
-              select-on-click
-              ng-class="inputStatus(t.mon.eid, 'monday', t.sid)" type="text"
-              ng-click="selectEmployee($index)" 
-              ng-model="e.firstName"
-              class="col-sm-12" >
-              </input>
-            </div>
-          </div>
+      <form class="pull-right">
+          <!-- Download and Print Options -->
+        <button class = "btn btn-default schedule-view-button">
+          Clear
+          <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+        </button>
+        <!-- visual indication that changes are all saved -->
+        <button class = "btn btn-success schedule-view-button"
+          ng-show = "updateShifts.length<=0"
+          ng-click = "saveSchedule()">
+          Save
+          <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+        </button>
+        <!-- Default button -->
+        <button class = "btn btn-default schedule-view-button"
+          ng-show = "updateShifts.length>0"
+          ng-click = "saveSchedule()">
+          Save
+          <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+        </button>
+        <button class = "btn btn-default schedule-view-button">
+          Publish
+          <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+        </button>
+      </form>
+    </div>
+  </div> <!-- End Schedule Header -->
+
+  <!-- Filter/ Narrow Schedule by location/shift -->
+  <div class="position-button-bar">
+    <div ng-repeat="pos in positions">
+      <button
+        class="btn btn-default btn-small pull-left clear-both position-button"
+        ng-show = "$index == 0"
+        ng-click="switchPos(0)">
+        All
+      </button>
+      <button class="btn btn-default btn-small pull-left clear-both position-button"
+        ng-click="switchPos(pos.id)">
+        {{pos.title}}
+      </button>
+    </div>
+  </div>
+
+  <!-- Schedule Edit Panel -->
+  <div class="panel panel-default schedule-edit-panel pull-left">
+    <div class="panel-body">
+      <schedule-edit></schedule-edit>
+    </div>
+  </div>
+
+  <!-- Employee List Panel -->
+  <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
+    <div class="panel-body">
+      <div ng-repeat="e in currentEmployees" class="row" ng-show="filterEmployees(e.id)">
+        <input
+        select-on-click
+        ng-class="inputStatus(e.id, 'monday', t.sid)" type="text"
+        ng-click="selectEid(e.id)"
+        ng-model="e.firstName"
+        class="col-sm-12" >
+        </input>
       </div>
-      <!--
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <p class="lead">
-                Scedule History
-              </p>
-              <schedule-view></schedule-view>
-          </div>
-      </div>
-      -->
-      <!--
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <schedule-shift-edit></schedule-shift-edit>
-          </div>
-      </div>
-      -->
+    </div>
+  </div>
+    <!--
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <p class="lead">
+        Scedule History
+      </p>
+      <schedule-view></schedule-view>
+    </div>
+  </div>
+    -->
+  <!--
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <schedule-shift-edit></schedule-shift-edit>
+    </div>
+  </div>
+  -->
 </div>

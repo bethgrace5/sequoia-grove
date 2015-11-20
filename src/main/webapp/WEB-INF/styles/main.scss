@@ -76,7 +76,7 @@ option.select-hr { border-bottom: 1px dotted #000; }
 
 /* the selected name */
 .schedule-edit-highlight {
-  background-color: #CCFFFF;
+  background-color: #66ffd7;
 }
 
 /* schedule input box */
@@ -93,8 +93,8 @@ option.select-hr { border-bottom: 1px dotted #000; }
   border: 1px solid #DDD;
 }
 .schedule-edit-input:focus{
-  box-shadow: 0 0 5px rgba(81, 203, 238, 1);
-  border: 1px solid rgba(81, 203, 238, 1);
+  box-shadow: 0 0 5px #4d79ff;
+  border: 1px solid #4d79ff;
 }
 .schedule-edit-input::selection {
   background: transparent; /* WebKit/Blink Browsers */
@@ -165,6 +165,13 @@ option.select-hr { border-bottom: 1px dotted #000; }
   width: 80%;
 }
 .employee-schedule-edit-panel {
+  border: none;
+  padding: 0, 10px, 0, 10px;
+  margin-top: 50px;
+  position:fixed;
+  right: 0;
+  max-height: 450px;
+  overflow-y: scroll;
   width: 19%;
 }
 
