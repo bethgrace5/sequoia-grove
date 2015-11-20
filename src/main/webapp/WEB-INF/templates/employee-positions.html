@@ -1,15 +1,15 @@
 <div class="request-title">
   <div class="row">
-    <div class="col-sm-3 col-sm-offset-1">
+    <div class="col-sm-2 col-sm-offset-1">
       <p> Add Position</p>
     </div>
-    <div class="col-sm-2 col-sm-offset-1">
+    <div class="col-sm-2 col-sm-offset-2">
       <select ng-options="p.title for p in positions" ng-model="newPos">
-        <option value="">-- Choose Position --</option>
+        <option value="">- Choose Position -</option>
       </select>
     </div>
     <div class="col-sm-1">
-      <button type="button" class="btn btn-success" ng-click="">
+      <button type="button" class="btn btn-success" ng-click="addPos()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
       </button>
     </div>
@@ -21,7 +21,7 @@
     </div>
     <div class="col-sm-1">
       <!-- remove position -->
-      <button type="button" class="btn btn-danger" ng-click="">
+      <button type="button" class="btn btn-danger" ng-click="remPos($index)">
         <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
       </button>
     </div>

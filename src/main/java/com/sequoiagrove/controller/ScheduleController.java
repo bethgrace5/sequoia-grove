@@ -112,7 +112,7 @@ public class ScheduleController {
 
     // Use String Builder to change int to String, and make
     // sure they are all 4 characters long
-    public String intToLenFourString(int time) {
+    public static String intToLenFourString(int time) {
       String ret = "";
       StringBuilder sb = new StringBuilder();
       sb.append(ret);

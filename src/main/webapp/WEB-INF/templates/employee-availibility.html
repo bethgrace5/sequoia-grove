@@ -8,7 +8,8 @@
     <div class="col-sm-4">
       <form ng-submit="addDelivery()">
         <!-- TODO set selected values so the fields aren't just blank fields -->
-        <select type="text" class="" ng-model="newAvail.day" placeholder="Start">
+        <select type="text" class="" ng-model="newAvail.day" placeholder="Day">
+          <option value="">- Day -</option>
           <option value="mon">Monday</option>
           <option value="tue">Tuesday</option>
           <option value="wed">Wednesday</option>
@@ -18,10 +19,14 @@
           <option value="sun">Sunday</option>
         </select>
         <select class="avail-edit-select" ng-model="newAvail.start" placeholder="Start"
-          ng-options="option.disp for option in times.start"/>
+          ng-options="option.disp for option in times.start">
+          <option value="">- Start -</option>
+        </select>
           - 
         <select class="avail-edit-select" ng-model="newAvail.end" placeholder="End"
-          ng-options="option.disp for option in times.end"/>
+          ng-options="option.disp for option in times.end">
+          <option value="">- End -</option>
+        </select>
       </form>
     </div>
     <div class="col-sm-1">
