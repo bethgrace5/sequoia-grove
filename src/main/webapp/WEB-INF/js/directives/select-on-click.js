@@ -49,14 +49,14 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var exists = false;
         var newId = 0;
 
-        var len = $scope.employees.length;
+        var len = $scope.currentEmployees.length;
         var i = 0;
 
         // find the matching employee by name, and update
         // the employee id for the template
         for(; i<len; i++) {
-          if($scope.employees[i].firstName == this.value) {
-            newId = $scope.employees[i].id;
+          if($scope.currentEmployees[i].firstName == this.value) {
+            newId = $scope.currentEmployees[i].id;
             exists = true;
             element.context.classList.remove('schedule-edit-input-warn');
 
@@ -84,6 +84,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             // add shift to update list if necessary
             $scope.checkIfShiftExists(attrs.day, newId, attrs.sid)
             this.click();
+            this.blur()
           }
         }
 

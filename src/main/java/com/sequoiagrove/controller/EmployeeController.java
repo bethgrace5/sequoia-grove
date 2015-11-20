@@ -62,10 +62,15 @@ public class EmployeeController
 
         // Get only Current Employees
         if (status.equals("current")) {
-            queryStr = "select * from (select distinct employee_id, max_hrs_week, is_manager, first_name, " +
-                "last_name, phone_number, birth_date from bajs_emp_all_info) a " +
-                "join bajs_employment_history h " +
-                "on h.date_unemployed is null and h.employee_id = a.employee_id";
+            queryStr = "select * from (select distinct employee_id, max_hrs_week, is_manager, first_name, "+
+                "last_name, phone_number, birth_date from bajs_emp_all_info) a "+
+                "natural join "+
+                "( "+
+                "select h.employee_id "+
+                "from "+
+                "bajs_employment_history h "+
+                "where h.date_unemployed is null "+
+                ") ";
         }
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
@@ -198,5 +203,6 @@ public class EmployeeController
                     }
         });
     }
+
 
 }

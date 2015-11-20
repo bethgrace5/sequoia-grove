@@ -20,7 +20,7 @@ angular.module('sequoiaGroveApp')
 {
 
   // Sample Data for current logged in user
-  // The logged in user's firstname is what is matched for highlighting
+  // The logged in user's id is what is matched for highlighting
   $scope.user1 = { id:1, firstname: "John", lastname: "Doe", type: "manager" };
   $scope.user2 = { id:2, firstname: "Smith", lastname: "theEmployee", type: "employee" };
   $scope.user = $scope.user1;
@@ -28,6 +28,8 @@ angular.module('sequoiaGroveApp')
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
   $scope.hasPosition = [];
+  // shifts that were changed from old shifts and need to be saved to database
+  $scope.updateShifts = [];
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -238,7 +240,7 @@ angular.module('sequoiaGroveApp')
         }
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining schedule template main: " + data);
+        $log.error(status + " Error saving update shifts schedule : " + data);
     });
   }
 

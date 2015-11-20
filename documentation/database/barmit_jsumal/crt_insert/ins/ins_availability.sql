@@ -5,10 +5,15 @@
 
 /* Monday Availability */
 insert into BAJS_AVAILABILITY values( 1, 'mon', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 1, 'mon', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 2, 'mon', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 2, 'mon', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 3, 'mon', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 3, 'mon', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 4, 'mon', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 4, 'mon', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 5, 'mon', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 5, 'mon', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 6, 'mon', 0600, 2100);
 insert into BAJS_AVAILABILITY values( 7, 'mon', 0600, 2100);
 insert into BAJS_AVAILABILITY values( 8, 'mon', 0600, 2100);
@@ -87,10 +92,15 @@ insert into BAJS_AVAILABILITY values( 39, 'tue', 0600, 2100);
 
 /* Wednesday Availability */
 insert into BAJS_AVAILABILITY values( 1, 'wed', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 1, 'wed', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 2, 'wed', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 2, 'wed', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 3, 'wed', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 3, 'wed', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 4, 'wed', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 4, 'wed', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 5, 'wed', 0600, 2100);
+insert into BAJS_AVAILABILITY values( 5, 'wed', 0900, 2100);
 insert into BAJS_AVAILABILITY values( 6, 'wed', 0600, 2100);
 insert into BAJS_AVAILABILITY values( 7, 'wed', 0600, 2100);
 insert into BAJS_AVAILABILITY values( 8, 'wed', 0600, 2100);

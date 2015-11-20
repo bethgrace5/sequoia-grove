@@ -52,7 +52,16 @@
           Clear
           <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
+        <!-- visual indication that changes are all saved -->
+        <button class = "btn btn-success schedule-view-button"
+          ng-show = "updateShifts.length<=0"
+          ng-click = "saveSchedule()">
+          Save
+          <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+        </button>
+        <!-- Default button -->
         <button class = "btn btn-default schedule-view-button"
+          ng-show = "updateShifts.length>0"
           ng-click = "saveSchedule()">
           Save
           <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
@@ -94,8 +103,8 @@
       <div ng-repeat="e in currentEmployees" class="row" ng-show="filterEmployees(e.id)">
         <input
         select-on-click
-        ng-class="inputStatus(t.mon.eid, 'monday', t.sid)" type="text"
-        ng-click="selectEmployee($index)"
+        ng-class="inputStatus(e.id, 'monday', t.sid)" type="text"
+        ng-click="selectEid(e.id)"
         ng-model="e.firstName"
         class="col-sm-12" >
         </input>

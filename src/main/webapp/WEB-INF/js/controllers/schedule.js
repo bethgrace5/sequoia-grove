@@ -22,8 +22,6 @@ angular.module('sequoiaGroveApp')
   $scope.newDelivery = '';
   $scope.selectedPid = 0;
 
-  // shifts that were changed from old shifts and need to be saved to database
-  $scope.updateShifts = [];
 
   $scope.selectEid = function(id) {
     $scope.selectedId = id;
@@ -106,20 +104,23 @@ angular.module('sequoiaGroveApp')
   $scope.saveSchedule = function() {
     var i=0;
     var len = $scope.updateShifts.length;
+    $log.debug(len);
 
     for(;i<len; i++) {
+      $log.debug($scope.updateShifts[0]);
       $http({
         url: '/sequoiagrove/schedule/update/'+ 
-            $scope.updateShifts[i].sid + '/' + 
-            $scope.updateShifts[i].eid + '/' + 
-            $scope.updateShifts[i].date,
+            $scope.updateShifts[0].sid + '/' + 
+            $scope.updateShifts[0].eid + '/' + 
+            $scope.updateShifts[0].date,
         method: "POST"
       }).success(function (data, status, headers, config) {
           //$log.debug(data);
           //$log.debug(status);
           if (status == 200) {
             // clear update shifts list
-            $scope.updateShifts.splice(i, 1);
+            $scope.updateShifts.splice(0, 1);
+            $log.debug($scope.updateShifts);
           }
           else {
             $log.error('Error saving schedule ', status, data);
@@ -276,6 +277,10 @@ angular.module('sequoiaGroveApp')
         break;
       }
     }
+  }
+
+  $scope.countDays = function() {
+
   }
 
   $scope.removeDelivery = function(index) {

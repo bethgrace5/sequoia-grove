@@ -18,7 +18,7 @@ import com.sequoiagrove.model.Position;
 
 @Controller
 public class PositionController {
-    private ArrayList<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
+    private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
 
     // Get position info including the id, title and location
     @RequestMapping(value = "/position")
