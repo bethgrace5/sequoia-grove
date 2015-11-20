@@ -13,6 +13,7 @@ type sch_record_type
 is record
 (
     sid         bajs_is_scheduled_for.shift_id%type,
+    pid         bajs_position.id%type,
     tname       bajs_new_shift.task_name%type,
     wd_st       bajs_hours.start_hour%type,
     wd_ed       bajs_hours.end_hour%type,
@@ -114,7 +115,7 @@ create or replace package body bajs_pkg as
     -- Define Cursor
     cursor temp_cur is 
     (
-    select m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
+    select m_sid as sid, pid, tname, we_st, we_ed, wd_st, wd_ed, location, position,
         mon,     tue,     wed,     thu,     fri,     sat,     sun, 
         mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
     from (
@@ -123,7 +124,7 @@ create or replace package body bajs_pkg as
          *  only gather the names for the employees scheduled based on the shift
          */
         select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
-            s.position, h.fname as mon, h.eid as mon_eid
+            s.position, h.fname as mon, h.eid as mon_eid, pid
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h

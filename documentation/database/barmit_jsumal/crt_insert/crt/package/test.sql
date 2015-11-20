@@ -1,4 +1,10 @@
 
+select * from bajs_has_position;
+
+
+
+
+/*
 select * from
 (
  select distinct employee_id, max_hrs_week, is_manager,
@@ -7,6 +13,7 @@ select * from
             join
             bajs_employment_history h
             on h.date_unemployed is null and h.employee_id = a.employee_id
+            */
 
 
 /*
