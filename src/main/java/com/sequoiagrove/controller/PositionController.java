@@ -96,25 +96,44 @@ public class PositionController {
 
     // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/position/add/{eid}/{pid}/{date}")
-    public String getScheduleTemplate(Model model,
+    public String addPosition(Model model,
           @PathVariable("eid") int eid,
           @PathVariable("pid") int pid,
           @PathVariable("date") String date) throws SQLException {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update("insert into bajs_has_position( employee_id, "+
-          "position_id, date_acquired, date_removed, is_primary, is_training) " +
-          "values(?, ?, to_date(?, 'dd-mm-yyyy'), null, 0, 0)", eid, pid, date);
-          //"exception "+
-          //"when DUP_VAL_ON_INDEX then "+
-          //"update bajs_is_scheduled_for "+
-          //"set employee_id = eid "+
-          //"where on_date = to_date(day, 'dd-mm-yyyy') and shift_id=sid; "+
+
+int count = jdbcTemplate.queryForObject( 
+    "select count(*) from bajs_has_position where position_id = " +
+          pid + " and employee_id = " + eid, Integer.class);
+
+      if(count <= 0 ) {
+          jdbcTemplate.update("insert into bajs_has_position(employee_id, position_id,date_acquired, date_removed, is_primary, is_training) "+
+              "values(?, ?, to_date(?, 'dd-mm-yyyy'), null, 0, 0)", eid, pid, date);
+      }
 
         return "jsonTemplate";
     }
 
+    // Get current schedule template (current shifts) dd/mm/yyyy
+    @RequestMapping(value = "/position/remove/{eid}/{pid}/{date}")
+    public String removePosition(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("pid") int pid,
+          @PathVariable("date") String date) throws SQLException {
 
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      /*
+      jdbcTemplate.update("update bajs_has_position "+
+          "set date_removed = to_date(?, 'dd-mm-yyyy') " +
+          "where employee_id = ? and position_id = ? and date_removed is null",
+          date, eid, pid);
+          */
+      jdbcTemplate.update("delete from bajs_has_position " +
+        "where employee_id = ? and position_id = ?", eid, pid);
+
+        return "jsonTemplate";
+    }
 
 }
 
