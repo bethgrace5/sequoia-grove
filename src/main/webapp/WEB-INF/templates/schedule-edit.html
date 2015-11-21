@@ -29,6 +29,10 @@
       idx={{$index}}
       date={{date.mon.val}}
       day="mon"
+      stHr={{t.wd_st_h}}
+      stMin={{t.wd_st_m}}
+      endHr={{t.wd_ed_h}}
+      endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.mon.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.mon.eid, 'monday', t.sid)"
@@ -44,6 +48,10 @@
       idx={{$index}}
       date={{date.tue.val}}
       day="tue"
+      stHr={{t.wd_st_h}}
+      stMin={{t.wd_st_m}}
+      endHr={{t.wd_ed_h}}
+      endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.tue.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.tue.eid, 'tuesday', t.sid)"
@@ -58,6 +66,10 @@
       idx={{$index}}
       date={{date.wed.val}}
       day="wed"
+      stHr={{t.wd_st_h}}
+      stMin={{t.wd_st_m}}
+      endHr={{t.wd_ed_h}}
+      endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.wed.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.wed.eid, 'wednesday', t.sid)"
@@ -72,6 +84,10 @@
       idx={{$index}}
       date={{date.thu.val}}
       day="thu"
+      stHr={{t.wd_st_h}}
+      stMin={{t.wd_st_m}}
+      endHr={{t.wd_ed_h}}
+      endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.thu.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.thu.eid, 'thursday', t.sid)"
@@ -86,6 +102,10 @@
       idx={{$index}}
       date={{date.fri.val}}
       day="fri"
+      stHr={{t.wd_st_h}}
+      stMin={{t.wd_st_m}}
+      endHr={{t.wd_ed_h}}
+      endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.fri.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.fri.eid, 'friday', t.sid)"
@@ -105,6 +125,10 @@
       idx={{$index}}
       date={{date.sat.val}}
       day="sat"
+      stHr={{t.we_st_h}}
+      stMin={{t.we_st_m}}
+      endHr={{t.we_ed_h}}
+      endmin={{t.we_ed_m}}
       ng-click="selectEid(t.sat.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.sat.eid, 'saturday', t.sid)"
@@ -119,6 +143,10 @@
       idx={{$index}}
       date={{date.sun.val}}
       day="sun"
+      stHr={{t.we_st_h}}
+      stMin={{t.we_st_m}}
+      endHr={{t.we_ed_h}}
+      endmin={{t.we_ed_m}}
       ng-click="selectEid(t.sun.eid)"
       ng-disabled=false type="text"
       ng-class="inputStatus(t.sun.eid, 'sunday', t.sid)"

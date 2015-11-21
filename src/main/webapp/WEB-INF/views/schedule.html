@@ -100,7 +100,15 @@
   <!-- Employee List Panel -->
   <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
     <div class="panel-body">
-      <div ng-repeat="e in currentEmployees" class="row" ng-show="filterEmployees(e.id)">
+      <div class="form-group">
+        <div class="input-group">
+          <div class="btn btn-default input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <input type="text" class="form-control" id="em-search" ng-model="empEditSearch" placeholder="Search...">
+        </div>
+      </div>
+      <div ng-repeat="e in currentEmployees | filter:empEditSearch" class="row" ng-show="filterEmployees(e.id)">
         <input
         select-on-click
         ng-class="inputStatus(e.id, 'monday', t.sid)" type="text"

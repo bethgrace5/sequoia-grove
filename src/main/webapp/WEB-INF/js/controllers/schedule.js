@@ -21,6 +21,7 @@ angular.module('sequoiaGroveApp')
   $scope.selectedId = 0;
   $scope.newDelivery = '';
   $scope.selectedPid = 0;
+  $scope.empEditSearch = '';
 
 
   $scope.selectEid = function(id) {
@@ -28,6 +29,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.switchPos = function(pos) {
+    $scope.empEditSearch = '';
     $scope.selectedPid = pos;
   }
 
@@ -262,6 +264,33 @@ angular.module('sequoiaGroveApp')
     }
     $scope.selectEid(eid);
     return;
+  }
+
+  $scope.checkEmpAvailWithShift = function(avl, atr) {
+    if (avl == null) {
+      return false;
+    }
+    var len = avl.length;
+    for (var i = 0; i < len; i++) {
+      var startFlag = false;
+      var endFlag = false;
+      if (
+        (avl[i].startHr == atr.sthr && avl[i].startMin <= atr.stmin) ||
+        avl[i].startHr < atr.sthr
+      ) {
+        startFlag = true;
+      }
+      if (
+        (avl[i].endHr == atr.endhr &&  avl[i].endMin >= atr.endmin) ||
+        avl[i].endHr > atr.endhr
+      ) {
+        endFlag = true;
+      }
+      if (startFlag && endFlag) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // check if the shift was updated then reverted back to it was originally
