@@ -312,5 +312,25 @@ public class EmployeeController
         return "jsonTemplate";
     }
 
+    @RequestMapping(value = "/employee/add/{fname}/{lname}/" +
+        "{mgr}/{phone}/{bday}/{maxHr}/{clk}")
+    public String addEmployee(Model model,
+          @PathVariable("fname") String fname,
+          @PathVariable("lname") String lname,
+          @PathVariable("mgr") int mgr,
+          @PathVariable("phone") String phone,
+          @PathVariable("bday") String bday,
+          @PathVariable("maxHr") int maxHr,
+          @PathVariable("clk") int clk) throws SQLException {
+
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
+          "is_manager, birth_date, max_hrs_week, phone_number, clock_number) " +
+          "values(0,?,?,?, to_date(?, 'dd/mm/yyyy'), ?, ?, ? )", 
+          fname, lname, mgr, bday, maxHr, phone, clk);
+
+        return "jsonTemplate";
+    }
+
 
 }
