@@ -287,5 +287,30 @@ public class EmployeeController
         });
     }
 
+    @RequestMapping(value = "/employee/update/{eid}/{fname}/{lname}/" +
+        "{mgr}/{phone}/{bday}/{maxHr}/{clk}")
+    public String updateEmployee(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("fname") String fname,
+          @PathVariable("lname") String lname,
+          @PathVariable("mgr") int mgr,
+          @PathVariable("phone") String phone,
+          @PathVariable("bday") String bday,
+          @PathVariable("maxHr") int maxHr,
+          @PathVariable("clk") int clk) throws SQLException {
+
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      jdbcTemplate.update( "update bajs_employee set first_name = ?, "+
+          "last_name = ?, "+
+          "is_manager = ?, "+
+          "phone_number = ?, "+
+          "birth_date = to_date(?, 'dd/mm/yyyy'), "+
+          "max_hrs_week = ?, "+
+          "clock_number = ? "+
+          "where id = ? ", fname, lname, mgr, phone, bday, maxHr, clk, eid);
+
+        return "jsonTemplate";
+    }
+
 
 }
