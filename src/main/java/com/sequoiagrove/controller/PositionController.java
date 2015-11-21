@@ -94,7 +94,6 @@ public class PositionController {
         return "jsonTemplate";
     }
 
-    // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/position/add/{eid}/{pid}/{date}")
     public String addPosition(Model model,
           @PathVariable("eid") int eid,
@@ -115,7 +114,6 @@ int count = jdbcTemplate.queryForObject(
         return "jsonTemplate";
     }
 
-    // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/position/remove/{eid}/{pid}/{date}")
     public String removePosition(Model model,
           @PathVariable("eid") int eid,
