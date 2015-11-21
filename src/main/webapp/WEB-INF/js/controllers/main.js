@@ -257,7 +257,7 @@ angular.module('sequoiaGroveApp')
             date: $scope.date.sun.val
           });
         }
-          //$scope.countDays();
+        $scope.countDays();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
