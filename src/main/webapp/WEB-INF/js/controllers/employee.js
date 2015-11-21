@@ -257,7 +257,6 @@ angular.module('sequoiaGroveApp')
         // send post
         $http({
             url: '/sequoiagrove/employee/update/' +
-            //bday(day-month-year)
             $scope.allEmployees[$scope.current].id + '/' +
             $scope.allEmployees[$scope.current].firstName + '/' +
             $scope.allEmployees[$scope.current].lastName + '/' +
@@ -302,7 +301,7 @@ angular.module('sequoiaGroveApp')
         var curid = $scope.allEmployees[i].id+"";
         if (curid==id) {
           $scope.current = i;
-          return;
+          break;
         }
       }
     }
