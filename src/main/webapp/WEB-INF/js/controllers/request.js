@@ -20,8 +20,16 @@ angular.module('sequoiaGroveApp')
   };
 
 
-  $scope.donGraph.labels = ["Download Sales", "In-Store Sales", "Mail-Order Sales"];
-  $scope.donGraph.data = [300, 500, 100];
+  $scope.donGraph.labels = ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"];
+  //$scope.donGraph.data = [1, 2, 3, 4, 5, 6, 7]
+  $scope.donGraph.data = [
+    $scope.schCount[0].length, 
+    $scope.schCount[1].length, 
+    $scope.schCount[2].length, 
+    $scope.schCount[3].length, 
+    $scope.schCount[4].length, 
+    $scope.schCount[5].length, 
+    $scope.schCount[6].length];
 
 
 

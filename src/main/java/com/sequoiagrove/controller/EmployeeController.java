@@ -304,7 +304,7 @@ public class EmployeeController
           "last_name = ?, "+
           "is_manager = ?, "+
           "phone_number = ?, "+
-          "birth_date = to_date(?, 'dd/mm/yyyy'), "+
+          "birth_date = to_date(?, 'dd-mm-yyyy'), "+
           "max_hrs_week = ?, "+
           "clock_number = ? "+
           "where id = ? ", fname, lname, mgr, phone, bday, maxHr, clk, eid);
@@ -326,7 +326,7 @@ public class EmployeeController
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
           "is_manager, birth_date, max_hrs_week, phone_number, clock_number) " +
-          "values(0,?,?,?, to_date(?, 'dd/mm/yyyy'), ?, ?, ? )", 
+          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ? )", 
           fname, lname, mgr, bday, maxHr, phone, clk);
 
         return "jsonTemplate";

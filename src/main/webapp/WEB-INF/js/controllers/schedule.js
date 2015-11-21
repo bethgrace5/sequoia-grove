@@ -22,6 +22,7 @@ angular.module('sequoiaGroveApp')
   $scope.newDelivery = '';
   $scope.selectedPid = 0;
   $scope.empEditSearch = '';
+  $scope.saving = false;
 
 
   $scope.selectEid = function(id) {
@@ -104,12 +105,12 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
+    $scope.saving = true;
     var i=0;
     var len = $scope.updateShifts.length;
     $log.debug(len);
 
-    for(;i<len; i++) {
-      $log.debug($scope.updateShifts[0]);
+    if(len>0) {
       $http({
         url: '/sequoiagrove/schedule/update/'+ 
             $scope.updateShifts[0].sid + '/' + 
@@ -121,8 +122,9 @@ angular.module('sequoiaGroveApp')
           //$log.debug(status);
           if (status == 200) {
             // clear update shifts list
-            $scope.updateShifts.splice(0, 1);
-            $log.debug($scope.updateShifts);
+            $scope.updateShifts.shift();
+            $scope.saveSchedule();
+            //$log.debug($scope.updateShifts);
           }
           else {
             $log.error('Error saving schedule ', status, data);
@@ -130,6 +132,12 @@ angular.module('sequoiaGroveApp')
       }).error(function (data, status, headers, config) {
           $log.error(status + " Error saving schedule " + data);
       });
+    }
+    else {
+      $scope.saving = false;
+      $scope.getScheduleTemplate();
+      //length is 0
+
     }
   }
 
@@ -308,8 +316,59 @@ angular.module('sequoiaGroveApp')
     }
   }
 
-  $scope.countDays = function() {
+  $scope.importLastWeek = function() {
+    //$log.debug($scope.previousShifts);
 
+    // all of the day of the week lists should be the same
+    // length as monday
+    var len  = $scope.oldShifts.mon.length;
+    var i=0;
+    for(; i<len; i++) {
+      // Monday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.mon[i].eid,
+        sid: $scope.previousShifts.mon[i].sid,
+        date: $scope.date.mon.val
+      });
+      // Tuesday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.tue[i].eid,
+        sid: $scope.previousShifts.tue[i].sid,
+        date: $scope.date.tue.val
+      });
+      // Wednesday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.wed[i].eid,
+        sid: $scope.previousShifts.wed[i].sid,
+        date: $scope.date.wed.val
+      });
+      // Thursday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.thu[i].eid,
+        sid: $scope.previousShifts.thu[i].sid,
+        date: $scope.date.thu.val
+      });
+      // Friday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.fri[i].eid,
+        sid: $scope.previousShifts.fri[i].sid,
+        date: $scope.date.fri.val
+      });
+      // Saturday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.sat[i].eid,
+        sid: $scope.previousShifts.sat[i].sid,
+        date: $scope.date.sat.val
+      });
+      // Sunday
+      $scope.updateShifts.push({
+        eid: $scope.previousShifts.sun[i].eid,
+        sid: $scope.previousShifts.sun[i].sid,
+        date: $scope.date.sun.val
+      });
+    }
+    $log.debug($scope.updateShifts);
+    $scope.saveSchedule();
   }
 
   $scope.removeDelivery = function(index) {
@@ -336,7 +395,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init = function() {
-    //$scope.getEmployees();
     $scope.getShifts();
   }
 

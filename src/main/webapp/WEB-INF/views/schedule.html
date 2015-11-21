@@ -29,10 +29,14 @@
           -->
         <!-- Filter by User, Location, or Position -->
         <div class="dropdown pull-left" dropdown is-open=true>
-          <button type="button" id="dropDownMenu1" class="btn btn-default schedule-view-button" data-toggle="dropdown"
+          <button type="button" id="dropDownMenu1" 
+            class="btn btn-default schedule-view-button" data-toggle="dropdown"
+            ng-click="importLastWeek()"
             aria-haspopup="true" aria-expanded="true">
-            Import <span class="caret"></span>
+            Import Last Week <!--<span class="caret"></span>-->
+            <span class="glyphicon glyphicon-arrow-down"></span>
           </button>
+          <!--
           <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
             <li role="menuitem"><a ng-click="type='all'">Last Week</a></li>
             <li role="menuitem"><a ng-click="type='mine'">Mine</a></li>
@@ -43,6 +47,7 @@
             <li class="dropdown-header">Positions</li>
             <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
           </ul>
+          -->
         </div>
       </div>
 
@@ -55,6 +60,7 @@
         <!-- visual indication that changes are all saved -->
         <button class = "btn btn-success schedule-view-button"
           ng-show = "updateShifts.length<=0"
+          ng-disabled = "saving";
           ng-click = "saveSchedule()">
           Save
           <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
@@ -62,6 +68,7 @@
         <!-- Default button -->
         <button class = "btn btn-default schedule-view-button"
           ng-show = "updateShifts.length>0"
+          ng-disabled = "saving";
           ng-click = "saveSchedule()">
           Save
           <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>

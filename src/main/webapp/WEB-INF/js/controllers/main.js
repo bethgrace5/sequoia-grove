@@ -40,6 +40,9 @@ angular.module('sequoiaGroveApp')
       phone:null,
       bdate:null
   };
+  $scope.schCount = [[],[],[],[],[],[],[]];
+  $scope.previousTemplate = [];
+  $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -119,10 +122,12 @@ angular.module('sequoiaGroveApp')
 
   // View Next or Previous Week
   $scope.changeWeek = function(operation) {
+    $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
     var nextMonday = '';
 
     // Set Monday Next Week
     if (operation == 'add') {
+      $scope.previousTemplate = $scope.template;
       nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
     }
     // Set Monday Previous Week
@@ -145,6 +150,10 @@ angular.module('sequoiaGroveApp')
     $scope.date.sat.disp = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
     $scope.date.sun.val  = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
+    
+    // save old template
+    $scope.previousTemplate = $scope.template; 
+    $scope.previousShifts = $scope.oldShifts;
 
     $scope.getScheduleTemplate();
   }
@@ -248,6 +257,7 @@ angular.module('sequoiaGroveApp')
             date: $scope.date.sun.val
           });
         }
+          //$scope.countDays();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
@@ -261,6 +271,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.currentEmployees = data.employeeInfo;
+        $scope.getScheduleTemplate();
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
@@ -309,11 +320,45 @@ angular.module('sequoiaGroveApp')
     return h+m;
   }
 
+  $scope.countDays = function() {
+    // clear schedule count
+    $scope.schCount = [[],[],[],[],[],[],[]];
+    var i=0;
+    var len = $scope.currentEmployees.length;
+    var k=0;
+    var tempLen = $scope.template.length;
+
+    var count = 0;
+    var checkId = 0;
+    var name = '';
+
+    for(; i<len; i++) {
+      checkId = $scope.currentEmployees[i].id
+      name = $scope.currentEmployees[i].firstName;
+      count = 0;
+      k=0;
+      for(; k<tempLen; k++) {
+        if($scope.template[k].mon.name == name ||
+           $scope.template[k].tue.name == name ||
+           $scope.template[k].wed.name == name ||
+           $scope.template[k].thu.name == name ||
+           $scope.template[k].fri.name == name ||
+           $scope.template[k].sat.name == name ||
+           $scope.template[k].sun.name == name) {
+          count++;
+        }
+      }
+
+      $scope.schCount[count-1].push({id:checkId, name:name});
+
+    }
+    //$log.debug($scope.schCount);
+  }
+
   // Initialize controller
   $scope.init = function() {
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
-    $scope.getScheduleTemplate();
     $scope.getPositions();
     $scope.getLocations();
     $scope.getEmployeeAll();
