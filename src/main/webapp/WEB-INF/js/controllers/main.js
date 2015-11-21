@@ -338,21 +338,34 @@ angular.module('sequoiaGroveApp')
       count = 0;
       k=0;
       for(; k<tempLen; k++) {
-        if($scope.template[k].mon.name == name ||
-           $scope.template[k].tue.name == name ||
-           $scope.template[k].wed.name == name ||
-           $scope.template[k].thu.name == name ||
-           $scope.template[k].fri.name == name ||
-           $scope.template[k].sat.name == name ||
-           $scope.template[k].sun.name == name) {
+        if($scope.template[k].mon.eid == checkId){
           count++;
+        }
+        if ($scope.template[k].tue.eid == checkId){
+           count++;
+        }
+        if ($scope.template[k].wed.eid == checkId){
+           count++;
+        }
+        if ($scope.template[k].thu.eid == checkId){
+           count++;
+        }
+        if ($scope.template[k].fri.eid == checkId){
+           count++;
+        }
+        if ($scope.template[k].sat.eid == checkId){
+           count++;
+        }
+        if ($scope.template[k].sun.eid == checkId) {
+           count++;
         }
       }
 
-      $scope.schCount[count-1].push({id:checkId, name:name});
+      if(count>0) {
+        $scope.schCount[count-1].push({id:checkId, name:name});
+      }
 
     }
-    //$log.debug($scope.schCount);
   }
 
   // Initialize controller

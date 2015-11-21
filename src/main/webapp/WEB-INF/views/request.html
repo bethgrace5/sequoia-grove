@@ -1,9 +1,6 @@
 <div class="container-fluid">
-  <p class="lead">
-    Reports
-  </p>
 
-  <div class="panel panel-default chart-panel">
+  <div class="panel panel-default chart-panel clear-both pull-left">
     <div class="panel-body">
 
       <p class="lead">
@@ -11,18 +8,18 @@
       </p>
       <div class="chart-container">
         <canvas id="doughnut" class="chart chart-doughnut"
-          chart-data="donGraph.data" chart-labels="donGraph.labels">
+        chart-data="donGraph.data" 
+        chart-legend="true"
+        chart-labels="donGraph.labels">
         </canvas> 
       </div>
-      <div>
-      <p> One Day:    {{donGraph.data[0]}}</p>
-      <p> Two Days:   {{donGraph.data[1]}}</p>
-      <p> Three Days: {{donGraph.data[2]}}</p>
-      <p> Four Days:  {{donGraph.data[3]}}</p>
-      <p> Five Days:  {{donGraph.data[4]}}</p>
-      <p> Six Days:   {{donGraph.data[5]}}</p>
-      <p> Seven Days: {{donGraph.data[6]}}</p>
+
     </div>
+  </div>
+
+  <div class="panel panel-default side-chart-panel clear-both pull-left">
+    <div class="panel-body">
+
 
     </div>
   </div>

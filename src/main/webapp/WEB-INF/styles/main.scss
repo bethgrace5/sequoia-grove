@@ -26,12 +26,19 @@ $brand-danger:  #d9534f;
   display: none !important;
 }*/
 
+.side-chart-panel {
+  width: 50%;
+  height: 70%;
+}
+
 .chart-panel {
-  width: 650px;
+  width: 50%;
+  height: 70%;
+  background-color:#f8f0ff;
 }
 
 .chart-container {
-  width: 600px;
+  width: 100%;
   margin:0 auto;
 }
 
