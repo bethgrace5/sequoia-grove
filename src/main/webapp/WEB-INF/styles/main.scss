@@ -15,11 +15,14 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
-
 #main-content {
   height: 400px;
   background-color: gray;
   color: white;
+}
+
+.panel {
+  background-color: fafafa;
 }
 
 /*.ng-cloak {
@@ -177,6 +180,7 @@ option.select-hr { border-bottom: 1px dotted #000; }
   border: none;
   padding: 0;
   margin-top: 50px;
+  margin-right: 1%;
   position:fixed;
   right: 0;
   max-height: 75%;
@@ -187,6 +191,7 @@ option.select-hr { border-bottom: 1px dotted #000; }
 .emp-edit-search {
   border: none;
   margin-top: 10px;
+  margin-right: 1%;
   position: fixed;
   right: 0;
   width: 19%;
