@@ -10,6 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sequoiagrove.dao.PositionDAO;
@@ -93,6 +94,25 @@ public class PositionController {
         return "jsonTemplate";
     }
 
+    // Get current schedule template (current shifts) dd/mm/yyyy
+    @RequestMapping(value = "/position/add/{eid}/{pid}/{date}")
+    public String getScheduleTemplate(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("pid") int pid,
+          @PathVariable("date") String date) throws SQLException {
+
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      jdbcTemplate.update("insert into bajs_has_position( employee_id, "+
+          "position_id, date_acquired, date_removed, is_primary, is_training) " +
+          "values(?, ?, to_date(?, 'dd-mm-yyyy'), null, 0, 0)", eid, pid, date);
+          //"exception "+
+          //"when DUP_VAL_ON_INDEX then "+
+          //"update bajs_is_scheduled_for "+
+          //"set employee_id = eid "+
+          //"where on_date = to_date(day, 'dd-mm-yyyy') and shift_id=sid; "+
+
+        return "jsonTemplate";
+    }
 
 
 
