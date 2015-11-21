@@ -47,6 +47,43 @@ public class ShiftController {
         return "jsonTemplate";
     }
 
+    @RequestMapping(value = "/avail/add/{eid}/{day}/{startt}/{endt}")
+    public String addAvail(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("day") String day,
+          @PathVariable("startt") int startt,
+          @PathVariable("endt") int endt) throws SQLException {
+
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+      int count = jdbcTemplate.queryForObject( 
+          "select count(*) from bajs_availability " +
+          " where day = '" + day +
+          "' and employee_id = " + eid+
+          " and startt = " + startt+
+          " and endt = " + endt, Integer.class);
+
+      if(count <= 0 ) {
+          jdbcTemplate.update("insert into bajs_availability( " +
+              "employee_id, day, startt, endt) "+
+              "values(?, ?, ?, ?)", eid, day, startt, endt);
+      }
+
+        return "jsonTemplate";
+    }
+
+    @RequestMapping(value = "/avail/remove/{eid}/{day}/{startt}")
+    public String removeAvail(Model model,
+          @PathVariable("eid") int eid,
+          @PathVariable("day") String day,
+          @PathVariable("startt") int startt) throws SQLException {
+
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      jdbcTemplate.update("delete from bajs_availability " +
+        "where employee_id = ? and day = ? and startt = ?", eid, day, startt);
+
+        return "jsonTemplate";
+    }
 
 }
 

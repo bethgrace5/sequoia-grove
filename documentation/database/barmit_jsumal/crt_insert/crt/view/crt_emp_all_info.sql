@@ -25,6 +25,7 @@ create or replace view bajs_emp_all_info as (
                 (
                     select distinct employee_id, position_id
                     from bajs_has_position
+                    where date_removed is null
                 )
                 natural join
                 (

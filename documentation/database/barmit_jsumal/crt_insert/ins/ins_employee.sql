@@ -4,19 +4,19 @@
 */
 
 /* Supervisors */
-insert into BAJS_employee values( 1, 'John',    'Doe',     1, to_date('12/04/1999', 'mm/dd/yyyy'), 40, '1234567890', 1 );
-insert into BAJS_employee values( 2, 'Jane',    'Akachi',  1, to_date('12/04/1998', 'mm/dd/yyyy'), 40, '1234567890', 2 );
-insert into BAJS_employee values( 3, 'Bob',     'Ping',    0, to_date('12/04/1997', 'mm/dd/yyyy'), 40, '1234567890', 3 );
-insert into BAJS_employee values( 4, 'Susan',   'Jordan',  0, to_date('12/04/1996', 'mm/dd/yyyy'), 40, '1234567890', 4 );
-insert into BAJS_employee values( 5, 'Chris',   'Tumelo',  0, to_date('12/04/1995', 'mm/dd/yyyy'), 40, '1234567890', 5 );
+insert into BAJS_employee values( 0, 'John',    'Doe',     1, to_date('12/04/1999', 'mm/dd/yyyy'), 40, '1234567890', 1 );
+insert into BAJS_employee values( 0, 'Jane',    'Akachi',  1, to_date('12/04/1998', 'mm/dd/yyyy'), 40, '1234567890', 2 );
+insert into BAJS_employee values( 0, 'Bob',     'Ping',    0, to_date('12/04/1997', 'mm/dd/yyyy'), 40, '1234567890', 3 );
+insert into BAJS_employee values( 0, 'Susan',   'Jordan',  0, to_date('12/04/1996', 'mm/dd/yyyy'), 40, '1234567890', 4 );
+insert into BAJS_employee values( 0, 'Chris',   'Tumelo',  0, to_date('12/04/1995', 'mm/dd/yyyy'), 40, '1234567890', 5 );
 
 /* Kitchen Supervisors */
-insert into BAJS_employee values( 6, 'Kamala',  'Agrippa', 0, to_date('12/04/1994', 'mm/dd/yyyy'), 40, '1234567890', 6 );
-insert into BAJS_employee values( 7, 'Lei',     'Lindsey', 0, to_date('12/04/1993', 'mm/dd/yyyy'), 40, '1234567890', 7 );
+insert into BAJS_employee values( 0, 'Kamala',  'Agrippa', 0, to_date('12/04/1994', 'mm/dd/yyyy'), 40, '1234567890', 6 );
+insert into BAJS_employee values( 0, 'Lei',     'Lindsey', 0, to_date('12/04/1993', 'mm/dd/yyyy'), 40, '1234567890', 7 );
 
 /* Cold Prep */
-insert into BAJS_employee values( 8, 'Sal',     'Finley',  0, to_date('12/04/1992', 'mm/dd/yyyy'), 40, '1234567890', 8 );
-insert into BAJS_employee values( 9, 'Taonga',  'Noam',    0, to_date('12/04/1991', 'mm/dd/yyyy'), 40, '1234567890', 9 );
+insert into BAJS_employee values( 0, 'Sal',     'Finley',  0, to_date('12/04/1992', 'mm/dd/yyyy'), 40, '1234567890', 8 );
+insert into BAJS_employee values( 0, 'Taonga',  'Noam',    0, to_date('12/04/1991', 'mm/dd/yyyy'), 40, '1234567890', 9 );
 insert into BAJS_employee values( 10, 'Aston',  'Francis', 0, to_date('12/04/1990', 'mm/dd/yyyy'), 40, '1234567890', 10 );
 insert into BAJS_employee values( 11, 'Mavuto', 'Leigh',   0, to_date('12/04/1989', 'mm/dd/yyyy'), 40, '1234567890', 11 );
 insert into BAJS_employee values( 12, 'Steph',  'Vivian',  0, to_date('12/04/1988', 'mm/dd/yyyy'), 40, '1234567890', 12 );
