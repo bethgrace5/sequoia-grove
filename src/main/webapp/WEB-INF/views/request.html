@@ -1,29 +1,58 @@
 <div class="container-fluid">
 
-  <div class="panel panel-default chart-panel clear-both pull-left">
-    <div class="panel-body">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default chart-panel clear-both pull-left">
+        <div class="panel-body">
 
-      <p class="lead">
-        Count of Number of Days Employees are Scheduled
-      </p>
-      <div class="chart-container">
-        <canvas id="doughnut" class="chart chart-doughnut"
-        chart-data="donGraph.data" 
-        chart-legend="true"
-        chart-labels="donGraph.labels">
-        </canvas> 
+          <p class="lead">
+            Count of Number of Days Employees are Scheduled
+          </p>
+          <div class="chart-container">
+            <canvas id="doughnut" class="chart chart-doughnut"
+            chart-data="donGraph.data" 
+            chart-click="donGraph.onClick"
+            chart-legend="true"
+            chart-labels="donGraph.labels">
+            </canvas> 
+          </div>
+
+        </div>
       </div>
 
+      <div class="panel panel-default side-chart-panel clear-both pull-left">
+        <div class="panel-body">
+
+          <p class="lead">
+            {{chartcount + 1}} Days This Schedule
+          </p>
+          <div ng-repeat="emp in schCount[chartcount]">
+            {{emp.name}}
+          </div>
+
+        </div>
+      </div>
     </div>
   </div>
 
-  <div class="panel panel-default side-chart-panel clear-both pull-left">
-    <div class="panel-body">
-
-
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="panel panel-default" style="margin:30px">
+        <div class="panel-body">
+      <p class="lead">
+        Weekly Hours Per Employee
+      </p>
+      <canvas id="bar" class="chart chart-bar"
+        chart-data="barChart.data" 
+        chart-labels="barChart.labels">
+      </canvas>
+    </div>
+  </div>
     </div>
   </div>
 
+
+  <!--
   <div class="panel panel-default chart-panel">
     <div class="panel-body">
 
@@ -41,6 +70,7 @@
 
     </div>
   </div>
+  -->
 
 
 </div>

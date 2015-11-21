@@ -41,8 +41,10 @@ angular.module('sequoiaGroveApp')
       bdate:null
   };
   $scope.schCount = [[],[],[],[],[],[],[]];
+  $scope.schHourCount = [];
   $scope.previousTemplate = [];
   $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+  $scope.barChart = { labels:[],  data:[[]], series:["names"]};
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -258,6 +260,8 @@ angular.module('sequoiaGroveApp')
           });
         }
         $scope.countDays();
+        $scope.countHours();
+
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
@@ -337,28 +341,39 @@ angular.module('sequoiaGroveApp')
       name = $scope.currentEmployees[i].firstName;
       count = 0;
       k=0;
+      var flags = [0, 0, 0, 0, 0, 0, 0];
       for(; k<tempLen; k++) {
-        if($scope.template[k].mon.eid == checkId){
-          count++;
-        }
-        if ($scope.template[k].tue.eid == checkId){
+        if($scope.template[k].mon.eid == checkId && !flags[0]){
            count++;
+           flags[0] = 1;
         }
-        if ($scope.template[k].wed.eid == checkId){
+        if ($scope.template[k].tue.eid == checkId && !flags[1]){
            count++;
+           flags[1] = 1;
         }
-        if ($scope.template[k].thu.eid == checkId){
+        if ($scope.template[k].wed.eid == checkId && !flags[2]){
            count++;
+           flags[2] = 1;
         }
-        if ($scope.template[k].fri.eid == checkId){
+        if ($scope.template[k].thu.eid == checkId && !flags[3]){
            count++;
+           flags[3] = 1;
         }
-        if ($scope.template[k].sat.eid == checkId){
+        if ($scope.template[k].fri.eid == checkId && !flags[4]){
            count++;
+           flags[4] = 1;
         }
-        if ($scope.template[k].sun.eid == checkId) {
+        if ($scope.template[k].sat.eid == checkId && !flags[5]){
            count++;
+           flags[5] = 1;
         }
+        if ($scope.template[k].sun.eid == checkId && !flags[6]) {
+           count++;
+           flags[6] = 1;
+        }
+      }
+      if(count>7) {
+        count = 7;
       }
 
       if(count>0) {
@@ -366,6 +381,103 @@ angular.module('sequoiaGroveApp')
       }
 
     }
+  }
+
+  $scope.countHours = function() {
+    // clear schedule count
+    $scope.schHourCount = [];
+    var i=0;
+    var len = $scope.currentEmployees.length;
+    var k=0;
+    var tempLen = $scope.template.length;
+
+    var count = 0;
+    var checkId = 0;
+    var name = '';
+
+    var emin = 0;
+    var smin = 0;
+    var ehr = 0;
+    var shr = 0;
+
+    var sum = 0;
+    for(; i<len; i++) {
+      checkId = $scope.currentEmployees[i].id
+      name = $scope.currentEmployees[i].firstName;
+      count = 0;
+      k=0;
+      for(; k<tempLen; k++) {
+        if($scope.template[k].mon.eid == checkId){
+          emin = $scope.template[k].wd_ed_m;
+          smin = $scope.template[k].wd_st_m;
+
+          ehr = $scope.template[k].wd_ed_h;
+          shr = $scope.template[k].wd_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].tue.eid == checkId){
+          emin = $scope.template[k].wd_ed_m;
+          smin = $scope.template[k].wd_st_m;
+
+          ehr = $scope.template[k].wd_ed_h;
+          shr = $scope.template[k].wd_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].wed.eid == checkId){
+          emin = $scope.template[k].wd_ed_m;
+          smin = $scope.template[k].wd_st_m;
+
+          ehr = $scope.template[k].wd_ed_h;
+          shr = $scope.template[k].wd_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].thu.eid == checkId){
+          emin = $scope.template[k].wd_ed_m;
+          smin = $scope.template[k].wd_st_m;
+
+          ehr = $scope.template[k].wd_ed_h;
+          shr = $scope.template[k].wd_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].fri.eid == checkId){
+          emin = $scope.template[k].wd_ed_m;
+          smin = $scope.template[k].wd_st_m;
+
+          ehr = $scope.template[k].wd_ed_h;
+          shr = $scope.template[k].wd_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].sat.eid == checkId){
+          emin = $scope.template[k].we_ed_m;
+          smin = $scope.template[k].we_st_m;
+
+          ehr = $scope.template[k].we_ed_h;
+          shr = $scope.template[k].we_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+         if ($scope.template[k].sun.eid == checkId) {
+          emin = $scope.template[k].we_ed_m;
+          smin = $scope.template[k].we_st_m;
+
+          ehr = $scope.template[k].we_ed_h;
+          shr = $scope.template[k].we_st_h;
+          sum += parseFloat((emin-smin)/60) + (ehr-shr);
+
+         }
+      }
+      $scope.barChart.labels.push(name);
+      $scope.barChart.data[0].push(sum);
+      $log.debug(sum);
+      $scope.schHourCount.push({id:checkId, name:name, hours:sum});
+      sum = 0;
+    }
+    $log.debug($scope.schHourCount);
   }
 
   // Initialize controller

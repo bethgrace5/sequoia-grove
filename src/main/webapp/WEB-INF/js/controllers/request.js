@@ -1,7 +1,9 @@
 'use strict';
 
 angular.module('sequoiaGroveApp')
-  .controller('RequestCtrl', function ($scope) {
+  .controller('RequestCtrl', function ($scope, $log) {
+
+  $scope.chartcount = 0 ;
 
   $scope.lineGraph= {};
   $scope.donGraph= {};
@@ -19,6 +21,12 @@ angular.module('sequoiaGroveApp')
     console.log(points, evt);
   };
 
+  $scope.donGraph.onClick = function(points, evt) {
+    //console.log(points, evt);
+    //console.log(points[0].value);
+    $scope.chartcount = points[0].label.substr(0,1)-1;
+    //$scope.chartcount = points[0].value;
+  }
 
   $scope.donGraph.labels = ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"];
   //$scope.donGraph.data = [1, 2, 3, 4, 5, 6, 7]
