@@ -59,175 +59,6 @@ angular.module('sequoiaGroveApp')
         {disp:"9:00 PM", valHr: 21, valMin: 0}
       ]
     };
-    /*$scope.employees=[
-      { id:"0", 
-        firstName:"Billy",
-        lastName:"Jean",
-        isManager:"0",
-        birthDate:"01/01/1990",
-        maxHoursPerWeek:"40",
-        positions:
-        [
-          {title: "Cashier"},
-          {title: "Supervisor"}
-        ],
-        phoneNumber:"000-000-0000",
-        clockNumber:"10",
-        emplHistory:
-        [
-        ],
-        avail:
-        { mon: [ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          tue:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          wed:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          thu:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          fri:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          sat:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          sun:[ {startHour: 8, startMin: 0, endHour: 20, endMin: 0}
-          ]
-        }
-      },
-      { id:"1", 
-        firstName:"Is not",
-        lastName:"My Lover",
-        isManager:"0",
-        birthDate:"02/02/1992",
-        maxHoursPerWeek:"50",
-        positions:
-        [
-          {title: "Cashier"},
-          {title: "Kitchen"}
-        ],
-        phoneNumber:"111-111-1111",
-        clockNumber:"11",
-        emplHistory:
-        [
-        ],
-        avail:
-        { mon:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          tue:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          wed:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          thu:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          fri:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          sat:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ],
-          sun:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 0}
-          ]
-        }
-      },
-      { id:"2", 
-        firstName:"She's just",
-        lastName:"A girl",
-        isManager:"1",
-        birthDate:"03/03/1991",
-        maxHoursPerWeek:"50",
-        positions:
-        [
-          {title: "Cashier"},
-          {title: "Bakery"}
-        ],
-        phoneNumber:"222-222-2222",
-        clockNumber:"12",
-        emplHistory:
-        [
-        ],
-        avail:
-        { mon:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          tue:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          wed:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          thu:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          fri:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          sat:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ],
-          sun:[ {startHour: 8, startMin: 0, endHour: 21, endMin: 0}
-          ]
-        }
-      },
-      { id:"3", 
-        firstName:"Who claims",
-        lastName:"That I am",
-        isManager:"0",
-        birthDate:"04/04/1991",
-        maxHoursPerWeek:"40",
-        positions:
-        [
-          {title: "Cashier"},
-          {title: "Cold Prep"}
-        ],
-        phoneNumber:"333-333-3333",
-        clockNumber:"13",
-        emplHistory:
-        [
-        ],
-        avail:
-        { mon:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          tue:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          wed:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          thu:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          fri:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          sat:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ],
-          sun:[ {startHour: 9, startMin: 0, endHour: 20, endMin: 0}
-          ]
-        }
-      },
-      { id:"4", 
-        firstName:"The",
-        lastName:"One",
-        isManager:"1",
-        birthDate:"05/05/1993",
-        maxHoursPerWeek:"40",
-        emplHistory:
-        [
-          {start: "06-04-2013", end: "04-02-2014"},
-          {start: "07-04-2014", end: ""}
-        ],
-        positions:
-        [
-          {title: "Cashier"},
-          {title: "Grill"}
-        ],
-        phoneNumber:"444-444-4444",
-        clockNumber:"14",
-        avail:
-        { mon:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          tue:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          wed:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          thu:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          fri:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          sat:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ],
-          sun:[ {startHour: 8, startMin: 0, endHour: 19, endMin: 30}
-          ]
-        }
-      }
-    ];*/
 
     $scope.current;
     $scope.newAvail = {day:'', start:'', end:''};
@@ -252,12 +83,14 @@ angular.module('sequoiaGroveApp')
 
         var newTimes = { startHr:st.valHr, startMin: st.valMin, endHr: end.valHr, endMin: end.valMin};
         // TODO send new availability to back end
-
-        // TODO, setup the selection of available times to not include times
-        // encompassed by their current availability times. possibly limit
-        // the number of availability objects to two per day?
-
-        // TODO order availabilities in front end by start time
+        var startt = $scope.hrMinTo24(st.valHr, st.valMin);
+        var endt = $scope.hrMinTo24(end.valHr, end.valMin);
+        var eid = $scope.allEmployees[$scope.current].id;
+        $http({
+            url: '/sequoiagrove/avail/add/'+ 
+                eid + '/' + day + '/' + startt + '/' + endt,
+            method: "POST"
+        })
 
         // update front end
         if (day=='mon') { $scope.allEmployees[$scope.current].avail.mon.push(newTimes); }
@@ -273,26 +106,41 @@ angular.module('sequoiaGroveApp')
     $scope.newPos = {};
     // add a new position for an employee
     $scope.addPos = function() {
-      var pos = $scope.newPos.title;
+        var pos = $scope.newPos.title;
 
-      // make sure all fields are filled in
-      if (pos!='') {
-        // reset input
-        $scope.newPos = {};
+        // make sure all fields are filled in
+        if (pos!='') {
+            // reset input
+            $scope.newPos = {};
 
-        var posObj = {id:null, title:pos, "location":null};
-        $log.debug(posObj);
-        // TODO send new availability to back end
+            // check if employee does not already have position
+            var empPosLen = $scope.allEmployees[$scope.current].positions.length;
+            for (var i = 0; i < empPosLen; i++) {
+                if ($scope.allEmployees[$scope.current].positions[i].title==pos)
+                    return;
+            }
 
-        // TODO, setup the selection of available times to not include times
-        // encompassed by their current availability times. possibly limit
-        // the number of availability objects to two per day?
+            var eid = $scope.allEmployees[$scope.current].id;
+            var pid;
+            var len = $scope.positions.length;
+            for (var i = 0; i < len; i++) {
+                if ($scope.positions[i].title==pos) {
+                    pid = $scope.positions[i].id;
+                }
+            }
 
-        // TODO order availabilities in front end by start time
+            var posObj = {id:pid, title:pos, "location":null};
+            // send new position to back end
+            $http({
+                url: '/sequoiagrove/position/add/'+ 
+                    eid + '/' + pid + '/' +
+                    moment().format("DD-MM-YYYY"),
+                method: "POST"
+            })
 
-        // update front end
-        $scope.allEmployees[$scope.current].positions.push(posObj);
-      }
+            // update front end
+            $scope.allEmployees[$scope.current].positions.push(posObj);
+        }
     }
 
     // click existing day to populate input with that day
@@ -331,37 +179,95 @@ angular.module('sequoiaGroveApp')
 
     // remove an availability for an employee
     $scope.remAvail = function(day, index) {
-      //TODO remove availability on the back end
-
-      // update front end
+        // update front end, and get start_time
+        var hr;
+        var min;
         if (day=='mon') {
+          hr = $scope.allEmployees[$scope.current].avail.mon[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.mon[index].startMin;
           $scope.allEmployees[$scope.current].avail.mon.splice(index, 1);
         }
         else if (day=='tue') {
+          hr = $scope.allEmployees[$scope.current].avail.tue[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.tue[index].startMin;
           $scope.allEmployees[$scope.current].avail.tue.splice(index, 1);
         }
         else if (day=='wed') {
+          hr = $scope.allEmployees[$scope.current].avail.wed[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.wed[index].startMin;
           $scope.allEmployees[$scope.current].avail.wed.splice(index, 1);
         }
         else if (day=='thu') {
+          hr = $scope.allEmployees[$scope.current].avail.thu[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.thu[index].startMin;
           $scope.allEmployees[$scope.current].avail.thu.splice(index, 1);
         }
         else if (day=='fri') {
+          hr = $scope.allEmployees[$scope.current].avail.fri[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.fri[index].startMin;
           $scope.allEmployees[$scope.current].avail.fri.splice(index, 1);
         }
         else if (day=='sat') {
+          hr = $scope.allEmployees[$scope.current].avail.sat[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.sat[index].startMin;
           $scope.allEmployees[$scope.current].avail.sat.splice(index, 1);
         }
         else if (day=='sun') {
+          hr = $scope.allEmployees[$scope.current].avail.sun[index].startHr;
+          min = $scope.allEmployees[$scope.current].avail.sun[index].startMin;
           $scope.allEmployees[$scope.current].avail.sun.splice(index, 1);
         }
+
+        var startt = $scope.hrMinTo24(hr,min);
+
+        //TODO remove availability on the back end
+        var eid = $scope.allEmployees[$scope.current].id;
+        $http({
+            url: '/sequoiagrove/avail/remove/'+ 
+                eid + '/' + day + '/' + startt,
+            method: "POST"
+        })
     }
 
     $scope.remPos = function(index) {
-      //TODO remove availability on the back end
+        var eid = $scope.allEmployees[$scope.current].id;
+        var title = $scope.allEmployees[$scope.current].positions[index].title;
+        var pid;
+        var len = $scope.positions.length;
+        for (var i = 0; i < len; i++) {
+            if ($scope.positions[i].title==title) {
+                pid = $scope.positions[i].id;
+            }
+        }
 
-      // update front end
-      $scope.allEmployees[$scope.current].positions.splice(index, 1);
+        // remove position from back end
+        $http({
+            url: '/sequoiagrove/position/remove/'+ 
+                eid + '/' + pid + '/' +
+                moment().format("DD-MM-YYYY"),
+            method: "POST"
+        })
+
+        // update front end
+        $scope.allEmployees[$scope.current].positions.splice(index, 1);
+    }
+
+    $scope.updateEmployee = function() {
+        // validate
+        // send post
+        $http({
+            url: '/sequoiagrove/employee/update/' +
+            //bday(day-month-year)
+            $scope.allEmployees[$scope.current].id + '/' +
+            $scope.allEmployees[$scope.current].firstName + '/' +
+            $scope.allEmployees[$scope.current].lastName + '/' +
+            $scope.allEmployees[$scope.current].isManager + '/' +
+            $scope.allEmployees[$scope.current].phone + '/' +
+             moment($scope.allEmployees[$scope.current].birthDate,"YYYY-MM-DD").format("DD-MM-YYYY")+ '/' +
+            $scope.allEmployees[$scope.current].maxHrsWeek + '/' +
+            $scope.allEmployees[$scope.current].clock,
+            method: 'POST'
+        })
     }
 
     $scope.getAvailability = function() {

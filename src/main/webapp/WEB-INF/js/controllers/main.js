@@ -30,6 +30,16 @@ angular.module('sequoiaGroveApp')
   $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
+  // employee info that was changed and needs to be saved to database
+  $scope.empNewInfo = {
+      maxhrs:null,
+      isManager:null,
+      clock:null,
+      fname:null,
+      lname:null,
+      phone:null,
+      bdate:null
+  };
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -281,6 +291,22 @@ angular.module('sequoiaGroveApp')
       return moment({hour:h, minute:m}).format('h:mm a');
     }
     return moment({hour:h, minute:m}).format('h:mm');
+  }
+
+  $scope.hrMinTo24 = function(h, m) {
+    if(h < 10) {
+      h = "0"+h;
+    }
+    else {
+      h = h+"";
+    }
+    if(m < 10) {
+      m = "0"+m;
+    }
+    else {
+     m = m+"";
+    }
+    return h+m;
   }
 
   // Initialize controller
