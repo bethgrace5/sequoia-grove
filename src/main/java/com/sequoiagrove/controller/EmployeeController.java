@@ -70,7 +70,7 @@ public class EmployeeController
         // Get only Current Employees
         if (status.equals("current")) {
             queryStr = "select * from (select distinct employee_id, max_hrs_week, is_manager, first_name, "+
-                "last_name, phone_number, birth_date from bajs_emp_all_info) a "+
+                "last_name, clock_number, phone_number, birth_date from bajs_emp_all_info) a "+
                 "natural join "+
                 "( "+
                 "select h.employee_id "+

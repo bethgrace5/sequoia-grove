@@ -266,6 +266,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
         $scope.allEmployees = data.employeeInfo;
         //$log.debug(data);
+        $scope.getEmployeeCurrent();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -289,7 +290,6 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate();
     $scope.getPositions();
     $scope.getLocations();
-    $scope.getEmployeeCurrent();
     $scope.getEmployeeAll();
     $scope.getHasPositions();
   }
