@@ -7,6 +7,8 @@ create or replace package bajs_pkg as
 procedure add_holiday( mmdd varchar2, n varchar2, t varchar2);
 procedure delete_ingredient(iid number);
 procedure schedule( eid number, sid number, day varchar2);
+procedure delete_schedule (sid number, day varchar2);
+procedure add_position( eid number, pid number, day varchar2);
 
 -- Type Definitions
 type sch_record_type 
@@ -95,6 +97,31 @@ create or replace package body bajs_pkg as
             set employee_id = eid
             where on_date = to_date(day, 'dd-mm-yyyy') and shift_id=sid;
     end schedule;
+
+    -- Delete an Ingredent from being used in a menu item by supplying the ingredient id
+    procedure delete_schedule (sid number, day varchar2) is
+    begin
+        delete from bajs_is_scheduled_for i
+        where i.shift_id = sid and i.on_date = to_date(day, 'dd-mm-yyyy');
+    end delete_schedule;
+
+    -- Schedule or update is_scheduled_for record
+    procedure add_position( eid number, pid number, day varchar2) is
+    begin
+        merge into bajs_has_position p
+            using (
+                select employee_id, position_id, date_acquired
+                from bajs_has_position
+                --where employee_id = eid and position_id = pid /*and date_removed is null*/
+            ) e
+            on(
+                e.employee_id = p.employee_id and e.position_id = p.position_id 
+            )
+            when not matched then 
+                insert(employee_id, position_id,date_acquired, date_removed, is_primary, is_training)
+                values(eid, pid, to_date(day, 'dd-mm-yyyy'), null, 0, 0);
+
+    end add_position;
 
     -- input date strings as 'dd/mm/yyyy' for each corresponding weekday
     -- function expects the correct weekdays in the order of monday to sunday

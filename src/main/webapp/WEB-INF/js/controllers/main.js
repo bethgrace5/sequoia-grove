@@ -30,6 +30,8 @@ angular.module('sequoiaGroveApp')
   $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
+  // when the schedule is cleared, any saved shifts are deleted
+  $scope.deleteShifts = [];
   // employee info that was changed and needs to be saved to database
   $scope.empNewInfo = {
       maxhrs:null,

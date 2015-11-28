@@ -144,6 +144,9 @@ a:focus {
 .schedule-edit-input-warn::selection {
   background: transparent; /* WebKit/Blink Browsers */
 }
+.schedule-view-panel {
+  min-height: 60%;
+}
 .schedule-edit-panel {
   /*background-color: #edf6f7;*/
   min-height: 70%;

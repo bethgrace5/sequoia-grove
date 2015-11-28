@@ -114,7 +114,6 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
     var i=0;
     var len = $scope.updateShifts.length;
-    $log.debug(len);
 
     if(len>0) {
       $http({
@@ -124,13 +123,10 @@ angular.module('sequoiaGroveApp')
             $scope.updateShifts[0].date,
         method: "POST"
       }).success(function (data, status, headers, config) {
-          //$log.debug(data);
-          //$log.debug(status);
           if (status == 200) {
             // clear update shifts list
             $scope.updateShifts.shift();
             $scope.saveSchedule();
-            //$log.debug($scope.updateShifts);
           }
           else {
             $log.error('Error saving schedule ', status, data);
@@ -144,6 +140,39 @@ angular.module('sequoiaGroveApp')
       $scope.getScheduleTemplate();
       //length is 0
 
+    }
+  }
+
+  // Delete all these shifts
+  $scope.deleteSchedule = function() {
+    $scope.schHourCount = [];
+    $scope.saving = true;
+    var i=0;
+    var len = $scope.deleteShifts.length;
+
+    if(len>0) {
+      $http({
+        url: '/sequoiagrove/schedule/delete/'+ 
+            $scope.deleteShifts[0].sid + '/' + 
+            $scope.deleteShifts[0].date,
+        method: "DELETE"
+      }).success(function (data, status, headers, config) {
+          if (status == 200) {
+            // clear update shifts list
+            $scope.deleteShifts.shift();
+            $scope.deleteSchedule();
+          }
+          else {
+            $log.error('Error deleting schedule ', status, data);
+          }
+      }).error(function (data, status, headers, config) {
+          $log.error(status + " Error deleting schedule " + data);
+      });
+    }
+    else {
+      $scope.saving = false;
+      $scope.getScheduleTemplate();
+      //length is 0
     }
   }
 
@@ -322,8 +351,60 @@ angular.module('sequoiaGroveApp')
     }
   }
 
+  $scope.clearSchedule = function() {
+  $scope.updateShifts = [];
+    var len = $scope.template.length;
+    var i = 0;
+    for(; i<len; i++) {
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.mon.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.tue.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.wed.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.thu.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.fri.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.sat.val
+      });
+      $scope.deleteShifts.push({
+        sid: $scope.template[i].sid,
+        date: $scope.date.sun.val
+      });
+
+      $scope.template[i].mon.name = "";
+      $scope.template[i].tue.name = "";
+      $scope.template[i].wed.name = "";
+      $scope.template[i].thu.name = "";
+      $scope.template[i].fri.name = "";
+      $scope.template[i].sat.name = "";
+      $scope.template[i].sun.name = "";
+
+      $scope.template[i].mon.eid = 0;
+      $scope.template[i].tue.eid = 0;
+      $scope.template[i].wed.eid = 0;
+      $scope.template[i].thu.eid = 0;
+      $scope.template[i].fri.eid = 0;
+      $scope.template[i].sat.eid = 0;
+      $scope.template[i].sun.eid = 0;
+    }
+    $scope.deleteSchedule();
+  }
+
   $scope.importLastWeek = function() {
-    //$log.debug($scope.previousShifts);
 
     // all of the day of the week lists should be the same
     // length as monday
@@ -373,7 +454,6 @@ angular.module('sequoiaGroveApp')
         date: $scope.date.sun.val
       });
     }
-    $log.debug($scope.updateShifts);
     $scope.saveSchedule();
   }
 

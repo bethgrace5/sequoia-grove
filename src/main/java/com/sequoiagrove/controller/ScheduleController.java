@@ -140,6 +140,17 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
+  // delete scheduled day dd/mm/yyyy
+    @RequestMapping(value = "/schedule/delete/{sid}/{date}")
+    public String getScheduleTemplate(Model model,
+          @PathVariable("sid")  int sid,
+          @PathVariable("date") String date) throws SQLException {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        jdbcTemplate.update("call bajs_pkg.delete_schedule(?, ?)", sid, date);
+        return "jsonTemplate";
+    }
+
 
 }
 
