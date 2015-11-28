@@ -45,6 +45,19 @@ angular.module('sequoiaGroveApp')
   $scope.previousTemplate = [];
   $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
   $scope.barChart = { labels:[],  data:[[]], series:["names"]};
+  $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
+  $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
+  $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
+  $scope.birthdays = [];
+  $scope.holidays = [];
+
+  // TODO function to find birthdays this week
+  $scope.birthdays.push({name:"Amelia", date:"10/10"});
+  $scope.birthdays.push({name:"Jem", date:"10/13"});
+
+  // TODO function to find holidays this week
+  $scope.holidays.push({name:"Christmas", date:"12/25"});
+  $scope.holidays.push({name:"New Years Day", date:"01/01"});
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -383,6 +396,9 @@ angular.module('sequoiaGroveApp')
       }
 
     }
+  }
+  $scope.shiftDuration = function(shr, smin, ehr, emin) {
+    return parseFloat((emin-smin)/60) + (ehr-shr);
   }
 
   $scope.countHours = function() {

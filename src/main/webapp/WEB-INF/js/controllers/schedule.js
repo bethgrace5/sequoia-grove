@@ -10,6 +10,7 @@
 angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function (
         $filter,
+        $window,
         $http, 
         $log, 
         $rootScope, 
@@ -23,6 +24,10 @@ angular.module('sequoiaGroveApp')
   $scope.selectedPid = 0;
   $scope.empEditSearch = '';
   $scope.saving = false;
+
+  $scope.print = function() {
+    $window.print();
+  }
 
 
   $scope.selectEid = function(id) {

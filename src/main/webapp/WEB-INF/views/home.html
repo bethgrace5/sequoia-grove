@@ -3,6 +3,10 @@
 <div class="container-fluid hidden-print schedule-view-options">
   <ng-include src="'views/templates/schedule-view-options.html'"></ng-include>
 </div>
+<!-- Print Version -->
+<div class="container-fluid visible-print-block schedule-view-options">
+  <ng-include src="'views/templates/schedule-view-print.html'"></ng-include>
+</div>
 
 <!-- Schedule -->
 <div class="panel panel-default hidden-print" style="margin-top:20px">
@@ -14,4 +18,17 @@
     <ng-include src="'views/templates/schedule-view.html'"></ng-include>
   </div>
 </div>
+
+<textarea ng-show="user.type=='manager'" 
+  class="form-control hidden-print" 
+  ng-model="printMessageDisclaimer">
+</textarea>
+<textarea ng-show="user.type=='manager'" 
+  class="form-control hidden-print"
+  ng-model="printMessageFullShift">
+</textarea>
+<textarea ng-show="user.type=='manager'"
+  class="form-control hidden-print"
+  ng-model="printMessageHalfShift">
+</textarea>
 

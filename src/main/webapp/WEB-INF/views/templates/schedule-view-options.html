@@ -4,11 +4,12 @@
   <div class="col-sm-12">
     <div class="pull-left">
 
-      <!-- Show Deliveries -->
+      <!-- Show Deliveries 
       <button ng-hide="deliveries.length<=0" class="btn btn-default" ng-click="showDeliveries=!showDeliveries">
         <div ng-hide="showDeliveries"> show deliveries </div>
         <div ng-show="showDeliveries"> hide deliveries </div>
       </button>
+      -->
 
       <!-- highlight logged in user's name -->
       <button class="btn btn-info" ng-click="selectLoggedInUser()">
@@ -37,11 +38,13 @@
 
     <!-- Download and Print Options -->
     <form class="pull-right">
+      <!--
       <button class="btn btn-primary">
         Download
         <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
       </button>
-      <button class="btn btn-primary">
+      -->
+      <button class="btn btn-primary" onclick="window.print()">
         Print
         <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
       </button>

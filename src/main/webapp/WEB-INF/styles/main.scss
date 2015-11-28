@@ -15,8 +15,31 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
+
 a:focus {
   outline: 0;
+}
+/* Print Styling */
+.print-message {
+  margin: 30px;
+}
+.print-header {
+  border-top: none !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.print-table {
+  border-top: none !important;
+  height: 10px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+.print-row {
+  border-top: none !important;
+  height: 10px !important;
+  font-size: 0.8em;
+  padding: 0 !important;
+  margin: 0 !important;
 }
 
 /* schedule eit/view options */
