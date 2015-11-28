@@ -64,7 +64,7 @@ angular.module('sequoiaGroveApp')
   }
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, weekday, shiftId) {
+  $scope.inputStatus = function(id, shiftId) {
     var style = 'form-control schedule-edit-input';
 
     // Highlight all occurences of the employee that was clicked
@@ -105,6 +105,7 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
+    $scope.schHourCount = [];
     $scope.saving = true;
     var i=0;
     var len = $scope.updateShifts.length;

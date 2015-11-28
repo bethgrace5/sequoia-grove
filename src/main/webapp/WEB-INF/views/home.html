@@ -1,74 +1,17 @@
-<div class="container-fluid hidden-print">
 
-  <!--
-    <div class="panel panel-default">
-        <div class="panel-body">
-
-            <div class="row" ng-repeat="h in hotel.name track by $index">
-                <div class="col-sm-2">
-                {{h}}
-                </div>
-            </div>
-
-        </div>
-    </div>
-    -->
-
-    <div class="row hidden-xs">
-        <div class="col-sm-12">
-
-            <div class="pull-left">
-              <!--
-                <button ng-hide="deliveries.length<=0" class="btn btn-default schedule-view-button" ng-click="showDeliveries=!showDeliveries">
-                    <div ng-hide="showDeliveries"> show deliveries </div>
-                    <div ng-show="showDeliveries"> hide deliveries </div>
-                </button>
-              -->
-                <!-- highlight logged in user's name -->
-                <button class="btn btn-default schedule-view-button" ng-click="selectLoggedInUser()">
-                    <div ng-hide="highlight"> highlight me </div>
-                    <div ng-show="highlight"> unhighlight me </div>
-                </button>
-
-                <!-- Filter by User, Location, or Position -->
-                <div class="dropdown pull-left" dropdown is-open=true>
-                  <button type="button" id="dropDownMenu1" class="btn btn-default schedule-view-button" data-toggle="dropdown" 
-                    aria-haspopup="true" aria-expanded="true">
-                    {{type}} <span class="caret"></span>
-                  </button>
-                  <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
-                    <li role="menuitem"><a ng-click="type='all'">All</a></li>
-                    <li role="menuitem"><a ng-click="type='mine'">Mine</a></li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Locations</li>
-                    <li ng-repeat = "loc in locations" value ="{{loc}}"><a ng-click="changeType(loc)">{{loc}}</a> </li>
-                    <li role="separator" class="divider"></li>
-                    <li class="dropdown-header">Positions</li>
-                    <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
-                  </ul>
-                </div>
-
-            </div>
-
-                <!-- Download and Print Options
-            <form class="pull-right">
-                <button class="btn btn-default schedule-view-button">
-                    Download
-                    <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
-                </button>
-                <button class="btn btn-default schedule-view-button">
-                    Print
-                    <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
-                </button>
-            </form>
-                -->
-
-        </div>
-    </div> <!-- End Schedule Header -->
-
-    <div class="panel panel-default hidden-print" style="margin-top:20px">
-        <div class="panel-body">
-            <schedule-view></schedule-view>
-        </div>
-    </div>
+<!-- Schedule View Options: filter, show deliveries, highlight, download, print -->
+<div class="container-fluid hidden-print schedule-view-options">
+  <ng-include src="'views/templates/schedule-view-options.html'"></ng-include>
 </div>
+
+<!-- Schedule -->
+<div class="panel panel-default hidden-print" style="margin-top:20px">
+  <div class="panel-body">
+    <!-- Header: Week Nav, title, dates -->
+    <ng-include src="'views/templates/schedule-header.html'"></ng-include>
+    <br/>
+    <!-- Schedule -->
+    <ng-include src="'views/templates/schedule-view.html'"></ng-include>
+  </div>
+</div>
+

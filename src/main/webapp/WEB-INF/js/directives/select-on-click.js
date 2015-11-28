@@ -110,7 +110,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             }
             else if (attrs.day == 'sun' &&
                 $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployeess[i].avail.sun, attrs
+                  $scope.currentEmployees[i].avail.sun, attrs
                 )
             ) {
               $scope.template[index].sun.eid = newId;

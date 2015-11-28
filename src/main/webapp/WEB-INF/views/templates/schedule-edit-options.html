@@ -1,0 +1,66 @@
+
+<div class="row hidden-xs schedule-view-options">
+
+  <div class="col-sm-12">
+
+    <div class="pull-left">
+      <!-- Filter by User, Location, or Position -->
+      <div class="dropdown pull-left" dropdown is-open=true>
+        <button type="button" id="dropDownMenu1" 
+          class="btn btn-info" data-toggle="dropdown"
+          ng-click="importLastWeek()"
+          aria-haspopup="true" aria-expanded="true">
+          Import Last Week <!--<span class="caret"></span>-->
+          <span class="glyphicon glyphicon-arrow-down"></span>
+        </button>
+      </div>
+    </div>
+
+    <form class="pull-right">
+      <!-- Download and Print Options -->
+      <button class = "btn btn-default btn-warning">
+        Clear
+        <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+
+      <!-- visual indication that changes are all saved -->
+      <button class = "btn btn-success"
+        ng-show = "updateShifts.length<=0"
+        ng-disabled = "saving";
+        ng-click = "saveSchedule()">
+        Saved
+        <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+      </button>
+
+      <!-- Default button -->
+      <button class = "btn btn-default"
+        ng-show = "updateShifts.length>0"
+        ng-disabled = "saving";
+        ng-click = "saveSchedule()">
+        Save Changes
+        <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
+      </button>
+      <button class = "btn btn-primary">
+        Save &amp; Publish
+        <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+      </button>
+    </form>
+
+  </div>
+</div> <!-- End Schedule Edit Options -->
+
+<!-- Filter/ Narrow Schedule by location/shift -->
+<div class="position-button-bar">
+  <div ng-repeat="pos in positions">
+    <button
+      class="btn btn-default btn-small pull-left clear-both position-button"
+      ng-show = "$index == 0"
+      ng-click="switchPos(0)">
+      All
+    </button>
+    <button class="btn btn-default btn-small pull-left clear-both position-button"
+      ng-click="switchPos(pos.id)">
+      {{pos.title}}
+    </button>
+  </div>
+</div>

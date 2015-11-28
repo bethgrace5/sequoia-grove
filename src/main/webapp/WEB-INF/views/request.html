@@ -1,35 +1,52 @@
+
 <div class="container-fluid">
 
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="panel panel-default chart-panel clear-both pull-left">
-        <div class="panel-body">
+  <div class="panel panel-default">
+    <div class="panel-body">
+      <ng-include src="'views/templates/request-submit.html'"></ng-include>
+    </div>
+  </div>
+  <div ng-show="user.type === 'manager'">
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ng-include src="'views/templates/request-pending.html'"></ng-include>
+      </div>
+    </div>
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <ng-include src="'views/templates/request-history.html'"></ng-include>
+      </div>
+    </div>
+  </div>
 
+  <!--
+  <div class="row">
+    <div class="col-sm-6">
+      <div class="panel panel-default">
+        <div class="panel-body">
           <p class="lead">
             Count of Number of Days Employees are Scheduled
           </p>
-          <div class="chart-container">
-            <canvas id="doughnut" class="chart chart-doughnut"
+          <canvas id="doughnut" class="chart chart-doughnut"
             chart-data="donGraph.data" 
             chart-click="donGraph.onClick"
             chart-legend="true"
             chart-labels="donGraph.labels">
-            </canvas> 
-          </div>
-
+          </canvas> 
         </div>
       </div>
+    </div>
 
-      <div class="panel panel-default side-chart-panel clear-both pull-left">
+    <div class="col-sm-6">
+      <div class="panel panel-default">
         <div class="panel-body">
-
           <p class="lead">
-            {{chartcount + 1}} Days This Schedule
+            {{countDisplay + 1}} 
+            Day<span ng-show="(countDisplay+1) > 1">s</span> This Schedule
           </p>
-          <div ng-repeat="emp in schCount[chartcount]">
-            <p class="lead">{{emp.name}}</p>
+          <div ng-repeat="emp in schCount[countDisplay]">
+            {{emp.name}}
           </div>
-
         </div>
       </div>
     </div>
@@ -37,61 +54,19 @@
 
   <div class="row">
     <div class="col-sm-12">
-      <div class="panel panel-default" style="margin:30px">
+      <div class="panel panel-default">
         <div class="panel-body">
-      <p class="lead">
-        Weekly Hours Per Employee
-      </p>
-      <canvas id="bar" class="chart chart-bar"
-        chart-data="barChart.data" 
-        chart-labels="barChart.labels">
-      </canvas>
-    </div>
-  </div>
-    </div>
-  </div>
-
-
-  <!--
-  <div class="panel panel-default chart-panel">
-    <div class="panel-body">
-
-      <div class="chart-container">
-        <canvas id="line"
-          class="chart chart-line"
-          chart-data="lineGraph.data"
-          chart-labels="lineGraph.labels"
-          chart-legend="true"
-          chart-series="lineGraph.series"
-          options="lineGraph.chart-line"
-          chart-click="lineGraph.onClick">
-        </canvas>
+          <p class="lead">
+            Weekly Hours Per Employee
+          </p>
+          <canvas id="bar" class="chart chart-bar"
+            chart-data="barChart.data" 
+            chart-labels="barChart.labels">
+          </canvas>
+        </div>
       </div>
-
     </div>
   </div>
   -->
-
 
 </div>
-
-  <!--
-  <div class="panel panel-default">
-      <div class="panel-body">
-          <request-submit></request-submit>
-      </div>
-  </div>
-  <div ng-show="user.type === 'manager'">
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <request-pending></request-pending>
-          </div>
-      </div>
-      <div class="panel panel-default">
-          <div class="panel-body">
-              <request-history></request-history>
-          </div>
-      </div>
-  </div>
-  -->
-

@@ -124,6 +124,8 @@ angular.module('sequoiaGroveApp')
 
   // View Next or Previous Week
   $scope.changeWeek = function(operation) {
+    // clear out hour count
+    $scope.schHourCount = [];
     $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
     var nextMonday = '';
 
@@ -473,11 +475,9 @@ angular.module('sequoiaGroveApp')
       }
       $scope.barChart.labels.push(name);
       $scope.barChart.data[0].push(sum);
-      $log.debug(sum);
       $scope.schHourCount.push({id:checkId, name:name, hours:sum});
       sum = 0;
     }
-    $log.debug($scope.schHourCount);
   }
 
   // Initialize controller

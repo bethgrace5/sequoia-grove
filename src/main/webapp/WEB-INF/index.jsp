@@ -20,14 +20,14 @@
   <body ng-controller="MainCtrl">
 
     <div class="hidden-print">
-      <header-menu></header-menu>
+      <ng-include src="'views/templates/header-menu.html'"></ng-include>
     </div>
 
     <!-- main view -->
     <div id="main-content" class="container-fluid" ng-view=""></div>
 
     <div class="hidden-print">
-      <footer-menu></footer-menu>
+      <ng-include src="'views/templates/footer-menu.html'"></ng-include>
     </div>
 
     <!-- build:js(.) scripts/vendor.js -->
@@ -65,23 +65,7 @@
     <script src="js/controllers/main.js"></script>
     <script src="js/controllers/request.js"></script>
     <script src="js/controllers/schedule.js"></script>
-    <script src="js/directives/header-menu.js"></script>
-    <script src="js/directives/footer-menu.js"></script>
-    <script src="js/directives/schedule-edit.js"></script>
-    <script src="js/directives/schedule-edit-header.js"></script>
-    <script src="js/directives/schedule-header.js"></script>
-    <script src="js/directives/schedule-shift-edit.js"></script>
-    <script src="js/directives/schedule-delivery-edit.js"></script>
-    <script src="js/directives/schedule-view.js"></script>
-    <script src="js/directives/employee-availibility.js"></script>
-    <script src="js/directives/employee-positions.js"></script>
-    <script src="js/directives/employee-history.js"></script>
-    <script src="js/directives/employee-info.js"></script>
-    <script src="js/directives/request-history.js"></script>
-    <script src="js/directives/request-pending.js"></script>
-    <script src="js/directives/request-submit.js"></script>
     <script src="js/directives/select-on-click.js"></script>
-    <script src="js/directives/employee-list.js"></script>
     <!-- endbuild -->
 
 </body>

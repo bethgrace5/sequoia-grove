@@ -1,12 +1,4 @@
 
-<div class="hidden-xs">
-  <div class="row">
-    <div class="col-sm-12">
-      <schedule-edit-header></schedule-edit-header>
-    </div>
-  </div>
-</div>
-
 <!-- shifts -->
 <div ng-repeat="t in template" ng-show="filterSchedule(t.pid)">
   <div class="row">
@@ -35,7 +27,7 @@
       endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.mon.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.mon.eid, 'monday', t.sid)"
+      ng-class="inputStatus(t.mon.eid, t.sid)"
       ng-change="changeId(t.mon.eid, t.sid, date.mon.val)"
       ng-model="t.mon.name">
     </div>
@@ -54,7 +46,7 @@
       endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.tue.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.tue.eid, 'tuesday', t.sid)"
+      ng-class="inputStatus(t.tue.eid, t.sid)"
       ng-model="t.tue.name">
     </div>
 
@@ -72,7 +64,7 @@
       endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.wed.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.wed.eid, 'wednesday', t.sid)"
+      ng-class="inputStatus(t.wed.eid, t.sid)"
       ng-model="t.wed.name">
     </div>
 
@@ -90,7 +82,7 @@
       endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.thu.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.thu.eid, 'thursday', t.sid)"
+      ng-class="inputStatus(t.thu.eid, t.sid)"
       ng-model="t.thu.name">
     </div>
 
@@ -108,7 +100,7 @@
       endmin={{t.wd_ed_m}}
       ng-click="selectEid(t.fri.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.fri.eid, 'friday', t.sid)"
+      ng-class="inputStatus(t.fri.eid, t.sid)"
       ng-model="t.fri.name">
     </div>
 
@@ -131,7 +123,7 @@
       endmin={{t.we_ed_m}}
       ng-click="selectEid(t.sat.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.sat.eid, 'saturday', t.sid)"
+      ng-class="inputStatus(t.sat.eid, t.sid)"
       ng-model="t.sat.name">
     </div>
 
@@ -149,7 +141,7 @@
       endmin={{t.we_ed_m}}
       ng-click="selectEid(t.sun.eid)"
       ng-disabled=false type="text"
-      ng-class="inputStatus(t.sun.eid, 'sunday', t.sid)"
+      ng-class="inputStatus(t.sun.eid, t.sid)"
       ng-model="t.sun.name">
     </div>
 

@@ -12,7 +12,6 @@
     <mvc:annotation-driven />
     <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
     <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/templates/**" location="/WEB-INF/templates/"/>
     <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
     <mvc:resources mapping="/img/**"       location="/resources/img/"/>
     <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>

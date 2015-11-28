@@ -1,0 +1,77 @@
+
+<!-- Week Nav and Title -->
+<div class="row hidden-xs">
+  <div class="col-sm-12 pull-right">
+    <p class="lead">
+      <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek('subtract')">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+      </button>
+      Week of {{date.mon.disp}}
+      <button type="button" class="btn btn-default week-nav-button" aria-label="Left Align" ng-click="changeWeek('add')">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+      </button>
+    </p>
+  </div>
+  <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
+</div>
+
+<div class="hidden-xs">
+
+  <!-- Weekday Dates -->
+  <div class="row weekday-title">
+    <div class="col-sm-1 col-sm-offset-3">    
+                           {{date.mon.disp}} </div>
+    <div class="col-sm-1"> {{date.tue.disp}} </div>
+    <div class="col-sm-1"> {{date.wed.disp}} </div>
+    <div class="col-sm-1"> {{date.thu.disp}} </div>
+    <div class="col-sm-1"> {{date.fri.disp}} </div>
+    <div class="col-sm-1 col-sm-offset-1">    
+                           {{date.sat.disp}} </div>
+    <div class="col-sm-1"> {{date.sun.disp}} </div>
+  </div>
+
+  <!-- Weekday Names -->
+  <div class="row weekday-title">
+    <div class="col-sm-1 col-sm-offset-3">     
+                            {{'SCHEDULE_VIEW_MONDAY'   | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_TUESDAY'  | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_WEDNESDAY'| translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_FRIDAY'   | translate}} </div>
+    <div class="col-sm-1 col-sm-offset-1">     
+                            {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_SUNDAY'   | translate}} </div>
+  </div>
+
+  <!-- FIXME make use of column offsets for gaps -->
+  <div ng-show="showDeliveries" ng-repeat="delivery in deliveries">
+    <div class="row">
+
+      <div ng-repeat="day in delivery.days">
+        <!-- gap on the left -->
+        <div class="col-sm-3" ng-show="$index==0""col-sm-2"> </div>
+
+        <!-- gap between weekdays and weekend days -->
+        <div ng-show="$index==5"> <div class="col-sm-1"> </div> </div>
+
+        <!-- delivery this day -->
+        <div ng-show="day">
+          <div class="col-sm-1 delivery-title">
+            {{delivery.title}}
+          </div>
+        </div>
+
+        <!-- no delivery this day -->
+        <div ng-hide="day">
+          <div class="col-sm-1 delivery-title">
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+
+

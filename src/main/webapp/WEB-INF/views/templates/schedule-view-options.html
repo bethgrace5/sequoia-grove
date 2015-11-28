@@ -1,0 +1,50 @@
+
+<!-- Options for Schedule View -->
+<div class="row hidden-xs">
+  <div class="col-sm-12">
+    <div class="pull-left">
+
+      <!-- Show Deliveries -->
+      <button ng-hide="deliveries.length<=0" class="btn btn-default" ng-click="showDeliveries=!showDeliveries">
+        <div ng-hide="showDeliveries"> show deliveries </div>
+        <div ng-show="showDeliveries"> hide deliveries </div>
+      </button>
+
+      <!-- highlight logged in user's name -->
+      <button class="btn btn-info" ng-click="selectLoggedInUser()">
+        <div ng-hide="highlight"> highlight me </div>
+        <div ng-show="highlight"> unhighlight me </div>
+      </button>
+
+      <!-- Filter by User, Location, or Position -->
+      <div class="dropdown pull-left" dropdown is-open=true>
+        <button type="button" id="dropDownMenu1" class="btn btn-default" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="true">
+          {{type}} <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
+          <li role="menuitem"><a ng-click="type='all'">All</a></li>
+          <li role="menuitem"><a ng-click="type='mine'">Mine</a></li>
+          <li role="separator" class="divider"></li>
+          <li class="dropdown-header">Locations</li>
+          <li ng-repeat = "loc in locations" value ="{{loc}}"><a ng-click="changeType(loc)">{{loc}}</a> </li>
+          <li role="separator" class="divider"></li>
+          <li class="dropdown-header">Positions</li>
+          <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Download and Print Options -->
+    <form class="pull-right">
+      <button class="btn btn-primary">
+        Download
+        <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
+      </button>
+      <button class="btn btn-primary">
+        Print
+        <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
+      </button>
+    </form>
+  </div>
+</div>
