@@ -124,8 +124,9 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             }
             // add shift to update list if necessary
             $scope.checkIfShiftExists(attrs.day, newId, attrs.sid)
-            this.click();
+            //this.click();
             //this.blur();
+            element.context.classList.add('schedule-edit-highlight');
           }
         }
 

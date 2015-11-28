@@ -102,7 +102,7 @@ a:focus {
 .schedule-edit{
   font-size: 1em;
   /*border: 1px solid #336699;*/
-  width: 8%;
+  width: 9%;
   padding: 0;
   border-radius: 5px;
 }
@@ -124,8 +124,13 @@ a:focus {
 .schedule-edit-panel {
   /*background-color: #edf6f7;*/
   min-height: 70%;
-  overflow-y: scroll;
-  width: 80%;
+  width: 87%;
+}
+.schedule-edit-panel-header div{
+  min-width: 9%;
+}
+.schedule-edit-header-spacing {
+  height: 15px;
 }
 .employee-schedule-edit-panel {
   border: none;
@@ -135,14 +140,14 @@ a:focus {
   right: 0;
   max-height: 70%;
   overflow-y: scroll;
-  width: 19%;
+  width: 13%;
 }
 .employee-schedule-edit-search {
   border: none;
   margin-top: 40px;
   position: fixed;
   right: 0;
-  width: 19%;
+  width: 13%;
 }
 
 /* Schedule Header */
