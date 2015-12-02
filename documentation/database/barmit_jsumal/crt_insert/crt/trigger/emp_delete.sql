@@ -15,9 +15,6 @@ begin
     update bajs_requests_vacation r set r.responded_by = null
     where :old.id = r.responded_by;
 
-    delete from bajs_orders o
-    where :old.id = o.employee_id;
-
     delete from bajs_is_scheduled_for i
     where :old.id = i.employee_id;
 

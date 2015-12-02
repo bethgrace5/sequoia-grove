@@ -4,7 +4,7 @@ create table BAJS_NEW_SHIFT (
 	position_id number(5) references BAJS_POSITION(id),
 	task_name varchar2(30) default '',
 	start_date date,
-    end_date  date,
+    end_date  date default null,
 	weekday_id number(5) references BAJS_HOURS(id),
 	weekend_id  number(5)references BAJS_HOURS(id),
         CONSTRAINT pk_new_shift_id PRIMARY KEY(id)

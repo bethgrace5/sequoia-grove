@@ -5,7 +5,7 @@ create or replace package bajs_pkg as
 
 -- Procedure Prototypes
 procedure add_holiday( mmdd varchar2, n varchar2, t varchar2);
-procedure delete_ingredient(iid number);
+--procedure delete_ingredient(iid number);
 procedure schedule( eid number, sid number, day varchar2);
 procedure delete_schedule (sid number, day varchar2);
 procedure add_position( eid number, pid number, day varchar2);
@@ -60,11 +60,12 @@ end bajs_pkg;
 create or replace package body bajs_pkg as
 
     -- Delete an Ingredent from being used in a menu item by supplying the ingredient id
-    procedure delete_ingredient (iid number) is
+    /*procedure delete_ingredient (iid number) is
     begin
         delete from bajs_used_in u
         where u.ingredient_id = iid;
     end delete_ingredient;
+    */
 
     -- Create a new Holiday Record
     procedure add_holiday( mmdd varchar2, n varchar2, t varchar2) is
@@ -226,6 +227,7 @@ create or replace package body bajs_pkg as
         pipe row(cur_rec);
         end loop;
     end get_schedule;
+
 
 end bajs_pkg;
 /
