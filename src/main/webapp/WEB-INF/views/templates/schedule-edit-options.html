@@ -9,6 +9,7 @@
         <button type="button" id="dropDownMenu1" 
           class="btn btn-info" data-toggle="dropdown"
           ng-click="importLastWeek()"
+          ng-disabled = "saving"
           aria-haspopup="true" aria-expanded="true">
           Import Last Week <!--<span class="caret"></span>-->
           <span class="glyphicon glyphicon-arrow-down"></span>
@@ -18,7 +19,9 @@
 
     <form class="pull-right">
       <!-- Download and Print Options -->
-      <button ng-click="clearSchedule()" class="btn btn-default btn-warning">
+      <button ng-click="clearSchedule()" 
+        ng-disabled = "saving";
+        class="btn btn-default btn-warning">
         Clear
         <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
       </button>
@@ -40,7 +43,17 @@
         Save Changes
         <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
       </button>
-      <button class = "btn btn-primary">
+
+      <button class = "btn btn-primary"
+        ng-show = "updateShifts.length<=0"
+        ng-disabled = "saving">
+        Publish
+        <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
+      </button>
+
+      <button class = "btn btn-primary"
+        ng-show = "updateShifts.length>0"
+        ng-disabled = "saving">
         Save &amp; Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
