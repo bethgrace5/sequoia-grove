@@ -68,6 +68,34 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
+  // check if given day availability is within provided shift range
+  $scope.checkEmpAvailWithShift = function(avl, shf) {
+    if (avl == null) {
+      return false;
+    }
+    var len = avl.length;
+    for (var i = 0; i < len; i++) {
+      var startFlag = false;
+      var endFlag = false;
+      if (
+        (avl[i].startHr == shf.sthr && avl[i].startMin <= shf.stmin) ||
+        avl[i].startHr < shf.sthr
+      ) {
+        startFlag = true;
+      }
+      if (
+        (avl[i].endHr == shf.endhr &&  avl[i].endMin >= shf.endmin) ||
+        avl[i].endHr > shf.endhr
+      ) {
+        endFlag = true;
+      }
+      if (startFlag && endFlag) {
+        return true;
+      }
+    }
+    return false;
+  }
+
   // validation for schedule edit input
   $scope.inputStatus = function(id, shiftId) {
     var style = 'form-control schedule-edit-input';
@@ -307,33 +335,6 @@ angular.module('sequoiaGroveApp')
     }
     $scope.selectEid(eid);
     return;
-  }
-
-  $scope.checkEmpAvailWithShift = function(avl, atr) {
-    if (avl == null) {
-      return false;
-    }
-    var len = avl.length;
-    for (var i = 0; i < len; i++) {
-      var startFlag = false;
-      var endFlag = false;
-      if (
-        (avl[i].startHr == atr.sthr && avl[i].startMin <= atr.stmin) ||
-        avl[i].startHr < atr.sthr
-      ) {
-        startFlag = true;
-      }
-      if (
-        (avl[i].endHr == atr.endhr &&  avl[i].endMin >= atr.endmin) ||
-        avl[i].endHr > atr.endhr
-      ) {
-        endFlag = true;
-      }
-      if (startFlag && endFlag) {
-        return true;
-      }
-    }
-    return false;
   }
 
   // check if the shift was updated then reverted back to it was originally

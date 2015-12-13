@@ -6,7 +6,7 @@
   </div>
   <div class="col-sm-2">
     <p>Position</p>
-    <div class="dropdown">
+    <!--div class="dropdown">
       <button id="primary-role-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Select
         <span class="caret"></span>
@@ -14,21 +14,27 @@
       <ul class="dropdown-menu" aria-labelledby="primary-role-dropdown">
         <li ng-repeat="position in positions">{{position.title}}</li>
       </ul>
-    </div>
+    </div-->
+    <select class="schedule-edit-shift-select" ng-model="" placeholder="Position"
+      ng-options="option.title for option in positions">
+      <option value="">- Position -</option>
+    </select>
   </div>
 
   <div class="col-sm-3">
     <p>Weekdays</p>
     <div class="row">
       <div class="col-sm-5">
-        <input type="text" 
-        class="form-control" 
-        ng-click="weekdayStart" placeholder="Start">
+        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekday Start"
+          ng-options="option.disp for option in times.start">
+          <option value="">- Start -</option>
+        </select>
       </div>
       <div class="col-sm-5">
-        <input type="text" 
-        class="form-control" 
-        ng-click="weekdayEnd" placeholder="End">
+        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekday End"
+          ng-options="option.disp for option in times.end">
+          <option value="">- End -</option>
+        </select>
       </div>
     </div>
   </div>
@@ -37,15 +43,24 @@
     <p>Weekends</p>
     <div class="row">
       <div class="col-sm-5">
-        <input type="text" 
-        class="form-control" 
-        ng-click="weekdayStart" placeholder="Start">
+        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekend Start"
+          ng-options="option.disp for option in times.start">
+          <option value="">- Start -</option>
+        </select>
       </div>
       <div class="col-sm-5">
-        <input type="text" 
-        class="form-control" 
-        ng-click="weekdayEnd" placeholder="End">
+        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekend End"
+          ng-options="option.disp for option in times.end">
+          <option value="">- End -</option>
+        </select>
       </div>
     </div>
+  </div>
+
+  <div class="col-sm-1">
+    <p>Add Shift</p>
+    <button type="button" class="btn btn-success" ng-click="foo()">
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
   </div>
 </div>

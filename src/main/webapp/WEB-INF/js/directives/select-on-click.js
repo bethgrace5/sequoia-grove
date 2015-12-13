@@ -83,6 +83,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
                 )
             ) {
               $scope.template[index].wed.eid = newId;
+              schFlag = true;
             }
             else if (attrs.day == 'thu' &&
                 $scope.checkEmpAvailWithShift(
@@ -116,7 +117,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
               $scope.template[index].sun.eid = newId;
               schFlag = true;
             }
-            if (!schFlag) {
+            if (schFlag) {
               element.context.classList.add('schedule-edit-input-error');
             }
             else {
@@ -134,31 +135,31 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           if (exists == false) {
             // This name does not match any employee in the list
             // set the template id to 0
-              element.context.classList.add('schedule-edit-input-warn');
+            element.context.classList.add('schedule-edit-input-warn');
 
-              if (attrs.day == 'mon') {
-                $scope.template[index].mon.eid = 0;
-              }
-              else if (attrs.day == 'tue') {
-                $scope.template[index].tue.eid = 0;
-              }
-              else if (attrs.day == 'wed') {
-                $scope.template[index].wed.eid = 0;
-              }
-              else if (attrs.day == 'thu') {
-                $scope.template[index].thu.eid = 0;
-              }
-              else if (attrs.day == 'fri') {
-                $scope.template[index].fri.eid = 0;
-              }
-              else if (attrs.day == 'sat') {
-                $scope.template[index].sat.eid = 0;
-              }
-              else if (attrs.day == 'sun') {
-                $scope.template[index].sun.eid = 0;
-              }
+            if (attrs.day == 'mon') {
+              $scope.template[index].mon.eid = 0;
             }
-          //}, 0)
+            else if (attrs.day == 'tue') {
+              $scope.template[index].tue.eid = 0;
+            }
+            else if (attrs.day == 'wed') {
+              $scope.template[index].wed.eid = 0;
+            }
+            else if (attrs.day == 'thu') {
+              $scope.template[index].thu.eid = 0;
+            }
+            else if (attrs.day == 'fri') {
+             $scope.template[index].fri.eid = 0;
+            }
+            else if (attrs.day == 'sat') {
+              $scope.template[index].sat.eid = 0;
+            }
+            else if (attrs.day == 'sun') {
+              $scope.template[index].sun.eid = 0;
+            }
+          }
+        //}, 0)
 
       });
 

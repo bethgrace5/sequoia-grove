@@ -98,6 +98,59 @@ angular.module('sequoiaGroveApp')
     fri:{val:'', disp:''}, 
     sat:{val:'', disp:''}, 
     sun:{val:'', disp:''}};
+  $scope.times = {
+    // start times start at the earlist shift start and increment by half
+    // hours until the end of the lastest starting shift
+    // TODO have a smarter way to populate this list
+    start:[
+      {disp:"5:00 AM", valHr: 5, valMin: 0},
+      {disp:"5:30 AM", valHr: 5, valMin: 30},
+      {disp:"6:00 AM", valHr: 6, valMin: 0},
+      {disp:"6:30 AM", valHr: 6, valMin: 30},
+      {disp:"7:00 AM", valHr: 7, valMin: 0},
+      {disp:"7:30 AM", valHr: 7, valMin: 30},
+      {disp:"8:00 AM", valHr: 8, valMin: 0},
+      {disp:"8:30 AM", valHr: 8, valMin: 30},
+      {disp:"9:00 AM", valHr: 9, valMin: 0},
+      {disp:"9:30 AM", valHr: 9, valMin: 30},
+      {disp:"10:00 AM", valHr: 10, valMin: 0},
+      {disp:"10:30 AM", valHr: 10, valMin: 30},
+      {disp:"11:00 AM", valHr: 11, valMin: 0},
+      {disp:"11:30 AM", valHr: 11, valMin: 30},
+      {disp:"12:00 PM", valHr: 12, valMin: 0},
+      {disp:"12:30 PM", valHr: 12, valMin: 30},
+      {disp:"1:00 PM", valHr: 13, valMin: 0},
+      {disp:"1:30 PM", valHr: 13, valMin: 30},
+      {disp:"2:00 PM", valHr: 14, valMin: 0},
+      {disp:"2:30 PM", valHr: 14, valMin: 30},
+      {disp:"3:00 PM", valHr: 15, valMin: 0},
+      {disp:"3:30 PM", valHr: 15, valMin: 30},
+      {disp:"4:00 PM", valHr: 16, valMin: 0},
+      {disp:"4:30 PM", valHr: 16, valMin: 30}
+    ],
+    // end times start at the earlist shift end and increment by half 
+    // hours until the end of the lastest ending shift
+    // TODO have a smarter way to populate this list
+    end:[
+      {disp:"1:00 PM", valHr: 13, valMin: 0},
+      {disp:"1:30 PM", valHr: 13, valMin: 30},
+      {disp:"2:00 PM", valHr: 14, valMin: 0},
+      {disp:"2:30 PM", valHr: 14, valMin: 30},
+      {disp:"3:00 PM", valHr: 15, valMin: 0},
+      {disp:"3:30 PM", valHr: 15, valMin: 30},
+      {disp:"4:00 PM", valHr: 16, valMin: 0},
+      {disp:"4:30 PM", valHr: 16, valMin: 30},
+      {disp:"5:00 PM", valHr: 17, valMin: 0},
+      {disp:"5:30 PM", valHr: 17, valMin: 30},
+      {disp:"6:00 PM", valHr: 18, valMin: 0},
+      {disp:"6:30 PM", valHr: 18, valMin: 30},
+      {disp:"7:00 PM", valHr: 19, valMin: 0},
+      {disp:"7:30 PM", valHr: 19, valMin: 30},
+      {disp:"8:00 PM", valHr: 20, valMin: 0},
+      {disp:"8:30 PM", valHr: 20, valMin: 30},
+      {disp:"9:00 PM", valHr: 21, valMin: 0}
+    ]
+  };
 
   // Set Schedule Header Dates, and Date String Values
   $scope.setScheduleHeader = function() {
