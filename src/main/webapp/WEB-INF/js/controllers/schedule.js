@@ -24,14 +24,29 @@ angular.module('sequoiaGroveApp')
   $scope.selectedPid = 0;
   $scope.empEditSearch = '';
   $scope.saving = false;
+  $scope.selectedShift = {
+    idx : -1,
+    title : '',
+    pos : 0,
+    wd_st : 0,
+    wd_ed : 0,
+    we_st : 0,
+    we_ed : 0
+  };
 
   $scope.print = function() {
     $window.print();
   }
 
-
   $scope.selectEid = function(id) {
     $scope.selectedId = id;
+  }
+
+  $scope.selectShift = function(i) {
+    $scope.selectedShift.idx = i;
+    if ($scope.selectedShift.idx != -1) {
+      $scope.selectedShift.title = $scope.template[i].tname;
+    }
   }
 
   $scope.switchPos = function(pos) {
@@ -117,6 +132,14 @@ angular.module('sequoiaGroveApp')
     else {
       style += ' schedule-edit-input-highlight';
     } */
+    return style;
+  }
+
+  $scope.shiftStatus = function(i) {
+    var style = '';
+    if(i===$scope.selectedShift.idx) {
+      style += 'schedule-edit-task-selected';
+    }
     return style;
   }
 
@@ -353,7 +376,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.clearSchedule = function() {
-  $scope.updateShifts = [];
+    $scope.updateShifts = [];
     var len = $scope.template.length;
     var i = 0;
     for(; i<len; i++) {

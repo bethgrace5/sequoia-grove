@@ -15,10 +15,14 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
-
+/* General Styling */
 a:focus {
   outline: 0;
 }
+.selectable-elem {
+  cursor: pointer;
+}
+
 /* Print Styling */
 .print-message {
   margin: 30px;
@@ -121,6 +125,12 @@ a:focus {
 .schedule-edit-task-names{
   font-size: 1em;
   margin:0 auto;
+}
+.schedule-edit-task-selected{
+  background-color: #66ffd7;
+  border-radius: 0.3em;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .schedule-edit{
   font-size: 1em;

@@ -4,12 +4,12 @@
   <div class="row">
     <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
-    <div class="col-sm-2 schedule-edit-task-names" >
-      {{t.tname}}
+    <div class="col-sm-2 schedule-edit-task-names selectable-elem" ng-click="selectShift($index)">
+      <span ng-class="shiftStatus($index)">{{t.tname}}</span>
     </div>
 
 <!-- weekday times -->
-    <div class="col-sm-1 schedule-times" >
+    <div class="col-sm-1 schedule-times">
       {{formatTime(t.wd_st_h, t.wd_st_m, false)}}-{{formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
     </div>
 

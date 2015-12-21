@@ -280,7 +280,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;
-        //$log.debug(data);
+        //$log.debug(data.template);
         // initialize a simpler container for checking when updating shifts
 
         var i=0;
