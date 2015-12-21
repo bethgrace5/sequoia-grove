@@ -3,8 +3,9 @@
 */
 create table BAJS_EMPLOYEE (
 	id number(5),
-	first_name varchar2(10) default '',
-	last_name varchar2(10) default '',
+	first_name varchar2(20) default '',
+	last_name varchar2(20) default '',
+    email varchar2(20),
     is_manager number(1), 
 	birth_date date,
 	max_hrs_week number(2, 0) default 40,

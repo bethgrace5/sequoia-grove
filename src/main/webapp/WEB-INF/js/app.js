@@ -84,10 +84,10 @@ angular.module('sequoiaGroveApp', [
       //loggedInUser: currentUser,
       onlogin: function(assertion) {
         var data = { assertion: assertion };
-        $http.post("/sequoiagrove/auth/login/", data).success(function(data, status){
-          //$scope.hello = data;
-          $log.debug(data.email);
-        });
+        $http.post("/sequoiagrove/auth/login/", data).
+          success(function(data, status){
+            $log.debug(data.email);
+          });
         $rootScope.loggedIn = true;
         console.log('logged in');
       },
