@@ -122,6 +122,7 @@ angular.module('sequoiaGroveApp')
 
 
   // Get The Schedule for the week currently being viewed
+  /*
   $scope.getShifts = function() {
     $http({
       url: '/sequoiagrove/shift',
@@ -134,6 +135,7 @@ angular.module('sequoiaGroveApp')
         $log.error(status + " Error obtaining emplyees simple : " + data);
     });
   }
+  */
 
 
   // Save the shifts in the list of updateShifts
@@ -482,7 +484,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init = function() {
-    $scope.getShifts();
+    //$scope.getShifts();
   }
 
   $scope.init();

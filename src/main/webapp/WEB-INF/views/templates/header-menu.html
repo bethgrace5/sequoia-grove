@@ -37,6 +37,8 @@
             <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/employee')"><a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a></li>
             <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/data')"><a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a></li>
             <li ng-show="user.type=='manager'" role="presentation" ng-class="changeTab('/schedule')"><a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a></li>
+            <li ng-click="login()" role="presentation" ng-class="changeTab('/schedule')"><a>Login</a></li>
+            <li ng-click="logout()" role="presentation" ng-class="changeTab('/schedule')"><a>Logout</a></li>
 
         </ul>
       </div>

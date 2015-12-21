@@ -15,7 +15,7 @@
         <li ng-repeat="position in positions">{{position.title}}</li>
       </ul>
     </div-->
-    <select class="schedule-edit-shift-select" ng-model="" placeholder="Position"
+    <select class="schedule-edit-shift-select"  placeholder="Position"
       ng-options="option.title for option in positions">
       <option value="">- Position -</option>
     </select>
@@ -25,13 +25,13 @@
     <p>Weekdays</p>
     <div class="row">
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekday Start"
+        <select class="schedule-edit-shift-select"  placeholder="Weekday Start"
           ng-options="option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekday End"
+        <select class="schedule-edit-shift-select"  placeholder="Weekday End"
           ng-options="option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
@@ -43,13 +43,13 @@
     <p>Weekends</p>
     <div class="row">
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekend Start"
+        <select class="schedule-edit-shift-select"  placeholder="Weekend Start"
           ng-options="option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" ng-model="" placeholder="Weekend End"
+        <select class="schedule-edit-shift-select"  placeholder="Weekend End"
           ng-options="option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
