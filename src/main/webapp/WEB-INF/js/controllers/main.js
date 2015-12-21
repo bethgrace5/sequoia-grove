@@ -16,8 +16,15 @@ angular.module('sequoiaGroveApp')
     $translate,
     $location,
     $log,
-    localStorageService) 
+    localStorageService,
+    Persona) 
 {
+  $scope.login = function () {
+    Persona.request();
+  }
+  $scope.logout = function () {
+    Persona.logout();
+  }
 
   // Sample Data for current logged in user
   // The logged in user's id is what is matched for highlighting

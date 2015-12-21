@@ -1,6 +1,8 @@
 'use strict';
 
 angular.module('sequoiaGroveApp', [
+    'LocalStorageModule',
+    'chart.js',
     'ngAnimate',
     'ngCookies',
     'ngResource',
@@ -8,8 +10,7 @@ angular.module('sequoiaGroveApp', [
     'ngSanitize',
     'ngTouch',
     'pascalprecht.translate',
-    'LocalStorageModule',
-    'chart.js'
+    'persona'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
               $logProvider, $compileProvider) {
@@ -75,4 +76,26 @@ angular.module('sequoiaGroveApp', [
 
       /* Increase application performance when false, default is true */
       $compileProvider.debugInfoEnabled(true);
+
+  }).
+  run (function($rootScope, $http, $log, Persona) {
+    var currentUser = 'bob@example.com';
+    Persona.watch({
+      //loggedInUser: currentUser,
+      onlogin: function(assertion) {
+        var data = { assertion: assertion };
+        $http.post("/sequoiagrove/auth/login/", data).
+          success(function(data, status){
+            $log.debug(data.email);
+          });
+        $rootScope.loggedIn = true;
+        console.log('logged in');
+      },
+      onlogout: function() {
+        $rootScope.loggedIn = false;
+          console.log('logged out');
+        // Stuff
+      }
+    });
+
   });

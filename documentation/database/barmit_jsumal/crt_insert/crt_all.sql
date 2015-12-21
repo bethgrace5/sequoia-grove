@@ -12,7 +12,7 @@ cache 20;
 @crt/table/crt_employee.sql
 @crt/table/crt_holiday.sql
 @crt/table/crt_employment_history.sql
-@crt/table/crt_user.sql
+--@crt/table/crt_user.sql
 @crt/table/crt_availability.sql
 @crt/table/crt_cannot_work_with.sql
 @crt/table/crt_supplier.sql

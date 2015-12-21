@@ -17,7 +17,7 @@ drop view  BAJS_EMP_ALL_INFO;
 
 /* base tables */
 drop table BAJS_HOLIDAY;
-drop table BAJS_USER;
+--drop table BAJS_USER;
 --drop table BAJS_WEEKDAY_HOURS;
 --drop table BAJS_WEEKEND_HOURS;
 --drop table BAJS_ORDERS;

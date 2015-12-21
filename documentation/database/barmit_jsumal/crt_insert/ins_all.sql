@@ -17,7 +17,7 @@
 --@ins/ins_sold_in.sql;
 @ins/ins_requests_vacation.sql;
 --@ins/ins_used_in.sql;
-@ins/ins_user.sql;
+--@ins/ins_user.sql;
 --@ins/ins_weekday_hours.sql;
 --@ins/ins_weekend_hours.sql;
 @ins/ins_holiday.sql;
