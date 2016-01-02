@@ -11,7 +11,8 @@ create table BAJS_EMPLOYEE (
 	max_hrs_week number(2, 0) default 40,
 	phone_number varchar2(10) default '',
 	clock_number number(2, 0),
-        CONSTRAINT pk_employee_id PRIMARY KEY(id)
+        CONSTRAINT pk_employee_id PRIMARY KEY(id),
+        CONSTRAINT email_unique UNIQUE (email)
 )
 	PCTFree 5
 	PCTUSED 15
