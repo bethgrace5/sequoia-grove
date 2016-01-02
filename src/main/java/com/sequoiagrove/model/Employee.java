@@ -17,6 +17,7 @@ public class Employee {
     int clock;
     String firstName;
     String lastName;
+    String email;
     String phone;
     Date birthDate;
     List<EmpHistory> history = new ArrayList<EmpHistory>();
@@ -33,6 +34,7 @@ public class Employee {
       String firstName,
       String lastName,
       String phone,
+      String email,
       Date birthDate,
       List<EmpHistory> history,
       List<Position> positions,
@@ -45,6 +47,7 @@ public class Employee {
         this.firstName = firstName;
         this.lastName = lastName;
         this.phone = phone;
+        this.email = email;
         this.birthDate = birthDate;
         this.history = history;
         this.positions = positions;
@@ -98,6 +101,13 @@ public class Employee {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Date getBirthDate() {

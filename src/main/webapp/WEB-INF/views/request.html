@@ -6,8 +6,8 @@
       <ng-include src="'views/templates/request-submit.html'"></ng-include>
     </div>
   </div>
-  <div ng-show="user.type === 'manager'">
-    <div class="panel panel-default hidden-print">
+  <div>
+    <div ng-show="loggedInUser.isManager" class="panel panel-default hidden-print">
       <div class="panel-body">
         <ng-include src="'views/templates/request-pending.html'"></ng-include>
       </div>

@@ -16,17 +16,15 @@ angular.module('sequoiaGroveApp', [
               $logProvider, $compileProvider) {
     $routeProvider
       .when('/', {
-        redirectTo: '/home'
-      })
-      .when('/login', {
-        templateUrl: 'views/login.html',
-        controller: 'LoginCtrl',
-        controllerAs: 'login'
+        redirectTo: '/login'
       })
       .when('/home', {
         templateUrl: 'views/home.html',
         controller: 'HomeCtrl',
         controllerAs: 'home'
+      })
+      .when('/login', {
+        templateUrl: 'views/login.html'
       })
       .when('/schedule', {
         templateUrl: 'views/schedule.html',
@@ -44,7 +42,7 @@ angular.module('sequoiaGroveApp', [
         controllerAs: 'request'
       })
       .otherwise({
-        redirectTo: '/home'
+        redirectTo: '/login'
       });
 
 
@@ -78,22 +76,29 @@ angular.module('sequoiaGroveApp', [
       $compileProvider.debugInfoEnabled(true);
 
   }).
-  run (function($rootScope, $http, $log, Persona) {
-    var currentUser = 'bob@example.com';
+  run (function($rootScope, $http, $log, $location, Persona) {
+    var currentUser = '';
     Persona.watch({
-      //loggedInUser: currentUser,
       onlogin: function(assertion) {
         var data = { assertion: assertion };
         $http.post("/sequoiagrove/auth/login/", data).
           success(function(data, status){
-            $log.debug(data.email);
+            if (data.UserNotRegistered) {
+              $log.debug(data.email, 'not registered with this application');
+              return;
+            }
+            $log.debug(data);
+            $rootScope.loggedInUser = data.user;
+            $rootScope.loggedIn = true;
+            $log.debug('logged in as', data.user.fullname, data.user.email);
+            $location.path( "/home" );
           });
-        $rootScope.loggedIn = true;
-        console.log('logged in');
       },
       onlogout: function() {
         $rootScope.loggedIn = false;
-          console.log('logged out');
+        $rootScope.loggedInUser = {};
+        $rootScope.$apply();
+        $location.path( "/login" );
         // Stuff
       }
     });

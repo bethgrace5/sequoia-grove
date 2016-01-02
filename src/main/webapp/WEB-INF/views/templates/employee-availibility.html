@@ -39,7 +39,7 @@
 
 
     <!-- Monday Availabiliy -->
-    <div ng-repeat="mon in allEmployees[current].avail.mon" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="mon in selectedEmployee.avail.mon" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('mon')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Monday: </p>
@@ -60,7 +60,7 @@
 
 
     <!-- Tuesday Availabiliy -->
-    <div ng-repeat="tue in allEmployees[current].avail.tue" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="tue in selectedEmployee.avail.tue" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('tue')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Tuesday: </p>
@@ -81,7 +81,7 @@
 
 
     <!-- Wednesday Availabiliy -->
-    <div ng-repeat="wed in allEmployees[current].avail.wed" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="wed in selectedEmployee.avail.wed" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('wed')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Wednesday: </p>
@@ -102,7 +102,7 @@
 
 
     <!-- Thursday Availabiliy -->
-    <div ng-repeat="thu in allEmployees[current].avail.thu" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="thu in selectedEmployee.avail.thu" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('thu')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Thursday: </p>
@@ -123,7 +123,7 @@
 
 
     <!-- Friday Availabiliy -->
-    <div ng-repeat="fri in allEmployees[current].avail.fri" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="fri in selectedEmployee.avail.fri" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('fri')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Friday: </p>
@@ -144,7 +144,7 @@
 
 
     <!-- Saturday Availabiliy -->
-    <div ng-repeat="sat in allEmployees[current].avail.sat" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="sat in selectedEmployee.avail.sat" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('sat')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Saturday: </p>
@@ -165,7 +165,7 @@
 
 
     <!-- Sunday Availabiliy -->
-    <div ng-repeat="sun in allEmployees[current].avail.sun" class="row emp-repeated-row ng-cloak">
+    <div ng-repeat="sun in selectedEmployee.avail.sun" class="row emp-repeated-row ng-cloak">
       <div ng-click="setNewAvailDay('sun')">
         <div class="col-sm-1 col-sm-offset-1">
           <p ng-show="$index==0"> Sunday: </p>

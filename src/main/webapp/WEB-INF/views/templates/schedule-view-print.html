@@ -48,7 +48,7 @@
 
 <!-- shifts -->
   <tr ng-repeat="t in template"
-    ng-show="filterByType(t.location, t.position, user.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
+    ng-show="filterByType(t.location, t.position, loggedInUser.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 
     <!-- shift title -->
     <td class="print-row">
@@ -78,27 +78,27 @@
     <!--</div>-->
 
     <!-- Monday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.mon.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.mon.eid==loggedInUser.id) && highlight]">
       {{t.mon.name}}
     </td>
 
     <!-- Tuesday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.tue.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.tue.eid==loggedInUser.id) && highlight]">
       {{t.tue.name}}
     </td>
 
     <!-- Wednesday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.wed.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.wed.eid==loggedInUser.id) && highlight]">
       {{t.wed.name}}
     </td>
 
     <!-- Thursday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.thu.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.thu.eid==loggedInUser.id) && highlight]">
         {{t.thu.name}}
     </td>
 
     <!-- Friday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.fri.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.fri.eid==loggedInUser.id) && highlight]">
       {{t.fri.name}}
     </td>
 
@@ -124,12 +124,12 @@
       <!--</div>-->
 
     <!-- Saturday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.sat.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.sat.eid==loggedInUser.id) && highlight]">
       {{t.sat.name}}
     </td>
 
     <!-- Sunday -->
-    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.sun.eid==user.id) && highlight]">
+    <td ng-class="{true:'highlighted print-row ', false:'print-row '}[(t.sun.eid==loggedInUser.id) && highlight]">
       {{t.sun.name}}
     </td>
 
