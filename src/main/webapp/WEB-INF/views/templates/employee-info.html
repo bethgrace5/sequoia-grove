@@ -41,7 +41,7 @@
       </div>
       <div class="col-sm-2 col-sm-offset-2">
         <span>Manager</span>
-        <input type="checkbox" ng-model="selectedEmployee.isManager" ng-true-value="1" ng-false-value="0">
+        <input ng-disabled="loggedInUser.id == selectedEmployee.id" type="checkbox" ng-model="selectedEmployee.isManager" ng-true-value="1" ng-false-value="0">
       </div>
     </div>
 
@@ -52,6 +52,16 @@
       <div class="col-sm-3">
         <!-- will be a datepicker -->
         <input class="form-control" ng-model="selectedEmployee.phone" placeholder="xxx-xxx-xxxx"/>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-sm-1 col-sm-offset-1">
+        <span>Email:</span>
+      </div>
+      <div class="col-sm-3">
+        <!-- will be a datepicker -->
+        <input class="form-control" ng-model="selectedEmployee.email"/>
       </div>
     </div>
   </form>

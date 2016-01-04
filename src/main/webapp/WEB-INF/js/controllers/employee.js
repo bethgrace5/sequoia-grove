@@ -4,7 +4,13 @@
  * Employee Controller
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
+
+    // user is not logged in
+    if ($rootScope.loggedIn == false) {
+      $location.path('/login');
+    }
+
     $scope.activeTab = 'info';
 
     $scope.current;

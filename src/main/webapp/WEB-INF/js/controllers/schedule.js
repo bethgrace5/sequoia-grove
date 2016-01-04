@@ -11,12 +11,18 @@ angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function (
         $filter,
         $window,
+        $location,
         $http, 
         $log, 
         $rootScope, 
         $scope, 
         $timeout, 
         $translate) {
+
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    $location.path('/login');
+  }
 
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;

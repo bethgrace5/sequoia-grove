@@ -12,8 +12,15 @@ angular.module('sequoiaGroveApp')
     $http,
     $log,
     $scope, 
+    $location,
+    $rootScope, 
     $translate)
   {
+
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    $location.path('/login');
+  }
 
   $scope.$on('translate', function(event, data) {
   }); 

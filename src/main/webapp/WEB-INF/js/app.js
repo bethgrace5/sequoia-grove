@@ -77,20 +77,35 @@ angular.module('sequoiaGroveApp', [
 
   }).
   run (function($rootScope, $http, $log, $location, Persona) {
+    $rootScope.loggedIn = false;
+    $rootScope.userNotRegistered = false;
+    $rootScope.loggedInUser = {};
     var currentUser = '';
+
+    $rootScope.login = function () {
+      Persona.request();
+    }
+    $rootScope.logout = function () {
+      Persona.logout();
+      $location.path( "/login" );
+    }
+
     Persona.watch({
       onlogin: function(assertion) {
         var data = { assertion: assertion };
         $http.post("/sequoiagrove/auth/login/", data).
           success(function(data, status){
             if (data.UserNotRegistered) {
+              $rootScope.userNotRegistered = true;
               $log.debug(data.email, 'not registered with this application');
+              $rootScope.loggedInUser = {email:data.email};
               return;
             }
+            $rootScope.userNotRegistered = false;
             $log.debug(data);
             $rootScope.loggedInUser = data.user;
             $rootScope.loggedIn = true;
-            $log.debug('logged in as', data.user.fullname, data.user.email);
+            $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
             $location.path( "/home" );
           });
       },

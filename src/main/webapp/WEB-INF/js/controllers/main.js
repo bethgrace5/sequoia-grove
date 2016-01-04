@@ -10,22 +10,22 @@
 angular.module('sequoiaGroveApp')
   .controller('MainCtrl', function (
     $http,
-    $scope,
-    $rootScope,
-    $route,
-    $translate,
     $location,
     $log,
+    $rootScope,
+    $route,
+    $scope,
+    $translate,
     localStorageService,
     Persona) 
 {
+  $rootScope.currentPath = $location.path();
 
-  $scope.login = function () {
-    Persona.request();
-  }
-  $scope.logout = function () {
-    Persona.logout();
-    $location.path( "/login" );
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    if ($location.path() != '/login') {
+      $location.path('/login');
+    }
   }
 
   $scope.currentEmployees = [];
@@ -565,4 +565,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+
 });

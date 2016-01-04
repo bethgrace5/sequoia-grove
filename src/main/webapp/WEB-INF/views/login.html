@@ -1,9 +1,18 @@
 <div class="container">
   <div class="hidden-print text-center" style="height: 300px;">
-    <p class="lead"> Sign in to continue </p>
+    <p class="lead"> <a style="cursor:pointer;" ng-click="login()">Sign in to continue</a> </p>
+    <p ng-show="userNotRegistered">
+    <strong style="color:b30000;">{{loggedInUser.email}}</strong> 
+    is not a registered user.
+    </p>
+    <p ng-show="userNotRegistered">
+    If you have an account, ask an administrator to verify your email.
+    </p>
+    <!--
       <button type="button" ng-click="login()" class="btn btn-default">
       <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
       Sign in with Persona
       </button>
+      -->
   </div>
 </div>
