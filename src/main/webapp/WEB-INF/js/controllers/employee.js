@@ -4,10 +4,17 @@
  * Employee Controller
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
+
+    // user is not logged in
+    if ($rootScope.loggedIn == false) {
+      $location.path('/login');
+    }
+
     $scope.activeTab = 'info';
 
     $scope.current;
+    $scope.selectedEmployee = {id:0};
     $scope.newAvail = {day:'', start:'', end:''};
 
     $scope.empDateFormat = function(curDate) {
@@ -200,54 +207,19 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.updateEmployee = function() {
-        // validate
-        // send post
-        $http({
-            url: '/sequoiagrove/employee/update/' +
-            $scope.allEmployees[$scope.current].id + '/' +
-            $scope.allEmployees[$scope.current].firstName + '/' +
-            $scope.allEmployees[$scope.current].lastName + '/' +
-            $scope.allEmployees[$scope.current].isManager + '/' +
-            $scope.allEmployees[$scope.current].phone + '/' +
-             moment($scope.allEmployees[$scope.current].birthDate,"YYYY-MM-DD").format("DD-MM-YYYY")+ '/' +
-            $scope.allEmployees[$scope.current].maxHrsWeek + '/' +
-            $scope.allEmployees[$scope.current].clock,
-            method: 'POST'
-        })
+      // validate
+      // send post
+      $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
+        success(function(data, status){
+        });
     }
-
-    $scope.getAvailability = function() {
-      /*
-      $http({
-        url: '/sequoiagrove/employee/availability/'+employees[current].id,
-        method: "GET"
-      }).success(function (data, status, headers, config) {
-        $log.debug(data);
-        $scope.employees = data.employees;
-        $scope.data.availability=[
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""},
-          {start:""+":"+"", end:""+":"+""}
-        ]
-      }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining employee data: " + data);
-      });
-      */
-
-    }
-    $scope.getAvailability();
 
     $scope.selectEmployee = function(id) {
-      id = id+"";
       var length = $scope.allEmployees.length;
       for(var i = 0; i < length; i++) {
-        var curid = $scope.allEmployees[i].id+"";
+        var curid = $scope.allEmployees[i].id;
         if (curid==id) {
-          $scope.current = i;
+          $scope.selectedEmployee = $scope.allEmployees[i];
           break;
         }
       }

@@ -76,7 +76,8 @@ insert into BAJS_employee values( 49, 'NE Camden',  'Ghassen','email49@gmail.com
 insert into BAJS_employee values( 50, 'NE Rob',     'Eemen',  'email50@gmail.com', 0, to_date('12/04/1980', 'mm/dd/yyyy'), 40, '1234567890', 50 );
 
 /* real test users */
-insert into BAJS_employee values( 0, 'Beth',    'Armitage','bethgrace5@gmail.com', 1, to_date('12/04/1999', 'mm/dd/yyyy'), 40, '1234567890', 51 );
+insert into BAJS_employee values( 51, 'Beth',  'Armitage','bethgrace5@gmail.com', 1, to_date('12/04/1999', 'mm/dd/yyyy'), 40, '1234567890', 51 );
+insert into BAJS_employee values( 51, 'Sunny', 'Sumal','sunnysumal@gmail.com', 1,    to_date('12/04/1999', 'mm/dd/yyyy'), 40, '1234567890', 52 );
 
 
 commit;

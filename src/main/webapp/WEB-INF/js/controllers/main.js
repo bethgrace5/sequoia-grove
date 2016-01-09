@@ -10,28 +10,24 @@
 angular.module('sequoiaGroveApp')
   .controller('MainCtrl', function (
     $http,
-    $scope,
-    $rootScope,
-    $route,
-    $translate,
     $location,
     $log,
+    $rootScope,
+    $route,
+    $scope,
+    $translate,
     localStorageService,
     Persona) 
 {
-  $scope.login = function () {
-    Persona.request();
-  }
-  $scope.logout = function () {
-    Persona.logout();
+  $rootScope.currentPath = $location.path();
+
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    if ($location.path() != '/login') {
+      $location.path('/login');
+    }
   }
 
-  // Sample Data for current logged in user
-  // The logged in user's id is what is matched for highlighting
-  $scope.user1 = { id:1, firstname: "John", lastname: "Doe", type: "manager" };
-  $scope.user2 = { id:2, firstname: "Smith", lastname: "theEmployee", type: "employee" };
-  $scope.user = $scope.user1;
-  localStorageService.set('SequoiaGrove.user', $scope.user);
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
   $scope.hasPosition = [];
@@ -569,4 +565,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+
 });

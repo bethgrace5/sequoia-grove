@@ -1,8 +1,11 @@
 package com.sequoiagrove.controller;
 
+import com.google.gson.*;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.web.bind.annotation.RequestBody;
 import java.sql.SQLException;
 import java.sql.ResultSet;
+import java.sql.Types;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -63,27 +66,17 @@ public class EmployeeController
     public String getAllEmployee(Model model, @PathVariable("status") String status) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         // Get All Employees by Default
-        String queryStr = "select distinct employee_id, max_hrs_week, is_manager, " +
-              "clock_number, first_name, last_name, phone_number, birth_date " +
-              "from bajs_emp_all_info";
+        String queryStr = "select * from bajs_employee";
 
         // Get only Current Employees
         if (status.equals("current")) {
-            queryStr = "select * from (select distinct employee_id, max_hrs_week, is_manager, first_name, "+
-                "last_name, clock_number, phone_number, birth_date from bajs_emp_all_info) a "+
-                "natural join "+
-                "( "+
-                "select h.employee_id "+
-                "from "+
-                "bajs_employment_history h "+
-                "where h.date_unemployed is null "+
-                ") ";
+            queryStr = "select * from bajs_employee natural join (select employee_id as id from bajs_employment_history where date_unemployed is null)";
         }
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    int id = rs.getInt("employee_id");
+                    int id = rs.getInt("id");
                     WeeklyAvail emptyWeek = new WeeklyAvail();
                     Employee es = new Employee (
                       id,
@@ -93,6 +86,7 @@ public class EmployeeController
                       rs.getString("first_name"),
                       rs.getString("last_name"),
                       rs.getString("phone_number"),
+                      rs.getString("email"),
                       rs.getDate("birth_date"),
                       null,
                       null,
@@ -287,27 +281,33 @@ public class EmployeeController
         });
     }
 
-    @RequestMapping(value = "/employee/update/{eid}/{fname}/{lname}/" +
-        "{mgr}/{phone}/{bday}/{maxHr}/{clk}")
-    public String updateEmployee(Model model,
-          @PathVariable("eid") int eid,
-          @PathVariable("fname") String fname,
-          @PathVariable("lname") String lname,
-          @PathVariable("mgr") int mgr,
-          @PathVariable("phone") String phone,
-          @PathVariable("bday") String bday,
-          @PathVariable("maxHr") int maxHr,
-          @PathVariable("clk") int clk) throws SQLException {
+    @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
+    public String updateEmployee(Model model, @RequestBody String postLoad) throws SQLException {
+
+      JsonElement jelement = new JsonParser().parse(postLoad);
+      JsonObject  jobject = jelement.getAsJsonObject();
+
+      String[] params = {
+          jobject.get("firstName").getAsString(),
+          jobject.get("lastName").getAsString(),
+          jobject.get("isManager").getAsString(),
+          jobject.get("birthDate").getAsString(),
+          jobject.get("maxHrsWeek").getAsString(),
+          jobject.get("phone").getAsString(),
+          jobject.get("clock").getAsString(),
+          jobject.get("id").getAsString()
+      };
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update( "update bajs_employee set first_name = ?, "+
-          "last_name = ?, "+
-          "is_manager = ?, "+
-          "phone_number = ?, "+
-          "birth_date = to_date(?, 'dd-mm-yyyy'), "+
+      jdbcTemplate.update( "update BAJS_employee set first_name = ?, "+
+          "last_name    = ?, "+
+          "is_manager   = ?, "+
+          "birth_date   = to_date(?, 'yyyy-mm-dd'), "+
           "max_hrs_week = ?, "+
-          "clock_number = ? "+
-          "where id = ? ", fname, lname, mgr, phone, bday, maxHr, clk, eid);
+          "phone_number = ?, "+
+          "clock_number = ?  "+
+          "where id = ?",
+         params);
 
         return "jsonTemplate";
     }

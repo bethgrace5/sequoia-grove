@@ -6,9 +6,6 @@ before delete on bajs_employee
 for each row
 when (old.id > 0)
 begin
-    delete from bajs_user u
-    where :old.id = u.employee_id;
-
     delete from bajs_requests_vacation r
     where :old.id = r.requested_by;
 
