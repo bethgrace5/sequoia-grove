@@ -14,6 +14,7 @@
     <!-- build:css(.tmp) styles/main.css -->
     <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css' media='screen,print'>
     <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
+    <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
     <link rel="stylesheet" href="styles/main.scss">
     <!-- endbuild -->
   </head>
@@ -55,6 +56,10 @@
     <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <script src="https://login.persona.org/include.js"></script>
     <script src="bower_components/angular-persona/angular-persona.js"></script>
+    <script src="bower_components/angular-aria/angular-aria.js"></script>
+    <script src="bower_components/angular-material/angular-material.js"></script>
+    <script src="bower_components/angular-messages/angular-messages.js"></script>
+
     <!--script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->

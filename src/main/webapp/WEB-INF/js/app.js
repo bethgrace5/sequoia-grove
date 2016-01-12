@@ -10,7 +10,9 @@ angular.module('sequoiaGroveApp', [
     'ngSanitize',
     'ngTouch',
     'pascalprecht.translate',
-    'persona'
+    'persona',
+    'ngMaterial',
+    'ngMessages'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
               $logProvider, $compileProvider) {
