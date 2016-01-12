@@ -24,7 +24,7 @@ angular.module('sequoiaGroveApp')
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     if ($location.path() != '/login') {
-      $location.path('/login');
+      //$location.path('/login');
     }
   }
 

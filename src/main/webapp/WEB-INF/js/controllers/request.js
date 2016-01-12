@@ -3,6 +3,7 @@
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
 
+
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');

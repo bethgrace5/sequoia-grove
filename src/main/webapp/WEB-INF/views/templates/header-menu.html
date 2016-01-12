@@ -21,7 +21,7 @@
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button type="button" ng-click="login()" class="btn btn-clear">
+        <button ng-disabled="loggingIn" type="button" ng-click="login()" class="btn btn-clear">
           <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
           Sign in / Sign up
         </button>
@@ -35,7 +35,7 @@
 
             <!-- all user options -->
             <li ng-show="loggedIn" role="presentation" ng-class="changeTab('/home')"><a href="#/home">{{'HEADER_TAB_HOME' | translate}}</a></li>
-            <li ng-show="loggedIn" role="presentation" ng-class="changeTab('/data')"><a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a></li>
+            <li ng-show="loggedIn" role="presentation" ng-class="changeTab('/request')"><a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a></li>
 
             <!-- manager only options -->
             <li ng-show="loggedInUser.isManager" role="presentation" ng-class="changeTab('/employee')"><a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a></li>
