@@ -32,12 +32,14 @@
     </div>
 
     <div class="row emp-text-row">
-      <div class="col-sm-1 col-sm-offset-1">
-        <span>Birthday:</span>
-      </div>
       <div class="col-sm-2">
         <!-- will be a datepicker -->
+        <h4>Birthday 
+          <md-datepicker ng-model="requestDate" md-placeholder="Starting Date"></md-datepicker>
+          </h4>
+        <!--
         <input class="form-control" ng-model="selectedEmployee.birthDate" placeholder="MM/DD/YYYY"/>
+        -->
       </div>
       <div class="col-sm-2 col-sm-offset-2">
         <span>Manager</span>

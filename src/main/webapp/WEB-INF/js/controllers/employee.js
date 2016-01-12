@@ -10,22 +10,7 @@ angular.module('sequoiaGroveApp')
     if ($rootScope.loggedIn == false) {
       $location.path('/login');
     }
-
-    //Birthday Selector
-    $scope.myDate = new Date();
-    $scope.minDate = new Date(
-      $scope.myDate.getFullYear(),
-      $scope.myDate.getMonth() - 2,
-      $scope.myDate.getDate());
-    $scope.maxDate = new Date(
-      $scope.myDate.getFullYear(),
-      $scope.myDate.getMonth() + 2,
-      $scope.myDate.getDate());
-    $scope.onlyWeekendsPredicate = function(date) {
-      var day = date.getDay();
-      return day === 0 || day === 6;
-    }
-
+ 
     $scope.activeTab = 'info';
 
     $scope.current;
@@ -37,6 +22,21 @@ angular.module('sequoiaGroveApp')
         return 'Present';
       }
       return moment(curDate,'YYYY-MM-DD').format('MMMM Do, YYYY');
+    }
+
+    //Birthday Selector
+    $scope.birthDate = new Date();
+    $scope.minDate = new Date(
+      $scope.birthDate.getFullYear(),
+      $scope.birthDate.getMonth() - 2,
+      $scope.birthDate.getDate());
+    $scope.maxDate = new Date(
+      $scope.birthDate.getFullYear(),
+      $scope.birthDate.getMonth() + 2,
+      $scope.birthDate.getDate());
+    $scope.onlyWeekendsPredicate = function(date) {
+      var day = date.getDay();
+      return day === 0 || day === 6;
     }
 
     // add a new availability time for an employee
