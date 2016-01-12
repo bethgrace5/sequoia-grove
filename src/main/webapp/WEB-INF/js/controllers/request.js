@@ -23,6 +23,7 @@ angular.module('sequoiaGroveApp')
     return day === 0 || day === 6;
   }
 
+
   $scope.countDisplay = 0 ;
 
   $scope.donGraph= {

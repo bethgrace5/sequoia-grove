@@ -3,18 +3,16 @@
         <p class="lead">
             My Requests
         </p>
-        <form>
-
-          <md-datepicker ng-model="myDate" md-placeholder="Enter date"></md-datepicker>`
-            <!-- will be a datepicker -->
-            <input placeholder="Start Date">
-            <!-- will be a datepicker -->
-            <input placeholder="End Date">
-
-            <button class="btn btn-primary">
-                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-                Submit
-            </button>
+        <form> 
+          <h4>Starting Date
+            <md-datepicker ng-model="myDate" md-placeholder="Starting Date"></md-datepicker>
+              Ending Date
+              <md-datepicker ng-model="myDate" md-placeholder="Ending Date"></md-datepicker>
+          </h4>
+          <button class="btn btn-primary">
+            <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+              Submit
+          </button>
         </form>
     </div>
 </div>
