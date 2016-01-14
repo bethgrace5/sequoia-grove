@@ -24,10 +24,11 @@ angular.module('sequoiaGroveApp')
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     if ($location.path() != '/login') {
-      $location.path('/login');
+      //$location.path('/login');
     }
   }
 
+  $scope.currentYear = "";
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
   $scope.hasPosition = [];
@@ -190,6 +191,8 @@ angular.module('sequoiaGroveApp')
     $scope.date.sat.disp = moment(mondayDateString, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
     $scope.date.sun.val  = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
+
+    $scope.currentYear = moment(mondayDateString, 'DD-MM-YYYY').format('YYYY');
 
   }
 
