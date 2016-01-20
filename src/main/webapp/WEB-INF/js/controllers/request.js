@@ -12,8 +12,8 @@ angular.module('sequoiaGroveApp')
   $scope.requestDate = new Date();
   $scope.minDate = new Date(
       $scope.requestDate.getFullYear(),
-      $scope.requestDate.getMonth() - 2,
-      $scope.requestDate.getDate());
+      $scope.requestDate.getMonth(),
+      $scope.requestDate.getDate() + 14);//14 days/2 weeks in advance
   $scope.maxDate = new Date(
       $scope.requestDate.getFullYear(),
       $scope.requestDate.getMonth() + 2,

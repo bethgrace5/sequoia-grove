@@ -30,8 +30,8 @@ angular.module('sequoiaGroveApp')
     //one day next before month
     $scope.minDate = new Date(
       $scope.birthDate.getFullYear(),
-      $scope.birthDate.getMonth() - 2,
-      $scope.birthDate.getDate());
+      $scope.birthDate.getMonth(),
+      $scope.birthDate.getDate() +14);
     $scope.maxDate = new Date(
       $scope.birthDate.getFullYear(),
       $scope.birthDate.getMonth() + 2,
