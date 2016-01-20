@@ -24,7 +24,7 @@ angular.module('sequoiaGroveApp')
       return moment(curDate,'YYYY-MM-DD').format('MMMM Do, YYYY');
     }
 
-    //Birthday Selector
+    //Birthday Selector  
     $scope.birthDate = new Date();
     $scope.minDate = new Date(
       $scope.birthDate.getFullYear(),
@@ -83,7 +83,7 @@ angular.module('sequoiaGroveApp')
         $scope.newPos = {};
 
         // check if employee does not already have position
-        var empPosLen = $scope.allEmployees[$scope.current].positions.length;
+        var empPosLen = $scope.allEmployees[$scope.current].positions.leng
         for (var i = 0; i < empPosLen; i++) {
           if ($scope.allEmployees[$scope.current].positions[i].title==pos)
             return;
@@ -222,6 +222,9 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.updateEmployee = function() {
+      //Adding birthDate to selectedEmployee[birthday]
+      //-
+      $scope.selectedEmployee[birthday] = moment(birthDate).format('yyyy-mm-dd');
       // validate
       // send post
       $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
