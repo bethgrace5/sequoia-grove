@@ -26,6 +26,8 @@ angular.module('sequoiaGroveApp')
 
     //Birthday Selector  
     $scope.birthDate = new Date();
+    //var minDate = new Date(currentTime.getYear(), currentTime.getMonth() -1, +1);
+    //one day next before month
     $scope.minDate = new Date(
       $scope.birthDate.getFullYear(),
       $scope.birthDate.getMonth() - 2,
@@ -38,6 +40,7 @@ angular.module('sequoiaGroveApp')
       var day = date.getDay();
       return day === 0 || day === 6;
     }
+    
 
     // add a new availability time for an employee
     $scope.addAvail = function() {
