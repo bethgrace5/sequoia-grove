@@ -21,11 +21,3 @@ Collaborators
 * [Ted](https://github.com/tpascua11)
 * [AJ](https://github.com/amadorjoaosilva)
 
-Ideas for application expansion  
---
-* Catering
-  * track orders in program: enter orders, view previous orders, organize by day/time/customer, verify delivery schedule, type special notes or requests
-  * print categorized checklists: total order construction, sandwiches only, bakery only, customer pickup or delivery schedule
-* Supervisor Information Manual: maintain updated information including: important phone numbers, list of store accounts, what to do in given situations (example: hot water not working usually means restart pilot light), bulletin notes, 
-* Request Switching Shifts, or giving shifts (giving and taking?)
-* Notifications - upcoming shifts, requests off approved or denied, switch shifts approved or denied, new schedules posted
