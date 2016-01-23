@@ -63,6 +63,15 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
+  $scope.publishSchedule = function() {
+      $log.debug("Schedule is published"); 
+      $log.debug($scope.date); 
+
+
+
+
+
+  }
   // Filter schedule by selected position
   $scope.filterSchedule = function(pid) {
     if($scope.selectedPid == 0) {
