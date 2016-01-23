@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+import com.google.gson.Gson;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
@@ -8,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -19,6 +21,8 @@ import java.sql.ResultSet;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.Param;
+import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
 
@@ -129,25 +133,47 @@ public class ScheduleController {
     }
 
   // Get current schedule template (current shifts) dd/mm/yyyy
-    @RequestMapping(value = "/schedule/update/{sid}/{eid}/{date}")
-    public String getScheduleTemplate(Model model,
-          @PathVariable("sid") int sid,
-          @PathVariable("eid") int eid,
-          @PathVariable("date") String date) throws SQLException {
-
+    @RequestMapping(value = "/schedule/update")
+    public String updateSchedule(@RequestBody String body, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)", eid, sid, date);
+
+        // Get the request body (represented as "body":"list of params")
+        Gson gson = new Gson();
+        Param params = gson.fromJson(body, Param.class);
+
+        // Parse the list of params to array of Strings
+        Scheduled [] scheduleChanges = gson.fromJson(params.getBody(), Scheduled[].class);
+
+        // update database
+        for (Scheduled change : scheduleChanges) {
+            jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)", 
+                change.getEid(), 
+                change.getSid(), 
+                change.getDate());
+        }
+
         return "jsonTemplate";
     }
 
   // delete scheduled day dd/mm/yyyy
-    @RequestMapping(value = "/schedule/delete/{sid}/{date}")
-    public String getScheduleTemplate(Model model,
-          @PathVariable("sid")  int sid,
-          @PathVariable("date") String date) throws SQLException {
-
+    @RequestMapping(value = "/schedule/delete")
+    public String deleteSchedule(@RequestBody String body, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        jdbcTemplate.update("call bajs_pkg.delete_schedule(?, ?)", sid, date);
+
+        // Get the request body (represented as "body":"list of params")
+        Gson gson = new Gson();
+        Param params = gson.fromJson(body, Param.class);
+
+        // Parse the list of params to array of Strings
+        Scheduled [] scheduleChanges = gson.fromJson(params.getBody(), Scheduled[].class);
+
+        // update database
+        for (Scheduled change : scheduleChanges) {
+            jdbcTemplate.update("call bajs_pkg.delete_schedule(?, ?)", 
+                change.getSid(),
+                change.getDate());
+        }
+
         return "jsonTemplate";
     }
 
