@@ -8,6 +8,7 @@ node_modules/*
 *.properties
 *.sh*
 test.sql
+*.jar
 
 *.sass-cache
 *.tmp
