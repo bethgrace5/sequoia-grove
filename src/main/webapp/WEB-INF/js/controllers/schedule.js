@@ -31,10 +31,10 @@ angular.module('sequoiaGroveApp')
   $scope.empEditSearch = '';
   $scope.saving = false;
 
+  // Call browser to print schedule on paper
   $scope.print = function() {
     $window.print();
   }
-
 
   $scope.selectEid = function(id) {
     $scope.selectedId = id;
@@ -135,290 +135,123 @@ angular.module('sequoiaGroveApp')
     return style;
   }
 
-
-  // Get The Schedule for the week currently being viewed
-  /*
-  $scope.getShifts = function() {
-    $http({
-      url: '/sequoiagrove/shift',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.shifts = data.shift;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining emplyees simple : " + data);
-    });
-  }
-  */
-
-
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
     $scope.schHourCount = [];
     $scope.saving = true;
-    var i=0;
-    var len = $scope.updateShifts.length;
 
-    if(len>0) {
-      $http({
-        url: '/sequoiagrove/schedule/update/'+ 
-            $scope.updateShifts[0].sid + '/' + 
-            $scope.updateShifts[0].eid + '/' + 
-            $scope.updateShifts[0].date,
-        method: "POST"
-      }).success(function (data, status, headers, config) {
-          if (status == 200) {
-            // clear update shifts list
-            $scope.updateShifts.shift();
-            $scope.saveSchedule();
-          }
-          else {
-            $log.error('Error saving schedule ', status, data);
-          }
-      }).error(function (data, status, headers, config) {
-          $log.error(status + " Error saving schedule " + data);
-      });
-    }
-    else {
+    $http({
+      url: '/sequoiagrove/schedule/update/',
+      method: "POST",
+      data: { 'body': JSON.stringify($scope.updateShifts) }
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear update shifts list
+        $scope.updateShifts = [];
+        $scope.getScheduleTemplate();
+        $scope.saving = false;
+      }
+      else {
+        $log.error('Error saving schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error saving schedule " + data);
       $scope.saving = false;
-      $scope.getScheduleTemplate();
-      //length is 0
-
-    }
+    });
   }
 
   // Delete all these shifts
   $scope.deleteSchedule = function() {
     $scope.schHourCount = [];
     $scope.saving = true;
-    var i=0;
-    var len = $scope.deleteShifts.length;
 
-    if(len>0) {
-      $http({
-        url: '/sequoiagrove/schedule/delete/'+ 
-            $scope.deleteShifts[0].sid + '/' + 
-            $scope.deleteShifts[0].date,
-        method: "DELETE"
-      }).success(function (data, status, headers, config) {
-          if (status == 200) {
-            // clear update shifts list
-            $scope.deleteShifts.shift();
-            $scope.deleteSchedule();
-          }
-          else {
-            $log.error('Error deleting schedule ', status, data);
-          }
-      }).error(function (data, status, headers, config) {
-          $log.error(status + " Error deleting schedule " + data);
-      });
-    }
-    else {
-      $scope.saving = false;
-      $scope.getScheduleTemplate();
-      //length is 0
-    }
+    $http({
+      url: '/sequoiagrove/schedule/delete/',
+      method: "DELETE",
+      data: { 'body': JSON.stringify($scope.deleteShifts) }
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear delete shifts list
+        $scope.deleteShifts = [];
+        $scope.getScheduleTemplate();
+        $scope.saving = false;
+      }
+      else {
+        $log.error('Error deleting schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error deleting schedule " + data);
+    });
   }
 
+  // tracks changes by keeping update list current
+  $scope.checkIfShiftExists = function(eid, sid, date) {
+    sid = parseInt(sid);
+    var paramObj = {'eid':eid, 'sid':sid, 'date':date};
+    var inOriginal = false;
+    var inUpdate = false;
+    var originalIndex = -1;
+    var updateIndex = -1;
 
-  // adds the shift to the list that needs to be sent to the database for updating
-  // if the shift is already in the list, the employee is changed to the new one
-  // if the shift was already that way when retrieved from the database, it is
-  // not added to the lists of shifts that need to be updated
-  $scope.checkIfShiftExists = function(day, eid, sid) {
-    var date = '';
-    var updateLen = $scope.updateShifts.length
-    var oldLen = 0;
+    // check if this shift is in the update list
+    _.map($scope.updateShifts, function(shift, index, list) {
+      if (_.isMatch(shift, { 'sid':sid, 'date':date})) {
+        $log.debug('match in update');
+        inUpdate = true;
+        updateIndex = index;
+      }
+    });
 
-    if (day == 'mon') {
-      date = $scope.date.mon.val;
-      oldLen = $scope.oldShifts.mon.length;
-    }
-    else if (day == 'tue') {
-      date = $scope.date.tue.val;
-      oldLen = $scope.oldShifts.tue.length;
-    }
-    else if (day == 'wed') {
-      date = $scope.date.wed.val;
-      oldLen = $scope.oldShifts.wed.length;
-    }
-    else if (day == 'thu') {
-      date = $scope.date.thu.val;
-      oldLen = $scope.oldShifts.thu.length;
-    }
-    else if (day == 'fri') {
-      date = $scope.date.fri.val;
-      oldLen = $scope.oldShifts.fri.length;
-    }
-    else if (day == 'sat') {
-      date = $scope.date.sat.val;
-      oldLen = $scope.oldShifts.sat.length;
-    }
-    else if (day == 'sun') {
-      date = $scope.date.sun.val;
-      oldLen = $scope.oldShifts.sun.length;
-    }
-
-
-    // first check if this was already in our original list of shifts
-    var j=0;
-    var duplicate = false;
-    for(; j<oldLen && (duplicate == false); j++) {
-
-      if (day == 'mon') {
-        if(($scope.oldShifts.mon[j].eid == eid)
-            && ($scope.oldShifts.mon[j].sid == sid)
-            && ($scope.oldShifts.mon[j].date == date)) {
-          duplicate = true;
-        }
+    // check if this shift is in the original list
+    _.map($scope.oldShifts, function(shift, index, list) {
+      if( _.isEqual(shift, paramObj)) {
+        $log.debug('match in original');
+        inOriginal = true;
+        originalIndex = index;
       }
-      if (day == 'tue') {
-        if(($scope.oldShifts.tue[j].eid == eid)
-            && ($scope.oldShifts.tue[j].sid == sid)
-            && ($scope.oldShifts.tue[j].date == date)) {
-          duplicate = true;
-        }
-      }
-      if (day == 'wed') {
-        if(($scope.oldShifts.wed[j].eid == eid)
-            && ($scope.oldShifts.wed[j].sid == sid)
-            && ($scope.oldShifts.wed[j].date == date)) {
-          duplicate = true;
-        }
-      }
-      if (day == 'thu') {
-        if(($scope.oldShifts.thu[j].eid == eid)
-            && ($scope.oldShifts.thu[j].sid == sid)
-            && ($scope.oldShifts.thu[j].date == date)) {
-          duplicate = true;
-        }
-      }
-      if (day == 'fri') {
-        if(($scope.oldShifts.fri[j].eid == eid)
-            && ($scope.oldShifts.fri[j].sid == sid)
-            && ($scope.oldShifts.fri[j].date == date)) {
-          duplicate = true;
-        }
-      }
-      if (day == 'sat') {
-        if(($scope.oldShifts.sat[j].eid == eid)
-            && ($scope.oldShifts.sat[j].sid == sid)
-            && ($scope.oldShifts.sat[j].date == date)) {
-          duplicate = true; }
-      }
-      if (day == 'sun') {
-        if(($scope.oldShifts.sun[j].eid == eid)
-            && ($scope.oldShifts.sun[j].sid == sid)
-            && ($scope.oldShifts.sun[j].date == date)) {
-          duplicate = true;
-        }
-      }
+    });
+    
+    // decide what to do with the info gathered above
+    if (inOriginal && inUpdate) {
+      // item needs to be removed from update
+      $scope.updateShifts.splice(updateIndex, 1);
+    }
+    else if (inOriginal && !inUpdate) {
+      // do nothing
+    }
+    else if (!inOriginal && inUpdate) {
+      // update the update list
+      $scope.updateShifts.splice(updateIndex, 1);
+      $scope.updateShifts.push(paramObj);
+    }
+    else if (!inOriginal && !inUpdate) {
+      // add item to update list
+      $scope.updateShifts.push(paramObj);
     }
 
-    // This shift was not in our original list add it to our update list 
-    // if it already was in the update list, but for another employee id,
-    // update the employee id. no change for the same employee id
-    if(duplicate == false) {
-      var i=0;
-      var existsInUpdateList = false;
-      for(; i<updateLen && (existsInUpdateList == false); i++) {
-
-        // check that this shift was not already added to the update list
-        if(($scope.updateShifts[i].date == date)
-            && ($scope.updateShifts[i].sid == sid)) {
-
-          // we don't need to add this to the list,
-          // we need to change the employee id for this shift
-          existsInUpdateList = true;
-          $scope.updateShifts[i].eid = eid;
-        }
-      }
-
-      // the shift needs to be added to the list of ones to update
-      if (existsInUpdateList == false) {
-        $scope.updateShifts.push({
-          eid: eid,
-          sid: sid,
-          date: date
-        });
-      }
-    }
-    // though this was a duplicate in our original list, if it had been
-    // previously changed this session, it still would exist in the update
-    // list, so it needs to be removed if it exists there.
-    if(duplicate == true) {
-      $scope.removeFromUpdate(sid, date);
-    }
     $scope.selectEid(eid);
-    return;
   }
 
-  // check if the shift was updated then reverted back to it was originally
-  // it needs to be removed from the update list if it was reverted back
-  $scope.removeFromUpdate = function(sid, date) {
-    var i=0;
-    var len = $scope.updateShifts.length;
-    for(; i<len; i++) {
-      if(($scope.updateShifts[i].date == date)
-          && ($scope.updateShifts[i].sid == sid)) {
-
-        $scope.updateShifts.splice(i, 1);
-        break;
-      }
-    }
-  }
 
   $scope.clearSchedule = function() {
-  $scope.updateShifts = [];
-    var len = $scope.template.length;
-    var i = 0;
-    for(; i<len; i++) {
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.mon.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.tue.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.wed.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.thu.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.fri.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.sat.val
-      });
-      $scope.deleteShifts.push({
-        sid: $scope.template[i].sid,
-        date: $scope.date.sun.val
-      });
+    _.map($scope.template, function(t, index, list) {
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.wed.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.thu.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.fri.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sat.val});
+      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sun.val});
 
-      $scope.template[i].mon.name = "";
-      $scope.template[i].tue.name = "";
-      $scope.template[i].wed.name = "";
-      $scope.template[i].thu.name = "";
-      $scope.template[i].fri.name = "";
-      $scope.template[i].sat.name = "";
-      $scope.template[i].sun.name = "";
+      t.mon.name = ""; t.mon.eid = 0;
+      t.tue.name = ""; t.tue.eid = 0;
+      t.wed.name = ""; t.wed.eid = 0;
+      t.thu.name = ""; t.thu.eid = 0;
+      t.fri.name = ""; t.fri.eid = 0;
+      t.sat.name = ""; t.sat.eid = 0;
+      t.sun.name = ""; t.sun.eid = 0;
+    });
 
-      $scope.template[i].mon.eid = 0;
-      $scope.template[i].tue.eid = 0;
-      $scope.template[i].wed.eid = 0;
-      $scope.template[i].thu.eid = 0;
-      $scope.template[i].fri.eid = 0;
-      $scope.template[i].sat.eid = 0;
-      $scope.template[i].sun.eid = 0;
-    }
     $scope.deleteSchedule();
   }
 

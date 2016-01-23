@@ -67,7 +67,7 @@ angular.module('sequoiaGroveApp')
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
-  $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+  $scope.oldShifts = [];
 
   // Locale settings
   $scope.lang = 'en';
@@ -273,7 +273,7 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
     // clear out old shifts
-    $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+    $scope.oldShifts = [];
     $http({
       url: '/sequoiagrove/schedule/template/' +
             $scope.date.mon.val + '/' +
@@ -286,6 +286,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;
+        $log.debug(data.template);
         //$log.debug(data);
         // initialize a simpler container for checking when updating shifts
 
@@ -293,43 +294,44 @@ angular.module('sequoiaGroveApp')
         var len = $scope.template.length;
         for(; i<len; i++){
           // Monday
-          $scope.oldShifts.mon.push({
+          // // underscore js add new object to array easier than this...
+          $scope.oldShifts.push({
             eid: $scope.template[i].mon.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.mon.val
           });
           // Tuesday
-          $scope.oldShifts.tue.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].tue.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.tue.val
           });
           // Wednesday
-          $scope.oldShifts.wed.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].wed.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.wed.val
           });
           // Thursday
-          $scope.oldShifts.thu.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].thu.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.thu.val
           });
           // Friday
-          $scope.oldShifts.fri.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].fri.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.fri.val
           });
           // Saturday
-          $scope.oldShifts.sat.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].sat.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.sat.val
           });
           // Sunday
-          $scope.oldShifts.sun.push({
+          $scope.oldShifts.push({
             eid: $scope.template[i].sun.eid,
             sid: $scope.template[i].sid,
             date: $scope.date.sun.val

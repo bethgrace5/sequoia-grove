@@ -55,6 +55,8 @@
     <script src="bower_components/angular-chart.js/dist/angular-chart.js"></script>
     <script src="https://login.persona.org/include.js"></script>
     <script src="bower_components/angular-persona/angular-persona.js"></script>
+    <script src="bower_components/underscore/underscore.js"></script>
+    <script src="bower_components/angular-underscore-module/angular-underscore-module.js"></script>
     <!--script type="text/javascript" src="webjars/bootstrap/3.2.0/js/bootstrap.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
