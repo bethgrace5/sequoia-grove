@@ -16,4 +16,4 @@ test.sql
 *.swp
 
 *~
-
+*.log
