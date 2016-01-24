@@ -6,11 +6,11 @@
         <form> 
           <h4>
             Starting Date
-            <md-datepicker ng-model="requestDateStart"
+            <md-datepicker ng-model="$parent.requestDateStart"
               md-placeholder="Starting Date" md-min-date="minDateStart">
             </md-datepicker>
             Ending Date
-            <md-datepicker ng-model="requestDateEnd" 
+            <md-datepicker ng-model="parent.requestDateEnd" 
               md-placeholder="Ending Date" md-min-date="requestDateStart">
             </md-datepicker>
           </h4>
@@ -18,8 +18,8 @@
             <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
               Submit
             </button>
-            <p>{{requestDateStart}}</p>
-            <p>{{requestDateEnd}}</p>
+            <p>{{$parent.requestDateStart}}</p>
+            <p>{{$parent.requestDateEnd}}</p>
         </form>
     </div>
 </div>
