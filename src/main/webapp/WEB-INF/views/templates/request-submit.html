@@ -10,8 +10,8 @@
               md-placeholder="Starting Date" md-min-date="minDateStart">
             </md-datepicker>
             Ending Date
-            <md-datepicker ng-model="parent.requestDateEnd" 
-              md-placeholder="Ending Date" md-min-date="requestDateStart">
+            <md-datepicker ng-model="$parent.requestDateEnd" 
+              md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
             </md-datepicker>
           </h4>
           <button class="btn btn-primary" ng-click="submitRequest()">
