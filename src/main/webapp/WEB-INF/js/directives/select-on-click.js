@@ -124,7 +124,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
               element.context.classList.remove('schedule-edit-input-error');
             }
             // add shift to update list if necessary
-            $scope.checkIfShiftExists(attrs.day, newId, attrs.sid)
+            $scope.checkIfShiftExists(newId, attrs.sid, attrs.date)
             $scope.selectEid(newId);
             $scope.$apply();
             element.context.classList.add('schedule-edit-highlight');

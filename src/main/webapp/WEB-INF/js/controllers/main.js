@@ -23,11 +23,13 @@ angular.module('sequoiaGroveApp')
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
+    $rootScope.lastPath = $location.path();
     if ($location.path() != '/login') {
       $location.path('/login');
     }
   } 
 
+  $scope.currentYear = "";
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
   $scope.hasPosition = [];
@@ -45,7 +47,6 @@ angular.module('sequoiaGroveApp')
       phone:null,
       bdate:null
   };
-  $scope.schCount = [[],[],[],[],[],[],[]];
   $scope.schHourCount = [];
   $scope.previousTemplate = [];
   $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
@@ -66,7 +67,7 @@ angular.module('sequoiaGroveApp')
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
-  $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+  $scope.oldShifts = [];
 
   // Locale settings
   $scope.lang = 'en';
@@ -191,6 +192,8 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.val  = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
+    $scope.currentYear = moment(mondayDateString, 'DD-MM-YYYY').format('YYYY');
+
   }
 
   // View Next or Previous Week
@@ -270,72 +273,26 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
     // clear out old shifts
-    $scope.oldShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+    $scope.oldShifts = [];
     $http({
-      url: '/sequoiagrove/schedule/template/' +
-            $scope.date.mon.val + '/' +
-            $scope.date.tue.val + '/' +
-            $scope.date.wed.val + '/' +
-            $scope.date.thu.val + '/' +
-            $scope.date.fri.val + '/' +
-            $scope.date.sat.val + '/' +
-            $scope.date.sun.val + '/',
-      method: "GET"
+      url: '/sequoiagrove/schedule/template/' + $scope.date.mon.val,
+      method: "GET",
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;
         //$log.debug(data);
-        // initialize a simpler container for checking when updating shifts
 
-        var i=0;
-        var len = $scope.template.length;
-        for(; i<len; i++){
-          // Monday
-          $scope.oldShifts.mon.push({
-            eid: $scope.template[i].mon.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.mon.val
-          });
-          // Tuesday
-          $scope.oldShifts.tue.push({
-            eid: $scope.template[i].tue.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.tue.val
-          });
-          // Wednesday
-          $scope.oldShifts.wed.push({
-            eid: $scope.template[i].wed.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.wed.val
-          });
-          // Thursday
-          $scope.oldShifts.thu.push({
-            eid: $scope.template[i].thu.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.thu.val
-          });
-          // Friday
-          $scope.oldShifts.fri.push({
-            eid: $scope.template[i].fri.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.fri.val
-          });
-          // Saturday
-          $scope.oldShifts.sat.push({
-            eid: $scope.template[i].sat.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.sat.val
-          });
-          // Sunday
-          $scope.oldShifts.sun.push({
-            eid: $scope.template[i].sun.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.sun.val
-          });
-        }
+        // save old shifts in a list for importing them to the next week.
+        _.map($scope.template, function(t, index, list) {
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+        });
         $scope.countDays();
         $scope.countHours();
-
-
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
@@ -397,64 +354,27 @@ angular.module('sequoiaGroveApp')
     return h+m;
   }
 
+  // count the number of days an employee is scheduled, if they are scheduled
+  // twice on a day, it still counts as one day.
   $scope.countDays = function() {
-    // clear schedule count
-    $scope.schCount = [[],[],[],[],[],[],[]];
-    var i=0;
-    var len = $scope.currentEmployees.length;
-    var k=0;
-    var tempLen = $scope.template.length;
+    var shifts = [[],[],[],[],[],[],[],];
 
-    var count = 0;
-    var checkId = 0;
-    var name = '';
+    _.map($scope.template, function(item) {
+      shifts[0] = _.union(shifts[0], [item.mon.eid]);
+      shifts[1] = _.union(shifts[1], [item.tue.eid]);
+      shifts[2] = _.union(shifts[2], [item.wed.eid]);
+      shifts[3] = _.union(shifts[3], [item.thu.eid]);
+      shifts[4] = _.union(shifts[4], [item.fri.eid]);
+      shifts[5] = _.union(shifts[5], [item.sat.eid]);
+      shifts[6] = _.union(shifts[6], [item.sun.eid]);
+    });
 
-    for(; i<len; i++) {
-      checkId = $scope.currentEmployees[i].id
-      name = $scope.currentEmployees[i].firstName;
-      count = 0;
-      k=0;
-      var flags = [0, 0, 0, 0, 0, 0, 0];
-      for(; k<tempLen; k++) {
-        if($scope.template[k].mon.eid == checkId && !flags[0]){
-           count++;
-           flags[0] = 1;
-        }
-        if ($scope.template[k].tue.eid == checkId && !flags[1]){
-           count++;
-           flags[1] = 1;
-        }
-        if ($scope.template[k].wed.eid == checkId && !flags[2]){
-           count++;
-           flags[2] = 1;
-        }
-        if ($scope.template[k].thu.eid == checkId && !flags[3]){
-           count++;
-           flags[3] = 1;
-        }
-        if ($scope.template[k].fri.eid == checkId && !flags[4]){
-           count++;
-           flags[4] = 1;
-        }
-        if ($scope.template[k].sat.eid == checkId && !flags[5]){
-           count++;
-           flags[5] = 1;
-        }
-        if ($scope.template[k].sun.eid == checkId && !flags[6]) {
-           count++;
-           flags[6] = 1;
-        }
-      }
-      if(count>7) {
-        count = 7;
-      }
-
-      if(count>0) {
-        $scope.schCount[count-1].push({id:checkId, name:name});
-      }
-
-    }
+    // get day count for each employee, format is: [ {'eid':'count'}, ... ]
+    $scope.dayCount = _.countBy((_.flatten(shifts)), function(id){
+      return id;
+    });
   }
+
   $scope.shiftDuration = function(shr, smin, ehr, emin) {
     return parseFloat((emin-smin)/60) + (ehr-shr);
   }
