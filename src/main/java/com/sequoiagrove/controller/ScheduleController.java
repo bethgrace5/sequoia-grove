@@ -150,7 +150,5 @@ public class ScheduleController {
         jdbcTemplate.update("call bajs_pkg.delete_schedule(?, ?)", sid, date);
         return "jsonTemplate";
     }
-
-
 }
 

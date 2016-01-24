@@ -17,7 +17,7 @@
       </ul>
     </div-->
     <select class="schedule-edit-shift-select" placeholder="Position"
-      ng-model="selectedShift.pos" ng-options="option.title for option in positions">
+      ng-model="selectedShift.pos" ng-options="option.title as option.title for option in positions">
       <option value="">- Position -</option>
     </select>
   </div>
