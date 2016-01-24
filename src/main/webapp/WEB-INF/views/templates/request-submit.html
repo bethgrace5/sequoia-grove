@@ -12,12 +12,14 @@
             Ending Date
             <md-datepicker ng-model="requestDateEnd" 
               md-placeholder="Ending Date" md-min-date="requestDateStart">
-              </md-datepicker>
+            </md-datepicker>
           </h4>
           <button class="btn btn-primary" ng-click="submitRequest()">
             <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
               Submit
-          </button>
+            </button>
+            <p>{{requestDateStart}}</p>
+            <p>{{requestDateEnd}}</p>
         </form>
     </div>
 </div>

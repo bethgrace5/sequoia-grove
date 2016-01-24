@@ -10,6 +10,7 @@ angular.module('sequoiaGroveApp')
     return;
   }
   //Date Gatherer x2
+  //$scope.requestDateStart = new Date();
   $scope.requestDateStart = new Date();
   $scope.requestDateEnd = new Date();
 
@@ -23,6 +24,7 @@ angular.module('sequoiaGroveApp')
       $scope.requestDateEnd.getMonth(),
       $scope.requestDateEnd.getDate());
 
+
     /*$scope.onlyWeekendsPredicate = function(date) {
     var day = date.getDay();
     return day === 0 || day === 6;
@@ -32,6 +34,7 @@ angular.module('sequoiaGroveApp')
   //note: should this be more protected?
   $scope.managerMode  = false;
   $scope.employeeMode = true;
+  var teste3 = 20;
 
 
   //Temporary 
@@ -42,7 +45,15 @@ angular.module('sequoiaGroveApp')
     //$log.debug($scope.requestDateStart < $scope.requestDateEnd); 
     //$log.debug(moment('2010-10-20').isAfter('2010-10-19')); 
     $log.debug(moment($scope.requestDateEnd).isAfter($scope.requestDateStart)); 
+    $log.debug($scope.requestDateStart); 
+    $log.debug($scope.requestDateEnd); 
+    teste3 = 50;
+    $log.debug(teste3);
   }
+  $scope.submitRequest2 = function(){
+    $log.debug(teste3);
+  }
+
 
   $scope.countDisplay = 0 ;
 
