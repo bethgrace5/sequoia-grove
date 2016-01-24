@@ -42,15 +42,8 @@ is record
 type sch_record is table of sch_record_type;
 
 -- Function Prototypes
-function get_schedule( 
-    mon varchar2,
-    tue varchar2,
-    wed varchar2,
-    thu varchar2,
-    fri varchar2,
-    sat varchar2,
-    sun varchar2
-) return sch_record pipelined;
+function get_schedule( mon varchar2) 
+return sch_record pipelined;
 
 
 end bajs_pkg;
@@ -129,15 +122,8 @@ create or replace package body bajs_pkg as
 
     -- returns columns (sid, tname, we_st, we_ed, wd_st, wd_ed, mon, tue, wed, thu,
     --                  fri, sat, sun, location)
-    function get_schedule( 
-        mon varchar2,
-        tue varchar2,
-        wed varchar2,
-        thu varchar2,
-        fri varchar2,
-        sat varchar2,
-        sun varchar2
-    ) return sch_record
+    function get_schedule( mon varchar2) 
+    return sch_record
     pipelined as
 
     -- Define Cursor
@@ -165,7 +151,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( tue, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 1
     )
     on m_sid = t_sid
     full outer join
@@ -175,7 +161,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( wed, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 2
     )
     on m_sid = w_sid
     full outer join
@@ -185,7 +171,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( thu, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 3
     )
     on m_sid = th_sid
     full outer join
@@ -195,7 +181,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( fri, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 4
     )
     on m_sid = f_sid
     full outer join
@@ -205,7 +191,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( sat, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 5
     )
     on m_sid = sa_sid
     full outer join
@@ -215,7 +201,7 @@ create or replace package body bajs_pkg as
         from bajs_sch_template s
         left outer join
         bajs_sch_hist h
-        on s.sid=h.sid and h.day = to_date( sun, 'dd-mm-yyyy')
+        on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 6
     )
     on m_sid = su_sid
     --order by wd_st, location, we_st

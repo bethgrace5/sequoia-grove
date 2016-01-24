@@ -8,7 +8,7 @@ angular.module('sequoiaGroveApp')
 
     // user is not logged in
     if ($rootScope.loggedIn == false) {
-      //$location.path('/login');
+      $location.path('/login');
     }
 
     $scope.activeTab = 'info';

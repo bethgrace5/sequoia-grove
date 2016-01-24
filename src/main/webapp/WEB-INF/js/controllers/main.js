@@ -23,8 +23,9 @@ angular.module('sequoiaGroveApp')
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
+    $rootScope.lastPath = $location.path();
     if ($location.path() != '/login') {
-      //$location.path('/login');
+      $location.path('/login');
     }
   }
 
@@ -275,72 +276,24 @@ angular.module('sequoiaGroveApp')
     // clear out old shifts
     $scope.oldShifts = [];
     $http({
-      url: '/sequoiagrove/schedule/template/' +
-            $scope.date.mon.val + '/' +
-            $scope.date.tue.val + '/' +
-            $scope.date.wed.val + '/' +
-            $scope.date.thu.val + '/' +
-            $scope.date.fri.val + '/' +
-            $scope.date.sat.val + '/' +
-            $scope.date.sun.val + '/',
-      method: "GET"
+      url: '/sequoiagrove/schedule/template/' + $scope.date.mon.val,
+      method: "GET",
     }).success(function (data, status, headers, config) {
         $scope.template = data.template;
-        $log.debug(data.template);
         //$log.debug(data);
-        // initialize a simpler container for checking when updating shifts
 
-        var i=0;
-        var len = $scope.template.length;
-        for(; i<len; i++){
-          // Monday
-          // // underscore js add new object to array easier than this...
-          $scope.oldShifts.push({
-            eid: $scope.template[i].mon.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.mon.val
-          });
-          // Tuesday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].tue.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.tue.val
-          });
-          // Wednesday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].wed.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.wed.val
-          });
-          // Thursday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].thu.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.thu.val
-          });
-          // Friday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].fri.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.fri.val
-          });
-          // Saturday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].sat.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.sat.val
-          });
-          // Sunday
-          $scope.oldShifts.push({
-            eid: $scope.template[i].sun.eid,
-            sid: $scope.template[i].sid,
-            date: $scope.date.sun.val
-          });
-        }
+        // save old shifts in a list for importing them to the next week.
+        _.map($scope.template, function(t, index, list) {
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+        });
         $scope.countDays();
         $scope.countHours();
-
-
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });

@@ -110,14 +110,14 @@ angular.module('sequoiaGroveApp', [
             $rootScope.loggedInUser = data.user;
             $rootScope.loggedIn = true;
             $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
-            //$location.path( "/home" );
+            $location.path( $rootScope.lastPath );
           });
       },
       onlogout: function() {
         $rootScope.loggedIn = false;
         $rootScope.loggedInUser = {};
         $rootScope.$apply();
-        //$location.path( "/login" );
+        $location.path( "/login" );
         // Stuff
       }
     });
