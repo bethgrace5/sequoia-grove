@@ -291,6 +291,8 @@ angular.module('sequoiaGroveApp')
       $scope.lastWeekShifts.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
     });
 
+    // clear out original template
+    $scope.originalTemplate = [];
     $http({
       url: '/sequoiagrove/schedule/template/' + $scope.date.mon.val,
       method: "GET",
