@@ -3,19 +3,19 @@
     <div class="col-sm-2 col-sm-offset-1">
       <p> Add Position</p>
     </div>
-    <div class="col-sm-2 col-sm-offset-2">
+    <div class="col-sm-3 col-sm-offset-2">
       <select ng-options="p.title for p in positions" ng-model="newPos">
         <option value="">- Choose Position -</option>
       </select>
     </div>
-    <div class="col-sm-1">
+    <div class="col-sm-2">
       <button type="button" class="btn btn-success" ng-click="addPos()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
       </button>
     </div>
   </div>
 
-  <div class="row emp-repeated-row" ng-repeat="p in allEmployees[current].positions">
+  <div class="row emp-repeated-row" ng-repeat="p in selectedEmployee.positions">
     <div class="col-sm-2 col-sm-offset-1">
       <span>{{p.title}}</span>
     </div>
