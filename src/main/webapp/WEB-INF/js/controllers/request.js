@@ -10,23 +10,38 @@ angular.module('sequoiaGroveApp')
     return;
   }
   //Date Gatherer x2
-  $scope.requestDate = new Date();
-  $scope.minDate = new Date(
-      $scope.requestDate.getFullYear(),
-      $scope.requestDate.getMonth(),
-      $scope.requestDate.getDate() + 14);//14 days/2 weeks in advance
-  $scope.maxDate = new Date(
-      $scope.requestDate.getFullYear(),
-      $scope.requestDate.getMonth() + 2,
-      $scope.requestDate.getDate());
-  /*$scope.onlyWeekendsPredicate = function(date) {
+  $scope.requestDateStart = new Date();
+  $scope.requestDateEnd = new Date();
+
+  $scope.minDateStart = new Date(
+      $scope.requestDateStart.getFullYear(),
+      $scope.requestDateStart.getMonth(),
+      $scope.requestDateStart.getDate() + 14);//14 days/2 weeks in advance
+
+  $scope.minDateEnd = new Date(
+      $scope.requestDateEnd.getFullYear(),
+      $scope.requestDateEnd.getMonth(),
+      $scope.requestDateEnd.getDate());
+
+    /*$scope.onlyWeekendsPredicate = function(date) {
     var day = date.getDay();
     return day === 0 || day === 6;
   }*/
 
-  //Sumbit Request
+  //Request Status
+  //note: should this be more protected?
+  $scope.managerMode  = false;
+  $scope.employeeMode = true;
+
+
+  //Temporary 
+
+  //Submit Request
   $scope.submitRequest = function(){
     $log.debug("sumbit request off"); 
+    //$log.debug($scope.requestDateStart < $scope.requestDateEnd); 
+    //$log.debug(moment('2010-10-20').isAfter('2010-10-19')); 
+    $log.debug(moment($scope.requestDateEnd).isAfter($scope.requestDateStart)); 
   }
 
   $scope.countDisplay = 0 ;

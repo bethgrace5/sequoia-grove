@@ -125,7 +125,6 @@ angular.module('sequoiaGroveApp')
 
         // update front end
         $scope.allEmployees[$scope.current].positions.push(posObj);
-      }
     }
 
     // click existing day to populate input with that day
@@ -222,7 +221,6 @@ angular.module('sequoiaGroveApp')
                 pid = $scope.positions[i].id;
             }
         }
-      }
 
       // remove position from back end
       $http({

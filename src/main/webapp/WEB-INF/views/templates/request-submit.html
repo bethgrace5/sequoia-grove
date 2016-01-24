@@ -6,13 +6,13 @@
         <form> 
           <h4>
             Starting Date
-            <md-datepicker ng-model="requestDate" 
-              md-placeholder="Starting Date" md-min-date="minDate">
+            <md-datepicker ng-model="requestDateStart"
+              md-placeholder="Starting Date" md-min-date="minDateStart">
             </md-datepicker>
             Ending Date
-            <md-datepicker ng-model="requestDate" 
-              md-placeholder="Ending Date" md-min-date="minDate">
-            </md-datepicker>
+            <md-datepicker ng-model="requestDateEnd" 
+              md-placeholder="Ending Date" md-min-date="requestDateStart">
+              </md-datepicker>
           </h4>
           <button class="btn btn-primary" ng-click="submitRequest()">
             <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
