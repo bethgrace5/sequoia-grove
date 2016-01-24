@@ -40,6 +40,21 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
       });
 
       element.on('keyup', function (e) {
+        var isInDeleteList = false;
+
+        // the shift name is empty - add this to delete list, if it
+        // is not already in delete list
+        if(this.value.length === 0) {
+          _.map($scope.deleteShifts, function(shift, index, list) {
+            if( _.isEqual(shift, {'sid':attrs.sid, 'date':attrs.date})) {
+              isInDeleteList = true;
+            }
+          });
+          if (isInDeleteList === false) {
+            $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
+          }
+        }
+
         // capitalize first letter of the value
         var firstLetter = this.value.charAt(0).toUpperCase();
         this.value = (firstLetter + this.value.substring(1,this.value.length));

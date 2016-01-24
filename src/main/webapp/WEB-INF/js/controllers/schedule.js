@@ -202,6 +202,15 @@ angular.module('sequoiaGroveApp')
       }
     });
 
+    // check if this shift is in the delete list
+    _.map($scope.deleteShifts, function(shift, index, list) {
+      if(_.isMatch(shift, {'sid':sid, 'date':date})) {
+        // remove this from delete shifts, because if this function
+        // was called, it means this shift was assigned a name
+        $scope.deleteShifts.splice(index, 1);
+      }
+    });
+
     // decide what to do with the info gathered above
     if (inOriginal && inUpdate) {
       // item needs to be removed from update
@@ -224,6 +233,7 @@ angular.module('sequoiaGroveApp')
   }
 
 
+  // adds all shifts to delete list, so they are deleted when save is clicked
   $scope.clearSchedule = function() {
     _.map($scope.template, function(t, index, list) {
       $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
@@ -242,8 +252,6 @@ angular.module('sequoiaGroveApp')
       t.sat.name = ""; t.sat.eid = 0;
       t.sun.name = ""; t.sun.eid = 0;
     });
-
-    $scope.deleteSchedule();
   }
 
   $scope.importLastWeek = function() {
@@ -265,8 +273,8 @@ angular.module('sequoiaGroveApp')
       if (status == 200) {
         // clear update shifts list
         $scope.updateShifts = [];
-        $scope.getScheduleTemplate();
         $scope.saving = false;
+        $scope.deleteSchedule();
       }
       else {
         $log.error('Error saving schedule ', status, data);
@@ -279,7 +287,7 @@ angular.module('sequoiaGroveApp')
 
   // Delete all these shifts
   $scope.deleteSchedule = function() {
-    scope.saving = true;
+    $scope.saving = true;
 
     $http({
       url: '/sequoiagrove/schedule/delete/',

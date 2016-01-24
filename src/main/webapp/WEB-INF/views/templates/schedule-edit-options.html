@@ -28,7 +28,7 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
-        ng-show = "updateShifts.length<=0"
+        ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-disabled = "saving";
         ng-click = "saveSchedule()">
         Saved
@@ -37,7 +37,7 @@
 
       <!-- Default button -->
       <button class = "btn btn-default"
-        ng-show = "updateShifts.length>0"
+        ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-disabled = "saving";
         ng-click = "saveSchedule()">
         Save Changes
@@ -45,18 +45,11 @@
       </button>
 
       <button class = "btn btn-primary"
-        ng-show = "updateShifts.length<=0"
-        ng-disabled = "saving">
-        Publish
-        <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
-      </button>
-
-      <button class = "btn btn-primary"
-        ng-show = "updateShifts.length>0"
         ng-disabled = "saving">
         Save &amp; Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
+
     </form>
 
   </div>
