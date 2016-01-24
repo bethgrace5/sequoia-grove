@@ -41,7 +41,7 @@ angular.module('sequoiaGroveApp')
         var endt = $scope.hrMinTo24(end.valHr, end.valMin);
         var eid = $scope.selectedEmployee.id;
         $http({
-            url: '/sequoiagrove/avail/add/'+ 
+            url: '/sequoiagrove/avail/add/'+
                 eid + '/' + day + '/' + startt + '/' + endt,
             method: "POST"
         })
@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp')
             var posObj = {id:pid, title:pos, "location":null};
             // send new position to back end
             $http({
-                url: '/sequoiagrove/position/add/'+ 
+                url: '/sequoiagrove/position/add/'+
                     eid + '/' + pid + '/' +
                     moment().format("DD-MM-YYYY"),
                 method: "POST"
@@ -109,7 +109,7 @@ angular.module('sequoiaGroveApp')
       var start = moment({hour:sH, minute:sM}).format('h:mm a');
       var end = moment({hour:eH, minute:eM}).format('h:mm a');
       $scope.newAvail.start = start;
-      $scope.newAvail.end = end; 
+      $scope.newAvail.end = end;
       //var stTimeLen = $scope.times.start.length;
       //var edTimeLen = $scope.times.end.length;
       //var i=0;
@@ -176,7 +176,7 @@ angular.module('sequoiaGroveApp')
 
         // remove availability from database
         $http({
-            url: '/sequoiagrove/avail/remove/'+ 
+            url: '/sequoiagrove/avail/remove/'+
                 $scope.selectedEmployee.id + '/' + day + '/' + startt,
             method: "POST"
         })
@@ -195,7 +195,7 @@ angular.module('sequoiaGroveApp')
 
         // remove position from back end
         $http({
-            url: '/sequoiagrove/position/remove/'+ 
+            url: '/sequoiagrove/position/remove/'+
                 eid + '/' + pid + '/' +
                 moment().format("DD-MM-YYYY"),
             method: "POST"

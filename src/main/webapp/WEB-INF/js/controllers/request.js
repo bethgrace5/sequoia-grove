@@ -20,12 +20,12 @@ angular.module('sequoiaGroveApp')
     data: [
     /*
      * TODO use dayCount instead
-      $scope.schCount[0].length, 
-      $scope.schCount[1].length, 
-      $scope.schCount[2].length, 
-      $scope.schCount[3].length, 
-      $scope.schCount[4].length, 
-      $scope.schCount[5].length, 
+      $scope.schCount[0].length,
+      $scope.schCount[1].length,
+      $scope.schCount[2].length,
+      $scope.schCount[3].length,
+      $scope.schCount[4].length,
+      $scope.schCount[5].length,
       $scope.schCount[6].length
       */
     ]

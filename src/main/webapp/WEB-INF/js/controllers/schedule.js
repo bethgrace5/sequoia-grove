@@ -12,12 +12,14 @@ angular.module('sequoiaGroveApp')
         $filter,
         $window,
         $location,
-        $http, 
-        $log, 
-        $rootScope, 
-        $scope, 
-        $timeout, 
+        $http,
+        $log,
+        $rootScope,
+        $scope,
+        $timeout,
         $translate) {
+
+/************** Login Redirect, Containers and UI settings **************/
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -39,6 +41,8 @@ angular.module('sequoiaGroveApp')
     we_st : 0,
     we_ed : 0
   };
+
+/************** Pure Functions **************/
 
   // Call browser to print schedule on paper
   $scope.print = function() {
@@ -150,71 +154,27 @@ angular.module('sequoiaGroveApp')
     return style;
   }
 
-
-  // Get The Schedule for the week currently being viewed
-  /*
-  $scope.getShifts = function() {
-    $http({
-      url: '/sequoiagrove/shift',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.shifts = data.shift;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining emplyees simple : " + data);
-    });
-  }
-  */
-
-
-  // Save the shifts in the list of updateShifts
-  $scope.saveSchedule = function() {
-    $scope.schHourCount = [];
-    $scope.saving = true;
-
-    $http({
-      url: '/sequoiagrove/schedule/update/',
-      method: "POST",
-      data: { 'body': JSON.stringify($scope.updateShifts) }
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // clear update shifts list
-        $scope.updateShifts = [];
-        $scope.getScheduleTemplate();
-        $scope.saving = false;
-      }
-      else {
-        $log.error('Error saving schedule ', status, data);
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error saving schedule " + data);
-      $scope.saving = false;
-    });
+  $scope.removeDelivery = function(index) {
+    // remove delivery from dummy list for now
+    $scope.deliveries.splice(index, 1);
   }
 
-  // Delete all these shifts
-  $scope.deleteSchedule = function() {
-    $scope.schHourCount = [];
-    $scope.saving = true;
-
-    $http({
-      url: '/sequoiagrove/schedule/delete/',
-      method: "DELETE",
-      data: { 'body': JSON.stringify($scope.deleteShifts) }
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // clear delete shifts list
-        $scope.deleteShifts = [];
-        $scope.getScheduleTemplate();
-        $scope.saving = false;
-      }
-      else {
-        $log.error('Error deleting schedule ', status, data);
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error deleting schedule " + data);
-    });
+  // add delivery to front end
+  $scope.addDelivery = function() {
+    if ($scope.newDelivery != '') {
+        $scope.deliveries.push(
+        { title: $scope.newDelivery,
+          days: {
+            monday:    false,
+            tuesday:   false,
+            wednesday: false,
+            thursday:  false,
+            friday:    false,
+            saturday:  false,
+            sunday:    false}
+        })
+        $scope.newDelivery = '';
+    }
   }
 
   // tracks changes by keeping update list current
@@ -243,7 +203,7 @@ angular.module('sequoiaGroveApp')
         originalIndex = index;
       }
     });
-    
+
     // decide what to do with the info gathered above
     if (inOriginal && inUpdate) {
       // item needs to be removed from update
@@ -341,28 +301,60 @@ angular.module('sequoiaGroveApp')
     $scope.saveSchedule();
   }
 
-  $scope.removeDelivery = function(index) {
-    // remove delivery from dummy list for now
-    $scope.deliveries.splice(index, 1);
+
+
+/************** HTTP Request Functions **************/
+
+  // Save the shifts in the list of updateShifts
+  $scope.saveSchedule = function() {
+    $scope.schHourCount = [];
+    $scope.saving = true;
+
+    $http({
+      url: '/sequoiagrove/schedule/update/',
+      method: "POST",
+      data: { 'body': JSON.stringify($scope.updateShifts) }
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear update shifts list
+        $scope.updateShifts = [];
+        $scope.getScheduleTemplate();
+        $scope.saving = false;
+      }
+      else {
+        $log.error('Error saving schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error saving schedule " + data);
+      $scope.saving = false;
+    });
   }
 
-  // add delivery to front end
-  $scope.addDelivery = function() {
-    if ($scope.newDelivery != '') {
-        $scope.deliveries.push(
-        { title: $scope.newDelivery,
-          days: {
-            monday:    false,
-            tuesday:   false,
-            wednesday: false,
-            thursday:  false,
-            friday:    false,
-            saturday:  false,
-            sunday:    false}
-        })
-        $scope.newDelivery = '';
-    }
+  // Delete all these shifts
+  $scope.deleteSchedule = function() {
+    $scope.schHourCount = [];
+    $scope.saving = true;
+
+    $http({
+      url: '/sequoiagrove/schedule/delete/',
+      method: "DELETE",
+      data: { 'body': JSON.stringify($scope.deleteShifts) }
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear delete shifts list
+        $scope.deleteShifts = [];
+        $scope.getScheduleTemplate();
+        $scope.saving = false;
+      }
+      else {
+        $log.error('Error deleting schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error deleting schedule " + data);
+    });
   }
+
+/************** Controller Initialization **************/
 
   $scope.init = function() {
     //$scope.getShifts();

@@ -17,57 +17,19 @@ angular.module('sequoiaGroveApp')
     $scope,
     $translate,
     localStorageService,
-    Persona) 
-{
+    Persona){
+
+/************** Login Redirect, Containers and UI settings **************/
+
   $rootScope.currentPath = $location.path();
 
-  // user is not logged in
+  // user is not logged in, redirect to login
   if ($rootScope.loggedIn == false) {
     $rootScope.lastPath = $location.path();
     if ($location.path() != '/login') {
       $location.path('/login');
     }
   }
-
-  $scope.currentYear = "";
-  $scope.currentEmployees = [];
-  $scope.allEmployees = [];
-  $scope.hasPosition = [];
-  // shifts that were changed from old shifts and need to be saved to database
-  $scope.updateShifts = [];
-  // when the schedule is cleared, any saved shifts are deleted
-  $scope.deleteShifts = [];
-  // employee info that was changed and needs to be saved to database
-  $scope.empNewInfo = {
-      maxhrs:null,
-      isManager:null,
-      clock:null,
-      fname:null,
-      lname:null,
-      phone:null,
-      bdate:null
-  };
-  $scope.schHourCount = [];
-  $scope.previousTemplate = [];
-  $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
-  $scope.barChart = { labels:[],  data:[[]], series:["names"]};
-  $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
-  $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
-  $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
-  $scope.birthdays = [];
-  $scope.holidays = [];
-
-  // TODO function to find birthdays this week
-  $scope.birthdays.push({name:"Amelia", date:"10/10"});
-  $scope.birthdays.push({name:"Jem", date:"10/13"});
-
-  // TODO function to find holidays this week
-  $scope.holidays.push({name:"Christmas", date:"12/25"});
-  $scope.holidays.push({name:"New Years Day", date:"01/01"});
-
-  // container of  a simplification of the scheudle template shifts
-  // used to check that updating a shift is making a chage or not
-  $scope.oldShifts = [];
 
   // Locale settings
   $scope.lang = 'en';
@@ -77,6 +39,42 @@ angular.module('sequoiaGroveApp')
     localStorageService.set('SequoiaGrove.lang', langKey);
     $scope.$broadcast('translate');
   };
+
+  // setup containers
+  $scope.currentEmployees = [];
+  $scope.allEmployees = [];
+
+  // a list of position ids as keys, with the value as a list of employee ids that hold that position
+  $scope.hasPosition = [];
+  // shifts that were changed from old shifts and need to be saved to database
+  $scope.updateShifts = [];
+  // when the schedule is cleared, any saved shifts are deleted
+  $scope.deleteShifts = [];
+  $scope.schHourCount = [];
+  $scope.previousTemplate = [];
+  $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
+  $scope.barChart = { labels:[],  data:[[]], series:["names"]};
+  // container of  a simplification of the scheudle template shifts
+  // used to check that updating a shift is making a chage or not
+  $scope.oldShifts = [];
+  $scope.birthdays = [];
+  $scope.holidays = [];
+
+  $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
+  $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
+  $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
+  $scope.currentYear = "";
+
+  // container for displaying the date header
+  // val 'DD-MM-YYYY' format, disp 'MMM-D' format
+  $scope.date = {
+    mon:{val:'', disp:''},
+    tue:{val:'', disp:''},
+    wed:{val:'', disp:''},
+    thu:{val:'', disp:''},
+    fri:{val:'', disp:''},
+    sat:{val:'', disp:''},
+    sun:{val:'', disp:''}};
 
   // UI 'Active' Tab Settings
   $scope.changeTab = function(tab) {
@@ -92,69 +90,7 @@ angular.module('sequoiaGroveApp')
   // highlight name
   $scope.highlight = false;
 
-  // container for displaying the date header
-  // val 'DD-MM-YYYY' format, disp 'MMM-D' format
-  $scope.date = { 
-    mon:{val:'', disp:''}, 
-    tue:{val:'', disp:''}, 
-    wed:{val:'', disp:''}, 
-    thu:{val:'', disp:''}, 
-    fri:{val:'', disp:''}, 
-    sat:{val:'', disp:''}, 
-    sun:{val:'', disp:''}};
-  $scope.times = {
-    // start times start at the earlist shift start and increment by half
-    // hours until the end of the lastest starting shift
-    // TODO have a smarter way to populate this list
-    start:[
-      {disp:"5:00 AM", valHr: 5, valMin: 0},
-      {disp:"5:30 AM", valHr: 5, valMin: 30},
-      {disp:"6:00 AM", valHr: 6, valMin: 0},
-      {disp:"6:30 AM", valHr: 6, valMin: 30},
-      {disp:"7:00 AM", valHr: 7, valMin: 0},
-      {disp:"7:30 AM", valHr: 7, valMin: 30},
-      {disp:"8:00 AM", valHr: 8, valMin: 0},
-      {disp:"8:30 AM", valHr: 8, valMin: 30},
-      {disp:"9:00 AM", valHr: 9, valMin: 0},
-      {disp:"9:30 AM", valHr: 9, valMin: 30},
-      {disp:"10:00 AM", valHr: 10, valMin: 0},
-      {disp:"10:30 AM", valHr: 10, valMin: 30},
-      {disp:"11:00 AM", valHr: 11, valMin: 0},
-      {disp:"11:30 AM", valHr: 11, valMin: 30},
-      {disp:"12:00 PM", valHr: 12, valMin: 0},
-      {disp:"12:30 PM", valHr: 12, valMin: 30},
-      {disp:"1:00 PM", valHr: 13, valMin: 0},
-      {disp:"1:30 PM", valHr: 13, valMin: 30},
-      {disp:"2:00 PM", valHr: 14, valMin: 0},
-      {disp:"2:30 PM", valHr: 14, valMin: 30},
-      {disp:"3:00 PM", valHr: 15, valMin: 0},
-      {disp:"3:30 PM", valHr: 15, valMin: 30},
-      {disp:"4:00 PM", valHr: 16, valMin: 0},
-      {disp:"4:30 PM", valHr: 16, valMin: 30}
-    ],
-    // end times start at the earlist shift end and increment by half 
-    // hours until the end of the lastest ending shift
-    // TODO have a smarter way to populate this list
-    end:[
-      {disp:"1:00 PM", valHr: 13, valMin: 0},
-      {disp:"1:30 PM", valHr: 13, valMin: 30},
-      {disp:"2:00 PM", valHr: 14, valMin: 0},
-      {disp:"2:30 PM", valHr: 14, valMin: 30},
-      {disp:"3:00 PM", valHr: 15, valMin: 0},
-      {disp:"3:30 PM", valHr: 15, valMin: 30},
-      {disp:"4:00 PM", valHr: 16, valMin: 0},
-      {disp:"4:30 PM", valHr: 16, valMin: 30},
-      {disp:"5:00 PM", valHr: 17, valMin: 0},
-      {disp:"5:30 PM", valHr: 17, valMin: 30},
-      {disp:"6:00 PM", valHr: 18, valMin: 0},
-      {disp:"6:30 PM", valHr: 18, valMin: 30},
-      {disp:"7:00 PM", valHr: 19, valMin: 0},
-      {disp:"7:30 PM", valHr: 19, valMin: 30},
-      {disp:"8:00 PM", valHr: 20, valMin: 0},
-      {disp:"8:30 PM", valHr: 20, valMin: 30},
-      {disp:"9:00 PM", valHr: 21, valMin: 0}
-    ]
-  };
+/************** Pure Functions **************/
 
   // Set Schedule Header Dates, and Date String Values
   $scope.setScheduleHeader = function() {
@@ -193,7 +129,6 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
     $scope.currentYear = moment(mondayDateString, 'DD-MM-YYYY').format('YYYY');
-
   }
 
   // View Next or Previous Week
@@ -228,13 +163,95 @@ angular.module('sequoiaGroveApp')
     $scope.date.sat.disp = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
     $scope.date.sun.val  = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
-    
+
     // save old template
-    $scope.previousTemplate = $scope.template; 
+    $scope.previousTemplate = $scope.template;
     $scope.previousShifts = $scope.oldShifts;
 
     $scope.getScheduleTemplate();
   }
+
+  $scope.formatTime = function(h, m, ampm) {
+    // we can use moment to parse times to display correctly on the front end
+    //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
+    if (ampm) {
+      return moment({hour:h, minute:m}).format('h:mm a');
+    }
+    return moment({hour:h, minute:m}).format('h:mm');
+  }
+
+  $scope.shiftDuration = function(shr, smin, ehr, emin) {
+    return parseFloat((emin-smin)/60) + (ehr-shr);
+  }
+
+  $scope.hrMinTo24 = function(h, m) {
+    if(h < 10) {
+      h = "0"+h;
+    }
+    else {
+      h = h+"";
+    }
+    if(m < 10) {
+      m = "0"+m;
+    }
+    else {
+      m = m+"";
+    }
+    return h+m;
+  }
+
+  // count the number of days an employee is scheduled, if they are scheduled
+  // twice on a day, it still counts as one day.
+  $scope.countDays = function() {
+    var shifts = [[],[],[],[],[],[],[],];
+
+    _.map($scope.template, function(item) {
+      shifts[0] = _.union(shifts[0], [item.mon.eid]);
+      shifts[1] = _.union(shifts[1], [item.tue.eid]);
+      shifts[2] = _.union(shifts[2], [item.wed.eid]);
+      shifts[3] = _.union(shifts[3], [item.thu.eid]);
+      shifts[4] = _.union(shifts[4], [item.fri.eid]);
+      shifts[5] = _.union(shifts[5], [item.sat.eid]);
+      shifts[6] = _.union(shifts[6], [item.sun.eid]);
+    });
+
+    // get day count for each employee, format is: [ {'eid':'count'}, ... ]
+    $scope.dayCount = _.countBy((_.flatten(shifts)), function(id){
+      return id;
+    });
+  }
+
+  $scope.countHours = function() {
+    var count = [];
+
+    _.map($scope.template, function(item) {
+      var duration = parseFloat( (item.wd_ed_m-item.wd_st_m)/60) +
+        parseFloat(item.wd_ed_h-item.wd_st_h);
+      count.push({'eid':item.mon.eid, 'duration':duration});
+      count.push({'eid':item.tue.eid, 'duration':duration});
+      count.push({'eid':item.wed.eid, 'duration':duration});
+      count.push({'eid':item.thu.eid, 'duration':duration});
+      count.push({'eid':item.fri.eid, 'duration':duration});
+      count.push({'eid':item.sat.eid, 'duration':duration});
+      count.push({'eid':item.sun.eid, 'duration':duration});
+    });
+
+    // get hour count for each employee, format is: [ {'eid':'count'}, ... ]
+    $scope.hourCount = _.groupBy(count, function(item){
+      return item.eid;
+    });
+
+    _.map($scope.hourCount, function(items, index) {
+      var hours =  _.reduce(items, function(memo, item) {
+        return memo + item.duration;
+      }, 0)
+      $scope.hourCount[index] = hours;
+    });
+
+    $log.debug($scope.hourCount);
+  }
+
+/************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
     $http({
@@ -328,151 +345,71 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+/************** Variable Initialization **************/
 
-  $scope.formatTime = function(h, m, ampm) {
-    // we can use moment to parse times to display correctly on the front end
-    //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
-    if (ampm) {
-      return moment({hour:h, minute:m}).format('h:mm a');
-    }
-    return moment({hour:h, minute:m}).format('h:mm');
-  }
+  // TODO function to find birthdays this week
+  $scope.birthdays.push({name:"Amelia", date:"10/10"});
+  $scope.birthdays.push({name:"Jem", date:"10/13"});
 
-  $scope.hrMinTo24 = function(h, m) {
-    if(h < 10) {
-      h = "0"+h;
-    }
-    else {
-      h = h+"";
-    }
-    if(m < 10) {
-      m = "0"+m;
-    }
-    else {
-     m = m+"";
-    }
-    return h+m;
-  }
+  // TODO function to find holidays this week
+  $scope.holidays.push({name:"Christmas", date:"12/25"});
+  $scope.holidays.push({name:"New Years Day", date:"01/01"});
 
-  // count the number of days an employee is scheduled, if they are scheduled
-  // twice on a day, it still counts as one day.
-  $scope.countDays = function() {
-    var shifts = [[],[],[],[],[],[],[],];
+  $scope.times = {
+    // start times start at the earlist shift start and increment by half
+    // hours until the end of the lastest starting shift
+    // TODO have a smarter way to populate this list
+    start:[
+      {disp:"5:00 AM", valHr: 5, valMin: 0},
+      {disp:"5:30 AM", valHr: 5, valMin: 30},
+      {disp:"6:00 AM", valHr: 6, valMin: 0},
+      {disp:"6:30 AM", valHr: 6, valMin: 30},
+      {disp:"7:00 AM", valHr: 7, valMin: 0},
+      {disp:"7:30 AM", valHr: 7, valMin: 30},
+      {disp:"8:00 AM", valHr: 8, valMin: 0},
+      {disp:"8:30 AM", valHr: 8, valMin: 30},
+      {disp:"9:00 AM", valHr: 9, valMin: 0},
+      {disp:"9:30 AM", valHr: 9, valMin: 30},
+      {disp:"10:00 AM", valHr: 10, valMin: 0},
+      {disp:"10:30 AM", valHr: 10, valMin: 30},
+      {disp:"11:00 AM", valHr: 11, valMin: 0},
+      {disp:"11:30 AM", valHr: 11, valMin: 30},
+      {disp:"12:00 PM", valHr: 12, valMin: 0},
+      {disp:"12:30 PM", valHr: 12, valMin: 30},
+      {disp:"1:00 PM", valHr: 13, valMin: 0},
+      {disp:"1:30 PM", valHr: 13, valMin: 30},
+      {disp:"2:00 PM", valHr: 14, valMin: 0},
+      {disp:"2:30 PM", valHr: 14, valMin: 30},
+      {disp:"3:00 PM", valHr: 15, valMin: 0},
+      {disp:"3:30 PM", valHr: 15, valMin: 30},
+      {disp:"4:00 PM", valHr: 16, valMin: 0},
+      {disp:"4:30 PM", valHr: 16, valMin: 30}
+    ],
+    // end times start at the earlist shift end and increment by half
+    // hours until the end of the lastest ending shift
+    // TODO have a smarter way to populate this list
+    end:[
+      {disp:"1:00 PM", valHr: 13, valMin: 0},
+      {disp:"1:30 PM", valHr: 13, valMin: 30},
+      {disp:"2:00 PM", valHr: 14, valMin: 0},
+      {disp:"2:30 PM", valHr: 14, valMin: 30},
+      {disp:"3:00 PM", valHr: 15, valMin: 0},
+      {disp:"3:30 PM", valHr: 15, valMin: 30},
+      {disp:"4:00 PM", valHr: 16, valMin: 0},
+      {disp:"4:30 PM", valHr: 16, valMin: 30},
+      {disp:"5:00 PM", valHr: 17, valMin: 0},
+      {disp:"5:30 PM", valHr: 17, valMin: 30},
+      {disp:"6:00 PM", valHr: 18, valMin: 0},
+      {disp:"6:30 PM", valHr: 18, valMin: 30},
+      {disp:"7:00 PM", valHr: 19, valMin: 0},
+      {disp:"7:30 PM", valHr: 19, valMin: 30},
+      {disp:"8:00 PM", valHr: 20, valMin: 0},
+      {disp:"8:30 PM", valHr: 20, valMin: 30},
+      {disp:"9:00 PM", valHr: 21, valMin: 0}
+    ]
+  };
 
-    _.map($scope.template, function(item) {
-      shifts[0] = _.union(shifts[0], [item.mon.eid]);
-      shifts[1] = _.union(shifts[1], [item.tue.eid]);
-      shifts[2] = _.union(shifts[2], [item.wed.eid]);
-      shifts[3] = _.union(shifts[3], [item.thu.eid]);
-      shifts[4] = _.union(shifts[4], [item.fri.eid]);
-      shifts[5] = _.union(shifts[5], [item.sat.eid]);
-      shifts[6] = _.union(shifts[6], [item.sun.eid]);
-    });
-
-    // get day count for each employee, format is: [ {'eid':'count'}, ... ]
-    $scope.dayCount = _.countBy((_.flatten(shifts)), function(id){
-      return id;
-    });
-  }
-
-  $scope.shiftDuration = function(shr, smin, ehr, emin) {
-    return parseFloat((emin-smin)/60) + (ehr-shr);
-  }
-
-  $scope.countHours = function() {
-    // clear schedule count
-    $scope.schHourCount = [];
-    var i=0;
-    var len = $scope.currentEmployees.length;
-    var k=0;
-    var tempLen = $scope.template.length;
-
-    var count = 0;
-    var checkId = 0;
-    var name = '';
-
-    var emin = 0;
-    var smin = 0;
-    var ehr = 0;
-    var shr = 0;
-
-    var sum = 0;
-    for(; i<len; i++) {
-      checkId = $scope.currentEmployees[i].id
-      name = $scope.currentEmployees[i].firstName;
-      count = 0;
-      k=0;
-      for(; k<tempLen; k++) {
-        if($scope.template[k].mon.eid == checkId){
-          emin = $scope.template[k].wd_ed_m;
-          smin = $scope.template[k].wd_st_m;
-
-          ehr = $scope.template[k].wd_ed_h;
-          shr = $scope.template[k].wd_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].tue.eid == checkId){
-          emin = $scope.template[k].wd_ed_m;
-          smin = $scope.template[k].wd_st_m;
-
-          ehr = $scope.template[k].wd_ed_h;
-          shr = $scope.template[k].wd_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].wed.eid == checkId){
-          emin = $scope.template[k].wd_ed_m;
-          smin = $scope.template[k].wd_st_m;
-
-          ehr = $scope.template[k].wd_ed_h;
-          shr = $scope.template[k].wd_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].thu.eid == checkId){
-          emin = $scope.template[k].wd_ed_m;
-          smin = $scope.template[k].wd_st_m;
-
-          ehr = $scope.template[k].wd_ed_h;
-          shr = $scope.template[k].wd_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].fri.eid == checkId){
-          emin = $scope.template[k].wd_ed_m;
-          smin = $scope.template[k].wd_st_m;
-
-          ehr = $scope.template[k].wd_ed_h;
-          shr = $scope.template[k].wd_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].sat.eid == checkId){
-          emin = $scope.template[k].we_ed_m;
-          smin = $scope.template[k].we_st_m;
-
-          ehr = $scope.template[k].we_ed_h;
-          shr = $scope.template[k].we_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-         if ($scope.template[k].sun.eid == checkId) {
-          emin = $scope.template[k].we_ed_m;
-          smin = $scope.template[k].we_st_m;
-
-          ehr = $scope.template[k].we_ed_h;
-          shr = $scope.template[k].we_st_h;
-          sum += parseFloat((emin-smin)/60) + (ehr-shr);
-
-         }
-      }
-      $scope.barChart.labels.push(name);
-      $scope.barChart.data[0].push(sum);
-      $scope.schHourCount.push({id:checkId, name:name, hours:sum});
-      sum = 0;
-    }
-  }
+/************** Controller Initialization **************/
 
   // Initialize controller
   $scope.init = function() {
@@ -485,6 +422,5 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
-
 
 });
