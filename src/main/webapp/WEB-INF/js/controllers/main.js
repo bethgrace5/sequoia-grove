@@ -247,8 +247,6 @@ angular.module('sequoiaGroveApp')
       }, 0)
       $scope.hourCount[index] = hours;
     });
-
-    $log.debug($scope.hourCount);
   }
 
 /************** HTTP Request Functions **************/
