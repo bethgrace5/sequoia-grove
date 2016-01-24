@@ -23,6 +23,10 @@ angular.module('sequoiaGroveApp')
     return day === 0 || day === 6;
   }*/
 
+  //Sumbit Request
+  $scope.submitRequest = function(){
+    $log.debug("sumbit request off"); 
+  }
 
   $scope.countDisplay = 0 ;
 
