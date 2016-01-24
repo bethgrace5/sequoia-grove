@@ -195,7 +195,7 @@ angular.module('sequoiaGroveApp')
     });
 
     // check if this shift is in the original list
-    _.map($scope.oldShifts, function(shift, index, list) {
+    _.map($scope.originalTemplate, function(shift, index, list) {
       if( _.isEqual(shift, paramObj)) {
         inOriginal = true;
         originalIndex = index;
@@ -247,65 +247,14 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.importLastWeek = function() {
-
-    // all of the day of the week lists should be the same
-    // length as monday
-    var len  = $scope.oldShifts.mon.length;
-    var i=0;
-    for(; i<len; i++) {
-      // Monday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.mon[i].eid,
-        sid: $scope.previousShifts.mon[i].sid,
-        date: $scope.date.mon.val
-      });
-      // Tuesday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.tue[i].eid,
-        sid: $scope.previousShifts.tue[i].sid,
-        date: $scope.date.tue.val
-      });
-      // Wednesday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.wed[i].eid,
-        sid: $scope.previousShifts.wed[i].sid,
-        date: $scope.date.wed.val
-      });
-      // Thursday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.thu[i].eid,
-        sid: $scope.previousShifts.thu[i].sid,
-        date: $scope.date.thu.val
-      });
-      // Friday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.fri[i].eid,
-        sid: $scope.previousShifts.fri[i].sid,
-        date: $scope.date.fri.val
-      });
-      // Saturday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.sat[i].eid,
-        sid: $scope.previousShifts.sat[i].sid,
-        date: $scope.date.sat.val
-      });
-      // Sunday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.sun[i].eid,
-        sid: $scope.previousShifts.sun[i].sid,
-        date: $scope.date.sun.val
-      });
-    }
+    angular.copy($scope.lastWeekShifts, $scope.updateShifts);
     $scope.saveSchedule();
   }
-
-
 
 /************** HTTP Request Functions **************/
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
-    $scope.schHourCount = [];
     $scope.saving = true;
 
     $http({
@@ -330,8 +279,7 @@ angular.module('sequoiaGroveApp')
 
   // Delete all these shifts
   $scope.deleteSchedule = function() {
-    $scope.schHourCount = [];
-    $scope.saving = true;
+    scope.saving = true;
 
     $http({
       url: '/sequoiagrove/schedule/delete/',

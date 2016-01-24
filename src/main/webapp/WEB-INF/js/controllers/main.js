@@ -48,15 +48,13 @@ angular.module('sequoiaGroveApp')
   $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
+  $scope.originalTemplate = [];
   // when the schedule is cleared, any saved shifts are deleted
   $scope.deleteShifts = [];
-  $scope.schHourCount = [];
-  $scope.previousTemplate = [];
-  $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
   $scope.barChart = { labels:[],  data:[[]], series:["names"]};
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
-  $scope.oldShifts = [];
+  $scope.lastWeekShifts = [];
   $scope.birthdays = [];
   $scope.holidays = [];
 
@@ -133,14 +131,10 @@ angular.module('sequoiaGroveApp')
 
   // View Next or Previous Week
   $scope.changeWeek = function(operation) {
-    // clear out hour count
-    $scope.schHourCount = [];
-    $scope.previousShifts = { mon:[], tue:[], wed:[], thu:[], fri:[], sat:[], sun:[] };
     var nextMonday = '';
 
     // Set Monday Next Week
     if (operation == 'add') {
-      $scope.previousTemplate = $scope.template;
       nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
     }
     // Set Monday Previous Week
@@ -165,9 +159,6 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
     // save old template
-    $scope.previousTemplate = $scope.template;
-    $scope.previousShifts = $scope.oldShifts;
-
     $scope.getScheduleTemplate();
   }
 
@@ -288,23 +279,35 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
     // clear out old shifts
-    $scope.oldShifts = [];
+    $scope.lastWeekShifts = [];
+    // save old shifts in a list for importing them to the next week.
+    _.map($scope.template, function(t, index, list) {
+      $scope.lastWeekShifts.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+      $scope.lastWeekShifts.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+      $scope.lastWeekShifts.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+      $scope.lastWeekShifts.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+      $scope.lastWeekShifts.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+      $scope.lastWeekShifts.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+      $scope.lastWeekShifts.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+    });
+
     $http({
       url: '/sequoiagrove/schedule/template/' + $scope.date.mon.val,
       method: "GET",
     }).success(function (data, status, headers, config) {
-        $scope.template = data.template;
         //$log.debug(data);
+        $scope.template = data.template;
 
-        // save old shifts in a list for importing them to the next week.
+        // keep an original copy of the template, so we can check modifications
+        // on the template against it
         _.map($scope.template, function(t, index, list) {
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-          $scope.oldShifts.push({'eid':t.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+          $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+          $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+          $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+          $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+          $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+          $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+          $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
         $scope.countDays();
         $scope.countHours();
