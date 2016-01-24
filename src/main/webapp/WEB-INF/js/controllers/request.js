@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:RequestCtrl
+ * @description
+ * # RequestCtrl
+ * Controller for requesting vacation
+ */
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
 

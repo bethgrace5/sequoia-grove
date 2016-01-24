@@ -2,10 +2,10 @@
 
 /**
  * @ngdoc function
- * @name sequoiaGroveApp.controller:MainCtrl
+ * @name sequoiaGroveApp.controller:ScheduleCtrl
  * @description
- * # MainCtrl
- * Controller of the sequoiaGroveApp
+ * # ScheduleCtrl
+ * Controller for editing the schedule.
  */
 angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function (
@@ -189,7 +189,6 @@ angular.module('sequoiaGroveApp')
     // check if this shift is in the update list
     _.map($scope.updateShifts, function(shift, index, list) {
       if (_.isMatch(shift, { 'sid':sid, 'date':date})) {
-        $log.debug('match in update');
         inUpdate = true;
         updateIndex = index;
       }
@@ -198,7 +197,6 @@ angular.module('sequoiaGroveApp')
     // check if this shift is in the original list
     _.map($scope.oldShifts, function(shift, index, list) {
       if( _.isEqual(shift, paramObj)) {
-        $log.debug('match in original');
         inOriginal = true;
         originalIndex = index;
       }
@@ -357,7 +355,6 @@ angular.module('sequoiaGroveApp')
 /************** Controller Initialization **************/
 
   $scope.init = function() {
-    //$scope.getShifts();
   }
 
   $scope.init();

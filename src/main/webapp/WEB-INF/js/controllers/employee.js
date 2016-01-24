@@ -1,7 +1,11 @@
 'use strict';
 
 /**
- * Employee Controller
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:EmployeeCtrl
+ * @description
+ * # EmployeeCtrl
+ * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
