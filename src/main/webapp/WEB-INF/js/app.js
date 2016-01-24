@@ -10,7 +10,8 @@ angular.module('sequoiaGroveApp', [
     'ngSanitize',
     'ngTouch',
     'pascalprecht.translate',
-    'persona'
+    'persona',
+    'underscore'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
               $logProvider, $compileProvider) {
@@ -78,6 +79,7 @@ angular.module('sequoiaGroveApp', [
   }).
   run (function($rootScope, $http, $log, $location, Persona) {
     $rootScope.loggedIn = false;
+    $rootScope.loggingIn = true;
     $rootScope.userNotRegistered = false;
     $rootScope.loggedInUser = {};
     var currentUser = '';
@@ -92,9 +94,11 @@ angular.module('sequoiaGroveApp', [
 
     Persona.watch({
       onlogin: function(assertion) {
+        $rootScope.loggingIn = true;
         var data = { assertion: assertion };
         $http.post("/sequoiagrove/auth/login/", data).
           success(function(data, status){
+            $rootScope.loggingIn = false;
             if (data.UserNotRegistered) {
               $rootScope.userNotRegistered = true;
               $log.debug(data.email, 'not registered with this application');
@@ -102,11 +106,11 @@ angular.module('sequoiaGroveApp', [
               return;
             }
             $rootScope.userNotRegistered = false;
-            $log.debug(data);
+            //$log.debug(data);
             $rootScope.loggedInUser = data.user;
             $rootScope.loggedIn = true;
             $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
-            $location.path( "/home" );
+            $location.path( $rootScope.lastPath );
           });
       },
       onlogout: function() {

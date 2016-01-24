@@ -31,6 +31,7 @@ cache 20;
 --@crt/table/crt_transaction.sql
 --@crt/table/crt_sold_in.sql
 --@crt/table/crt_used_in.sql
+@crt/table/crt_published_schedule.sql
 
 /* views */
 @crt/view/crt_sch_template.sql
