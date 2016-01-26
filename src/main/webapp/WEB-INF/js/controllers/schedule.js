@@ -122,6 +122,17 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
+  // takes an array of moment objects
+  $scope.checkAvail = function(avail, shiftStart, shiftEnd) {
+    var isAvailable = false;
+    _.map(avail, function(a, index) {
+      if (a.start.isBefore(shiftStart) && a.end.isAfter(shiftEnd)) {
+        isAvailable = true;
+      }
+    });
+    return isAvailable;
+  }
+
   // validation for schedule edit input
   $scope.inputStatus = function(id, shiftId) {
     var style = 'form-control schedule-edit-input';
@@ -178,7 +189,7 @@ angular.module('sequoiaGroveApp')
   }
 
   // tracks changes by keeping update list current
-  $scope.checkIfShiftExists = function(eid, sid, date) {
+  $scope.trackScheduleChange = function(eid, sid, date) {
     sid = parseInt(sid);
     var paramObj = {'eid':eid, 'sid':sid, 'date':date};
     var inOriginal = false;
