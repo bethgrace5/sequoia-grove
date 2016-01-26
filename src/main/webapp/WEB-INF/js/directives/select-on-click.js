@@ -46,6 +46,20 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var matchFound = false;
         var firstLetter = name.charAt(0).toUpperCase();
         var templateIndex = attrs.idx;
+        var isInDeleteList = false;
+
+        // the shift name is empty - add this to delete list, if it
+        // is not already in delete list
+        if(this.value.length === 0) {
+          _.map($scope.deleteShifts, function(shift, index, list) {
+            if( _.isEqual(shift, {'sid':attrs.sid, 'date':attrs.date})) {
+              isInDeleteList = true;
+            }
+          });
+          if (isInDeleteList === false) {
+            $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
+          }
+        }
 
         // capitalize first letter of the value
         this.value = (firstLetter + this.value.substring(1,this.value.length));
@@ -59,42 +73,12 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         });
 
         if (matchFound) {
+          exists = true;
           // remove warning class
           element.context.classList.remove('schedule-edit-input-warn');
-          exists = true;
-          // determine which day we need to look at for availability
-          switch (attrs.day) {
-            case 'mon':
-              avail = employee.avail.mon;
-              $scope.template[templateIndex].mon.eid = employee.id;
-              break;
-            case 'tue':
-              avail = employee.avail.tue;
-              $scope.template[templateIndex].tue.eid = employee.id;
-              break;
-            case 'wed':
-              avail = employee.avail.wed;
-              $scope.template[templateIndex].wed.eid = employee.id;
-              break;
-            case 'thu':
-              avail = employee.avail.thu;
-              $scope.template[templateIndex].thu.eid = employee.id;
-              break;
-            case 'fri':
-              avail = employee.avail.fri;
-              $scope.template[templateIndex].fri.eid = employee.id;
-              break;
-            case 'sat':
-              avail = employee.avail.sat;
-              $scope.template[templateIndex].sat.eid = employee.id;
-              break;
-            case 'sun':
-              avail = employee.avail.sun;
-              $scope.template[templateIndex].sun.eid = employee.id;
-              break;
-          }
+          $scope.template[templateIndex][attrs.day].eid = employee.id;
 
-          avail = _.map(avail, function(a) {
+          avail = _.map(employee.avail[attrs.day], function(a) {
             return {
               'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
               'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
@@ -104,7 +88,11 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
           var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
 
-          var isAvailable = $scope.checkAvail(avail, shiftStart, shiftEnd);
+          var isAvailable = false;
+
+          if (avail.length > 0) {
+            isAvailable = $scope.checkAvail(avail, shiftStart, shiftEnd);
+          }
 
           if(isAvailable === false) {
             element.context.classList.add('schedule-edit-input-error');
