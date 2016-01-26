@@ -47,22 +47,15 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         var firstLetter = name.charAt(0).toUpperCase();
         var templateIndex = attrs.idx;
         var isInDeleteList = false;
-
-        // the shift name is empty - add this to delete list, if it
-        // is not already in delete list
-        if(this.value.length === 0) {
-          _.map($scope.deleteShifts, function(shift, index, list) {
-            if( _.isEqual(shift, {'sid':attrs.sid, 'date':attrs.date})) {
-              isInDeleteList = true;
-            }
-          });
-          if (isInDeleteList === false) {
-            $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
-          }
-        }
+        var isAvailable = false;
 
         // capitalize first letter of the value
         this.value = (firstLetter + this.value.substring(1,this.value.length));
+
+        // the shift name is empty - add it to delete list
+        if(this.value.length === 0) {
+          $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
+        }
 
         // find the matching employee by name
         _.map($scope.currentEmployees, function(e) {
@@ -72,12 +65,18 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           }
         });
 
-        if (matchFound) {
-          exists = true;
+        // No Employee was found by the name supplied
+        if (matchFound === false) {
+          element.context.classList.add('schedule-edit-input-warn');
+        }
+        // Found Employee - check availability and update changes in lists
+        else {
           // remove warning class
           element.context.classList.remove('schedule-edit-input-warn');
+          // update template with new id
           $scope.template[templateIndex][attrs.day].eid = employee.id;
 
+          // get availability
           avail = _.map(employee.avail[attrs.day], function(a) {
             return {
               'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
@@ -85,33 +84,29 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             }
           });
 
+          // determine shift duration times
           var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
           var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
 
-          var isAvailable = false;
-
+          // check availability against shift duration
           if (avail.length > 0) {
             isAvailable = $scope.checkAvail(avail, shiftStart, shiftEnd);
           }
-
+          // The Employee is not available
           if(isAvailable === false) {
             element.context.classList.add('schedule-edit-input-error');
           }
+          // The Employee is available
           else {
             element.context.classList.add('schedule-edit-highlight');
           }
         }
-        else {
-          //add warning class
-          element.context.classList.add('schedule-edit-input-warn');
+        //  update change lists
+        if (employee.id !== 0) {
+          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
         }
-        $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
         $scope.selectEid(employee.id);
         $scope.$apply();
-
-        //element.context.classList.remove('schedule-edit-input-error');
-        // add shift to update list if necessary
-
       });
 
       element.on('blur', function (e) {

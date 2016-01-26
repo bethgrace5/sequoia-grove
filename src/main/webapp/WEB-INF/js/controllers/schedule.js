@@ -94,34 +94,6 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
-  // check if given day availability is within provided shift range
-  $scope.checkEmpAvailWithShift = function(avl, shf) {
-    if (avl == null) {
-      return false;
-    }
-    var len = avl.length;
-    for (var i = 0; i < len; i++) {
-      var startFlag = false;
-      var endFlag = false;
-      if (
-        (avl[i].startHr == shf.sthr && avl[i].startMin <= shf.stmin) ||
-        avl[i].startHr < shf.sthr
-      ) {
-        startFlag = true;
-      }
-      if (
-        (avl[i].endHr == shf.endhr &&  avl[i].endMin >= shf.endmin) ||
-        avl[i].endHr > shf.endhr
-      ) {
-        endFlag = true;
-      }
-      if (startFlag && endFlag) {
-        return true;
-      }
-    }
-    return false;
-  }
-
   // takes an array of moment objects
   $scope.checkAvail = function(avail, shiftStart, shiftEnd) {
     var isAvailable = false;
@@ -185,6 +157,19 @@ angular.module('sequoiaGroveApp')
             sunday:    false}
         })
         $scope.newDelivery = '';
+    }
+  }
+
+  // a shift was typed in blank, add it to delete list, if it isn't
+  // already in there
+  $scope.addToDeleteList = function(obj) {
+    _.map($scope.deleteShifts, function(shift, index, list) {
+      if( _.isEqual(shift, obj)) {
+        isInDeleteList = true;
+      }
+    });
+    if (isInDeleteList === false) {
+      $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
     }
   }
 
