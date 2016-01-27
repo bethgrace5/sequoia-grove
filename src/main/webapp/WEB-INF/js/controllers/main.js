@@ -159,7 +159,7 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
     // save old template
-    $scope.getScheduleTemplate();
+    $scope.getScheduleTemplate($scope.date.mon.val);
   }
 
   $scope.formatTime = function(h, m, ampm) {
@@ -276,25 +276,15 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Get The Schedule for the week currently being viewed
-  $scope.getScheduleTemplate = function() {
-    // clear out old shifts
-    $scope.lastWeekShifts = [];
-    // save old shifts in a list for importing them to the next week.
-    _.map($scope.template, function(t, index, list) {
-      $scope.lastWeekShifts.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-      $scope.lastWeekShifts.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-      $scope.lastWeekShifts.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-      $scope.lastWeekShifts.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-      $scope.lastWeekShifts.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-      $scope.lastWeekShifts.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-      $scope.lastWeekShifts.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
-    });
+  // Get The Schedule for the week currently being viewed - expects
+  // a moment object for week
+  $scope.getScheduleTemplate = function(week) {
+    var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
     $scope.originalTemplate = [];
     $http({
-      url: '/sequoiagrove/schedule/template/' + $scope.date.mon.val,
+      url: url,
       method: "GET",
     }).success(function (data, status, headers, config) {
         //$log.debug(data);
@@ -313,6 +303,14 @@ angular.module('sequoiaGroveApp')
         });
         $scope.countDays();
         $scope.countHours();
+
+        // we were importing another week - add them to update shifts, so they can
+        // be saved for this week
+        if (_.isEqual(week, $scope.date.mon.val) == false) {
+          $scope.updateShifts = [];
+          angular.copy($scope.originalTemplate, $scope.updateShifts);
+        }
+
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
@@ -325,7 +323,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.currentEmployees = data.employeeInfo;
-        $scope.getScheduleTemplate();
+        $scope.getScheduleTemplate($scope.date.mon.val);
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {

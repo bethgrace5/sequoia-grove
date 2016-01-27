@@ -251,14 +251,22 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.importLastWeek = function() {
-    angular.copy($scope.lastWeekShifts, $scope.updateShifts);
-    $scope.saveSchedule();
+    var date = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+    $scope.getScheduleTemplate(date);
   }
 
 /************** HTTP Request Functions **************/
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
+    // add blank spaces to delete list
+    $scope.deleteShifts = _.filter($scope.updateShifts, function(shift) {
+      return (shift.eid === 0);
+    });
+    // remove blank spaces from update list
+    $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
+      return (shift.eid !== 0);
+    });
     $scope.saving = true;
 
     $http({
@@ -293,7 +301,7 @@ angular.module('sequoiaGroveApp')
       if (status == 200) {
         // clear delete shifts list
         $scope.deleteShifts = [];
-        $scope.getScheduleTemplate();
+        $scope.getScheduleTemplate($scope.date.mon.val);
         $scope.saving = false;
       }
       else {
