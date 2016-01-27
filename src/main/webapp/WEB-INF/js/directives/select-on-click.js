@@ -55,6 +55,8 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         // the shift name is empty - add it to delete list
         if(this.value.length === 0) {
           $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
+          $scope.template[templateIndex][attrs.day].eid = 0;
+          $scope.selectEid(0);
         }
 
         // find the matching employee by name
@@ -100,12 +102,12 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           else {
             element.context.classList.add('schedule-edit-highlight');
           }
+          $scope.selectEid(employee.id);
         }
         //  update change lists
         if (employee.id !== 0) {
           $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
         }
-        $scope.selectEid(employee.id);
         $scope.$apply();
       });
 

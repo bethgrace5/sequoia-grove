@@ -163,13 +163,15 @@ angular.module('sequoiaGroveApp')
   // a shift was typed in blank, add it to delete list, if it isn't
   // already in there
   $scope.addToDeleteList = function(obj) {
+    var isInDeleteList = false;
+    obj.sid = parseInt(obj.sid);
     _.map($scope.deleteShifts, function(shift, index, list) {
       if( _.isEqual(shift, obj)) {
         isInDeleteList = true;
       }
     });
     if (isInDeleteList === false) {
-      $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
+      $scope.deleteShifts.push({'sid':obj.sid, 'date':obj.date});
     }
   }
 
@@ -259,10 +261,6 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
-    // add blank spaces to delete list
-    $scope.deleteShifts = _.filter($scope.updateShifts, function(shift) {
-      return (shift.eid === 0);
-    });
     // remove blank spaces from update list
     $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
       return (shift.eid !== 0);
