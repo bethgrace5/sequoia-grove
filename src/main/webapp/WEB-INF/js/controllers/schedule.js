@@ -256,6 +256,14 @@ angular.module('sequoiaGroveApp')
 
   $scope.importLastWeek = function() {
     angular.copy($scope.lastWeekShifts, $scope.updateShifts);
+    // delete shifts that are not assigned
+    $scope.deleteShifts = _.filter($scope.updateShifts, function(shift) {
+      return shift.eid === 0;
+    });
+    // update shifts that are assigned
+    $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
+      return shift.eid !== 0;
+    });
     $scope.saveSchedule();
   }
 
