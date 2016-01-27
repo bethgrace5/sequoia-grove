@@ -261,7 +261,8 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
-    // remove blank spaces from update list
+    // remove blank spaces from update list - they are in delete shifts, or
+    // have not been assigned
     $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
       return (shift.eid !== 0);
     });
