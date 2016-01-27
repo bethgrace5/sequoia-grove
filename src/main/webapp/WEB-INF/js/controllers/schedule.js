@@ -94,32 +94,15 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
-  // check if given day availability is within provided shift range
-  $scope.checkEmpAvailWithShift = function(avl, shf) {
-    if (avl == null) {
-      return false;
-    }
-    var len = avl.length;
-    for (var i = 0; i < len; i++) {
-      var startFlag = false;
-      var endFlag = false;
-      if (
-        (avl[i].startHr == shf.sthr && avl[i].startMin <= shf.stmin) ||
-        avl[i].startHr < shf.sthr
-      ) {
-        startFlag = true;
+  // takes an array of moment objects
+  $scope.checkAvail = function(avail, shiftStart, shiftEnd) {
+    var isAvailable = false;
+    _.map(avail, function(a, index) {
+      if (a.start.isBefore(shiftStart) && a.end.isAfter(shiftEnd)) {
+        isAvailable = true;
       }
-      if (
-        (avl[i].endHr == shf.endhr &&  avl[i].endMin >= shf.endmin) ||
-        avl[i].endHr > shf.endhr
-      ) {
-        endFlag = true;
-      }
-      if (startFlag && endFlag) {
-        return true;
-      }
-    }
-    return false;
+    });
+    return isAvailable;
   }
 
   // validation for schedule edit input
@@ -177,8 +160,23 @@ angular.module('sequoiaGroveApp')
     }
   }
 
+  // a shift was typed in blank, add it to delete list, if it isn't
+  // already in there
+  $scope.addToDeleteList = function(obj) {
+    var isInDeleteList = false;
+    obj.sid = parseInt(obj.sid);
+    _.map($scope.deleteShifts, function(shift, index, list) {
+      if( _.isEqual(shift, obj)) {
+        isInDeleteList = true;
+      }
+    });
+    if (isInDeleteList === false) {
+      $scope.deleteShifts.push({'sid':obj.sid, 'date':obj.date});
+    }
+  }
+
   // tracks changes by keeping update list current
-  $scope.checkIfShiftExists = function(eid, sid, date) {
+  $scope.trackScheduleChange = function(eid, sid, date) {
     sid = parseInt(sid);
     var paramObj = {'eid':eid, 'sid':sid, 'date':date};
     var inOriginal = false;
@@ -264,7 +262,8 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
-    // remove blank spaces from update list
+    // remove blank spaces from update list - they are in delete shifts, or
+    // have not been assigned
     $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
       return (shift.eid !== 0);
     });

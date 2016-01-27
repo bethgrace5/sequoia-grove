@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', function ($window, $timeout) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', function ($window, $timeout, $log) {
   return {
     restrict: 'A',
     scope: false,
@@ -40,142 +40,75 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
       });
 
       element.on('keyup', function (e) {
+        var avail = [];
+        var employee = {'id':0};
+        var name = this.value;
+        var matchFound = false;
+        var firstLetter = name.charAt(0).toUpperCase();
+        var templateIndex = attrs.idx;
         var isInDeleteList = false;
-
-        // the shift name is empty - add this to delete list, if it
-        // is not already in delete list
-        if(this.value.length === 0) {
-          _.map($scope.deleteShifts, function(shift, index, list) {
-            if( _.isEqual(shift, {'sid':attrs.sid, 'date':attrs.date})) {
-              isInDeleteList = true;
-            }
-          });
-          if (isInDeleteList === false) {
-            $scope.deleteShifts.push({'sid':parseInt(attrs.sid), 'date':attrs.date});
-          }
-        }
+        var isAvailable = false;
 
         // capitalize first letter of the value
-        var firstLetter = this.value.charAt(0).toUpperCase();
         this.value = (firstLetter + this.value.substring(1,this.value.length));
 
-        // schedule template index
-        var index = attrs.idx;
-        var exists = false;
-        var newId = 0;
-
-        var len = $scope.currentEmployees.length;
-        var i = 0;
-
-        // find the matching employee by name, and update
-        // the employee id for the template
-        for(; i<len; i++) {
-          if($scope.currentEmployees[i].firstName == this.value) {
-            newId = $scope.currentEmployees[i].id;
-            exists = true;
-            element.context.classList.remove('schedule-edit-input-warn');
-
-            var schFlag = false;
-            if (attrs.day == 'mon' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.mon, attrs
-                )
-            ) {
-              $scope.template[index].mon.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'tue' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.tue, attrs
-                )
-            ) {
-              $scope.template[index].tue.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'wed' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.wed, attrs
-                )
-            ) {
-              $scope.template[index].wed.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'thu' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.thu, attrs
-                )
-            ) {
-              $scope.template[index].thu.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'fri' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.fri, attrs
-                )
-            ) {
-              $scope.template[index].fri.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'sat' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.sat, attrs
-                )
-            ) {
-              $scope.template[index].sat.eid = newId;
-              schFlag = true;
-            }
-            else if (attrs.day == 'sun' &&
-                $scope.checkEmpAvailWithShift(
-                  $scope.currentEmployees[i].avail.sun, attrs
-                )
-            ) {
-              $scope.template[index].sun.eid = newId;
-              schFlag = true;
-            }
-            if (schFlag) {
-              element.context.classList.add('schedule-edit-input-error');
-            }
-            else {
-              element.context.classList.remove('schedule-edit-input-error');
-            }
-            // add shift to update list if necessary
-            $scope.checkIfShiftExists(newId, attrs.sid, attrs.date)
-            $scope.selectEid(newId);
-            $scope.$apply();
-            element.context.classList.add('schedule-edit-highlight');
-          }
+        // the shift name is empty - add it to delete list
+        if(this.value.length === 0) {
+          $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
+          $scope.template[templateIndex][attrs.day].eid = 0;
+          $scope.selectEid(0);
         }
 
-        //$timeout( function() {
-          if (exists == false) {
-            // This name does not match any employee in the list
-            // set the template id to 0
-            element.context.classList.add('schedule-edit-input-warn');
-
-            if (attrs.day == 'mon') {
-              $scope.template[index].mon.eid = 0;
-            }
-            else if (attrs.day == 'tue') {
-              $scope.template[index].tue.eid = 0;
-            }
-            else if (attrs.day == 'wed') {
-              $scope.template[index].wed.eid = 0;
-            }
-            else if (attrs.day == 'thu') {
-              $scope.template[index].thu.eid = 0;
-            }
-            else if (attrs.day == 'fri') {
-             $scope.template[index].fri.eid = 0;
-            }
-            else if (attrs.day == 'sat') {
-              $scope.template[index].sat.eid = 0;
-            }
-            else if (attrs.day == 'sun') {
-              $scope.template[index].sun.eid = 0;
-            }
+        // find the matching employee by name
+        _.map($scope.currentEmployees, function(e) {
+          if(_.isMatch(e, {'firstName':name})) {
+            matchFound = true;
+            employee = e;
           }
-        //}, 0)
+        });
 
+        // No Employee was found by the name supplied
+        if (matchFound === false) {
+          element.context.classList.add('schedule-edit-input-warn');
+        }
+        // Found Employee - check availability and update changes in lists
+        else {
+          // remove warning class
+          element.context.classList.remove('schedule-edit-input-warn');
+          // update template with new id
+          $scope.template[templateIndex][attrs.day].eid = employee.id;
+
+          // get availability
+          avail = _.map(employee.avail[attrs.day], function(a) {
+            return {
+              'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
+              'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
+            }
+          });
+
+          // determine shift duration times
+          var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
+          var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
+
+          // check availability against shift duration
+          if (avail.length > 0) {
+            isAvailable = $scope.checkAvail(avail, shiftStart, shiftEnd);
+          }
+          // The Employee is not available
+          if(isAvailable === false) {
+            element.context.classList.add('schedule-edit-input-error');
+          }
+          // The Employee is available
+          else {
+            element.context.classList.add('schedule-edit-highlight');
+          }
+          $scope.selectEid(employee.id);
+        }
+        //  update change lists
+        if (employee.id !== 0) {
+          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
+        }
+        $scope.$apply();
       });
 
       element.on('blur', function (e) {

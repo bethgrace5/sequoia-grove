@@ -158,7 +158,6 @@ angular.module('sequoiaGroveApp')
     $scope.date.sun.val  = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
 
-    // save old template
     $scope.getScheduleTemplate($scope.date.mon.val);
   }
 
@@ -285,6 +284,7 @@ angular.module('sequoiaGroveApp')
     $scope.originalTemplate = [];
     $scope.updateShifts = [];
     $scope.deleteShifts = [];
+
     $http({
       url: url,
       method: "GET",
