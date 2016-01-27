@@ -235,6 +235,7 @@ angular.module('sequoiaGroveApp')
 
   // adds all shifts to delete list, so they are deleted when save is clicked
   $scope.clearSchedule = function() {
+    $scope.deleteShifts = [];
     _.map($scope.template, function(t, index, list) {
       $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
       $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
@@ -263,10 +264,6 @@ angular.module('sequoiaGroveApp')
 
   // Save the shifts in the list of updateShifts
   $scope.saveSchedule = function() {
-    // add blank spaces to delete list
-    $scope.deleteShifts = _.filter($scope.updateShifts, function(shift) {
-      return (shift.eid === 0);
-    });
     // remove blank spaces from update list
     $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
       return (shift.eid !== 0);

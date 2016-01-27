@@ -283,6 +283,8 @@ angular.module('sequoiaGroveApp')
 
     // clear out original template
     $scope.originalTemplate = [];
+    $scope.updateShifts = [];
+    $scope.deleteShifts = [];
     $http({
       url: url,
       method: "GET",
@@ -307,7 +309,6 @@ angular.module('sequoiaGroveApp')
         // we were importing another week - add them to update shifts, so they can
         // be saved for this week
         if (_.isEqual(week, $scope.date.mon.val) == false) {
-          $scope.updateShifts = [];
           angular.copy($scope.originalTemplate, $scope.updateShifts);
         }
 
