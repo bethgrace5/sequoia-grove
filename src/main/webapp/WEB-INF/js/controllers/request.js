@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sequoiaGroveApp')
-  .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
+  .controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
 
   // user is not logged in
@@ -9,8 +9,8 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
     return;
   }
-  //Date Gatherer x2
-  //$scope.requestDateStart = new Date();
+
+  //Date Gatherer
   $scope.today = new Date();
   $scope.minDateStart = new Date(
       $scope.today.getFullYear(),
@@ -25,37 +25,27 @@ angular.module('sequoiaGroveApp')
 
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
       $scope.requestDateEnd = $scope.requestDateStart; 
-    }
- 
+    } 
   }
 
-    /*$scope.onlyWeekendsPredicate = function(date) {
-    var day = date.getDay();
-    return day === 0 || day === 6;
-  }*/
-
-  //Request Status
-  //note: should this be more protected?
-  $scope.managerMode  = false;
-  $scope.employeeMode = true;
-  var teste3 = 20;
-
-
-  //Temporary 
 
   //Submit Request
   $scope.submitRequest = function(){
-    $log.debug("sumbit request off"); 
-    //$log.debug($scope.requestDateStart < $scope.requestDateEnd); 
-    //$log.debug(moment('2010-10-20').isAfter('2010-10-19')); 
-    $log.debug(moment($scope.requestDateEnd).isAfter($scope.requestDateStart)); 
-    $log.debug($scope.requestDateStart); 
-    $log.debug($scope.requestDateEnd); 
-    teste3 = 50;
-    $log.debug(teste3);
-  }
-  $scope.submitRequest2 = function(){
-    $log.debug(teste3);
+    var obj = { "eid": $rootScope.loggedInUser.id, 
+      "start":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "end":moment($scope.requetsDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/submit/',
+      method: "POST",
+      data: { 'body': JSON.stringify(obj) }
+    })
+    .success(function (data, status, headers, config) {
+      $log.debug(data);
+    })
+    .error(function (data, status, headers, config) {
+        $log.error('Error submiting request ', status, data);
+    });  
   }
 
 
