@@ -254,8 +254,8 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.importLastWeek = function() {
-    var date = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
-    $scope.getScheduleTemplate(date);
+    var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+    $scope.getScheduleTemplate(d);
   }
 
 /************** HTTP Request Functions **************/
@@ -267,6 +267,7 @@ angular.module('sequoiaGroveApp')
     $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
       return (shift.eid !== 0);
     });
+    $log.debug($scope.updateShifts);
     $scope.saving = true;
 
     $http({

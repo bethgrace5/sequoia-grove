@@ -54,7 +54,6 @@ angular.module('sequoiaGroveApp')
   $scope.barChart = { labels:[],  data:[[]], series:["names"]};
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
-  $scope.lastWeekShifts = [];
   $scope.birthdays = [];
   $scope.holidays = [];
 
@@ -193,7 +192,7 @@ angular.module('sequoiaGroveApp')
   // count the number of days an employee is scheduled, if they are scheduled
   // twice on a day, it still counts as one day.
   $scope.countDays = function() {
-    var shifts = [[],[],[],[],[],[],[],];
+    var shifts = [[],[],[],[],[],[],[]];
 
     _.map($scope.template, function(item) {
       shifts[0] = _.union(shifts[0], [item.mon.eid]);
@@ -282,8 +281,8 @@ angular.module('sequoiaGroveApp')
 
     // clear out original template
     $scope.originalTemplate = [];
-    $scope.updateShifts = [];
     $scope.deleteShifts = [];
+    $scope.updateShifts = [];
 
     $http({
       url: url,
@@ -294,7 +293,7 @@ angular.module('sequoiaGroveApp')
 
         // keep an original copy of the template, so we can check modifications
         // on the template against it
-        _.map($scope.template, function(t, index, list) {
+        _.map(data.template, function(t, index, list) {
           $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
           $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
           $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
@@ -303,15 +302,14 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
-        $scope.countDays();
-        $scope.countHours();
 
         // we were importing another week - add them to update shifts, so they can
         // be saved for this week
         if (_.isEqual(week, $scope.date.mon.val) == false) {
           angular.copy($scope.originalTemplate, $scope.updateShifts);
         }
-
+        $scope.countDays();
+        $scope.countHours();
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
