@@ -7,7 +7,8 @@
           <h4>
             Starting Date
             <md-datepicker ng-model="$parent.requestDateStart"
-              md-placeholder="Starting Date" md-min-date="minDateStart">
+              md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+              ng-change="updateEnd()">
             </md-datepicker>
             Ending Date
             <md-datepicker ng-model="$parent.requestDateEnd" 
@@ -18,8 +19,6 @@
             <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
               Submit
             </button>
-            <p>{{$parent.requestDateStart}}</p>
-            <p>{{$parent.requestDateEnd}}</p>
         </form>
     </div>
 </div>

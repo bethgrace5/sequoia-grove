@@ -11,19 +11,23 @@ angular.module('sequoiaGroveApp')
   }
   //Date Gatherer x2
   //$scope.requestDateStart = new Date();
-  $scope.requestDateStart = new Date();
-  $scope.requestDateEnd = new Date();
-
+  $scope.today = new Date();
   $scope.minDateStart = new Date(
-      $scope.requestDateStart.getFullYear(),
-      $scope.requestDateStart.getMonth(),
-      $scope.requestDateStart.getDate() + 14);//14 days/2 weeks in advance
+      $scope.today.getFullYear(),
+      $scope.today.getMonth(),
+      $scope.today.getDate() + 14);//14 days/2 weeks in advance
 
-  $scope.minDateEnd = new Date(
-      $scope.requestDateEnd.getFullYear(),
-      $scope.requestDateEnd.getMonth(),
-      $scope.requestDateEnd.getDate());
+  $scope.requestDateStart = $scope.minDateStart;
+  $scope.requestDateEnd   = $scope.minDateStart;
 
+
+  $scope.updateEnd = function(){ 
+
+    if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
+      $scope.requestDateEnd = $scope.requestDateStart; 
+    }
+ 
+  }
 
     /*$scope.onlyWeekendsPredicate = function(date) {
     var day = date.getDay();
