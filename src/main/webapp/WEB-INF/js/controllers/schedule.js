@@ -94,9 +94,39 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
-  // takes an array of moment objects
-  $scope.checkAvail = function(avail, shiftStart, shiftEnd) {
+
+  // find the matching employee by name
+  $scope.getEmployeeByname = function(name) {
+    var employee = {'id':0};
+    _.map($scope.currentEmployees, function(e) {
+      if(_.isMatch(e, {'firstName':name})) {
+        employee = e;
+      }
+    });
+    return employee;
+  }
+
+  // get if employee is available
+  $scope.employeeIsAvailable = function(attrs, employee) {
+    var avail = [];
     var isAvailable = false;
+
+    // 1. get employee availability
+    avail = _.map(employee.avail[attrs.day], function(a) {
+      return {
+        'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
+        'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
+      }
+    });
+    if (avail.length <=0 ) {
+      return false;
+    }
+
+    // 2. determine shift duration times
+    var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
+    var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
+
+    // 3. check employee availability against shift duration
     _.map(avail, function(a, index) {
       if (a.start.isBefore(shiftStart) && a.end.isAfter(shiftEnd)) {
         isAvailable = true;
