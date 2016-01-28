@@ -56,13 +56,8 @@ angular.module('sequoiaGroveApp')
       $scope.selectedShift.title = $scope.template[cur].tname;
       /*set position*/
       $scope.selectedShift.pos = $scope.template[cur].position;
-      /*for(var i=0; i < $scope.positions.length; i++) {
-        if($scope.positions[i].title == $scope.template[cur].position) {
-          $scope.selectedShift.pos = $scope.positions[i];
-          break;
-        }
-      }*/
       /*set hours*/
+
     }
   }
 
