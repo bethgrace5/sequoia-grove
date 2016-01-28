@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Param;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.dao.DeliveryDAO;
@@ -33,13 +34,14 @@ public class RequestController{
 
   // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/request/submit")
-    public String sumbitRequest(@RequestBody String body, Model model) throws SQLException {
+    public String sumbitRequest(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        // Get the request body (represented as "body":"list of params")
         Gson gson = new Gson();
-        Param params = gson.fromJson(body, Param.class);
-        System.out.println(params.getBody());
+        Request req = gson.fromJson(data, Request.class);
+
+        System.out.println(req.getEid());
+        System.out.println(req.getStartDate());
+        System.out.println(req.getEndDate());
         return "jsonTemplate";
     }
 

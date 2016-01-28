@@ -32,13 +32,13 @@ angular.module('sequoiaGroveApp')
   //Submit Request
   $scope.submitRequest = function(){
     var obj = { "eid": $rootScope.loggedInUser.id, 
-      "start":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
-      "end":moment($scope.requetsDateEnd).format("MM-DD-YYYY")
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "endDate":moment($scope.requetsDateEnd).format("MM-DD-YYYY")
     }
     $http({
       url: '/sequoiagrove/request/submit/',
       method: "POST",
-      data: { 'body': JSON.stringify(obj) }
+      data: JSON.stringify(obj) 
     })
     .success(function (data, status, headers, config) {
       $log.debug(data);
