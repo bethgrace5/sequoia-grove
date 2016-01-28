@@ -7,6 +7,14 @@ start with 1
 increment by 1
 cache 20;
 
+/* sequences */
+create sequence bajs_request_seq
+minvalue 1
+maxvalue 99999
+start with 1
+increment by 1
+cache 20;
+
 /* base tables */
 @crt/table/crt_hours.sql
 @crt/table/crt_employee.sql
@@ -46,6 +54,7 @@ cache 20;
 
 /* triggers */
 @crt/trigger/emp_id_seq.sql
+@crt/trigger/request_id_seq.sql
 @crt/trigger/emp_delete.sql
 @crt/trigger/before_ins_train.sql
 --@crt/trigger/change_tid.sql
