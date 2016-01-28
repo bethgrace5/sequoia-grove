@@ -5,115 +5,66 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
   return {
     restrict: 'A',
     scope: false,
+
     link: function ($scope, element, attrs) {
       element.on('click', function () {
         if (!$window.getSelection().toString()) {
           // Required for mobile Safari
           this.setSelectionRange(0, this.value.length)
         }
-        // get name to see if it changes
-        oldName = this.value;
       });
 
       element.on('keydown', function (e) {
-        //console.log(e.keyCode);
-
-        // Enter Pressed
-        if(e.keyCode == 13) {
-          // deselect the item
-          this.blur()
+        if(e.keyCode == 13) { // Enter Pressed
+          this.blur(); // deselect the item
         }
-
-        // Backspace Pressed
-        if(e.keyCode == 8) {
-          // clear input
-          //this.value = this.value.substring(0, this.value.length);
-
-          // back space operate as usual
-          this.setSelectionRange(this.value.length-1, this.value.length)
+        if(e.keyCode == 8) { // Backspace Pressed
+          //this.value = this.value.substring(0, this.value.length); // clear input
+          this.setSelectionRange(this.value.length-1, this.value.length) // back space operate as usual
         }
-
-        // Esc Pressed
-        if(e.keyCode == 27) {
-          this.blur()
+        if(e.keyCode == 27) { // Esc Pressed
+          this.blur();
         }
-      });
+      }); // end keydown function
 
       element.on('keyup', function (e) {
-        var avail = [];
-        var employee = {'id':0};
-        var name = this.value;
-        var matchFound = false;
-        var firstLetter = name.charAt(0).toUpperCase();
-        var templateIndex = attrs.idx;
-        var isInDeleteList = false;
-        var isAvailable = false;
+        var employee = $scope.getEmployeeByname(this.value);;
 
-        // capitalize first letter of the value
-        this.value = (firstLetter + this.value.substring(1,this.value.length));
+        // capitalize first letter of the name
+        var firstLetter = this.value.charAt(0).toUpperCase();
+        this.value = firstLetter + this.value.substring(1, this.value.length);
 
-        // the shift name is empty - add it to delete list
+        // the name is blank - add it to delete list
         if(this.value.length === 0) {
           $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
-          $scope.template[templateIndex][attrs.day].eid = 0;
-          $scope.selectEid(0);
+          $scope.template[attrs.idx][attrs.day].eid = 0;
         }
 
-        // find the matching employee by name
-        _.map($scope.currentEmployees, function(e) {
-          if(_.isMatch(e, {'firstName':name})) {
-            matchFound = true;
-            employee = e;
-          }
-        });
-
-        // No Employee was found by the name supplied
-        if (matchFound === false) {
-          element.context.classList.add('schedule-edit-input-warn');
-        }
-        // Found Employee - check availability and update changes in lists
-        else {
-          // remove warning class
+        // Found Employee!
+        if (employee.id !== 0) {
+          // remove warning class and update template with new id
           element.context.classList.remove('schedule-edit-input-warn');
-          // update template with new id
-          $scope.template[templateIndex][attrs.day].eid = employee.id;
+          $scope.template[attrs.idx][attrs.day].eid = employee.id;
 
-          // get availability
-          avail = _.map(employee.avail[attrs.day], function(a) {
-            return {
-              'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
-              'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
-            }
-          });
-
-          // determine shift duration times
-          var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
-          var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
-
-          // check availability against shift duration
-          if (avail.length > 0) {
-            isAvailable = $scope.checkAvail(avail, shiftStart, shiftEnd);
-          }
-          // The Employee is not available
-          if(isAvailable === false) {
-            element.context.classList.add('schedule-edit-input-error');
-          }
-          // The Employee is available
-          else {
+          // 1. Check availability
+          if ($scope.employeeIsAvailable(attrs, employee)) {
             element.context.classList.add('schedule-edit-highlight');
           }
-          $scope.selectEid(employee.id);
-        }
-        //  update change lists
-        if (employee.id !== 0) {
+          else { // the employee is not available
+            element.context.classList.add('schedule-edit-input-error');
+          }
+
+          // 2. update change lists
           $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
         }
-        $scope.$apply();
-      });
+        else { // No Employee was found by the name supplied
+          element.context.classList.add('schedule-edit-input-warn');
+        }
 
-      element.on('blur', function (e) {
-        oldName = this.value;
-      });
-    }
-  };
-}]);
+        $scope.selectEid(employee.id);
+        $scope.$apply();
+      }); // end 'keyup' function
+
+    }  //end link
+  };  // end return
+}]); // end module
