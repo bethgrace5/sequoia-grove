@@ -28,8 +28,6 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
       }); // end keydown function
 
       element.on('keyup', function (e) {
-        var employee = $scope.getEmployeeByname(this.value);;
-
         // capitalize first letter of the name
         var firstLetter = this.value.charAt(0).toUpperCase();
         this.value = firstLetter + this.value.substring(1, this.value.length);
@@ -39,6 +37,8 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
           $scope.template[attrs.idx][attrs.day].eid = 0;
         }
+
+        var employee = $scope.getEmployeeByname(this.value);;
 
         // Found Employee!
         if (employee.id !== 0) {
@@ -55,7 +55,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           }
 
           // 2. update change lists
-          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date)
+          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied
           element.context.classList.add('schedule-edit-input-warn');
