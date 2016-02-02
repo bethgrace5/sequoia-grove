@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:RequestCtrl
+ * @description
+ * # RequestCtrl
+ * Controller for requesting vacation
+ */
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
 
@@ -20,12 +27,12 @@ angular.module('sequoiaGroveApp')
     data: [
     /*
      * TODO use dayCount instead
-      $scope.schCount[0].length, 
-      $scope.schCount[1].length, 
-      $scope.schCount[2].length, 
-      $scope.schCount[3].length, 
-      $scope.schCount[4].length, 
-      $scope.schCount[5].length, 
+      $scope.schCount[0].length,
+      $scope.schCount[1].length,
+      $scope.schCount[2].length,
+      $scope.schCount[3].length,
+      $scope.schCount[4].length,
+      $scope.schCount[5].length,
       $scope.schCount[6].length
       */
     ]
