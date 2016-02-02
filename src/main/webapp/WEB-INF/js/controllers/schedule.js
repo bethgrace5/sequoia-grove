@@ -34,10 +34,10 @@ angular.module('sequoiaGroveApp')
     idx : -1,
     title : '',
     pos : '',
-    wd_st : 0,
-    wd_ed : 0,
-    we_st : 0,
-    we_ed : 0
+    wd_st : '',
+    wd_ed : '',
+    we_st : '',
+    we_ed : ''
   };
 
   // Call browser to print schedule on paper
@@ -57,7 +57,7 @@ angular.module('sequoiaGroveApp')
       /*set position*/
       $scope.selectedShift.pos = $scope.template[cur].position;
       /*set hours*/
-
+      $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h+':'$scope.template[cur].wd_st_m+', HH:MM', 'hh:mm A');
     }
   }
 
