@@ -17,11 +17,13 @@ angular.module('sequoiaGroveApp')
     $scope,
     $translate,
     localStorageService,
-    Persona){
+    Persona,
+    $q){
 
 /************** Login Redirect, Containers and UI settings **************/
 
   $rootScope.currentPath = $location.path();
+  $rootScope.lastPath = '/home';
 
   // user is not logged in, redirect to login
   if ($rootScope.loggedIn == false) {
@@ -241,7 +243,7 @@ angular.module('sequoiaGroveApp')
 /************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/position',
       method: "GET"
     }).success(function (data, status, headers, config) {
@@ -252,25 +254,13 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.getHasPositions = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/position/has',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.hasPosition = data.hasPositions;
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining has position data: " + data);
-    });
-  }
-
-  $scope.getLocations = function() {
-    $http({
-      url: '/sequoiagrove/position/location',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.locations = data.locations;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining location data: " + data);
     });
   }
 
@@ -284,7 +274,7 @@ angular.module('sequoiaGroveApp')
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
 
-    $http({
+    return $http({
       url: url,
       method: "GET",
     }).success(function (data, status, headers, config) {
@@ -308,8 +298,6 @@ angular.module('sequoiaGroveApp')
         if (_.isEqual(week, $scope.date.mon.val) == false) {
           angular.copy($scope.originalTemplate, $scope.updateShifts);
         }
-        $scope.countDays();
-        $scope.countHours();
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
@@ -317,12 +305,11 @@ angular.module('sequoiaGroveApp')
 
   // Get Current Employees with their id
   $scope.getEmployeeCurrent = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/employee/info/current',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.currentEmployees = data.employeeInfo;
-        $scope.getScheduleTemplate($scope.date.mon.val);
         //$log.debug(data);
 
     }).error(function (data, status, headers, config) {
@@ -332,13 +319,12 @@ angular.module('sequoiaGroveApp')
 
   // Get All Employees with their id
   $scope.getEmployeeAll = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/employee/info/all',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.allEmployees = data.employeeInfo;
         //$log.debug(data);
-        $scope.getEmployeeCurrent();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -415,12 +401,33 @@ angular.module('sequoiaGroveApp')
   $scope.init = function() {
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
-    $scope.getPositions();
-    $scope.getLocations();
-    $scope.getEmployeeAll();
-    $scope.getHasPositions();
-  }
 
-  $scope.init();
+    if ($rootScope.loggingIn) {
+    }
+    $q.all(
+      [$scope.getPositions(),
+        $scope.getEmployeeAll(),
+        $scope.getEmployeeCurrent(),
+        $scope.getScheduleTemplate($scope.date.mon.val),
+        $scope.countDays(),
+        $scope.countHours(),
+        $scope.getHasPositions()
+       ]
+     ).then(function(results) {
+        $log.debug('complete');
+      });
+
+  }
+  $scope.$on('logged in', function(event, args) {
+    $scope.init();
+  });
+
+  $scope.personaLogin = function() {
+    $rootScope.$broadcast('login');
+  }
+  $scope.personaLogout = function() {
+    $log.debug('logout');
+    $rootScope.$broadcast('logout');
+  }
 
 });

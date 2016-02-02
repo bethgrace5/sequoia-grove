@@ -25,6 +25,7 @@ angular.module('sequoiaGroveApp')
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
   }
+  $rootScope.lastPath = '/schedule';
 
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
@@ -392,5 +393,15 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+/************** Event Watchers **************/
+
+  $scope.$watch('selectedId', function(newVal, oldVal){
+    if(newVal){
+      $log.debug(newVal);
+      // watchExpression has changed.
+    }
+  });
+
 
 });

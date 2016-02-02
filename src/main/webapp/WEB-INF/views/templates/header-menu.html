@@ -14,14 +14,14 @@
       </div>
 
       <span ng-show="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button type="button" ng-click="logout()" class="btn btn-clear">
+        <button type="button" ng-click="personaLogout()" class="btn btn-clear">
           <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
           Hello, {{loggedInUser.firstname}}! (Sign out)
         </button>
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button ng-disabled="loggingIn" type="button" ng-click="login()" class="btn btn-clear">
+        <button ng-disabled="loggingIn" type="button" ng-click="personaLogin()" class="btn btn-clear">
           <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
           Sign in / Sign up
         </button>
