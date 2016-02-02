@@ -61,7 +61,10 @@ angular.module('sequoiaGroveApp')
       /*set position*/
       $scope.selectedShift.pos = $scope.template[cur].position;
       /*set hours*/
-      $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h+':'$scope.template[cur].wd_st_m+', HH:MM', 'hh:mm A');
+      $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h + ':' + $scope.template[cur].wd_st_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.wd_ed = moment($scope.template[cur].wd_ed_h + ':' + $scope.template[cur].wd_ed_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.we_st = moment($scope.template[cur].we_st_h + ':' + $scope.template[cur].we_st_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.we_ed = moment($scope.template[cur].we_ed_h + ':' + $scope.template[cur].we_ed_m, 'HH:mm').format('h:mm A');
     }
   }
 

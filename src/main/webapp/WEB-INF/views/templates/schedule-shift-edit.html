@@ -27,13 +27,13 @@
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekday Start"
-          ng-model="selectedShift.wd_st" ng-options="option.disp for option in times.start">
+          ng-model="selectedShift.wd_st" ng-options="option.disp as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekday End"
-          ng-model="selectedShift.wd_ed" ng-options="option.disp for option in times.end">
+          ng-model="selectedShift.wd_ed" ng-options="option.disp as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>
@@ -45,13 +45,13 @@
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekend Start"
-          ng-model="selectedShift.we_st" ng-options="option.disp for option in times.start">
+          ng-model="selectedShift.we_st" ng-options="option.disp as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekend End"
-          ng-model="selectedShift.we_ed" ng-options="option.disp for option in times.end">
+          ng-model="selectedShift.we_ed" ng-options="option.disp as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>
