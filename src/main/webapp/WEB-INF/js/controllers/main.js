@@ -426,7 +426,6 @@ angular.module('sequoiaGroveApp')
     $rootScope.$broadcast('login');
   }
   $scope.personaLogout = function() {
-    $log.debug('logout');
     $rootScope.$broadcast('logout');
   }
 

@@ -15,7 +15,6 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         Persona){
-    $log.debug('login');
     $rootScope.loggedIn = false;
     $rootScope.userNotRegistered = false;
     $rootScope.loggedInUser = {};
@@ -52,7 +51,6 @@ angular.module('sequoiaGroveApp')
             $rootScope.loggedIn = true;
             $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
 
-            $log.debug($rootScope.lastPath);
             $rootScope.$broadcast('logged in');
             if ($rootScope.lastPath === '/login') {
               $rootScope.lastPath = '/home';
@@ -81,7 +79,6 @@ angular.module('sequoiaGroveApp')
     });
 
     $rootScope.$on('logout', function() {
-      $log.debug('caught logout');
       $scope.personaLogout();
     });
 
