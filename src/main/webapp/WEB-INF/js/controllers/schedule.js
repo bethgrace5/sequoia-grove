@@ -64,12 +64,17 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.publishSchedule = function() {
-      $log.debug("Schedule is published"); 
-      $log.debug($scope.date); 
+      var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
+    $http({
+      url: '/sequoiagrove/schedule/publish/',
+      method: "POST",
+      data: obj
+      }).success(function (data, status, headers, config) {
+        $log.debug(data)
 
-
-
-
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error posting schedule " + data);
+    });
 
   }
   // Filter schedule by selected position

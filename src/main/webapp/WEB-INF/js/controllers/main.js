@@ -272,9 +272,14 @@ angular.module('sequoiaGroveApp')
 
   // Get The Schedule for the week currently being viewed
   $scope.getScheduleTemplate = function() {
+      if($scope.checkifPublished() === false) {
+          $log.debug("Schedule has not been published");
+          return;
+
+      }
     // clear out old shifts
     $scope.oldShifts = [];
-    $http({
+   /* $http({
       url: '/sequoiagrove/schedule/template/' +
             $scope.date.mon.val + '/' +
             $scope.date.tue.val + '/' +
@@ -340,10 +345,12 @@ angular.module('sequoiaGroveApp')
         $scope.countDays();
         $scope.countHours();
 
+        
+
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
-    });
+    });*/
   }
 
   // Get Current Employees with their id
@@ -373,6 +380,21 @@ angular.module('sequoiaGroveApp')
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
+    });
+  }
+  
+  // send http request to back end to check if published
+  $scope.checkifPublished = function() {
+    $http({
+      url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $log.debug(data.ispublished);
+        return true;
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining all employee: " + data);
+        return true;
     });
   }
 

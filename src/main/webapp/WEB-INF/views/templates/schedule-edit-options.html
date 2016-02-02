@@ -45,18 +45,12 @@
       </button>
 
       <button class = "btn btn-primary"
-        ng-show = "updateShifts.length<=0"
         ng-click = "publishSchedule()"
         ng-disabled = "saving">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
 
-      <button class = "btn btn-primary"
-        ng-show = "updateShifts.length>0"
-        ng-disabled = "saving">
-        Save &amp; Publish
-        <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
     </form>
 

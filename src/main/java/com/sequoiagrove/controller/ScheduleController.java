@@ -154,6 +154,31 @@ public class ScheduleController {
 
         return "jsonTemplate";
     }
+  
+  // Check with database if is published or not
+    @RequestMapping(value = "/schedule/ispublished/{date}")
+    public String checkifPublished( @PathVariable("date") String mon, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+           /* jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)", 
+                change.getEid(), 
+                change.getSid(), 
+                change.getDate());*/
+        model.addAttribute("ispublished", true);    
+
+        return "jsonTemplate";
+    }
+    
+    @RequestMapping(value = "/schedule/publish")
+    public String publishSchedule(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Gson gson = new Gson();
+        String date = gson.fromJson(data, String.class);
+        System.out.println(date);
+
+        return "jsonTemplate";
+    }
 
   // delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
