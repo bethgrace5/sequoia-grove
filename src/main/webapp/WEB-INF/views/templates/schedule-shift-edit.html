@@ -58,10 +58,24 @@
     </div>
   </div>
 
-  <div class="col-sm-1">
+  <div class="col-sm-1" ng-hide="shiftSelected()">
     <p>Add Shift</p>
     <button type="button" class="btn btn-success" ng-click="foo()">
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="col-sm-2" ng-hide="!shiftSelected()">
+    <p>Remove Shift</p>
+    <button type="button" class="btn btn-danger" ng-click="foo()">
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+    </button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-sm-2" ng-hide="!shiftSelected()">
+    <button type="button" class="btn btn-info" ng-click="selectShift(-1)">
+      Back to New Shift Edit
     </button>
   </div>
 </div>
