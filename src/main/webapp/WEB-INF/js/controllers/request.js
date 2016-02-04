@@ -15,26 +15,25 @@ angular.module('sequoiaGroveApp')
   $scope.minDateStart = new Date(
       $scope.today.getFullYear(),
       $scope.today.getMonth(),
-      $scope.today.getDate() + 14);//14 days/2 weeks in advance
+      $scope.today.getDate() + 14
+    );//14 days/2 weeks in advance
 
   $scope.requestDateStart = $scope.minDateStart;
   $scope.requestDateEnd   = $scope.minDateStart;
 
-
   $scope.updateEnd = function(){ 
-
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
-      $scope.requestDateEnd = $scope.requestDateStart; 
+      $scope.requestDateEnd = $scope.requestDateStart;
     } 
   }
-
 
   //Submit Request
   $scope.submitRequest = function(){
     var obj = { "eid": $rootScope.loggedInUser.id, 
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
-      "endDate":moment($scope.requetsDateEnd).format("MM-DD-YYYY")
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
+    $log.debug(obj);
     $http({
       url: '/sequoiagrove/request/submit/',
       method: "POST",
@@ -47,7 +46,6 @@ angular.module('sequoiaGroveApp')
         $log.error('Error submiting request ', status, data);
     });  
   }
-
 
   $scope.countDisplay = 0 ;
 

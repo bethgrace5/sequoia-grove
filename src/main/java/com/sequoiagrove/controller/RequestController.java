@@ -27,23 +27,54 @@ import com.sequoiagrove.model.Param;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
+/** 
+RequestController:
+   Puts Starting Date, End Date, and Employee ID from the front end to the datebase
+   It will also retrieve information from the backend 
+ */
 
 
 @Controller
 public class RequestController{
-
-  // Get current schedule template (current shifts) dd/mm/yyyy
-    @RequestMapping(value = "/request/submit")
+  @RequestMapping(value = "/request/submit")
     public String sumbitRequest(@RequestBody String data, Model model) throws SQLException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        Gson gson = new Gson();
-        Request req = gson.fromJson(data, Request.class);
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      Gson gson = new Gson();
+      Request req = gson.fromJson(data, Request.class);
 
-        System.out.println(req.getEid());
-        System.out.println(req.getStartDate());
-        System.out.println(req.getEndDate());
-        return "jsonTemplate";
+      int eid = req.getEid();
+      String start = req.getStartDate();
+      String end = req.getEndDate();
+
+      jdbcTemplate.update(
+          "insert into bajs_requests_vacation"+
+          "(id, requested_by, responded_by, is_approved, start_date_time, end_date_time)" +
+          "values(?, ?, ?, ?, "+
+          "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
+          0, eid, null, 0, start, end);
+      System.out.println("Start Date: " + start + "\nEnd Date: " + end);
+
+      return "jsonTemplate";
     }
 
+  @RequestMapping(value = "/request")
+    public String getRequest(Model model){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+      List<Request> empList = jdbcTemplate.query(
+          "select id, requested_by, responded_by, is_approved, start_date_time, end_date_time from bajs_requests_vaction",  
+          new RowMapper<Request>() {
+            public Request  mapRow(ResultSet rs, int rowNum) throws SQLException {
+              Request es = new Request(
+                rs.getInt("id"),
+                rs.getString("start_date_time"),
+                rs.getString("end_date_time")
+              );
+              return es;
+            }
+          });
+      model.addAttribute("request", empList);
+      return "jsonTemplate";
+    }
 }
 

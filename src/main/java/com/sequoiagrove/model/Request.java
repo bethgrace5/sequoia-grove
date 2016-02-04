@@ -15,22 +15,25 @@ public class Request {
         this.endDate = endDate;
     }
 
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-    public void setEndDate(String startDate) {
-        this.endDate = endDate;
-    }
-    public String getStartDate() {
-      return this.startDate;
-    }
-    public String getEndDate(){
-      return this.endDate;
-    }
+
     public void setEid(int id) {
         this.eid = eid;
     }
     public int getEid() {
         return eid;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+    public String getStartDate() {
+      return this.startDate;
+    }
+
+    public void setEndDate(String startDate) {
+        this.endDate = endDate;
+    }
+    public String getEndDate(){
+      return this.endDate;
     }
 }
