@@ -25,14 +25,6 @@ angular.module('sequoiaGroveApp')
   $rootScope.currentPath = $location.path();
   $rootScope.lastPath = '/home';
 
-  // user is not logged in, redirect to login
-  if ($rootScope.loggedIn == false) {
-    $rootScope.lastPath = $location.path();
-    if ($location.path() != '/login') {
-      $location.path('/login');
-    }
-  }
-
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
@@ -88,6 +80,8 @@ angular.module('sequoiaGroveApp')
   }
   // highlight name
   $scope.highlight = false;
+  // flag when set will disable all buttons, to avoid overlapping requests
+  $scope.loading = true;
 
 /************** Pure Functions **************/
 
@@ -399,6 +393,14 @@ angular.module('sequoiaGroveApp')
 
   // Initialize controller
   $scope.init = function() {
+    // user is not logged in, redirect to login
+    if ($rootScope.loggedIn == false) {
+      $rootScope.lastPath = $location.path();
+      if ($location.path() != '/login') {
+        $location.path('/login');
+      }
+    }
+
     $scope.changeTab('/home');
     $scope.setScheduleHeader();
 
@@ -414,7 +416,8 @@ angular.module('sequoiaGroveApp')
      ).then(function(results) {
         $scope.countDays(),
         $scope.countHours(),
-        $log.debug('complete');
+        $scope.loading = false;
+        $log.debug('loading complete');
       });
 
   }

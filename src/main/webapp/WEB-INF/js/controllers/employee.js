@@ -23,6 +23,7 @@ angular.module('sequoiaGroveApp')
     $scope.selectedEmployee = {id:0};
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
+    $scope.saving = false;
 
 /************** Pure Functions **************/
 
@@ -56,6 +57,11 @@ angular.module('sequoiaGroveApp')
 
     // add a new availability time for an employee
     $scope.addAvail = function() {
+      // guard against double clicking
+      if ($scope.saving) {
+        return;
+      }
+      $scope.saving = true;
       var day = $scope.newAvail.day;
       var st = $scope.newAvail.start;
       var end = $scope.newAvail.end;
@@ -74,20 +80,27 @@ angular.module('sequoiaGroveApp')
             url: '/sequoiagrove/avail/add/'+
                 eid + '/' + day + '/' + startt + '/' + endt,
             method: "POST"
-        })
-        // update front end
-        if (day=='mon') { $scope.selectedEmployee.avail.mon.push(newTimes); }
-        else if (day=='tue') { $scope.selectedEmployee.avail.tue.push(newTimes); }
-        else if (day=='wed') { $scope.selectedEmployee.avail.wed.push(newTimes); }
-        else if (day=='thu') { $scope.selectedEmployee.avail.thu.push(newTimes); }
-        else if (day=='fri') { $scope.selectedEmployee.avail.fri.push(newTimes); }
-        else if (day=='sat') { $scope.selectedEmployee.avail.sat.push(newTimes); }
-        else if (day=='sun') { $scope.selectedEmployee.avail.sun.push(newTimes); }
+        }).success(function(data, status) {
+          // update front end
+          if (day=='mon') { $scope.selectedEmployee.avail.mon.push(newTimes); }
+          else if (day=='tue') { $scope.selectedEmployee.avail.tue.push(newTimes); }
+          else if (day=='wed') { $scope.selectedEmployee.avail.wed.push(newTimes); }
+          else if (day=='thu') { $scope.selectedEmployee.avail.thu.push(newTimes); }
+          else if (day=='fri') { $scope.selectedEmployee.avail.fri.push(newTimes); }
+          else if (day=='sat') { $scope.selectedEmployee.avail.sat.push(newTimes); }
+          else if (day=='sun') { $scope.selectedEmployee.avail.sun.push(newTimes); }
+          $scope.saving = false;
+        });
       }
     }
 
     // add a new position for an employee
     $scope.addPos = function() {
+      // guard against double clicking
+      if ($scope.saving) {
+        return;
+      }
+      $scope.saving = true;
         var pos = $scope.newPos.title;
 
         // make sure all fields are filled in
@@ -118,53 +131,29 @@ angular.module('sequoiaGroveApp')
                     eid + '/' + pid + '/' +
                     moment().format("DD-MM-YYYY"),
                 method: "POST"
-            })
-            // update front end
-            $scope.selectedEmployee.positions.push(posObj);
+            }).success(function(data, status) {
+              $scope.saving = false;
+              // update front end
+              $scope.selectedEmployee.positions.push(posObj);
+            });
         }
     }
 
     // remove an availability for an employee
     $scope.remAvail = function(day, index) {
+      // guard against double clicking
+      if ($scope.saving) {
+        return;
+      }
+      $scope.saving = true;
         // update front end, and get start_time
         var hr;
         var min;
         if (day=='mon') {
-          hr = $scope.selectedEmployee.avail.mon[index].startHr;
-          min = $scope.selectedEmployee.avail.mon[index].startMin;
-          $scope.selectedEmployee.avail.mon.splice(index, 1);
+          hr = $scope.selectedEmployee.avail[day][index].startHr;
+          min = $scope.selectedEmployee.avail[day][index].startMin;
+          $scope.selectedEmployee.avail[day].splice(index, 1);
         }
-        else if (day=='tue') {
-          hr = $scope.selectedEmployee.avail.tue[index].startHr;
-          min = $scope.selectedEmployee.avail.tue[index].startMin;
-          $scope.selectedEmployee.avail.tue.splice(index, 1);
-        }
-        else if (day=='wed') {
-          hr = $scope.selectedEmployee.avail.wed[index].startHr;
-          min = $scope.selectedEmployee.avail.wed[index].startMin;
-          $scope.selectedEmployee.avail.wed.splice(index, 1);
-        }
-        else if (day=='thu') {
-          hr = $scope.selectedEmployee.avail.thu[index].startHr;
-          min = $scope.selectedEmployee.avail.thu[index].startMin;
-          $scope.selectedEmployee.avail.thu.splice(index, 1);
-        }
-        else if (day=='fri') {
-          hr = $scope.selectedEmployee.avail.fri[index].startHr;
-          min = $scope.selectedEmployee.avail.fri[index].startMin;
-          $scope.selectedEmployee.avail.fri.splice(index, 1);
-        }
-        else if (day=='sat') {
-          hr = $scope.selectedEmployee.avail.sat[index].startHr;
-          min = $scope.selectedEmployee.avail.sat[index].startMin;
-          $scope.selectedEmployee.avail.sat.splice(index, 1);
-        }
-        else if (day=='sun') {
-          hr = $scope.selectedEmployee.avail.sun[index].startHr;
-          min = $scope.selectedEmployee.avail.sun[index].startMin;
-          $scope.selectedEmployee.avail.sun.splice(index, 1);
-        }
-
         var startt = $scope.hrMinTo24(hr,min);
 
         // remove availability from database
@@ -172,10 +161,17 @@ angular.module('sequoiaGroveApp')
             url: '/sequoiagrove/avail/remove/'+
                 $scope.selectedEmployee.id + '/' + day + '/' + startt,
             method: "POST"
-        })
+        }).success(function(data, status) {
+          $scope.saving = false;
+        });
     }
 
     $scope.remPos = function(index) {
+      // guard against double clicking
+      if ($scope.saving) {
+        return;
+      }
+      $scope.saving = true;
         var eid = $scope.selectedEmployee.id;
         var title = $scope.selectedEmployee.positions[index].title;
         var pid;
@@ -192,14 +188,22 @@ angular.module('sequoiaGroveApp')
                 eid + '/' + pid + '/' +
                 moment().format("DD-MM-YYYY"),
             method: "POST"
+        }).success(function(data, status) {
+          // update front end
+          $scope.selectedEmployee.positions.splice(index, 1);
+          $scope.saving = false;
         })
-        // update front end
-        $scope.selectedEmployee.positions.splice(index, 1);
     }
 
     $scope.updateEmployee = function() {
+      // guard against double clicking
+      if ($scope.saving) {
+        return;
+      }
+      $scope.saving = true;
       $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
         success(function(data, status){
+          $scope.saving = false;
         });
     }
 
