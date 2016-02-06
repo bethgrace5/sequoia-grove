@@ -2,11 +2,23 @@
 <div class="row request-title">
   <div class="col-sm-2">
     <p>Title</p>
+  </div>
+  <div class="col-sm-2">
+    <p>Position</p>
+  </div>
+  <div class="col-sm-3">
+    <p>Weekdays</p>
+  </div>
+  <div class="col-sm-3">
+    <p>Weekends</p>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-2">
     <input type="text" class="form-control" placeholder="title..."
       ng-model="selectedShift.title" ng-click="alteredTitle">
   </div>
   <div class="col-sm-2">
-    <p>Position</p>
     <!--div class="dropdown">
       <button id="primary-role-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
         Select
@@ -23,7 +35,6 @@
   </div>
 
   <div class="col-sm-3">
-    <p>Weekdays</p>
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekday Start"
@@ -41,7 +52,6 @@
   </div>
 
   <div class="col-sm-3">
-    <p>Weekends</p>
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekend Start"
@@ -59,22 +69,36 @@
   </div>
 
   <div class="col-sm-1" ng-hide="shiftSelected()">
-    <p>Add Shift</p>
     <button type="button" class="btn btn-success" ng-click="foo()">
+      <span class="schedule-edit-shift-txt-addshift">Add Shift</span>
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     </button>
   </div>
-  <div class="col-sm-2" ng-hide="!shiftSelected()">
-    <p>Remove Shift</p>
+  <div class="col-sm-1" ng-hide="!shiftSelected()">
+    <!-- visual indication that changes are all saved -->
+    <!--button class = "btn btn-success schedule-view-button"
+      ng-show = ""
+      ng-click = "">
+      Save
+      <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+    </button-->
+    <!-- Default button -->
+    <button class = "btn btn-default schedule-view-button">
+      Save
+      <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="col-sm-1" ng-hide="!shiftSelected()">
     <button type="button" class="btn btn-danger" ng-click="foo()">
+      Delete
       <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
     </button>
   </div>
 </div>
 
-<div class="row">
-  <div class="col-sm-2" ng-hide="!shiftSelected()">
-    <button type="button" class="btn btn-info" ng-click="selectShift(-1)">
+<div class="row centered-elem schedule-edit-shift-droprow">
+  <div class="center-block" ng-hide="!shiftSelected()">
+    <button type="button schedule-edit-shift-btn-newshift" class="btn btn-info" ng-click="selectShift(-1)">
       Back to New Shift Edit
     </button>
   </div>

@@ -43,6 +43,9 @@ a:focus {
 .selectable-elem {
   cursor: pointer;
 }
+.centered-elem {
+  text-align: center;
+}
 
 /********************************************
     03. Print Styling
@@ -219,6 +222,16 @@ a:focus {
 .schedule-edit-shift-select {
   width: auto;
   margin: 5px;
+}
+.schedule-edit-shift-txt-addshift {
+  padding-right: 0.1em;
+}
+.schedule-edit-shift-btn-newshift {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+}
+.schedule-edit-shift-droprow {
+  margin-top: 10px;
 }
 
 /********************************************
