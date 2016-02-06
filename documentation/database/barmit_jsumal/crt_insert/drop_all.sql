@@ -1,11 +1,13 @@
 /* sequences */
 drop sequence BAJS_EMP_SEQ;
+drop sequence BAJS_REQUEST_SEQ;
 
 /* triggers */
 drop trigger BAJS_EMP_DELETE;
 --drop trigger BAJS_CHANGE_TID;
 drop trigger BAJS_UPDATE_TRAIN_EMP;
 drop trigger BAJS_EMP_ID_SEQ;
+drop trigger BAJS_REQUEST_ID_SEQ;
 
 /* views */
 drop view  BAJS_SCH_TEMPLATE;
