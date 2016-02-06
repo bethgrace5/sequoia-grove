@@ -25,7 +25,9 @@ angular.module('sequoiaGroveApp', [
         controllerAs: 'home'
       })
       .when('/login', {
-        templateUrl: 'views/login.html'
+        templateUrl: 'views/login.html',
+        controller: 'LoginCtrl',
+        controllerAs: 'login'
       })
       .when('/schedule', {
         templateUrl: 'views/schedule.html',
@@ -78,52 +80,5 @@ angular.module('sequoiaGroveApp', [
 
   }).
   run (function($rootScope, $http, $log, $location, Persona) {
-    $rootScope.loggedIn = false;
-    $rootScope.loggingIn = true;
-    $rootScope.userNotRegistered = false;
-    $rootScope.loggedInUser = {};
-    var currentUser = '';
-
-    $rootScope.login = function () {
-      Persona.request();
-    }
-    $rootScope.logout = function () {
-      Persona.logout();
-      $location.path( "/login" );
-    }
-
-    Persona.watch({
-      onlogin: function(assertion) {
-        $rootScope.loggingIn = true;
-        var data = { assertion: assertion };
-        $http.post("/sequoiagrove/auth/login/", data).
-          success(function(data, status){
-            $rootScope.loggingIn = false;
-            if (data.UserNotRegistered) {
-              $rootScope.userNotRegistered = true;
-              $log.debug(data.email, 'not registered with this application');
-              $rootScope.loggedInUser = {email:data.email};
-              return;
-            }
-            $rootScope.userNotRegistered = false;
-            //$log.debug(data);
-            $rootScope.loggedInUser = data.user;
-            $rootScope.loggedIn = true;
-            $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
-
-            if ($rootScope.lastPath === '/login') {
-              $rootScope.lastPath = '/home';
-            }
-            $location.path( $rootScope.lastPath );
-          });
-      },
-      onlogout: function() {
-        $rootScope.loggedIn = false;
-        $rootScope.loggedInUser = {};
-        $rootScope.$apply();
-        $location.path( "/login" );
-        // Stuff
-      }
-    });
-
+    $location.path( "/login" );
   });

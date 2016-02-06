@@ -17,6 +17,7 @@ angular.module('sequoiaGroveApp')
       $location.path('/login');
     }
 
+    $rootScope.lastPath = '/schedule';
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {id:0};

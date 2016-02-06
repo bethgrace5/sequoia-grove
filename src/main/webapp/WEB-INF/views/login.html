@@ -1,6 +1,9 @@
 <div class="container">
   <div class="hidden-print text-center" style="height: 300px;">
-    <p class="lead"> <a ng-disabled="loggingIn" style="cursor:pointer;" ng-click="login()">Sign in to continue</a> </p>
+    <p class="lead">
+    <a ng-hide="loggingIn" style="cursor:pointer;" ng-click="personaLogin()">Sign in to continue</a>
+    <a ng-show="loggingIn" style="cursor:pointer;">Logging in...</a>
+    </p>
     <p ng-show="userNotRegistered">
     <strong style="color:b30000;">{{loggedInUser.email}}</strong>
     is not a registered user.

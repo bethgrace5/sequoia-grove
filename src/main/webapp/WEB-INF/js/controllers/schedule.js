@@ -25,6 +25,7 @@ angular.module('sequoiaGroveApp')
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
   }
+  $rootScope.lastPath = '/schedule';
 
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
@@ -213,8 +214,25 @@ angular.module('sequoiaGroveApp')
   // a shift was typed in blank, add it to delete list, if it isn't
   // already in there
   $scope.addToDeleteList = function(obj) {
+    var isAlreadyBlank = false;
     var isInDeleteList = false;
     obj.sid = parseInt(obj.sid);
+
+    // check if this entry was already blank
+    _.map($scope.originalTemplate, function(shift, index) {
+      if (shift.eid === 0) {
+        if ( _.isEqual(obj, _.omit(shift, 'eid'))) {
+          isAlreadyBlank = true;
+        }
+      }
+    });
+
+    // we don't need to delete this shift because it never existed in
+    // the first place
+    if (isAlreadyBlank) {
+      return;
+    }
+
     _.map($scope.deleteShifts, function(shift, index, list) {
       if( _.isEqual(shift, obj)) {
         isInDeleteList = true;
@@ -283,16 +301,34 @@ angular.module('sequoiaGroveApp')
 
   // adds all shifts to delete list, so they are deleted when save is clicked
   $scope.clearSchedule = function() {
+    $scope.updateShifts = [];
     $scope.deleteShifts = [];
-    _.map($scope.template, function(t, index, list) {
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.wed.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.thu.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.fri.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sat.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sun.val});
 
+    // add all shifts to delete list if they weren't already blank
+    _.map($scope.template, function(t, index, list) {
+      if (t.mon.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
+      }
+      if (t.tue.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
+      }
+      if (t.wed.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.wed.val});
+      }
+      if (t.thu.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.thu.val});
+      }
+      if (t.fri.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.fri.val});
+      }
+      if (t.sat.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sat.val});
+      }
+      if (t.sun.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sun.val});
+      }
+
+      // update template so view reflects changes
       t.mon.name = ""; t.mon.eid = 0;
       t.tue.name = ""; t.tue.eid = 0;
       t.wed.name = ""; t.wed.eid = 0;
@@ -369,5 +405,15 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+/************** Event Watchers **************/
+
+  $scope.$watch('selectedId', function(newVal, oldVal){
+    if(newVal){
+      $log.debug(newVal);
+      // watchExpression has changed.
+    }
+  });
+
 
 });

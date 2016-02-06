@@ -14,9 +14,9 @@ angular.module('sequoiaGroveApp')
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
-    return;
   }
 
+  $rootScope.lastPath = '/schedule';
   $scope.countDisplay = 0 ;
 
   $scope.donGraph= {
