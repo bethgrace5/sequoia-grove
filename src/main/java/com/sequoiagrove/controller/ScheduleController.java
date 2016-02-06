@@ -165,6 +165,12 @@ public class ScheduleController {
         PublishSchedule param = gson.fromJson(data, PublishSchedule.class);
         System.out.println(param.getEid());
         System.out.println(param.getDate());
+        // update database
+        jdbcTemplate.update("call bajs_pkg.publish(?, ?)", 
+            param.getEid(),
+            param.getDate());
+
+
 
         return "jsonTemplate";
     }
