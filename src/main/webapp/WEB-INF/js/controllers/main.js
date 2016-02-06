@@ -409,11 +409,11 @@ angular.module('sequoiaGroveApp')
         $scope.getEmployeeAll(),
         $scope.getEmployeeCurrent(),
         $scope.getScheduleTemplate($scope.date.mon.val),
-        $scope.countDays(),
-        $scope.countHours(),
         $scope.getHasPositions()
        ]
      ).then(function(results) {
+        $scope.countDays(),
+        $scope.countHours(),
         $log.debug('complete');
       });
 
