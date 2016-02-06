@@ -21,6 +21,7 @@ import java.sql.ResultSet;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.PublishSchedule;
 import com.sequoiagrove.model.Param;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.dao.DeliveryDAO;
@@ -174,8 +175,9 @@ public class ScheduleController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Gson gson = new Gson();
-        String date = gson.fromJson(data, String.class);
-        System.out.println(date);
+        PublishSchedule param = gson.fromJson(data, PublishSchedule.class);
+        System.out.println(param.getEid());
+        System.out.println(param.getDate());
 
         return "jsonTemplate";
     }
