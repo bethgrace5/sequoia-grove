@@ -48,7 +48,8 @@ public class RequestController{
 
       jdbcTemplate.update(
           "insert into bajs_requests_vacation"+
-          "(id, requested_by, responded_by, is_approved, start_date_time, end_date_time)" +
+          "(id, requested_by, responded_by, is_approved, start_date_time," +
+          " end_date_time)" +
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
           0, eid, null, 0, start, end);
@@ -57,12 +58,12 @@ public class RequestController{
       return "jsonTemplate";
     }
 
-  @RequestMapping(value = "/request")
+  @RequestMapping(value = "/request/get")
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-      List<Request> empList = jdbcTemplate.query(
-          "select id, requested_by, responded_by, is_approved, start_date_time, end_date_time from bajs_requests_vaction",  
+      List<Request> requestList = jdbcTemplate.query(
+          "select id, requested_by, responded_by, is_approved, " +
+          "start_date_time, end_date_time from bajs_requests_vacation",
           new RowMapper<Request>() {
             public Request  mapRow(ResultSet rs, int rowNum) throws SQLException {
               Request es = new Request(
@@ -71,9 +72,9 @@ public class RequestController{
                 rs.getString("end_date_time")
               );
               return es;
-            }
-          });
-      model.addAttribute("request", empList);
+          }
+      });
+      model.addAttribute("request", requestList);
       return "jsonTemplate";
     }
 }

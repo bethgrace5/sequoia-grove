@@ -47,6 +47,19 @@ angular.module('sequoiaGroveApp')
     });  
   }
 
+  $scope.getRequests = function() {
+    $http({
+      url: '/sequoiagrove/request/get/',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        //alert(JSON.stringify(data));
+        $log.debug(data);
+        //$scope.positions = data.positions;
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
   $scope.countDisplay = 0 ;
 
   $scope.donGraph= {
