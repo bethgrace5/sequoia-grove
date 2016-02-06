@@ -68,6 +68,7 @@
     <script src="js/controllers/employee.js"></script>
     <script src="js/controllers/request.js"></script>
     <script src="js/controllers/schedule.js"></script>
+    <script src="js/controllers/login.js"></script>
     <script src="js/directives/select-on-click.js"></script>
     <!-- endbuild -->
 

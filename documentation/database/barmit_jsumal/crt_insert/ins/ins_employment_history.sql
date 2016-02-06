@@ -43,8 +43,11 @@ insert into BAJS_EMPLOYMENT_HISTORY values( 36, to_date('12/24/1989', 'mm/dd/yyy
 insert into BAJS_EMPLOYMENT_HISTORY values( 37, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 insert into BAJS_EMPLOYMENT_HISTORY values( 38, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 insert into BAJS_EMPLOYMENT_HISTORY values( 39, to_date('12/24/1989', 'mm/dd/yyyy'), null);
+
 insert into BAJS_EMPLOYMENT_HISTORY values( 51, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 insert into BAJS_EMPLOYMENT_HISTORY values( 52, to_date('12/24/1989', 'mm/dd/yyyy'), null);
+insert into BAJS_EMPLOYMENT_HISTORY values( 53, to_date('12/24/1989', 'mm/dd/yyyy'), null);
+insert into BAJS_EMPLOYMENT_HISTORY values( 54, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 
 
 /* Past Employees (or history of current Employees) */

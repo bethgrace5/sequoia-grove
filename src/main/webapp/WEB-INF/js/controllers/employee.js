@@ -1,21 +1,30 @@
 'use strict';
 
 /**
- * Employee Controller
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:EmployeeCtrl
+ * @description
+ * # EmployeeCtrl
+ * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
 
+/************** Login Redirect, Containers and UI settings **************/
+
     // user is not logged in
     if ($rootScope.loggedIn == false) {
-      //$location.path('/login');
+      $location.path('/login');
     }
 
+    $rootScope.lastPath = '/schedule';
     $scope.activeTab = 'info';
-
     $scope.current;
     $scope.selectedEmployee = {id:0};
     $scope.newAvail = {day:'', start:'', end:''};
+    $scope.newPos = {};
+
+/************** Pure Functions **************/
 
     $scope.empDateFormat = function(curDate) {
       if (curDate=='' || curDate==0 || curDate==null) {
@@ -23,6 +32,27 @@ angular.module('sequoiaGroveApp')
       }
       return moment(curDate,'YYYY-MM-DD').format('MMMM Do, YYYY');
     }
+
+    // click existing times to populate input with those times
+    $scope.setNewAvailTimes = function(sH, sM, eH, eM) {
+      var start = moment({hour:sH, minute:sM}).format('h:mm a');
+      var end = moment({hour:eH, minute:eM}).format('h:mm a');
+      $scope.newAvail.start = start;
+      $scope.newAvail.end = end;
+    }
+
+    $scope.selectEmployee = function(id) {
+      var length = $scope.allEmployees.length;
+      for(var i = 0; i < length; i++) {
+        var curid = $scope.allEmployees[i].id;
+        if (curid==id) {
+          $scope.selectedEmployee = $scope.allEmployees[i];
+          break;
+        }
+      }
+    }
+
+/************** HTTP Request Functions **************/
 
     // add a new availability time for an employee
     $scope.addAvail = function() {
@@ -41,11 +71,10 @@ angular.module('sequoiaGroveApp')
         var endt = $scope.hrMinTo24(end.valHr, end.valMin);
         var eid = $scope.selectedEmployee.id;
         $http({
-            url: '/sequoiagrove/avail/add/'+ 
+            url: '/sequoiagrove/avail/add/'+
                 eid + '/' + day + '/' + startt + '/' + endt,
             method: "POST"
         })
-
         // update front end
         if (day=='mon') { $scope.selectedEmployee.avail.mon.push(newTimes); }
         else if (day=='tue') { $scope.selectedEmployee.avail.tue.push(newTimes); }
@@ -57,7 +86,6 @@ angular.module('sequoiaGroveApp')
       }
     }
 
-    $scope.newPos = {};
     // add a new position for an employee
     $scope.addPos = function() {
         var pos = $scope.newPos.title;
@@ -86,49 +114,14 @@ angular.module('sequoiaGroveApp')
             var posObj = {id:pid, title:pos, "location":null};
             // send new position to back end
             $http({
-                url: '/sequoiagrove/position/add/'+ 
+                url: '/sequoiagrove/position/add/'+
                     eid + '/' + pid + '/' +
                     moment().format("DD-MM-YYYY"),
                 method: "POST"
             })
-
             // update front end
             $scope.selectedEmployee.positions.push(posObj);
         }
-    }
-
-    // click existing day to populate input with that day
-    $scope.setNewAvailDay = function(day) {
-      // there's not often the case where the same day has multiple
-      // availabilities
-      //$scope.newAvail.day=day;
-    }
-
-    // click existing imes to populate input with those times
-    $scope.setNewAvailTimes = function(sH, sM, eH, eM) {
-      var start = moment({hour:sH, minute:sM}).format('h:mm a');
-      var end = moment({hour:eH, minute:eM}).format('h:mm a');
-      $scope.newAvail.start = start;
-      $scope.newAvail.end = end; 
-      //var stTimeLen = $scope.times.start.length;
-      //var edTimeLen = $scope.times.end.length;
-      //var i=0;
-
-      // find this item in start times and set start input as it
-      /*for(i=0;i<stTimeLen; i++) {
-        if (start == $scope.times.start[i].val) {
-          $scope.newAvail.start = $scope.times.start[i];
-          break;
-        }
-      }*/
-
-      // find this item in end times and set end input as it
-      /*for(i=0; i<edTimeLen; i++) {
-        if (end == $scope.times.end[i].val) {
-          $scope.newAvail.end = $scope.times.end[i];
-          break;
-        }
-      }*/
     }
 
     // remove an availability for an employee
@@ -176,7 +169,7 @@ angular.module('sequoiaGroveApp')
 
         // remove availability from database
         $http({
-            url: '/sequoiagrove/avail/remove/'+ 
+            url: '/sequoiagrove/avail/remove/'+
                 $scope.selectedEmployee.id + '/' + day + '/' + startt,
             method: "POST"
         })
@@ -195,32 +188,19 @@ angular.module('sequoiaGroveApp')
 
         // remove position from back end
         $http({
-            url: '/sequoiagrove/position/remove/'+ 
+            url: '/sequoiagrove/position/remove/'+
                 eid + '/' + pid + '/' +
                 moment().format("DD-MM-YYYY"),
             method: "POST"
         })
-
         // update front end
         $scope.selectedEmployee.positions.splice(index, 1);
     }
 
     $scope.updateEmployee = function() {
-      // validate
-      // send post
       $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
         success(function(data, status){
         });
     }
 
-    $scope.selectEmployee = function(id) {
-      var length = $scope.allEmployees.length;
-      for(var i = 0; i < length; i++) {
-        var curid = $scope.allEmployees[i].id;
-        if (curid==id) {
-          $scope.selectedEmployee = $scope.allEmployees[i];
-          break;
-        }
-      }
-    }
   });

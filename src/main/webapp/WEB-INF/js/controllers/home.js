@@ -5,29 +5,30 @@
  * @name sequoiaGroveApp.controller:HomeCtrl
  * @description
  * # HomeCtrl
- * Controller of the sequoiaGroveApp
+ * Controller for viewing the schedule
  */
 angular.module('sequoiaGroveApp')
   .controller('HomeCtrl', function (
     $http,
     $log,
-    $scope, 
+    $scope,
     $location,
-    $rootScope, 
+    $rootScope,
     $translate)
   {
+
+/************** Login Redirect, Containers and UI settings **************/
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
   }
 
-  $scope.$on('translate', function(event, data) {
-  }); 
-
   $scope.showDeliveries = false;
   $scope.highlight = false;
   $scope.type = 'all';
+
+/************** Pure Functions **************/
 
   // Change filter type to show - can be 'all', 'mine', a location or a position
   $scope.changeType = function(t) {
@@ -37,7 +38,6 @@ angular.module('sequoiaGroveApp')
   // Toggle Highlight of Current Logged in user
   $scope.selectLoggedInUser = function() {
     $scope.highlight = !$scope.highlight;
-    // Possibly change the type to 'mine'?
   }
 
   $scope.filterByType = function (loc, pos, uid, mon, tue, wed, thu, fri, sat, sun) {
@@ -60,10 +60,9 @@ angular.module('sequoiaGroveApp')
       return false;
   }
 
+/************** Controller Initialization **************/
   $scope.init = function() {
   }
 
   $scope.init();
-
-
 });

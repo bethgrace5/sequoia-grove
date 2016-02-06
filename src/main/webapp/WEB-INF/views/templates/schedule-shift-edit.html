@@ -2,7 +2,8 @@
 <div class="row request-title">
   <div class="col-sm-2">
     <p>Title</p>
-    <input type="text" class="form-control" ng-click="alteredTitle" placeholder="title...">
+    <input type="text" class="form-control" placeholder="title..."
+      ng-model="selectedShift.title" ng-click="alteredTitle">
   </div>
   <div class="col-sm-2">
     <p>Position</p>
@@ -15,8 +16,8 @@
         <li ng-repeat="position in positions">{{position.title}}</li>
       </ul>
     </div-->
-    <select class="schedule-edit-shift-select"  placeholder="Position"
-      ng-options="option.title for option in positions">
+    <select class="schedule-edit-shift-select" placeholder="Position"
+      ng-model="selectedShift.pos" ng-options="option.title as option.title for option in positions">
       <option value="">- Position -</option>
     </select>
   </div>
@@ -25,14 +26,14 @@
     <p>Weekdays</p>
     <div class="row">
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select"  placeholder="Weekday Start"
-          ng-options="option.disp for option in times.start">
+        <select class="schedule-edit-shift-select" placeholder="Weekday Start"
+          ng-model="selectedShift.wd_st" ng-options="option.disp as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select"  placeholder="Weekday End"
-          ng-options="option.disp for option in times.end">
+        <select class="schedule-edit-shift-select" placeholder="Weekday End"
+          ng-model="selectedShift.wd_ed" ng-options="option.disp as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>
@@ -43,14 +44,14 @@
     <p>Weekends</p>
     <div class="row">
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select"  placeholder="Weekend Start"
-          ng-options="option.disp for option in times.start">
+        <select class="schedule-edit-shift-select" placeholder="Weekend Start"
+          ng-model="selectedShift.we_st" ng-options="option.disp as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
-        <select class="schedule-edit-shift-select"  placeholder="Weekend End"
-          ng-options="option.disp for option in times.end">
+        <select class="schedule-edit-shift-select" placeholder="Weekend End"
+          ng-model="selectedShift.we_ed" ng-options="option.disp as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>

@@ -39,6 +39,7 @@ drop table BAJS_EMPLOYEE;
 --drop table BAJS_TRANSACTION;
 --drop table BAJS_INGREDIENT;
 drop table BAJS_SUPPLIER;
+drop table BAJS_PUBLISHED_SCHEDULE;
 
 /* packages */
 drop package BAJS_PKG;

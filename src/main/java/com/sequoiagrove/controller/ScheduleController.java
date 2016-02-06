@@ -31,27 +31,14 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class ScheduleController {
 
-  // Get current schedule template (current shifts) dd/mm/yyyy
-    @RequestMapping(value = "/schedule/template/{mon}/{tue}/{wed}/{thu}/{fri}/{sat}/{sun}")
-    public String getScheduleTemplate(Model model,
-          @PathVariable("mon") String mon,
-          @PathVariable("tue") String tue,
-          @PathVariable("wed") String wed,
-          @PathVariable("thu") String thu,
-          @PathVariable("fri") String fri,
-          @PathVariable("sat") String sat,
-          @PathVariable("sun") String sun ) {
+  // Get current schedule template (current shifts) dd-mm-yyyy
+    @RequestMapping(value = "/schedule/template/{mon}")
+    public String getScheduleTemplate(Model model, @PathVariable("mon") String mon) {
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-          "select * from table(bajs_pkg.get_schedule('" + mon + "', '" +
-                                                          tue + "', '" +
-                                                          wed + "', '" +
-                                                          thu + "', '" +
-                                                          fri + "', '" +
-                                                          sat + "', '" +
-                                                          sun + "' ))",
+          "select * from table(bajs_pkg.get_schedule('"+ mon +"'))",
             new RowMapper<ScheduleTemplate>() {
                 public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
@@ -203,7 +190,5 @@ public class ScheduleController {
 
         return "jsonTemplate";
     }
-
-
 }
 

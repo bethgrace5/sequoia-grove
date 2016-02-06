@@ -1,5 +1,12 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:RequestCtrl
+ * @description
+ * # RequestCtrl
+ * Controller for requesting vacation
+ */
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
 
@@ -7,9 +14,9 @@ angular.module('sequoiaGroveApp')
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
-    return;
   }
 
+  $rootScope.lastPath = '/schedule';
   $scope.countDisplay = 0 ;
 
   $scope.donGraph= {
@@ -18,13 +25,16 @@ angular.module('sequoiaGroveApp')
     },
     labels: ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"],
     data: [
-      $scope.schCount[0].length, 
-      $scope.schCount[1].length, 
-      $scope.schCount[2].length, 
-      $scope.schCount[3].length, 
-      $scope.schCount[4].length, 
-      $scope.schCount[5].length, 
+    /*
+     * TODO use dayCount instead
+      $scope.schCount[0].length,
+      $scope.schCount[1].length,
+      $scope.schCount[2].length,
+      $scope.schCount[3].length,
+      $scope.schCount[4].length,
+      $scope.schCount[5].length,
       $scope.schCount[6].length
+      */
     ]
   };
 

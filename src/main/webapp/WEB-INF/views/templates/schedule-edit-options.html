@@ -6,7 +6,7 @@
     <div class="pull-left">
       <!-- Filter by User, Location, or Position -->
       <div class="dropdown pull-left" dropdown is-open=true>
-        <button type="button" id="dropDownMenu1" 
+        <button type="button" id="dropDownMenu1"
           class="btn btn-info" data-toggle="dropdown"
           ng-click="importLastWeek()"
           ng-disabled = "saving"
@@ -21,6 +21,7 @@
       <!-- Download and Print Options -->
       <button ng-click="clearSchedule()" 
         ng-disabled = "saving"
+        ng-disabled = "saving";
         class="btn btn-default btn-warning">
         Clear
         <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -28,19 +29,20 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
-        ng-show = "updateShifts.length<=0"
         ng-disabled = "saving"
+        ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-click = "saveSchedule()">
-        Saved
+        Saved {{updateShifts.length}} {{deleteShifts.length}}
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
       </button>
 
       <!-- Default button -->
       <button class = "btn btn-default"
-        ng-show = "updateShifts.length>0"
         ng-disabled = "saving"
+        ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
+        ng-disabled = "saving";
         ng-click = "saveSchedule()">
-        Save Changes
+        Save Changes {{updateShifts.length}} {{deleteShifts.length}}
         <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
       </button>
 
@@ -51,7 +53,6 @@
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
 
-      </button>
     </form>
 
   </div>

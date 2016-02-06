@@ -3,6 +3,25 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
 // endbower
 
+/********************************************
+  Table of Contents
+
+  01. Variables
+  02. General Styling
+  03. Print Styling
+  04. Schedule Edit
+  05. Schedule View
+  06. Schedule Header
+  07. Site Header and Navbar
+  08. Employee List
+  09. Default settings Yeoman put in
+
+*********************************************/
+
+
+/********************************************
+    01. Variables
+*********************************************/
 $gray-darker:  lighten(#000, 13.5%); // #222
 $gray-dark:    lighten(#000, 20%);   // #333
 $gray:         lighten(#000, 33.5%); // #555
@@ -15,11 +34,19 @@ $brand-info:    #5bc0de;
 $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
-
+/********************************************
+    02. General Styling
+*********************************************/
 a:focus {
   outline: 0;
 }
-/* Print Styling */
+.selectable-elem {
+  cursor: pointer;
+}
+
+/********************************************
+    03. Print Styling
+*********************************************/
 .print-message {
   margin: 30px;
 }
@@ -42,13 +69,9 @@ a:focus {
   margin: 0 !important;
 }
 
-/* schedule eit/view options */
-.schedule-view-options .btn{
-  margin: 0 0.5em;
-  width: 160px;
-}
-
-/* */
+/********************************************
+    04. Schedule Edit
+*********************************************/
 .position-button-bar {
   margin: 0 auto;
 }
@@ -61,7 +84,15 @@ a:focus {
   background-color: yellow;
 }
 
-/* Schedule View */
+/********************************************
+    05. Schedule View
+*********************************************/
+/* schedule edit/view options */
+.schedule-view-options .btn{
+  margin: 0 0.5em;
+  width: 160px;
+}
+
 .schedule-view-row {
   height: 35px;
   padding: 5px;
@@ -121,6 +152,12 @@ a:focus {
 .schedule-edit-task-names{
   font-size: 1em;
   margin:0 auto;
+}
+.schedule-edit-task-selected{
+  background-color: #66ffd7;
+  border-radius: 0.3em;
+  padding-left: 3px;
+  padding-right: 3px;
 }
 .schedule-edit{
   font-size: 1em;
@@ -184,7 +221,9 @@ a:focus {
   margin: 5px;
 }
 
-/* Schedule Header */
+/********************************************
+    06. Schedule Header
+*********************************************/
 .weekday-title div{
   font-size: 1.1em;
   color: #336699;
@@ -232,7 +271,9 @@ a:focus {
   border: none;
 }
 
-/* Site Header and Navbar */
+/********************************************
+    07. Site Header and Navbar
+*********************************************/
 .navbar .divider-vertical {
   height: 50px;
   margin: 0 9px 0 10px;
@@ -251,6 +292,44 @@ a:focus {
   color: #336699;
 }
 
+/********************************************
+    08. Employee List
+*********************************************/
+.clock-input {
+  width: 45px;
+  margin-left: 10px;
+}
+.emp-header {
+  padding: 0;
+  margin: 0;
+}
+.emp-text-row {
+  margin-bottom: 10px;
+}
+.emp-repeated-row {
+  line-height: 1;
+  margin-bottom: 7px;
+}
+.emp-history {
+  display: inline;
+}
+.emp-history-dash {
+  margin: 0px 30px 0px 30px;
+}
+.emp-history-row {
+  margin-top: 15px;
+}
+.emp-history-row:first-of-type {
+  margin-top: 0px;
+}
+.emp-list-wrapper {
+  max-height: 500px;
+  overflow-y: scroll;
+}
+
+/********************************************
+    09. Default Settings Yeoman put in
+*********************************************/
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
 .marketing,
@@ -273,7 +352,6 @@ a:focus {
   }
 }
 
-/* Custom page footer */
 .footer {
   padding-top: 19px;
   color: #777;
@@ -327,35 +405,3 @@ a:focus {
   }
 }
 
-/* Employee List Styling */
-.clock-input {
-  width: 45px;
-  margin-left: 10px;
-}
-.emp-header {
-  padding: 0;
-  margin: 0;
-}
-.emp-text-row {
-  margin-bottom: 10px;
-}
-.emp-repeated-row {
-  line-height: 1;
-  margin-bottom: 7px;
-}
-.emp-history {
-  display: inline;
-}
-.emp-history-dash {
-  margin: 0px 30px 0px 30px;
-}
-.emp-history-row {
-  margin-top: 15px;
-}
-.emp-history-row:first-of-type {
-  margin-top: 0px;
-}
-.emp-list-wrapper {
-  max-height: 500px;
-  overflow-y: scroll;
-}
