@@ -1,6 +1,6 @@
 
 create or replace view bajs_avail as (
-    select id, first_name, mon, tue, wed, thu, fri, sat, sun
+    select id, mon, tue, wed, thu, fri, sat, sun
     from bajs_employee e
     full outer join
     (

@@ -49,6 +49,8 @@ cache 20;
 @crt/view/crt_training_emp.sql
 @crt/view/crt_emp_all_info.sql
 @crt/view/crt_avail.sql
+@crt/view/crt_positions.sql
+@crt/view/crt_hist.sql
 
 /* packages */
 @crt/package/package.sql
