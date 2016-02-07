@@ -10,7 +10,7 @@
 
 <!-- weekday times -->
     <div class="col-sm-1 schedule-times">
-      {{formatTime(t.wd_st_h, t.wd_st_m, false)}}-{{formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
+      {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
     </div>
 
     <!-- Monday -->
@@ -110,7 +110,7 @@
 
 <!-- weekend times -->
     <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-      {{formatTime(t.we_st_h, t.we_st_m, false)}}-{{formatTime(t.we_ed_h, t.we_ed_m, false)}}
+      {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
     </div>
 
     <!-- Saturday -->
