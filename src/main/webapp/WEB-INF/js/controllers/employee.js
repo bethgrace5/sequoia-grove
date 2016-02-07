@@ -139,19 +139,13 @@ angular.module('sequoiaGroveApp')
       }
       $scope.saving = true;
         // update front end, and get start_time
-        var hr;
-        var min;
-        if (day=='mon') {
-          hr = $scope.selectedEmployee.avail[day][index].startHr;
-          min = $scope.selectedEmployee.avail[day][index].startMin;
-          $scope.selectedEmployee.avail[day].splice(index, 1);
-        }
-        //var startt = $scope.hrMinTo24(hr,min);
+        var start = $scope.selectedEmployee.avail[day][index].start;
+        $scope.selectedEmployee.avail[day].splice(index, 1);
 
         // remove availability from database
         $http({
             url: '/sequoiagrove/avail/remove/'+
-                $scope.selectedEmployee.id + '/' + day + '/' + startt,
+                $scope.selectedEmployee.id + '/' + day + '/' + start,
             method: "POST"
         }).success(function(data, status) {
           $scope.saving = false;
