@@ -121,15 +121,12 @@ public class ScheduleController {
 
   // Get current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
-    public String updateSchedule(@RequestBody String body, Model model) throws SQLException {
+    public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        // Get the request body (represented as "body":"list of params")
-        Gson gson = new Gson();
-        Param params = gson.fromJson(body, Param.class);
-
         // Parse the list of params to array of Strings
-        Scheduled [] scheduleChanges = gson.fromJson(params.getBody(), Scheduled[].class);
+        Gson gson = new Gson();
+        Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
         // update database
         for (Scheduled change : scheduleChanges) {
@@ -144,15 +141,12 @@ public class ScheduleController {
 
   // delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
-    public String deleteSchedule(@RequestBody String body, Model model) throws SQLException {
+    public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        // Get the request body (represented as "body":"list of params")
-        Gson gson = new Gson();
-        Param params = gson.fromJson(body, Param.class);
-
         // Parse the list of params to array of Strings
-        Scheduled [] scheduleChanges = gson.fromJson(params.getBody(), Scheduled[].class);
+        Gson gson = new Gson();
+        Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
         // update database
         for (Scheduled change : scheduleChanges) {

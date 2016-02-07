@@ -346,7 +346,7 @@ angular.module('sequoiaGroveApp')
 
 /************** HTTP Request Functions **************/
 
-  // Save the shifts in the list of updateShifts
+  // Save these shift schedulings in the list of updateShifts
   $scope.saveSchedule = function() {
     // remove blank spaces from update list - they are in delete shifts, or
     // have not been assigned
@@ -359,7 +359,7 @@ angular.module('sequoiaGroveApp')
     $http({
       url: '/sequoiagrove/schedule/update/',
       method: "POST",
-      data: { 'body': JSON.stringify($scope.updateShifts) }
+      data: $scope.updateShifts
     }).success(function (data, status, headers, config) {
       if (status == 200) {
         // clear update shifts list
@@ -376,14 +376,14 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Delete all these shifts
+  // Delete these shift schedulings
   $scope.deleteSchedule = function() {
     $scope.saving = true;
 
     $http({
       url: '/sequoiagrove/schedule/delete/',
       method: "DELETE",
-      data: { 'body': JSON.stringify($scope.deleteShifts) }
+      data: $scope.deleteShifts
     }).success(function (data, status, headers, config) {
       if (status == 200) {
         // clear delete shifts list
@@ -397,6 +397,10 @@ angular.module('sequoiaGroveApp')
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error deleting schedule " + data);
     });
+  }
+
+  // Add new shift to schedule
+  $scope.addShift = function() {
   }
 
 /************** Controller Initialization **************/
