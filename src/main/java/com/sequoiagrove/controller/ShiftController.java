@@ -51,8 +51,8 @@ public class ShiftController {
     public String addAvail(Model model,
           @PathVariable("eid") int eid,
           @PathVariable("day") String day,
-          @PathVariable("startt") int startt,
-          @PathVariable("endt") int endt) throws SQLException {
+          @PathVariable("startt") String startt,
+          @PathVariable("endt") String endt) throws SQLException {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
@@ -76,7 +76,7 @@ public class ShiftController {
     public String removeAvail(Model model,
           @PathVariable("eid") int eid,
           @PathVariable("day") String day,
-          @PathVariable("startt") int startt) throws SQLException {
+          @PathVariable("startt") String startt) throws SQLException {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       jdbcTemplate.update("delete from bajs_availability " +

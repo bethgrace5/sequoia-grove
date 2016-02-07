@@ -18,14 +18,10 @@ public class ScheduleTemplate {
     String tname;
     String location;
     String position;
-    String wd_st_h;
-    String wd_st_m;
-    String wd_ed_h;
-    String wd_ed_m;
-    String we_st_h;
-    String we_st_m;
-    String we_ed_h;
-    String we_ed_m;
+    String weekdayStart;
+    String weekdayEnd;
+    String weekendStart;
+    String weekendEnd;
 
     Day mon;
     Day tue;
@@ -44,14 +40,10 @@ public class ScheduleTemplate {
         String location,
         String tname,
         String position,
-        String wd_st_h,
-        String wd_st_m,
-        String wd_ed_h,
-        String wd_ed_m,
-        String we_st_h,
-        String we_st_m,
-        String we_ed_h,
-        String we_ed_m,
+        String weekdayStart,
+        String weekdayEnd,
+        String weekendStart,
+        String weekendEnd,
         Day mon,
         Day tue,
         Day wed,
@@ -64,14 +56,10 @@ public class ScheduleTemplate {
             this.tname = tname;
             this.location = location;
             this.position = position;
-            this.wd_st_h = wd_st_h;
-            this.wd_st_m = wd_st_m;
-            this.wd_ed_h = wd_ed_h;
-            this.wd_ed_m = wd_ed_m;
-            this.we_st_h = we_st_h;
-            this.we_st_m = we_st_m;
-            this.we_ed_h = we_ed_h;
-            this.we_ed_m = we_ed_m;
+            this.weekdayStart = weekdayStart;
+            this.weekdayEnd = weekdayEnd;
+            this.weekendStart = weekendStart;
+            this.weekendEnd = weekendEnd;
             this.mon = mon;
             this.tue = tue;
             this.wed = wed;
@@ -125,75 +113,41 @@ public class ScheduleTemplate {
 
   /* WeekDay Times */
 
-    // get weekday start hour
-    public String getWd_st_h() {
-        return wd_st_h;
+    // get weekday start
+    public String getWeekdayStart() {
+        return weekdayStart;
     }
     // set weekday start hour
-    public void setWd_st_h(String wd_st_h) {
-        this.wd_st_h = wd_st_h;
+    public void setWeekdayStart(String weekdayStart) {
+        this.weekdayStart = weekdayStart;
     }
-    // get weekday start minute
-    public String getWd_st_m() {
-        return wd_st_m;
+    // get weekday end
+    public String getWeekdayEnd() {
+        return weekdayEnd;
     }
-    // set weekday start minute
-    public void setWd_st_m(String wd_st_m) {
-        this.wd_st_m = wd_st_m;
+    // set weekday end
+    public void setWeekdayEnd(String weekdayEnd) {
+        this.weekdayEnd = weekdayEnd;
     }
-    // get weekday end hour
-    public String getWd_ed_h() {
-        return wd_ed_h;
-    }
-    // set weekday end hour
-    public void setWd_ed_h(String wd_ed_h) {
-        this.wd_ed_h = wd_ed_h;
-    }
-    // get weekday end minute
-    public String getWd_ed_m() {
-        return wd_ed_m;
-    }
-    // set weekday end minute
-    public void setWd_ed_m(String wd_ed_m) {
-        this.wd_ed_m = wd_ed_m;
-    }
-
 
   /* WeekEnd Times */
 
-    // get weekend start hour
-    public String getWe_st_h() {
-        return we_st_h;
+    // get weekend start
+    public String getWeekendStart() {
+        return weekendStart;
     }
-    // set weekend start hour
-    public void setWe_st_h(String we_st_h) {
-        this.we_st_h = we_st_h;
+    // set weekend start
+    public void setWeekendStart(String weekendStart) {
+        this.weekendStart = weekendStart;
     }
-    // get weekend start minute
-    public String getWe_st_m() {
-        return we_st_m;
+    // get weekend end
+    public String getWeekendEnd() {
+        return weekendEnd;
     }
-    // set weekend start minute
-    public void setWe_st_m(String we_st_m) {
-        this.we_st_m = we_st_m;
+    // set weekend end
+    public void setWeekendEnd(String weekendEnd) {
+        this.weekendEnd = weekendEnd;
     }
-    // get weekend end hour
-    public String getWe_ed_h() {
-        return we_ed_h;
-    }
-    // set weekend end hour
-    public void setWe_ed_h(String we_ed_h) {
-        this.we_ed_h = we_ed_h;
-    }
-    // get weekend end minute
-    public String getWe_ed_m() {
-        return we_ed_m;
-    }
-    // set weekend end minute
-    public void setWe_ed_m(String we_ed_m) {
-        this.we_ed_m = we_ed_m;
-    }
-
 
   /* Days */
     public Day getMon() {
