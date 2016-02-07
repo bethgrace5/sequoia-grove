@@ -194,8 +194,13 @@ angular.module('sequoiaGroveApp')
     var count = [];
 
     _.map($scope.template, function(item) {
-      var duration = parseFloat( (item.wd_ed_m-item.wd_st_m)/60) +
-        parseFloat(item.wd_ed_h-item.wd_st_h);
+      var duration = 0;
+      if (item.day !== 'sat' && item.day !== 'sun') {
+        duration = $scope.shiftDuration(item.weekdayStart, item.weekdayEnd);
+      }
+      else {
+        duration = $scope.shiftDuration(item.weekendStart, item.weekendEnd);
+      }
       count.push({'eid':item.mon.eid, 'duration':duration});
       count.push({'eid':item.tue.eid, 'duration':duration});
       count.push({'eid':item.wed.eid, 'duration':duration});
