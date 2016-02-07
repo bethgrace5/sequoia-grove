@@ -146,7 +146,7 @@ angular.module('sequoiaGroveApp')
           min = $scope.selectedEmployee.avail[day][index].startMin;
           $scope.selectedEmployee.avail[day].splice(index, 1);
         }
-        var startt = $scope.hrMinTo24(hr,min);
+        //var startt = $scope.hrMinTo24(hr,min);
 
         // remove availability from database
         $http({

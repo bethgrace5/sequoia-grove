@@ -165,24 +165,8 @@ angular.module('sequoiaGroveApp')
     return moment(t, 'HHmm').format('h:mm');
   }
 
-  $scope.shiftDuration = function(shr, smin, ehr, emin) {
-    return parseFloat((emin-smin)/60) + (ehr-shr);
-  }
-
-  $scope.hrMinTo24 = function(h, m) {
-    if(h < 10) {
-      h = "0"+h;
-    }
-    else {
-      h = h+"";
-    }
-    if(m < 10) {
-      m = "0"+m;
-    }
-    else {
-      m = m+"";
-    }
-    return h+m;
+  $scope.shiftDuration = function(start, end) {
+    return moment(end, 'HHmm').diff(moment(start, 'HHmm'), 'hours', true);
   }
 
   // count the number of days an employee is scheduled, if they are scheduled
