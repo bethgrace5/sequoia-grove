@@ -150,7 +150,7 @@ angular.module('sequoiaGroveApp')
 
     // 3. check employee availability against shift duration
     _.map(avail, function(a, index) {
-      if (a.start.isBefore(shiftStart) && a.end.isAfter(shiftEnd)) {
+      if ((a.start.isBefore(shiftStart) || a.start.isSame(shiftStart)) && (a.end.isAfter(shiftEnd) || a.end.isSame(shiftEnd))) {
         isAvailable = true;
       }
     });

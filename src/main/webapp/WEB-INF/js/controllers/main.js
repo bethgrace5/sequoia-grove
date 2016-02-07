@@ -297,28 +297,14 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Get Current Employees with their id
-  $scope.getEmployeeCurrent = function() {
-    return $http({
-      url: '/sequoiagrove/employee/info/current',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.currentEmployees = data.employeeInfo;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining current employee: " + data);
-    });
-  }
-
   // Get All Employees with their id
   $scope.getEmployeeAll = function() {
     return $http({
       url: '/sequoiagrove/employee/info/all',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.allEmployees = data.employeeInfo;
-        //$log.debug(data);
+        $scope.employees = data.employees;
+        $log.debug(data);
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -409,7 +395,6 @@ angular.module('sequoiaGroveApp')
     $q.all(
       [$scope.getPositions(),
         $scope.getEmployeeAll(),
-        $scope.getEmployeeCurrent(),
         $scope.getScheduleTemplate($scope.date.mon.val),
         $scope.getHasPositions()
        ]
