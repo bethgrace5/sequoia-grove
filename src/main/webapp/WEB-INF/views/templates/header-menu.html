@@ -14,14 +14,17 @@
       </div>
 
       <span ng-show="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button type="button" ng-click="logout()" class="btn btn-clear">
+        <button type="button"
+          class="btn btn-clear"
+          ng-disabled="loading"
+          ng-click="personaLogout()">
           <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
           Hello, {{loggedInUser.firstname}}! (Sign out)
         </button>
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button ng-disabled="loggingIn" type="button" ng-click="login()" class="btn btn-clear">
+        <button ng-disabled="loggingIn || loading" type="button" ng-click="personaLogin()" class="btn btn-clear">
           <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
           Sign in / Sign up
         </button>
@@ -34,12 +37,28 @@
             <li class="divider-vertical"></li>
 
             <!-- all user options -->
-            <li ng-show="loggedIn" role="presentation" ng-class="changeTab('/home')"><a href="#/home">{{'HEADER_TAB_HOME' | translate}}</a></li>
-            <li ng-show="loggedIn" role="presentation" ng-class="changeTab('/request')"><a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a></li>
+            <li ng-show="loggedIn" role="presentation"
+              ng-disabled="loading"
+              ng-class="changeTab('/home')">
+              <a href="#/home">{{'HEADER_TAB_HOME' | translate}}</a>
+            </li>
+            <li ng-show="loggedIn" role="presentation"
+              ng-disabled="loading"
+              ng-class="changeTab('/request')">
+              <a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a>
+            </li>
 
             <!-- manager only options -->
-            <li ng-show="loggedInUser.isManager" role="presentation" ng-class="changeTab('/employee')"><a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a></li>
-            <li ng-show="loggedInUser.isManager" role="presentation" ng-class="changeTab('/schedule')"><a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a></li>
+            <li role="presentation"
+              ng-show="loggedInUser.isManager"
+              ng-class="changeTab('/employee')">
+              <a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a>
+            </li>
+            <li role="presentation"
+              ng-show="loggedInUser.isManager"
+              ng-class="changeTab('/schedule')">
+              <a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a>
+            </li>
 
         </ul>
       </div>

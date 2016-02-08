@@ -15,6 +15,7 @@
     <link rel='stylesheet' href='webjars/bootstrap/3.2.0/css/bootstrap.min.css' media='screen,print'>
     <link rel="stylesheet" href="bower_components/angular-chart.js/dist/angular-chart.css">
     <link rel="stylesheet" href="bower_components/angular-material/angular-material.css">
+    <link rel="stylesheet" href="bower_components/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="styles/main.scss">
     <!-- endbuild -->
   </head>
@@ -72,6 +73,7 @@
     <script src="js/controllers/employee.js"></script>
     <script src="js/controllers/request.js"></script>
     <script src="js/controllers/schedule.js"></script>
+    <script src="js/controllers/login.js"></script>
     <script src="js/directives/select-on-click.js"></script>
     <!-- endbuild -->
 

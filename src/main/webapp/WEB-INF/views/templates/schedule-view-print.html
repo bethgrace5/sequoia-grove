@@ -56,24 +56,23 @@
     </td>
 
     <td class="print-row">
-      <span ng-show="shiftDuration(t.wd_st_h, t.wd_st_m, t.wd_ed_h, t.wd_ed_m) >= 7"
+      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) >= 7"
         class="glyphicon glyphicon-star">
       </span>
-      <span ng-show="shiftDuration(t.wd_st_h, t.wd_st_m, t.wd_ed_h, t.wd_ed_m) < 7 && 
-        shiftDuration(t.wd_st_h, t.wd_st_m, t.wd_ed_h, t.wd_ed_m) >= 4"
+      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) < 7 &&
+        shiftDuration(t.weekdayStart, t.weekdayEnd) >= 4"
         class="glyphicon glyphicon-star-empty">
       </span>
-      <span ng-show="shiftDuration(t.wd_st_h, t.wd_st_m, t.wd_ed_h, t.wd_ed_m) < 4"
+      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) < 4"
         class="glyphicon glyphicon-minus">
       </span>
-      {{::shiftDuration(t.wd_st_h, t.wd_st_m, t.wd_ed_h, t.wd_ed_m)}} hrs
+      {{::shiftDuration(t.weekdayStart, t.weekdayEnd)}} hrs
     </td>
 
     <!-- weekday times -->
     <!--<div ng-show="t.wd_st != 0">-->
     <td class="print-row ">
-      {{::formatTime(t.wd_st_h, t.wd_st_m, false)}} -
-      {{::formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
+      {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
     </td>
     <!--</div>-->
 
@@ -103,23 +102,22 @@
     </td>
 
     <td class="print-row">
-      <span ng-show="shiftDuration(t.we_st_h, t.we_st_m, t.we_ed_h, t.we_ed_m) >= 7"
+      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) >= 7"
         class="glyphicon glyphicon-star">
       </span>
-      <span ng-show="shiftDuration(t.we_st_h, t.we_st_m, t.we_ed_h, t.we_ed_m) < 7 && 
-        shiftDuration(t.we_st_h, t.we_st_m, t.we_ed_h, t.we_ed_m) >= 4"
+      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) < 7 &&
+        shiftDuration(t.weekendStart, t.weekendEnd) >= 4"
         class="glyphicon glyphicon-star-empty">
       </span>
-      <span ng-show="shiftDuration(t.we_st_h, t.we_st_m, t.we_ed_h, t.we_ed_m) < 4"
+      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) < 4"
         class="glyphicon glyphicon-minus">
       </span>
-      {{::shiftDuration(t.we_st_h, t.we_st_m, t.we_ed_h, t.we_ed_m)}} hrs
+      {{::shiftDuration(t.weekendStart, t.weekendEnd)}} hrs
     </td>
     <!-- weekend times -->
       <!--<div ng-show="t.we_st != 0">-->
     <td class="print-row ">
-      {{::formatTime(t.we_st_h, t.we_st_m, false)}} -
-      {{::formatTime(t.we_ed_h, t.we_ed_m, false)}}
+      {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
     </td>
       <!--</div>-->
 

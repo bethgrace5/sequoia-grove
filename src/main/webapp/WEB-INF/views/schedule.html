@@ -40,12 +40,12 @@
 
   <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
     <div class="panel-body">
-      <div ng-repeat="e in currentEmployees | filter:empEditSearch" class="row" ng-show="filterEmployees(e.id)">
+      <div ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="filterEmployees(e.id)">
         <span
-        ng-class="inputStatus(e.id, 'monday', t.sid)" type="text"
-        ng-click="selectEid(e.id)"
-        class="col-sm-12" >
-        ( {{dayCount[e.id]}} ) {{e.firstName}}
+        ng-class="inputStatus(e.id, 'monday', t.sid)"
+        ng-click="selectEid(e.id)">
+          <div style="width:70px; float:left;"> {{e.firstName}} </div>
+          <div style="float:left;">{{dayCount[e.id]}}d {{hourCount[e.id]}}h </div>
         </span>
       </div>
     </div>

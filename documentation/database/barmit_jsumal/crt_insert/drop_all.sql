@@ -16,6 +16,9 @@ drop view  BAJS_STD_EMP;
 drop view  BAJS_SCHEDULE;
 drop view  BAJS_SCH_HIST;
 drop view  BAJS_EMP_ALL_INFO;
+drop view  CRT_AVAIL.SQL
+Drop view  CRT_POSITIONS.SQL
+Drop view  CRT_HIST.SQL
 
 /* base tables */
 drop table BAJS_HOLIDAY;

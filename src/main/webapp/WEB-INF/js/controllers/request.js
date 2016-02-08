@@ -1,13 +1,20 @@
 'use strict';
 
+/**
+ * @ngdoc function
+ * @name sequoiaGroveApp.controller:RequestCtrl
+ * @description
+ * # RequestCtrl
+ * Controller for requesting vacation
+ */
 angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
+  $rootScope.lastPath = '/schedule';
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
-    return;
   }
 
   //Date Gatherer
@@ -21,15 +28,15 @@ angular.module('sequoiaGroveApp')
   $scope.requestDateStart = $scope.minDateStart;
   $scope.requestDateEnd   = $scope.minDateStart;
 
-  $scope.updateEnd = function(){ 
+  $scope.updateEnd = function(){
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
       $scope.requestDateEnd = $scope.requestDateStart;
-    } 
+    }
   }
 
   //Submit Request
   $scope.submitRequest = function(){
-    var obj = { "eid": $rootScope.loggedInUser.id, 
+    var obj = { "eid": $rootScope.loggedInUser.id,
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
@@ -37,14 +44,14 @@ angular.module('sequoiaGroveApp')
     $http({
       url: '/sequoiagrove/request/submit/',
       method: "POST",
-      data: JSON.stringify(obj) 
+      data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
       $log.debug(data);
     })
     .error(function (data, status, headers, config) {
         $log.error('Error submiting request ', status, data);
-    });  
+    });
   }
 
   $scope.getRequests = function() {
@@ -70,12 +77,12 @@ angular.module('sequoiaGroveApp')
     data: [
     /*
      * TODO use dayCount instead
-      $scope.schCount[0].length, 
-      $scope.schCount[1].length, 
-      $scope.schCount[2].length, 
-      $scope.schCount[3].length, 
-      $scope.schCount[4].length, 
-      $scope.schCount[5].length, 
+      $scope.schCount[0].length,
+      $scope.schCount[1].length,
+      $scope.schCount[2].length,
+      $scope.schCount[3].length,
+      $scope.schCount[4].length,
+      $scope.schCount[5].length,
       $scope.schCount[6].length
       */
     ]

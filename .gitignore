@@ -16,6 +16,7 @@ ojdbc6.jar
 
 *.DS_Store
 *.swp
+*.swo
 
 *~
-
+*.log

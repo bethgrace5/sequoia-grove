@@ -2,22 +2,27 @@
 
 /**
  * @ngdoc function
- * @name sequoiaGroveApp.controller:MainCtrl
+ * @name sequoiaGroveApp.controller:ScheduleCtrl
  * @description
- * # MainCtrl
- * Controller of the sequoiaGroveApp
+ * # ScheduleCtrl
+ * Controller for editing the schedule.
  */
 angular.module('sequoiaGroveApp')
   .controller('ScheduleCtrl', function (
         $filter,
         $window,
         $location,
-        $http, 
-        $log, 
-        $rootScope, 
-        $scope, 
-        $timeout, 
+        $http,
+        $log,
+        $rootScope,
+        $scope,
+        $timeout,
         $translate) {
+
+/************** Login Redirect, Containers and UI settings **************/
+  $rootScope.lastPath = '/schedule';
+  $scope.saving = false;
+  $scope.importing = false;
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -29,7 +34,18 @@ angular.module('sequoiaGroveApp')
   $scope.newDelivery = '';
   $scope.selectedPid = 0;
   $scope.empEditSearch = '';
-  $scope.saving = false;
+  $scope.selectedShift = {
+    idx : -1,
+    sid : -1,
+    title : '',
+    pos : '',
+    wd_st : '',
+    wd_ed : '',
+    we_st : '',
+    we_ed : ''
+  };
+
+/************** Pure Functions **************/
 
   // Call browser to print schedule on paper
   $scope.print = function() {
@@ -38,6 +54,32 @@ angular.module('sequoiaGroveApp')
 
   $scope.selectEid = function(id) {
     $scope.selectedId = id;
+  }
+
+  $scope.selectShift = function(cur) {
+    $scope.selectedShift.idx = cur;
+    if ($scope.selectedShift.idx != -1) {
+      $scope.selectedShift.sid = $scope.template[cur].sid;
+      $scope.selectedShift.title = $scope.template[cur].tname;
+      $scope.selectedShift.pos = $scope.template[cur].position;
+      $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h + ':' + $scope.template[cur].wd_st_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.wd_ed = moment($scope.template[cur].wd_ed_h + ':' + $scope.template[cur].wd_ed_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.we_st = moment($scope.template[cur].we_st_h + ':' + $scope.template[cur].we_st_m, 'HH:mm').format('h:mm A');
+      $scope.selectedShift.we_ed = moment($scope.template[cur].we_ed_h + ':' + $scope.template[cur].we_ed_m, 'HH:mm').format('h:mm A');
+    }
+    else {
+      $scope.selectedShift.sid = 0;
+      $scope.selectedShift.title = '';
+      $scope.selectedShift.pos = '';
+      $scope.selectedShift.wd_st = '';
+      $scope.selectedShift.wd_ed = '';
+      $scope.selectedShift.we_st = '';
+      $scope.selectedShift.we_ed = '';
+    }
+  }
+
+  $scope.shiftSelected = function() {
+    return ($scope.selectedShift.idx != -1);
   }
 
   $scope.switchPos = function(pos) {
@@ -74,32 +116,45 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
-  // check if given day availability is within provided shift range
-  $scope.checkEmpAvailWithShift = function(avl, shf) {
-    if (avl == null) {
+
+  // find the matching employee by name
+  $scope.getEmployeeByname = function(name) {
+    var employee = {'id':0};
+    _.map($scope.currentEmployees, function(e) {
+      if(_.isMatch(e, {'firstName':name})) {
+        employee = e;
+      }
+    });
+    return employee;
+  }
+
+  // get if employee is available
+  $scope.employeeIsAvailable = function(attrs, employee) {
+    var avail = [];
+    var isAvailable = false;
+
+    // 1. get employee availability
+    avail = _.map(employee.avail[attrs.day], function(a) {
+      return {
+        'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
+        'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
+      }
+    });
+    if (avail.length <=0 ) {
       return false;
     }
-    var len = avl.length;
-    for (var i = 0; i < len; i++) {
-      var startFlag = false;
-      var endFlag = false;
-      if (
-        (avl[i].startHr == shf.sthr && avl[i].startMin <= shf.stmin) ||
-        avl[i].startHr < shf.sthr
-      ) {
-        startFlag = true;
+
+    // 2. determine shift duration times
+    var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
+    var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
+
+    // 3. check employee availability against shift duration
+    _.map(avail, function(a, index) {
+      if ((a.start.isBefore(shiftStart) || a.start.isSame(shiftStart)) && (a.end.isAfter(shiftEnd) || a.end.isSame(shiftEnd))) {
+        isAvailable = true;
       }
-      if (
-        (avl[i].endHr == shf.endhr &&  avl[i].endMin >= shf.endmin) ||
-        avl[i].endHr > shf.endhr
-      ) {
-        endFlag = true;
-      }
-      if (startFlag && endFlag) {
-        return true;
-      }
-    }
-    return false;
+    });
+    return isAvailable;
   }
 
   // validation for schedule edit input
@@ -126,177 +181,12 @@ angular.module('sequoiaGroveApp')
     return style;
   }
 
-  // Save the shifts in the list of updateShifts
-  $scope.saveSchedule = function() {
-    $scope.schHourCount = [];
-    $scope.saving = true;
-
-    $http({
-      url: '/sequoiagrove/schedule/update/',
-      method: "POST",
-      data: { 'body': JSON.stringify($scope.updateShifts) }
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // clear update shifts list
-        $scope.updateShifts = [];
-        $scope.getScheduleTemplate();
-        $scope.saving = false;
-      }
-      else {
-        $log.error('Error saving schedule ', status, data);
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error saving schedule " + data);
-      $scope.saving = false;
-    });
-  }
-
-  // Delete all these shifts
-  $scope.deleteSchedule = function() {
-    $scope.schHourCount = [];
-    $scope.saving = true;
-
-    $http({
-      url: '/sequoiagrove/schedule/delete/',
-      method: "DELETE",
-      data: { 'body': JSON.stringify($scope.deleteShifts) }
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // clear delete shifts list
-        $scope.deleteShifts = [];
-        $scope.getScheduleTemplate();
-        $scope.saving = false;
-      }
-      else {
-        $log.error('Error deleting schedule ', status, data);
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error deleting schedule " + data);
-    });
-  }
-
-  // tracks changes by keeping update list current
-  $scope.checkIfShiftExists = function(eid, sid, date) {
-    sid = parseInt(sid);
-    var paramObj = {'eid':eid, 'sid':sid, 'date':date};
-    var inOriginal = false;
-    var inUpdate = false;
-    var originalIndex = -1;
-    var updateIndex = -1;
-
-    // check if this shift is in the update list
-    _.map($scope.updateShifts, function(shift, index, list) {
-      if (_.isMatch(shift, { 'sid':sid, 'date':date})) {
-        $log.debug('match in update');
-        inUpdate = true;
-        updateIndex = index;
-      }
-    });
-
-    // check if this shift is in the original list
-    _.map($scope.oldShifts, function(shift, index, list) {
-      if( _.isEqual(shift, paramObj)) {
-        $log.debug('match in original');
-        inOriginal = true;
-        originalIndex = index;
-      }
-    });
-    
-    // decide what to do with the info gathered above
-    if (inOriginal && inUpdate) {
-      // item needs to be removed from update
-      $scope.updateShifts.splice(updateIndex, 1);
+  $scope.shiftStatus = function(i) {
+    var style = '';
+    if(i===$scope.selectedShift.idx) {
+      style += 'schedule-edit-task-selected';
     }
-    else if (inOriginal && !inUpdate) {
-      // do nothing
-    }
-    else if (!inOriginal && inUpdate) {
-      // update the update list
-      $scope.updateShifts.splice(updateIndex, 1);
-      $scope.updateShifts.push(paramObj);
-    }
-    else if (!inOriginal && !inUpdate) {
-      // add item to update list
-      $scope.updateShifts.push(paramObj);
-    }
-
-    $scope.selectEid(eid);
-  }
-
-
-  $scope.clearSchedule = function() {
-    _.map($scope.template, function(t, index, list) {
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.wed.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.thu.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.fri.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sat.val});
-      $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sun.val});
-
-      t.mon.name = ""; t.mon.eid = 0;
-      t.tue.name = ""; t.tue.eid = 0;
-      t.wed.name = ""; t.wed.eid = 0;
-      t.thu.name = ""; t.thu.eid = 0;
-      t.fri.name = ""; t.fri.eid = 0;
-      t.sat.name = ""; t.sat.eid = 0;
-      t.sun.name = ""; t.sun.eid = 0;
-    });
-
-    $scope.deleteSchedule();
-  }
-
-  $scope.importLastWeek = function() {
-
-    // all of the day of the week lists should be the same
-    // length as monday
-    var len  = $scope.oldShifts.mon.length;
-    var i=0;
-    for(; i<len; i++) {
-      // Monday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.mon[i].eid,
-        sid: $scope.previousShifts.mon[i].sid,
-        date: $scope.date.mon.val
-      });
-      // Tuesday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.tue[i].eid,
-        sid: $scope.previousShifts.tue[i].sid,
-        date: $scope.date.tue.val
-      });
-      // Wednesday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.wed[i].eid,
-        sid: $scope.previousShifts.wed[i].sid,
-        date: $scope.date.wed.val
-      });
-      // Thursday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.thu[i].eid,
-        sid: $scope.previousShifts.thu[i].sid,
-        date: $scope.date.thu.val
-      });
-      // Friday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.fri[i].eid,
-        sid: $scope.previousShifts.fri[i].sid,
-        date: $scope.date.fri.val
-      });
-      // Saturday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.sat[i].eid,
-        sid: $scope.previousShifts.sat[i].sid,
-        date: $scope.date.sat.val
-      });
-      // Sunday
-      $scope.updateShifts.push({
-        eid: $scope.previousShifts.sun[i].eid,
-        sid: $scope.previousShifts.sun[i].sid,
-        date: $scope.date.sun.val
-      });
-    }
-    $scope.saveSchedule();
+    return style;
   }
 
   $scope.removeDelivery = function(index) {
@@ -322,10 +212,221 @@ angular.module('sequoiaGroveApp')
     }
   }
 
+  // a shift was typed in blank, add it to delete list, if it isn't
+  // already in there
+  $scope.addToDeleteList = function(obj) {
+    var isAlreadyBlank = false;
+    var isInDeleteList = false;
+    obj.sid = parseInt(obj.sid);
+
+    // check if this entry was already blank
+    _.map($scope.originalTemplate, function(shift, index) {
+      if (shift.eid === 0) {
+        if ( _.isEqual(obj, _.omit(shift, 'eid'))) {
+          isAlreadyBlank = true;
+        }
+      }
+    });
+
+    // we don't need to delete this shift because it never existed in
+    // the first place
+    if (isAlreadyBlank) {
+      return;
+    }
+
+    _.map($scope.deleteShifts, function(shift, index, list) {
+      if( _.isEqual(shift, obj)) {
+        isInDeleteList = true;
+      }
+    });
+    if (isInDeleteList === false) {
+      $scope.deleteShifts.push({'sid':obj.sid, 'date':obj.date});
+    }
+  }
+
+  // tracks changes by keeping update list current
+  $scope.trackScheduleChange = function(eid, sid, date) {
+    sid = parseInt(sid);
+    var paramObj = {'eid':eid, 'sid':sid, 'date':date};
+    var inOriginal = false;
+    var inUpdate = false;
+    var originalIndex = -1;
+    var updateIndex = -1;
+
+    // check if this shift is in the update list
+    _.map($scope.updateShifts, function(shift, index, list) {
+      if (_.isMatch(shift, { 'sid':sid, 'date':date})) {
+        inUpdate = true;
+        updateIndex = index;
+      }
+    });
+
+    // check if this shift is in the original list
+    _.map($scope.originalTemplate, function(shift, index, list) {
+      if( _.isEqual(shift, paramObj)) {
+        inOriginal = true;
+        originalIndex = index;
+      }
+    });
+
+    // check if this shift is in the delete list
+    _.map($scope.deleteShifts, function(shift, index, list) {
+      if(_.isMatch(shift, {'sid':sid, 'date':date})) {
+        // remove this from delete shifts, because if this function
+        // was called, it means this shift was assigned a name
+        $scope.deleteShifts.splice(index, 1);
+      }
+    });
+
+    // decide what to do with the info gathered above
+    if (inOriginal && inUpdate) {
+      // item needs to be removed from update
+      $scope.updateShifts.splice(updateIndex, 1);
+    }
+    else if (inOriginal && !inUpdate) {
+      // do nothing
+    }
+    else if (!inOriginal && inUpdate) {
+      // update the update list
+      $scope.updateShifts.splice(updateIndex, 1);
+      $scope.updateShifts.push(paramObj);
+    }
+    else if (!inOriginal && !inUpdate) {
+      // add item to update list
+      $scope.updateShifts.push(paramObj);
+    }
+
+    $scope.selectedId = eid;
+  }
+
+
+  // adds all shifts to delete list, so they are deleted when save is clicked
+  $scope.clearSchedule = function() {
+    $scope.updateShifts = [];
+    $scope.deleteShifts = [];
+
+    // add all shifts to delete list if they weren't already blank
+    _.map($scope.template, function(t, index, list) {
+      if (t.mon.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.mon.val});
+      }
+      if (t.tue.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.tue.val});
+      }
+      if (t.wed.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.wed.val});
+      }
+      if (t.thu.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.thu.val});
+      }
+      if (t.fri.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.fri.val});
+      }
+      if (t.sat.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sat.val});
+      }
+      if (t.sun.eid !== 0) {
+        $scope.deleteShifts.push({'sid':t.sid, 'date':$scope.date.sun.val});
+      }
+
+      // update template so view reflects changes
+      t.mon.name = ""; t.mon.eid = 0;
+      t.tue.name = ""; t.tue.eid = 0;
+      t.wed.name = ""; t.wed.eid = 0;
+      t.thu.name = ""; t.thu.eid = 0;
+      t.fri.name = ""; t.fri.eid = 0;
+      t.sat.name = ""; t.sat.eid = 0;
+      t.sun.name = ""; t.sun.eid = 0;
+    });
+  }
+
+  $scope.importLastWeek = function() {
+    $scope.importing = true;
+    $scope.selectedId = 0;
+    var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+   $scope.getScheduleTemplate(d)
+     .then(function() {
+       $scope.importing = false;
+   });
+  }
+
+/************** HTTP Request Functions **************/
+
+  // Save these shift schedulings in the list of updateShifts
+  $scope.saveSchedule = function() {
+    if ($scope.saving) {
+      return;
+    }
+    $scope.saving = true;
+    $scope.selectedId = 0;
+    // remove blank spaces from update list - they are in delete shifts, or
+    // have not been assigned
+    $scope.updateShifts = _.filter($scope.updateShifts, function(shift) {
+      return (shift.eid !== 0);
+    });
+
+    $http({
+      url: '/sequoiagrove/schedule/update/',
+      method: "POST",
+      data: $scope.updateShifts
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear update shifts list
+        $scope.updateShifts = [];
+        $scope.deleteSchedule();
+      }
+      else {
+        $log.error('Error saving schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error saving schedule " + data);
+      $scope.saving = false;
+    });
+  }
+
+  // Delete these shift schedulings
+  $scope.deleteSchedule = function() {
+    if ($scope.saving) {
+      return;
+    }
+    $http({
+      url: '/sequoiagrove/schedule/delete/',
+      method: "DELETE",
+      data: $scope.deleteShifts
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear delete shifts list
+        $scope.deleteShifts = [];
+        $scope.getScheduleTemplate($scope.date.mon.val);
+        $scope.saving = false;
+      }
+      else {
+        $log.error('Error deleting schedule ', status, data);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error deleting schedule " + data);
+    });
+  }
+
+  // Add new shift to schedule
+  $scope.addShift = function() {
+  }
+
+/************** Controller Initialization **************/
+
   $scope.init = function() {
-    //$scope.getShifts();
   }
 
   $scope.init();
+
+/************** Event Watchers **************/
+
+  $scope.$watch($rootScope.loading, function(newVal, oldVal){
+    if(newVal){
+      //$log.debug(newVal);
+      // watchExpression has changed.
+    }
+  });
+
 
 });
