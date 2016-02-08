@@ -7,6 +7,7 @@ create or replace package bajs_pkg as
 procedure add_holiday( mmdd varchar2, n varchar2, t varchar2);
 --procedure delete_ingredient(iid number);
 procedure schedule( eid number, sid number, day varchar2);
+procedure publish( eid number, day varchar2);
 procedure delete_schedule (sid number, day varchar2);
 procedure add_position( eid number, pid number, day varchar2);
 
@@ -91,6 +92,18 @@ create or replace package body bajs_pkg as
             set employee_id = eid
             where on_date = to_date(day, 'dd-mm-yyyy') and shift_id=sid;
     end schedule;
+
+    -- Schedule or update is_scheduled_for record 'dd-mm-yyyy'
+    procedure publish( eid number, day varchar2) is
+    begin
+        insert into bajs_published_schedule(published_by, start_date, date_published) 
+        values(eid, to_date(day, 'dd-mm-yyyy'), (select current_timestamp from dual));
+        exception
+        when DUP_VAL_ON_INDEX then
+            update bajs_published_schedule
+            set published_by = eid, date_published = (select current_timestamp from dual)
+            where start_date = to_date(day, 'dd-mm-yyyy');
+    end publish;
 
     -- Delete an Ingredent from being used in a menu item by supplying the ingredient id
     procedure delete_schedule (sid number, day varchar2) is

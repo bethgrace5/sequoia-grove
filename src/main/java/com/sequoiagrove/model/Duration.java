@@ -1,13 +1,18 @@
+
 package com.sequoiagrove.model;
 
-public class Availability{
+public class Duration{
     String start;
     String end;
 
-    public Availability(){}
-    public Availability(String start, String end) {
+    public Duration(){}
+    public Duration(String start, String end) {
       this.start = start;
       this.end = end;
+    }
+    public Duration(String start) {
+      this.start = start;
+      this.end = "";
     }
 
     public void setStart(String start) {

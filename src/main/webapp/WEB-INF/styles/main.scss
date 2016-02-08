@@ -7,14 +7,14 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   Table of Contents
 
   01. Variables
-  02. General Styling
-  03. Print Styling
-  04. Schedule Edit
-  05. Schedule View
-  06. Schedule Header
-  07. Site Header and Navbar
-  08. Employee List
-  09. Default settings Yeoman put in
+  02. General_Styling
+  03. Print_Styling
+  04. Schedule_Edit
+  05. Schedule_View
+  06. Schedule_Header
+  07. Site_Header_and_Navbar
+  08. Employee_List
+  09. Default_settings_Yeoman_put_in
 
 *********************************************/
 
@@ -35,7 +35,7 @@ $brand-warning: #f0ad4e;
 $brand-danger:  #d9534f;
 
 /********************************************
-    02. General Styling
+    02. General_Styling
 *********************************************/
 a:focus {
   outline: 0;
@@ -43,9 +43,12 @@ a:focus {
 .selectable-elem {
   cursor: pointer;
 }
+.centered-elem {
+  text-align: center;
+}
 
 /********************************************
-    03. Print Styling
+    03. Print_Styling
 *********************************************/
 .print-message {
   margin: 30px;
@@ -70,7 +73,7 @@ a:focus {
 }
 
 /********************************************
-    04. Schedule Edit
+    04. Schedule_Edit
 *********************************************/
 .position-button-bar {
   margin: 0 auto;
@@ -85,7 +88,7 @@ a:focus {
 }
 
 /********************************************
-    05. Schedule View
+    05. Schedule_View
 *********************************************/
 /* schedule edit/view options */
 .schedule-view-options .btn{
@@ -220,9 +223,19 @@ a:focus {
   width: auto;
   margin: 5px;
 }
+.schedule-edit-shift-txt-addshift {
+  padding-right: 0.1em;
+}
+.schedule-edit-shift-btn-newshift {
+  padding-right: 0.5em;
+  padding-left: 0.5em;
+}
+.schedule-edit-shift-droprow {
+  margin-top: 10px;
+}
 
 /********************************************
-    06. Schedule Header
+    06. Schedule_Header
 *********************************************/
 .weekday-title div{
   font-size: 1.1em;
@@ -272,7 +285,7 @@ a:focus {
 }
 
 /********************************************
-    07. Site Header and Navbar
+    07. Site_Header_and_Navbar
 *********************************************/
 .navbar .divider-vertical {
   height: 50px;
@@ -293,7 +306,7 @@ a:focus {
 }
 
 /********************************************
-    08. Employee List
+    08. Employee_List
 *********************************************/
 .clock-input {
   width: 45px;
@@ -328,7 +341,7 @@ a:focus {
 }
 
 /********************************************
-    09. Default Settings Yeoman put in
+    09. Default_Settings_Yeoman_put_in
 *********************************************/
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,

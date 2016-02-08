@@ -21,3 +21,4 @@
 --@ins/ins_weekday_hours.sql;
 --@ins/ins_weekend_hours.sql;
 @ins/ins_holiday.sql;
+@ins/ins_published_schedule.sql;
