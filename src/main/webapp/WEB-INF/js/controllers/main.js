@@ -267,6 +267,7 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
+    $scope.checkifPublished();
     var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
@@ -338,7 +339,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $log.debug(data.ispublished);
-        return true;
+        //return true;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);

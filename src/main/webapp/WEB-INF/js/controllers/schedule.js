@@ -92,6 +92,7 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
+  //send date and employee id as an object thru http request
   $scope.publishSchedule = function() {
       var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
     $http({
