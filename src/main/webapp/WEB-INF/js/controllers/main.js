@@ -276,11 +276,6 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
 
-        // we were importing another week - add them to update shifts, so they can
-        // be saved for this week
-        if (_.isEqual(week, $scope.date.mon.val) == false) {
-          angular.copy($scope.originalTemplate, $scope.updateShifts);
-        }
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
@@ -369,10 +364,11 @@ angular.module('sequoiaGroveApp')
   $scope.init = function() {
     // user is not logged in, redirect to login
     if ($rootScope.loggedIn == false) {
+      $log.debug($location.path());
       $rootScope.lastPath = $location.path();
-      if ($location.path() != '/login') {
+      //if ($location.path() != '/login') {
         $location.path('/login');
-      }
+      //}
     }
 
     $scope.changeTab('/home');

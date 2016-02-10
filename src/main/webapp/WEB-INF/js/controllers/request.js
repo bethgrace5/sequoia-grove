@@ -11,12 +11,12 @@ angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
 
 
+  $rootScope.lastPath = '/request';
+
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
   }
-
-  $rootScope.lastPath = '/schedule';
   $scope.countDisplay = 0 ;
 
   $scope.donGraph= {

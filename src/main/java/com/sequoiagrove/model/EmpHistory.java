@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.sequoiagrove.model.Position;
-import com.sequoiagrove.model.Availability;
 
 public class EmpHistory {
     Date start; 

@@ -344,10 +344,12 @@ angular.module('sequoiaGroveApp')
     $scope.importing = true;
     $scope.selectedId = 0;
     var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
-   $scope.getScheduleTemplate(d)
-     .then(function() {
-       $scope.importing = false;
-   });
+     $scope.getScheduleTemplate(d)
+       .then(function(data) {
+         // add all shifts to update shifts, so they can be saved for this week
+         angular.copy($scope.originalTemplate, $scope.updateShifts);
+         $scope.importing = false;
+     });
   }
 
 /************** HTTP Request Functions **************/
@@ -386,9 +388,6 @@ angular.module('sequoiaGroveApp')
 
   // Delete these shift schedulings
   $scope.deleteSchedule = function() {
-    if ($scope.saving) {
-      return;
-    }
     $http({
       url: '/sequoiagrove/schedule/delete/',
       method: "DELETE",

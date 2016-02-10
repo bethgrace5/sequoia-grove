@@ -12,12 +12,13 @@ angular.module('sequoiaGroveApp')
 
 /************** Login Redirect, Containers and UI settings **************/
 
+    $rootScope.lastPath = '/employee';
+
     // user is not logged in
     if ($rootScope.loggedIn == false) {
       $location.path('/login');
     }
 
-    $rootScope.lastPath = '/schedule';
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {id:0};
