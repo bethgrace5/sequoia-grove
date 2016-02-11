@@ -7,18 +7,18 @@ public class RequestStatus {
     int requestID;
     int employeeID;
     int approverID;
-    boolean isApprove;
+    String status;
     String startDate;
     String endDate;
 
     public RequestStatus(){}
     public RequestStatus(int requestID, int employeeID, int approverID,
-        boolean isApprove, String startDate, String endDate) {
+        String status, String startDate, String endDate) {
 
       this.requestID = requestID;
       this.employeeID = employeeID;
       this.approverID = approverID;
-      this.isApprove = isApprove;
+      this.status = status;
       this.startDate = startDate;
       this.endDate = endDate;
     }
@@ -44,11 +44,11 @@ public class RequestStatus {
       return requestID;
     }
 
-    public void setIsApprove(boolean isApprove){
-      this.isApprove = isApprove;
+    public void setStatus(String status){
+      this.status= status;
     }
-    public boolean getIsApprove(){
-      return isApprove;
+    public String getStatus(){
+      return status;
     }
 
     public void setStartDate(String startDate) {

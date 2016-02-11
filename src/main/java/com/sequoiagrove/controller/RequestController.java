@@ -70,7 +70,7 @@ public class RequestController{
                 rs.getInt("id"),
                 rs.getInt("requested_by"),
                 rs.getInt("responded_by"),
-                rs.getBoolean("is_approved"),
+                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
                 rs.getString("start_date_time"),
                 rs.getString("end_date_time")
               );
@@ -79,6 +79,14 @@ public class RequestController{
       });
       model.addAttribute("request", requestList);
       return "jsonTemplate";
+    } 
+  public String checkStatus(Integer requester, boolean approval){
+    if(requester == null) return "Pending";
+    else{
+      if(approval == true) return "Approved";
+      else return "Denied";
     }
+  }
+
 }
 
