@@ -63,8 +63,7 @@ public class RequestController{
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select id, requested_by, responded_by, is_approved, " +
-          "start_date_time, end_date_time from bajs_requests_vacation",
+          "select * from bajs_requests_vacation",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(
