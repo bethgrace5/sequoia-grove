@@ -62,7 +62,7 @@ public class Authentication {
           String email = personaResponse.getEmail();
 
           // find this user in database
-          String sql = "select * from bajs_employee where email = ?"; 
+          String sql = "select * from bajs_employee where email = ?";
           try {
           user = (User)jdbcTemplate.queryForObject(
                     sql, new Object[] { email }, new UserRowMapper());
@@ -80,7 +80,7 @@ public class Authentication {
             model.addAttribute("user", user);
           }
 
-        } 
+        }
         // Authentication with Persona failed
         else {
           System.out.println("Sign in failed...");

@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HasShift {
     int sid;
     int pid;
-    String tname; 
-    String pname; 
+    String tname;
+    String pname;
     //int wd_st;
     //int wd_ed;
     //int we_st;

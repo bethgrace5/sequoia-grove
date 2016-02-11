@@ -8,7 +8,7 @@ import java.util.HashMap;
 import com.sequoiagrove.model.Position;
 
 public class EmpHistory {
-    Date start; 
+    Date start;
     Date end;
 
     public EmpHistory(){}

@@ -7,7 +7,7 @@ import java.util.HashMap;
 
 public class Delivery {
     int id;
-    String title; 
+    String title;
     Map<String, Boolean> days = new HashMap<String, Boolean>();
 
     public Delivery(){}

@@ -55,7 +55,7 @@ public class PositionController {
         String eid = ep.get("pid").getAsString();
 
         // see if this is already a current position that the employee has
-        int count = jdbcTemplate.queryForInt( 
+        int count = jdbcTemplate.queryForInt(
             "select count(*) from bajs_has_position where employee_id = ?"+
             " and position_id = ? and date_removed is null", eid, pid);
 
@@ -82,7 +82,7 @@ public class PositionController {
         String eid = ep.get("pid").getAsString();
 
         // see if this is a current position that the employee has
-        int count = jdbcTemplate.queryForInt( 
+        int count = jdbcTemplate.queryForInt(
             "select count(*) from bajs_has_position where employee_id = ?"+
             " and position_id = ? and date_removed is null", eid, pid);
 
