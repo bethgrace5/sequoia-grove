@@ -87,23 +87,6 @@ angular.module('sequoiaGroveApp')
     $scope.selectedPid = pos;
   }
 
-  // Filter employees by selected position
-  $scope.filterEmployees = function(eid) {
-    if($scope.selectedPid == 0) {
-      return true;
-    }
-    var hasPos = $scope.hasPosition[$scope.selectedPid];
-    var i=0;
-    var len = hasPos.length;
-
-    for(; i<len; i++) {
-      // this employee has this position
-      if(hasPos[i] == eid){
-        return true;
-      }
-    }
-    return false;
-  }
 
   // Filter schedule by selected position
   $scope.filterSchedule = function(pid) {

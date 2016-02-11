@@ -38,8 +38,6 @@ angular.module('sequoiaGroveApp')
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
 
-  // a list of position ids as keys, with the value as a list of employee ids that hold that position
-  $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
   $scope.originalTemplate = [];
@@ -223,6 +221,26 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // check if employee has this position
+  $scope.employeeHasPosition = function(eid, pid) {
+    if (pid === 0) {
+      return true;
+    }
+    var hasPosition = false;
+
+    // find if this employee knows the selected position
+    _.map($scope.employeeInfo, function(e) {
+      if (e.id === eid) {
+        _.map(e.positions, function(p) {
+          if (p === $scope.selectedPid) {
+            hasPosition = true;
+          }
+        })
+      }
+    });
+    return hasPosition;
+  }
+
 /************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
@@ -233,17 +251,6 @@ angular.module('sequoiaGroveApp')
         $scope.positions = data.positions;
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining position data: " + data);
-    });
-  }
-
-  $scope.getHasPositions = function() {
-    return $http({
-      url: '/sequoiagrove/position/has',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.hasPosition = data.hasPositions;
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining has position data: " + data);
     });
   }
 
@@ -379,8 +386,7 @@ angular.module('sequoiaGroveApp')
     $q.all(
       [$scope.getPositions(),
         $scope.getEmployeeAll(),
-        $scope.getScheduleTemplate($scope.date.mon.val),
-        $scope.getHasPositions()
+        $scope.getScheduleTemplate($scope.date.mon.val)
        ]
      ).then(function(results) {
         $scope.countDays(),

@@ -1,7 +1,9 @@
 package com.sequoiagrove.controller;
 
+import com.google.gson.*;
 import com.sequoiagrove.model.HasShift;
 import java.sql.SQLException;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.ui.Model;
@@ -27,11 +29,10 @@ public class ShiftController {
             "select p.id as pid, s.id as sid, p.title as pname, s.task_name as tname " +
             "from " +
             "bajs_new_shift s " +
-            "inner join " + 
+            "inner join " +
             "bajs_position p " +
             "on s.position_id = p.id " +
             "where s.end_date is null",
-
             new RowMapper<HasShift>() {
                 public HasShift mapRow(ResultSet rs, int rowNum) throws SQLException {
                     HasShift s = new HasShift(
@@ -47,29 +48,42 @@ public class ShiftController {
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/avail/add/{eid}/{day}/{startt}/{endt}")
-    public String addAvail(Model model,
-          @PathVariable("eid") int eid,
-          @PathVariable("day") String day,
-          @PathVariable("startt") String startt,
-          @PathVariable("endt") String endt) throws SQLException {
+    // Add new availability (or update end time if the availability for the
+    //   day and time already existed)
+    @RequestMapping(value = "/avail/add")
+     public String addAvail(Model model, @RequestBody String data) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        System.out.println("add availability");
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
 
-      int count = jdbcTemplate.queryForObject( 
-          "select count(*) from bajs_availability " +
-          " where day = '" + day +
-          "' and employee_id = " + eid+
-          " and startt = " + startt+
-          " and endt = " + endt, Integer.class);
+        String day = jobject.get("day").getAsString();
+        String eid = jobject.get("eid").getAsString();
+        String start = jobject.get("start").getAsString();
+        String end = jobject.get("end").getAsString();
 
-      if(count <= 0 ) {
-          jdbcTemplate.update("insert into bajs_availability( " +
-              "employee_id, day, startt, endt) "+
-              "values(?, ?, ?, ?)", eid, day, startt, endt);
-      }
+        // TODO make sure this availability isn't overlapping with the availability
+        // time this employee already has for this day (if any)
 
-        return "jsonTemplate";
+        // see if this is a current position that the employee has
+        int count = jdbcTemplate.queryForInt(
+            "select count(*) from bajs_availability where employee_id = ?"+
+            " and day = ? and startt = ?", eid, day, start);
+
+        // we found a match, update the end time
+        if (count > 0) {
+           jdbcTemplate.update(" update bajs_availability set endt = ? " +
+           " where employee_id = ? and day = ? and startt = ?", end, eid, day, start);
+        }
+        // no match was found, add new availability
+        else {
+           jdbcTemplate.update(" insert into  bajs_availability " +
+               "( employee_id, day, startt, endt ), values(?, ?, ?, ?)",
+               end, eid, day, start);
+        }
+
+          return "jsonTemplate";
     }
 
     @RequestMapping(value = "/avail/remove/{eid}/{day}/{startt}")

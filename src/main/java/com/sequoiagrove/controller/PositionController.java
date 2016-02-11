@@ -1,6 +1,6 @@
 package com.sequoiagrove.controller;
 
-import com.sequoiagrove.model.Position;
+import com.google.gson.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,9 +11,9 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sequoiagrove.dao.PositionDAO;
 import com.sequoiagrove.model.Position;
 
 
@@ -21,7 +21,7 @@ import com.sequoiagrove.model.Position;
 public class PositionController {
     private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
 
-    // Get position info including the id, title and location
+    // Get Basic position info (id, title and location)
     @RequestMapping(value = "/position")
     public String getPositions(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -37,99 +37,61 @@ public class PositionController {
                     return pos;
                 }
         });
-
         model.addAttribute("positions", posList);
         return "jsonTemplate";
     }
 
-    // Populates map of position id to a list of employee ids that currently
-    // have that position
-    @RequestMapping(value = "/position/has")
-    public String getHasPositions(Model model){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        HashMap<Integer, ArrayList<Integer>> localMap = new HashMap<Integer, ArrayList<Integer>>();
-
-        jdbcTemplate.query(
-            "select distinct employee_id as eid, position_id as pid " +
-            "from bajs_has_position " +
-            "where date_removed is null",
-            new RowMapper<String>() {
-                public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Integer pid = rs.getInt("pid");
-                    Integer eid = rs.getInt("eid");
-                    if(posKeyMap.containsKey(pid)) { // key exists, add elem
-                        posKeyMap.get(pid).add(eid);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Integer> tempList = new ArrayList<Integer>();
-                        tempList.add(eid);
-                        posKeyMap.put(pid, tempList);
-                    }
-                    return "";
-                    }
-        });
-
-        localMap.putAll(posKeyMap);
-        posKeyMap.clear();
-
-        model.addAttribute("hasPositions", localMap);
-        return "jsonTemplate";
-    }
-    // Get only locations (kitchen and front) <- this shouldn't change ever
-    @RequestMapping(value = "/position/location")
-    public String getLocations(Model model) {
+    // Add a current position for an employee
+    @RequestMapping(value = "/position/add/")
+    public String addPosition(Model model, @RequestBody String data) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        List<String> locList = new ArrayList<String>();
+        // Parse the body to position object
+        Gson gson = new Gson();
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject ep = jelement.getAsJsonObject();
 
-        locList = jdbcTemplate.query(
-            "select distinct location from bajs_position order by location",
-            new RowMapper<String>() {
-                public String mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    String str = new String(rs.getString("location"));
-                    return str;
-                }
-        });
-        model.addAttribute("locations", locList );
+        String pid = ep.get("pid").getAsString();
+        String eid = ep.get("pid").getAsString();
+
+        // see if this is already a current position that the employee has
+        int count = jdbcTemplate.queryForInt( 
+            "select count(*) from bajs_has_position where employee_id = ?"+
+            " and position_id = ? and date_removed is null", eid, pid);
+
+        // this employee does not currently have this position. add it.
+        if (count <= 0) {
+            jdbcTemplate.update("insert into bajs_has_position(" +
+              "employee_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
+              "values(?, ?, (select current_date from dual), null, 0, 0)", eid, pid);
+        }
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/position/add/{eid}/{pid}/{date}")
-    public String addPosition(Model model,
-          @PathVariable("eid") int eid,
-          @PathVariable("pid") int pid,
-          @PathVariable("date") String date) throws SQLException {
+    // Remove a current position from an employee
+    @RequestMapping(value = "/position/remove/")
+    public String removePosition(Model model, @RequestBody String data) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        // Parse the body to position object
+        Gson gson = new Gson();
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject ep = jelement.getAsJsonObject();
 
-int count = jdbcTemplate.queryForObject( 
-    "select count(*) from bajs_has_position where position_id = " +
-          pid + " and employee_id = " + eid, Integer.class);
+        String pid = ep.get("pid").getAsString();
+        String eid = ep.get("pid").getAsString();
 
-      if(count <= 0 ) {
-          jdbcTemplate.update("insert into bajs_has_position(employee_id, position_id,date_acquired, date_removed, is_primary, is_training) "+
-              "values(?, ?, to_date(?, 'dd-mm-yyyy'), null, 0, 0)", eid, pid, date);
-      }
+        // see if this is a current position that the employee has
+        int count = jdbcTemplate.queryForInt( 
+            "select count(*) from bajs_has_position where employee_id = ?"+
+            " and position_id = ? and date_removed is null", eid, pid);
 
-        return "jsonTemplate";
-    }
-
-    @RequestMapping(value = "/position/remove/{eid}/{pid}/{date}")
-    public String removePosition(Model model,
-          @PathVariable("eid") int eid,
-          @PathVariable("pid") int pid,
-          @PathVariable("date") String date) throws SQLException {
-
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      /*
-      jdbcTemplate.update("update bajs_has_position "+
-          "set date_removed = to_date(?, 'dd-mm-yyyy') " +
-          "where employee_id = ? and position_id = ? and date_removed is null",
-          date, eid, pid);
-          */
-      jdbcTemplate.update("delete from bajs_has_position " +
-        "where employee_id = ? and position_id = ?", eid, pid);
-
+        // this employee currently has this position. remove it.
+        if (count > 0) {
+           jdbcTemplate.update(" update bajs_has_position " +
+           " set date_removed = (select current_date from dual) " +
+           " where employee_id = ? and position_id = ? and date_removed is null", eid, pid);
+        }
         return "jsonTemplate";
     }
 
