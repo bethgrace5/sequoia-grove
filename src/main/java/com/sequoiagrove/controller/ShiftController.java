@@ -79,8 +79,8 @@ public class ShiftController {
         // no match was found, add new availability
         else {
            jdbcTemplate.update(" insert into  bajs_availability " +
-               "( employee_id, day, startt, endt ), values(?, ?, ?, ?)",
-               end, eid, day, start);
+               "( employee_id, day, startt, endt ) values(?, ?, ?, ?)",
+               eid, day, start, end);
         }
 
           return "jsonTemplate";
