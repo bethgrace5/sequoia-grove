@@ -1,7 +1,6 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
-import com.sequoiagrove.model.HasShift;
 import java.sql.SQLException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.sequoiagrove.model.HasShift;
 import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;

@@ -321,6 +321,8 @@ angular.module('sequoiaGroveApp')
       t.sat.name = ""; t.sat.eid = 0;
       t.sun.name = ""; t.sun.eid = 0;
     });
+    $scope.countDays();
+    $scope.countHours();
   }
 
   $scope.importLastWeek = function() {
@@ -330,9 +332,11 @@ angular.module('sequoiaGroveApp')
     var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
      $scope.getScheduleTemplate(d)
        .then(function(data) {
-         // add all shifts to update shifts, so they can be saved for this week
-         angular.copy($scope.originalTemplate, $scope.updateShifts);
-         $scope.importing = false;
+          // add all shifts to update shifts, so they can be saved for this week
+          angular.copy($scope.originalTemplate, $scope.updateShifts);
+          $scope.importing = false;
+          $scope.countDays();
+          $scope.countHours();
      });
   }
 

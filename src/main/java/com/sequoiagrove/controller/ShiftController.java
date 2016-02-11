@@ -1,7 +1,6 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
-import com.sequoiagrove.model.HasShift;
 import java.sql.SQLException;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.stereotype.Controller;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-import com.sequoiagrove.model.HasShift;
 import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;
@@ -25,26 +23,6 @@ public class ShiftController {
     @RequestMapping(value = "/shift")
     public String listShiftIds(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        List<HasShift> list = jdbcTemplate.query(
-            "select p.id as pid, s.id as sid, p.title as pname, s.task_name as tname " +
-            "from " +
-            "bajs_new_shift s " +
-            "inner join " +
-            "bajs_position p " +
-            "on s.position_id = p.id " +
-            "where s.end_date is null",
-            new RowMapper<HasShift>() {
-                public HasShift mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    HasShift s = new HasShift(
-                      rs.getInt("sid"),
-                      rs.getInt("pid"),
-                      rs.getString("tname"),
-                      rs.getString("pname")
-                    );
-                    return s;
-                }
-        });
         model.addAttribute("shift", list);
         return "jsonTemplate";
     }

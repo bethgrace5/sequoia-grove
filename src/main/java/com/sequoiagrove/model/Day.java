@@ -25,7 +25,7 @@ public class Day {
         // slots that need to all be filled
     }
 
-    public void scheduleEmployee(Employee employee, HasShift shift) {
+    public void scheduleEmployee(Employee employee, hasShift shift) {
         // check that this employee is able to work this shift
         // and that they are not already scheduled for this day
         // if the day is a weekday, add weekday hours if the day is a
