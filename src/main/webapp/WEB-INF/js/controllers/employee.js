@@ -182,12 +182,22 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.updateEmployee = function() {
+      $scope.selectedEmployee.isManager = "1";
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
-      $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
+      var action = "update";
+      if ($scope.selectedEmployee.id === 0) {
+        action = "add"
+        // TODO make it so a new employee can be added - there are 
+        // lots of checks that need to be made before selectedEmployee can
+        // be sent to the back end, for now, disallow new employee additions
+        return;
+      }
+
+      $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee).
         success(function(data, status){
           $scope.saving = false;
         });

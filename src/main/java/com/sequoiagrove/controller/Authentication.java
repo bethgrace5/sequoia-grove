@@ -35,10 +35,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.sequoiagrove.model.Delivery;
 import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
-import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
 
 @Controller
@@ -89,24 +87,6 @@ public class Authentication {
         }
         return "jsonTemplate";
     }
-
-    // Find Employee in database, and get their fullname
-    /*
-    private User getUser(String email) throws SQLException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        String sql = "select * from bajs_employee where email = ?"; 
-        User user;
-        try {
-        user = (User)jdbcTemplate.queryForObject(
-                  sql, new Object[] { email }, new UserRowMapper());
-        } catch (EmptyResultDataAccessException e) {
-        }
-
-        return user;
-    }
-    */
-
-
 }
 
 

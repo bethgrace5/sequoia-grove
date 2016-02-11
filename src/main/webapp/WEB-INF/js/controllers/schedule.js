@@ -324,6 +324,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.importLastWeek = function() {
+    $scope.deleteShifts = [];
     $scope.importing = true;
     $scope.selectedId = 0;
     var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');

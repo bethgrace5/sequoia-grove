@@ -289,12 +289,12 @@ angular.module('sequoiaGroveApp')
   }
 
   // Get All Employees with their id
-  $scope.getEmployeeAll = function() {
+  $scope.getEmployees = function() {
     return $http({
-      url: '/sequoiagrove/employee/info/all',
+      url: '/sequoiagrove/employees',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.employees = data.employeeInfo;
+        $scope.employees = data.employees;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -385,7 +385,7 @@ angular.module('sequoiaGroveApp')
     }
     $q.all(
       [$scope.getPositions(),
-        $scope.getEmployeeAll(),
+        $scope.getEmployees(),
         $scope.getScheduleTemplate($scope.date.mon.val)
        ]
      ).then(function(results) {
