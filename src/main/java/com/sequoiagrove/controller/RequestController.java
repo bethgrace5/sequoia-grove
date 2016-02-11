@@ -80,8 +80,9 @@ public class RequestController{
       model.addAttribute("request", requestList);
       return "jsonTemplate";
     } 
-  public String checkStatus(Integer requester, boolean approval){
-    if(requester == null) return "Pending";
+  public String checkStatus(Integer responder, boolean approval){
+    System.out.println(responder);
+    if (responder == null | responder == 0) return "Pending";
     else{
       if(approval == true) return "Approved";
       else return "Denied";
