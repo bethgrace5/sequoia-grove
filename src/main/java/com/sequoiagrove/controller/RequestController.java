@@ -23,6 +23,7 @@ import java.sql.ResultSet;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.Request;
+import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.Param;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.dao.DeliveryDAO;
@@ -61,13 +62,16 @@ public class RequestController{
   @RequestMapping(value = "/request/get")
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      List<Request> requestList = jdbcTemplate.query(
+      List<RequestStatus> requestList = jdbcTemplate.query(
           "select id, requested_by, responded_by, is_approved, " +
           "start_date_time, end_date_time from bajs_requests_vacation",
-          new RowMapper<Request>() {
-            public Request  mapRow(ResultSet rs, int rowNum) throws SQLException {
-              Request es = new Request(
+          new RowMapper<RequestStatus>() {
+            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+              RequestStatus es = new RequestStatus(
                 rs.getInt("id"),
+                rs.getInt("requested_by"),
+                rs.getInt("responded_by"),
+                rs.getBoolean("is_approved"),
                 rs.getString("start_date_time"),
                 rs.getString("end_date_time")
               );

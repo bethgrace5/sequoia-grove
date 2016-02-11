@@ -15,7 +15,6 @@ public class Request {
         this.endDate = endDate;
     }
 
-
     public void setEid(int id) {
         this.eid = eid;
     }
