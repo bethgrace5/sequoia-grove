@@ -53,6 +53,7 @@ angular.module('sequoiaGroveApp')
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
+  $scope.loadingMsg = "Verifying user with Application...";
 
   // container for displaying the date header
   // val 'DD-MM-YYYY' format, disp 'MMM-D' format
@@ -79,7 +80,7 @@ angular.module('sequoiaGroveApp')
   // highlight name
   $scope.highlight = false;
   // flag when set will disable all buttons, to avoid overlapping requests
-  $scope.loading = true;
+  $scope.loading = false;
 
 /************** Pure Functions **************/
 
@@ -257,6 +258,7 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
+    $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
@@ -290,6 +292,7 @@ angular.module('sequoiaGroveApp')
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
+    $scope.loadingMsg = "Obtaining current employee data...";
     return $http({
       url: '/sequoiagrove/employees',
       method: "GET"
@@ -371,7 +374,6 @@ angular.module('sequoiaGroveApp')
   $scope.init = function() {
     // user is not logged in, redirect to login
     if ($rootScope.loggedIn == false) {
-      $log.debug($location.path());
       $rootScope.lastPath = $location.path();
       //if ($location.path() != '/login') {
         $location.path('/login');
@@ -379,21 +381,6 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.changeTab('/home');
-    $scope.setScheduleHeader();
-
-    if ($rootScope.loggingIn) {
-    }
-    $q.all(
-      [$scope.getPositions(),
-        $scope.getEmployees(),
-        $scope.getScheduleTemplate($scope.date.mon.val)
-       ]
-     ).then(function(results) {
-        $scope.countDays(),
-        $scope.countHours(),
-        $scope.loading = false;
-        $log.debug('loading complete');
-      });
 
   }
   $scope.$on('logged in', function(event, args) {
