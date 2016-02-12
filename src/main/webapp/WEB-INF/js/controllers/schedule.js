@@ -36,6 +36,7 @@ angular.module('sequoiaGroveApp')
   $scope.selectedShift = {
     idx : -1,
     sid : -1,
+    pid : -1,
     title : '',
     pos : '',
     wd_st : '',
@@ -59,6 +60,7 @@ angular.module('sequoiaGroveApp')
     $scope.selectedShift.idx = cur;
     if ($scope.selectedShift.idx != -1) {
       $scope.selectedShift.sid = $scope.template[cur].sid;
+      $scope.selectedShift.pid = $scope.template[cur].pid;
       $scope.selectedShift.title = $scope.template[cur].tname;
       $scope.selectedShift.pos = $scope.template[cur].position;
       $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h + ':' + $scope.template[cur].wd_st_m, 'HH:mm').format('h:mm A');
@@ -67,7 +69,8 @@ angular.module('sequoiaGroveApp')
       $scope.selectedShift.we_ed = moment($scope.template[cur].we_ed_h + ':' + $scope.template[cur].we_ed_m, 'HH:mm').format('h:mm A');
     }
     else {
-      $scope.selectedShift.sid = 0;
+      $scope.selectedShift.sid = -1;
+      $scope.selectedShift.pid = -1;
       $scope.selectedShift.title = '';
       $scope.selectedShift.pos = '';
       $scope.selectedShift.wd_st = '';

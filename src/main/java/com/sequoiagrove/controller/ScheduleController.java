@@ -119,7 +119,7 @@ public class ScheduleController {
       return ret;
     }
 
-  // Get current schedule template (current shifts) dd/mm/yyyy
+  // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
     public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -139,7 +139,7 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-  // delete scheduled day dd/mm/yyyy
+  // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
     public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
