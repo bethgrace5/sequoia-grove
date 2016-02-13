@@ -114,7 +114,7 @@ public class ScheduleController {
             jdbcTemplate.update("call bajs_pkg.publish(?, ?)", 
                     param.getEid(),
                     param.getDate());
-            model.addAttribute("i_like_cats", true);    
+            //model.addAttribute("updated!", true);    
 
 
 
