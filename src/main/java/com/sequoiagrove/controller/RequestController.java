@@ -84,10 +84,12 @@ public class RequestController{
     @RequestMapping(value = "/request/get/current/employee/{eid}")
       public String getCurrentEmployeeRequestl(Model model,
           @PathVariable("eid") int eid) throws SQLException {
+            Integer eidTest = eid;
 
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
-              "select * from bajs_requests_vacation",
+              "select * from bajs_requests_vacation " +
+              "where requested_by = " + eid,
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
                   RequestStatus es = new RequestStatus(

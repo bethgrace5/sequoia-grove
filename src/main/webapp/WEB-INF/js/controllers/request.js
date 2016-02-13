@@ -74,11 +74,11 @@ angular.module('sequoiaGroveApp')
   $scope.getCurrentEmployeeRequest = function() {
     // remove availability from database
     $http({
-      url: '/sequoiagrove/request/get/current/employee'+
-      $scope.rootScope.loggedInUser.id,
+      url: '/sequoiagrove/request/get/current/employee/'+
+       $rootScope.loggedInUser.id,
       method: "POST"
     }).success(function(data, status) {
-      log.debug("sucess?");
+      $log.debug(data);
     });
   }
 
