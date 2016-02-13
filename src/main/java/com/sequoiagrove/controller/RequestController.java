@@ -30,9 +30,9 @@ import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
 /** 
 RequestController:
-   Puts Starting Date, End Date, and Employee ID from the front end to the datebase
-   It will also retrieve information from the backend 
- */
+Puts Starting Date, End Date, and Employee ID from the front end to the datebase
+It will also retrieve information from the backend 
+*/
 
 
 @Controller
@@ -73,21 +73,46 @@ public class RequestController{
                 checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
                 rs.getString("start_date_time"),
                 rs.getString("end_date_time")
-              );
+                );
               return es;
-          }
-      });
+            }
+          });
       model.addAttribute("request", requestList);
       return "jsonTemplate";
     } 
-  public String checkStatus(Integer responder, boolean approval){
-    System.out.println(responder);
-    if (responder == null | responder == 0) return "Pending";
-    else{
-      if(approval == true) return "Approved";
-      else return "Denied";
+
+    @RequestMapping(value = "/request/get/current/employee/{eid}")
+      public String getCurrentEmployeeRequestl(Model model,
+          @PathVariable("eid") int eid) throws SQLException {
+
+            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+            List<RequestStatus> requestList = jdbcTemplate.query(
+              "select * from bajs_requests_vacation",
+              new RowMapper<RequestStatus>() {
+                public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+                  RequestStatus es = new RequestStatus(
+                    rs.getInt("id"),
+                    rs.getInt("requested_by"),
+                    rs.getInt("responded_by"),
+                    checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
+                    rs.getString("start_date_time"),
+                    rs.getString("end_date_time")
+                    );
+                  return es;
+                }
+              });
+            model.addAttribute("request", requestList);
+            return "jsonTemplate";
+      }
+
+    public String checkStatus(Integer responder, boolean approval){
+      System.out.println(responder);
+      if (responder == null | responder == 0) return "Pending";
+      else{
+        if(approval == true) return "Approved";
+        else return "Denied";
+      }
     }
-  }
 
 }
 
