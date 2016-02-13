@@ -3,8 +3,8 @@ package com.sequoiagrove.model;
 
 public class Position {
     int id;
-    String title; 
-    String location; 
+    String title;
+    String location;
 
     public Position(){}
     public Position(int id, String title, String location) {

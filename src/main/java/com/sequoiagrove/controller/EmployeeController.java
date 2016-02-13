@@ -28,10 +28,10 @@ import com.sequoiagrove.model.WeeklyAvail;
 public class EmployeeController
 {
 
-    @RequestMapping(value = "/employee/info/all")
+    // Get All Employees with the availability, positions, and employment history
+    @RequestMapping(value = "/employees")
     public String getAllEmployee(Model model) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        // Get All Employees by Default
         String queryStr = "select * from bajs_emp_all_info";
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
@@ -49,15 +49,11 @@ public class EmployeeController
                       rs.getDate("birth_date"),
                       parseHistory(rs.getString("history")),
                       parsePositions(rs.getString("positions")),
-                      parseAvailability(rs.getString("avail"))
-                    );
-
+                      parseAvailability(rs.getString("avail")));
                     return employee;
                 }
         });
-
-        /*for all emp, find emp_id in hashmap and insert corresponding data*/
-        model.addAttribute("employeeInfo", empList);
+        model.addAttribute("employees", empList);
         return "jsonTemplate";
     }
 
@@ -107,9 +103,9 @@ public class EmployeeController
     }
 
     @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
-    public String updateEmployee(Model model, @RequestBody String postLoad) throws SQLException {
+    public String updateEmployee(Model model, @RequestBody String data) throws SQLException {
 
-      JsonElement jelement = new JsonParser().parse(postLoad);
+      JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
       String[] params = {
@@ -120,6 +116,7 @@ public class EmployeeController
           jobject.get("maxHrsWeek").getAsString(),
           jobject.get("phone").getAsString(),
           jobject.get("clock").getAsString(),
+          jobject.get("email").getAsString(),
           jobject.get("id").getAsString()
       };
 
@@ -131,31 +128,35 @@ public class EmployeeController
           "max_hrs_week = ?, "+
           "phone_number = ?, "+
           "clock_number = ?  "+
+          "email = ?  "+
           "where id = ?",
          params);
 
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/employee/add/{fname}/{lname}/" +
-        "{mgr}/{phone}/{bday}/{maxHr}/{clk}")
-    public String addEmployee(Model model,
-          @PathVariable("fname") String fname,
-          @PathVariable("lname") String lname,
-          @PathVariable("mgr") int mgr,
-          @PathVariable("phone") String phone,
-          @PathVariable("bday") String bday,
-          @PathVariable("maxHr") int maxHr,
-          @PathVariable("clk") int clk) throws SQLException {
+    @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
+    public String addEmployee(Model model, @RequestBody String data) throws SQLException {
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+
+      String[] params = {
+          jobject.get("firstName").getAsString(),
+          jobject.get("lastName").getAsString(),
+          jobject.get("isManager").getAsString(),
+          jobject.get("birthDate").getAsString(),
+          jobject.get("maxHrsWeek").getAsString(),
+          jobject.get("phone").getAsString(),
+          jobject.get("clock").getAsString(),
+          jobject.get("email").getAsString(),
+      };
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
-          "is_manager, birth_date, max_hrs_week, phone_number, clock_number) " +
-          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ? )",
-          fname, lname, mgr, bday, maxHr, phone, clk);
+          "is_manager, birth_date, max_hrs_week, phone_number, clock_number, email) " +
+          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ? )", params);
 
         return "jsonTemplate";
     }
-
 
 }

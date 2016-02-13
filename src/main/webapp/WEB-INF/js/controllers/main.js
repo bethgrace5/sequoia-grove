@@ -45,8 +45,6 @@ angular.module('sequoiaGroveApp')
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
 
-  // a list of position ids as keys, with the value as a list of employee ids that hold that position
-  $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
   $scope.originalTemplate = [];
@@ -62,6 +60,7 @@ angular.module('sequoiaGroveApp')
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
+  $scope.loadingMsg = "Verifying user with Application...";
 
   // container for displaying the date header
   // val 'DD-MM-YYYY' format, disp 'MMM-D' format
@@ -88,7 +87,7 @@ angular.module('sequoiaGroveApp')
   // highlight name
   $scope.highlight = false;
   // flag when set will disable all buttons, to avoid overlapping requests
-  $scope.loading = true;
+  $scope.loading = false;
 
 /************** Pure Functions **************/
 
@@ -230,6 +229,26 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // check if employee has this position
+  $scope.employeeHasPosition = function(eid, pid) {
+    if (pid === 0) {
+      return true;
+    }
+    var hasPosition = false;
+
+    // find if this employee knows the selected position
+    _.map($scope.employeeInfo, function(e) {
+      if (e.id === eid) {
+        _.map(e.positions, function(p) {
+          if (p === $scope.selectedPid) {
+            hasPosition = true;
+          }
+        })
+      }
+    });
+    return hasPosition;
+  }
+
 /************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
@@ -243,20 +262,10 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.getHasPositions = function() {
-    return $http({
-      url: '/sequoiagrove/position/has',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.hasPosition = data.hasPositions;
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining has position data: " + data);
-    });
-  }
-
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
+    $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
@@ -283,23 +292,19 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
 
-        // we were importing another week - add them to update shifts, so they can
-        // be saved for this week
-        if (_.isEqual(week, $scope.date.mon.val) == false) {
-          angular.copy($scope.originalTemplate, $scope.updateShifts);
-        }
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
   }
 
   // Get All Employees with their id
-  $scope.getEmployeeAll = function() {
+  $scope.getEmployees = function() {
+    $scope.loadingMsg = "Obtaining current employee data...";
     return $http({
-      url: '/sequoiagrove/employee/info/all',
+      url: '/sequoiagrove/employees',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.employees = data.employeeInfo;
+        $scope.employees = data.employees;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -377,28 +382,12 @@ angular.module('sequoiaGroveApp')
     // user is not logged in, redirect to login
     if ($rootScope.loggedIn == false) {
       $rootScope.lastPath = $location.path();
-      if ($location.path() != '/login') {
+      //if ($location.path() != '/login') {
         $location.path('/login');
-      }
+      //}
     }
 
     $scope.changeTab('/home');
-    $scope.setScheduleHeader();
-
-    if ($rootScope.loggingIn) {
-    }
-    $q.all(
-      [$scope.getPositions(),
-        $scope.getEmployeeAll(),
-        $scope.getScheduleTemplate($scope.date.mon.val),
-        $scope.getHasPositions()
-       ]
-     ).then(function(results) {
-        $scope.countDays(),
-        $scope.countHours(),
-        $scope.loading = false;
-        $log.debug('loading complete');
-      });
 
   }
   $scope.$on('logged in', function(event, args) {

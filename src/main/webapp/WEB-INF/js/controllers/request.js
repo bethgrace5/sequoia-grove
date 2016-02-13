@@ -12,6 +12,8 @@ angular.module('sequoiaGroveApp')
 
   $rootScope.lastPath = '/schedule';
 
+  $rootScope.lastPath = '/request';
+
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');

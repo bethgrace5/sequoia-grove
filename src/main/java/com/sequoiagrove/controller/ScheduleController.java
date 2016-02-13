@@ -21,9 +21,7 @@ import java.sql.ResultSet;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
-import com.sequoiagrove.model.Param;
 import com.sequoiagrove.model.Scheduled;
-import com.sequoiagrove.dao.DeliveryDAO;
 import com.sequoiagrove.controller.MainController;
 
 
@@ -67,7 +65,7 @@ public class ScheduleController {
     }
 
 
-  // Get current schedule template (current shifts) dd/mm/yyyy
+  // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
     public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -87,7 +85,7 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-  // delete scheduled day dd/mm/yyyy
+  // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
     public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
