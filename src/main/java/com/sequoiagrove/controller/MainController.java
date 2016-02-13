@@ -34,10 +34,4 @@ public class MainController {
         return jdbcTemplate;
     }
 
-
-    public void listHotels(){
-        int rowCount = this.jdbcTemplate.queryForObject("select count(*) from HOTEL", Integer.class);
-        System.out.println(rowCount);
-    }
-
 }

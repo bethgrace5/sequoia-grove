@@ -30,7 +30,7 @@
       </form>
     </div>
     <div class="col-sm-1">
-      <button type="button" class="btn btn-success" ng-click="addAvail()">
+      <button type="button" class="btn btn-success" ng-click="addAvailability()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
       </button>
     </div>
@@ -47,12 +47,12 @@
       </div>
       <div ng-click="setNewAvailTimes(mon.startHr, mon.startMin, mon.endHr, mon.endMin)">
         <div class="col-sm-3">
-          <span> {{formatTime(mon.startHr, mon.startMin, true)}} - {{formatTime(mon.endHr, mon.endMin, true)}} </span>
+          <span> {{formatTime(mon.start, true)}} - {{formatTime(mon.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('mon', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('mon', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -68,12 +68,12 @@
       </div>
       <div ng-click="setNewAvailTimes(tue.startHr, tue.startMin, tue.endHr, tue.endMin)">
         <div class="col-sm-3">
-          <span> {{formatTime(tue.startHr, tue.startMin, true)}} - {{formatTime(tue.endHr, tue.endMin, true)}} </span>
+          <span> {{formatTime(tue.start, true)}} - {{formatTime(tue.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('tue', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('tue', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -89,12 +89,12 @@
       </div>
       <div ng-click="setNewAvailTimes(wed.start.val, wed.end.val)">
         <div class="col-sm-3">
-          <span> {{formatTime(wed.startHr, wed.startMin, true)}} - {{formatTime(wed.endHr, wed.endMin, true)}} </span>
+          <span> {{formatTime(wed.start, true)}} - {{formatTime(wed.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('wed', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('wed', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -110,12 +110,12 @@
       </div>
       <div ng-click="setNewAvailTimes(thu.start.val, thu.end.val)">
         <div class="col-sm-3">
-          <span> {{formatTime(thu.startHr, thu.startMin, true)}} - {{formatTime(thu.endHr, thu.endMin, true)}} </span>
+          <span> {{formatTime(thu.start, true)}} - {{formatTime(thu.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('thu', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('thu', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -131,12 +131,12 @@
       </div>
       <div ng-click="setNewAvailTimes(fri.start.val, fri.end.val)">
         <div class="col-sm-3">
-          <span> {{formatTime(fri.startHr, fri.startMin, true)}} - {{formatTime(fri.endHr, fri.endMin, true)}} </span>
+          <span> {{formatTime(fri.start, true)}} - {{formatTime(fri.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('fri', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('fri', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -152,12 +152,12 @@
       </div>
       <div ng-click="setNewAvailTimes(sat.start.val, sat.end.val)">
         <div class="col-sm-3">
-          <span> {{formatTime(sat.startHr, sat.startMin, true)}} - {{formatTime(sat.endHr, sat.endMin, true)}} </span>
+          <span> {{formatTime(sat.start, true)}} - {{formatTime(sat.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('sat', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('sat', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>
@@ -173,12 +173,12 @@
       </div>
       <div ng-click="setNewAvailTimes(sun.start.val, sun.end.val)">
         <div class="col-sm-3">
-          <span> {{formatTime(sun.startHr, sun.startMin, true)}} - {{formatTime(sun.endHr, sun.endMin, true)}} </span>
+          <span> {{formatTime(sun.start, true)}} - {{formatTime(sun.end, true)}} </span>
         </div>
       </div>
       <div class="col-sm-1">
         <!-- remove availability -->
-        <button type="button" class="btn btn-danger" ng-click="remAvail('sun', $index)">
+        <button type="button" class="btn btn-danger" ng-click="removeAvailability('sun', $index)">
           <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
         </button>
       </div>

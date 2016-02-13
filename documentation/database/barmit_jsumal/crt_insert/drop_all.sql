@@ -1,11 +1,13 @@
 /* sequences */
 drop sequence BAJS_EMP_SEQ;
+drop sequence BAJS_REQUEST_SEQ;
 
 /* triggers */
 drop trigger BAJS_EMP_DELETE;
 --drop trigger BAJS_CHANGE_TID;
 drop trigger BAJS_UPDATE_TRAIN_EMP;
 drop trigger BAJS_EMP_ID_SEQ;
+drop trigger BAJS_REQUEST_ID_SEQ;
 
 /* views */
 drop view  BAJS_SCH_TEMPLATE;
@@ -14,6 +16,9 @@ drop view  BAJS_STD_EMP;
 drop view  BAJS_SCHEDULE;
 drop view  BAJS_SCH_HIST;
 drop view  BAJS_EMP_ALL_INFO;
+drop view  CRT_AVAIL.SQL
+Drop view  CRT_POSITIONS.SQL
+Drop view  CRT_HIST.SQL
 
 /* base tables */
 drop table BAJS_HOLIDAY;
@@ -34,7 +39,6 @@ drop table BAJS_POSITION;
 drop table BAJS_EMPLOYMENT_HISTORY;
 drop table BAJS_CANNOT_WORK_WITH;
 drop table BAJS_AVAILABILITY;
-drop table BAJS_EMPLOYEE;
 --drop table BAJS_DELIVERED_BY;
 --drop table BAJS_TRANSACTION;
 --drop table BAJS_INGREDIENT;
@@ -43,6 +47,8 @@ drop table BAJS_PUBLISHED_SCHEDULE;
 
 /* packages */
 drop package BAJS_PKG;
+
+drop table BAJS_EMPLOYEE;
 
 
 purge recyclebin;

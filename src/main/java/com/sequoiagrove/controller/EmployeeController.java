@@ -17,69 +17,28 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
 import org.springframework.jdbc.core.RowMapper;
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.HashMap;
 
-import com.sequoiagrove.model.EmployeeSimple;
 import com.sequoiagrove.model.Employee;
-import com.sequoiagrove.model.EmpHistory;
-import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
-import com.sequoiagrove.model.Position;
-import com.sequoiagrove.controller.ScheduleController;
 
 @Controller
 public class EmployeeController
 {
-    private HashMap<Integer, ArrayList<EmpHistory>> histMap = new HashMap<Integer, ArrayList<EmpHistory>>();
-    private HashMap<Integer, ArrayList<Availability>> availMonMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availTueMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availWedMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availThuMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availFriMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availSatMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Availability>> availSunMap = new HashMap<Integer, ArrayList<Availability>>();
-    private HashMap<Integer, ArrayList<Position>> posMap = new HashMap<Integer, ArrayList<Position>>();
-    // get all of the possible shift ids
-    @RequestMapping(value = "/employee")
-    public String getEmployee(Model model){
+
+    // Get All Employees with the availability, positions, and employment history
+    @RequestMapping(value = "/employees")
+    public String getAllEmployee(Model model) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        List<EmployeeSimple> empList = jdbcTemplate.query(
-            "select distinct name, eid, pid, title from bajs_std_emp",
-            new RowMapper<EmployeeSimple>() {
-                public EmployeeSimple mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    EmployeeSimple es = new EmployeeSimple (
-                      rs.getInt("eid"),
-                      rs.getInt("pid"),
-                      rs.getString("name"),
-                      rs.getString("title")
-                    );
-                    return es;
-                }
-        });
-        model.addAttribute("employee", empList);
-        return "jsonTemplate";
-    }
-
-    @RequestMapping(value = "/employee/info/{status}")
-    public String getAllEmployee(Model model, @PathVariable("status") String status) {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        // Get All Employees by Default
-        String queryStr = "select * from bajs_employee";
-
-        // Get only Current Employees
-        if (status.equals("current")) {
-            queryStr = "select * from bajs_employee natural join (select employee_id as id from bajs_employment_history where date_unemployed is null)";
-        }
+        String queryStr = "select * from bajs_emp_all_info";
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    int id = rs.getInt("id");
-                    WeeklyAvail emptyWeek = new WeeklyAvail();
-                    Employee es = new Employee (
-                      id,
+                    Employee employee = new Employee (
+                      rs.getInt("id"),
                       rs.getInt("max_hrs_week"),
                       rs.getInt("is_manager"),
                       rs.getInt("clock_number"),
@@ -88,203 +47,65 @@ public class EmployeeController
                       rs.getString("phone_number"),
                       rs.getString("email"),
                       rs.getDate("birth_date"),
-                      null,
-                      null,
-                      emptyWeek
-                    );
-                    return es;
+                      parseHistory(rs.getString("history")),
+                      parsePositions(rs.getString("positions")),
+                      parseAvailability(rs.getString("avail")));
+                    return employee;
                 }
         });
-
-        getEmpHistory();
-        getAvail();
-        getPositions();
-
-        // loop through all employees, and put their corresponding employment history
-        int len = empList.size();
-        for(int i=0; i<len; i++) {
-            int id = empList.get(i).getId();
-            empList.get(i).setHistory(histMap.get(id));
-            empList.get(i).setPositions(posMap.get(id));
-            empList.get(i).getAvail().setMon(availMonMap.get(id));
-            empList.get(i).getAvail().setTue(availTueMap.get(id));
-            empList.get(i).getAvail().setWed(availWedMap.get(id));
-            empList.get(i).getAvail().setThu(availThuMap.get(id));
-            empList.get(i).getAvail().setFri(availFriMap.get(id));
-            empList.get(i).getAvail().setSat(availSatMap.get(id));
-            empList.get(i).getAvail().setSun(availSunMap.get(id));
-        }
-        histMap.clear();
-        availMonMap.clear();
-        availTueMap.clear();
-        availWedMap.clear();
-        availThuMap.clear();
-        availFriMap.clear();
-        availSatMap.clear();
-        availSunMap.clear();
-        posMap.clear();
-
-        /*for all emp, find emp_id in hashmap and insert corresponding data*/
-        model.addAttribute("employeeInfo", empList);
+        model.addAttribute("employees", empList);
         return "jsonTemplate";
     }
 
-    // Populate Employment History Hash Map with all employees and their history
-    public void getEmpHistory(){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    // change availability string to java object
+    public WeeklyAvail parseAvailability(String avail) {
 
-        jdbcTemplate.query(
-            "select distinct employee_id, date_employed, date_unemployed from bajs_emp_all_info",
-            new RowMapper<EmpHistory>() {
-                public EmpHistory mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Integer id = rs.getInt("employee_id");
-                    EmpHistory hist = new EmpHistory (
-                      rs.getDate("date_employed"),
-                      rs.getDate("date_unemployed")
-                    );
-                    if(histMap.containsKey(id)) { // key exists, add elem
-                        histMap.get(id).add(hist);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<EmpHistory> tempList = new ArrayList<EmpHistory>();
-                        tempList.add(hist);
-                        histMap.put(id, tempList);
-                    }
-                    return hist;
-                    }
-        });
+      WeeklyAvail entireAvail = new WeeklyAvail();
+
+      // split string into array with one string per day
+      String[] weekdays = avail.split("\\s+");
+
+      // for each day, add it to the weekly availability
+      for (String d : weekdays) {
+        String[] day = d.split(",");
+
+        for(int i=1; i<day.length; i++) {
+          String[] times = day[i].split(":");
+          entireAvail.add(day[0], times[0], times[1]);
+        }
+      }
+      return entireAvail;
     }
 
-    // Populate Availability Hash Map with all employees and their availability
-    public void getAvail(){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    // change History string to list of java objects
+    public List<Duration> parseHistory(String hist) {
+      List<Duration> historyList = new ArrayList<Duration>();
 
-        jdbcTemplate.query(
-            "select * from bajs_availability",
-            new RowMapper<Availability>() {
-            public Availability mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Integer id = rs.getInt("employee_id");
-                String day = rs.getString("day");
-                String startt = ScheduleController.intToLenFourString(rs.getInt("startt"));
-                String endt = ScheduleController.intToLenFourString(rs.getInt("endt"));
-                int starthr=0, startmin=0, endhr=0, endmin=0;
-                if (startt.length() == 4) {
-                    starthr = Integer.parseInt(startt.substring(0,2));
-                    startmin = Integer.parseInt(startt.substring(2,4));
-                }
-                if (endt.length() == 4) {
-                    endhr = Integer.parseInt(endt.substring(0,2));
-                    endmin = Integer.parseInt(endt.substring(2,4));
-                }
-                Availability avail = new Availability (
-                    starthr, startmin, endhr, endmin
-                );
-                if (day.equals("mon")) {
-                    if (availMonMap.containsKey(id)) { // key exists, add elem
-                        availMonMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availMonMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("tue")) {
-                    if (availTueMap.containsKey(id)) { // key exists, add elem
-                        availTueMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availTueMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("wed")) {
-                    if (availWedMap.containsKey(id)) { // key exists, add elem
-                        availWedMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availWedMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("thu")) {
-                    if (availThuMap.containsKey(id)) { // key exists, add elem
-                        availThuMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availThuMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("fri")) {
-                    if (availFriMap.containsKey(id)) { // key exists, add elem
-                        availFriMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availFriMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("sat")) {
-                    if (availSatMap.containsKey(id)) { // key exists, add elem
-                        availSatMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availSatMap.put(id, tempList);
-                    }
-                }
-                else if (day.equals("sun")) {
-                    if (availSunMap.containsKey(id)) { // key exists, add elem
-                        availSunMap.get(id).add(avail);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Availability> tempList = new ArrayList<Availability>();
-                        tempList.add(avail);
-                        availSunMap.put(id, tempList);
-                    }
-                }
-                return avail;
-            }
-        });
+      String[] histories = hist.split(",");
+      for (String h : histories) {
+        String[] times = h.split(":");
+        if(times.length == 2) {
+          historyList.add(new Duration(times[0], times[1]));
+        }
+        else {
+          historyList.add(new Duration(times[0]));
+        }
+      }
+      return historyList;
     }
 
-    // Populate Positions Hash Map with all employees and their positions
-    public void getPositions(){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        jdbcTemplate.query(
-            "select distinct employee_id, position_id, title, location from bajs_emp_all_info where position_id is not null",
-            new RowMapper<Position>() {
-                public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Integer id = rs.getInt("employee_id");
-                    Position pos = new Position (
-                      rs.getInt("position_id"),
-                      rs.getString("title"),
-                      rs.getString("location")
-                    );
-                    if(posMap.containsKey(id)) { // key exists, add elem
-                        posMap.get(id).add(pos);
-                    }
-                    else { // key does not exist, add new one plus 1st elem
-                        ArrayList<Position> tempList = new ArrayList<Position>();
-                        tempList.add(pos);
-                        posMap.put(id, tempList);
-                    }
-                    return pos;
-                    }
-        });
+    // change Position string to list of java objects
+    public List<String> parsePositions(String pos) {
+      if (pos == null) {
+        return new ArrayList<String>();
+      }
+      return new ArrayList<String>(Arrays.asList(pos.split(",")));
     }
 
     @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
-    public String updateEmployee(Model model, @RequestBody String postLoad) throws SQLException {
+    public String updateEmployee(Model model, @RequestBody String data) throws SQLException {
 
-      JsonElement jelement = new JsonParser().parse(postLoad);
+      JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
       String[] params = {
@@ -295,6 +116,7 @@ public class EmployeeController
           jobject.get("maxHrsWeek").getAsString(),
           jobject.get("phone").getAsString(),
           jobject.get("clock").getAsString(),
+          jobject.get("email").getAsString(),
           jobject.get("id").getAsString()
       };
 
@@ -306,31 +128,35 @@ public class EmployeeController
           "max_hrs_week = ?, "+
           "phone_number = ?, "+
           "clock_number = ?  "+
+          "email = ?  "+
           "where id = ?",
          params);
 
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/employee/add/{fname}/{lname}/" +
-        "{mgr}/{phone}/{bday}/{maxHr}/{clk}")
-    public String addEmployee(Model model,
-          @PathVariable("fname") String fname,
-          @PathVariable("lname") String lname,
-          @PathVariable("mgr") int mgr,
-          @PathVariable("phone") String phone,
-          @PathVariable("bday") String bday,
-          @PathVariable("maxHr") int maxHr,
-          @PathVariable("clk") int clk) throws SQLException {
+    @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
+    public String addEmployee(Model model, @RequestBody String data) throws SQLException {
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+
+      String[] params = {
+          jobject.get("firstName").getAsString(),
+          jobject.get("lastName").getAsString(),
+          jobject.get("isManager").getAsString(),
+          jobject.get("birthDate").getAsString(),
+          jobject.get("maxHrsWeek").getAsString(),
+          jobject.get("phone").getAsString(),
+          jobject.get("clock").getAsString(),
+          jobject.get("email").getAsString(),
+      };
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
-          "is_manager, birth_date, max_hrs_week, phone_number, clock_number) " +
-          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ? )", 
-          fname, lname, mgr, bday, maxHr, phone, clk);
+          "is_manager, birth_date, max_hrs_week, phone_number, clock_number, email) " +
+          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ? )", params);
 
         return "jsonTemplate";
     }
-
 
 }
