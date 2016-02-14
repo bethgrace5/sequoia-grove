@@ -203,4 +203,9 @@ angular.module('sequoiaGroveApp')
         });
     }
 
+    // reset selected employee
+    $scope.clearEmployee = function() {
+      $scope.selectedEmployee = {'id':0};
+    }
+
 });
