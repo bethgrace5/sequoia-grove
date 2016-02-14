@@ -38,7 +38,7 @@
     insert into BAJS_NEW_SHIFT values( 25, 8, 'Support Staff',        to_date('05/01/2015', 'mm/dd/yyyy'), null, 2, 2);
 
     /* evening kitchen NEW_SHIFTs */
-    insert into BAJS_NEW_SHIFT values( 19, 7, 'Kitchen Sup or Staff', to_date('05/01/2015', 'mm/dd/yyyy'), null,14,14);
+    insert into BAJS_NEW_SHIFT values( 19, 4, 'Kitchen Sup or Staff', to_date('05/01/2015', 'mm/dd/yyyy'), null,14,14);
     insert into BAJS_NEW_SHIFT values( 20, 6, 'Grill',                to_date('05/01/2015', 'mm/dd/yyyy'), null,15,15);
     insert into BAJS_NEW_SHIFT values( 21, 7, 'Salads',               to_date('05/01/2015', 'mm/dd/yyyy'), null,16,16);
     insert into BAJS_NEW_SHIFT values( 22, 8, 'Support Staff',        to_date('05/01/2015', 'mm/dd/yyyy'), null,15,15);

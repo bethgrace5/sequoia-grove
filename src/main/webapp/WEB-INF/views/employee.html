@@ -62,6 +62,7 @@
           <!-- Unemploy this current employee -->
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === true"
+            ng-click="deactivateEmployee()"
             class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstName}}
           </button>
           <!-- Employ this past employee -->

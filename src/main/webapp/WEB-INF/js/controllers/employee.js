@@ -73,6 +73,11 @@ angular.module('sequoiaGroveApp')
       }
     }
 
+    // reset selected employee
+    $scope.clearEmployee = function() {
+      $scope.selectedEmployee = {'id':0};
+    }
+
 /************** HTTP Request Functions **************/
 
     // add a new availability time for an employee
@@ -222,9 +227,16 @@ angular.module('sequoiaGroveApp')
         });
     }
 
-    // reset selected employee
-    $scope.clearEmployee = function() {
-      $scope.selectedEmployee = {'id':0};
+    $scope.deactivateEmployee = function() {
+      $http({
+        url: '/sequoiagrove/employee/deactivate/',
+        method: "POST",
+        data: {'id': $scope.selectedEmployee.id}
+      }).success(function(data, status) {
+      }).error(function(data, status) {
+        $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
+      });
+
     }
 
 });

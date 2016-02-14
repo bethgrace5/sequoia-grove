@@ -167,4 +167,27 @@ public class EmployeeController
         return "jsonTemplate";
     }
 
+    @RequestMapping(value = "/employee/deactivate", method=RequestMethod.POST)
+    public String deactivateEmployee(Model model, @RequestBody String data) throws SQLException {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      String id = jobject.get("id").getAsString();
+
+      Object[] params = new Object[] { id };
+
+      // make sure this employee is current
+      int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
+          " where employee_id = ? and date_unemployed is null", params, Integer.class);
+
+      // this was a current employee, set date unemployed to today
+      if (count > 0){
+        jdbcTemplate.update(" update bajs_employment_history " +
+            "set date_unemployed = (select current_date from dual) " +
+            "where employee_id = ? and date_unemployed is null", id);
+      }
+
+        return "jsonTemplate";
+    }
+
 }
