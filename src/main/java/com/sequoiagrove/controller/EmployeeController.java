@@ -49,10 +49,18 @@ public class EmployeeController
                       rs.getDate("birth_date"),
                       parseHistory(rs.getString("history")),
                       parsePositions(rs.getString("positions")),
-                      parseAvailability(rs.getString("avail")));
+                      parseAvailability(rs.getString("avail")),
+                      false);
+
+                      // if the history end is an empty string, employee is current
+                      employee.setIsCurrent(
+                        employee.getHistory()
+                          .get(employee.getHistory().size() - 1)
+                          .getEnd() == ""
+                      );
                     return employee;
                 }
-        });
+            });
         model.addAttribute("employees", empList);
         return "jsonTemplate";
     }
