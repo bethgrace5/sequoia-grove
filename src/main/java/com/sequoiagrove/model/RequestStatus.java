@@ -26,22 +26,22 @@ public class RequestStatus {
     public void setRequestID(int requestID){
       this.requestID = requestID;
     }
-    public int getRequestID(int id){
+    public int getRequestID(int requestID){
       return requestID;
     }
 
-    public void setEmployeeID(int requestID) {
+    public void setEmployeeID(int employeeID) {
         this.employeeID = employeeID;
     }
     public int getEmployeeID() {
         return employeeID;
     }
 
-    public void setApproverID(int requestID){
-      this.requestID = requestID;
+    public void setApproverID(int approverID){
+      this.approverID= approverID;
     }
     public int getApproverID(){
-      return requestID;
+      return approverID;
     }
 
     public void setStatus(String status){

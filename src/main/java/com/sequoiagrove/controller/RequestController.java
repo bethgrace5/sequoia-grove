@@ -77,15 +77,13 @@ public class RequestController{
               return es;
             }
           });
-      model.addAttribute("request", requestList);
+      model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
     } 
 
     @RequestMapping(value = "/request/get/current/employee/{eid}")
       public String getCurrentEmployeeRequestl(Model model,
           @PathVariable("eid") int eid) throws SQLException {
-            Integer eidTest = eid;
-
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
               "select * from bajs_requests_vacation " +
@@ -93,9 +91,9 @@ public class RequestController{
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
                   RequestStatus es = new RequestStatus(
-                    rs.getInt("id"),
+                    readAndPut(rs.getInt("id")), 
                     rs.getInt("requested_by"),
-                    rs.getInt("responded_by"),
+                    checkApprover(rs.getInt("responded_by")),
                     checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
                     rs.getString("start_date_time"),
                     rs.getString("end_date_time")
@@ -107,14 +105,61 @@ public class RequestController{
             return "jsonTemplate";
       }
 
-    public String checkStatus(Integer responder, boolean approval){
-      System.out.println(responder);
-      if (responder == null | responder == 0) return "Pending";
-      else{
-        if(approval == true) return "Approved";
-        else return "Denied";
-      }
-    }
+     @RequestMapping(value = "/request/accept/{eid}")
+      public String changeRequest(Model model, 
+          @PathVariable("eid") int eid) throws SQLException{
+        //Make Sure request ID is there too...
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        jdbcTemplate.update("update bajs_requests_vacation " +
+            "set " +
+            "is_approved = 1 " +
+            "where requested_by = " + eid
+            );
+        return "jsonTemplate";
+      } 
+
+     @RequestMapping(value = "/request/accept/{requestID}/{approverID}/{is_approve}")
+       public String updateRequest(Model model, 
+           @PathVariable("requestID") int requestID,
+           @PathVariable("approverID") int approverID,
+           @PathVariable("is_approve") boolean is_approve) throws SQLException{
+         //Make Sure request ID is there too...
+
+         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+         jdbcTemplate.update("update bajs_requests_vacation " +
+             "set " +
+             "is_approved  = " + is_approve +
+             "responded_by = " + approverID +
+             "where id = " + requestID
+             );
+         return "jsonTemplate";
+       } 
+
+
+     public String checkStatus(Integer responder, boolean approval){
+       // System.out.println(responder + " and request is " +  approval);
+       if (responder == null | responder == 0) return "Pending";
+       else{
+         if(approval == true) return "Approved";
+         else return "Denied";
+       }
+     }
+     public int checkApprover(Integer responder){
+       int test = 0;
+       if(responder == null || responder == 0){
+         // System.out.println("ApproverID: " + responder + " does not exist");
+         return responder;
+       }
+       else{
+         // System.out.println(responder + "does exist");
+       }
+       return 0;
+     }
+     public int readAndPut(int testIn){
+       System.out.println("Request ID: " + testIn);
+       return testIn;
+     }
 
 }
 

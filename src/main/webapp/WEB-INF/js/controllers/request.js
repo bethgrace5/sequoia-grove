@@ -72,10 +72,34 @@ angular.module('sequoiaGroveApp')
 
   //Get Current User Requests
   $scope.getCurrentEmployeeRequest = function() {
-    // remove availability from database
     $http({
       url: '/sequoiagrove/request/get/current/employee/'+
        $rootScope.loggedInUser.id,
+      method: "POST"
+    }).success(function(data, status) {
+      $log.debug(data);
+    });
+  }
+
+  //Approve Request
+  $scope.approveRequest= function() {
+    $http({
+      url: '/sequoiagrove/request/accept/'+
+       $rootScope.loggedInUser.id,
+      method: "POST"
+    }).success(function(data, status) {
+      $log.debug(data);
+    });
+  }
+
+  //Change Request
+  $scope.changeRequest= function() {
+    $approverID = 13; //This will be only temporary. 
+    $requestID= 17; //This will be only temporary. 
+    $is_approve = 1;
+    $http({
+      url: '/sequoiagrove/request/' + 
+      $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
       $log.debug(data);
