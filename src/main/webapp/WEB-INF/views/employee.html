@@ -4,6 +4,23 @@
     <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <!-- Filter by User, Location, or Position -->
+          <div class="dropdown pull-right" dropdown is-open=true>
+            <button type="button"
+            ng-disabled = "loading"
+              id="employeeDropdown"
+              class="btn btn-default"
+              data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true">
+              {{typeFilter}}<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" rol="menu" arial-labelledby="employeeDropdown">
+              <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
+              <li role="separator" class="divider"></li>
+              <li role="menuitem"><a ng-click="changeType('current')">Current</a></li>
+              <li role="menuitem"><a ng-click="changeType('past')">Past</a></li>
+            </ul>
+          </div>
           <p class="lead emp-header">Employees</p>
         </div>
         <div class="panel-body">

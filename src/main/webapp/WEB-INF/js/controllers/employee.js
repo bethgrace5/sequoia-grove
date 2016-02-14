@@ -25,8 +25,27 @@ angular.module('sequoiaGroveApp')
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
+    $scope.typeFilter = 'current';
 
 /************** Pure Functions **************/
+
+    // switch filter of employee list type for all, current or past
+    $scope.changeType = function(type) {
+      $scope.typeFilter = type;
+    }
+
+    // filter employee list by all, current, or past employees
+    $scope.filterByType = function(isCurrent) {
+      if ($scope.typeFilter === 'all') {
+        return true;
+      }
+      else if ($scope.typeFilter === 'current') {
+        return isCurrent;
+      }
+      else if ($scope.typeFilter === 'past') {
+        return !isCurrent;
+      }
+    }
 
     $scope.formatEmploymentHistory = function(dateString) {
       if (dateString=='') {

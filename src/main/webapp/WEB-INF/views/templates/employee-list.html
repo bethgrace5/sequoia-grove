@@ -15,13 +15,14 @@
       </div>
     </button>
   <div ng-repeat="e in employees | filter : empSearch">
-    <button ng-click="selectEmployee(e.id)"
-      class="list-group-item btn btn-default btn-block"
-      ng-class="{'active': selectedEmployee.id===e.id}">
-      <div class="pull-left">
-        {{e.lastName}}, {{e.firstName}}
-        {{selectedEmployee.id === e.id}}
-      </div>
-    </button>
+    <div ng-show="filterByType(e.isCurrent)">
+      <button ng-click="selectEmployee(e.id)"
+        class="list-group-item btn btn-default btn-block"
+        ng-class="{'active': selectedEmployee.id===e.id}">
+        <div class="pull-left">
+          {{::e.lastName}}, {{::e.firstName}}
+        </div>
+      </button>
+    </div>
   </div>
 </div>
