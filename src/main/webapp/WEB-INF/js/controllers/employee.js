@@ -236,7 +236,17 @@ angular.module('sequoiaGroveApp')
       }).error(function(data, status) {
         $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
       });
+    }
 
+    $scope.activateEmployee = function() {
+      $http({
+        url: '/sequoiagrove/employee/activate/',
+        method: "POST",
+        data: {'id': $scope.selectedEmployee.id}
+      }).success(function(data, status) {
+      }).error(function(data, status) {
+        $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
+      });
     }
 
 });

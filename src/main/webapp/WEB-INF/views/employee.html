@@ -68,6 +68,7 @@
           <!-- Employ this past employee -->
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === false"
+            ng-click="activateEmployee()"
             class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstName}}
           </button>
           <p class="lead emp-header">Employment History</p>

@@ -167,6 +167,7 @@ public class EmployeeController
         return "jsonTemplate";
     }
 
+    // Deactivate (un-employ) an employee
     @RequestMapping(value = "/employee/deactivate", method=RequestMethod.POST)
     public String deactivateEmployee(Model model, @RequestBody String data) throws SQLException {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -186,7 +187,31 @@ public class EmployeeController
             "set date_unemployed = (select current_date from dual) " +
             "where employee_id = ? and date_unemployed is null", id);
       }
+        return "jsonTemplate";
+    }
 
+    // Activate (re-employ) an employee
+    @RequestMapping(value = "/employee/activate", method=RequestMethod.POST)
+    public String activateEmployee(Model model, @RequestBody String data) throws SQLException {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      String id = jobject.get("id").getAsString();
+
+      Object[] params = new Object[] { id };
+
+      // we are assuming the employee id exists. Might need to add a query to double check
+      // "select count(*) from bajs_employee where id = ?"
+
+      // see if this employee current
+      int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
+          " where employee_id = ? and date_unemployed is null", params, Integer.class);
+
+      // this was NOT a current employee, add a new employment history
+      if (count <= 0){
+        jdbcTemplate.update(" insert into bajs_employment_history " +
+            "values( ?, (select current_date from dual), null) ", id);
+      }
         return "jsonTemplate";
     }
 
