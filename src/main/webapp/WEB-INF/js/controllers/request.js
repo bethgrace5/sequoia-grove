@@ -134,5 +134,15 @@ angular.module('sequoiaGroveApp')
   { employee: "Blue",   startDate: "May 15", endDate: "May 15", totalDays: "1", status: "denied"  }
   ];
 
+//---------- Initialize Testing Extreme ----------------\\
+  $scope.init = function(){
+    $scope.getRequests();
+  }
+  $scope.init();
+
+  //
+
+
+
 
   });
