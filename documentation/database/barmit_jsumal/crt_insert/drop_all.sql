@@ -39,7 +39,6 @@ drop table BAJS_POSITION;
 drop table BAJS_EMPLOYMENT_HISTORY;
 drop table BAJS_CANNOT_WORK_WITH;
 drop table BAJS_AVAILABILITY;
-drop table BAJS_EMPLOYEE;
 --drop table BAJS_DELIVERED_BY;
 --drop table BAJS_TRANSACTION;
 --drop table BAJS_INGREDIENT;
@@ -48,6 +47,8 @@ drop table BAJS_PUBLISHED_SCHEDULE;
 
 /* packages */
 drop package BAJS_PKG;
+
+drop table BAJS_EMPLOYEE;
 
 
 purge recyclebin;

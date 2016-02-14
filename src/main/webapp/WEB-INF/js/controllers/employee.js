@@ -12,12 +12,13 @@ angular.module('sequoiaGroveApp')
 
 /************** Login Redirect, Containers and UI settings **************/
 
+    $rootScope.lastPath = '/employee';
+
     // user is not logged in
     if ($rootScope.loggedIn == false) {
       $location.path('/login');
     }
 
-    $rootScope.lastPath = '/schedule';
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {id:0};
@@ -56,7 +57,7 @@ angular.module('sequoiaGroveApp')
 /************** HTTP Request Functions **************/
 
     // add a new availability time for an employee
-    $scope.addAvail = function() {
+    $scope.addAvailability = function() {
       // guard against double clicking
       if ($scope.saving) {
         return;
@@ -67,72 +68,69 @@ angular.module('sequoiaGroveApp')
         'eid':$scope.selectedEmployee.id,
         'day': $scope.newAvail.day,
         'start': $scope.newAvail.start.val,
-        'end': $scope.newAvail.start.val
+        'end': $scope.newAvail.end.val
       }
 
       // make sure all fields are filled in
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
+        $log.debug(avail);
         $http({
-            url: '/sequoiagrove/avail/add/'+
-                avail.eid + '/' + avail.day + '/' + avail.start + '/' + avail.end,
-            method: "POST"
+          url: '/sequoiagrove/avail/add',
+          method: "POST",
+          data: avail
         }).success(function(data, status) {
+          $log.debug(data, status);
           // update front end
-          $scope.selectedEmployee.avail[day].push(
+          $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
+        }).error(function(data, status) {
+          $log.debug(data, status);
         });
       }
     }
 
+    $scope.getPositionTitle = function(pid) {
+      var title = "";
+      _.map($scope.positions, function(p) {
+      if (p.id === parseInt(pid)) {
+          title = p.title;
+        }
+      });
+      return title;
+    }
+
     // add a new position for an employee
-    $scope.addPos = function() {
+    $scope.addPosition = function() {
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
-        var pos = $scope.newPos.title;
+      var pid = $scope.newPos.id;
+      var obj = { 'pid':pid, 'eid':$scope.selectedEmployee.id };
+      // reset input
+      $scope.newPos = {};
 
-        // make sure all fields are filled in
-        if (pos!='') {
-            // reset input
-            $scope.newPos = {};
-
-            // check if employee does not already have position
-            var empPosLen = $scope.selectedEmployee.positions.length;
-            for (var i = 0; i < empPosLen; i++) {
-                if ($scope.selectedEmployee.positions[i].title==pos)
-                    return;
-            }
-
-            var eid = $scope.selectedEmployee.id;
-            var pid;
-            var len = $scope.positions.length;
-            for (var i = 0; i < len; i++) {
-                if ($scope.positions[i].title==pos) {
-                    pid = $scope.positions[i].id;
-                }
-            }
-
-            var posObj = {id:pid, title:pos, "location":null};
-            // send new position to back end
-            $http({
-                url: '/sequoiagrove/position/add/'+
-                    eid + '/' + pid + '/' +
-                    moment().format("DD-MM-YYYY"),
-                method: "POST"
-            }).success(function(data, status) {
-              $scope.saving = false;
-              // update front end
-              $scope.selectedEmployee.positions.push(posObj);
-            });
-        }
+      if ($scope.employeeHasPosition(obj.eid, pid) === false) {
+        // send new position to back end
+        $http({ 
+          url: '/sequoiagrove/position/add/', 
+          method: "POST", 
+          data: obj
+        }).success(function(data, status, headers, config) {
+            $scope.saving = false;
+            // update front end
+            $scope.selectedEmployee.positions.push(pid);
+        }).error(function(data, status) {
+          $log.debug(status, 'failed to add position(', pid, ') for employee(', obj.eid, ')');
+        });
+      }
     }
 
     // remove an availability for an employee
-    $scope.remAvail = function(day, index) {
+    $scope.removeAvailability = function(day, index) {
       // guard against double clicking
       if ($scope.saving) {
         return;
@@ -152,45 +150,57 @@ angular.module('sequoiaGroveApp')
         });
     }
 
-    $scope.remPos = function(index) {
+    $scope.removePosition = function(pid) {
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
-        var eid = $scope.selectedEmployee.id;
-        var title = $scope.selectedEmployee.positions[index].title;
-        var pid;
-        var len = $scope.positions.length;
-        for (var i = 0; i < len; i++) {
-            if ($scope.positions[i].title==title) {
-                pid = $scope.positions[i].id;
-            }
-        }
+      var eid = $scope.selectedEmployee.id;
 
-        // remove position from back end
-        $http({
-            url: '/sequoiagrove/position/remove/'+
-                eid + '/' + pid + '/' +
-                moment().format("DD-MM-YYYY"),
-            method: "POST"
-        }).success(function(data, status) {
-          // update front end
-          $scope.selectedEmployee.positions.splice(index, 1);
-          $scope.saving = false;
-        })
+      // remove the position from the employee (front end)
+      $scope.employees = _.map($scope.employees, function(e) {
+        if (parseInt(e.id) === parseInt(eid)) {
+          e.positions = _.reject(e.positions, function(id) {
+            return parseInt(id) === parseInt(pid);
+          });
+        }
+        return e;
+      });
+
+      // remove position from the employee (back end)
+      var obj = { 'pid':pid, 'eid':eid };
+      $http({
+        url: '/sequoiagrove/position/remove/',
+        method: "POST",
+        data: obj
+      }).success(function(data, status) {
+        $scope.saving = false;
+      }).error(function(data, status) {
+        $log.debug('error removing position',pid,'from',eid);
+      });
     }
 
     $scope.updateEmployee = function() {
+      $scope.selectedEmployee.isManager = "1";
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
-      $http.post("/sequoiagrove/employee/update", $scope.selectedEmployee).
+      var action = "update";
+      if ($scope.selectedEmployee.id === 0) {
+        action = "add"
+        // TODO make it so a new employee can be added - there are 
+        // lots of checks that need to be made before selectedEmployee can
+        // be sent to the back end, for now, disallow new employee additions
+        return;
+      }
+
+      $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee).
         success(function(data, status){
           $scope.saving = false;
         });
     }
 
-  });
+});
