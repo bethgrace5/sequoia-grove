@@ -139,9 +139,9 @@ angular.module('sequoiaGroveApp')
 
       if ($scope.employeeHasPosition(obj.eid, pid) === false) {
         // send new position to back end
-        $http({ 
-          url: '/sequoiagrove/position/add/', 
-          method: "POST", 
+        $http({
+          url: '/sequoiagrove/position/add/',
+          method: "POST",
           data: obj
         }).success(function(data, status, headers, config) {
             $scope.saving = false;
@@ -215,7 +215,7 @@ angular.module('sequoiaGroveApp')
       var action = "update";
       if ($scope.selectedEmployee.id === 0) {
         action = "add"
-        // TODO make it so a new employee can be added - there are 
+        // TODO make it so a new employee can be added - there are
         // lots of checks that need to be made before selectedEmployee can
         // be sent to the back end, for now, disallow new employee additions
         return;
@@ -227,23 +227,51 @@ angular.module('sequoiaGroveApp')
         });
     }
 
+    // Deactivate (un-employ) an employee
     $scope.deactivateEmployee = function() {
       $http({
         url: '/sequoiagrove/employee/deactivate/',
         method: "POST",
         data: {'id': $scope.selectedEmployee.id}
       }).success(function(data, status) {
+
+        // update UI with change
+        $scope.employees = _.map($scope.employees, function(e) {
+          if(e.id === $scope.selectedEmployee.id) {
+            e.isCurrent = false;
+            e.history = _.map(e.history, function(h) {
+              if(h.end === '') {
+                h.end = moment().format('MM-DD-YYYY');
+              }
+              return h;
+            });
+          }
+          return e;
+        });
+
       }).error(function(data, status) {
         $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
       });
     }
 
+    // Activate (re-employ) an employee
     $scope.activateEmployee = function() {
       $http({
         url: '/sequoiagrove/employee/activate/',
         method: "POST",
         data: {'id': $scope.selectedEmployee.id}
       }).success(function(data, status) {
+
+        // update UI with change
+        $scope.employees = _.map($scope.employees, function(e) {
+          if(e.id === $scope.selectedEmployee.id) {
+            e.isCurrent = true;
+            e.history = _.union(e.history,
+              [{'start': moment().format('MM-DD-YYYY'), 'end':''}])
+          }
+          return e;
+        });
+
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });
