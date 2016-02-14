@@ -26,7 +26,7 @@ public class RequestStatus {
     public void setRequestID(int requestID){
       this.requestID = requestID;
     }
-    public int getRequestID(int requestID){
+    public int getRequestID(){
       return requestID;
     }
 
