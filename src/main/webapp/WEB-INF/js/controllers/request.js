@@ -56,10 +56,10 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  //Get Requets Template
+  //Get All Request
   $scope.getRequests = function() {
     $http({
-      url: '/sequoiagrove/request/get/',
+      url: '/sequoiagrove/request/get',
       method: "GET"
     }).success(function (data, status, headers, config) {
         $log.debug(data);
@@ -67,6 +67,22 @@ angular.module('sequoiaGroveApp')
         $log.error(status + " Error obtaining position data: " + data);
     });
   }
+
+  //Get Request that are pending
+  $scope.pendingRequests;
+  $scope.getPendingRequests = function() {
+    $http({
+      url: '/sequoiagrove/request/get/pending',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $log.debug("Pending Requests");
+        $scope.pendingRequests = data.requestStatus;
+        $log.debug($scope.pendingRequests);
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
 
   //Get Current User Requests
   $scope.userRequests;
@@ -144,6 +160,7 @@ angular.module('sequoiaGroveApp')
     $log.debug($scope.previousRequests);
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getCurrentEmployeeRequest();
+    $scope.getPendingRequests();
   }
   $scope.init();
 

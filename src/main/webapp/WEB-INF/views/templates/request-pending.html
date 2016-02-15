@@ -21,11 +21,11 @@
     </div>
 </div>
 
-<div  ng-repeat="request in previousRequests">
+<div  ng-repeat="request in pendingRequests">
     <br/>
     <div class="row">
         <div class="col-sm-1">
-            <p> {{request.employee}} </p>
+            <p> {{request.employeeID}} </p>
         </div>
         <div class="col-sm-2">
             <p> {{request.startDate}} </p>
@@ -34,7 +34,7 @@
             <p> {{request.endDate}} </p>
         </div>
         <div class="col-sm-1">
-            <p> {{request.totalDays}} </p>
+            <p> {{totalDays(startDate, endDate)}} </p>
         </div>
         <div class="col-sm-2">
             <button class="btn btn-success">

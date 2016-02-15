@@ -81,6 +81,31 @@ public class RequestController{
       return "jsonTemplate";
     } 
 
+  @RequestMapping(value = "/request/get/pending")
+    public String getPendingRequest(Model model){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      //$$hash key gets return??? 
+      List<RequestStatus> requestList = jdbcTemplate.query(
+          "select * from bajs_requests_vacation "+
+          "where responded_by = 0 OR responded_by IS NULL AND "+
+          " is_approved = 0",
+          new RowMapper<RequestStatus>() {
+            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+              RequestStatus es = new RequestStatus(
+                rs.getInt("id"),
+                rs.getInt("requested_by"),
+                rs.getInt("responded_by"),
+                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
+                rs.getString("start_date_time"),
+                rs.getString("end_date_time")
+                );
+              return es;
+            }
+          });
+      model.addAttribute("requestStatus", requestList);
+      return "jsonTemplate";
+    } 
+
     @RequestMapping(value = "/request/get/current/employee/{eid}")
       public String getCurrentEmployeeRequestl(Model model,
           @PathVariable("eid") int eid) throws SQLException {
