@@ -79,6 +79,10 @@ angular.module('sequoiaGroveApp', [
       $compileProvider.debugInfoEnabled(true);
 
   }).
-  run (function($rootScope, $injector, $location, $log) {
+  run (function($rootScope, $injector, $location, $log, localStorageService) {
+    //localStorageService.set('auth_token', 'tok');
+
+    //$log.debug(localStorageService.get('auth_token'));
+
     $location.path( "/login" );
   });

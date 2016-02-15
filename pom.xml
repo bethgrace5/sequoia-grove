@@ -136,6 +136,12 @@
           <version>1.7.13</version>
         </dependency>
 
+        <!-- JSON web token for Java -->
+        <dependency>
+          <groupId>io.jsonwebtoken</groupId>
+          <artifactId>jjwt</artifactId>
+          <version>0.6.0</version>
+        </dependency>
 
     </dependencies>
     <build>

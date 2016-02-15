@@ -1,18 +1,19 @@
 'use strict';
 
 // Factory to inject authorization token with each request sent
-angular.module('sequoiaGroveApp')
-    .factory('authTokenInterceptor', ['$log', function ($http, $log, $scope, $rootScope, $location) {
+angular.module('sequoiaGroveApp').factory('authTokenInterceptor', function ($log, localStorageService) {
+
   var tokenInjector = {
     request: function(config) {
-      config.headers['Authorization'] = 'setting auth in interceptor';
+      // put the token from local storage
+      config.headers['Authorization'] = localStorageService.get('auth_token');
       return config;
     }
   }
   return tokenInjector
-}]);
+});
 
 // add interceptor to $httpProvider
-angular.module('sequoiaGroveApp').config(['$httpProvider', function($httpProvider) {
+angular.module('sequoiaGroveApp').config(function($httpProvider) {
   $httpProvider.interceptors.push('authTokenInterceptor');
-}]);
+});

@@ -15,6 +15,7 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $q,
+        localStorageService,
         Persona){
     $rootScope.loggedIn = false;
     $rootScope.userNotRegistered = false;
@@ -118,6 +119,7 @@ angular.module('sequoiaGroveApp')
             $rootScope.loggedInUser = data.user;
             $rootScope.loggedIn = true;
             $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
+            localStorageService.set('auth_token', data.auth_token);
 
             // then call function to load all required data and redirect to home
             $scope.initializeData();
