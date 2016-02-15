@@ -69,13 +69,15 @@ angular.module('sequoiaGroveApp')
   }
 
   //Get Current User Requests
+  $scope.userRequests;
   $scope.getCurrentEmployeeRequest = function() {
     $http({
       url: '/sequoiagrove/request/get/current/employee/'+
        $rootScope.loggedInUser.id,
       method: "POST"
     }).success(function(data, status) {
-      $log.debug(data);
+      $scope.userRequests = data.request;
+      $log.debug($scope.userRequests);
     });
   }
 
@@ -99,6 +101,12 @@ angular.module('sequoiaGroveApp')
     }).success(function(data, status) {
       $log.debug(data);
     });
+  }
+
+  $scope.totalDays = function(a, b){
+    var dog = moment(a);
+    var cool = moment(b)
+    return cool.diff(dog, 'days');
   }
 
   $scope.countDisplay = 0 ;
@@ -133,12 +141,13 @@ angular.module('sequoiaGroveApp')
 
 //---------- Initialize Testing Extreme ----------------\\
   $scope.init = function(){
-    $scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
-    $scope.getRequests();
+    $log.debug($scope.previousRequests);
+    //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
+    $scope.getCurrentEmployeeRequest();
   }
   $scope.init();
 
-  //
+  //----Temporary Function Location -----
 
 
 
