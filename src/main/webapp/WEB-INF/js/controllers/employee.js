@@ -76,7 +76,8 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
-      $scope.selectedEmployee = {'id':0};
+      $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
+        'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
     }
 
 /************** HTTP Request Functions **************/
@@ -233,6 +234,14 @@ angular.module('sequoiaGroveApp')
       }
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
+          // upate front end
+          if (action === 'add') {
+            $scope.selectedEmployee.isCurrent = true;
+            $scope.selectedEmployee.id = data.id;
+            $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
+            $scope.employees.push($scope.selectedEmployee);
+          }
+          $scope.selectEmployee($scope.selectedEmployee.id);
           $scope.saving = false;
         }).error(function(data, status) {
           $log.debug('error with action:', action, status);

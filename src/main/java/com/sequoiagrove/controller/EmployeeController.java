@@ -140,6 +140,8 @@ public class EmployeeController
           "where id = ?",
          params);
 
+        // return the id
+        model.addAttribute("id", jobject.get("id").getAsString());
         return "jsonTemplate";
     }
 
