@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
@@ -30,9 +31,13 @@ public class EmployeeController
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model) {
+    public String getAllEmployee(Model model, @RequestHeader (value="Authorization", defaultValue = "foo") String authToken) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        System.out.println(authToken);
+
         String queryStr = "select * from bajs_emp_all_info";
+
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {

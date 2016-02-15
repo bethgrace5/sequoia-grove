@@ -13,8 +13,8 @@ angular.module('sequoiaGroveApp', [
     'persona',
     'underscore'
   ])
-  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
-              $logProvider, $compileProvider) {
+  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
+              $logProvider, $compileProvider, $httpProvider) {
     $routeProvider
       .when('/', {
         redirectTo: '/login'
@@ -78,7 +78,26 @@ angular.module('sequoiaGroveApp', [
       /* Increase application performance when false, default is true */
       $compileProvider.debugInfoEnabled(true);
 
+
   }).
-  run (function($rootScope, $http, $log, $location, Persona) {
+  run (function($rootScope, $injector, $location, $log) {
     $location.path( "/login" );
+
+    //$injector.get("$http").defaults.transformRequest = function(data, headersGetter, status) {
+      //if (true) {
+      //if ($rootScope.oauth) {
+        //headersGetter()['Authorization'] = "Bearer "+$rootScope.oauth.access_token;
+        //headersGetter()['authorization'] = "Bearer 123456";
+      //}
+      //if (data) {
+        //_.extend(data, {"auth_token":"1234567890"});
+        //return angular.toJson(data);
+      //}
+    //};
+  //- See more at: http://engineering.talis.com/articles/elegant-api-auth-angular-js/#sthash.vzLOHR6H.dpuf
+
+
+
+
+
   });
