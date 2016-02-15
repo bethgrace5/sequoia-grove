@@ -2,32 +2,28 @@
 
   <!-- Add New Availability for Current Employee -->
   <div class="row">
-    <div class="col-sm-3 col-sm-offset-1">
-      <p> Add Availability </p>
-    </div>
+    <label class="col-sm-3 col-sm-offset-1 control-label">Add Availability</label>
     <div class="col-sm-5">
-      <form ng-submit="addDelivery()">
-        <!-- TODO set selected values so the fields aren't just blank fields -->
-        <select type="text" class="" ng-model="newAvail.day" placeholder="Day">
-          <option value="">- Day -</option>
-          <option value="mon">Monday</option>
-          <option value="tue">Tuesday</option>
-          <option value="wed">Wednesday</option>
-          <option value="thu">Thursday</option>
-          <option value="fri">Friday</option>
-          <option value="sat">Saturday</option>
-          <option value="sun">Sunday</option>
-        </select>
-        <select class="avail-edit-select" ng-model="newAvail.start" placeholder="Start"
-          ng-options="option.disp for option in times.start">
-          <option value="">- Start -</option>
-        </select>
-          -
-        <select class="avail-edit-select" ng-model="newAvail.end" placeholder="End"
-          ng-options="option.disp for option in times.end">
-          <option value="">- End -</option>
-        </select>
-      </form>
+      <!-- TODO set selected values so the fields aren't just blank fields -->
+      <select type="text" class="" ng-model="newAvail.day" placeholder="Day">
+        <option value="">- Day -</option>
+        <option value="mon">Monday</option>
+        <option value="tue">Tuesday</option>
+        <option value="wed">Wednesday</option>
+        <option value="thu">Thursday</option>
+        <option value="fri">Friday</option>
+        <option value="sat">Saturday</option>
+        <option value="sun">Sunday</option>
+      </select>
+      <select class="avail-edit-select" ng-model="newAvail.start" placeholder="Start"
+        ng-options="option.disp for option in times.start">
+        <option value="">- Start -</option>
+      </select>
+        -
+      <select class="avail-edit-select" ng-model="newAvail.end" placeholder="End"
+        ng-options="option.disp for option in times.end">
+        <option value="">- End -</option>
+      </select>
     </div>
     <div class="col-sm-1">
       <button type="button" class="btn btn-success" ng-click="addAvailability()">
@@ -36,7 +32,7 @@
     </div>
   </div>
 
-
+  <hr/>
 
     <!-- Monday Availabiliy -->
     <div ng-repeat="mon in selectedEmployee.avail.mon" class="row emp-repeated-row ng-cloak">
