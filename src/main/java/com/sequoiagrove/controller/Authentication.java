@@ -69,7 +69,7 @@ public class Authentication {
           } catch (EmptyResultDataAccessException e) {
 
             // this user does not exist in the database
-            model.addAttribute("UserNotRegistered", true);
+            model.addAttribute("userNotRegistered", true);
             model.addAttribute("email", email);
             return "jsonTemplate";
           }
@@ -90,7 +90,7 @@ public class Authentication {
                 model.addAttribute("user", user);
             }
             else {
-                model.addAttribute("UserNotCurrent", true);
+                model.addAttribute("userNotCurrent", true);
                 model.addAttribute("email", email);
             }
 

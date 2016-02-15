@@ -21,7 +21,8 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'info';
     $scope.current;
-    $scope.selectedEmployee = {'id':0, 'isManager':0};
+    $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
+      'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
@@ -216,16 +217,25 @@ angular.module('sequoiaGroveApp')
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
         action = "add";
-        $log.debug($scope.selectedEmployee);
-        // TODO make it so a new employee can be added - there are
-        // lots of checks that need to be made before selectedEmployee can
-        // be sent to the back end, for now, disallow new employee additions
-        return;
-      }
 
-      $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee).
-        success(function(data, status){
+        if ($scope.selectedEmployee.firstName === '') {
+          return;
+        }
+        if ($scope.selectedEmployee.lastName === '') {
+          return;
+        }
+        if ($scope.selectedEmployee.birthdate === '') {
+          return;
+        }
+        if ($scope.selectedEmployee.email === '') {
+          return;
+        }
+      }
+      $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
+        .success(function(data, status){
           $scope.saving = false;
+        }).error(function(data, status) {
+          $log.debug('error with action:', action, status);
         });
     }
 

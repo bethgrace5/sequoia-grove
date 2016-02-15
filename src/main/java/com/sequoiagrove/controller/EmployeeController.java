@@ -145,25 +145,42 @@ public class EmployeeController
 
     @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
     public String addEmployee(Model model, @RequestBody String data) throws SQLException {
-      JsonElement jelement = new JsonParser().parse(data);
-      JsonObject  jobject = jelement.getAsJsonObject();
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
 
-      String[] params = {
-          jobject.get("firstName").getAsString(),
-          jobject.get("lastName").getAsString(),
-          jobject.get("isManager").getAsString(),
-          jobject.get("birthDate").getAsString(),
-          jobject.get("maxHrsWeek").getAsString(),
-          jobject.get("phone").getAsString(),
-          jobject.get("clock").getAsString(),
-          jobject.get("email").getAsString(),
-      };
+        // get next sequence id value
+        int id = jdbcTemplate.queryForObject("select bajs_emp_seq.nextval from dual",
+              Integer.class);
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
-          "is_manager, birth_date, max_hrs_week, phone_number, clock_number, email) " +
-          "values(0,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ? )", params);
+        String[] params = {
+            id + "",
+            jobject.get("firstName").getAsString(),
+            jobject.get("lastName").getAsString(),
+            jobject.get("isManager").getAsString(),
+            jobject.get("birthDate").getAsString(),
+            jobject.get("maxHrsWeek").getAsString(),
+            jobject.get("phone").getAsString(),
+            jobject.get("clock").getAsString(),
+            jobject.get("email").getAsString(),
+        };
 
+        jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
+            "is_manager, birth_date, max_hrs_week, phone_number, clock_number, email) " +
+            "values(?,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ? )", params);
+
+        //activate the employee
+        Object[] obj = new Object[] { id };
+        int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
+            " where employee_id = ? and date_unemployed is null", obj, Integer.class);
+
+        // this was NOT a current employee, add a new employment history
+        if (count <= 0){
+          jdbcTemplate.update(" insert into bajs_employment_history " +
+              "values( ?, (select current_date from dual), null) ", id);
+        }
+        // return the new id
+        model.addAttribute("id", id);
         return "jsonTemplate";
     }
 

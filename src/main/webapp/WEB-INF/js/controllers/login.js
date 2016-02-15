@@ -30,6 +30,8 @@ angular.module('sequoiaGroveApp')
 
     // User initialized login, send it to Mozilla Persona
     $scope.personaLogin = function () {
+      $rootScope.userNotRegistered = false;
+      $rootScope.userNotCurrent = false;
       Persona.request();
     }
 
