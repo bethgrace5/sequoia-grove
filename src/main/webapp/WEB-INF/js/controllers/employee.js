@@ -250,6 +250,11 @@ angular.module('sequoiaGroveApp')
 
     // Deactivate (un-employ) an employee
     $scope.deactivateEmployee = function() {
+      // a user shouldn't be able to unemploy themselves - it would
+      // lock them out of the system.
+      if ($rootScope.loggedInUser.id === $scope.selectedEmployee.id) {
+        return
+      }
       $http({
         url: '/sequoiagrove/employee/deactivate/',
         method: "POST",
