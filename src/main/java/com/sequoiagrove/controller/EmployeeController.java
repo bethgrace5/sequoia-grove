@@ -31,14 +31,10 @@ public class EmployeeController
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model, @RequestHeader (value="Authorization", defaultValue = "foo") String authToken) {
+    public String getAllEmployee(Model model, @RequestHeader (value="Authorization", defaultValue = "") String authToken) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        System.out.println(authToken);
-
         String queryStr = "select * from bajs_emp_all_info";
-
-
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
