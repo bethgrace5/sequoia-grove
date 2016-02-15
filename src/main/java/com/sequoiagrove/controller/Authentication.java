@@ -76,8 +76,24 @@ public class Authentication {
 
           // found the user in the database
           if(user != null) {
-            System.out.println(user.getFullname() + " has sucessfully signed in");
-            model.addAttribute("user", user);
+            Object[] params = new Object[] { user.getId() };
+
+            // make sure this is a current employee
+            int count = jdbcTemplate.queryForObject(
+                "select count(*) from bajs_employment_history " +
+                " where employee_id = ? and date_unemployed is null",
+                params, Integer.class);
+
+            // This employee is currently employed
+            if (count > 0) {
+                System.out.println(user.getFullname() + " has sucessfully signed in");
+                model.addAttribute("user", user);
+            }
+            else {
+                model.addAttribute("UserNotCurrent", true);
+                model.addAttribute("email", email);
+            }
+
           }
 
         }

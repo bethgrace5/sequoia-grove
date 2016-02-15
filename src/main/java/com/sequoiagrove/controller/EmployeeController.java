@@ -135,7 +135,7 @@ public class EmployeeController
           "birth_date   = to_date(?, 'yyyy-mm-dd'), "+
           "max_hrs_week = ?, "+
           "phone_number = ?, "+
-          "clock_number = ?  "+
+          "clock_number = ?, "+
           "email = ?  "+
           "where id = ?",
          params);

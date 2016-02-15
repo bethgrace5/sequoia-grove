@@ -21,7 +21,7 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'info';
     $scope.current;
-    $scope.selectedEmployee = {id:0};
+    $scope.selectedEmployee = {'id':0, 'isManager':0};
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
@@ -205,8 +205,8 @@ angular.module('sequoiaGroveApp')
       });
     }
 
+    // Update Existing employee, or add new
     $scope.updateEmployee = function() {
-      $scope.selectedEmployee.isManager = "1";
       // guard against double clicking
       if ($scope.saving) {
         return;
@@ -214,7 +214,9 @@ angular.module('sequoiaGroveApp')
       $scope.saving = true;
       var action = "update";
       if ($scope.selectedEmployee.id === 0) {
-        action = "add"
+        $scope.saving = false;
+        action = "add";
+        $log.debug($scope.selectedEmployee);
         // TODO make it so a new employee can be added - there are
         // lots of checks that need to be made before selectedEmployee can
         // be sent to the back end, for now, disallow new employee additions
