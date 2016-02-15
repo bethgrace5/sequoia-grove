@@ -32,7 +32,6 @@ angular.module('sequoiaGroveApp')
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.newDelivery = '';
-  $scope.selectedPid = 0;
   $scope.empEditSearch = '';
   $scope.selectedShift = {
     idx : -1,
@@ -83,11 +82,6 @@ angular.module('sequoiaGroveApp')
 
   $scope.shiftSelected = function() {
     return ($scope.selectedShift.idx != -1);
-  }
-
-  $scope.switchPos = function(pos) {
-    $scope.empEditSearch = '';
-    $scope.selectedPid = pos;
   }
 
 

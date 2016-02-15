@@ -65,11 +65,11 @@
     <button
       class="btn btn-default btn-small pull-left clear-both position-button"
       ng-show = "$index == 0"
-      ng-click="switchPos(0)">
+      ng-click="selectPosition(0)">
       All
     </button>
     <button class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-click="switchPos(pos.id)">
+      ng-click="selectPosition(pos.id)">
       {{pos.title}}
     </button>
   </div>
