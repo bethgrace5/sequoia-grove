@@ -52,12 +52,13 @@ public class PositionController {
         JsonObject ep = jelement.getAsJsonObject();
 
         String pid = ep.get("pid").getAsString();
-        String eid = ep.get("pid").getAsString();
+        String eid = ep.get("eid").getAsString();
 
         // see if this is already a current position that the employee has
-        int count = jdbcTemplate.queryForInt(
+        Object[] obj = new Object[] { eid, pid };
+        int count = jdbcTemplate.queryForObject(
             "select count(*) from bajs_has_position where employee_id = ?"+
-            " and position_id = ? and date_removed is null", eid, pid);
+            " and position_id = ? and date_removed is null", obj, Integer.class);
 
         // this employee does not currently have this position. add it.
         if (count <= 0) {
