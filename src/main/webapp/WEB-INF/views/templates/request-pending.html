@@ -34,16 +34,18 @@
             <p> {{request.endDate}} </p>
         </div>
         <div class="col-sm-1">
-            <p> {{totalDays(startDate, endDate)}} </p>
+            <p> {{totalDays(request.startDate, request.endDate)}} </p>
         </div>
         <div class="col-sm-2">
-            <button class="btn btn-success">
+          <button class="btn btn-success" 
+            ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
                 Approve
                 <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
             </button>
         </div>
         <div class="col-sm-2">
-            <button class="btn btn-danger">
+          <button class="btn btn-danger"
+            ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
                 Deny
                 <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
             </button>

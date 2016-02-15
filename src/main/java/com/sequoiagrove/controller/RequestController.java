@@ -87,8 +87,7 @@ public class RequestController{
       //$$hash key gets return??? 
       List<RequestStatus> requestList = jdbcTemplate.query(
           "select * from bajs_requests_vacation "+
-          "where responded_by = 0 OR responded_by IS NULL AND "+
-          " is_approved = 0",
+          "where responded_by IS NULL",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(

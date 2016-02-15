@@ -76,6 +76,7 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $log.debug("Pending Requests");
+        $log.debug(data);
         $scope.pendingRequests = data.requestStatus;
         $log.debug($scope.pendingRequests);
     }).error(function (data, status, headers, config) {
@@ -110,13 +111,18 @@ angular.module('sequoiaGroveApp')
 
   //Change Request
   $scope.changeRequest = function($requestID, $approverID, $is_approve) {
+    $log.debug("changeRequest activated");
     $http({
       url: '/sequoiagrove/request/update/' + 
       $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
       $log.debug(data);
+      $scope.getPendingRequests();
     });
+  }
+  $scope.test = function(){
+    $log.debug("changeRequest activated"); 
   }
 
   $scope.totalDays = function(a, b){
