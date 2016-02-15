@@ -91,12 +91,9 @@ angular.module('sequoiaGroveApp')
   }
 
   //Change Request
-  $scope.changeRequest= function() {
-    $approverID = 13; //This will be only temporary. 
-    $requestID= 17; //This will be only temporary. 
-    $is_approve = 1;
+  $scope.changeRequest = function($requestID, $approverID, $is_approve) {
     $http({
-      url: '/sequoiagrove/request/' + 
+      url: '/sequoiagrove/request/update/' + 
       $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
@@ -136,6 +133,7 @@ angular.module('sequoiaGroveApp')
 
 //---------- Initialize Testing Extreme ----------------\\
   $scope.init = function(){
+    $scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getRequests();
   }
   $scope.init();

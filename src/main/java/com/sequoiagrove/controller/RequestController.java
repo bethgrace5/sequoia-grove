@@ -119,19 +119,19 @@ public class RequestController{
         return "jsonTemplate";
       } 
 
-     @RequestMapping(value = "/request/accept/{requestID}/{approverID}/{is_approve}")
+     @RequestMapping(value = "/request/update/{requestID}/{approverID}/{is_approve}")
        public String updateRequest(Model model, 
            @PathVariable("requestID") int requestID,
            @PathVariable("approverID") int approverID,
-           @PathVariable("is_approve") boolean is_approve) throws SQLException{
+           @PathVariable("is_approve") int is_approve) throws SQLException{
          //Make Sure request ID is there too...
 
          JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
          jdbcTemplate.update("update bajs_requests_vacation " +
-             "set " +
-             "is_approved  = " + is_approve +
-             "responded_by = " + approverID +
-             "where id = " + requestID
+             " set" +
+             " is_approved  = " + is_approve +
+             ", responded_by = " + approverID +
+             " where id     = " + requestID
              );
          return "jsonTemplate";
        } 
