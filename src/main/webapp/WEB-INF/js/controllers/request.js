@@ -42,13 +42,13 @@ angular.module('sequoiaGroveApp')
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
-    $log.debug(obj);
     $http({
       url: '/sequoiagrove/request/submit/',
       method: "POST",
       data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $log.debug("Sumbiting Request");
       $log.debug(data);
     })
     .error(function (data, status, headers, config) {
@@ -66,14 +66,13 @@ angular.module('sequoiaGroveApp')
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
-    $log.debug("Managers Request to object:");
-    $log.debug(obj);
     $http({
       url: '/sequoiagrove/request/submit/',
       method: "POST",
       data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $log.debug("Managers Request to object:");
       $log.debug(data);
     })
     .error(function (data, status, headers, config) {
@@ -104,7 +103,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/employees',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $log.debug("sucess");
+        $log.debug("All Employeess");
         $scope.employees = data.employees;
         $log.debug(data);
     }).error(function (data, status, headers, config) {
@@ -118,6 +117,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/get',
       method: "GET"
     }).success(function (data, status, headers, config) {
+        $log.debug("All Requests");
         $log.debug(data);
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining position data: " + data);
@@ -140,7 +140,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-
   //Get Current User Requests
   $scope.userRequests;
   $scope.getCurrentEmployeeRequest = function() {
@@ -150,6 +149,7 @@ angular.module('sequoiaGroveApp')
       method: "POST"
     }).success(function(data, status) {
       $scope.userRequests = data.request;
+      $log.debug("Current Requests");
       $log.debug($scope.userRequests);
     });
   }
@@ -161,6 +161,7 @@ angular.module('sequoiaGroveApp')
        $rootScope.loggedInUser.id,
       method: "POST"
     }).success(function(data, status) {
+      $log.debug("Request Approved");
       $log.debug(data);
     });
   }
@@ -173,6 +174,7 @@ angular.module('sequoiaGroveApp')
       $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
+      $log.debug("Request Changed");
       $log.debug(data);
       $scope.getPendingRequests();
     });
@@ -223,7 +225,6 @@ angular.module('sequoiaGroveApp')
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getCurrentEmployeeRequest();
     $scope.getPendingRequests();
-    $log.debug("For Employees List");
     $scope.getEmployees();
   }
   $scope.init();
