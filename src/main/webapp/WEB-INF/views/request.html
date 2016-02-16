@@ -1,45 +1,49 @@
-
+<!---Feature Request--->
 <div class="container-fluid hidden-print">
-
+  <!--  Employee User Request and history-->
   <div class="panel panel-default hidden-print">
     <div class="panel-body">
       <ng-include src="'views/templates/request-submit.html'"></ng-include>
     </div>
   </div>
-  <div>
+  <!--  Managers View -->
+  <div ng-show="loggedInUser.isManager">
+    <!--- Pending Request -->
     <div class="panel panel-default hidden-print">
       <div class="panel-body">
         <ng-include src="'views/templates/request-pending.html'"></ng-include>
       </div>
     </div>
+    <!--- Request History -->
     <div class="panel panel-default hidden-print">
       <div class="panel-body">
         <ng-include src="'views/templates/request-history.html'"></ng-include>
       </div>
+    </div>  
+    <!--- Make Request -->
+    <div>
+      <div class="panel panel-default hidden-print">
+        <div class="panel-body">
+          <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
+        </div>
+      </div>
     </div>
   </div>
-  <!-- For Manager Mode Testing--->
-  <div>
-    <div class="panel panel-default hidden-print">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
-      </div>
-  </div>
 
   <!-- For Manager Mode Testing--->
-
+  <!--
   <div class="row">
     <div class="col-sm-6">
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead">
-            Count of Number of Days Employees are Scheduled
+          Count of Number of Days Employees are Scheduled
           </p>
           <canvas id="doughnut" class="chart chart-doughnut"
-            chart-data="donGraph.data"
-            chart-click="donGraph.onClick"
-            chart-legend="true"
-            chart-labels="donGraph.labels">
+          chart-data="donGraph.data"
+          chart-click="donGraph.onClick"
+          chart-legend="true"
+          chart-labels="donGraph.labels">
           </canvas>
         </div>
       </div>
@@ -49,8 +53,8 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead">
-            {{countDisplay + 1}}
-            Day<span ng-show="(countDisplay+1) > 1">s</span> This Schedule
+          {{countDisplay + 1}}
+          Day<span ng-show="(countDisplay+1) > 1">s</span> This Schedule
           </p>
           <div ng-repeat="emp in schCount[countDisplay]">
             {{emp.name}}
@@ -65,15 +69,16 @@
       <div class="panel panel-default">
         <div class="panel-body">
           <p class="lead">
-            Weekly Hours Per Employee
+          Weekly Hours Per Employee
           </p>
           <canvas id="bar" class="chart chart-bar"
-            chart-data="barChart.data"
-            chart-labels="barChart.labels">
+          chart-data="barChart.data"
+          chart-labels="barChart.labels">
           </canvas>
         </div>
       </div>
     </div>
   </div>
+  -->
 
 </div>

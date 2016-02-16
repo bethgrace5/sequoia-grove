@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc function
  * @name sequoiaGroveApp.controller:RequestCtrl
@@ -11,7 +10,6 @@ angular.module('sequoiaGroveApp')
   .controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
   $rootScope.lastPath = '/schedule';
-
   $rootScope.lastPath = '/request';
 
   // user is not logged in
@@ -55,7 +53,9 @@ angular.module('sequoiaGroveApp')
         $log.error('Error submiting request ', status, data);
     });
   }
+  $scope.checkUserRequest = function(){
   
+  }
   //Manager's Sumbit Request
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
   $scope.seeTargetEmployee = 0;
@@ -220,12 +220,22 @@ angular.module('sequoiaGroveApp')
   ];
 
 //---------- Initialize Testing Extreme ----------------\\
+
+ $scope.testManager = function(){
+  if ($rootScope.loggedInUser.isManager) {
+    $log.debug("you are a Manager");
+  } 
+  else{
+    $log.debug("you are a  Employee");
+  }
+ } 
   $scope.init = function(){
     $log.debug($scope.previousRequests);
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getCurrentEmployeeRequest();
     $scope.getPendingRequests();
     $scope.getEmployees();
+    $scope.testManager();
   }
   $scope.init();
 
