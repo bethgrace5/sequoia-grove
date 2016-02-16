@@ -1,29 +1,64 @@
-<div class="row">
-  <div class="col-sm-12">
-    <p class="lead">
-    Dragon's View
-    </p>
-  </div>
-  <div class="col-sm=1">
-    <button class="btn btn-primary" 
-      ng-click="changeEmployeeView()">
-      See All Employees
-      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-    </button>
-  </div>
-
-</div>
-<hr/>
-
-<div ng-show="seeEmployees" ng-repeat="employee in employees">
+<div class = "col-md-2">
   <div class="row">
+    <div class="col-sm-12">
+      <p class="lead">
+      Managers View
+      </p>
+    </div>
     <div class="col-sm=1">
       <button class="btn btn-primary" 
-        ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
-        {{employee.firstName}} {{employee.lastName }}
+        ng-click="changeEmployeeView()">
+        See All Employees
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
       </button>
+    </div>
+
+  </div>
+  <hr/>
+
+  <div id="" style="overflow-y: scroll; height:250px; width:250px;">
+    <div ng-show="seeEmployees" ng-repeat="employee in employees">
+      <div class="row">
+        <div class="col-sm=2">
+          <button class="btn btn-primary" 
+            ng-click="targetEmployee(employee)">
+            {{employee.firstName}} {{employee.lastName }}
+            <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
+
+<div class = "col-md-10">
+  <div ng-show="seeTargetEmployee">
+    <div class="col-md=10">
+      <h3> {{selectedEmployee.firstName}} {{selectedEmployee.lastName}} </h3>
+    </div>
+    <form> 
+      <h4>
+        Starting Date
+        <md-datepicker ng-model="$parent.requestDateStart"
+        md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+        ng-change="updateEnd()">
+        </md-datepicker>
+        Ending Date
+        <md-datepicker ng-model="$parent.requestDateEnd" 
+        md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+        </md-datepicker>
+      </h4>
+      <button class="btn btn-primary" 
+        ng-click="managerSubmitRequest()">
+        <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+        Submit
+      </button>
+
+      <p> 
+      {{requestDateStart}} 
+      {{requestDateEnd}}}
+      </p>
+    </form>
+  </div>
+</div>

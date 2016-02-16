@@ -58,12 +58,13 @@ angular.module('sequoiaGroveApp')
   
   //Manager's Sumbit Request
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
-  $scope.selectEmployee;   //Info On Specific
+  $scope.seeTargetEmployee = 0;
+  $scope.selectedEmployee;   //Info On Specific
 
-  $scope.managerSubmitRequest = function(id, startDate, endDate ){
-    var obj = { "eid": id,
-      "startDate":moment(startDate).format("MM-DD-YYYY"), 
-      "endDate":moment(endDate).format("MM-DD-YYYY")
+  $scope.managerSubmitRequest = function(){
+    var obj = { "eid": $scope.selectedEmployee.id,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $log.debug("Managers Request to object:");
     $log.debug(obj);
@@ -88,6 +89,12 @@ angular.module('sequoiaGroveApp')
     else{
       $scope.seeEmployees = 1;
     }
+  }
+  //See One Employee
+  $scope.targetEmployee = function(employee){
+    $scope.selectedEmployee = employee
+    $log.debug($scope.selectedEmployee);
+    $scope.seeTargetEmployee = 1;
   }
 
   //Get All Employees 
