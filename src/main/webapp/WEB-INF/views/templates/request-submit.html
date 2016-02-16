@@ -48,7 +48,7 @@
     </div>
 </div>
 
-<div  ng-repeat="request in previousRequests">
+<div  ng-repeat="request in userRequests">
     <div class="row">
         <div class="col-sm-2">
             <p> {{request.startDate}} </p>
@@ -57,17 +57,17 @@
             <p> {{request.endDate}} </p>
         </div>
         <div class="col-sm-2">
-            <p> {{request.totalDays}} </p>
+            <p> {{totalDays(request.startDate, request.endDate)}} </p>
         </div>
         <div class="col-sm-2">
-            <div ng-show="request.status=='pending'">
-                <h3><span class="label label-warning">pending</span></h3>
+            <div ng-show="request.status=='Pending'">
+                <h3><span class="label label-warning">Pending</span></h3>
             </div>
-            <div ng-show="request.status=='approved'">
-                <h3><span class="label label-success">approved</span></h3>
+            <div ng-show="request.status=='Approved'">
+                <h3><span class="label label-success">Approved</span></h3>
             </div>
-            <div ng-show="request.status=='denied'">
-                <h3><span class="label label-danger">denied</span></h3>
+            <div ng-show="request.status=='Denied'">
+                <h3><span class="label label-danger">Denied</span></h3>
             </div>
         </div>
     </div>
