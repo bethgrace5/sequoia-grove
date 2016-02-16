@@ -7,7 +7,7 @@
     </div>
   </div>
   <div>
-    <div ng-show="loggedInUser.isManager" class="panel panel-default hidden-print">
+    <div ng-show="loggedinuser.ismanager" class="panel panel-default hidden-print">
       <div class="panel-body">
         <ng-include src="'views/templates/request-pending.html'"></ng-include>
       </div>
@@ -18,6 +18,15 @@
       </div>
     </div>
   </div>
+  <!-- For Manager Mode Testing--->
+  <div>
+    <div class="panel panel-default hidden-print">
+      <div class="panel-body">
+        <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
+      </div>
+  </div>
+
+  <!-- For Manager Mode Testing--->
 
   <div class="row">
     <div class="col-sm-6">

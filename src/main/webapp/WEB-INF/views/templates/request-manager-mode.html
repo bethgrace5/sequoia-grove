@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-sm-12">
+    <p class="lead">
+    Dragon's View
+    </p>
+  </div>
+  <div class="col-sm=1">
+    <button class="btn btn-primary" 
+      ng-click="changeEmployeeView()">
+      See All Employees
+      <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+    </button>
+  </div>
+
+</div>
+<hr/>
+
+<div ng-show="seeEmployees" ng-repeat="employee in employees">
+  <div class="row">
+    <div class="col-sm=1">
+      <button class="btn btn-primary" 
+        ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
+        {{employee.firstName}} {{employee.lastName }}
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</div>
+

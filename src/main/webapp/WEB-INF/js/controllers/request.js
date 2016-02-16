@@ -55,6 +55,55 @@ angular.module('sequoiaGroveApp')
         $log.error('Error submiting request ', status, data);
     });
   }
+  
+  //Manager's Sumbit Request
+  $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
+  $scope.selectEmployee;   //Info On Specific
+
+  $scope.managerSubmitRequest = function(id, startDate, endDate ){
+    var obj = { "eid": id,
+      "startDate":moment(startDate).format("MM-DD-YYYY"), 
+      "endDate":moment(endDate).format("MM-DD-YYYY")
+    }
+    $log.debug("Managers Request to object:");
+    $log.debug(obj);
+    $http({
+      url: '/sequoiagrove/request/submit/',
+      method: "POST",
+      data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+      $log.debug(data);
+    })
+    .error(function (data, status, headers, config) {
+        $log.error('Error submiting request ', status, data);
+    });
+  }
+
+  //See All Employees
+  $scope.changeEmployeeView = function(){
+    if($scope.seeEmployees){
+      $scope.seeEmployees = 0;
+    }
+    else{
+      $scope.seeEmployees = 1;
+    }
+  }
+
+  //Get All Employees 
+    $scope.employees;
+    $scope.getEmployees = function() {
+    $http({
+      url: '/sequoiagrove/employees',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $log.debug("sucess");
+        $scope.employees = data.employees;
+        $log.debug(data);
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
 
   //Get All Request
   $scope.getRequests = function() {
@@ -167,6 +216,8 @@ angular.module('sequoiaGroveApp')
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getCurrentEmployeeRequest();
     $scope.getPendingRequests();
+    $log.debug("For Employees List");
+    $scope.getEmployees();
   }
   $scope.init();
 
