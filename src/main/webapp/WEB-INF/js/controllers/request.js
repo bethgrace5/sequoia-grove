@@ -6,6 +6,7 @@
  * # RequestCtrl
  * Controller for requesting vacation
  */
+
 angular.module('sequoiaGroveApp')
 .controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
@@ -23,7 +24,7 @@ angular.module('sequoiaGroveApp')
     $scope.today.getFullYear(),
     $scope.today.getMonth(),
     $scope.today.getDate() + 14
-    );//14 days/2 weeks in advance
+    );
 
   $scope.requestDateStart = $scope.minDateStart;
   $scope.requestDateEnd   = $scope.minDateStart;
@@ -33,17 +34,33 @@ angular.module('sequoiaGroveApp')
       $scope.requestDateEnd = $scope.requestDateStart;
     }
   }
-  $scope.checkDates = function(){
-    $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
-    $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
-  }
 
-  //User Requests List
+  //Submit Request 
   $scope.userRequests;
-
-  //Submit Request ----------------------------------------------------
   $scope.submitRequest = function(){
-    //Switch to its own function
+    if($scope.checkDatesCollide()){
+      return;
+    }
+    var obj = { "eid": $rootScope.loggedInUser.id,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/submit/',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+      $log.debug("Sumbiting Request");
+      $log.debug(data);
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting request ', status, data);
+    });
+  }
+  //Check If User Requests History 
+  //Conflicts with User's Submit Request
+  $scope.checkDatesCollide = function(){
     $log.debug($scope.userRequests);
 
     var i = 0;
@@ -55,70 +72,27 @@ angular.module('sequoiaGroveApp')
       var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
 
       if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        $log.debug("Is S In"); 
+        //$log.debug("Is S In"); 
         alert("Dates Already Taken");
-        return;
+        return true;
       }
       if(moment(submitEnd).isBetween(checkStart, checkEnd)){
-        $log.debug("Is N In");
+        //$log.debug("Is N In");
         alert("Dates Already Taken");
-        return;
+        return true;
       }
       if(moment(checkStart).isBetween(submitStart, submitEnd)){
-        $log.debug("S Is N");
+        //$log.debug("S Is N");
         alert("Dates Already Taken");
-        return;
+        return true;
       }
       if(moment(checkEnd).isBetween(submitStart, submitEnd)){
-        $log.debug("S In N");
+        //$log.debug("S In N");
         alert("Dates Already Taken");
-        return;
+        return true;
       }
     }
-    //-----------------------------------------------------------------
-       var obj = { "eid": $rootScope.loggedInUser.id,
-       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
-       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
-       }
-       $http({
-       url: '/sequoiagrove/request/submit/',
-       method: "POST",
-       data: JSON.stringify(obj)
-       })
-       .success(function (data, status, headers, config) {
-       $log.debug("Sumbiting Request");
-       $log.debug(data);
-       })
-       .error(function (data, status, headers, config) {
-       $log.error('Error submiting request ', status, data);
-       });
-  }
-
-  //Check User Request
-  $scope.checkUserRequests = function(){
-    return true;
-    for(i = 0; i < $scope.userRequests.length; i++){
-      var checkStart = moment($scope.userRequests[i].startDate).format('MM/DD/YYYY');
-      var checkEnd   = moment($scope.userRequests[i].startEnd).format('MM/DD/YYYY');
-      $log.debug("Testing Each Date Comparision Extreme 5 folds");
-      $log.debug(submitStart);
-      $log.debug(submitEnd);
-      $log.debug(checkStart);
-      $log.debug(checkEnd);
-
-      if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        $log.debug("Is S In");
-      }
-      if(moment(submitEnd).isBetween(checkStart, checkEnd)){
-        $log.debug("Is N In");
-      }
-      if(moment(checkStart).isBetween(submitStart, submitEnd)){
-        $log.debug("S Is N");
-      }
-      if(moment(checkEnd).isBetween(submitStart, submitEnd)){
-        $log.debug("S In N");
-      }
-    }
+    return false;
   }
 
   //Manager's Sumbit Request
@@ -303,7 +277,7 @@ angular.module('sequoiaGroveApp')
     $scope.getPendingRequests();
     $scope.getEmployees();
     $scope.testManager();
-    $scope.checkDates();
+    //$scope.checkDates();
   }
   $scope.init();
 
