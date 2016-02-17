@@ -1,55 +1,58 @@
 <div class="row">
-    <div class="col-sm-12">
-        <p class="lead">
-            Edit Pending Request Template
-        </p>
-    </div>
+  <div class="col-sm-12">
+    <p class="lead">
+    Pending Request
+    </p>
+  </div>
 </div>
 
 <div class="row request-title">
-    <div class="col-sm-1">
-        <p> Employee </p>
-    </div>
-    <div class="col-sm-2">
-        <p> Start Date </p>
-    </div>
-    <div class="col-sm-2">
-        <p> End Date </p>
-    </div>
-    <div class="col-sm-1">
-        <p> Total Days </p>
-    </div>
+  <div class="col-sm-1">
+    <p> Employee </p>
+  </div>
+  <div class="col-sm-2">
+    <p> Start Date </p>
+  </div>
+  <div class="col-sm-2">
+    <p> End Date </p>
+  </div>
+  <div class="col-sm-1">
+    <p> Total Days </p>
+  </div>
 </div>
 
+
+<div id="" style="overflow-y: scroll; height:250px;">
 <div  ng-repeat="request in pendingRequests">
-    <br/>
-    <div class="row">
-        <div class="col-sm-1">
-            <p> {{request.employeeID}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.startDate}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.endDate}} </p>
-        </div>
-        <div class="col-sm-1">
-            <p> {{totalDays(request.startDate, request.endDate)}} </p>
-        </div>
-        <div class="col-sm-2">
-          <button class="btn btn-success" 
-            ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
-                Approve
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="col-sm-2">
-          <button class="btn btn-danger"
-            ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
-                Deny
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-        </div>
+  <br/>
+  <div class="row">
+    <div class="col-sm-1">
+      <p> {{request.employeeID}} </p>
     </div>
+    <div class="col-sm-2">
+      <p> {{request.startDate}} </p>
+    </div>
+    <div class="col-sm-2">
+      <p> {{request.endDate}} </p>
+    </div>
+    <div class="col-sm-1">
+      <p> {{totalDays(request.startDate, request.endDate)}} </p>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-success" 
+        ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
+        Approve
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="col-sm-2">
+      <button class="btn btn-danger"
+        ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
+        Deny
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
+</div>
 </div>
 

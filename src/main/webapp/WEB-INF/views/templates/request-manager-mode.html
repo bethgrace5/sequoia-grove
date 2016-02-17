@@ -12,25 +12,25 @@
         <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
       </button>
     </div>
-
   </div>
   <hr/>
 
-  <div id="" style="overflow-y: scroll; height:250px; width:250px;">
+  <div id="" style="overflow-y: scroll; height:250px; width:215px;">
     <div ng-show="seeEmployees" ng-repeat="employee in employees">
       <div class="row">
         <div class="col-sm=2">
+          <h2>--
           <button class="btn btn-primary" 
             ng-click="targetEmployee(employee)">
             {{employee.firstName}} {{employee.lastName }}
             <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
           </button>
+          </h2>
         </div>
       </div>
     </div>
   </div>
 </div>
-
 
 <div class = "col-md-10">
   <div ng-show="seeTargetEmployee">
@@ -54,11 +54,6 @@
         <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
         Submit
       </button>
-
-      <p> 
-      {{requestDateStart}} 
-      {{requestDateEnd}}}
-      </p>
     </form>
   </div>
 </div>

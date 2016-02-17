@@ -243,7 +243,7 @@ angular.module('sequoiaGroveApp')
   //Toggles
   //------------------------- 
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
-  $scope.seeTargetEmployee = 0;
+  $scope.seeTargetEmployee = 1;
 
   $scope.changeEmployeeView = function(){
     if($scope.seeEmployees){

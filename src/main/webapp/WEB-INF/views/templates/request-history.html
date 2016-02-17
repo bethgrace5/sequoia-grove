@@ -1,50 +1,52 @@
 <div class="row">
-    <div class="col-sm-12">
-        <p class="lead">
-            Request History
-        </p>
-    </div>
+  <div class="col-sm-12">
+    <p class="lead">
+    Request History
+    </p>
+  </div>
 </div>
 
 <div class="row request-title">
-    <div class="col-sm-1">
-        <p> Employee </p>
-    </div>
-    <div class="col-sm-2">
-        <p> Start Date </p>
-    </div>
-    <div class="col-sm-2">
-        <p> End Date </p>
-    </div>
-    <div class="col-sm-1">
-        <p> Total Days </p>
-    </div>
-    <div class="col-sm-1">
-        <p> Status </p>
-    </div>
+  <div class="col-sm-1">
+    <p> Employee </p>
+  </div>
+  <div class="col-sm-2">
+    <p> Start Date </p>
+  </div>
+  <div class="col-sm-2">
+    <p> End Date </p>
+  </div>
+  <div class="col-sm-1">
+    <p> Total Days </p>
+  </div>
+  <div class="col-sm-1">
+    <p> Status </p>
+  </div>
 </div>
 
-<div  ng-repeat="request in allRequests ">
+<div id="" style="overflow-y: scroll; height:250px;">
+  <div  ng-repeat="request in allRequests ">
     <br/>
     <div class="row">
-        <div class="col-sm-1">
-            <p> {{request.employeeID}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.startDate}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.endDate}} </p>
-        </div>
-        <div class="col-sm-1">
-            <p> {{totalDays(request.startDate, request.endDate)}} </p>
-        </div>
-        <div class="col-sm-1">
-            <p> {{request.status}} </p>
-        </div>
-        <div class="col-sm-3">
-            <p> {{request.approverID}} </p>
-        </div>
+      <div class="col-sm-1">
+        <p> {{request.employeeID}} </p>
+      </div>
+      <div class="col-sm-2">
+        <p> {{request.startDate}} </p>
+      </div>
+      <div class="col-sm-2">
+        <p> {{request.endDate}} </p>
+      </div>
+      <div class="col-sm-1">
+        <p> {{totalDays(request.startDate, request.endDate)}} </p>
+      </div>
+      <div class="col-sm-1">
+        <p> {{request.status}} </p>
+      </div>
+      <div class="col-sm-3">
+        <p> {{request.approverID}} </p>
+      </div>
     </div>
+  </div>
 </div>
 
