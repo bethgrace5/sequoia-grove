@@ -58,8 +58,7 @@ angular.module('sequoiaGroveApp')
       $log.error('Error submiting request ', status, data);
     });
   }
-  //Check If User Requests History 
-  //Conflicts with User's Submit Request
+  //Check If User Requests History Conflicts with User's Submit Request
   $scope.checkDatesCollide = function(){
     $log.debug($scope.userRequests);
 
@@ -68,6 +67,7 @@ angular.module('sequoiaGroveApp')
     var submitEnd = moment($scope.requestDateEnd);
 
     for(i = 0; i < $scope.userRequests.length; i++){
+      //I need more testing with this function...
       var checkStart = moment($scope.userRequests[i].startDate).subtract(1, 'day');
       var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
 
@@ -119,7 +119,7 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  //See All Employees
+  //Toggle Employees View
   $scope.changeEmployeeView = function(){
     if($scope.seeEmployees){
       $scope.seeEmployees = 0;
@@ -128,7 +128,7 @@ angular.module('sequoiaGroveApp')
       $scope.seeEmployees = 1;
     }
   }
-  //See One Employee
+  //Toggle See Target Employee
   $scope.targetEmployee = function(employee){
     $scope.selectedEmployee = employee
       $log.debug($scope.selectedEmployee);
@@ -151,13 +151,15 @@ angular.module('sequoiaGroveApp')
   }
 
   //Get All Request
-  $scope.getRequests = function() {
+  $scope.allRequests;
+  $scope.getAllRequests = function() {
     $http({
       url: '/sequoiagrove/request/get',
       method: "GET"
     }).success(function (data, status, headers, config) {
       $log.debug("All Requests");
-      $log.debug(data);
+      $scope.allRequests = data.requestStatus;
+      $log.debug($scope.allRequests);
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
     });
@@ -215,6 +217,10 @@ angular.module('sequoiaGroveApp')
     var cool = moment(b)
       return cool.diff(dog, 'days');
   }
+  //Change Date I
+  $scope.defaultDate = function(a){
+    return moment(a).format("MM-DD-YYYY");
+  }
 
   $scope.countDisplay = 0 ;
 
@@ -259,6 +265,7 @@ angular.module('sequoiaGroveApp')
   $scope.init = function(){
     $log.debug($scope.previousRequests);
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
+    $scope.getAllRequests();
     $scope.getCurrentEmployeeRequest();
     $scope.getPendingRequests();
     $scope.getEmployees();
