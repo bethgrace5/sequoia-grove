@@ -180,7 +180,6 @@ angular.module('sequoiaGroveApp')
   }
 
   //Get Current User Requests
-
   $scope.getCurrentEmployeeRequest = function() {
     $http({
       url: '/sequoiagrove/request/get/current/employee/'+
@@ -190,20 +189,6 @@ angular.module('sequoiaGroveApp')
       $scope.userRequests = data.request;
       $log.debug("Current Requests");
       $log.debug($scope.userRequests);
-      //Testing
-    });
-  }
-
-
-  //Approve Request
-  $scope.approveRequest= function() {
-    $http({
-      url: '/sequoiagrove/request/accept/'+
-      $rootScope.loggedInUser.id,
-    method: "POST"
-    }).success(function(data, status) {
-      $log.debug("Request Approved");
-      $log.debug(data);
     });
   }
 
@@ -224,6 +209,7 @@ angular.module('sequoiaGroveApp')
     $log.debug("changeRequest activated"); 
   }
 
+  //Total Days
   $scope.totalDays = function(a, b){
     var dog = moment(a);
     var cool = moment(b)
