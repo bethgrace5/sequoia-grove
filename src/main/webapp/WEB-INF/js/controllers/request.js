@@ -7,7 +7,7 @@
  * Controller for requesting vacation
  */
 angular.module('sequoiaGroveApp')
-  .controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
+.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
   $rootScope.lastPath = '/schedule';
   $rootScope.lastPath = '/request';
@@ -20,9 +20,9 @@ angular.module('sequoiaGroveApp')
   //Date Gatherer
   $scope.today = new Date();
   $scope.minDateStart = new Date(
-      $scope.today.getFullYear(),
-      $scope.today.getMonth(),
-      $scope.today.getDate() + 14
+    $scope.today.getFullYear(),
+    $scope.today.getMonth(),
+    $scope.today.getDate() + 14
     );//14 days/2 weeks in advance
 
   $scope.requestDateStart = $scope.minDateStart;
@@ -33,31 +33,95 @@ angular.module('sequoiaGroveApp')
       $scope.requestDateEnd = $scope.requestDateStart;
     }
   }
-$scope.checkDates = function(){
-  $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
-  $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
-}
-
-  //Submit Request
-  $scope.submitRequest = function(){
-    var obj = { "eid": $rootScope.loggedInUser.id,
-      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
-      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
-    }
-    $http({
-      url: '/sequoiagrove/request/submit/',
-      method: "POST",
-      data: JSON.stringify(obj)
-    })
-    .success(function (data, status, headers, config) {
-      $log.debug("Sumbiting Request");
-      $log.debug(data);
-    })
-    .error(function (data, status, headers, config) {
-        $log.error('Error submiting request ', status, data);
-    });
+  $scope.checkDates = function(){
+    $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
+    $log.debug(moment($scope.requestDateStart).format('MM/DD/YYYY'));
   }
-    //Manager's Sumbit Request
+
+  //User Requests List
+  $scope.userRequests;
+
+  //Submit Request ----------------------------------------------------
+  $scope.submitRequest = function(){
+    //Switch to its own function
+    $log.debug($scope.userRequests);
+
+    var i = 0;
+    var submitStart = moment($scope.requestDateStart);
+    var submitEnd = moment($scope.requestDateEnd);
+
+    for(i = 0; i < $scope.userRequests.length; i++){
+      var checkStart = moment($scope.userRequests[i].startDate).subtract(1, 'day');
+      var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
+
+      if(moment(submitStart).isBetween(checkStart, checkEnd)){
+        $log.debug("Is S In"); 
+        alert("Dates Already Taken");
+        return;
+      }
+      if(moment(submitEnd).isBetween(checkStart, checkEnd)){
+        $log.debug("Is N In");
+        alert("Dates Already Taken");
+        return;
+      }
+      if(moment(checkStart).isBetween(submitStart, submitEnd)){
+        $log.debug("S Is N");
+        alert("Dates Already Taken");
+        return;
+      }
+      if(moment(checkEnd).isBetween(submitStart, submitEnd)){
+        $log.debug("S In N");
+        alert("Dates Already Taken");
+        return;
+      }
+    }
+    //-----------------------------------------------------------------
+       var obj = { "eid": $rootScope.loggedInUser.id,
+       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+       }
+       $http({
+       url: '/sequoiagrove/request/submit/',
+       method: "POST",
+       data: JSON.stringify(obj)
+       })
+       .success(function (data, status, headers, config) {
+       $log.debug("Sumbiting Request");
+       $log.debug(data);
+       })
+       .error(function (data, status, headers, config) {
+       $log.error('Error submiting request ', status, data);
+       });
+  }
+
+  //Check User Request
+  $scope.checkUserRequests = function(){
+    return true;
+    for(i = 0; i < $scope.userRequests.length; i++){
+      var checkStart = moment($scope.userRequests[i].startDate).format('MM/DD/YYYY');
+      var checkEnd   = moment($scope.userRequests[i].startEnd).format('MM/DD/YYYY');
+      $log.debug("Testing Each Date Comparision Extreme 5 folds");
+      $log.debug(submitStart);
+      $log.debug(submitEnd);
+      $log.debug(checkStart);
+      $log.debug(checkEnd);
+
+      if(moment(submitStart).isBetween(checkStart, checkEnd)){
+        $log.debug("Is S In");
+      }
+      if(moment(submitEnd).isBetween(checkStart, checkEnd)){
+        $log.debug("Is N In");
+      }
+      if(moment(checkStart).isBetween(submitStart, submitEnd)){
+        $log.debug("S Is N");
+      }
+      if(moment(checkEnd).isBetween(submitStart, submitEnd)){
+        $log.debug("S In N");
+      }
+    }
+  }
+
+  //Manager's Sumbit Request
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
   $scope.seeTargetEmployee = 0;
   $scope.selectedEmployee;   //Info On Specific
@@ -142,140 +206,108 @@ $scope.checkDates = function(){
   }
 
   //Get Current User Requests
-  $scope.userRequests;
-  $scope.checkUserRequests = function(){
-    $log.debug("ummm...");
-    $log.debug($scope.userRequests);
-/*
-    var i = 0;
-    var submitStart = moment($scope.requestDateStart).format('MM/DD/YYYY');
-    var submitEnd = moment($scope.requestDateEnd).format('MM/DD/YYYY');
 
-    for(i = 0; i < $scope.userRequests.length; i++){
-      var checkStart = moment($scope.userRequests[i].startDate).format('MM/DD/YYYY');
-      var checkEnd   = moment($scope.userRequests[i].startEnd).format('MM/DD/YYYY');
-      $log.debug("Testing Each Date Comparision Extreme 5 folds");
-      $log.debug(submitStart);
-      $log.debug(submitEnd);
-      $log.debug(checkStart);
-      $log.debug(checkEnd);
-
-      if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        $log.debug("Is S In");
-      }
-      if(moment(submitEnd).isBetween(checkStart, checkEnd)){
-        $log.debug("Is N In");
-      }
-      if(moment(checkStart).isBetween(submitStart, submitEnd)){
-        $log.debug("S Is N");
-      }
-      if(moment(checkEnd).isBetween(submitStart, submitEnd)){
-        $log.debug("S In N");
-      }
-    }*/
+  $scope.getCurrentEmployeeRequest = function() {
+    $http({
+      url: '/sequoiagrove/request/get/current/employee/'+
+      $rootScope.loggedInUser.id,
+      method: "POST"
+    }).success(function(data, status) {
+      $scope.userRequests = data.request;
+      $log.debug("Current Requests");
+      $log.debug($scope.userRequests);
+      //Testing
+    });
   }
 
-$scope.getCurrentEmployeeRequest = function() {
-  $http({
-    url: '/sequoiagrove/request/get/current/employee/'+
-    $rootScope.loggedInUser.id,
-  method: "POST"
-  }).success(function(data, status) {
-    $scope.userRequests = data.request;
-    $log.debug("Current Requests");
-    $log.debug($scope.userRequests);
-    //Testing
-  });
-}
 
-
-//Approve Request
-$scope.approveRequest= function() {
-  $http({
-    url: '/sequoiagrove/request/accept/'+
-    $rootScope.loggedInUser.id,
-  method: "POST"
-  }).success(function(data, status) {
-    $log.debug("Request Approved");
-    $log.debug(data);
-  });
-}
-
-//Change Request
-$scope.changeRequest = function($requestID, $approverID, $is_approve) {
-  $log.debug("changeRequest activated");
-  $http({
-    url: '/sequoiagrove/request/update/' + 
-    $requestID + '/' + $approverID + '/' + $is_approve,
+  //Approve Request
+  $scope.approveRequest= function() {
+    $http({
+      url: '/sequoiagrove/request/accept/'+
+      $rootScope.loggedInUser.id,
     method: "POST"
-  }).success(function(data, status) {
-    $log.debug("Request Changed");
-    $log.debug(data);
-    $scope.getPendingRequests();
-  });
-}
-$scope.test = function(){
-  $log.debug("changeRequest activated"); 
-}
-
-$scope.totalDays = function(a, b){
-  var dog = moment(a);
-  var cool = moment(b)
-    return cool.diff(dog, 'days');
-}
-
-$scope.countDisplay = 0 ;
-
-$scope.donGraph= {
-  onClick: function(points, evt) {
-             $scope.countDisplay = points[0].label.substr(0,1)-1;
-           },
-  labels: ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"],
-  data: [
-    /*
-     * TODO use dayCount instead
-     $scope.schCount[0].length,
-     $scope.schCount[1].length,
-     $scope.schCount[2].length,
-     $scope.schCount[3].length,
-     $scope.schCount[4].length,
-     $scope.schCount[5].length,
-     $scope.schCount[6].length
-     */
-    ]
-};
-
-$scope.previousRequests = [
-{ employee: "John",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-{ employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-{ employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-{ employee: "Andy",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "approved"},
-{ employee: "Sawyer", startDate: "May 20", endDate: "May 20", totalDays: "1", status: "approved"},
-{ employee: "Blue",   startDate: "May 15", endDate: "May 15", totalDays: "1", status: "denied"  }
-];
-
-//---------- Initialize Testing Extreme ----------------\\
-
-$scope.testManager = function(){
-  if ($rootScope.loggedInUser.isManager) {
-    $log.debug("you are a Manager");
-  } 
-  else{
-    $log.debug("you are a  Employee");
+    }).success(function(data, status) {
+      $log.debug("Request Approved");
+      $log.debug(data);
+    });
   }
-} 
-$scope.init = function(){
-  $log.debug($scope.previousRequests);
-  //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
-  $scope.getCurrentEmployeeRequest();
-  $scope.getPendingRequests();
-  $scope.getEmployees();
-  $scope.testManager();
-  $scope.checkDates();
-}
-$scope.init();
 
-//----Temporary Function Location -----
+  //Change Request
+  $scope.changeRequest = function($requestID, $approverID, $is_approve) {
+    $log.debug("changeRequest activated");
+    $http({
+      url: '/sequoiagrove/request/update/' + 
+      $requestID + '/' + $approverID + '/' + $is_approve,
+      method: "POST"
+    }).success(function(data, status) {
+      $log.debug("Request Changed");
+      $log.debug(data);
+      $scope.getPendingRequests();
+    });
+  }
+  $scope.test = function(){
+    $log.debug("changeRequest activated"); 
+  }
+
+  $scope.totalDays = function(a, b){
+    var dog = moment(a);
+    var cool = moment(b)
+      return cool.diff(dog, 'days');
+  }
+
+  $scope.countDisplay = 0 ;
+
+  $scope.donGraph= {
+    onClick: function(points, evt) {
+               $scope.countDisplay = points[0].label.substr(0,1)-1;
+             },
+    labels: ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"],
+    data: [
+      /*
+       * TODO use dayCount instead
+       $scope.schCount[0].length,
+       $scope.schCount[1].length,
+       $scope.schCount[2].length,
+       $scope.schCount[3].length,
+       $scope.schCount[4].length,
+       $scope.schCount[5].length,
+       $scope.schCount[6].length
+       */
+      ]
+  };
+
+  $scope.previousRequests = [
+  { employee: "John",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
+  { employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
+  { employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
+  { employee: "Andy",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "approved"},
+  { employee: "Sawyer", startDate: "May 20", endDate: "May 20", totalDays: "1", status: "approved"},
+  { employee: "Blue",   startDate: "May 15", endDate: "May 15", totalDays: "1", status: "denied"  }
+  ];
+
+  //---------- Initialize Testing Extreme ----------------\\
+
+  $scope.testManager = function(){
+    if ($rootScope.loggedInUser.isManager) {
+      $log.debug("you are a Manager");
+    } 
+    else{
+      $log.debug("you are a  Employee");
+    }
+  } 
+  $scope.init = function(){
+    $log.debug($scope.previousRequests);
+    //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
+    $scope.getCurrentEmployeeRequest();
+    $scope.getPendingRequests();
+    $scope.getEmployees();
+    $scope.testManager();
+    $scope.checkDates();
+  }
+  $scope.init();
+
+  //----Temporary Function Location -----
 
 
 
