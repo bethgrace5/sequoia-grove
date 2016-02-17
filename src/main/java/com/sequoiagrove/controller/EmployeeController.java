@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import com.sequoiagrove.controller.Authentication;
 import com.sequoiagrove.model.Employee;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
@@ -34,6 +35,8 @@ public class EmployeeController
     public String getAllEmployee(Model model,
             @RequestHeader (value="Authorization", defaultValue = "") String authToken) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        System.out.println(Authentication.verifyToken(authToken));
 
         System.out.println(authToken);
 

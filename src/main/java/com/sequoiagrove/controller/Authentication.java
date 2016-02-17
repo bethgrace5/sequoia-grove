@@ -6,7 +6,10 @@ import info.modprobe.browserid.BrowserIDResponse.Status;
 import info.modprobe.browserid.BrowserIDResponse;
 import info.modprobe.browserid.Verifier;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -42,6 +45,7 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class Authentication {
   private final String USER_AGENT = "Mozilla/5.0";
+  private static Key key = MacProvider.generateKey();
 
     // Verify mozilla persona token received
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
@@ -109,7 +113,6 @@ public class Authentication {
       //byte[] key = getSignatureKey();
       // We need a signing key, so we'll create one just for this example. Usually
       // the key would be read from your application configuration instead.
-       Key key = MacProvider.generateKey();
 
       String jwt =
         Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
@@ -122,14 +125,23 @@ public class Authentication {
       return jwt;
     }
 
+    public static String verifyToken(String jwt) {
+      String subject = "HACKER";
+      try {
+        Jws<Claims> jwtClaims = 
+          Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
+
+        subject = jwtClaims.getBody().getSubject();
+
+        //OK, we can trust this JWT
+        System.out.println(subject);
+
+      } catch (SignatureException e) {
+        System.out.println("signature exception caught");
+
+        //don't trust the JWT!
+      }
+      return(subject);
+    }
+
 }
-
-
-
-
-
-
-
-
-
-
