@@ -24,11 +24,11 @@
     </div>
 </div>
 
-<div  ng-repeat="request in previousRequests">
+<div  ng-repeat="request in allRequests ">
     <br/>
     <div class="row">
         <div class="col-sm-1">
-            <p> {{request.employee}} </p>
+            <p> {{request.employeeID}} </p>
         </div>
         <div class="col-sm-2">
             <p> {{request.startDate}} </p>
@@ -37,13 +37,13 @@
             <p> {{request.endDate}} </p>
         </div>
         <div class="col-sm-1">
-            <p> {{request.totalDays}} </p>
+            <p> {{totalDays(request.startDate, request.endDate)}} </p>
         </div>
         <div class="col-sm-1">
             <p> {{request.status}} </p>
         </div>
         <div class="col-sm-3">
-            Approved by: %manager%
+            <p> {{request.approverID}} </p>
         </div>
     </div>
 </div>
