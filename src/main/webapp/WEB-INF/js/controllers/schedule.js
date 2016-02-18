@@ -124,7 +124,6 @@ angular.module('sequoiaGroveApp')
       return false;
     }
 
-    $log.debug(attrs);
     // 2. determine shift duration times
     var shiftStart = moment(attrs.date + ' ' + attrs.shiftstart, 'DD-MM-YYYY HHmm');
     var shiftEnd = moment(attrs.date + ' ' + attrs.shiftend, 'DD-MM-YYYY HHmm');

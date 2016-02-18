@@ -292,6 +292,9 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
+        // update count of days and hours per employee
+        $scope.countDays();
+        $scope.countHours();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
