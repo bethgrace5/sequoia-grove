@@ -18,6 +18,7 @@ angular.module('sequoiaGroveApp')
         Persona){
     $rootScope.loggedIn = false;
     $rootScope.userNotRegistered = false;
+    $rootScope.userNotCurrent = false;
     $rootScope.loggedInUser = {};
 
     // User tried to go back to the login page when they were alredy logged in.
@@ -29,6 +30,8 @@ angular.module('sequoiaGroveApp')
 
     // User initialized login, send it to Mozilla Persona
     $scope.personaLogin = function () {
+      $rootScope.userNotRegistered = false;
+      $rootScope.userNotCurrent = false;
       Persona.request();
     }
 
@@ -95,9 +98,17 @@ angular.module('sequoiaGroveApp')
             // The user with the supplied email was verified by Mozilla Persona,
             // but was not found in the database.
             // Issue warning message, don't redirect to home
-            if (data.UserNotRegistered) {
+            if (data.userNotRegistered) {
               $rootScope.userNotRegistered = true;
               $log.debug(data.email, 'not registered with this application');
+              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+            // The user has been unemployed from the company
+            if (data.userNotCurrent) {
+              $rootScope.userNotCurrent = true;
+              $log.debug(data.email, 'is not a current employee');
               $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
               $rootScope.loggingIn = false;
               return;

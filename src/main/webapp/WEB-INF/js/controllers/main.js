@@ -61,6 +61,7 @@ angular.module('sequoiaGroveApp')
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
   $scope.loadingMsg = "Verifying user with Application...";
+  $scope.selectedPid = 0;
 
   // container for displaying the date header
   // val 'DD-MM-YYYY' format, disp 'MMM-D' format
@@ -231,22 +232,29 @@ angular.module('sequoiaGroveApp')
 
   // check if employee has this position
   $scope.employeeHasPosition = function(eid, pid) {
+    if (pid === -1) {
+      pid = $scope.selectedPid;
+    }
     if (pid === 0) {
       return true;
     }
     var hasPosition = false;
 
     // find if this employee knows the selected position
-    _.map($scope.employeeInfo, function(e) {
+    _.map($scope.employees, function(e) {
       if (e.id === eid) {
         _.map(e.positions, function(p) {
-          if (p === $scope.selectedPid) {
+          if (parseInt(p) === parseInt(pid)) {
             hasPosition = true;
           }
         })
       }
     });
     return hasPosition;
+  }
+
+  $scope.selectPosition = function(pid) {
+    $scope.selectedPid = pid;
   }
 
 /************** HTTP Request Functions **************/
@@ -291,6 +299,9 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
+        // update count of days and hours per employee
+        $scope.countDays();
+        $scope.countHours();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);

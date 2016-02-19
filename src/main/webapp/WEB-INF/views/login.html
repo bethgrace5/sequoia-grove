@@ -14,6 +14,13 @@
     <p ng-show="userNotRegistered">
     If you have an account, ask an administrator to verify your email.
     </p>
+    <p ng-show="userNotCurrent">
+    <strong style="color:b30000;">{{loggedInUser.email}}</strong>
+    is not a current employee.
+    </p>
+    <p ng-show="userNotCurrent">
+    If you are a current employee, ask an administrator to verify your email and employment status.
+    </p>
     <!--
       <button type="button" ng-click="login()" class="btn btn-default">
       <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
