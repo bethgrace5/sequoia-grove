@@ -160,6 +160,28 @@ public class RequestController{
          return "jsonTemplate";
        } 
 
+     @RequestMapping(value = "/request/update/dates")
+       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
+         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+         Gson gson = new Gson();
+         Request req = gson.fromJson(data, Request.class);
+
+         int eid = req.getEid();
+         String start = req.getStartDate();
+         String end = req.getEndDate();
+/*
+         jdbcTemplate.update("update bajs_requests_vacation " +
+             " set" +
+             " start_date_time = " + "to_timestamp(" + start + ", 'mm-dd-yyyy')" +
+             " where id = " + eid
+             );
+*/
+         System.out.println("I changed " + eid);
+         System.out.println("Start Date: " + start + "\nEnd Date: " + end);
+        
+         return "jsonTemplate";
+       }
+
 
      public String checkStatus(Integer responder, boolean approval){
        // System.out.println(responder + " and request is " +  approval);

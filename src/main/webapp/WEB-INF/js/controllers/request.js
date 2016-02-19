@@ -204,7 +204,14 @@ angular.module('sequoiaGroveApp')
   $scope.selectedEmployee;
   $scope.targetEmployee = function(employee){
     $scope.selectedEmployee = employee
-      $log.debug($scope.selectedEmployee);
+    $log.debug($scope.selectedEmployee);
+    $scope.seeTargetEmployee = 1;
+  }
+  $scope.selectedRequest;
+  $scope.targetRequest = function(request){
+    $scope.selectedRequest = request
+    $log.debug($scope.selectedRequest);
+    $scope.seeTargetRequest = 1;
   }
 
   $scope.managerSubmitRequest = function(){
@@ -239,11 +246,31 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  $scope.changeRequestDates = function(){
+    $log.debug("changeRequest activated");
+    $log.debug($scope.selectedRequest.requestID);
+    var obj = { "eid": $scope.selectedRequest.requestID,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/update/dates',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+      $log.debug(data);
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting request ', status, data);
+    });
+  }
   //-------------------------
   //Toggles
   //------------------------- 
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
   $scope.seeTargetEmployee = 1;
+  $scope.seeTargetRequest = 0;
 
   $scope.changeEmployeeView = function(){
     if($scope.seeEmployees){
@@ -253,7 +280,15 @@ angular.module('sequoiaGroveApp')
       $scope.seeEmployees = 1;
     }
   }
-
+  $scope.targetPendingEmployee = function(){
+    $log.debug("Toggle Dog");
+    if($scope.seeTargetRequests){
+      $scope.seeTargetRequests = 0;
+    }
+    else{
+      $scope.seeTargetRequests = 1;
+    }
+  }
   //?????
   //********* Not Sure What this is Placement, but might be important info**************
   $scope.countDisplay = 0 ;
