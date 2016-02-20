@@ -34,16 +34,17 @@ angular.module('sequoiaGroveApp')
   $scope.newDelivery = '';
   $scope.empEditSearch = '';
   $scope.selectedShift = {
-    idx : -1,
+    idx : -1
+  };
+  $scope.shiftInfo = {
     sid : -1,
     pid : -1,
-    title : '',
-    pos : '',
+    tname : '',
     wd_st : '',
     wd_ed : '',
     we_st : '',
     we_ed : ''
-  };
+  }
 
 /************** Pure Functions **************/
 
@@ -56,34 +57,36 @@ angular.module('sequoiaGroveApp')
     $scope.selectedId = id;
   }
 
+  $scope.clearShiftSelect = function() {
+    $scope.selectedShift.idx = -1;
+    $scope.shiftInfo.sid = -1;
+    $scope.shiftInfo.pid = -1;
+    $scope.shiftInfo.tname = '';
+    $scope.shiftInfo.wd_st = '';
+    $scope.shiftInfo.wd_ed = '';
+    $scope.shiftInfo.we_st = '';
+    $scope.shiftInfo.we_ed = '';
+  }
+
   $scope.selectShift = function(cur) {
     $scope.selectedShift.idx = cur;
     if ($scope.selectedShift.idx != -1) {
-      $scope.selectedShift.sid = $scope.template[cur].sid;
-      $scope.selectedShift.pid = $scope.template[cur].pid;
-      $scope.selectedShift.title = $scope.template[cur].tname;
-      $scope.selectedShift.pos = $scope.template[cur].position;
-      $scope.selectedShift.wd_st = moment($scope.template[cur].wd_st_h + ':' + $scope.template[cur].wd_st_m, 'HH:mm').format('h:mm A');
-      $scope.selectedShift.wd_ed = moment($scope.template[cur].wd_ed_h + ':' + $scope.template[cur].wd_ed_m, 'HH:mm').format('h:mm A');
-      $scope.selectedShift.we_st = moment($scope.template[cur].we_st_h + ':' + $scope.template[cur].we_st_m, 'HH:mm').format('h:mm A');
-      $scope.selectedShift.we_ed = moment($scope.template[cur].we_ed_h + ':' + $scope.template[cur].we_ed_m, 'HH:mm').format('h:mm A');
+      $scope.shiftInfo.sid = $scope.template[cur].sid;
+      $scope.shiftInfo.pid = $scope.template[cur].pid;
+      $scope.shiftInfo.tname = $scope.template[cur].tname;
+      $scope.shiftInfo.wd_st = $scope.template[cur].weekdayStart;
+      $scope.shiftInfo.wd_ed = $scope.template[cur].weekdayEnd;
+      $scope.shiftInfo.we_st = $scope.template[cur].weekendStart;
+      $scope.shiftInfo.we_ed = $scope.template[cur].weekendEnd;
     }
     else {
-      $scope.selectedShift.sid = -1;
-      $scope.selectedShift.pid = -1;
-      $scope.selectedShift.title = '';
-      $scope.selectedShift.pos = '';
-      $scope.selectedShift.wd_st = '';
-      $scope.selectedShift.wd_ed = '';
-      $scope.selectedShift.we_st = '';
-      $scope.selectedShift.we_ed = '';
+      $scope.clearShiftSelect();
     }
   }
 
   $scope.shiftSelected = function() {
     return ($scope.selectedShift.idx != -1);
   }
-
 
   // Filter schedule by selected position
   $scope.filterSchedule = function(pid) {
@@ -95,7 +98,6 @@ angular.module('sequoiaGroveApp')
     }
     return false;
   }
-
 
   // find the matching employee by name
   $scope.getEmployeeByname = function(name) {
@@ -394,6 +396,47 @@ angular.module('sequoiaGroveApp')
 
   // Add new shift to schedule
   $scope.addShift = function() {
+    $http({
+      url: '/sequoiagrove/shift/add/',
+      method: "POST",
+      data: $scope.shiftInfo
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        $scope.clearShiftSelect();
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error adding shift " + data);
+    });
+  }
+
+  // Update current shift to schedule
+  $scope.updateShift = function() {
+    $http({
+      url: '/sequoiagrove/shift/update/',
+      method: "POST",
+      data: $scope.shiftInfo
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        $scope.clearShiftSelect();
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error updating shift " + data);
+    });
+  }
+
+  // Delete current shift to schedule
+  $scope.deleteShift = function() {
+    $http({
+      url: '/sequoiagrove/shift/delete/',
+      method: "DELETE",
+      data: $scope.shiftInfo
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        $scope.clearShiftSelect();
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error deleting shift " + data);
+    });
   }
 
 /************** Controller Initialization **************/
@@ -411,6 +454,5 @@ angular.module('sequoiaGroveApp')
       // watchExpression has changed.
     }
   });
-
 
 });

@@ -22,6 +22,7 @@ import java.sql.ResultSet;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.Scheduled;
+import com.sequoiagrove.model.Shift;
 import com.sequoiagrove.controller.MainController;
 
 
@@ -64,7 +65,6 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-
   // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
     public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
@@ -100,6 +100,48 @@ public class ScheduleController {
                 change.getSid(),
                 change.getDate());
         }
+
+        return "jsonTemplate";
+    }
+
+  // Add new shift
+    @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
+    public String addShift(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        Gson gson = new Gson();
+        Shift shiftToAdd = gson.fromJson(data, Shift.class);
+
+        /*jdbcTemplate.update("sql",
+            params,...);*/
+
+        return "jsonTemplate";
+    }
+
+  // Update currently selected shift
+    @RequestMapping(value = "/shift/update", method = RequestMethod.POST)
+    public String updateShift(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        Gson gson = new Gson();
+        Shift shiftToUpdate = gson.fromJson(data, Shift.class);
+
+        /*jdbcTemplate.update("sql",
+            params,...);*/
+
+        return "jsonTemplate";
+    }
+
+  // Delete currently selected shift
+    @RequestMapping(value = "/shift/delete", method = RequestMethod.POST)
+    public String deleteShift(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        Gson gson = new Gson();
+        Shift shiftToDelete = gson.fromJson(data, Shift.class);
+
+        /*jdbcTemplate.update("sql",
+            params,...);*/
 
         return "jsonTemplate";
     }
