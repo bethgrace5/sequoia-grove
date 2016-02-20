@@ -32,9 +32,13 @@
         ng-disabled = "saving"
         ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-click = "saveSchedule()">
-        Saved {{updateShifts.length}} {{deleteShifts.length}}
+        Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
       </button>
+      <div style="position:absolute; right:21%; top:10%;"
+        ng-show="saving || importing">
+      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+      </div>
 
       <!-- Default button -->
       <button class = "btn btn-default"
@@ -42,7 +46,7 @@
         ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-disabled = "saving";
         ng-click = "saveSchedule()">
-        Save Changes {{updateShifts.length}} {{deleteShifts.length}}
+        Save Changes
         <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
       </button>
 
@@ -64,11 +68,11 @@
     <button
       class="btn btn-default btn-small pull-left clear-both position-button"
       ng-show = "$index == 0"
-      ng-click="switchPos(0)">
+      ng-click="selectPosition(0)">
       All
     </button>
     <button class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-click="switchPos(pos.id)">
+      ng-click="selectPosition(pos.id)">
       {{pos.title}}
     </button>
   </div>

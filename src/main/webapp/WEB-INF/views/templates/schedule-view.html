@@ -14,7 +14,7 @@
       <!-- weekday times -->
       <div class="col-sm-1 col-sm-offset-0 schedule-times" >
         <!--<div ng-show="t.wd_st != 0">-->
-        {{formatTime(t.wd_st_h, t.wd_st_m, false)}} - {{formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
+        {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
         <!--</div>-->
       </div>
 
@@ -56,7 +56,7 @@
       <!-- weekend times -->
       <div class="col-sm-1 col-sm-offset-0 schedule-times" >
         <!--<div ng-show="t.we_st != 0">-->
-        {{formatTime(t.we_st_h, t.we_st_m, false)}} - {{formatTime(t.we_ed_h, t.we_ed_m, fasle)}}
+        {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
         <!--</div>-->
       </div>
 

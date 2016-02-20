@@ -1,41 +1,26 @@
 package com.sequoiagrove.model;
 
 public class Availability{
-    int startHr;
-    int startMin;
-    int endHr;
-    int endMin;
+    String start;
+    String end;
 
     public Availability(){}
-    public Availability(int sh, int sm, int eh, int em) {
-      startHr = sh;
-      startMin = sm;
-      endHr = eh;
-      endMin = em;
+    public Availability(String start, String end) {
+      this.start = start;
+      this.end = end;
     }
 
-    public int getStartHr() {
-      return startHr;
+    public void setStart(String start) {
+      this.start = start;
     }
-    public int getEndHr() {
-      return endHr;
+    public String getStart() {
+      return start;
     }
-    public int getStartMin() {
-      return startMin;
+
+    public void setEnd(String end) {
+      this.end = end;
     }
-    public int getEndMin() {
-      return endMin;
-    }
-    public void setStartHr(int st) {
-      startHr = st;
-    }
-    public void setEndHr(int et) {
-      endHr = et;
-    }
-    public void setStartMin(int st) {
-      startMin = st;
-    }
-    public void setEndMin(int et) {
-      endMin = et;
+    public String getEnd() {
+      return end;
     }
 };

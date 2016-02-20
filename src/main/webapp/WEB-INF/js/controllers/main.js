@@ -25,14 +25,6 @@ angular.module('sequoiaGroveApp')
   $rootScope.currentPath = $location.path();
   $rootScope.lastPath = '/home';
 
-  // user is not logged in, redirect to login
-  if ($rootScope.loggedIn == false) {
-    $rootScope.lastPath = $location.path();
-    if ($location.path() != '/login') {
-      $location.path('/login');
-    }
-  }
-
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
@@ -46,8 +38,6 @@ angular.module('sequoiaGroveApp')
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
 
-  // a list of position ids as keys, with the value as a list of employee ids that hold that position
-  $scope.hasPosition = [];
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
   $scope.originalTemplate = [];
@@ -63,6 +53,8 @@ angular.module('sequoiaGroveApp')
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
+  $scope.loadingMsg = "Verifying user with Application...";
+  $scope.selectedPid = 0;
 
   // container for displaying the date header
   // val 'DD-MM-YYYY' format, disp 'MMM-D' format
@@ -88,6 +80,8 @@ angular.module('sequoiaGroveApp')
   }
   // highlight name
   $scope.highlight = false;
+  // flag when set will disable all buttons, to avoid overlapping requests
+  $scope.loading = false;
 
 /************** Pure Functions **************/
 
@@ -162,33 +156,17 @@ angular.module('sequoiaGroveApp')
     $scope.getScheduleTemplate($scope.date.mon.val);
   }
 
-  $scope.formatTime = function(h, m, ampm) {
+  $scope.formatTime = function(t, ampm) {
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
     if (ampm) {
-      return moment({hour:h, minute:m}).format('h:mm a');
+      return moment(t, 'HHmm').format('h:mm a');
     }
-    return moment({hour:h, minute:m}).format('h:mm');
+    return moment(t, 'HHmm').format('h:mm');
   }
 
-  $scope.shiftDuration = function(shr, smin, ehr, emin) {
-    return parseFloat((emin-smin)/60) + (ehr-shr);
-  }
-
-  $scope.hrMinTo24 = function(h, m) {
-    if(h < 10) {
-      h = "0"+h;
-    }
-    else {
-      h = h+"";
-    }
-    if(m < 10) {
-      m = "0"+m;
-    }
-    else {
-      m = m+"";
-    }
-    return h+m;
+  $scope.shiftDuration = function(start, end) {
+    return moment(end, 'HHmm').diff(moment(start, 'HHmm'), 'hours', true);
   }
 
   // count the number of days an employee is scheduled, if they are scheduled
@@ -216,8 +194,13 @@ angular.module('sequoiaGroveApp')
     var count = [];
 
     _.map($scope.template, function(item) {
-      var duration = parseFloat( (item.wd_ed_m-item.wd_st_m)/60) +
-        parseFloat(item.wd_ed_h-item.wd_st_h);
+      var duration = 0;
+      if (item.day !== 'sat' && item.day !== 'sun') {
+        duration = $scope.shiftDuration(item.weekdayStart, item.weekdayEnd);
+      }
+      else {
+        duration = $scope.shiftDuration(item.weekendStart, item.weekendEnd);
+      }
       count.push({'eid':item.mon.eid, 'duration':duration});
       count.push({'eid':item.tue.eid, 'duration':duration});
       count.push({'eid':item.wed.eid, 'duration':duration});
@@ -240,6 +223,33 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // check if employee has this position
+  $scope.employeeHasPosition = function(eid, pid) {
+    if (pid === -1) {
+      pid = $scope.selectedPid;
+    }
+    if (pid === 0) {
+      return true;
+    }
+    var hasPosition = false;
+
+    // find if this employee knows the selected position
+    _.map($scope.employees, function(e) {
+      if (e.id === eid) {
+        _.map(e.positions, function(p) {
+          if (parseInt(p) === parseInt(pid)) {
+            hasPosition = true;
+          }
+        })
+      }
+    });
+    return hasPosition;
+  }
+
+  $scope.selectPosition = function(pid) {
+    $scope.selectedPid = pid;
+  }
+
 /************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
@@ -253,21 +263,11 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.getHasPositions = function() {
-    return $http({
-      url: '/sequoiagrove/position/has',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.hasPosition = data.hasPositions;
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining has position data: " + data);
-    });
-  }
-
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
     $scope.checkifPublished();
+    $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
@@ -293,39 +293,23 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
+        // update count of days and hours per employee
+        $scope.countDays();
+        $scope.countHours();
 
-        // we were importing another week - add them to update shifts, so they can
-        // be saved for this week
-        if (_.isEqual(week, $scope.date.mon.val) == false) {
-          angular.copy($scope.originalTemplate, $scope.updateShifts);
-        }
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
     });
   }
 
-  // Get Current Employees with their id
-  $scope.getEmployeeCurrent = function() {
-    return $http({
-      url: '/sequoiagrove/employee/info/current',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.currentEmployees = data.employeeInfo;
-        //$log.debug(data);
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining current employee: " + data);
-    });
-  }
-
   // Get All Employees with their id
-  $scope.getEmployeeAll = function() {
+  $scope.getEmployees = function() {
+    $scope.loadingMsg = "Obtaining current employee data...";
     return $http({
-      url: '/sequoiagrove/employee/info/all',
+      url: '/sequoiagrove/employees',
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.allEmployees = data.employeeInfo;
-        //$log.debug(data);
+        $scope.employees = data.employees;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -362,52 +346,52 @@ angular.module('sequoiaGroveApp')
     // hours until the end of the lastest starting shift
     // TODO have a smarter way to populate this list
     start:[
-      {disp:"5:00 AM", valHr: 5, valMin: 0},
-      {disp:"5:30 AM", valHr: 5, valMin: 30},
-      {disp:"6:00 AM", valHr: 6, valMin: 0},
-      {disp:"6:30 AM", valHr: 6, valMin: 30},
-      {disp:"7:00 AM", valHr: 7, valMin: 0},
-      {disp:"7:30 AM", valHr: 7, valMin: 30},
-      {disp:"8:00 AM", valHr: 8, valMin: 0},
-      {disp:"8:30 AM", valHr: 8, valMin: 30},
-      {disp:"9:00 AM", valHr: 9, valMin: 0},
-      {disp:"9:30 AM", valHr: 9, valMin: 30},
-      {disp:"10:00 AM", valHr: 10, valMin: 0},
-      {disp:"10:30 AM", valHr: 10, valMin: 30},
-      {disp:"11:00 AM", valHr: 11, valMin: 0},
-      {disp:"11:30 AM", valHr: 11, valMin: 30},
-      {disp:"12:00 PM", valHr: 12, valMin: 0},
-      {disp:"12:30 PM", valHr: 12, valMin: 30},
-      {disp:"1:00 PM", valHr: 13, valMin: 0},
-      {disp:"1:30 PM", valHr: 13, valMin: 30},
-      {disp:"2:00 PM", valHr: 14, valMin: 0},
-      {disp:"2:30 PM", valHr: 14, valMin: 30},
-      {disp:"3:00 PM", valHr: 15, valMin: 0},
-      {disp:"3:30 PM", valHr: 15, valMin: 30},
-      {disp:"4:00 PM", valHr: 16, valMin: 0},
-      {disp:"4:30 PM", valHr: 16, valMin: 30}
+      {disp:"5:00 AM",  val: '0500'},
+      {disp:"5:30 AM",  val: '0530'},
+      {disp:"6:00 AM",  val: '0600'},
+      {disp:"6:30 AM",  val: '0630'},
+      {disp:"7:00 AM",  val: '0700'},
+      {disp:"7:30 AM",  val: '0730'},
+      {disp:"8:00 AM",  val: '0800'},
+      {disp:"8:30 AM",  val: '0830'},
+      {disp:"9:00 AM",  val: '0900'},
+      {disp:"9:30 AM",  val: '0930'},
+      {disp:"10:00 AM", val: '1000'},
+      {disp:"10:30 AM", val: '1030'},
+      {disp:"11:00 AM", val: '1100'},
+      {disp:"11:30 AM", val: '1130'},
+      {disp:"12:00 PM", val: '1200'},
+      {disp:"12:30 PM", val: '1230'},
+      {disp:"1:00 PM",  val: '1300'},
+      {disp:"1:30 PM",  val: '1330'},
+      {disp:"2:00 PM",  val: '1400'},
+      {disp:"2:30 PM",  val: '1430'},
+      {disp:"3:00 PM",  val: '1500'},
+      {disp:"3:30 PM",  val: '1530'},
+      {disp:"4:00 PM",  val: '1600'},
+      {disp:"4:30 PM",  val: '1630'}
     ],
     // end times start at the earlist shift end and increment by half
     // hours until the end of the lastest ending shift
     // TODO have a smarter way to populate this list
     end:[
-      {disp:"1:00 PM", valHr: 13, valMin: 0},
-      {disp:"1:30 PM", valHr: 13, valMin: 30},
-      {disp:"2:00 PM", valHr: 14, valMin: 0},
-      {disp:"2:30 PM", valHr: 14, valMin: 30},
-      {disp:"3:00 PM", valHr: 15, valMin: 0},
-      {disp:"3:30 PM", valHr: 15, valMin: 30},
-      {disp:"4:00 PM", valHr: 16, valMin: 0},
-      {disp:"4:30 PM", valHr: 16, valMin: 30},
-      {disp:"5:00 PM", valHr: 17, valMin: 0},
-      {disp:"5:30 PM", valHr: 17, valMin: 30},
-      {disp:"6:00 PM", valHr: 18, valMin: 0},
-      {disp:"6:30 PM", valHr: 18, valMin: 30},
-      {disp:"7:00 PM", valHr: 19, valMin: 0},
-      {disp:"7:30 PM", valHr: 19, valMin: 30},
-      {disp:"8:00 PM", valHr: 20, valMin: 0},
-      {disp:"8:30 PM", valHr: 20, valMin: 30},
-      {disp:"9:00 PM", valHr: 21, valMin: 0}
+      {disp:"1:00 PM", val: '1300'},
+      {disp:"1:30 PM", val: '1330'},
+      {disp:"2:00 PM", val: '1400'},
+      {disp:"2:30 PM", val: '1430'},
+      {disp:"3:00 PM", val: '1500'},
+      {disp:"3:30 PM", val: '1530'},
+      {disp:"4:00 PM", val: '1600'},
+      {disp:"4:30 PM", val: '1630'},
+      {disp:"5:00 PM", val: '1700'},
+      {disp:"5:30 PM", val: '1730'},
+      {disp:"6:00 PM", val: '1800'},
+      {disp:"6:30 PM", val: '1830'},
+      {disp:"7:00 PM", val: '1900'},
+      {disp:"7:30 PM", val: '1930'},
+      {disp:"8:00 PM", val: '2000'},
+      {disp:"8:30 PM", val: '2030'},
+      {disp:"9:00 PM", val: '2100'}
     ]
   };
 
@@ -415,23 +399,15 @@ angular.module('sequoiaGroveApp')
 
   // Initialize controller
   $scope.init = function() {
-    $scope.changeTab('/home');
-    $scope.setScheduleHeader();
-
-    if ($rootScope.loggingIn) {
+    // user is not logged in, redirect to login
+    if ($rootScope.loggedIn == false) {
+      $rootScope.lastPath = $location.path();
+      //if ($location.path() != '/login') {
+        $location.path('/login');
+      //}
     }
-    $q.all(
-      [$scope.getPositions(),
-        $scope.getEmployeeAll(),
-        $scope.getEmployeeCurrent(),
-        $scope.getScheduleTemplate($scope.date.mon.val),
-        $scope.countDays(),
-        $scope.countHours(),
-        $scope.getHasPositions()
-       ]
-     ).then(function(results) {
-        $log.debug('complete');
-      });
+
+    $scope.changeTab('/home');
 
   }
   $scope.$on('logged in', function(event, args) {

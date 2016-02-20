@@ -10,7 +10,7 @@
 
 <!-- weekday times -->
     <div class="col-sm-1 schedule-times">
-      {{formatTime(t.wd_st_h, t.wd_st_m, false)}}-{{formatTime(t.wd_ed_h, t.wd_ed_m, false)}}
+      {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
     </div>
 
     <!-- Monday -->
@@ -21,14 +21,12 @@
       idx={{$index}}
       date={{date.mon.val}}
       day="mon"
-      stHr={{t.wd_st_h}}
-      stMin={{t.wd_st_m}}
-      endHr={{t.wd_ed_h}}
-      endmin={{t.wd_ed_m}}
+      shiftStart={{t.weekdayStart}}
+      shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.mon.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.mon.eid, t.sid)"
-      ng-change="changeId(t.mon.eid, t.sid, date.mon.val)"
       ng-model="t.mon.name">
     </div>
 
@@ -40,12 +38,11 @@
       idx={{$index}}
       date={{date.tue.val}}
       day="tue"
-      stHr={{t.wd_st_h}}
-      stMin={{t.wd_st_m}}
-      endHr={{t.wd_ed_h}}
-      endmin={{t.wd_ed_m}}
+      shiftStart={{t.weekdayStart}}
+      shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.tue.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.tue.eid, t.sid)"
       ng-model="t.tue.name">
     </div>
@@ -58,12 +55,11 @@
       idx={{$index}}
       date={{date.wed.val}}
       day="wed"
-      stHr={{t.wd_st_h}}
-      stMin={{t.wd_st_m}}
-      endHr={{t.wd_ed_h}}
-      endmin={{t.wd_ed_m}}
+      shiftStart={{t.weekdayStart}}
+      shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.wed.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.wed.eid, t.sid)"
       ng-model="t.wed.name">
     </div>
@@ -76,12 +72,11 @@
       idx={{$index}}
       date={{date.thu.val}}
       day="thu"
-      stHr={{t.wd_st_h}}
-      stMin={{t.wd_st_m}}
-      endHr={{t.wd_ed_h}}
-      endmin={{t.wd_ed_m}}
+      shiftStart={{t.weekdayStart}}
+      shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.thu.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.thu.eid, t.sid)"
       ng-model="t.thu.name">
     </div>
@@ -94,19 +89,18 @@
       idx={{$index}}
       date={{date.fri.val}}
       day="fri"
-      stHr={{t.wd_st_h}}
-      stMin={{t.wd_st_m}}
-      endHr={{t.wd_ed_h}}
-      endmin={{t.wd_ed_m}}
+      shiftStart={{t.weekdayStart}}
+      shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.fri.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.fri.eid, t.sid)"
       ng-model="t.fri.name">
     </div>
 
 <!-- weekend times -->
     <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-      {{formatTime(t.we_st_h, t.we_st_m, false)}}-{{formatTime(t.we_ed_h, t.we_ed_m, false)}}
+      {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
     </div>
 
     <!-- Saturday -->
@@ -117,12 +111,11 @@
       idx={{$index}}
       date={{date.sat.val}}
       day="sat"
-      stHr={{t.we_st_h}}
-      stMin={{t.we_st_m}}
-      endHr={{t.we_ed_h}}
-      endmin={{t.we_ed_m}}
+      shiftStart={{t.weekendStart}}
+      shiftEnd={{t.weekendEnd}}
       ng-click="selectEid(t.sat.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.sat.eid, t.sid)"
       ng-model="t.sat.name">
     </div>
@@ -135,12 +128,11 @@
       idx={{$index}}
       date={{date.sun.val}}
       day="sun"
-      stHr={{t.we_st_h}}
-      stMin={{t.we_st_m}}
-      endHr={{t.we_ed_h}}
-      endmin={{t.we_ed_m}}
+      shiftStart={{t.weekendStart}}
+      shiftEnd={{t.weekendEnd}}
       ng-click="selectEid(t.sun.eid)"
-      ng-disabled=false type="text"
+      type="text"
+      ng-disabled="saving"
       ng-class="inputStatus(t.sun.eid, t.sid)"
       ng-model="t.sun.name">
     </div>

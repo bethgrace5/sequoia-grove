@@ -16,6 +16,7 @@ test.sql
 *.DS_Store
 *.swp
 *.jar
+*.swo
 
 *~
 *.log

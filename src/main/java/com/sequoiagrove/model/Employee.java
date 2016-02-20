@@ -6,22 +6,22 @@ import java.util.Map;
 import java.util.HashMap;
 
 import com.sequoiagrove.model.Position;
-import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
-import com.sequoiagrove.model.EmpHistory;
 
 public class Employee {
     int id;
     int maxHrsWeek;
     int isManager;
     int clock;
+    boolean isCurrent;
     String firstName;
     String lastName;
     String email;
     String phone;
     Date birthDate;
-    List<EmpHistory> history = new ArrayList<EmpHistory>();
-    List<Position> positions = new ArrayList<Position>();
+    List<Duration> history = new ArrayList<Duration>();
+    List<String> positions = new ArrayList<String>();
     WeeklyAvail avail = new WeeklyAvail();
 
 
@@ -36,9 +36,10 @@ public class Employee {
       String phone,
       String email,
       Date birthDate,
-      List<EmpHistory> history,
-      List<Position> positions,
-      WeeklyAvail avail
+      List<Duration> history,
+      List<String> positions,
+      WeeklyAvail avail,
+      boolean isCurrent
     ) {
         this.id = id;
         this.maxHrsWeek = maxHrsWeek;
@@ -52,6 +53,7 @@ public class Employee {
         this.history = history;
         this.positions = positions;
         this.avail = avail;
+        this.isCurrent = isCurrent;
     }
 
     public int getId() {
@@ -80,6 +82,13 @@ public class Employee {
     }
     public void setClock(int clock) {
         this.clock = clock;
+    }
+
+    public boolean getIsCurrent() {
+        return isCurrent;
+    }
+    public void setIsCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
     }
 
     public String getFirstName() {
@@ -117,17 +126,17 @@ public class Employee {
         this.birthDate = birthDate;
     }
 
-    public List<EmpHistory> getHistory() {
+    public List<Duration> getHistory() {
         return history;
     }
-    public void setHistory(List<EmpHistory> history) {
+    public void setHistory(List<Duration> history) {
         this.history = history;
     }
 
-    public List<Position> getPositions() {
+    public List<String> getPositions() {
         return positions;
     }
-    public void setPositions(List<Position> positions) {
+    public void setPositions(List<String> positions) {
         this.positions = positions;
     }
 

@@ -12,14 +12,20 @@
       -->
 
       <!-- highlight logged in user's name -->
-      <button class="btn btn-info" ng-click="selectLoggedInUser()">
+      <button class="btn btn-info"
+        ng-disabled = "loading"
+        ng-click="selectLoggedInUser()">
         <div ng-hide="highlight"> highlight me </div>
         <div ng-show="highlight"> unhighlight me </div>
       </button>
 
       <!-- Filter by User, Location, or Position -->
       <div class="dropdown pull-left" dropdown is-open=true>
-        <button type="button" id="dropDownMenu1" class="btn btn-default" data-toggle="dropdown"
+        <button type="button"
+        ng-disabled = "loading"
+          id="dropDownMenu1"
+          class="btn btn-default"
+          data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="true">
           {{type}} <span class="caret"></span>
         </button>
@@ -35,6 +41,9 @@
         </ul>
       </div>
     </div>
+    <div style="position:fixed left:30%;" ng-show="loading">
+      <i style="color:grey; position:absolute" class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+    </div>
 
     <!-- Download and Print Options -->
     <form class="pull-right">
@@ -44,7 +53,9 @@
         <span class="glyphicon glyphicon-download" aria-hidden="true"></span>
       </button>
       -->
-      <button class="btn btn-primary" onclick="window.print()">
+      <button class="btn btn-primary"
+        ng-disabled = "loading"
+        onclick="window.print()">
         Print
         <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
       </button>

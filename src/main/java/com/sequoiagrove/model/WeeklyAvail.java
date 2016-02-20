@@ -2,26 +2,26 @@ package com.sequoiagrove.model;
 
 import java.util.List;
 import java.util.ArrayList;
-import com.sequoiagrove.model.Availability;
+import com.sequoiagrove.model.Duration;
 
 public class WeeklyAvail {
-    List<Availability> mon = new ArrayList<Availability>();
-    List<Availability> tue = new ArrayList<Availability>();
-    List<Availability> wed = new ArrayList<Availability>();
-    List<Availability> thu = new ArrayList<Availability>();
-    List<Availability> fri = new ArrayList<Availability>();
-    List<Availability> sat = new ArrayList<Availability>();
-    List<Availability> sun = new ArrayList<Availability>();
+    List<Duration> mon = new ArrayList<Duration>();
+    List<Duration> tue = new ArrayList<Duration>();
+    List<Duration> wed = new ArrayList<Duration>();
+    List<Duration> thu = new ArrayList<Duration>();
+    List<Duration> fri = new ArrayList<Duration>();
+    List<Duration> sat = new ArrayList<Duration>();
+    List<Duration> sun = new ArrayList<Duration>();
 
     public WeeklyAvail(){}
     public WeeklyAvail(
-      List<Availability> mon,
-      List<Availability> tue,
-      List<Availability> wed,
-      List<Availability> thu,
-      List<Availability> fri,
-      List<Availability> sat,
-      List<Availability> sun
+      List<Duration> mon,
+      List<Duration> tue,
+      List<Duration> wed,
+      List<Duration> thu,
+      List<Duration> fri,
+      List<Duration> sat,
+      List<Duration> sun
     ){
         this.mon = mon;
         this.tue = tue;
@@ -32,52 +32,77 @@ public class WeeklyAvail {
         this.sun = sun;
     }
 
-    public List<Availability> getMon() {
+    public List<Duration> getMon() {
         return mon;
     }
-    public void setMon(List<Availability> mon) {
+    public void setMon(List<Duration> mon) {
         this.mon = mon;
     }
 
-    public List<Availability> getTue() {
+    public List<Duration> getTue() {
         return tue;
     }
-    public void setTue(List<Availability> tue) {
+    public void setTue(List<Duration> tue) {
         this.tue = tue;
     }
 
-    public List<Availability> getWed() {
+    public List<Duration> getWed() {
         return wed;
     }
-    public void setWed(List<Availability> wed) {
+    public void setWed(List<Duration> wed) {
         this.wed = wed;
     }
 
-    public List<Availability> getThu() {
+    public List<Duration> getThu() {
         return thu;
     }
-    public void setThu(List<Availability> thu) {
+    public void setThu(List<Duration> thu) {
         this.thu = thu;
     }
 
-    public List<Availability> getFri() {
+    public List<Duration> getFri() {
         return fri;
     }
-    public void setFri(List<Availability> fri) {
+    public void setFri(List<Duration> fri) {
         this.fri = fri;
     }
 
-    public List<Availability> getSat() {
+    public List<Duration> getSat() {
         return sat;
     }
-    public void setSat(List<Availability> sat) {
+    public void setSat(List<Duration> sat) {
         this.sat = sat;
     }
 
-    public List<Availability> getSun() {
+    public List<Duration> getSun() {
         return sun;
     }
-    public void setSun(List<Availability> sun) {
+    public void setSun(List<Duration> sun) {
         this.sun = sun;
+    }
+    public void add(String day, String start, String end) {
+
+      if (day.equals("mon")) {
+        this.mon.add(new Duration(start, end));
+      }
+      if (day.equals("tue")) {
+        this.tue.add(new Duration(start, end));
+      }
+      if (day.equals("wed")) {
+        this.wed.add(new Duration(start, end));
+      }
+      if (day.equals("thu")) {
+        this.thu.add(new Duration(start, end));
+      }
+      if (day.equals("fri")) {
+        this.fri.add(new Duration(start, end));
+      }
+      if (day.equals("sat")) {
+        this.sat.add(new Duration(start, end));
+      }
+      if (day.equals("sun")) {
+        this.sun.add(new Duration(start, end));
+      }
+
     }
 };

@@ -2,7 +2,10 @@
   <div class="hidden-print text-center" style="height: 300px;">
     <p class="lead">
     <a ng-hide="loggingIn" style="cursor:pointer;" ng-click="personaLogin()">Sign in to continue</a>
-    <a ng-show="loggingIn" style="cursor:pointer;">Logging in...</a>
+    <p ng-show="loggingIn">
+      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+      {{loadingMsg}}
+    </p>
     </p>
     <p ng-show="userNotRegistered">
     <strong style="color:b30000;">{{loggedInUser.email}}</strong>
@@ -10,6 +13,13 @@
     </p>
     <p ng-show="userNotRegistered">
     If you have an account, ask an administrator to verify your email.
+    </p>
+    <p ng-show="userNotCurrent">
+    <strong style="color:b30000;">{{loggedInUser.email}}</strong>
+    is not a current employee.
+    </p>
+    <p ng-show="userNotCurrent">
+    If you are a current employee, ask an administrator to verify your email and employment status.
     </p>
     <!--
       <button type="button" ng-click="login()" class="btn btn-default">
