@@ -9,7 +9,7 @@ create table BAJS_EMPLOYEE (
     is_manager number(1) default 0, 
 	birth_date date,
 	max_hrs_week number(2, 0) default 40,
-	--min_hrs_week number(2, 0) default 0,
+	min_hrs_week number(2, 0) default 0,
 	phone_number varchar2(20) default '',
 	clock_number number(2, 0) default 0,
         CONSTRAINT pk_employee_id PRIMARY KEY(id),

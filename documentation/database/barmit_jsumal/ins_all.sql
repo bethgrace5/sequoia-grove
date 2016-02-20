@@ -4,9 +4,9 @@
 @ins/cannot_work_with.sql;
 @ins/employment_history.sql;
 @ins/position.sql;
-@ins/new_shift.sql;
+@ins/shift.sql;
 @ins/has_position.sql;
 @ins/is_scheduled_for.sql;
 @ins/requests_vacation.sql;
-@ins/holiday.sql;
 @ins/published_schedule.sql;
+@ins/holiday.sql;

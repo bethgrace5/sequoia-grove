@@ -1,28 +1,28 @@
-insert into BAJS_REQUESTS_VACATION values( 0, 1 , 4 , 1,
+insert into BAJS_REQUESTS_VACATION values( 1, 1 , 4 , 1,
     to_timestamp('10-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('10-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 2 , 7 , 0,
+insert into BAJS_REQUESTS_VACATION values( 2, 2 , 7 , 0,
     to_timestamp('10-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('10-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 3 , 10, 0,
+insert into BAJS_REQUESTS_VACATION values( 3, 3 , 10, 0,
     to_timestamp('10-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('10-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 4 , 14, 1,
+insert into BAJS_REQUESTS_VACATION values( 4, 4 , 14, 1,
     to_timestamp('11-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('11-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 5 , 17, 0,
+insert into BAJS_REQUESTS_VACATION values( 5, 5 , 17, 0,
     to_timestamp('11-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('11-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 6 , 20, 0,
+insert into BAJS_REQUESTS_VACATION values( 6, 6 , 20, 0,
     to_timestamp('11-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('11-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 7 , 4 , 1,
+insert into BAJS_REQUESTS_VACATION values( 7, 7 , 4 , 1,
     to_timestamp('12-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('12-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 8 , 7 , 0,
+insert into BAJS_REQUESTS_VACATION values( 8, 8 , 7 , 0,
     to_timestamp('12-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('12-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
-insert into BAJS_REQUESTS_VACATION values( 0, 9 , 10, 0,
+insert into BAJS_REQUESTS_VACATION values( 9, 9 , 10, 0,
     to_timestamp('12-SEP-0214:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),
     to_timestamp('12-SEP-0214:20:10.123000','DD-MON-RRHH24:MI:SS.FF'));
 insert into BAJS_REQUESTS_VACATION values( 10, 10, 4 , 1,

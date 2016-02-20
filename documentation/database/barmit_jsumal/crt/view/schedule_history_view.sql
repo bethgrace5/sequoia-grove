@@ -6,7 +6,7 @@ select * from (
     from
         (
             select * 
-            from bajs_sch_template
+            from bajs_schedule_template_view
         )
         natural join
         (

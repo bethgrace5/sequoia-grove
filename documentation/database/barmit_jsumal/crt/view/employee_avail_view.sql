@@ -1,5 +1,5 @@
 
-create or replace view bajs_employee_availability_view as (
+create or replace view bajs_employee_avail_view as (
     select id, mon, tue, wed, thu, fri, sat, sun
     from bajs_employee e
     full outer join

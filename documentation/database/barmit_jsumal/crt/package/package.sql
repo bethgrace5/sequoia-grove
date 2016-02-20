@@ -17,7 +17,7 @@ is record
 (
     sid         bajs_is_scheduled_for.shift_id%type,
     pid         bajs_position.id%type,
-    tname       bajs_new_shift.task_name%type,
+    tname       bajs_shift.task_name%type,
     wd_st       bajs_hours.start_hour%type,
     wd_ed       bajs_hours.end_hour%type,
     we_st       bajs_hours.start_hour%type,

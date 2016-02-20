@@ -16,7 +16,7 @@ create or replace view bajs_schedule_view as (
          */
         select s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.location, 
             s.position, h.fname as mon, h.eid as mon_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -26,7 +26,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Tuesday
         select s.sid as t_sid, h.fname as tue, h.eid as tue_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -37,7 +37,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Wednesday
         select s.sid as w_sid, h.fname as wed, h.eid as wed_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -48,7 +48,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Thursday
         select s.sid as th_sid, h.fname as thu, h.eid as thu_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -59,7 +59,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Friday
         select s.sid as f_sid, h.fname as fri, h.eid as fri_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -70,7 +70,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Saturday
         select s.sid as sa_sid, h.fname as sat, h.eid as sat_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
@@ -81,7 +81,7 @@ create or replace view bajs_schedule_view as (
     (
         -- Sunday
         select s.sid as su_sid, h.fname as sun, h.eid as sun_eid
-        from bajs_sch_template s
+        from bajs_schedule_template_view s
         left outer join
         bajs_schedule_history_view h
         on s.sid=h.sid 
