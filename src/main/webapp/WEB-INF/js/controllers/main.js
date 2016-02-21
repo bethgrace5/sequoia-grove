@@ -267,7 +267,6 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
-    $scope.checkifPublished();
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
     
@@ -276,8 +275,15 @@ angular.module('sequoiaGroveApp')
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
 
-    if($scope.ispublished === false && $rootScope.loggedInUser.isManager === false) {
+    $log.debug('get schedule template');
+
+    if(!$scope.ispublished) {
+      $log.debug('schedule is not published');
+
+      if (!$rootScope.loggedInUser.isManager) {
+        $log.debug('you are not a manager');
         return;
+      }
     }
 
     return $http({
@@ -323,11 +329,12 @@ angular.module('sequoiaGroveApp')
   
   // send http request to back end to check if published
   $scope.checkifPublished = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.ispublished = data.result;
+      $log.debug($scope.ispublished);
         //return true;
 
     }).error(function (data, status, headers, config) {
