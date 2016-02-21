@@ -1,6 +1,6 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
@@ -64,8 +64,7 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-
-  // Update current schedule template (current shifts) dd/mm/yyyy
+    // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
     public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -84,41 +83,7 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-    // Check with database if is published or not
-    @RequestMapping(value = "/schedule/ispublished/{date}")
-        public String checkifPublished( @PathVariable("date") String mon, Model model) throws SQLException {
-            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-            Integer cnt = jdbcTemplate.queryForObject(
-                    "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
-
-            boolean isPublished =  (cnt != null && cnt > 0);
-
-            model.addAttribute("ispublished", isPublished);    
-
-            return "jsonTemplate";
-        }
-
-    @RequestMapping(value = "/schedule/publish")
-        public String publishSchedule(@RequestBody String data, Model model) throws SQLException {
-            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-            Gson gson = new Gson();
-            PublishSchedule param = gson.fromJson(data, PublishSchedule.class);
-            System.out.println(param.getEid());
-            System.out.println(param.getDate());
-            // update database
-            jdbcTemplate.update("call bajs_pkg.publish(?, ?)", 
-                    param.getEid(),
-                    param.getDate());
-            //model.addAttribute("updated!", true);    
-
-
-
-            return "jsonTemplate";
-        }
-
-  // delete scheduled day dd/mm/yyyy
+    // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
     public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -135,5 +100,35 @@ public class ScheduleController {
         }
         return "jsonTemplate";
     }
+
+    @RequestMapping(value = "/schedule/publish")
+    public String publishSchedule(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        // parse params
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+        String eid = jobject.get("eid").getAsString();
+        String date = jobject.get("date").getAsString();
+
+        // update database
+        jdbcTemplate.update("call bajs_pkg.publish(?, ?)", eid, date);
+        return "jsonTemplate";
+    }
+
+    // Check with database if is published or not
+    @RequestMapping(value = "/schedule/ispublished/{date}")
+    public String checkifPublished( @PathVariable("date") String mon, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+
+        boolean isPublished =  (count != null && count > 0);
+
+        model.addAttribute("result", isPublished);    
+        return "jsonTemplate";
+    }
+
 }
 

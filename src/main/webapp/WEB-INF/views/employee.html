@@ -4,6 +4,23 @@
     <div class="col-sm-3">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <!-- Filter by User, Location, or Position -->
+          <div class="dropdown pull-right" dropdown is-open=true>
+            <button type="button"
+            ng-disabled = "loading"
+              id="employeeDropdown"
+              class="btn btn-default"
+              data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true">
+              {{typeFilter}}<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" rol="menu" arial-labelledby="employeeDropdown">
+              <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
+              <li role="separator" class="divider"></li>
+              <li role="menuitem"><a ng-click="changeType('current')">Current</a></li>
+              <li role="menuitem"><a ng-click="changeType('past')">Past</a></li>
+            </ul>
+          </div>
           <p class="lead emp-header">Employees</p>
         </div>
         <div class="panel-body">
@@ -15,6 +32,19 @@
     <div class="col-sm-9">
       <div class="panel panel-default">
         <div class="panel-heading">
+          <button class = "btn btn-info pull-right"
+              ng-show="selectedEmployee.id === 0"
+              ng-click="updateEmployee()">
+            <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
+            Add
+          </button>
+          <div ng-hide = "selectedEmployee.id === 0">
+            <button class = "btn btn-primary pull-right"
+                ng-click="updateEmployee()">
+              <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+              Save Info
+            </button>
+          </div>
           <p class="lead emp-header">Employee Info</p>
         </div>
         <div class="panel-body">
@@ -42,6 +72,18 @@
 
       <div class="panel panel-default">
         <div class="panel-heading">
+          <!-- Unemploy this current employee -->
+          <button type = "button"
+            ng-show="selectedEmployee.isCurrent === true"
+            ng-click="deactivateEmployee()"
+            class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstName}}
+          </button>
+          <!-- Employ this past employee -->
+          <button type = "button"
+            ng-show="selectedEmployee.isCurrent === false"
+            ng-click="activateEmployee()"
+            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstName}}
+          </button>
           <p class="lead emp-header">Employment History</p>
         </div>
         <div class="panel-body">

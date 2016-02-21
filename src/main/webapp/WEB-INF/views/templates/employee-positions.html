@@ -1,16 +1,14 @@
 <div class="request-title">
   <div class="row">
-    <div class="col-sm-2 col-sm-offset-1">
-      <p> Add Position</p>
-    </div>
-    <div class="col-sm-3 col-sm-offset-2">
+    <label class="col-sm-3 col-sm-offset-1 control-label">Add Position</label>
+    <div class="col-sm-2">
       <select ng-options="p.title for p in positions" ng-model="$parent.newPos"
         ng-change="$parent.addPosition()">
         <option value="">- Choose Position -</option>
       </select>
     </div>
   </div>
-
+  <hr/>
   <div class="row emp-repeated-row" ng-repeat="p in selectedEmployee.positions">
     <div class="col-sm-2 col-sm-offset-1">
       <span>{{getPositionTitle(p)}}</span>

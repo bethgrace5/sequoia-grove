@@ -14,6 +14,7 @@ public class Employee {
     int maxHrsWeek;
     int isManager;
     int clock;
+    boolean isCurrent;
     String firstName;
     String lastName;
     String email;
@@ -37,7 +38,8 @@ public class Employee {
       Date birthDate,
       List<Duration> history,
       List<String> positions,
-      WeeklyAvail avail
+      WeeklyAvail avail,
+      boolean isCurrent
     ) {
         this.id = id;
         this.maxHrsWeek = maxHrsWeek;
@@ -51,6 +53,7 @@ public class Employee {
         this.history = history;
         this.positions = positions;
         this.avail = avail;
+        this.isCurrent = isCurrent;
     }
 
     public int getId() {
@@ -79,6 +82,13 @@ public class Employee {
     }
     public void setClock(int clock) {
         this.clock = clock;
+    }
+
+    public boolean getIsCurrent() {
+        return isCurrent;
+    }
+    public void setIsCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
     }
 
     public String getFirstName() {
