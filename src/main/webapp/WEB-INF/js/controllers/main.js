@@ -275,13 +275,9 @@ angular.module('sequoiaGroveApp')
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
 
-    $log.debug('get schedule template');
-
     if(!$scope.ispublished) {
-      $log.debug('schedule is not published');
 
       if (!$rootScope.loggedInUser.isManager) {
-        $log.debug('you are not a manager');
         return;
       }
     }
@@ -334,12 +330,9 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.ispublished = data.result;
-      $log.debug($scope.ispublished);
-        //return true;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
-        //return true;
     });
   }
 
