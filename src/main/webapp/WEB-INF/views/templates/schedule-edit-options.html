@@ -19,7 +19,8 @@
 
     <form class="pull-right">
       <!-- Download and Print Options -->
-      <button ng-click="clearSchedule()"
+      <button ng-click="clearSchedule()" 
+        ng-disabled = "saving"
         ng-disabled = "saving";
         class="btn btn-default btn-warning">
         Clear
@@ -28,8 +29,8 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
+        ng-disabled = "saving"
         ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
-        ng-disabled = "saving";
         ng-click = "saveSchedule()">
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
@@ -41,6 +42,7 @@
 
       <!-- Default button -->
       <button class = "btn btn-default"
+        ng-disabled = "saving"
         ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
         ng-disabled = "saving";
         ng-click = "saveSchedule()">
@@ -49,8 +51,9 @@
       </button>
 
       <button class = "btn btn-primary"
+        ng-click = "publishSchedule()"
         ng-disabled = "saving">
-        Save &amp; Publish
+        Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
 

@@ -20,7 +20,7 @@ public class MainController {
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String goHome(ModelMap model) {
-        return "/WEB-INF/index.jsp";
+        return "static/index.html";
     }
 
     @Autowired

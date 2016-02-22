@@ -39,9 +39,10 @@ angular.module('sequoiaGroveApp')
     // When user has logged in, this will load required data based
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
+      $scope.setScheduleHeader();
 
       // first, build schedule header
-      $q.all([$scope.setScheduleHeader()]
+      $q.all([$scope.checkifPublished()]
       ).then(function(data) {
 
         // next, build schedule template

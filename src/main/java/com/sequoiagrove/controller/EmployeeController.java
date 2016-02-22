@@ -37,10 +37,9 @@ public class EmployeeController
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         System.out.println(Authentication.verifyToken(authToken));
-
         System.out.println(authToken);
 
-        String queryStr = "select * from bajs_emp_all_info";
+        String queryStr = "select * from bajs_employee_info_view";
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -159,7 +158,7 @@ public class EmployeeController
         JsonObject  jobject = jelement.getAsJsonObject();
 
         // get next sequence id value
-        int id = jdbcTemplate.queryForObject("select bajs_emp_seq.nextval from dual",
+        int id = jdbcTemplate.queryForObject("select bajs_employee_id_sequence.nextval from dual",
               Integer.class);
 
         String[] params = {

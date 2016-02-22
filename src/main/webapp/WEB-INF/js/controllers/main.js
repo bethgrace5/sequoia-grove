@@ -48,6 +48,7 @@ angular.module('sequoiaGroveApp')
   // used to check that updating a shift is making a chage or not
   $scope.birthdays = [];
   $scope.holidays = [];
+  $scope.ispublished = false;
 
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
@@ -268,11 +269,18 @@ angular.module('sequoiaGroveApp')
   $scope.getScheduleTemplate = function(week) {
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
-
+    
     // clear out original template
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
+
+    if(!$scope.ispublished) {
+
+      if (!$rootScope.loggedInUser.isManager) {
+        return;
+      }
+    }
 
     return $http({
       url: url,
@@ -292,6 +300,9 @@ angular.module('sequoiaGroveApp')
           $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
           $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
         });
+        // update count of days and hours per employee
+        $scope.countDays();
+        $scope.countHours();
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error saving update shifts schedule : " + data);
@@ -306,6 +317,19 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.employees = data.employees;
+
+    }).error(function (data, status, headers, config) {
+        $log.error(status + " Error obtaining all employee: " + data);
+    });
+  }
+  
+  // send http request to back end to check if published
+  $scope.checkifPublished = function() {
+    return $http({
+      url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $scope.ispublished = data.result;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);

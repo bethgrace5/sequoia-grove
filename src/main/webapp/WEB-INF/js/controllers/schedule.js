@@ -85,6 +85,21 @@ angular.module('sequoiaGroveApp')
   }
 
 
+  //send date and employee id as an object thru http request
+  $scope.publishSchedule = function() {
+      var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
+    $http({
+      url: '/sequoiagrove/schedule/publish/',
+      method: "POST",
+      data: obj
+      }).success(function (data, status, headers, config) {
+        $log.debug(data)
+
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error posting schedule " + data);
+    });
+
+  }
   // Filter schedule by selected position
   $scope.filterSchedule = function(pid) {
     if($scope.selectedPid == 0) {
@@ -116,8 +131,8 @@ angular.module('sequoiaGroveApp')
     // 1. get employee availability
     avail = _.map(employee.avail[attrs.day], function(a) {
       return {
-        'start':moment(attrs.date +' '+ a.startHr +' '+ a.startMin, 'DD-MM-YYYY hh mm'),
-        'end':moment(attrs.date +' '+ a.endHr +' '+ a.endMin, 'DD-MM-YYYY hh mm')
+        'start':moment(attrs.date +' '+ a.start, 'DD-MM-YYYY HHmm'),
+        'end':moment(attrs.date +' '+ a.end, 'DD-MM-YYYY HHmm')
       }
     });
     if (avail.length <=0 ) {
@@ -125,12 +140,12 @@ angular.module('sequoiaGroveApp')
     }
 
     // 2. determine shift duration times
-    var shiftStart = moment(attrs.date + ' ' + attrs.sthr+attrs.stmin, 'DD-MM-YYYY hhmm');
-    var shiftEnd = moment(attrs.date + ' ' + attrs.endhr+attrs.endmin, 'DD-MM-YYYY hhmm');
+    var shiftStart = moment(attrs.date + ' ' + attrs.shiftstart, 'DD-MM-YYYY HHmm');
+    var shiftEnd = moment(attrs.date + ' ' + attrs.shiftend, 'DD-MM-YYYY HHmm');
 
     // 3. check employee availability against shift duration
     _.map(avail, function(a, index) {
-      if ((a.start.isBefore(shiftStart) || a.start.isSame(shiftStart)) && (a.end.isAfter(shiftEnd) || a.end.isSame(shiftEnd))) {
+      if ((a.start.isBefore(shiftStart, 'minute') || a.start.isSame(shiftStart, 'minute')) && (a.end.isAfter(shiftEnd, 'minute') || a.end.isSame(shiftEnd, 'minute'))) {
         isAvailable = true;
       }
     });
