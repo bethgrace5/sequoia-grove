@@ -48,7 +48,7 @@ angular.module('sequoiaGroveApp')
   // used to check that updating a shift is making a chage or not
   $scope.birthdays = [];
   $scope.holidays = [];
-  $scope.ispublished = false;
+  $rootScope.ispublished = false;
 
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
@@ -222,6 +222,7 @@ angular.module('sequoiaGroveApp')
       }, 0)
       $scope.hourCount[index] = hours;
     });
+    $scope.checkifPublished();
   }
 
   // check if employee has this position
@@ -278,7 +279,7 @@ angular.module('sequoiaGroveApp')
     return $http({ url: url, method: "GET", })
         .success(function (data, status, headers, config) {
       //$log.debug(data);
-      $scope.ispublished = data.ispublished;
+      $rootScope.ispublished = data.ispublished;
       if (!$scope.loggedInUser.isManager) {
         if (!data.ispublished){
           return;
@@ -326,7 +327,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.ispublished = data.result;
+        $rootScope.ispublished = data.result;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
@@ -341,7 +342,7 @@ angular.module('sequoiaGroveApp')
       method: "POST",
       data: obj
       }).success(function (data, status, headers, config) {
-        $scope.ispublished = true;   
+        $rootScope.ispublished = true;   
         //$log.debug(data)
 
     }).error(function (data, status, headers, config) {
@@ -430,7 +431,7 @@ angular.module('sequoiaGroveApp')
 
   }
   $scope.$on('logged in', function(event, args) {
-    $scope.init();
+    //$scope.init();
   });
 
   $scope.personaLogin = function() {

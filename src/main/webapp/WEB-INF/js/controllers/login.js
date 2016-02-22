@@ -40,36 +40,32 @@ angular.module('sequoiaGroveApp')
     $scope.initializeData = function() {
 
       // first, build schedule header
-      $q.all([$scope.setScheduleHeader()]
-      ).then(function(data) {
+      $scope.setScheduleHeader();
 
-        // next, build schedule template
-        $q.all( [$scope.getScheduleTemplate($scope.date.mon.val)]
-        ).then(function(results) {
+      // next, build schedule template
+      $q.all( [$scope.getScheduleTemplate($scope.date.mon.val)]
+      ).then(function(results) {
 
-          // next, if the user is a manager, gather additional needed data
-          if ($rootScope.loggedInUser.isManager) {
+        // next, if the user is a manager, gather additional needed data
+        if ($rootScope.loggedInUser.isManager) {
+          $q.all([ $scope.getEmployees()]
+          ).then(function(results) {
+            $scope.getPositions();
+          })
+        }
 
-            $q.all([ $scope.getEmployees(), $scope.getPositions()]
-            ).then(function(results) {
-              $scope.countDays();
-              $scope.countHours();
-            })
+        // Finally, redirect to home
+        }).then(function(results) {
+          $scope.loading = false;
+          $log.debug('loading complete');
+
+          // redirect to last path, or home if none
+          if ($rootScope.lastPath === '/login' ||
+              $rootScope.lastPath === undefined  ||
+              $rootScope.lastPath === null) {
+            $rootScope.lastPath = '/home';
           }
-
-          // Finally, redirect to home
-          }).then(function(results) {
-            $scope.loading = false;
-            $log.debug('loading complete');
-
-            // redirect to last path, or home if none
-            if ($rootScope.lastPath === '/login' ||
-                $rootScope.lastPath === undefined  ||
-                $rootScope.lastPath === null) {
-              $rootScope.lastPath = '/home';
-            }
-            $location.path( $rootScope.lastPath );
-          });
+          $location.path( $rootScope.lastPath );
         });
     }
 
