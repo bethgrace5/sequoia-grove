@@ -85,21 +85,6 @@ angular.module('sequoiaGroveApp')
   }
 
 
-  //send date and employee id as an object thru http request
-  $scope.publishSchedule = function() {
-      var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
-    $http({
-      url: '/sequoiagrove/schedule/publish/',
-      method: "POST",
-      data: obj
-      }).success(function (data, status, headers, config) {
-        $log.debug(data)
-
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error posting schedule " + data);
-    });
-
-  }
   // Filter schedule by selected position
   $scope.filterSchedule = function(pid) {
     if($scope.selectedPid == 0) {
