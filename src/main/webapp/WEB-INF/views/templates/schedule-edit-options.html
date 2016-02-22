@@ -53,7 +53,7 @@
       <button class = "btn btn-default"
         ng-click = "publishSchedule()"
         ng-hide = "ispublished"
-        ng-disabled = "saving">
+        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>

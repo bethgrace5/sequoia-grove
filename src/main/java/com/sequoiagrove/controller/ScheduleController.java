@@ -60,6 +60,10 @@ public class ScheduleController {
               }
           });
 
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+
+        model.addAttribute("ispublished", (count!=null && count > 0));
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
     }

@@ -127,7 +127,6 @@ angular.module('sequoiaGroveApp')
 
   // View Next or Previous Week
   $scope.changeWeek = function(operation) {
-    $scope.ispublished = false;
     var nextMonday = '';
 
     // Set Monday Next Week
@@ -270,46 +269,41 @@ angular.module('sequoiaGroveApp')
   $scope.getScheduleTemplate = function(week) {
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
-    
+
     // clear out original template
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
 
-    $scope.checkifPublished().then(
-        function(success) {
-            if(!$scope.ispublished) {
-              return;
-            }
-            return $http({
-              url: url,
-              method: "GET",
-            }).success(function (data, status, headers, config) {
-                //$log.debug(data);
-                $scope.template = data.template;
+    return $http({ url: url, method: "GET", })
+        .success(function (data, status, headers, config) {
+      //$log.debug(data);
+      $scope.ispublished = data.ispublished;
+      if (!$scope.loggedInUser.isManager) {
+        if (!data.ispublished){
+          return;
+        }
+      }
+      $scope.template = data.template;
 
-                // keep an original copy of the template, so we can check modifications
-                // on the template against it
-                _.map(data.template, function(t, index, list) {
-                  $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-                  $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-                  $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-                  $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-                  $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-                  $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-                  $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
-                });
-                // update count of days and hours per employee
-                $scope.countDays();
-                $scope.countHours();
+      // keep an original copy of the template, so we can check modifications
+      // on the template against it
+      _.map(data.template, function(t, index, list) {
+        $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+        $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+        $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+        $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+        $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+        $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+        $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+      });
+      // update count of days and hours per employee
+      $scope.countDays();
+      $scope.countHours();
 
-            }).error(function (data, status, headers, config) {
-                $log.error(status + " Error saving update shifts schedule : " + data);
-            });
-        },
-        function(failure) {
-
-        });
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error saving update shifts schedule : " + data);
+    });
   }
 
   // Get All Employees with their id
