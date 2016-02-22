@@ -106,6 +106,17 @@ a:focus {
   background-color: #ffffb3;
 }
 
+.schedule-message {
+  padding: 30px 0 100px 0;
+  color: #333333;
+  font-size: 1.2em;
+}
+
+.schedule-message-panel {
+  width:80%; 
+  margin:0 auto; 
+  background-color:#e6e6e6;
+}
 /* Availability */
 .avail-edit-select {
   width: 90px;
