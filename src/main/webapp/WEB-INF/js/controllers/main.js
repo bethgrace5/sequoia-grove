@@ -333,10 +333,6 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.ispublished = data.result;
-<<<<<<< HEAD
-=======
-        //return true;
->>>>>>> feature-publish-schedule
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
