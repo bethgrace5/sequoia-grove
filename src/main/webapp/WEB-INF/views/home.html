@@ -15,7 +15,9 @@
     <ng-include src="'views/templates/schedule-header.html'"></ng-include>
     <br/>
     <!-- Schedule -->
-    <ng-include src="'views/templates/schedule-view.html'"></ng-include>
+    <div ng-show="ispublished">
+      <ng-include src="'views/templates/schedule-view.html'" ></ng-include>
+    </div>
   </div>
 </div>
 

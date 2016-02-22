@@ -93,7 +93,8 @@ angular.module('sequoiaGroveApp')
       method: "POST",
       data: obj
       }).success(function (data, status, headers, config) {
-        $log.debug(data)
+        $scope.ispublished = true;   
+        //$log.debug(data)
 
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error posting schedule " + data);
