@@ -9,7 +9,7 @@
 //+---------------
 //| Directory
 //+--------------
-//| Minor_Function
+//| Minor_Functions
 //|   - Date_Gatherer
 //|   - Ease_of_Access
 //| Employee_User_Setup
@@ -58,14 +58,14 @@ angular.module('sequoiaGroveApp')
   // Ease_of_Access
   //-----------------
   $scope.totalDays = function(a, b){
-    var dog = moment(a);
-    var cool = moment(b)
-    return cool.diff(dog, 'days');
+    var date1 = moment(a);
+    var date2 = moment(b)
+    return date2.diff(date1, 'days') + 1;
   }
 
   //Change Date into a specific format
   $scope.defaultDate = function(a){
-    return moment(a).format("MM-DD-YYYY");
+    return moment(a).format("MMMM Do, YYYY");
   }
 
   /****************** Employee_User_Setup ****************************/
@@ -81,8 +81,6 @@ angular.module('sequoiaGroveApp')
       method: "POST"
     }).success(function(data, status) {
       $scope.userRequests = data.request;
-      $log.debug("Current Requests");
-      $log.debug($scope.userRequests);
     });
   }
 
@@ -100,8 +98,7 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $log.debug("Sumbiting Request");
-      $log.debug(data);
+      $scope.getCurrentEmployeeRequest();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -154,31 +151,15 @@ angular.module('sequoiaGroveApp')
   //-----------------------------------
   //Retrieve_Requests
   //-----------------------------------
-  $scope.employees;
   $scope.allRequests;
   $scope.pendingRequests;
-
-  $scope.getEmployees = function() {
-    $http({
-      url: '/sequoiagrove/employees',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-      $log.debug("All Employeess");
-      $scope.employees = data.employees;
-      $log.debug(data);
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
-    });
-  }
 
   $scope.getAllRequests = function() {
     $http({
       url: '/sequoiagrove/request/get',
       method: "GET"
     }).success(function (data, status, headers, config) {
-      $log.debug("All Requests");
       $scope.allRequests = data.requestStatus;
-      $log.debug($scope.allRequests);
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
     });
@@ -189,10 +170,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/get/pending',
       method: "GET"
     }).success(function (data, status, headers, config) {
-      $log.debug("Pending Requests");
-      $log.debug(data);
       $scope.pendingRequests = data.requestStatus;
-      $log.debug($scope.pendingRequests);
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
     });
@@ -204,13 +182,11 @@ angular.module('sequoiaGroveApp')
   $scope.selectedEmployee;
   $scope.targetEmployee = function(employee){
     $scope.selectedEmployee = employee
-    $log.debug($scope.selectedEmployee);
     $scope.seeTargetEmployee = 1;
   }
   $scope.selectedRequest;
   $scope.targetRequest = function(request){
     $scope.selectedRequest = request
-    $log.debug($scope.selectedRequest);
     $scope.seeTargetRequest = 1;
   }
 
@@ -225,8 +201,6 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $log.debug("Managers Request to object:");
-      $log.debug(data);
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -234,21 +208,16 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.changeRequest = function($requestID, $approverID, $is_approve) {
-    $log.debug("changeRequest activated");
     $http({
       url: '/sequoiagrove/request/update/' + 
       $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
-      $log.debug("Request Changed");
-      $log.debug(data);
       $scope.getPendingRequests();
     });
   }
 
   $scope.changeRequestDates = function(){
-    $log.debug("changeRequest activated");
-    $log.debug($scope.selectedRequest.requestID);
     var obj = { "eid": $scope.selectedRequest.requestID,
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
@@ -259,7 +228,6 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $log.debug(data);
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -281,7 +249,6 @@ angular.module('sequoiaGroveApp')
     }
   }
   $scope.targetPendingEmployee = function(){
-    $log.debug("Toggle Dog");
     if($scope.seeTargetRequests){
       $scope.seeTargetRequests = 0;
     }
@@ -289,28 +256,6 @@ angular.module('sequoiaGroveApp')
       $scope.seeTargetRequests = 1;
     }
   }
-  //?????
-  //********* Not Sure What this is Placement, but might be important info**************
-  $scope.countDisplay = 0 ;
-
-  $scope.donGraph= {
-    onClick: function(points, evt) {
-               $scope.countDisplay = points[0].label.substr(0,1)-1;
-             },
-    labels: ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"],
-    data: [
-      /*
-       * TODO use dayCount instead
-       $scope.schCount[0].length,
-       $scope.schCount[1].length,
-       $scope.schCount[2].length,
-       $scope.schCount[3].length,
-       $scope.schCount[4].length,
-       $scope.schCount[5].length,
-       $scope.schCount[6].length
-       */
-      ]
-  };
 
   //********** Initialize Testing Extreme ***************************\
   $scope.testManager = function(){

@@ -29,7 +29,7 @@ import com.sequoiagrove.controller.MainController;
 /** 
 RequestController:
 Puts Starting Date, End Date, and Employee ID from the front end to the datebase
-It will also retrieve information from the backend 
+It will also retrieve information from the backend :
 */
 
 
@@ -45,13 +45,16 @@ public class RequestController{
       String start = req.getStartDate();
       String end = req.getEndDate();
 
+      int id = jdbcTemplate.queryForObject("select bajs_request_id_sequence.nextval from dual",
+            Integer.class);
+
       jdbcTemplate.update(
           "insert into bajs_requests_vacation"+
           "(id, requested_by, responded_by, is_approved, start_date_time," +
           " end_date_time)" +
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
-          0, eid, null, 0, start, end);
+          id, eid, null, 0, start, end);
       System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";

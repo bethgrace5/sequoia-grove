@@ -25,16 +25,16 @@
 <hr/>
 
 <div class="row request-title">
-  <div class="col-sm-2">
+  <div class="col-xs-2">
     <p> Start Date </p>
   </div>
   <div class="col-sm-2">
     <p> End Date </p>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-1">
     <p> Total Days </p>
   </div>
-  <div class="col-sm-2">
+  <div class="col-sm-1">
     <p> Status </p>
   </div>
 </div>
@@ -48,10 +48,10 @@
       <div class="col-sm-2">
         <p> {{defaultDate(request.endDate)}} </p>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <p> {{totalDays(request.startDate, request.endDate)}} </p>
       </div>
-      <div class="col-sm-2">
+      <div class="col-sm-1">
         <div ng-show="request.status=='Pending'">
           <h3><span class="label label-warning">Pending</span></h3>
         </div>

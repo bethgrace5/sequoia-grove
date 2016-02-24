@@ -32,10 +32,10 @@
         <p> {{request.employeeID}} </p>
       </div>
       <div class="col-sm-2">
-        <p> {{request.startDate}} </p>
+        <p> {{defaultDate(request.startDate)}} </p>
       </div>
       <div class="col-sm-2">
-        <p> {{request.endDate}} </p>
+        <p> {{defaultDate(request.endDate)}} </p>
       </div>
       <div class="col-sm-1">
         <p> {{totalDays(request.startDate, request.endDate)}} </p>
