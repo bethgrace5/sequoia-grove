@@ -1,6 +1,8 @@
 /* sequences */
 drop sequence bajs_employee_id_sequence;
 drop sequence bajs_request_id_sequence;
+drop sequence bajs_shift_id_sequence;
+drop sequence bajs_hours_id_sequence;
 
 /* views */
 drop view  bajs_schedule_template_view;
