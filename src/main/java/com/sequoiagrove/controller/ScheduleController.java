@@ -1,6 +1,6 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
@@ -28,16 +28,16 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class ScheduleController {
 
-  // Get current schedule template (current shifts) dd-mm-yyyy
+    // Get current schedule template (current shifts) dd-mm-yyyy
     @RequestMapping(value = "/schedule/template/{mon}")
-    public String getScheduleTemplate(Model model, @PathVariable("mon") String mon) {
+        public String getScheduleTemplate(Model model, @PathVariable("mon") String mon) {
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-          "select * from table(bajs_pkg.get_schedule('"+ mon +"'))",
-            new RowMapper<ScheduleTemplate>() {
-                public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
+            List<ScheduleTemplate> schTempList = jdbcTemplate.query(
+                    "select * from table(bajs_pkg.get_schedule('"+ mon +"'))",
+                    new RowMapper<ScheduleTemplate>() {
+                    public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
                           rs.getInt("sid"),
                           rs.getInt("pid"),
@@ -60,12 +60,15 @@ public class ScheduleController {
               }
           });
 
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+
+        model.addAttribute("ispublished", (count!=null && count > 0));
         model.addAttribute("template", schTempList);
         return "jsonTemplate";
     }
 
-
-  // Update current schedule template (current shifts) dd/mm/yyyy
+    // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
     public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -81,11 +84,10 @@ public class ScheduleController {
                 change.getSid(),
                 change.getDate());
         }
-
         return "jsonTemplate";
     }
 
-  // Delete scheduled day dd/mm/yyyy
+    // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
     public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -100,8 +102,37 @@ public class ScheduleController {
                 change.getSid(),
                 change.getDate());
         }
-
         return "jsonTemplate";
     }
+
+    @RequestMapping(value = "/schedule/publish")
+    public String publishSchedule(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        // parse params
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+        String eid = jobject.get("eid").getAsString();
+        String date = jobject.get("date").getAsString();
+
+        // update database
+        jdbcTemplate.update("call bajs_pkg.publish(?, ?)", eid, date);
+        return "jsonTemplate";
+    }
+
+    // Check with database if is published or not
+    @RequestMapping(value = "/schedule/ispublished/{date}")
+    public String checkifPublished( @PathVariable("date") String mon, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Integer count = jdbcTemplate.queryForObject(
+                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+
+        boolean isPublished =  (count != null && count > 0);
+
+        model.addAttribute("result", isPublished);    
+        return "jsonTemplate";
+    }
+
 }
 

@@ -17,6 +17,7 @@
     <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>
     <mvc:resources mapping="/resources/**" location="/resources/"/>
     <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
+    <mvc:resources mapping="/static/**"    location="/static/" />
     <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
 
     <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>

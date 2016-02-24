@@ -47,7 +47,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
     protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user;
+        User user = new User(0, "", "", "", "", false);
 
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
@@ -99,6 +99,9 @@ public class Authentication {
         }
         // Authentication with Persona failed
         else {
+          model.addAttribute("user", user);
+          model.addAttribute("email", "");
+          model.addAttribute("loginFailed", true);
           System.out.println("Sign in failed...");
         }
         return "jsonTemplate";
