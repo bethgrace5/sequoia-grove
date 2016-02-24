@@ -19,6 +19,7 @@ angular.module('sequoiaGroveApp')
     $rootScope.loggedIn = false;
     $rootScope.userNotRegistered = false;
     $rootScope.userNotCurrent = false;
+    $rootScope.loginFailed = false;
     $rootScope.loggedInUser = {};
 
     // User tried to go back to the login page when they were alredy logged in.
@@ -32,6 +33,7 @@ angular.module('sequoiaGroveApp')
     $scope.personaLogin = function () {
       $rootScope.userNotRegistered = false;
       $rootScope.userNotCurrent = false;
+      $rootScope.loginFailed = false;
       Persona.request();
     }
 
@@ -109,6 +111,16 @@ angular.module('sequoiaGroveApp')
               $rootScope.loggingIn = false;
               return;
             }
+
+            // the login failed - maybe the domain was incorrect
+            if (data.loginFailed) {
+              $rootScope.loginFailed = true;
+              $log.debug('sign in failed');
+              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+
             // Otherwise, we found the user - save that user's data
             $rootScope.userNotRegistered = false;
             $rootScope.loggedInUser = data.user;
