@@ -59,21 +59,39 @@ public class RequestController{
 
       return "jsonTemplate";
     }
-
+  /*
+1 create or replace view bajs_requests_view as (
+  2     select
+  3     vac.id as rid,
+  4     vac.responded_by,
+  5     vac.requested_by,
+  6     vac.is_approved,
+  7     vac.start_date_time,
+  8     vac.end_date_time,
+  9     requester.first_name as requester_first_name,
+ 10     requester.last_name as requester_last_name,
+ 11     responder.first_name as responder_first_name,
+ 12     responder.last_name as responder_last_name
+ 13     from bajs_requests_vacation vac
+     */
   @RequestMapping(value = "/request/get")
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_vacation",
+          "select * from bajs_requests_view",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(
-                rs.getInt("id"),
+                rs.getInt("rid"),
                 rs.getInt("requested_by"),
                 rs.getInt("responded_by"),
                 checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
                 rs.getString("start_date_time"),
-                rs.getString("end_date_time")
+                rs.getString("end_date_time"),
+                readAndPutF(rs.getString("requester_first_name")),
+                readAndPutF(rs.getString("requester_last_name")),
+                readAndPutF(rs.getString("responder_first_name")),
+                readAndPutL(rs.getString("responder_last_name"))
                 );
               return es;
             }
@@ -86,6 +104,7 @@ public class RequestController{
     public String getPendingRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       //$$hash key gets return??? 
+      /*
       List<RequestStatus> requestList = jdbcTemplate.query(
           "select * from bajs_requests_vacation "+
           "where responded_by IS NULL",
@@ -103,6 +122,7 @@ public class RequestController{
             }
           });
       model.addAttribute("requestStatus", requestList);
+      */
       return "jsonTemplate";
     } 
 
@@ -110,6 +130,7 @@ public class RequestController{
       public String getCurrentEmployeeRequestl(Model model,
           @PathVariable("eid") int eid) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+            /*
             List<RequestStatus> requestList = jdbcTemplate.query(
               "select * from bajs_requests_vacation " +
               "where requested_by = " + eid,
@@ -127,6 +148,7 @@ public class RequestController{
                 }
               });
             model.addAttribute("request", requestList);
+            */
             return "jsonTemplate";
       }
 
@@ -205,6 +227,14 @@ public class RequestController{
      }
      public int readAndPut(int testIn){
        System.out.println("Request ID: " + testIn);
+       return testIn;
+     }
+     public String readAndPutL(String testIn){
+       System.out.println(testIn);
+       return testIn;
+     }
+     public String readAndPutF(String testIn){
+       System.out.printf(" " + testIn + " ");
        return testIn;
      }
 

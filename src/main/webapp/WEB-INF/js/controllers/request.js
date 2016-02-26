@@ -159,6 +159,7 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/get',
       method: "GET"
     }).success(function (data, status, headers, config) {
+      $log.debug(data);
       $scope.allRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
