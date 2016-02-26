@@ -156,7 +156,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.getAllRequests = function() {
     $http({
-      url: '/sequoiagrove/request/get',
+      url: '/sequoiagrove/request/get/checked',
       method: "GET"
     }).success(function (data, status, headers, config) {
       $log.debug(data);

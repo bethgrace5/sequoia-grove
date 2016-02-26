@@ -86,6 +86,33 @@ public class RequestController{
       return "jsonTemplate";
     } 
 
+  @RequestMapping(value = "/request/get/checked")
+    public String getCheckedRequest(Model model){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      List<RequestStatus> requestList = jdbcTemplate.query(
+          "select * from bajs_requests_view " +
+          "where responded_by IS NOT NULL ",
+          new RowMapper<RequestStatus>() {
+            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+              RequestStatus es = new RequestStatus(
+                rs.getInt("rid"),
+                rs.getInt("requested_by"),
+                rs.getInt("responded_by"),
+                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
+                rs.getString("start_date_time"),
+                rs.getString("end_date_time"),
+                rs.getString("requester_first_name"),
+                rs.getString("requester_last_name"),
+                rs.getString("responder_first_name"),
+                rs.getString("responder_last_name")
+                );
+              return es;
+            }
+          });
+      model.addAttribute("requestStatus", requestList);
+      return "jsonTemplate";
+    } 
+
   @RequestMapping(value = "/request/get/pending")
     public String getPendingRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
