@@ -7,7 +7,7 @@
 </div>
 
 <div class="row request-title">
-  <div class="col-sm-1">
+  <div class="col-sm-2">
     <p> Employee </p>
   </div>
   <div class="col-sm-2">
@@ -28,8 +28,8 @@
   <div  ng-repeat="request in allRequests ">
     <br/>
     <div class="row">
-      <div class="col-sm-1">
-        <p> {{request.employeeID}} </p>
+      <div class="col-sm-2">
+        <p> {{request.employeeFirstName}} {{request.employeeLastName}} </p>
       </div>
       <div class="col-sm-2">
         <p> {{defaultDate(request.startDate)}} </p>
