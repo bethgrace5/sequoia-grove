@@ -29,7 +29,6 @@ angular.module('sequoiaGroveApp')
     $scope.typeFilter = 'current';
 
 /************** Pure Functions **************/
-
     // switch filter of employee list type for all, current or past
     $scope.changeType = function(type) {
       $scope.typeFilter = type;
@@ -74,12 +73,27 @@ angular.module('sequoiaGroveApp')
       }
     }
 
+    //Birthday Selector
+    $scope.birthDate = new Date();
+    //var minDate = new Date(currentTime.getYear(), currentTime.getMonth() -1, +1);
+    //one day next before month
+    $scope.minDate = new Date(
+      $scope.birthDate.getFullYear(),
+      $scope.birthDate.getMonth(),
+      $scope.birthDate.getDate() +14);
+    $scope.maxDate = new Date(
+      $scope.birthDate.getFullYear(),
+      $scope.birthDate.getMonth() + 2,
+      $scope.birthDate.getDate());
+    $scope.onlyWeekendsPredicate = function(date) {
+      var day = date.getDay();
+      return day === 0 || day === 6;
+    }
     // reset selected employee
     $scope.clearEmployee = function() {
       $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
         'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
     }
-
 /************** HTTP Request Functions **************/
 
     // add a new availability time for an employee

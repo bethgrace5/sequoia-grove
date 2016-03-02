@@ -25,6 +25,13 @@ angular.module('sequoiaGroveApp')
   $rootScope.currentPath = $location.path();
   $rootScope.lastPath = '/home';
 
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    $rootScope.lastPath = $location.path();
+    if ($location.path() != '/login') {
+      $location.path('/login');
+    }
+  }
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
