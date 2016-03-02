@@ -1,10 +1,10 @@
 <div class="row">
   <div class="col-sm-12">
-    <p class="lead">
+    <h4 class="lead">
     My Requests
-    </p>
+    </h2>
     <form> 
-      <h4>
+      <h3>
         Starting Date
         <md-datepicker ng-model="$parent.requestDateStart"
         md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
@@ -18,7 +18,7 @@
           <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
           Submit
         </button>
-      </h4>
+      </h3>
     </form>
   </div>
 </div>
@@ -26,30 +26,30 @@
 
 <div class="row request-title">
   <div class="col-xs-2">
-    <p> Start Date </p>
+    <h4> Start Date </h4>
   </div>
-  <div class="col-sm-2">
-    <p> End Date </p>
-  </div>
-  <div class="col-sm-1">
-    <p> Total Days </p>
+  <div class="col-xs-2">
+    <h4> End Date </h4>
   </div>
   <div class="col-sm-1">
-    <p> Status </p>
+    <h4> Total Days </h4>
+  </div>
+  <div class="col-sm-1">
+    <h4> Status </h4>
   </div>
 </div>
 
 <div id="" style="overflow-y: scroll; height:250px;">
   <div  ng-repeat="request in userRequests">
     <div class="row">
-      <div class="col-sm-2">
-        <p> {{defaultDate(request.startDate)}} </p>
+      <div class="col-xs-2">
+        <h4> {{defaultDate(request.startDate)}} </h4>
       </div>
-      <div class="col-sm-2">
-        <p> {{defaultDate(request.endDate)}} </p>
+      <div class="col-xs-2">
+        <h4> {{defaultDate(request.endDate)}} </h4>
       </div>
       <div class="col-sm-1">
-        <p> {{totalDays(request.startDate, request.endDate)}} </p>
+        <h4> {{totalDays(request.startDate, request.endDate)}} </h4>
       </div>
       <div class="col-sm-1">
         <div ng-show="request.status=='Pending'">
