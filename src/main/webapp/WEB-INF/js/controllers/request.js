@@ -192,7 +192,7 @@ angular.module('sequoiaGroveApp')
   //----------------------------------
   //Manager_Change_Submit_Request
   //----------------------------------
-  $scope.selectedEmployee;
+  $scope.selectedEmployee = {'id':0};
   $scope.targetEmployee = function(employee){
     $scope.selectedEmployee = employee
     $scope.seeTargetEmployee = 1;
@@ -245,6 +245,10 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
     });
+  }
+
+  $scope.clearManagerForm = function() {
+    $scope.selectedEmployee = {'id':0};
   }
   //-------------------------
   //Toggles
