@@ -124,7 +124,6 @@ angular.module('sequoiaGroveApp')
    *to userRequestes, it will return true if it conflicts with eachother */
 
   $scope.checkDatesCollide = function(){
-    $log.debug($scope.userRequests);
 
     var i = 0;
     var submitStart = moment($scope.requestDateStart);
@@ -136,22 +135,18 @@ angular.module('sequoiaGroveApp')
       var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
 
       if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        //$log.debug("Is S In");
         alert("Dates Already Taken");
         return true;
       }
       if(moment(submitEnd).isBetween(checkStart, checkEnd)){
-        //$log.debug("Is N In");
         alert("Dates Already Taken");
         return true;
       }
       if(moment(checkStart).isBetween(submitStart, submitEnd)){
-        //$log.debug("S Is N");
         alert("Dates Already Taken");
         return true;
       }
       if(moment(checkEnd).isBetween(submitStart, submitEnd)){
-        //$log.debug("S In N");
         alert("Dates Already Taken");
         return true;
       }
@@ -171,7 +166,6 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/get/checked',
       method: "GET"
     }).success(function (data, status, headers, config) {
-      $log.debug(data);
       $scope.allRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
@@ -277,15 +271,12 @@ angular.module('sequoiaGroveApp')
   //********** Initialize Testing Extreme ***************************\
   $scope.testManager = function(){
     if ($rootScope.loggedInUser.isManager) {
-      $log.debug("you are a Manager");
     }
     else{
-      $log.debug("you are a  Employee");
     }
   }
 
   $scope.init = function(){
-    $log.debug($scope.previousRequests);
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
     $scope.getAllRequests();
     $scope.getCurrentEmployeeRequest();
