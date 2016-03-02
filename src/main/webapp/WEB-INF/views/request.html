@@ -2,7 +2,7 @@
 
 <div class="container-fluid hidden-print">
   <!--  Employee User Request and history-->
-  <div class="panel panel-default hidden-print">
+  <div class="panel panel-default hidden-print request-panel">
     <div class="panel-body">
       <ng-include src="'views/templates/request-submit.html'"></ng-include>
     </div>
@@ -10,20 +10,20 @@
   <!--  Managers View -->
   <div ng-show="loggedInUser.isManager">
     <!--- Pending Request -->
-    <div class="panel panel-default hidden-print">
+    <div class="panel panel-default hidden-print request-panel">
       <div class="panel-body">
         <ng-include src="'views/templates/request-pending.html'"></ng-include>
       </div>
     </div>
     <!--- Request History -->
-    <div class="panel panel-default hidden-print">
+    <div class="panel panel-default hidden-print request-panel">
       <div class="panel-body">
         <ng-include src="'views/templates/request-history.html'"></ng-include>
       </div>
     </div>  
     <!--- Make Request -->
     <div>
-      <div class="panel panel-default hidden-print">
+      <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
           <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
         </div>

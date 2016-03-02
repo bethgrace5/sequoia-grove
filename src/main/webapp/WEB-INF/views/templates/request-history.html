@@ -19,7 +19,7 @@
   <div class="col-sm-1">
     <p> Total Days </p>
   </div>
-  <div class="col-sm-1">
+  <div class="col-sm-3">
     <p> Status </p>
   </div>
 </div>
@@ -40,11 +40,8 @@
       <div class="col-sm-1">
         <p> {{totalDays(request.startDate, request.endDate)}} </p>
       </div>
-      <div class="col-sm-1">
-        <p> {{request.status}} </p>
-      </div>
       <div class="col-sm-3">
-        <p> {{request.approverID}} </p>
+        <p> {{request.status}} by {{request.approverFirstName}} {{request.approverLastName}}</p>
       </div>
     </div>
   </div>
