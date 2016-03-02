@@ -136,6 +136,12 @@
           <version>1.7.13</version>
         </dependency>
 
+        <!-- Liquibase Database Versioning -->
+        <dependency>
+          <groupId>org.liquibase</groupId>
+          <artifactId>liquibase-core</artifactId>
+          <version>3.4.2</version>
+        </dependency>
 
     </dependencies>
     <build>

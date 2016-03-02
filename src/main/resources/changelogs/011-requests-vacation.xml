@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="11" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Employee Table -->
+    <createTable schemaName="public" tableName="requests_vacation" remarks="is scheduled for data">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="requested_by" type="integer">
+        <constraints unique="false" nullable="false" />
+      </column>
+      <column name="responded_by" type="integer">
+        <constraints unique="false" nullable="false" />
+      </column>
+      <column name="is_approved" type="boolean">
+        <constraints unique="false" nullable="false" default="null"/>
+      </column>
+      <column name="start_date_time" type="date">
+        <constraints unique="false" nullable="false" />
+      </column>
+      <column name="end_date_time" type="date">
+        <constraints unique="false" nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="requested_by"
+      baseTableName="requests_vacation"
+      constraintName="fk_requested_by_vacation"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="employee" />
+
+    <addForeignKeyConstraint baseColumnNames="responded_by"
+      baseTableName="requests_vacation"
+      constraintName="fk_responded_by_vacation"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="employee" />
+
+  </changeSet>
+
+</databaseChangeLog>
