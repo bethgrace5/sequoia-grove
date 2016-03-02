@@ -1,25 +1,25 @@
-<!---Feature Request--->
+<!-- Feature Request -->
 
 <div class="container-fluid hidden-print">
 
   <!-- Navigation Tabs -->
-  <ul class="nav nav-tabs">
+  <ul class="nav nav-tabs" ng-show="loggedInUser.isManager">
 
     <!-- Submit Request Tab-->
-    <li role="presentation" ng-class="{true:'active', false:''}[isActive('pending')]">
-      <a ng-click="activeTab='pending'"href="">Pending</a>
-    </li>
-
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit')]">
       <a ng-click="activeTab='submit'" href="">Submit</a>
     </li>
 
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('pending')]">
+      <a ng-click="activeTab='pending'"href="">Respond to Pending</a>
+    </li>
+
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('history')]">
-      <a ng-click="activeTab='history'"href="">Request History</a>
+      <a ng-click="activeTab='history'"href="">View History</a>
       </li>
 
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit-for')]">
-      <a ng-click="activeTab='submit-for'"href=""> Submit-For </a>
+      <a ng-click="activeTab='submit-for'"href="">Manage</a>
     </li>
   </ul>
 
@@ -63,55 +63,6 @@
       </div>
     </div>
 
-
-    <div class="tab-pane">
-      <div class="panel panel-default hidden-print request-panel">
-        <div class="panel-body">
-          Panel 2 Content
-        </div>
-      </div>
-    </div>
-
-    <div class="tab-pane">
-      <div class="panel panel-default hidden-print request-panel">
-        <div class="panel-body">
-          Panel 3 Content
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!--  Managers View -->
-  <div ng-show="loggedInUser.isManager">
-    <!--- Pending Request -->
-    <div class="panel panel-default hidden-print request-panel">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-pending.html'"></ng-include>
-      </div>
-    </div>
-    <!--- Request History -->
-    <div class="panel panel-default hidden-print request-panel">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-history.html'"></ng-include>
-      </div>
-    </div>  
-    <!--- Make Request -->
-    <div>
-      <div class="panel panel-default hidden-print request-panel">
-        <div class="panel-body">
-          <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Employee Only View  -->
-  <div ng-show="loggedInUser.isEmployee">
-    <div class="panel panel-default hidden-print request-panel">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-submit.html'"></ng-include>
-      </div>
   </div>
 
 </div>
