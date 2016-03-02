@@ -1,60 +1,84 @@
-<div class="row">
-    <div class="col-sm-12">
-        <p class="lead">
-            My Requests
-        </p>
-        <form>
-            <!-- will be a datepicker -->
-            <input placeholder="Start Date">
-            <!-- will be a datepicker -->
-            <input placeholder="End Date">
-
-            <button class="btn btn-primary">
-                <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-                Submit
-            </button>
-        </form>
-    </div>
-</div>
-<hr/>
-
-<div class="row request-title">
-    <div class="col-sm-2">
-        <p> Start Date </p>
-    </div>
-    <div class="col-sm-2">
-        <p> End Date </p>
-    </div>
-    <div class="col-sm-2">
-        <p> Total Days </p>
-    </div>
-    <div class="col-sm-2">
-        <p> Status </p>
-    </div>
-</div>
-
-<div  ng-repeat="request in previousRequests">
+  <div class="col-sm-9">
     <div class="row">
-        <div class="col-sm-2">
-            <p> {{request.startDate}} </p>
+      <div class="col-sm-12">
+        <p class="lead">New Request </p>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateStart"
+            md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+            ng-change="updateEnd()">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateEnd"
+            md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <button class="btn btn-primary"
+              ng-click="submitRequest()">
+              <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+              Submit request
+            </button>
+          </div>
         </div>
-        <div class="col-sm-2">
-            <p> {{request.endDate}} </p>
+      </div>
+      <div class="col-sm-12">
+        <div style="height:50px; padding-top:30px;"> </div>
+        <hr/>
+      </div>
+      <div class="col-sm-12">
+        <div class="row request-title"
+          ng-show="userRequests.length>0">
+
+          <div class="col-sm-3">
+            <p> Start Date </p>
+          </div>
+          <div class="col-sm-3">
+            <p> End Date </p>
+          </div>
+          <div class="col-sm-3">
+            <p> Total Days </p>
+          </div>
+          <div class="col-sm-3">
+            <p> Status </p>
+          </div>
         </div>
-        <div class="col-sm-2">
-            <p> {{request.totalDays}} </p>
-        </div>
-        <div class="col-sm-2">
-            <div ng-show="request.status=='pending'">
-                <h3><span class="label label-warning">pending</span></h3>
+
+        <div  ng-repeat="request in userRequests"
+          ng-show="userRequests.length>0">
+          <div class="row">
+            <div class="col-sm-3">
+              <p> {{defaultDate(request.startDate)}} </p>
             </div>
-            <div ng-show="request.status=='approved'">
-                <h3><span class="label label-success">approved</span></h3>
+            <div class="col-sm-3">
+              <p> {{defaultDate(request.endDate)}} </p>
             </div>
-            <div ng-show="request.status=='denied'">
-                <h3><span class="label label-danger">denied</span></h3>
+            <div class="col-sm-3">
+              <p> {{totalDays(request.startDate, request.endDate)}} </p>
             </div>
+            <div class="col-sm-3">
+              <div ng-show="request.status=='Pending'">
+                <h3><span class="label label-warning">Pending</span></h3>
+              </div>
+              <div ng-show="request.status=='Approved'">
+                <h3><span class="label label-success">Approved</span></h3>
+              </div>
+              <div ng-show="request.status=='Denied'">
+                <h3><span class="label label-danger">Denied</span></h3>
+              </div>
+            </div>
+          </div>
         </div>
+
+      </div>
     </div>
+  </div>
+
 </div>
 

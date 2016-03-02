@@ -11,6 +11,8 @@ angular.module('sequoiaGroveApp', [
     'ngTouch',
     'pascalprecht.translate',
     'persona',
+    'ngMaterial',
+    'ngMessages',
     'underscore'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 

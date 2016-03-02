@@ -1,70 +1,68 @@
+<!-- Feature Request -->
 
 <div class="container-fluid hidden-print">
 
-  <div class="panel panel-default hidden-print">
-    <div class="panel-body">
-      <ng-include src="'views/templates/request-submit.html'"></ng-include>
-    </div>
-  </div>
-  <div>
-    <div ng-show="loggedInUser.isManager" class="panel panel-default hidden-print">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-pending.html'"></ng-include>
-      </div>
-    </div>
-    <div class="panel panel-default hidden-print">
-      <div class="panel-body">
-        <ng-include src="'views/templates/request-history.html'"></ng-include>
-      </div>
-    </div>
-  </div>
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" ng-show="loggedInUser.isManager">
 
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="panel panel-default">
+    <!-- Submit Request Tab-->
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit')]">
+      <a ng-click="activeTab='submit'" href="">Submit</a>
+    </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('pending')]">
+      <a ng-click="activeTab='pending'"href="">Respond to Pending</a>
+    </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('history')]">
+      <a ng-click="activeTab='history'"href="">View History</a>
+      </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit-for')]">
+      <a ng-click="activeTab='submit-for'"href="">Manage</a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+
+    <!-- Submit Request Content-->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('submit')]">
+      <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
-          <p class="lead">
-            Count of Number of Days Employees are Scheduled
-          </p>
-          <canvas id="doughnut" class="chart chart-doughnut"
-            chart-data="donGraph.data"
-            chart-click="donGraph.onClick"
-            chart-legend="true"
-            chart-labels="donGraph.labels">
-          </canvas>
+          <!-- Request Submit / User Request  -->
+          <ng-include src="'views/templates/request-submit.html'"></ng-include>
         </div>
       </div>
     </div>
 
-    <div class="col-sm-6">
-      <div class="panel panel-default">
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('history')]">
+      <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
-          <p class="lead">
-            {{countDisplay + 1}}
-            Day<span ng-show="(countDisplay+1) > 1">s</span> This Schedule
-          </p>
-          <div ng-repeat="emp in schCount[countDisplay]">
-            {{emp.name}}
-          </div>
+          <!--  All Request History -->
+          <ng-include src="'views/templates/request-history.html'"></ng-include>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="row">
-    <div class="col-sm-12">
-      <div class="panel panel-default">
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('pending')]">
+      <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
-          <p class="lead">
-            Weekly Hours Per Employee
-          </p>
-          <canvas id="bar" class="chart chart-bar"
-            chart-data="barChart.data"
-            chart-labels="barChart.labels">
-          </canvas>
+          <!--  All Pending Request -->
+          <ng-include src="'views/templates/request-pending.html'"></ng-include>
         </div>
       </div>
     </div>
+
+    <div ng-class="{true:'tab-pane active',false:'tab-pane'}[isActive('submit-for')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <!--  All Pending Request -->
+          <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
   </div>
 
 </div>
