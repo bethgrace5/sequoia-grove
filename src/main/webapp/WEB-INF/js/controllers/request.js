@@ -55,7 +55,7 @@ angular.module('sequoiaGroveApp')
   }
 
   // The name of the active tab, by default, it will be the submit section
-  $scope.activeTab = "submit";
+  $scope.activeTab = "pending";
 
   // function to set the class of the tab to active,
   // and

@@ -6,16 +6,20 @@
   <ul class="nav nav-tabs">
 
     <!-- Submit Request Tab-->
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('pending')]">
+      <a ng-click="activeTab='pending'"href="">Pending</a>
+    </li>
+
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit')]">
       <a ng-click="activeTab='submit'" href="">Submit</a>
     </li>
 
-    <li role="presentation" ng-class="">
-      <a href="">two</a>
-    </li>
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('history')]">
+      <a ng-click="activeTab='history'"href="">Request History</a>
+      </li>
 
-    <li role="presentation" ng-class="">
-      <a href="">three</a>
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit-for')]">
+      <a ng-click="activeTab='submit-for'"href=""> Submit-For </a>
     </li>
   </ul>
 
@@ -26,11 +30,39 @@
     <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('submit')]">
       <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
-          <!--  Employee User Request and history-->
+          <!-- Request Submit / User Request  -->
           <ng-include src="'views/templates/request-submit.html'"></ng-include>
         </div>
       </div>
     </div>
+
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('history')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <!--  All Request History -->
+          <ng-include src="'views/templates/request-history.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('pending')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <!--  All Pending Request -->
+          <ng-include src="'views/templates/request-pending.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <div ng-class="{true:'tab-pane active',false:'tab-pane'}[isActive('submit-for')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <!--  All Pending Request -->
+          <ng-include src="'views/templates/request-manager-mode.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
 
     <div class="tab-pane">
       <div class="panel panel-default hidden-print request-panel">
@@ -49,7 +81,6 @@
     </div>
 
   </div>
-
 
   <!--  Managers View -->
   <div ng-show="loggedInUser.isManager">
@@ -73,6 +104,14 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Employee Only View  -->
+  <div ng-show="loggedInUser.isEmployee">
+    <div class="panel panel-default hidden-print request-panel">
+      <div class="panel-body">
+        <ng-include src="'views/templates/request-submit.html'"></ng-include>
+      </div>
   </div>
 
 </div>
