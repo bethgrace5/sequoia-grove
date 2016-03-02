@@ -54,6 +54,18 @@ angular.module('sequoiaGroveApp')
     }
   }
 
+  // The name of the active tab, by default, it will be the submit section
+  $scope.activeTab = "submit";
+
+  // function to set the class of the tab to active,
+  // and
+  $scope.isActive = function(tabName) {
+    if(tabName === $scope.activeTab) {
+        return true;
+    }
+    return false;
+  }
+
   //-----------------
   // Ease_of_Access
   //-----------------
@@ -89,7 +101,7 @@ angular.module('sequoiaGroveApp')
       return;
     }
     var obj = { "eid": $rootScope.loggedInUser.id,
-      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $http({
@@ -124,7 +136,7 @@ angular.module('sequoiaGroveApp')
       var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
 
       if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        //$log.debug("Is S In"); 
+        //$log.debug("Is S In");
         alert("Dates Already Taken");
         return true;
       }
@@ -193,7 +205,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.managerSubmitRequest = function(){
     var obj = { "eid": $scope.selectedEmployee.id,
-      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $http({
@@ -210,7 +222,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.changeRequest = function($requestID, $approverID, $is_approve) {
     $http({
-      url: '/sequoiagrove/request/update/' + 
+      url: '/sequoiagrove/request/update/' +
       $requestID + '/' + $approverID + '/' + $is_approve,
       method: "POST"
     }).success(function(data, status) {
@@ -220,7 +232,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.changeRequestDates = function(){
     var obj = { "eid": $scope.selectedRequest.requestID,
-      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"), 
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $http({
@@ -236,7 +248,7 @@ angular.module('sequoiaGroveApp')
   }
   //-------------------------
   //Toggles
-  //------------------------- 
+  //-------------------------
   $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
   $scope.seeTargetEmployee = 1;
   $scope.seeTargetRequest = 0;
@@ -262,11 +274,11 @@ angular.module('sequoiaGroveApp')
   $scope.testManager = function(){
     if ($rootScope.loggedInUser.isManager) {
       $log.debug("you are a Manager");
-    } 
+    }
     else{
       $log.debug("you are a  Employee");
     }
-  } 
+  }
 
   $scope.init = function(){
     $log.debug($scope.previousRequests);

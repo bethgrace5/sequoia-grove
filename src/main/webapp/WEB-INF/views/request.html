@@ -2,28 +2,55 @@
 
 <div class="container-fluid hidden-print">
 
-
   <!-- Navigation Tabs -->
   <ul class="nav nav-tabs">
-    <li role="presentation" ng-class="{true:'active', false:''}[selectedTab == 'submit']"><a href="">one</a></li>
-    <li role="presentation" ng-class=""><a href="">two</a></li>
-    <li role="presentation" ng-class=""><a href="">three</a></li>
+
+    <!-- Submit Request Tab-->
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('submit')]">
+      <a ng-click="activeTab='submit'" href="">Submit</a>
+    </li>
+
+    <li role="presentation" ng-class="">
+      <a href="">two</a>
+    </li>
+
+    <li role="presentation" ng-class="">
+      <a href="">three</a>
+    </li>
   </ul>
 
   <!-- Tab Content -->
   <div class="tab-content">
-    <div class="tab-pane active">Panel 1 Content</div>
-    <div class="tab-pane">Panel 2 Content</div>
-    <div class="tab-pane">Panel 3 Content</div>
-  </div>
 
-  <!--  Employee User Request and history-->
-  <div class="panel panel-default hidden-print request-panel">
-    <div class="panel-body">
-
-      <ng-include src="'views/templates/request-submit.html'"></ng-include>
+    <!-- Submit Request Content-->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('submit')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <!--  Employee User Request and history-->
+          <ng-include src="'views/templates/request-submit.html'"></ng-include>
+        </div>
+      </div>
     </div>
+
+    <div class="tab-pane">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          Panel 2 Content
+        </div>
+      </div>
+    </div>
+
+    <div class="tab-pane">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          Panel 3 Content
+        </div>
+      </div>
+    </div>
+
   </div>
+
+
   <!--  Managers View -->
   <div ng-show="loggedInUser.isManager">
     <!--- Pending Request -->
