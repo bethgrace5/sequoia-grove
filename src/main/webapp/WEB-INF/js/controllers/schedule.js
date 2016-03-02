@@ -442,16 +442,15 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.getAllHolidays = function() {
-    /*
     $http({
       url: '/sequoiagrove/schedule/get/holidays',
       method: "GET"
     }).success(function (data, status, headers, config) {
-      $scope.allHolidays = ? [insert data name here] ?
+      $log.debug(data);
+      //$scope.allHolidays = ? [insert data name here] ?
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
     });
-    */
   }
 
   $scope.changeHolidayDates = function(){
@@ -488,6 +487,8 @@ angular.module('sequoiaGroveApp')
   /************** Controller Initialization **************/
 
   $scope.init = function() {
+    $log.debug("Testing 1 2 3");
+    $scope.getAllHolidays();
   }
 
   $scope.init();
