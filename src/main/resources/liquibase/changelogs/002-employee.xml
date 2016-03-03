@@ -17,33 +17,69 @@
         <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="first_name" type="varchar(255)">
-        <constraints unique="false" nullable="false"  default=""/>
+        <constraints unique="false" nullable="false"  />
       </column>
       <column name="last_name" type="varchar(255)">
-        <constraints unique="false" nullable="false" default="" />
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="email" type="varchar(255)">
         <constraints unique="true" nullable="false" />
       </column>
       <column name="is_manager" type="boolean">
-        <constraints unique="false" nullable="false" default="false" />
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="birth_date" type="date">
         <constraints unique="false" nullable="false" />
       </column>
       <column name="max_hrs_week" type="integer">
-        <constraints unique="false" nullable="true" default="40" />
+        <constraints unique="false" nullable="true"/>
       </column>
       <column name="min_hrs_week" type="integer">
-        <constraints unique="false" nullable="true" default="null"/>
+        <constraints unique="false" nullable="true"/>
       </column>
       <column name="phone_number" type="varchar(255)">
-        <constraints unique="false" nullable="true" default="null"/>
+        <constraints unique="false" nullable="true"/>
       </column>
       <column name="clock_number" type="integer">
-        <constraints unique="false" nullable="true" default="null"/>
+        <constraints unique="false" nullable="true"/>
       </column>
     </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="varchar(255)"
+      columnName="first_name"
+      defaultValue="" />
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="varchar(255)"
+      columnName="last_name"
+      defaultValue="" />
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="boolean"
+      columnName="is_manager"
+      defaultValueBoolean="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="integer"
+      columnName="max_hrs_week"
+      defaultValueNumeric="40" />
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="integer"
+      columnName="min_hrs_week"
+      defaultValue="null" />
+
+    <addDefaultValue schemaName="public"
+      tableName="employee"
+      columnDataType="integer"
+      columnName="clock_number"
+      defaultValue="null" />
 
   </changeSet>
 

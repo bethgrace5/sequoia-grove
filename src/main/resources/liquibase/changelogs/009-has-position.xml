@@ -14,24 +14,42 @@
     <!-- Employee Table -->
     <createTable schemaName="public" tableName="has_position" remarks="has position data">
       <column name="employee_id" type="integer">
-        <constraints unique="false" nullable="false"  default=""/>
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="position_id" type="integer">
-        <constraints unique="false" nullable="false" default="" />
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="date_acquired" type="date">
         <constraints unique="true" nullable="false" />
       </column>
       <column name="date_removed" type="date">
-        <constraints unique="true" nullable="true" default="null"/>
+        <constraints unique="true" nullable="true"/>
       </column>
       <column name="is_primary" type="boolean">
-        <constraints unique="false" nullable="false" default="false" />
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="is_training" type="boolean">
-        <constraints unique="false" nullable="false" default="false" />
+        <constraints unique="false" nullable="false"/>
       </column>
     </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="date_removed"
+      defaultValue="null" />
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="is_primary"
+      defaultValueBoolean="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="is_training"
+      defaultValueBoolean="false" />
 
     <addForeignKeyConstraint baseColumnNames="employee_id"
       baseTableName="has_position"

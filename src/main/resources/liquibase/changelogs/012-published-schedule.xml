@@ -24,19 +24,9 @@
       </column>
     </createTable>
 
-    <addForeignKeyConstraint baseColumnNames="requested_by"
-      baseTableName="requests_vacation"
-      constraintName="fk_requested_by_vacation"
-      deferrable="false"
-      initiallyDeferred="false"
-      onDelete="CASCADE"
-      onUpdate="RESTRICT"
-      referencedColumnNames="id"
-      referencedTableName="employee" />
-
-    <addForeignKeyConstraint baseColumnNames="responded_by"
-      baseTableName="requests_vacation"
-      constraintName="fk_responded_by_vacation"
+    <addForeignKeyConstraint baseColumnNames="published_by"
+      baseTableName="published_schedule"
+      constraintName="fk_published_by"
       deferrable="false"
       initiallyDeferred="false"
       onDelete="CASCADE"

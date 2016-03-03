@@ -20,9 +20,15 @@
         <constraints unique="true" nullable="false" />
       </column>
       <column name="type" type="varchar(255)">
-        <constraints unique="false" nullable="false" default="" />
+        <constraints unique="false" nullable="false"/>
       </column>
     </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="holiday"
+      columnDataType="varchar(255)"
+      columnName="type"
+      defaultValue="" />
 
   </changeSet>
 

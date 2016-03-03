@@ -24,17 +24,6 @@
       </column>
     </createTable>
 
-
-    <addForeignKeyConstraint baseColumnNames="user_id"
-      baseTableName="user_account_settings"
-      constraintName="fk_account_settings_to_user"
-      deferrable="false"
-      initiallyDeferred="false"
-      onDelete="CASCADE"
-      onUpdate="RESTRICT"
-      referencedColumnNames="id"
-      referencedTableName="user" />
-
   </changeSet>
 
 </databaseChangeLog>

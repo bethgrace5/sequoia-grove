@@ -23,7 +23,7 @@
         <constraints unique="false" nullable="false" />
       </column>
       <column name="is_approved" type="boolean">
-        <constraints unique="false" nullable="false" default="null"/>
+        <constraints unique="false" nullable="false"/>
       </column>
       <column name="start_date_time" type="date">
         <constraints unique="false" nullable="false" />
@@ -32,6 +32,18 @@
         <constraints unique="false" nullable="false" />
       </column>
     </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="requests_vacation"
+      columnDataType="integer"
+      columnName="responded_by"
+      defaultValue="null" />
+
+    <addDefaultValue schemaName="public"
+      tableName="requests_vacation"
+      columnDataType="boolean"
+      columnName="is_approved"
+      defaultValue="null" />
 
     <addForeignKeyConstraint baseColumnNames="requested_by"
       baseTableName="requests_vacation"
