@@ -45,11 +45,11 @@ public class RequestController{
       String start = req.getStartDate();
       String end = req.getEndDate();
 
-      int id = jdbcTemplate.queryForObject("select bajs_request_id_sequence.nextval from dual",
+      int id = jdbcTemplate.queryForObject("select request_id_sequence.nextval from dual",
             Integer.class);
 
       jdbcTemplate.update(
-          "insert into bajs_requests_vacation"+
+          "insert into requests_vacation"+
           "(id, requested_by, responded_by, is_approved, start_date_time," +
           " end_date_time)" +
           "values(?, ?, ?, ?, "+
@@ -64,7 +64,7 @@ public class RequestController{
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view",
+          "select * from requests_view",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(
@@ -90,7 +90,7 @@ public class RequestController{
     public String getCheckedRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view " +
+          "select * from requests_view " +
           "where responded_by IS NOT NULL ",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -117,7 +117,7 @@ public class RequestController{
     public String getPendingRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view "+
+          "select * from requests_view "+
           "where responded_by IS NULL",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -145,7 +145,7 @@ public class RequestController{
           @PathVariable("eid") int eid) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
-              "select * from bajs_requests_view " +
+              "select * from requests_view " +
               "where requested_by = " + eid,
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -176,7 +176,7 @@ public class RequestController{
         //Make Sure request ID is there too...
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        jdbcTemplate.update("update bajs_requests_vacation " +
+        jdbcTemplate.update("update requests_vacation " +
             " set" +
             " is_approved  = " + is_approve +
             ", responded_by = " + approverID +
@@ -195,7 +195,7 @@ public class RequestController{
         String start = req.getStartDate();
         String end = req.getEndDate();
         /*
-           jdbcTemplate.update("update bajs_requests_vacation " +
+           jdbcTemplate.update("update requests_vacation " +
            " set" +
            " start_date_time = " + "to_timestamp(" + start + ", 'mm-dd-yyyy')" +
            " where id = " + eid

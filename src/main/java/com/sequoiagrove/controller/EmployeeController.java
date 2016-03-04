@@ -131,7 +131,7 @@ public class EmployeeController
       };
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update( "update BAJS_employee set first_name = ?, "+
+      jdbcTemplate.update( "update employee set first_name = ?, "+
           "last_name    = ?, "+
           "is_manager   = ?, "+
           "birth_date   = to_date(?, 'yyyy-mm-dd'), "+
@@ -171,7 +171,7 @@ public class EmployeeController
             jobject.get("email").getAsString(),
         };
 
-        jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
+        jdbcTemplate.update("insert into employee (id, first_name, last_name," +
             "is_manager, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
             "values(?,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ?, ? )", params);
 

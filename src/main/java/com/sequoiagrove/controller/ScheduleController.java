@@ -35,7 +35,7 @@ public class ScheduleController {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-                    "select * from table(bajs_pkg.get_schedule('"+ mon +"'))",
+                    "select * from table(pkg.get_schedule('"+ mon +"'))",
                     new RowMapper<ScheduleTemplate>() {
                     public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
                     ScheduleTemplate schTmp = new ScheduleTemplate(
@@ -61,7 +61,7 @@ public class ScheduleController {
           });
 
         Integer count = jdbcTemplate.queryForObject(
-                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+                "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
 
         model.addAttribute("ispublished", (count!=null && count > 0));
         model.addAttribute("template", schTempList);
@@ -79,7 +79,7 @@ public class ScheduleController {
 
         // update database
         for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("call bajs_pkg.schedule(?, ?, ?)",
+            jdbcTemplate.update("call pkg.schedule(?, ?, ?)",
                 change.getEid(),
                 change.getSid(),
                 change.getDate());
@@ -98,7 +98,7 @@ public class ScheduleController {
 
         // update database
         for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("call bajs_pkg.delete_schedule(?, ?)",
+            jdbcTemplate.update("call pkg.delete_schedule(?, ?)",
                 change.getSid(),
                 change.getDate());
         }
@@ -116,7 +116,7 @@ public class ScheduleController {
         String date = jobject.get("date").getAsString();
 
         // update database
-        jdbcTemplate.update("call bajs_pkg.publish(?, ?)", eid, date);
+        jdbcTemplate.update("call pkg.publish(?, ?)", eid, date);
         return "jsonTemplate";
     }
 
@@ -126,7 +126,7 @@ public class ScheduleController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Integer count = jdbcTemplate.queryForObject(
-                "SELECT count(*) FROM bajs_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+                "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
 
         boolean isPublished =  (count != null && count > 0);
 

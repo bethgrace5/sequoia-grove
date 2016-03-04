@@ -27,7 +27,7 @@ public class PositionController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         List<Position> posList = jdbcTemplate.query(
-            "select id, title, location from bajs_position order by location, title",
+            "select id, title, location from position order by location, title",
             new RowMapper<Position>() {
                 public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Position pos = new Position(
@@ -57,12 +57,12 @@ public class PositionController {
         // see if this is already a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
         int count = jdbcTemplate.queryForObject(
-            "select count(*) from bajs_has_position where employee_id = ?"+
+            "select count(*) from has_position where employee_id = ?"+
             " and position_id = ? and date_removed is null", obj, Integer.class);
 
         // this employee does not currently have this position. add it.
         if (count <= 0) {
-            jdbcTemplate.update("insert into bajs_has_position(" +
+            jdbcTemplate.update("insert into has_position(" +
               "employee_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
               "values(?, ?, (select current_date from dual), null, 0, 0)", eid, pid);
         }
@@ -85,12 +85,12 @@ public class PositionController {
         // see if this is a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
         int count = jdbcTemplate.queryForObject(
-            "select count(*) from bajs_has_position where employee_id = ?"+
+            "select count(*) from has_position where employee_id = ?"+
             " and position_id = ? and date_removed is null", obj, Integer.class);
 
         // this employee currently has this position. remove it.
         if (count > 0) {
-           jdbcTemplate.update(" update bajs_has_position " +
+           jdbcTemplate.update(" update has_position " +
            " set date_removed = (select current_date from dual) " +
            " where employee_id = ? and position_id = ? and date_removed is null", eid, pid);
         }

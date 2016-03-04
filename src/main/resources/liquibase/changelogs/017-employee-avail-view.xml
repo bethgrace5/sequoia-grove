@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="17" author="Bethany Armitage" context="prod or dev or test">
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="employee_avail_view">
+        select id, mon, tue, wed, thu, fri, sat, sun
+        from employee e
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS mon
+        from availability
+        where day = 'mon'
+        group by employee_id
+        ) m
+        on e.id = m.eid
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS tue
+        from availability
+        where day = 'tue'
+        group by employee_id
+        ) t
+        on e.id = t.eid
+        full outer join
+            (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ','ORDER BY employee_id)
+        AS wed
+        from availability
+        where day = 'wed'
+        group by employee_id
+        ) w
+        on e.id = w.eid
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS thu
+        from availability
+        where day = 'thu'
+        group by employee_id
+        ) th
+        on e.id = th.eid
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS fri
+        from availability
+        where day = 'fri'
+        group by employee_id
+        ) f
+        on e.id = f.eid
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS sat
+        from availability
+        where day = 'sat'
+        group by employee_id
+        ) sa
+        on e.id = sa.eid
+        full outer join
+        (
+        select employee_id as eid, STRING_AGG(startt||':'||endt, ',' ORDER BY employee_id)
+        AS sun
+        from availability
+        where day = 'sun'
+        group by employee_id
+        ) su
+        on e.id = su.eid
+
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>
