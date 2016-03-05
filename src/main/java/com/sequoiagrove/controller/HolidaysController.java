@@ -35,10 +35,11 @@ import com.sequoiagrove.model.Holiday;
 
 @Controller
 public class HolidaysController {
-  @RequestMapping(value = "/schedule/get/holidays")
+
+  @RequestMapping(value = "/schedule/get/holiday")
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      /*
+
       List<Holiday> holidayList = jdbcTemplate.query(
           "select * from bajs_holiday",
           new RowMapper<Holiday>() {
@@ -52,7 +53,47 @@ public class HolidaysController {
             }
           });
       model.addAttribute("holidays", holidayList);
-      */
       return "jsonTemplate";
     }
+
+  @RequestMapping(value = "/schedule/submit/new/holiday")
+    public String sumbitRequest(@RequestBody String data, Model model) throws SQLException {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      Gson gson = new Gson();
+      Holiday hol = gson.fromJson(data, Holiday.class);
+
+      String newName = hol.getName();
+      String newDate = hol.getDate();
+      String newType = hol.getType();
+      jdbcTemplate.update("insert into bajs_holidays " +
+          " (name, date, type) " +
+          " values(? , ? , ?) " +
+          newName, newDate, newType
+      );
+
+      return "jsonTemplate";
+    }
+
+    @RequestMapping(value = "/schedule/update/holiday")
+      public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        Gson gson = new Gson();
+
+        Holiday hol = gson.fromJson(data, Holiday.class);
+
+        String name = hol.getName();
+        String newDate = hol.getDate();
+        String newType = hol.getType();
+
+        jdbcTemplate.update(
+           " update bajs_holidays " +
+           " set " +
+           " type = " + newType + ", ",
+           " date = " + "to_timestamp(" + newDate + ", 'mm-dd-yyyy')" +
+           " where name = " + name
+        );
+
+        return "jsonTemplate";
+      }
+
 }

@@ -15,24 +15,24 @@ public class Holiday {
         this.type = type;
     }
 
-    void setName(String name){
+    public void setName(String name){
       this.name = name;
     }
-    String getName(){
+    public String getName(){
       return this.name;
     }
 
-    void setDate(String date){
+    public void setDate(String date){
       this.date = date;
     }
-    String getDate(){
+    public String getDate(){
       return this.date;
     }
 
-    void setType(String type){
+    public void setType(String type){
       this.type = type;
     }
-    String getType(){
+    public String getType(){
       return this.type;
     }
 }
