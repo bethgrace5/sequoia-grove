@@ -36,7 +36,7 @@ import com.sequoiagrove.model.Holiday;
 @Controller
 public class HolidaysController {
 
-  @RequestMapping(value = "/schedule/get/holiday")
+  @RequestMapping(value = "/schedule/get/holidays")
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
