@@ -11,6 +11,17 @@
 
   <changeSet id="7" author="Bethany Armitage" context="prod or dev or test">
 
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="position_id_seq"
+      startValue="1"/>
+
     <!-- Position Table -->
     <createTable schemaName="public" tableName="position" 
       remarks="positions an employee may work">

@@ -11,6 +11,17 @@
 
   <changeSet id="11" author="Bethany Armitage" context="prod or dev or test">
 
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="requests_id_seq"
+      startValue="1"/>
+
     <!-- Employee Table -->
     <createTable schemaName="public" tableName="requests_vacation" remarks="is scheduled for data">
       <column name="id" type="serial">

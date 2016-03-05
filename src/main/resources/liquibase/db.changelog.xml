@@ -34,5 +34,7 @@
   <include relativeToChangelogFile="true" file="changelogs/018-employee-position-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/019-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-request-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/021-mock-data.xml"/>
+
 
 </databaseChangeLog>

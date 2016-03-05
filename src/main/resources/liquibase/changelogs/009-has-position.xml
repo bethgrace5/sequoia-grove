@@ -20,10 +20,10 @@
         <constraints unique="false" nullable="false"/>
       </column>
       <column name="date_acquired" type="date">
-        <constraints unique="true" nullable="false" />
+        <constraints unique="false" nullable="false" />
       </column>
       <column name="date_removed" type="date">
-        <constraints unique="true" nullable="true"/>
+        <constraints unique="false" nullable="true"/>
       </column>
       <column name="is_primary" type="boolean">
         <constraints unique="false" nullable="false"/>

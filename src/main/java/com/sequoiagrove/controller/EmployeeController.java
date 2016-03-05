@@ -41,7 +41,7 @@ public class EmployeeController
                       rs.getInt("id"),
                       rs.getInt("max_hrs_week"),
                       rs.getInt("min_hrs_week"),
-                      rs.getInt("is_manager"),
+                      rs.getBoolean("is_manager"),
                       rs.getInt("clock_number"),
                       rs.getString("first_name"),
                       rs.getString("last_name"),

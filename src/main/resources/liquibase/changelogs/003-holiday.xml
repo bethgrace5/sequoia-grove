@@ -13,7 +13,7 @@
 
     <!-- Holiday Table -->
     <createTable schemaName="public" tableName="holiday" remarks="holiday data">
-      <column name="hdate" type="date">
+      <column name="hdate" type="varchar(255)">
         <constraints primaryKey="true" nullable="false" />
       </column>
       <column name="name" type="varchar(255)">

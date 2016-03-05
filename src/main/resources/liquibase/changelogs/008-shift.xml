@@ -11,6 +11,17 @@
 
   <changeSet id="8" author="Bethany Armitage" context="prod or dev or test">
 
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="shift_id_seq"
+      startValue="1"/>
+
     <!-- Position Table -->
     <createTable schemaName="public" tableName="shift" 
       remarks="shifts that are on the schedule">
@@ -27,7 +38,7 @@
         <constraints unique="false" nullable="false" />
       </column>
       <column name="end_date" type="date">
-        <constraints unique="false" nullable="false" />
+        <constraints unique="false" nullable="true" />
       </column>
       <column name="weekday_id" type="integer">
         <constraints unique="false" nullable="false" />

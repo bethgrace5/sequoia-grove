@@ -16,7 +16,7 @@ public class UserRowMapper implements RowMapper {
         user.setFirstname(rs.getString("first_name"));
         user.setLastname(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
-        user.setIsManager(rs.getInt("is_manager") == 1);
+        user.setIsManager(rs.getBoolean("is_manager"));
         return user;
     }
 
