@@ -57,7 +57,7 @@ public class HolidaysController {
     }
 
   @RequestMapping(value = "/schedule/submit/new/holiday")
-    public String sumbitRequest(@RequestBody String data, Model model) throws SQLException {
+    public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Gson gson = new Gson();
       Holiday hol = gson.fromJson(data, Holiday.class);
@@ -65,12 +65,15 @@ public class HolidaysController {
       String newName = hol.getName();
       String newDate = hol.getDate();
       String newType = hol.getType();
-      jdbcTemplate.update("insert into bajs_holidays " +
-          " (name, date, type) " +
-          " values(? , ? , ?) " +
-          newName, newDate, newType
+      System.out.println(newName + " " + newDate + " " + newType);
+      //INSERT INTO emp (empno, ename, job, sal, comm, deptno)
+      //   VALUES (4160, 'STURDEVIN', 'SECURITY GUARD', 2045, NULL, 30);
+      jdbcTemplate.update(
+          "insert into bajs_holiday "+
+          " (name, type, hdate) "+
+          " values(?, ?, ?) ",
+          newName, newType, newDate
       );
-
       return "jsonTemplate";
     }
 

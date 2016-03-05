@@ -400,12 +400,17 @@ angular.module('sequoiaGroveApp')
   $scope.chosenHoliday;
   $scope.holidayStartDate;
   $scope.holidayEndDate;
+  $scope.newHoliday = "Dog Days Off";
+
+    /* HTML reminder  (this will be deleted after implemented in html"
+        <input type="text" id="newHoliday" class="form-control"
+        ng-model="newHoliday"
+        placeholder="New Holiday" />
+   */
 
   //--------------------------
   //Holiday Minor Functions
   //--------------------------
-  $scope.holidayStartDate;// = $scope.minDateStart;
-  $scope.holidayEndDate;  //= $scope.minDateStart;
 
   $scope.today = new Date();
   $scope.minDateStart = new Date(
@@ -413,6 +418,9 @@ angular.module('sequoiaGroveApp')
     $scope.today.getMonth(),
     $scope.today.getDate()
     );
+
+  $scope.holidayStartDate  = $scope.minDateStart;
+  $scope.holidayEndDate =   $scope.minDateStart;
 
   $scope.updateEnd = function(){
     if(moment($scope.holidayDateStart).isAfter($scope.holidayDateEnd)){
@@ -424,13 +432,16 @@ angular.module('sequoiaGroveApp')
   //--------------------------
 
   $scope.addNewHoliday = function(){
-    /*
+  $scope.holidayStartDate  = $scope.minDateStart;
+  $scope.holidayEndDate =   $scope.minDateStart;
+  $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
     var obj = {
-      //"startDate":moment($scope.holidayStartDate).format("MM-DD-YYYY"),
-      //"endDate":moment($scope.holidayEndDate).format("MM-DD-YYYY")
+      "name":"Dogs' Day Off",
+      "date":moment($scope.holidayStartDate).format("MM-DD"),
+      "type":"Cows"
     }
     $http({
-      url: '/sequoiagrove/schedule/add/holiday',
+      url: '/sequoiagrove/schedule/submit/new/holiday',
       method: "POST",
       data: JSON.stringify(obj)
     })
@@ -438,7 +449,7 @@ angular.module('sequoiaGroveApp')
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting new holiday ', status, data);
-    });*/
+    });
   }
 
   $scope.getAllHolidays = function() {
@@ -488,7 +499,9 @@ angular.module('sequoiaGroveApp')
 
   $scope.init = function() {
     $log.debug("Testing 1 2 3");
-    $scope.getAllHolidays();
+    $scope.getAllHolidays()
+    //$scope.addNewHoliday();
+
   }
 
   $scope.init();
