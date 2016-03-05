@@ -33,11 +33,8 @@ public class ManageStore {
     public String getAllStore(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-    }
-  }
-  @RequestMapping(value = "/manageStore/get/")
-    public String (Model model){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-  }
+      return "nothing";
 
+    }
 }
+
