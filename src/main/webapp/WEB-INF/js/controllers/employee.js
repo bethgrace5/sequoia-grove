@@ -22,7 +22,7 @@ angular.module('sequoiaGroveApp')
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-      'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
+      'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':'', 'phone':0};
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
@@ -75,14 +75,10 @@ angular.module('sequoiaGroveApp')
       }
     }
 
-    $scope.momentToDate = function(formattedString) {
-      return moment('dd-mm-yyyy', formattedString).toDate();
-    }
-
     // reset selected employee
     $scope.clearEmployee = function() {
       $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-        'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
+        'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':40, 'phone':0};
       $scope.birthDate = '';
     }
 /************** HTTP Request Functions **************/
@@ -105,7 +101,7 @@ angular.module('sequoiaGroveApp')
       // make sure all fields are filled in
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
-        $log.debug(avail);
+        //$log.debug(avail);
         $http({
           url: '/sequoiagrove/avail/add',
           method: "POST",
@@ -213,31 +209,60 @@ angular.module('sequoiaGroveApp')
     }
 
     // Update Existing employee, or add new
-    $scope.updateEmployee = function() {
-      $log.debug($scope.selectedEmployee);
+    $scope.updateEmployee = function(form) {
+      //$log.debug(form);
+
+      // validate max hours per week
+      if ((form.maxHrsWeek.$viewValue == '') ||
+          (form.maxHrsWeek.$viewValue < 0) ||
+          (form.maxHrsWeek.$viewValue > 40)) {
+        $scope.selectedEmployee.maxHrsWeek = 40;
+      };
+
+      // validate min hours per week
+      if ((form.minHrsWeek.$viewValue == '') ||
+          (form.minHrsWeek.$viewValue > form.maxHrsWeek.$viewValue) ||
+          (form.minHrsWeek.$viewValue < 0)) {
+        $scope.selectedEmployee.minHrsWeek = 0;
+      };
+
+      // transform firstname to uppercase first letter and lowercase for the rest
+      var firstLetter = $scope.selectedEmployee.firstName.substring(0,1);
+      var theRest = $scope.selectedEmployee.firstName.substring(1,
+          $scope.selectedEmployee.firstName.length);
+
+      $scope.selectedEmployee.firstName =
+        (firstLetter.toUpperCase() + theRest.toLowerCase());
+
+      // transform lastname to uppercase first letter and lowercase for the rest
+      firstLetter = $scope.selectedEmployee.lastName.substring(0,1);
+      theRest = $scope.selectedEmployee.lastName.substring(1,
+          $scope.selectedEmployee.lastName.length);
+
+      $scope.selectedEmployee.lastName =
+        (firstLetter.toUpperCase() + theRest.toLowerCase());
+
+      //TODO if clock number is greater than allowd size, fix it or show error
+
+      // validate the rest of the form
+      if (form.$invalid) {
+        form.firstName.$setTouched();
+        form.lastName.$setTouched();
+        form.email.$setTouched();
+        return;
+      }
+
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
       var action = "update";
+      $log.debug($scope.birthdate);
       $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
         action = "add";
-
-        if ($scope.selectedEmployee.firstName === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.lastName === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.birthdate === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.email === '') {
-          return;
-        }
       }
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
@@ -250,6 +275,7 @@ angular.module('sequoiaGroveApp')
           }
           $scope.selectEmployee($scope.selectedEmployee.id);
           $scope.saving = false;
+          form.$setSubmitted();
         }).error(function(data, status) {
           $log.debug('error with action:', action, status);
         });
