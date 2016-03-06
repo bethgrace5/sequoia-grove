@@ -19,5 +19,17 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
+  // The name of the active tab, by default, it will be the submit section
+  $scope.activeTab = "holiday";
+
+  // function to set the class of the tab to active,
+  // and
+  $scope.isActive = function(tabName) {
+    if(tabName === $scope.activeTab) {
+        return true;
+    }
+    return false;
+  }
+
 });
 
