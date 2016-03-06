@@ -154,6 +154,9 @@ angular.module('sequoiaGroveApp')
           $log.debug(status, 'failed to add position(', pid, ') for employee(', obj.eid, ')');
         });
       }
+      else {
+        $scope.saving = false;
+      }
     }
 
     // remove an availability for an employee
