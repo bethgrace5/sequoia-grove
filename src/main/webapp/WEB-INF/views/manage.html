@@ -1,0 +1,65 @@
+
+<div class="container-fluid hidden-print">
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" ng-show="loggedInUser.isManager">
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('holiday')]">
+      <a ng-click="activeTab='holiday'" href="">Holidays</a>
+    </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('shift')]">
+      <a ng-click="activeTab='shift'"href="">Shifts</a>
+    </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('delivery')]">
+      <a ng-click="activeTab='delivery'"href="">Deliveries</a>
+      </li>
+
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('restriction')]">
+      <a ng-click="activeTab='restriction'"href="">Restrictions</a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+
+    <!-- Edit Holidays -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('holiday')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <ng-include src="'views/templates/manage-holidays.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Shifts -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('shift')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <p class="lead">put existing manage shifts template here</p>
+          <!--<ng-include src="'views/templates/.html'"></ng-include>-->
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Deliveries -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('delivery')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <ng-include src="'views/templates/manage-deliveries.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit Restrictions (cannot work with) -->
+    <div ng-class="{true:'tab-pane active',false:'tab-pane'}[isActive('restriction')]">
+      <div class="panel panel-default hidden-print request-panel">
+        <div class="panel-body">
+          <ng-include src="'views/templates/manage-restrictions.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>
