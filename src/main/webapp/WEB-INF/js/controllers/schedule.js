@@ -498,8 +498,7 @@ angular.module('sequoiaGroveApp')
   /************** Controller Initialization **************/
 
   $scope.init = function() {
-    $log.debug("Testing 1 2 3");
-    $scope.getAllHolidays()
+    //$scope.getAllHolidays()
     //$scope.addNewHoliday();
 
   }
