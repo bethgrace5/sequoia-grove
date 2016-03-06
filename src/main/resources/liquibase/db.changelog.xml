@@ -35,6 +35,7 @@
   <include relativeToChangelogFile="true" file="changelogs/019-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-request-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/021-mock-data.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/022-get-schedule-function.xml"/>
 
 
 </databaseChangeLog>

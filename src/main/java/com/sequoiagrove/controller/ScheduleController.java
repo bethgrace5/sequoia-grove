@@ -28,16 +28,37 @@ import com.sequoiagrove.controller.MainController;
 @Controller
 public class ScheduleController {
 
-    // Get current schedule template (current shifts) dd-mm-yyyy
+    // Get current schedule template (current shifts) mm-dd-yyyy
     @RequestMapping(value = "/schedule/template/{mon}")
         public String getScheduleTemplate(Model model, @PathVariable("mon") String mon) {
 
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-                    "select * from table(pkg.get_schedule('"+ mon +"'))",
+                "select get_schedule('schedulecursor', '" + mon + "')",
                     new RowMapper<ScheduleTemplate>() {
                     public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
+                      System.out.println(rs.getType());
+                      System.out.println(rs.next());
+                      System.out.println(rs.getRow());
+                      //System.out.println(rs.getRowId());
+                      System.out.println(rs.getStatement());
+                      System.out.println(rs.getWarnings());
+                      System.out.println(rs.wasNull());
+                      System.out.println(rs.getMetaData().getColumnCount());
+
+                      for(int i=1; i<= rs.getMetaData().getColumnCount(); i++) {
+                        System.out.println("column name: ");
+                        System.out.println(rs.getMetaData().getColumnName(i));
+                        System.out.println("column type: ");
+                        System.out.println(rs.getMetaData().getColumnType(i));
+                        System.out.println("table name: ");
+                        System.out.println(rs.getMetaData().getTableName(i));
+                      }
+
+                      //System.out.println(rs.getObject(1).toString());
+
+
                     ScheduleTemplate schTmp = new ScheduleTemplate(
                           rs.getInt("sid"),
                           rs.getInt("pid"),
