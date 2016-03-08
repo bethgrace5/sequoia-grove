@@ -18,8 +18,9 @@
       from employee e
       full outer join
       (
-        select employee_id as eid, STRING_AGG(to_char(date_employed, 'mm-dd-yyyy') || ':' || to_char(date_unemployed, 'mm-dd-yyyy'), ','
-        order by employee_id, date_employed) AS history
+        select employee_id as eid, STRING_AGG(
+          concat_ws(':',to_char(date_employed, 'mm-dd-yyyy')::text, to_char(date_unemployed, 'mm-dd-yyyy')::text), ','
+              order by employee_id, date_employed) AS history
         from employment_history h
         group by employee_id
       ) pos

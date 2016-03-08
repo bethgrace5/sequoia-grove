@@ -37,7 +37,7 @@ public class ScheduleController {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-        "select * from get_schedule('10-12-2015')",
+        "select * from get_schedule('12-10-2015')",
         new RowMapper<ScheduleTemplate>() {
           public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
