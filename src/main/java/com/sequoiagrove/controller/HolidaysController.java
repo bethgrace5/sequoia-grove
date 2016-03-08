@@ -66,8 +66,7 @@ public class HolidaysController {
       String newDate = hol.getDate();
       String newType = hol.getType();
       System.out.println(newName + " " + newDate + " " + newType);
-      //INSERT INTO emp (empno, ename, job, sal, comm, deptno)
-      //   VALUES (4160, 'STURDEVIN', 'SECURITY GUARD', 2045, NULL, 30);
+
       jdbcTemplate.update(
           "insert into bajs_holiday "+
           " (name, type, hdate) "+
@@ -89,10 +88,10 @@ public class HolidaysController {
         String newType = hol.getType();
 
         jdbcTemplate.update(
-           " update bajs_holidays " +
+           " update bajs_holiday " +
            " set " +
-           " type = " + newType + ", ",
-           " date = " + "to_timestamp(" + newDate + ", 'mm-dd-yyyy')" +
+           " type = " + newType + ", " +
+           " date = " + newDate + " "  +
            " where name = " + name
         );
 
