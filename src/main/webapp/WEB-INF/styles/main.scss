@@ -436,9 +436,22 @@ a:focus {
 .request-panel{
   border-top:none;
   padding-top: 30px;
-  height: 70%;
+  min-height: 70%;
   overflow-y:scroll;
 }
 
+.css-form input.ng-invalid.ng-touched {
+  -webkit-box-shadow: inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  -moz-box-shadow:    inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  box-shadow:         inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  //background-color: #FA787E;
+}
+
+.css-form input.ng-valid.ng-touched {.
+  //-webkit-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //-moz-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //background-color: #78FA89;
+}
 
 

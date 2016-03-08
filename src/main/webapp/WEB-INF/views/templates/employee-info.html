@@ -1,72 +1,83 @@
-<!-- Employee Info -->
-<div class="request-title">
-  <form class="form-horizontal">
-    <div class="form-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+  <button class = "btn btn-info pull-right"
+      ng-show="selectedEmployee.id === 0"
+      ng-click="updateEmployee(employeeform)">
+    <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
+    Add
+  </button>
+  <div ng-hide = "selectedEmployee.id === 0">
+    <button class = "btn btn-primary pull-right"
+        ng-click="updateEmployee(employeeform)">
+      <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
+      Save Info
+    </button>
+  </div>
+  <p class="lead emp-header">Employee Info</p>
+</div>
+<div class="panel-body">
+  <!-- Employee Info -->
+  <div class="request-title">
+    <form name="employeeform" class="form-horizontal css-form" novalidate>
+      <div class="form-group">
 
-      <label for="firstName" class="col-sm-2 control-label">Name</label>
-      <div class="col-sm-4">
-        <input type="text" id="firstName" class="form-control"
-        ng-model="selectedEmployee.firstName"
-        placeholder="First" />
-        <input type="text" id="lastName" class="form-control"
-        ng-model="selectedEmployee.lastName"
-        placeholder="Last" />
-      </div>
+        <label for="firstName" class="col-sm-2 control-label">Name</label>
+        <div class="col-sm-4">
+          <input name="firstName" type="text" id="firstName" class="form-control" required=""
+          ng-model="selectedEmployee.firstName"
+          placeholder="First" />
+          <input name="lastName" type="text" id="lastName" class="form-control" required=""
+          ng-model="selectedEmployee.lastName"
+          placeholder="Last" />
+        </div>
 
-      <label for="clock" class="col-sm-2 control-label">Number</label>
-      <div class="col-sm-4">
-        <input type="number" id="clock" class="form-control"
-          ng-model="selectedEmployee.clock"
+        <label for="clock" class="col-sm-2 control-label">Number</label>
+        <div class="col-sm-4">
+          <input name="number" type="number" id="clock" class="form-control"
+            ng-model="selectedEmployee.clock"
+            placeholder="#" />
+        </div>
+
+        <label for="phone" class="col-sm-2 control-label">Phone</label>
+        <div class="col-sm-4">
+          <input name="phone" type="phone" id="phone" class="form-control"
+          ng-model="selectedEmployee.phone"
           placeholder="#" />
-      </div>
-
-      <label for="phone" class="col-sm-2 control-label">Phone</label>
-      <div class="col-sm-4">
-        <input type="phone" id="phone" class="form-control"
-        ng-model="selectedEmployee.phone"
-        placeholder="#" />
-      </div>
-
-      <label for="email" class="col-sm-2 control-label">Email</label>
-      <div class="col-sm-4">
-        <input type="email" id="email" class="form-control"
-        ng-model="selectedEmployee.email"
-        placeholder="email" />
-      </div>
-
-      <label for="birthday" class="col-sm-2 control-label">Birthday</label>
-      <div class="col-sm-4">
-        <input type="text" id="clock" class="form-control"
-          ng-model="selectedEmployee.birthDate"
-          placeholder="dd-mm-yyyy" />
         </div>
 
-      <label for="max" class="col-sm-2 control-label">Hours</label>
-      <div class="col-sm-2">
-        <input type="number" id="min" class="form-control"
-          ng-model="selectedEmployee.minHrsWeek"
-          placeholder="Minimum" />
-      </div>
-      <div class="col-sm-2">
-        <input type="number" id="clock" class="form-control"
-          ng-model="selectedEmployee.maxHrsWeek"
-          placeholder="Maximum" />
+        <label for="email" class="col-sm-2 control-label">Email</label>
+        <div class="col-sm-4">
+          <input name="email" type="email" id="email" class="form-control" required=""
+          ng-model="selectedEmployee.email"
+          placeholder="email" />
         </div>
 
-      <label for="birthdateTemplate" class="col-sm-2 control-label"> Birthdate</label>
-      <div class="col-sm-4">
-          <md-datepicker ng-model="birthDate" 
-            md-placeholder="Starting Date">
-          </md-datepicker>
+        <label for="max" class="col-sm-2 control-label">Hours</label>
+        <div class="col-sm-2">
+          <input name="minHrsWeek" type="number" id="min" class="form-control"
+            ng-model="selectedEmployee.minHrsWeek"
+            placeholder="Minimum" />
+        </div>
+        <div class="col-sm-2">
+          <input name="maxHrsWeek" type="number" id="clock" class="form-control"
+            ng-model="selectedEmployee.maxHrsWeek"
+            placeholder="Maximum" />
+          </div>
+
+        <label for="birthdateTemplate" class="col-sm-2 control-label" required=""> Birthdate</label>
+        <div class="col-sm-4">
+            <md-datepicker ng-model="$parent.birthdate"> </md-datepicker>
+        </div>
+
+        <label for="manager" class="col-sm-2 control-label"> Manager </label>
+        <div class="col-sm-4">
+        <input name="isManager" type="checkbox" id="manager"
+            ng-model="selectedEmployee.isManager" ng-true-value="1" ng-false-value="0"
+            ng-disabled="loggedInUser.id == selectedEmployee.id"/>
+        </div>
       </div>
 
-      <label for="manager" class="col-sm-2 control-label"> Manager </label>
-      <div class="col-sm-4">
-      <input type="checkbox" id="manager"
-          ng-model="selectedEmployee.isManager" ng-true-value="1" ng-false-value="0"
-          ng-disabled="loggedInUser.id == selectedEmployee.id"/>
-      </div>
-
-    </div>
-  </form>
+    </form>
+  </div>
+</div>
 </div>
