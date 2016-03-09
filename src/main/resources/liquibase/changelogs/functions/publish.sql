@@ -1,5 +1,5 @@
 
-create or replace function publish(eid numeric, d varchar)
+create or replace function publish(eid integer, d varchar)
 returns void as
 $BODY$
 BEGIN

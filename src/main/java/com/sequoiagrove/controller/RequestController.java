@@ -64,7 +64,7 @@ public class RequestController{
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from requests_view",
+          "select * from request_view",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(
@@ -90,7 +90,7 @@ public class RequestController{
     public String getCheckedRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from requests_view " +
+          "select * from request_view " +
           "where responded_by IS NOT NULL ",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -117,7 +117,7 @@ public class RequestController{
     public String getPendingRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from requests_view "+
+          "select * from request_view "+
           "where responded_by IS NULL",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -145,7 +145,7 @@ public class RequestController{
           @PathVariable("eid") int eid) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
-              "select * from requests_view " +
+              "select * from request_view " +
               "where requested_by = " + eid,
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {

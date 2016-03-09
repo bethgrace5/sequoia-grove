@@ -4,6 +4,7 @@ import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -120,7 +121,12 @@ public class ScheduleController {
         String date = jobject.get("date").getAsString();
 
         // update database publish(eid, datestring)
-        jdbcTemplate.update(" DO $$ BEGIN PERFORM publish((select to_number(?, '99999999')), ?); END$$;" , eid, date);
+        try {
+        jdbcTemplate.update("select publish(?, ?)" , Integer.parseInt(eid), date);
+        }
+        catch (DataAccessException e) {
+          // do nothing
+        }
         return "jsonTemplate";
     }
 
