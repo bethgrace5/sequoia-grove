@@ -81,9 +81,9 @@ public class ScheduleController {
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-        // update database
+        // update database schedule(eid, sid, mon)
         for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("call pkg.schedule(?, ?, ?)",
+            jdbcTemplate.update("select schedule(?, ?, ?)",
                 change.getEid(),
                 change.getSid(),
                 change.getDate());
@@ -91,7 +91,7 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-    // Delete scheduled day dd/mm/yyyy
+    // Delete scheduled day
     @RequestMapping(value = "/schedule/delete")
     public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -102,7 +102,7 @@ public class ScheduleController {
 
         // update database
         for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("call pkg.delete_schedule(?, ?)",
+            jdbcTemplate.update("select delete_schedule(?, ?)",
                 change.getSid(),
                 change.getDate());
         }
@@ -119,8 +119,8 @@ public class ScheduleController {
         String eid = jobject.get("eid").getAsString();
         String date = jobject.get("date").getAsString();
 
-        // update database
-        jdbcTemplate.update("call pkg.publish(?, ?)", eid, date);
+        // update database publish(eid, datestring)
+        jdbcTemplate.update(" DO $$ BEGIN PERFORM publish((select to_number(?, '99999999')), ?); END$$;" , eid, date);
         return "jsonTemplate";
     }
 

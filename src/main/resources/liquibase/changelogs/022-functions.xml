@@ -13,6 +13,9 @@
 
     <!-- function get schedule -->
     <sqlFile encoding="UTF-8" path="functions/get-schedule.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="functions/schedule.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="functions/delete-schedule.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="functions/publish.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
 
   </changeSet>
 

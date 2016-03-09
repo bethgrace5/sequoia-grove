@@ -19,7 +19,7 @@
       <column name="start_date" type="date">
         <constraints unique="false" nullable="false" />
       </column>
-      <column name="end_date_time" type="date">
+      <column name="date_published" type="timestamp">
         <constraints unique="false" nullable="false" />
       </column>
     </createTable>
