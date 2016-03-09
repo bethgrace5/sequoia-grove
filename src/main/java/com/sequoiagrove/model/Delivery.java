@@ -14,6 +14,7 @@ import com.sequoiagrove.model.Day;
 public class Delivery {
   /* Class Variables */
     String name;
+<<<<<<< HEAD
     boolean mon;
     boolean tue;
     boolean wed;
@@ -22,12 +23,25 @@ public class Delivery {
     boolean sat;
     boolean sun;
     int id;
+=======
+    int mon;
+    int tue;
+    int wed;
+    int thu;
+    int fri;
+    int sat;
+    int sun;
+>>>>>>> delivery model added
 
 
   /* Empty Constructor */
     public Delivery(){}
   /* Constructor */
+<<<<<<< HEAD
     public Delivery( String name, boolean mon,boolean tue, boolean wed, boolean thu, boolean fri, boolean sat, boolean sun, int id ) {
+=======
+    public Delivery( String name, int mon,int tue, int wed, int thu, int fri, int sat, int sun ) {
+>>>>>>> delivery model added
             this.name= name;
             this.mon = mon;
             this.tue = tue;
@@ -36,7 +50,10 @@ public class Delivery {
             this.fri = fri;
             this.sat = sat;
             this.sun = sun;
+<<<<<<< HEAD
             this.id = id;
+=======
+>>>>>>> delivery model added
     }// end constructor
 
     // get task name
@@ -50,6 +67,7 @@ public class Delivery {
 
 
   /* Days */
+<<<<<<< HEAD
     public boolean getMon() {
         return mon;
     }
@@ -98,4 +116,48 @@ public class Delivery {
     public void setId(int id) {
         this.id = id;
     }
+=======
+    public int getMon() {
+        return mon;
+    }
+    public void setMon(int mon) {
+        this.mon = mon;
+    }
+    public int getTue() {
+        return tue;
+    }
+    public void setTue(int tue) {
+        this.tue = tue;
+    }
+    public int getWed() {
+        return wed;
+    }
+    public void setWed(int wed) {
+        this.wed = wed;
+    }
+    public int getThu() {
+        return thu;
+    }
+    public void setThu(int thu) {
+        this.thu = thu;
+    }
+    public int getFri() {
+        return fri;
+    }
+    public void setFri(int fri) {
+        this.fri = fri;
+    }
+    public int getSat() {
+        return sat;
+    }
+    public void setSat(int sat) {
+        this.sat = sat;
+    }
+    public int getSun() {
+        return sun;
+    }
+    public void setSun(int sun) {
+        this.sun = sun;
+    }
+>>>>>>> delivery model added
 }
