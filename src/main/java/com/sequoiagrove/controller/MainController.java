@@ -33,5 +33,4 @@ public class MainController {
     public static JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
-
 }

@@ -1,7 +1,8 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.Gson;
+import com.google.gson.*;
 import java.sql.SQLException;
+import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;
 import org.springframework.http.HttpStatus;
@@ -22,13 +23,54 @@ import java.sql.ResultSet;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.Scheduled;
-import com.sequoiagrove.model.Shift;
 import com.sequoiagrove.controller.MainController;
 
 
 @Controller
 public class ScheduleController {
 
+/* ----- Pure Functions ----- */
+   public boolean validateStrings(String... args) {
+        for (String arg : args) {
+            if (arg.isEmpty() || arg == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+/* ----- Helper JDBC Functions ----- */
+    public boolean checkHoursExist(String startHr, String endHr) {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Object[] obj = new Object[] { startHr, endHr };
+        int count = jdbcTemplate.queryForObject("select count(*) from bajs_hours " +
+            " where start_hour = ? and end_hour = ?", obj, Integer.class);
+        return (count > 0);
+    }
+
+    public int addHours(String startHr, String endHr) {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        int id = 0;
+        Object[] obj = new Object[] { startHr, endHr };
+        if ( checkHoursExist(startHr, endHr) ) {
+          id = jdbcTemplate.queryForObject(
+              "select id from bajs_hours where start_hour=? and end_hour=?",
+              obj, Integer.class);
+        }
+        else {
+          id = jdbcTemplate.queryForObject(
+              "select bajs_hours_id_sequence.nextval from dual", Integer.class);
+          jdbcTemplate.update(" insert into bajs_hours (id, start_hour, end_hour) " +
+              "values( ?, ?, ?) ", id, startHr, endHr);
+        }
+        return id;
+    }
+
+/* ----- HTTP Mapped Functions -----*/
   // Get current schedule template (current shifts) dd-mm-yyyy
     @RequestMapping(value = "/schedule/template/{mon}")
     public String getScheduleTemplate(Model model, @PathVariable("mon") String mon) {
@@ -109,11 +151,48 @@ public class ScheduleController {
     public String addShift(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
-        Gson gson = new Gson();
-        Shift shiftToAdd = gson.fromJson(data, Shift.class);
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
 
-        /*jdbcTemplate.update("sql",
-            params,...);*/
+        String pid = jobject.get("pid").getAsString();
+        String tname = jobject.get("tname").getAsString();
+        String weekdayStart = jobject.get("wd_st").getAsString();
+        String weekdayEnd = jobject.get("wd_ed").getAsString();
+        String weekendStart = jobject.get("we_st").getAsString();
+        String weekendEnd = jobject.get("we_ed").getAsString();
+
+        if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+            model.addAttribute("One or more fields null/empty", true);
+            return "jsonTemplate";
+        }
+        try {
+            if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
+              Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
+                model.addAttribute("Invalid time interval", true);
+                return "jsonTemplate";
+            }
+            Integer.parseInt(pid);
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("One or more integer fields not integers", true);
+            return "jsonTemplate";
+        }
+
+        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
+        int weekendHourId = addHours(weekendStart, weekendEnd);
+        int sid = jdbcTemplate.queryForObject("select bajs_shift_id_sequence.nextval from dual", Integer.class);
+
+        String[] params = {
+            sid + "",
+            pid,
+            tname,
+            weekdayHourId + "",
+            weekendHourId + ""
+        };
+
+        jdbcTemplate.update("insert into bajs_shift " +
+            "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
+            "values(?, ?, ?, (select current_date from dual), null, ?, ?)", params);
 
         return "jsonTemplate";
     }
@@ -123,11 +202,54 @@ public class ScheduleController {
     public String updateShift(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
-        Gson gson = new Gson();
-        Shift shiftToUpdate = gson.fromJson(data, Shift.class);
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
 
-        /*jdbcTemplate.update("sql",
-            params,...);*/
+        String sid = jobject.get("sid").getAsString();
+        String pid = jobject.get("pid").getAsString();
+        String tname = jobject.get("tname").getAsString();
+        String weekdayStart = jobject.get("wd_st").getAsString();
+        String weekdayEnd = jobject.get("wd_ed").getAsString();
+        String weekendStart = jobject.get("we_st").getAsString();
+        String weekendEnd = jobject.get("we_ed").getAsString();
+
+        if (!validateStrings(
+          sid, pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+            model.addAttribute("One or more fields null/empty", true);
+            return "jsonTemplate";
+        }
+        try {
+            if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
+              Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
+                model.addAttribute("Invalid time interval", true);
+                return "jsonTemplate";
+            }
+            Integer.parseInt(pid);
+            Integer.parseInt(sid);
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("One or more integer fields not integers", true);
+            return "jsonTemplate";
+        }
+
+        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
+        int weekendHourId = addHours(weekendStart, weekendEnd);
+
+        String[] params = {
+            pid,
+            tname,
+            weekdayHourId + "",
+            weekendHourId + "",
+            sid
+        };
+
+        jdbcTemplate.update( "update BAJS_shift set "+
+          "position_id = ?, "+
+          "task_name = ?, "+
+          "weekday_id = ?, "+
+          "weekend_id = ? "+
+          "where id = ?",
+         params);
 
         return "jsonTemplate";
     }
@@ -137,11 +259,27 @@ public class ScheduleController {
     public String deleteShift(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
-        Gson gson = new Gson();
-        Shift shiftToDelete = gson.fromJson(data, Shift.class);
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
 
-        /*jdbcTemplate.update("sql",
-            params,...);*/
+        String sid = jobject.get("sid").getAsString();
+
+        if (!validateStrings(sid)) {
+            model.addAttribute("One or more fields null/empty", true);
+            return "jsonTemplate";
+        }
+        try {
+            Integer.parseInt(sid);
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("One or more integer fields not integers", true);
+            return "jsonTemplate";
+        }
+
+        jdbcTemplate.update( "update BAJS_shift set "+
+          "end_date = (select current_date from dual) "+
+          "where id = ?",
+        sid);
 
         return "jsonTemplate";
     }

@@ -402,10 +402,13 @@ angular.module('sequoiaGroveApp')
       data: $scope.shiftInfo
     }).success(function (data, status, headers, config) {
       if (status == 200) {
+        // !!!! confirm shift added to user !!!!
         $scope.clearShiftSelect();
       }
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error adding shift " + data);
+      // !!!! show error to user !!!!
+      $scope.clearShiftSelect();
     });
   }
 
@@ -428,7 +431,7 @@ angular.module('sequoiaGroveApp')
   $scope.deleteShift = function() {
     $http({
       url: '/sequoiagrove/shift/delete/',
-      method: "DELETE",
+      method: "POST",
       data: $scope.shiftInfo
     }).success(function (data, status, headers, config) {
       if (status == 200) {
