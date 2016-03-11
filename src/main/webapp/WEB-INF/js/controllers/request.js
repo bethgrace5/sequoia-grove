@@ -1,5 +1,4 @@
 'use strict';
-
 /**
  * @ngdoc function
  * @name sequoiaGroveApp.controller:RequestCtrl
@@ -7,45 +6,284 @@
  * # RequestCtrl
  * Controller for requesting vacation
  */
+//+---------------
+//| Directory
+//+--------------
+//| Minor_Functions
+//|   - Date_Gatherer
+//|   - Ease_of_Access
+//| Employee_User_Setup
+//|   - SubmitGet_Request
+//|   - Dates_Collider
+//| Manager_View
+//|   - Retrieve_Requests
+//|   - Manager_Change_Submit_Request
+//| Toggles
+//| ?????
+//| Initialize_Testing_Extreme
+
+
 angular.module('sequoiaGroveApp')
-  .controller('RequestCtrl', function ($scope, $log, $rootScope, $location) {
+.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
-
+  /****************** Check and Balances ****************************/
+  $rootScope.lastPath = '/schedule';
   $rootScope.lastPath = '/request';
-
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
   }
-  $scope.countDisplay = 0 ;
 
-  $scope.donGraph= {
-    onClick: function(points, evt) {
-        $scope.countDisplay = points[0].label.substr(0,1)-1;
-    },
-    labels: ["1 Day", "2 Days", "3 Days", "4 Days", "5 Days", "6 Days", "7 Days"],
-    data: [
-    /*
-     * TODO use dayCount instead
-      $scope.schCount[0].length,
-      $scope.schCount[1].length,
-      $scope.schCount[2].length,
-      $scope.schCount[3].length,
-      $scope.schCount[4].length,
-      $scope.schCount[5].length,
-      $scope.schCount[6].length
-      */
-    ]
-  };
+  /****************** Minor_Functions ****************************/
+  //-----------------
+  // Date_Gatherer
+  //-----------------
+  $scope.requestDateStart;// = $scope.minDateStart;
+  $scope.requestDateEnd;  //= $scope.minDateStart;
 
-  $scope.previousRequests = [
-    { employee: "John",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-    { employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-    { employee: "Emma",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "pending" },
-    { employee: "Andy",   startDate: "May 25", endDate: "May 28", totalDays: "3", status: "approved"},
-    { employee: "Sawyer", startDate: "May 20", endDate: "May 20", totalDays: "1", status: "approved"},
-    { employee: "Blue",   startDate: "May 15", endDate: "May 15", totalDays: "1", status: "denied"  }
-  ];
+  $scope.today = new Date();
+  $scope.minDateStart = new Date(
+    $scope.today.getFullYear(),
+    $scope.today.getMonth(),
+    $scope.today.getDate() + 14
+    );
 
+  $scope.updateEnd = function(){
+    if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
+      $scope.requestDateEnd = $scope.requestDateStart;
+    }
+  }
 
+  // The name of the active tab, by default, it will be the submit section
+  $scope.activeTab = "submit";
+
+  // function to set the class of the tab to active,
+  // and
+  $scope.isActive = function(tabName) {
+    if(tabName === $scope.activeTab) {
+        return true;
+    }
+    return false;
+  }
+
+  //-----------------
+  // Ease_of_Access
+  //-----------------
+  $scope.totalDays = function(a, b){
+    var date1 = moment(a);
+    var date2 = moment(b)
+    return date2.diff(date1, 'days') + 1;
+  }
+
+  //Change Date into a specific format
+  $scope.defaultDate = function(a){
+    return moment(a).format("MMMM Do, YYYY");
+  }
+
+  /****************** Employee_User_Setup ****************************/
+  //------------------------------
+  //  SubmitGet_Request
+  //------------------------------
+  $scope.userRequests;
+
+  $scope.getCurrentEmployeeRequest = function() {
+    $http({
+      url: '/sequoiagrove/request/get/current/employee/'+
+      $rootScope.loggedInUser.id,
+      method: "POST"
+    }).success(function(data, status) {
+      $scope.userRequests = data.request;
+    });
+  }
+
+  $scope.submitRequest = function(){
+    if($scope.checkDatesCollide()){
+      return;
+    }
+    var obj = { "eid": $rootScope.loggedInUser.id,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/submit/',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+      $scope.getCurrentEmployeeRequest();
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting request ', status, data);
+    });
+  }
+
+  //---------------
+  //Dates_Collider
+  //---------------
+  /*This will take the requestDateStart / requestDateEnd and compare it
+   *to userRequestes, it will return true if it conflicts with eachother */
+
+  $scope.checkDatesCollide = function(){
+
+    var i = 0;
+    var submitStart = moment($scope.requestDateStart);
+    var submitEnd = moment($scope.requestDateEnd);
+
+    for(i = 0; i < $scope.userRequests.length; i++){
+      //I need more testing with this function...
+      var checkStart = moment($scope.userRequests[i].startDate).subtract(1, 'day');
+      var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
+
+      if(moment(submitStart).isBetween(checkStart, checkEnd)){
+        alert("Dates Already Taken");
+        return true;
+      }
+      if(moment(submitEnd).isBetween(checkStart, checkEnd)){
+        alert("Dates Already Taken");
+        return true;
+      }
+      if(moment(checkStart).isBetween(submitStart, submitEnd)){
+        alert("Dates Already Taken");
+        return true;
+      }
+      if(moment(checkEnd).isBetween(submitStart, submitEnd)){
+        alert("Dates Already Taken");
+        return true;
+      }
+    }
+    return false;
+  }
+
+  /****************** Manager_View ****************************/
+  //-----------------------------------
+  //Retrieve_Requests
+  //-----------------------------------
+  $scope.allRequests;
+  $scope.pendingRequests;
+
+  $scope.getAllRequests = function() {
+    $http({
+      url: '/sequoiagrove/request/get/checked',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+      $scope.allRequests = data.requestStatus;
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
+  $scope.getPendingRequests = function() {
+    $http({
+      url: '/sequoiagrove/request/get/pending',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+      $scope.pendingRequests = data.requestStatus;
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
+  //----------------------------------
+  //Manager_Change_Submit_Request
+  //----------------------------------
+  $scope.selectedEmployee = {'id':0};
+  $scope.targetEmployee = function(employee){
+    $scope.selectedEmployee = employee
+    $scope.seeTargetEmployee = 1;
+  }
+  $scope.selectedRequest;
+  $scope.targetRequest = function(request){
+    $scope.selectedRequest = request
+    $scope.seeTargetRequest = 1;
+  }
+
+  $scope.managerSubmitRequest = function(){
+    var obj = { "eid": $scope.selectedEmployee.id,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/submit/',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting request ', status, data);
+    });
+  }
+
+  $scope.changeRequest = function($requestID, $approverID, $is_approve) {
+    $http({
+      url: '/sequoiagrove/request/update/' +
+      $requestID + '/' + $approverID + '/' + $is_approve,
+      method: "POST"
+    }).success(function(data, status) {
+      $scope.getPendingRequests();
+    });
+  }
+
+  $scope.changeRequestDates = function(){
+    var obj = { "eid": $scope.selectedRequest.requestID,
+      "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
+      "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove/request/update/dates',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting request ', status, data);
+    });
+  }
+
+  $scope.clearManagerForm = function() {
+    $scope.selectedEmployee = {'id':0};
+  }
+  //-------------------------
+  //Toggles
+  //-------------------------
+  $scope.seeEmployees = 1; //When Manager Wants to see all employees... Test?
+  $scope.seeTargetEmployee = 1;
+  $scope.seeTargetRequest = 0;
+
+  $scope.changeEmployeeView = function(){
+    if($scope.seeEmployees){
+      $scope.seeEmployees = 0;
+    }
+    else{
+      $scope.seeEmployees = 1;
+    }
+  }
+  $scope.targetPendingEmployee = function(){
+    if($scope.seeTargetRequests){
+      $scope.seeTargetRequests = 0;
+    }
+    else{
+      $scope.seeTargetRequests = 1;
+    }
+  }
+
+  //********** Initialize Testing Extreme ***************************\
+  $scope.testManager = function(){
+    if ($rootScope.loggedInUser.isManager) {
+    }
+    else{
+    }
+  }
+
+  $scope.init = function(){
+    //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
+    $scope.getAllRequests();
+    $scope.getCurrentEmployeeRequest();
+    $scope.getPendingRequests();
+    $scope.getEmployees();
+    $scope.testManager();
+  }
+
+  $scope.init();
 });

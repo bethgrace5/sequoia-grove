@@ -11,6 +11,8 @@ angular.module('sequoiaGroveApp', [
     'ngTouch',
     'pascalprecht.translate',
     'persona',
+    'ngMaterial',
+    'ngMessages',
     'underscore'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
@@ -43,6 +45,11 @@ angular.module('sequoiaGroveApp', [
         templateUrl: 'views/request.html',
         controller: 'RequestCtrl',
         controllerAs: 'request'
+      })
+      .when('/manage', {
+        templateUrl: 'views/manage.html',
+        controller: 'ManageCtrl',
+        controllerAs: 'manage'
       })
       .otherwise({
         redirectTo: '/login'

@@ -8,12 +8,16 @@ node_modules/*
 *.properties
 *.sh*
 test.sql
+npm-debug.log
+ojdbc6.jar
+*.jar
 
 *.sass-cache
 *.tmp
 
 *.DS_Store
 *.swp
+*.jar
 *.swo
 
 *~

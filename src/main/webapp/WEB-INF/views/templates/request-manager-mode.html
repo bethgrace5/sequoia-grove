@@ -1,0 +1,82 @@
+<div class="row">
+
+  <div class="col-sm-3">
+    <!-- Employee List Panel -->
+    <div class="panel panel-default" style="min-height:60%;">
+      <div class="panel-heading">
+        <p class="lead emp-header">Employees</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="form-group">
+        <div class="input-group">
+          <div class="btn btn-default input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <input type="text" class="form-control" id="em-search" ng-model="empSearch" placeholder="Search...">
+        </div>
+      </div>
+
+      <!-- Clear Form Button -->
+      <button ng-click="clearManagerForm(); empSearch=''"
+        class="btn btn-info btn-block">
+        <div class="pull-left">
+          <i class="glyphicon glyphicon-remove"></i> Clear
+        </div>
+      </button>
+
+      <!-- Employee List -->
+      <div class="list-group emp-list-wrapper">
+        <!-- repeating list of employees -->
+        <div ng-show="seeEmployees" ng-repeat="employee in employees | filter: empSearch">
+          <button ng-click="targetEmployee(employee)"
+            class="list-group-item btn btn-default btn-block"
+            ng-class="{'active': selectedEmployee.id == employee.id}">
+            <div class="pull-left">
+              {{::employee.lastName}}, {{::employee.firstName}}
+            </div>
+          </button>
+        </div>
+      </div>
+    </div> <!-- End Employee List Panel -->
+  </div><!-- End col-sm-3 -->
+
+  <div class="col-sm-9">
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="lead">Submit New Request <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}</p>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateStart"
+            ng-disabled="selectedEmployee.id == 0"
+            md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+            ng-change="updateEnd()">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateEnd"
+            ng-disabled="selectedEmployee.id == 0"
+            md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <button class="btn btn-primary"
+              ng-disabled="selectedEmployee.id == 0"
+              ng-click="managerSubmitRequest()">
+              <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+              Submit request <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+

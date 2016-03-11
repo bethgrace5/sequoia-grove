@@ -12,6 +12,7 @@ import com.sequoiagrove.model.WeeklyAvail;
 public class Employee {
     int id;
     int maxHrsWeek;
+    int minHrsWeek;
     int isManager;
     int clock;
     boolean isCurrent;
@@ -29,6 +30,7 @@ public class Employee {
     public Employee(
       int id,
       int maxHrsWeek,
+      int minHrsWeek,
       int isManager,
       int clock,
       String firstName,
@@ -43,6 +45,7 @@ public class Employee {
     ) {
         this.id = id;
         this.maxHrsWeek = maxHrsWeek;
+        this.minHrsWeek = minHrsWeek;
         this.isManager = isManager;
         this.clock = clock;
         this.firstName = firstName;
@@ -68,6 +71,13 @@ public class Employee {
     }
     public void setMaxHrsWeek(int maxHrsWeek) {
         this.maxHrsWeek =maxHrsWeek;
+    }
+
+    public int getMinHrsWeek() {
+        return minHrsWeek;
+    }
+    public void setMinHrsWeek(int minHrsWeek) {
+        this.minHrsWeek =minHrsWeek;
     }
 
     public int getIsManager() {

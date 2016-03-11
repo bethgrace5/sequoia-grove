@@ -329,8 +329,7 @@ angular.module('sequoiaGroveApp')
     $scope.importing = true;
     $scope.selectedId = 0;
     var d = moment($scope.date.mon.val,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
-     $scope.getScheduleTemplate(d)
-       .then(function(data) {
+     $scope.getScheduleTemplate(d).then(function(data) {
           // add all shifts to update shifts, so they can be saved for this week
           angular.copy($scope.originalTemplate, $scope.updateShifts);
           $scope.importing = false;
@@ -442,14 +441,117 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-/************** Controller Initialization **************/
+/************** Holidays Functions **********************************/
+  $scope.allHolidays;
+  $scope.chosenHoliday;
+  $scope.holidayStartDate;
+  $scope.holidayEndDate;
+  $scope.newHoliday = "Dog Days Off";
+
+    /* HTML reminder  (this will be deleted after implemented in html"
+        <input type="text" id="newHoliday" class="form-control"
+        ng-model="newHoliday"
+        placeholder="New Holiday" />
+   */
+
+  //--------------------------
+  //Holiday Minor Functions
+  //--------------------------
+
+  $scope.today = new Date();
+  $scope.minDateStart = new Date(
+    $scope.today.getFullYear(),
+    $scope.today.getMonth(),
+    $scope.today.getDate()
+    );
+
+  $scope.holidayStartDate  = $scope.minDateStart;
+  $scope.holidayEndDate =   $scope.minDateStart;
+
+  $scope.updateEnd = function(){
+    if(moment($scope.holidayDateStart).isAfter($scope.holidayDateEnd)){
+      $scope.holidayEndDate = $scope.holidayStartDate;
+    }
+  }
+  //--------------------------
+  //Holiday Major Functions
+  //--------------------------
+
+  $scope.addNewHoliday = function(){
+  $scope.holidayStartDate  = $scope.minDateStart;
+  $scope.holidayEndDate =   $scope.minDateStart;
+  $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
+    var obj = {
+      "name":"Dogs' Day Off",
+      "date":moment($scope.holidayStartDate).format("MM-DD"),
+      "type":"Cows"
+    }
+    $http({
+      url: '/sequoiagrove/schedule/submit/new/holiday',
+      method: "POST",
+      data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error submiting new holiday ', status, data);
+    });
+  }
+
+  $scope.getAllHolidays = function() {
+    $http({
+      url: '/sequoiagrove/schedule/get/holidays',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+      $log.debug(data);
+      //$scope.allHolidays = ? [insert data name here] ?
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error obtaining position data: " + data);
+    });
+  }
+
+  $scope.changeHolidayDates = function(){
+    /*
+    var obj = { "id": 1 //Not Sure Yet
+      "startDate":moment($scope.holidayStartDate).format("MM-DD-YYYY"),
+      "endDate":moment($scope.holidayEndDate).format("MM-DD-YYYY")
+    }
+    $http({
+      url: '/sequoiagrove//change/holidays/dates',
+    method: "POST",
+    data: JSON.stringify(obj)
+    })
+    .success(function (data, status, headers, config) {
+    })
+    .error(function (data, status, headers, config) {
+      $log.error('Error changing Holidays ', status, data);
+    });*/
+  }
+  $scope.changeHolidayDates = function(){
+    /*
+     //$scope.testID
+       $http({
+        url: '/sequoiagrove//change/holidays/dates/' + $testID,
+        method: "POST"
+       })
+       .success(function (data, status, headers, config) {
+       })
+       .error(function (data, status, headers, config) {
+       $log.error('Error changing Holidays ', status, data);
+       });
+    */
+  }
+  /************** Controller Initialization **************/
 
   $scope.init = function() {
+    //$scope.getAllHolidays()
+    //$scope.addNewHoliday();
+
   }
 
   $scope.init();
 
-/************** Event Watchers **************/
+  /************** Event Watchers **************/
 
   $scope.$watch($rootScope.loading, function(newVal, oldVal){
     if(newVal){
@@ -457,5 +559,4 @@ angular.module('sequoiaGroveApp')
       // watchExpression has changed.
     }
   });
-
 });
