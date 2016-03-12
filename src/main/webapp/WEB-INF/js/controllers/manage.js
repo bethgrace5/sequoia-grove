@@ -19,6 +19,8 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
+  $scope.deliveries = [];
+
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "holiday";
 
@@ -30,6 +32,25 @@ angular.module('sequoiaGroveApp')
     }
     return false;
   }
+
+
+  // get all existing deliveries
+  $scope.getdeliveries = function() {
+    $http({
+      url: '/sequoiagrove/delivery',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+      if (status == 200) {
+        // clear update shifts list
+        $scope.deliveries = data.delivery; 
+        $log.debug(data.delivery);
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error('Error getting deliveries ', status, data);
+    });
+  }
+
+  $scope.getdeliveries();
 
 });
 
