@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -312,12 +312,36 @@ angular.module('sequoiaGroveApp')
     }
 
     // Deactivate (un-employ) an employee
-    $scope.deactivateEmployee = function() {
+    $scope.deactivateEmployee = function(ev) {
       // a user shouldn't be able to unemploy themselves - it would
       // lock them out of the system.
       if ($rootScope.loggedInUser.id === $scope.selectedEmployee.id) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title('Unemploy ' + $scope.selectedEmployee.firstName)
+            .textContent('You cannot unemploy yourself!')
+            .ariaLabel('cannot unemploy yourself')
+            .ok('Got it!')
+            .targetEvent(ev)
+            );
         return
       }
+
+      // Confirm to unemploy
+      var confirm = $mdDialog.confirm()
+        .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
+        .ariaLabel('Unemploy')
+        .targetEvent(ev)
+        .ok(Unemploy)
+        .cancel(Cancel);
+      $mdDialog.show(confirm).then(function() {
+        // ok
+      }, function() {
+        // cancel
+        return;
+      });
+
       $http({
         url: '/sequoiagrove/employee/deactivate/',
         method: "POST",

@@ -321,6 +321,10 @@ a:focus {
 /********************************************
     08. Employee_List
 *********************************************/
+.employee-list-panel {
+  min-height: 70%;
+}
+
 .clock-input {
   width: 45px;
   margin-left: 10px;
@@ -349,7 +353,7 @@ a:focus {
   margin-top: 0px;
 }
 .emp-list-wrapper {
-  max-height: 500px;
+  height: 70%;
   overflow-y: scroll;
 }
 
