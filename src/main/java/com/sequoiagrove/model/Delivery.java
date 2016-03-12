@@ -14,19 +14,20 @@ import com.sequoiagrove.model.Day;
 public class Delivery {
   /* Class Variables */
     String name;
-    int mon;
-    int tue;
-    int wed;
-    int thu;
-    int fri;
-    int sat;
-    int sun;
+    boolean mon;
+    boolean tue;
+    boolean wed;
+    boolean thu;
+    boolean fri;
+    boolean sat;
+    boolean sun;
+    int id;
 
 
   /* Empty Constructor */
     public Delivery(){}
   /* Constructor */
-    public Delivery( String name, int mon,int tue, int wed, int thu, int fri, int sat, int sun ) {
+    public Delivery( String name, boolean mon,boolean tue, boolean wed, boolean thu, boolean fri, boolean sat, boolean sun, int id ) {
             this.name= name;
             this.mon = mon;
             this.tue = tue;
@@ -35,6 +36,7 @@ public class Delivery {
             this.fri = fri;
             this.sat = sat;
             this.sun = sun;
+            this.id = id;
     }// end constructor
 
     // get task name
@@ -48,46 +50,52 @@ public class Delivery {
 
 
   /* Days */
-    public int getMon() {
+    public boolean getMon() {
         return mon;
     }
-    public void setMon(int mon) {
+    public void setMon(boolean mon) {
         this.mon = mon;
     }
-    public int getTue() {
+    public boolean getTue() {
         return tue;
     }
-    public void setTue(int tue) {
+    public void setTue(boolean tue) {
         this.tue = tue;
     }
-    public int getWed() {
+    public boolean getWed() {
         return wed;
     }
-    public void setWed(int wed) {
+    public void setWed(boolean wed) {
         this.wed = wed;
     }
-    public int getThu() {
+    public boolean getThu() {
         return thu;
     }
-    public void setThu(int thu) {
+    public void setThu(boolean thu) {
         this.thu = thu;
     }
-    public int getFri() {
+    public boolean getFri() {
         return fri;
     }
-    public void setFri(int fri) {
+    public void setFri(boolean fri) {
         this.fri = fri;
     }
-    public int getSat() {
+    public boolean getSat() {
         return sat;
     }
-    public void setSat(int sat) {
+    public void setSat(boolean sat) {
         this.sat = sat;
     }
-    public int getSun() {
+    public boolean getSun() {
         return sun;
     }
-    public void setSun(int sun) {
+    public void setSun(boolean sun) {
         this.sun = sun;
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
     }
 }
