@@ -17,7 +17,9 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $timeout,
-        $translate) {
+        $translate,
+        $mdDialog) {
+
 
 /************** Login Redirect, Containers and UI settings **************/
   $rootScope.lastPath = '/schedule';
@@ -501,13 +503,26 @@ angular.module('sequoiaGroveApp')
     });
     */
   }
+  $scope.showAlert = showAlert;
+  function showAlert() {
+    alert = $mdDialog.alert()
+      .title('Attention, ' + $scope.userName)
+      .textContent('This is an example of how easy dialogs can be!')
+      .ok('Close');
+    $mdDialog
+      .show( alert )
+      .finally(function() {
+        alert = undefined;
+      });
+  }
+
   /************** Controller Initialization **************/
 
   $scope.init = function() {
     $scope.getAllHolidays()
       //$scope.addNewHoliday();
       //$scope.changeHolidayDates();
-
+      $scope.showAlert();
   }
 
   $scope.init();
