@@ -432,9 +432,10 @@ angular.module('sequoiaGroveApp')
   //--------------------------
 
   $scope.addNewHoliday = function(){
-  $scope.holidayStartDate  = $scope.minDateStart;
-  $scope.holidayEndDate =   $scope.minDateStart;
-  $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
+    $scope.holidayStartDate  = $scope.minDateStart;
+    $scope.holidayEndDate =   $scope.minDateStart;
+    $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
+    /*
     var obj = {
       "name":"Dogs' Day Off",
       "date":moment($scope.holidayStartDate).format("MM-DD"),
@@ -442,29 +443,33 @@ angular.module('sequoiaGroveApp')
     }
     $http({
       url: '/sequoiagrove/schedule/submit/new/holiday',
-      method: "POST",
-      data: JSON.stringify(obj)
+    method: "POST",
+    data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting new holiday ', status, data);
     });
+    */
   }
 
   $scope.getAllHolidays = function() {
+    /*
     $http({
       url: '/sequoiagrove/schedule/get/holidays',
-      method: "GET"
+    method: "GET"
     }).success(function (data, status, headers, config) {
       $log.debug(data);
       //$scope.allHolidays = ? [insert data name here] ?
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error obtaining position data: " + data);
     });
+    */
   }
 
   $scope.changeHolidayDates = function(){
+    /*
     var obj = { 
       "name":"Dogs' Day Off",
       "date":moment($scope.holidayStartDate).format("MM-DD"),
@@ -472,35 +477,36 @@ angular.module('sequoiaGroveApp')
     }
     $http({
       url: '/sequoiagrove/update/holiday',
-      method: "POST",
-      data: JSON.stringify(obj)
+    method: "POST",
+    data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
     })
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
+    */
   }
   $scope.changeHolidayDates = function(){
     /*
-     //$scope.testID
-       $http({
-        url: '/sequoiagrove//change/holidays/dates/' + $testID,
-        method: "POST"
-       })
-       .success(function (data, status, headers, config) {
-       })
-       .error(function (data, status, headers, config) {
-       $log.error('Error changing Holidays ', status, data);
-       });
+    //$scope.testID
+    $http({
+    url: '/sequoiagrove//change/holidays/dates/' + $testID,
+    method: "POST"
+    })
+    .success(function (data, status, headers, config) {
+    })
+    .error(function (data, status, headers, config) {
+    $log.error('Error changing Holidays ', status, data);
+    });
     */
   }
   /************** Controller Initialization **************/
 
   $scope.init = function() {
     $scope.getAllHolidays()
-    //$scope.addNewHoliday();
-    //$scope.changeHolidayDates();
+      //$scope.addNewHoliday();
+      //$scope.changeHolidayDates();
 
   }
 
