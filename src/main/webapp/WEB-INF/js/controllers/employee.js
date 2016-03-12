@@ -21,8 +21,22 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'info';
     $scope.current;
-    $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-      'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':'', 'phone':0};
+    $scope.selectedEmployee = {
+      'id':0,
+      'isManager':0,
+      'firstName':'',
+      'lastName':'',
+      'birthDate':'',
+      'clock':0,
+      'email':'',
+      'minHrsWeek':'',
+      'maxHrsWeek':'',
+      'phone':0,
+      'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+      'history':[],
+      'positions':[]
+    };
+
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
@@ -77,8 +91,21 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
-      $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-        'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':40, 'phone':0};
+      $scope.selectedEmployee = {
+        'id':0,
+        'isManager':0,
+        'firstName':'',
+        'lastName':'',
+        'birthDate':'',
+        'clock':0,
+        'email':'',
+        'minHrsWeek':'',
+        'maxHrsWeek':'',
+        'phone':0,
+        'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+        'history':[],
+        'positions':[]
+      };
       $scope.birthDate = '';
     }
 /************** HTTP Request Functions **************/
