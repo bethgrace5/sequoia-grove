@@ -173,10 +173,10 @@ public class ScheduleController {
 
         String pid = jobject.get("pid").getAsString();
         String tname = jobject.get("tname").getAsString();
-        String weekdayStart = jobject.get("wd_st").getAsString();
-        String weekdayEnd = jobject.get("wd_ed").getAsString();
-        String weekendStart = jobject.get("we_st").getAsString();
-        String weekendEnd = jobject.get("we_ed").getAsString();
+        String weekdayStart = jobject.get("weekdayStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
+        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekendEnd = jobject.get("weekendEnd").getAsString();
 
         if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("One or more fields null/empty", true);
@@ -211,6 +211,8 @@ public class ScheduleController {
             "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
             "values(?, ?, ?, (select current_date from dual), null, ?, ?)", params);
 
+        model.addAttribute("sid", sid);
+
         return "jsonTemplate";
     }
 
@@ -225,10 +227,10 @@ public class ScheduleController {
         String sid = jobject.get("sid").getAsString();
         String pid = jobject.get("pid").getAsString();
         String tname = jobject.get("tname").getAsString();
-        String weekdayStart = jobject.get("wd_st").getAsString();
-        String weekdayEnd = jobject.get("wd_ed").getAsString();
-        String weekendStart = jobject.get("we_st").getAsString();
-        String weekendEnd = jobject.get("we_ed").getAsString();
+        String weekdayStart = jobject.get("weekdayStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
+        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekendEnd = jobject.get("weekendEnd").getAsString();
 
         if (!validateStrings(
           sid, pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
