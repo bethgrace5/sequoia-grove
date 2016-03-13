@@ -1,5 +1,32 @@
 
 <p/ class="lead"> Manage Deliveries </p>
-
-{{deliveries}}
+<div ng-repeat="d in deliveries">
+    <div class="row">
+        <div class="col-sm-2">
+            <h5>{{d.name}}</h5>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.mon}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.tue}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.wed}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.thu}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.fri}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.sat}}</p>
+        </div>
+        <div class="col-sm-1">
+            <p>{{d.sun}}</p>
+        </div>
+        <hr/>
+    </div>
+</div>
 
