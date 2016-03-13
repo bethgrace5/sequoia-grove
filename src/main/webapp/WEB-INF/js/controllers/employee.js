@@ -333,37 +333,34 @@ angular.module('sequoiaGroveApp')
         .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
         .ariaLabel('Unemploy')
         .targetEvent(ev)
-        .ok(Unemploy)
-        .cancel(Cancel);
+        .ok('Unemploy')
+        .cancel('Cancel');
       $mdDialog.show(confirm).then(function() {
         // ok
+        $http({
+          url: '/sequoiagrove/employee/deactivate/',
+          method: "POST",
+          data: {'id': $scope.selectedEmployee.id}
+        }).success(function(data, status) {
+          // update UI with change
+          $scope.employees = _.map($scope.employees, function(e) {
+            if(e.id === $scope.selectedEmployee.id) {
+              e.isCurrent = false;
+              e.history = _.map(e.history, function(h) {
+                if(h.end === '') {
+                  h.end = moment().format('MM-DD-YYYY');
+                }
+                return h;
+              });
+            }
+            return e;
+          });
+        }).error(function(data, status) {
+          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
+        });
       }, function() {
         // cancel
         return;
-      });
-
-      $http({
-        url: '/sequoiagrove/employee/deactivate/',
-        method: "POST",
-        data: {'id': $scope.selectedEmployee.id}
-      }).success(function(data, status) {
-
-        // update UI with change
-        $scope.employees = _.map($scope.employees, function(e) {
-          if(e.id === $scope.selectedEmployee.id) {
-            e.isCurrent = false;
-            e.history = _.map(e.history, function(h) {
-              if(h.end === '') {
-                h.end = moment().format('MM-DD-YYYY');
-              }
-              return h;
-            });
-          }
-          return e;
-        });
-
-      }).error(function(data, status) {
-        $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
       });
     }
 
