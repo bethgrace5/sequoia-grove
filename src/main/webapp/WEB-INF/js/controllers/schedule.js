@@ -474,7 +474,7 @@ angular.module('sequoiaGroveApp')
     method: "GET"
     }).success(function (data, status, headers, config) {
       $log.debug("At get All Holidays");
-      $scope.allHolidays = data;
+      $scope.allHolidays = data.holidays;
       $log.debug($scope.allHolidays);
     });
   }
@@ -497,17 +497,29 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.changeHolidayDates = function(){
+  $scope.selectHoliday = function(name){
+    $scope.holidayName = name;
+  }
+
+  $scope.deleteHoliday = function(){
+    var obj = { 
+      "name":$scope.holidayName,
+      "date":moment($scope.holidayStartDate).format("MM-DD"),
+      "type":$scope.holidayType
+    }
     $http({
-      url: '/sequoiagrove//change/holidays/dates/' + $testID,
-    method: "POST"
+      url: '/sequoiagrove/schedule/delete/holiday',
+    method: "POST",
+    data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $scope.getAllHolidays();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
   }
+
 
   /************** Controller Initialization **************/
 

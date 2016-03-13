@@ -94,5 +94,22 @@ public class HolidaysController {
 
         return "jsonTemplate";
       }
+    @RequestMapping(value = "/schedule/delete/holiday")
+      public String deleteRequest(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        Gson gson = new Gson();
+
+        Holiday hol = gson.fromJson(data, Holiday.class);
+
+        String name = hol.getName();
+        String newDate = hol.getDate();
+        String newType = hol.getType();
+
+        jdbcTemplate.update(
+           " DELETE FROM bajs_holiday " +
+           " where name = '" + name + "'"
+        );
+        return "jsonTemplate";
+      }
 
 }
