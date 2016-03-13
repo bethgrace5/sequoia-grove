@@ -1,0 +1,72 @@
+<div class="col-sm-12">
+  <!-- Submit New Holiday-->
+  <div class = "row">
+    <div class="col-sm-2">
+      <p class="lead">New Holiday</p>
+    </div>
+  </div>
+
+  <div class="col-sm-2">
+    <md-input-container>
+    <label>Name</label>
+    <input ng-model="$parent.holidayName" type="holidayName">
+    </md-input-container>
+  </div>
+
+  <div class="col-sm-1">
+    <md-input-container>
+    <label>Size</label>
+    <md-select ng-model="$parent.holidayType">
+    <md-option ng-repeat="type in types" value="{{type}}">{{type}}</md-option>
+    </md-select>
+    </md-input-container>
+  </div>
+
+  <div class="col-sm-2">
+    <md-datepicker ng-model="$parent.holidayStartDate"
+    md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+    ng-change="updateEnd()">
+    </md-datepicker>
+  </div>
+
+  <div class="col-sm-3"> 
+    <button class="btn btn-primary"
+      ng-click="addNewHoliday()">
+      <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+      Submit request
+    </button>
+  </div>
+
+  <div class="col-sm-12">
+    <div style="height:50px; padding-top:30px;"> </div>
+    <hr/>
+  </div>
+  <div class="col-sm-12">
+    <div class="row request-title">
+      <div class="col-sm-2">
+        <p> Holidays </p>
+      </div>
+      <div class="col-sm-2">
+        <p> Date </p>
+      </div>
+      <div class="col-sm-2">
+        <p> Type </p>
+      </div>
+    </div>
+
+    <div ng-repeat="holiday in allHolidays">
+      <div class="row">
+        <div class="col-sm-3">
+          <p> dog {{holiday.name}} </p>
+        </div>
+        <div class="col-sm-3">
+          <p> cat {{holiday.date}} </p>
+        </div>
+        <div class="col-sm-3">
+          <p> zebra {{holiday.type}} </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+

@@ -398,22 +398,21 @@ angular.module('sequoiaGroveApp')
   }
 
 /************** Holidays Functions **********************************/
-  $scope.allHolidays;
   $scope.chosenHoliday;
   $scope.holidayStartDate;
   $scope.holidayEndDate;
-  $scope.newHoliday = "Dog Days Off";
-
-    /* HTML reminder  (this will be deleted after implemented in html"
+  $scope.holidayName;
+  $scope.holidayDate;
+  $scope.holidayType;
+  $scope.types = ["Half" , "Full"];
+  /* HTML reminder  (this will be deleted after implemented in html"
         <input type="text" id="newHoliday" class="form-control"
         ng-model="newHoliday"
         placeholder="New Holiday" />
    */
-
   //--------------------------
   //Holiday Minor Functions
   //--------------------------
-
   $scope.today = new Date();
   $scope.minDateStart = new Date(
     $scope.today.getFullYear(),
@@ -429,19 +428,32 @@ angular.module('sequoiaGroveApp')
       $scope.holidayEndDate = $scope.holidayStartDate;
     }
   }
+
+  $scope.defaultDate = function(a){
+    return moment(a).format("MMMM Do, YYYY");
+  }
+
+  $scope.compareDate = function(a, b){
+    moment(a).format("MMMM Do, YYYY");
+    moment(b).format("MMMM Do, YYYY");
+    if(moment(a).isSame(b)){
+      return true;
+    }
+    else{
+      return false
+    }
+  }
   //--------------------------
   //Holiday Major Functions
   //--------------------------
-
   $scope.addNewHoliday = function(){
-    $scope.holidayStartDate  = $scope.minDateStart;
-    $scope.holidayEndDate =   $scope.minDateStart;
+    $log.debug($scope.holidayName);
+    $log.debug($scope.holidayType);
     $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
-    /*
     var obj = {
-      "name":"Dogs' Day Off",
+      "name":$scope.holidayName,
       "date":moment($scope.holidayStartDate).format("MM-DD"),
-      "type":"Cows"
+      "type":$scope.holidayType
     }
     $http({
       url: '/sequoiagrove/schedule/submit/new/holiday',
@@ -449,33 +461,29 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $scope.getAllHolidays();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting new holiday ', status, data);
     });
-    */
   }
 
   $scope.getAllHolidays = function() {
-    /*
     $http({
       url: '/sequoiagrove/schedule/get/holidays',
     method: "GET"
     }).success(function (data, status, headers, config) {
-      $log.debug(data);
-      //$scope.allHolidays = ? [insert data name here] ?
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
+      $log.debug("At get All Holidays");
+      $scope.allHolidays = data;
+      $log.debug($scope.allHolidays);
     });
-    */
   }
 
   $scope.changeHolidayDates = function(){
-    /*
     var obj = { 
-      "name":"Dogs' Day Off",
+      "name":$scope.holidayName,
       "date":moment($scope.holidayStartDate).format("MM-DD"),
-      "type":"Cats"
+      "type":$scope.holidayType
     }
     $http({
       url: '/sequoiagrove/update/holiday',
@@ -487,42 +495,26 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
-    */
   }
+
   $scope.changeHolidayDates = function(){
-    /*
-    //$scope.testID
     $http({
-    url: '/sequoiagrove//change/holidays/dates/' + $testID,
+      url: '/sequoiagrove//change/holidays/dates/' + $testID,
     method: "POST"
     })
     .success(function (data, status, headers, config) {
     })
     .error(function (data, status, headers, config) {
-    $log.error('Error changing Holidays ', status, data);
+      $log.error('Error changing Holidays ', status, data);
     });
-    */
-  }
-  $scope.showAlert = showAlert;
-  function showAlert() {
-    alert = $mdDialog.alert()
-      .title('Attention, ' + $scope.userName)
-      .textContent('This is an example of how easy dialogs can be!')
-      .ok('Close');
-    $mdDialog
-      .show( alert )
-      .finally(function() {
-        alert = undefined;
-      });
   }
 
   /************** Controller Initialization **************/
 
   $scope.init = function() {
-    $scope.getAllHolidays()
-      //$scope.addNewHoliday();
-      //$scope.changeHolidayDates();
-      $scope.showAlert();
+    $scope.getAllHolidays();
+    $log.debug("At Init");
+    $log.debug($scope.allHolidays);
   }
 
   $scope.init();

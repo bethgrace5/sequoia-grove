@@ -39,7 +39,6 @@ public class HolidaysController {
   @RequestMapping(value = "/schedule/get/holidays")
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-/*
       List<Holiday> holidayList = jdbcTemplate.query(
           "select * from bajs_holiday",
           new RowMapper<Holiday>() {
@@ -53,10 +52,8 @@ public class HolidaysController {
             }
           });
       model.addAttribute("holidays", holidayList);
-*/
       return "jsonTemplate";
     }
-/*
   @RequestMapping(value = "/schedule/submit/new/holiday")
     public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -76,8 +73,6 @@ public class HolidaysController {
       );
       return "jsonTemplate";
     }
-*/
-/*
     @RequestMapping(value = "/schedule/update/holiday")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -99,6 +94,5 @@ public class HolidaysController {
 
         return "jsonTemplate";
       }
-*/
 
 }
