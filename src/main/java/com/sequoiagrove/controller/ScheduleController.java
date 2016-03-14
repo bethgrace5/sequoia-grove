@@ -180,8 +180,8 @@ public class ScheduleController {
 
         if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
-            //return "jsonTemplate";
-            return new ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            return "jsonTemplate";
+            //return new ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
