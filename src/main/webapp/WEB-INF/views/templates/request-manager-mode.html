@@ -44,7 +44,9 @@
   <div class="col-sm-9">
     <div class="row">
       <div class="col-sm-12">
-        <p class="lead">Submit New Request <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}</p>
+        <p class="lead">
+          Manage Requests <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}
+        </p>
       </div>
 
       <div class="col-sm-12">
@@ -69,11 +71,76 @@
               ng-disabled="selectedEmployee.id == 0"
               ng-click="managerSubmitRequest()">
               <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
-              Submit request <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}
+              submit
             </button>
           </div>
         </div>
       </div>
+
+    </div>
+
+    <div class="col-sm-12" ng-show="selectedEmployee.id != 0">
+      <p class="lead" style="padding-top:40px;" >Pending Requests </p>
+      <div class="row request-title">
+        <div class="col-sm-2"> <p> Start Date </p> </div>
+        <div class="col-sm-2"> <p> End Date </p> </div>
+        <div class="col-sm-2"> <p> Days </p> </div>
+      </div>
+
+      <!-- Pending Requests for Selected Employee -->
+      <div  ng-repeat="request in pendingRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}">
+        <br/>
+        <div class="row">
+          <div class="col-sm-2"> <p> {{defaultDate(request.startDate)}} </p> </div>
+          <div class="col-sm-2"> <p> {{defaultDate(request.endDate)}} </p> </div>
+          <div class="col-sm-2">
+            <p> {{totalDays(request.startDate, request.endDate)}} Day(s) </p>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-success btn-block"
+              ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
+              Approve
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-danger btn-block"
+              ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
+              Deny
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <br/>
+
+      <p class="lead" style="padding-top:40px;"> History </p>
+      <div class="row request-title">
+        <div class="col-sm-3"> <p> Start Date </p> </div>
+        <div class="col-sm-3"> <p> End Date </p> </div>
+        <div class="col-sm-2"> <p> Days </p> </div>
+        <div class="col-sm-4"> <p> Status </p> </div>
+      </div>
+
+      <div ng-repeat="request in allRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}"
+        ng-show="selectedEmployee.id != 0">
+        <div class="row">
+          <div class="col-sm-3">
+            <p> {{defaultDate(request.startDate)}} </p>
+          </div>
+          <div class="col-sm-3">
+            <p> {{defaultDate(request.endDate)}} </p>
+          </div>
+          <div class="col-sm-2">
+            <p> {{totalDays(request.startDate, request.endDate)}} </p>
+          </div>
+          <div class="col-sm-4">
+            <p> {{request.status}} by {{request.approverFirstName}} {{request.approverLastName}}</p>
+          </div>
+        </div>
+      </div>
+
 
     </div>
   </div>

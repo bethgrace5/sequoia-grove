@@ -1,5 +1,4 @@
-package com.sequoiagrove.controller;
-
+package com.sequoiagrove.controller; 
 import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
@@ -34,7 +33,6 @@ public class ManageStore {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
       return "nothing";
-
     }
 }
 

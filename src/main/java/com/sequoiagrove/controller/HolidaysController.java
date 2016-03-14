@@ -39,7 +39,6 @@ public class HolidaysController {
   @RequestMapping(value = "/schedule/get/holidays")
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
       List<Holiday> holidayList = jdbcTemplate.query(
           "select * from bajs_holiday",
           new RowMapper<Holiday>() {
@@ -55,7 +54,6 @@ public class HolidaysController {
       model.addAttribute("holidays", holidayList);
       return "jsonTemplate";
     }
-
   @RequestMapping(value = "/schedule/submit/new/holiday")
     public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -66,8 +64,7 @@ public class HolidaysController {
       String newDate = hol.getDate();
       String newType = hol.getType();
       System.out.println(newName + " " + newDate + " " + newType);
-      //INSERT INTO emp (empno, ename, job, sal, comm, deptno)
-      //   VALUES (4160, 'STURDEVIN', 'SECURITY GUARD', 2045, NULL, 30);
+
       jdbcTemplate.update(
           "insert into bajs_holiday "+
           " (name, type, hdate) "+
@@ -76,7 +73,6 @@ public class HolidaysController {
       );
       return "jsonTemplate";
     }
-
     @RequestMapping(value = "/schedule/update/holiday")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -89,13 +85,30 @@ public class HolidaysController {
         String newType = hol.getType();
 
         jdbcTemplate.update(
-           " update bajs_holidays " +
+           " update bajs_holiday " +
            " set " +
-           " type = " + newType + ", ",
-           " date = " + "to_timestamp(" + newDate + ", 'mm-dd-yyyy')" +
+           " type = " + newType + ", " +
+           " date = " + newDate + " "  +
            " where name = " + name
         );
 
+        return "jsonTemplate";
+      }
+    @RequestMapping(value = "/schedule/delete/holiday")
+      public String deleteRequest(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        Gson gson = new Gson();
+
+        Holiday hol = gson.fromJson(data, Holiday.class);
+
+        String name = hol.getName();
+        String newDate = hol.getDate();
+        String newType = hol.getType();
+
+        jdbcTemplate.update(
+           " DELETE FROM bajs_holiday " +
+           " where name = '" + name + "'"
+        );
         return "jsonTemplate";
       }
 
