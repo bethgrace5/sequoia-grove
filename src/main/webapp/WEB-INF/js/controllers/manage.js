@@ -20,6 +20,18 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.deliveries = [];
+  $scope.newdelivery = {
+      id: 0,
+      name:"",
+      mon: false,
+      tue:false,
+      wed:false,
+      thu:false,
+      fri:false,
+      sat:false,
+      sun:false 
+  }
+
 
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "holiday";

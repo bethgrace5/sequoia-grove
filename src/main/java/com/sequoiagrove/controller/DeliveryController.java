@@ -85,4 +85,30 @@ public class DeliveryController {
                     obj);
             return "jsonTemplate";
         }
+    
+    @RequestMapping(value = "/delivery/add")
+        public String UpdateDelivery(@RequestBody String data, Model model) throws SQLException {
+            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+            int id = jdbcTemplate.queryForObject("select bajs_delivery_id_sequence.nextval from dual",
+              Integer.class);
+            // parse params
+            JsonElement jelement = new JsonParser().parse(data);
+            JsonObject  jobject = jelement.getAsJsonObject();
+            int mon = jobject.get("mon").getAsInt();
+            int tue = jobject.get("tue").getAsInt();
+            int wed = jobject.get("wed").getAsInt();
+            int thu = jobject.get("thu").getAsInt();
+            int fri = jobject.get("fri").getAsInt();
+            int sat = jobject.get("sat").getAsInt();
+            int sun = jobject.get("sun").getAsInt();
+            String name = jobject.get("name").getAsString();
+
+            // update/add to database
+            Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
+            jdbcTemplate.update("insert into bajs_delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)", 
+                    obj);
+            model.addAttribute("id", id);
+            return "jsonTemplate";
+        }
 }
