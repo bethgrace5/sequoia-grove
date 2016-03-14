@@ -7,30 +7,22 @@ public class Shift {
     int sid;
     int pid;
     String tname; 
-    int wd_st_h;
-    int wd_st_m;
-    int wd_ed_h;
-    int wd_ed_m;
-    int we_st_h;
-    int we_st_m;
-    int we_ed_h;
-    int we_ed_m;
+    String wd_st;
+    String wd_ed;
+    String we_st;
+    String we_ed;
 
     public Shift(){}
     public Shift(int sid, int pid, String tname,
-      int wd_st_h, int wd_st_m, int wd_ed_h, int wd_ed_m,
-      int we_st_h, int we_st_m, int we_ed_h, int we_ed_m) {
+      String wd_st, String wd_ed, 
+      String we_st, String we_ed) {
         this.sid = sid;
         this.pid = pid;
         this.tname = tname;
-        this.wd_st_h = wd_st_h;
-        this.wd_st_m = wd_st_m;
-        this.wd_ed_h = wd_ed_h;
-        this.wd_ed_m = wd_ed_m;
-        this.we_st_h = we_st_h;
-        this.we_st_m = we_st_m;
-        this.we_ed_h = we_ed_h;
-        this.we_ed_m = we_ed_m;
+        this.wd_st = wd_st;
+        this.wd_ed = wd_ed;
+        this.we_st = we_st;
+        this.we_ed = we_ed;
     }
 
     public int getSid() {
@@ -54,59 +46,31 @@ public class Shift {
         this.tname = tname;
     }
 
-    public int getWd_st_h() {
-        return wd_st_h;
+    public String getWd_st() {
+        return wd_st;
     }
-    public void setWd_st_h(int wd_st_h) {
-        this.wd_st_h = wd_st_h;
-    }
-
-    public int getWd_st_m() {
-        return wd_st_m;
-    }
-    public void setWd_st_m(int wd_st_m) {
-        this.wd_st_m = wd_st_m;
+    public void setWd_st(String wd_st) {
+        this.wd_st = wd_st;
     }
 
-    public int getWd_ed_h() {
-        return wd_ed_h;
+    public String getWd_ed() {
+        return wd_ed;
     }
-    public void setWd_ed_h(int wd_ed_h) {
-        this.wd_ed_h = wd_ed_h;
-    }
-
-    public int getWd_ed_m() {
-        return wd_ed_m;
-    }
-    public void setWd_ed_m(int wd_ed_m) {
-        this.wd_ed_m = wd_ed_m;
+    public void setWd_ed(String wd_ed) {
+        this.wd_ed = wd_ed;
     }
 
-    public int getWe_st_h() {
-        return we_st_h;
+    public String getWe_st() {
+        return we_st;
     }
-    public void setWe_st_h(int we_st_h) {
-        this.we_st_h = we_st_h;
-    }
-
-    public int getWe_st_m() {
-        return we_st_m;
-    }
-    public void setWe_st_m(int we_st_m) {
-        this.we_st_m = we_st_m;
+    public void setWe_st(String we_st) {
+        this.we_st = we_st;
     }
 
-    public int getWe_ed_h() {
-        return we_ed_h;
+    public String getWe_ed() {
+        return we_ed;
     }
-    public void setWe_ed_h(int we_ed_h) {
-        this.we_ed_h = we_ed_h;
-    }
-
-    public int getWe_ed_m() {
-        return we_ed_m;
-    }
-    public void setWe_ed_m(int we_ed_m) {
-        this.we_ed_m = we_ed_m;
+    public void setWe_ed(String we_ed) {
+        this.we_ed = we_ed;
     }
 }

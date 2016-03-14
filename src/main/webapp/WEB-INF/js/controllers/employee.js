@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -21,8 +21,22 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'info';
     $scope.current;
-    $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-      'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':'', 'phone':0};
+    $scope.selectedEmployee = {
+      'id':0,
+      'isManager':0,
+      'firstName':'',
+      'lastName':'',
+      'birthDate':'',
+      'clock':0,
+      'email':'',
+      'minHrsWeek':'',
+      'maxHrsWeek':'',
+      'phone':0,
+      'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+      'history':[],
+      'positions':[]
+    };
+
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
@@ -77,8 +91,21 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
-      $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-        'birthDate':'', 'clock':0, 'email':'', 'minHrsWeek':'', 'maxHrsWeek':40, 'phone':0};
+      $scope.selectedEmployee = {
+        'id':0,
+        'isManager':0,
+        'firstName':'',
+        'lastName':'',
+        'birthDate':'',
+        'clock':0,
+        'email':'',
+        'minHrsWeek':'',
+        'maxHrsWeek':'',
+        'phone':0,
+        'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+        'history':[],
+        'positions':[]
+      };
       $scope.birthDate = '';
     }
 /************** HTTP Request Functions **************/
@@ -285,34 +312,55 @@ angular.module('sequoiaGroveApp')
     }
 
     // Deactivate (un-employ) an employee
-    $scope.deactivateEmployee = function() {
+    $scope.deactivateEmployee = function(ev) {
       // a user shouldn't be able to unemploy themselves - it would
       // lock them out of the system.
       if ($rootScope.loggedInUser.id === $scope.selectedEmployee.id) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title('Unemploy ' + $scope.selectedEmployee.firstName)
+            .textContent('You cannot unemploy yourself!')
+            .ariaLabel('cannot unemploy yourself')
+            .ok('Got it!')
+            .targetEvent(ev)
+            );
         return
       }
-      $http({
-        url: '/sequoiagrove/employee/deactivate/',
-        method: "POST",
-        data: {'id': $scope.selectedEmployee.id}
-      }).success(function(data, status) {
 
-        // update UI with change
-        $scope.employees = _.map($scope.employees, function(e) {
-          if(e.id === $scope.selectedEmployee.id) {
-            e.isCurrent = false;
-            e.history = _.map(e.history, function(h) {
-              if(h.end === '') {
-                h.end = moment().format('MM-DD-YYYY');
-              }
-              return h;
-            });
-          }
-          return e;
+      // Confirm to unemploy
+      var confirm = $mdDialog.confirm()
+        .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
+        .ariaLabel('Unemploy')
+        .targetEvent(ev)
+        .ok('Unemploy')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        // ok
+        $http({
+          url: '/sequoiagrove/employee/deactivate/',
+          method: "POST",
+          data: {'id': $scope.selectedEmployee.id}
+        }).success(function(data, status) {
+          // update UI with change
+          $scope.employees = _.map($scope.employees, function(e) {
+            if(e.id === $scope.selectedEmployee.id) {
+              e.isCurrent = false;
+              e.history = _.map(e.history, function(h) {
+                if(h.end === '') {
+                  h.end = moment().format('MM-DD-YYYY');
+                }
+                return h;
+              });
+            }
+            return e;
+          });
+        }).error(function(data, status) {
+          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
-
-      }).error(function(data, status) {
-        $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
+      }, function() {
+        // cancel
+        return;
       });
     }
 

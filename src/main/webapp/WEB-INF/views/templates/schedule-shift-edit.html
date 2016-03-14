@@ -16,7 +16,7 @@
 <div class="row">
   <div class="col-sm-2">
     <input type="text" class="form-control" placeholder="title..."
-      ng-model="selectedShift.title" ng-click="alteredTitle">
+      ng-model="shiftInfo.tname" ng-click="alteredTitle">
   </div>
   <div class="col-sm-2">
     <!--div class="dropdown">
@@ -29,7 +29,7 @@
       </ul>
     </div-->
     <select class="schedule-edit-shift-select" placeholder="Position"
-      ng-model="selectedShift.pos" ng-options="option.title as option.title for option in positions">
+      ng-model="shiftInfo.pid" ng-options="option.id as option.title for option in positions">
       <option value="">- Position -</option>
     </select>
   </div>
@@ -38,13 +38,13 @@
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekday Start"
-          ng-model="selectedShift.wd_st" ng-options="option.disp as option.disp for option in times.start">
+          ng-model="shiftInfo.weekdayStart" ng-options="option.val as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekday End"
-          ng-model="selectedShift.wd_ed" ng-options="option.disp as option.disp for option in times.end">
+          ng-model="shiftInfo.weekdayEnd" ng-options="option.val as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>
@@ -55,13 +55,13 @@
     <div class="row">
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekend Start"
-          ng-model="selectedShift.we_st" ng-options="option.disp as option.disp for option in times.start">
+          ng-model="shiftInfo.weekendStart" ng-options="option.val as option.disp for option in times.start">
           <option value="">- Start -</option>
         </select>
       </div>
       <div class="col-sm-5">
         <select class="schedule-edit-shift-select" placeholder="Weekend End"
-          ng-model="selectedShift.we_ed" ng-options="option.disp as option.disp for option in times.end">
+          ng-model="shiftInfo.weekendEnd" ng-options="option.val as option.disp for option in times.end">
           <option value="">- End -</option>
         </select>
       </div>
@@ -83,13 +83,13 @@
       <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
     </button-->
     <!-- Default button -->
-    <button class = "btn btn-default schedule-view-button">
+    <button type="button" class="btn btn-default schedule-view-button" ng-click="updateShift()">
       Save
       <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
     </button>
   </div>
   <div class="col-sm-1" ng-hide="!shiftSelected()">
-    <button type="button" class="btn btn-danger" ng-click="foo()">
+    <button type="button" class="btn btn-danger" ng-click="deleteShift()">
       Delete
       <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
     </button>

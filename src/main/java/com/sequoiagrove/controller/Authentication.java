@@ -1,4 +1,3 @@
-
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
@@ -107,13 +106,3 @@ public class Authentication {
         return "jsonTemplate";
     }
 }
-
-
-
-
-
-
-
-
-
-
