@@ -513,6 +513,7 @@ angular.module('sequoiaGroveApp')
   $scope.holidayStartDate;
   $scope.holidayEndDate;
   $scope.holidayName;
+  $scope.newHolidayName;
   $scope.holidayDate;
   $scope.holidayType;
   $scope.types = ["Half" , "Full"];
@@ -558,11 +559,11 @@ angular.module('sequoiaGroveApp')
   //Holiday Major Functions
   //--------------------------
   $scope.addNewHoliday = function(){
-    $log.debug($scope.holidayName);
+    $log.debug($scope.newHolidayName);
     $log.debug($scope.holidayType);
     $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
     var obj = {
-      "name":$scope.holidayName,
+      "name":$scope.newHolidayName,
       "date":moment($scope.holidayStartDate).format("MM-DD"),
       "type":$scope.holidayType
     }
