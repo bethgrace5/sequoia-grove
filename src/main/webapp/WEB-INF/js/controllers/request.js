@@ -111,6 +111,8 @@ angular.module('sequoiaGroveApp')
     })
     .success(function (data, status, headers, config) {
       $scope.getCurrentEmployeeRequest();
+      $scope.getPendingRequests();
+      $scope.getAllRequests();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -121,7 +123,7 @@ angular.module('sequoiaGroveApp')
   //Dates_Collider
   //---------------
   /*This will take the requestDateStart / requestDateEnd and compare it
-   *to userRequestes, it will return true if it conflicts with eachother */
+   *to userRequests, it will return true if it conflicts with eachother */
 
   $scope.checkDatesCollide = function(){
 
@@ -168,7 +170,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       $scope.allRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
+      $log.error(status + " Error obtaining all requests: " + data);
     });
   }
 
@@ -179,7 +181,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       $scope.pendingRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
+      $log.error(status + " Error obtaining pending requests: " + data);
     });
   }
 
@@ -208,6 +210,8 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $scope.getPendingRequests();
+      $scope.getAllRequests();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -221,6 +225,8 @@ angular.module('sequoiaGroveApp')
       method: "POST"
     }).success(function(data, status) {
       $scope.getPendingRequests();
+      $scope.getCurrentEmployeeRequest();
+      $scope.getAllRequests();
     });
   }
 
