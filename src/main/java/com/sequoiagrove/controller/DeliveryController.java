@@ -93,7 +93,7 @@ public class DeliveryController {
         }
     
     @RequestMapping(value = "/delivery/add")
-        public String UpdateDelivery(@RequestBody String data, Model model) throws SQLException {
+        public String AddDelivery(@RequestBody String data, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             int id = jdbcTemplate.queryForObject("select bajs_delivery_id_sequence.nextval from dual",
