@@ -1,85 +1,80 @@
-  <div class="col-sm-9">
-    <div class="row">
-      <div class="col-sm-12">
-        <p class="lead">New Request </p>
-      </div>
+<!-- Submit New Request -->
+<div class="row">
+  <div class="col-sm-12">
+    <p class="lead">Submit New Request </p>
+  </div>
+</div>
 
-      <div class="col-sm-12">
-        <div class="row">
-          <div class="col-sm-3" ng-show="seeTargetEmployee">
-            <md-datepicker ng-model="$parent.requestDateStart"
-            md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
-            ng-change="updateEnd()">
-            </md-datepicker>
-          </div>
-
-          <div class="col-sm-3" ng-show="seeTargetEmployee">
-            <md-datepicker ng-model="$parent.requestDateEnd"
-            md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
-            </md-datepicker>
-          </div>
-
-          <div class="col-sm-3" ng-show="seeTargetEmployee">
-            <button class="btn btn-primary"
-              ng-click="submitRequest()">
-              <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
-              Submit request
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div class="col-sm-12">
-        <div style="height:50px; padding-top:30px;"> </div>
-        <hr/>
-      </div>
-      <div class="col-sm-12">
-        <div class="row request-title"
-          ng-show="userRequests.length>0">
-
-          <div class="col-sm-3">
-            <p> Start Date </p>
-          </div>
-          <div class="col-sm-3">
-            <p> End Date </p>
-          </div>
-          <div class="col-sm-3">
-            <p> Total Days </p>
-          </div>
-          <div class="col-sm-3">
-            <p> Status </p>
-          </div>
-        </div>
-
-        <div  ng-repeat="request in userRequests"
-          ng-show="userRequests.length>0">
-          <div class="row">
-            <div class="col-sm-3">
-              <p> {{defaultDate(request.startDate)}} </p>
-            </div>
-            <div class="col-sm-3">
-              <p> {{defaultDate(request.endDate)}} </p>
-            </div>
-            <div class="col-sm-3">
-              <p> {{totalDays(request.startDate, request.endDate)}} </p>
-            </div>
-            <div class="col-sm-3">
-              <div ng-show="request.status=='Pending'">
-                <h3><span class="label label-warning">Pending</span></h3>
-              </div>
-              <div ng-show="request.status=='Approved'">
-                <h3span class="label label-success">Approved</span></h3>
-              </div>
-              <div ng-show="request.status=='Denied'">
-                <h3><span class="label label-danger">Denied</span></h3>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </div>
+<div class="row">
+  <!-- Start Date Picker -->
+  <div class="col-sm-2" ng-show="seeTargetEmployee">
+    <md-datepicker ng-model="$parent.requestDateStart"
+    md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+    ng-change="updateEnd()">
+    </md-datepicker>
   </div>
 
+  <!-- End Date Picker -->
+  <div class="col-sm-2" ng-show="seeTargetEmployee">
+    <md-datepicker ng-model="$parent.requestDateEnd"
+    md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+    </md-datepicker>
+  </div>
+
+  <!-- Submit -->
+  <div class="col-sm-3" ng-show="seeTargetEmployee">
+    <button class="btn btn-primary"
+      ng-click="submitRequest()">
+      <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+      Submit
+    </button>
+  </div>
+</div>
+
+<hr/>
+
+<!-- Display My Requests -->
+<div class="row" style="padding-top:40px;">
+  <div class="col-sm-4 col-sm-offset-2">
+    <!--<p class="lead">My Requests </p>-->
+  </div>
+</div>
+
+<!-- User Has No Requests -->
+<div ng-show="userRequests.length<=0">
+  <p style="margin-left:20px"> You have not submitted any requests yet.</p>
+</div>
+
+<!-- Header Labels -->
+<div class="row request-title" style="margin-bottom:20px;" ng-show="userRequests.length>0">
+  <div class="col-sm-2"> <p> Start Date </p> </div>
+  <div class="col-sm-2"> <p> End Date </p> </div>
+  <div class="col-sm-2"> <p> Days </p> </div>
+  <div class="col-sm-2"> <p> Status </p> </div>
+</div>
+
+<!-- List of Logged In User's Requests -->
+<div class="row" ng-repeat="request in userRequests"
+    ng-show="userRequests.length>0">
+  <div class="col-sm-2">
+    <p> {{defaultDate(request.startDate)}} </p>
+  </div>
+  <div class="col-sm-2">
+    <p> {{defaultDate(request.endDate)}} </p>
+  </div>
+  <div class="col-sm-2">
+    <p> {{totalDays(request.startDate, request.endDate)}} </p>
+  </div>
+  <div class="col-sm-2">
+    <div ng-show="request.status=='Pending'">
+      <h3><span class="label label-warning">Pending</span></h3>
+    </div>
+    <div ng-show="request.status=='Approved'">
+      <h3><span class="label label-success">Approved</span></h3>
+    </div>
+    <div ng-show="request.status=='Denied'">
+      <h3><span class="label label-danger">Denied</span></h3>
+    </div>
+  </div>
 </div>
 
