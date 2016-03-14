@@ -179,19 +179,20 @@ public class ScheduleController {
         String weekendEnd = jobject.get("weekendEnd").getAsString();
 
         if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
-            model.addAttribute("One or more fields null/empty", true);
-            return "jsonTemplate";
+            model.addAttribute("invalidField", true);
+            //return "jsonTemplate";
+            return new ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
-                model.addAttribute("Invalid time interval", true);
+                model.addAttribute("invalidTime", true);
                 return "jsonTemplate";
             }
             Integer.parseInt(pid);
         }
         catch (NumberFormatException e) {
-            model.addAttribute("One or more integer fields not integers", true);
+            model.addAttribute("invalidInteger", true);
             return "jsonTemplate";
         }
 
@@ -234,20 +235,20 @@ public class ScheduleController {
 
         if (!validateStrings(
           sid, pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
-            model.addAttribute("One or more fields null/empty", true);
+            model.addAttribute("invalidField", true);
             return "jsonTemplate";
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
-                model.addAttribute("Invalid time interval", true);
+                model.addAttribute("invalidTime", true);
                 return "jsonTemplate";
             }
             Integer.parseInt(pid);
             Integer.parseInt(sid);
         }
         catch (NumberFormatException e) {
-            model.addAttribute("One or more integer fields not integers", true);
+            model.addAttribute("invalidInteger", true);
             return "jsonTemplate";
         }
 
@@ -283,15 +284,16 @@ public class ScheduleController {
 
         String sid = jobject.get("sid").getAsString();
 
+        //model.addAttribute("error", false);
         if (!validateStrings(sid)) {
-            model.addAttribute("One or more fields null/empty", true);
+            model.addAttribute("invalidField", true);
             return "jsonTemplate";
         }
         try {
             Integer.parseInt(sid);
         }
         catch (NumberFormatException e) {
-            model.addAttribute("One or more integer fields not integers", true);
+            model.addAttribute("invalidInteger", true);
             return "jsonTemplate";
         }
 

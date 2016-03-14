@@ -358,7 +358,19 @@ a:focus {
 }
 
 /********************************************
-    09. Default_Settings_Yeoman_put_in
+    09. Manage_Store
+*********************************************/
+/* Shift Edit */
+.shift-list-panel {
+  min-height: 50%;
+}
+.shift-list-wrapper {
+  height: 50%;
+  overflow-y: scroll;
+}
+
+/********************************************
+    10. Default_Settings_Yeoman_put_in
 *********************************************/
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -435,7 +447,7 @@ a:focus {
   }
 }
 /********************************************
-    10. Request
+    11. Request
 *********************************************/
 .request-panel{
   border-top:none;

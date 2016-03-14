@@ -1,0 +1,43 @@
+<p/ class="lead"> Manage Shifts </p>
+<div class="row">
+
+    <div class="col-sm-3">
+      <div class="panel panel-default shift-list-panel">
+        <div class="panel-heading">
+          <!-- Filter by User, Location, or Position -->
+          <!--div class="dropdown pull-right" dropdown is-open=true>
+            <button type="button"
+            ng-disabled = "loading"
+              id="shiftDropdown"
+              class="btn btn-default"
+              data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true">
+              {{typeFilter}}<span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" rol="menu" arial-labelledby="shiftDropdown">
+              <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
+              <li role="separator" class="divider"></li>
+              <li role="menuitem"><a ng-click="changeType('current')">Current</a></li>
+              <li role="menuitem"><a ng-click="changeType('past')">Past</a></li>
+            </ul>
+          </div-->
+          <p class="lead">Shift List</p>
+        </div>
+        <div class="panel-body">
+          <ng-include src="'views/templates/shift-list.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-9">
+      <div class="panel panel-default shift-info-panel">
+        <div class="panel-heading">
+          <p class="lead">Shift Edit</p>
+        </div>
+        <div class="panel-body">
+          <ng-include src="'views/templates/shift-info.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+</div>
