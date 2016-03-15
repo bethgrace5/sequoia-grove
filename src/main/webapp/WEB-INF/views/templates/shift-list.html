@@ -30,7 +30,7 @@
       class="list-group-item btn btn-default btn-block"
       ng-class="{'active': shiftInfo.sid===s.sid}">
       <div class="pull-left" ng-model="template">
-        {{::s.tname}}, {{::s.weekdayStart}}-{{::s.weekdayEnd}}
+        {{s.tname}} , ({{s.weekdayStart}}-{{s.weekdayEnd}})
       </div>
     </button>
   </div>
