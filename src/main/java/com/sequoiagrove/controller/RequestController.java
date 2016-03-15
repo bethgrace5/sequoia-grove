@@ -55,7 +55,7 @@ public class RequestController{
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
           id, eid, null, 0, start, end);
-      System.out.println("Start Date: " + start + "\nEnd Date: " + end);
+      //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";
     }
@@ -201,8 +201,8 @@ public class RequestController{
            " where id = " + eid
            );
            */
-        System.out.println("I changed " + eid);
-        System.out.println("Start Date: " + start + "\nEnd Date: " + end);
+        //System.out.println("I changed " + eid);
+        //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
         return "jsonTemplate";
       }

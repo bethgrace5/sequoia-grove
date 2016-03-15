@@ -36,8 +36,4 @@ public class MainController {
     public static JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
-
-    public static TransactionTemplate getTransactionTemplate() {
-        return transactionTemplate;
-    }
 }

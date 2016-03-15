@@ -40,24 +40,45 @@
             <li ng-show="loggedIn" role="presentation"
               ng-disabled="loading"
               ng-class="changeTab('/home')">
-              <a href="#/home">{{'HEADER_TAB_HOME' | translate}}</a>
+              <a href="#/home">
+                <span class="glyphicon glyphicon-home"></span>
+                {{'HEADER_TAB_HOME' | translate}} 
+              </a>
             </li>
             <li ng-show="loggedIn" role="presentation"
               ng-disabled="loading"
               ng-class="changeTab('/request')">
-              <a href="#/request">{{ 'HEADER_TAB_REQUESTS' | translate}}</a>
+              <a href="#/request">
+                <span class="glyphicon glyphicon-flag"></span>
+                {{ 'HEADER_TAB_REQUESTS' | translate}}
+              </a>
+            <!--<span class="glyphicon glyphicon-sunglasses"></span>-->
             </li>
 
             <!-- manager only options -->
             <li role="presentation"
               ng-show="loggedInUser.isManager"
               ng-class="changeTab('/employee')">
-              <a href="#/employee">{{'HEADER_TAB_EMPLOYEES' | translate}}</a>
+              <a href="#/employee">
+                <span class="glyphicon glyphicon-user"></span>
+                {{'HEADER_TAB_EMPLOYEES' | translate}}
+              </a>
             </li>
             <li role="presentation"
               ng-show="loggedInUser.isManager"
               ng-class="changeTab('/schedule')">
-              <a href="#/schedule">{{'HEADER_TAB_SCHEDULING' | translate}}</a>
+              <a href="#/schedule">
+                <span class="glyphicon glyphicon-calendar"></span>
+                {{'HEADER_TAB_SCHEDULING' | translate}}
+              </a>
+            </li>
+            <li role="presentation"
+              ng-show="loggedInUser.isManager"
+              ng-class="changeTab('/manage')">
+              <a href="#/manage">
+                <span class="glyphicon glyphicon-paperclip"></span>
+                Manage Store
+              </a>
             </li>
 
         </ul>

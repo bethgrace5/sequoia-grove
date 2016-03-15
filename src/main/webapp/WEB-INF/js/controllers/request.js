@@ -24,7 +24,7 @@
 
 
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $location) {
+.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location) {
 
   /****************** Check and Balances ****************************/
   $rootScope.lastPath = '/schedule';
@@ -97,9 +97,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.submitRequest = function(){
-    if($scope.checkDatesCollide()){
-      return;
-    }
     var obj = { "eid": $rootScope.loggedInUser.id,
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
@@ -111,20 +108,67 @@ angular.module('sequoiaGroveApp')
     })
     .success(function (data, status, headers, config) {
       $scope.getCurrentEmployeeRequest();
+      $scope.getPendingRequests();
+      $scope.getAllRequests();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
     });
   }
 
+  $scope.confirmSubmit = function(ev) {
+    if($scope.checkDatesCollide()){
+      $scope.datesCollidePopup(ev);
+      return;
+    }
+    var message = 
+      'from ' + $scope.defaultDate($scope.requestDateStart) + 
+      ' to ' + $scope.defaultDate($scope.requestDateEnd);
+    
+    if($scope.totalDays($scope.requestDateStart, $scope.requestDateEnd ) == 1) {
+      message = "Date: " + $scope.defaultDate($scope.requestDateStart);
+    }
+  
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+      .title('Would You Like To Submit This Request')
+      .textContent(message)
+      .ariaLabel('Request Submit')
+      .targetEvent(ev)
+      .ok('Confirm')
+      .cancel('Deny');
+
+    $mdDialog.show(confirm).then(function() {
+      $scope.status = 'Submited Request';
+      $scope.submitRequest();
+    }, function() {
+      $scope.status = 'Request not send.';
+    });
+  };
+
+  $scope.datesCollidePopup = function(ev){
+    // Appending dialog to document.body to cover sidenav in docs app
+    // Modal dialogs should fully cover application
+    // to prevent interaction outside of dialog
+    $mdDialog.show(
+      $mdDialog.alert()
+        .parent(angular.element(document.querySelector('#popupContainer')))
+        .clickOutsideToClose(true)
+        .title('Request Denied')
+        .textContent('Dates Are Already in use')
+        .ariaLabel('Alert Dialog Demo')
+        .ok('Got it!')
+        .targetEvent(ev)
+    );
+  };
+
   //---------------
   //Dates_Collider
   //---------------
   /*This will take the requestDateStart / requestDateEnd and compare it
-   *to userRequestes, it will return true if it conflicts with eachother */
+   *to userRequests, it will return true if it conflicts with eachother */
 
   $scope.checkDatesCollide = function(){
-
     var i = 0;
     var submitStart = moment($scope.requestDateStart);
     var submitEnd = moment($scope.requestDateEnd);
@@ -135,19 +179,15 @@ angular.module('sequoiaGroveApp')
       var checkEnd   = moment($scope.userRequests[i].endDate).add(1, 'day');
 
       if(moment(submitStart).isBetween(checkStart, checkEnd)){
-        alert("Dates Already Taken");
         return true;
       }
       if(moment(submitEnd).isBetween(checkStart, checkEnd)){
-        alert("Dates Already Taken");
         return true;
       }
       if(moment(checkStart).isBetween(submitStart, submitEnd)){
-        alert("Dates Already Taken");
         return true;
       }
       if(moment(checkEnd).isBetween(submitStart, submitEnd)){
-        alert("Dates Already Taken");
         return true;
       }
     }
@@ -168,7 +208,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       $scope.allRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
+      $log.error(status + " Error obtaining all requests: " + data);
     });
   }
 
@@ -179,7 +219,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       $scope.pendingRequests = data.requestStatus;
     }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining position data: " + data);
+      $log.error(status + " Error obtaining pending requests: " + data);
     });
   }
 
@@ -189,12 +229,12 @@ angular.module('sequoiaGroveApp')
   $scope.selectedEmployee = {'id':0};
   $scope.targetEmployee = function(employee){
     $scope.selectedEmployee = employee
-    $scope.seeTargetEmployee = 1;
+      $scope.seeTargetEmployee = 1;
   }
   $scope.selectedRequest;
   $scope.targetRequest = function(request){
     $scope.selectedRequest = request
-    $scope.seeTargetRequest = 1;
+      $scope.seeTargetRequest = 1;
   }
 
   $scope.managerSubmitRequest = function(){
@@ -208,6 +248,8 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
+      $scope.getPendingRequests();
+      $scope.getAllRequests();
     })
     .error(function (data, status, headers, config) {
       $log.error('Error submiting request ', status, data);
@@ -218,9 +260,11 @@ angular.module('sequoiaGroveApp')
     $http({
       url: '/sequoiagrove/request/update/' +
       $requestID + '/' + $approverID + '/' + $is_approve,
-      method: "POST"
+    method: "POST"
     }).success(function(data, status) {
       $scope.getPendingRequests();
+      $scope.getCurrentEmployeeRequest();
+      $scope.getAllRequests();
     });
   }
 
