@@ -25,6 +25,13 @@ angular.module('sequoiaGroveApp')
   $rootScope.currentPath = $location.path();
   $rootScope.lastPath = '/home';
 
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    $rootScope.lastPath = $location.path();
+    if ($location.path() != '/login') {
+      $location.path('/login');
+    }
+  }
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
@@ -48,7 +55,7 @@ angular.module('sequoiaGroveApp')
   // used to check that updating a shift is making a chage or not
   $scope.birthdays = [];
   $scope.holidays = [];
-  $scope.ispublished = false;
+  $rootScope.ispublished = false;
 
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
@@ -222,6 +229,7 @@ angular.module('sequoiaGroveApp')
       }, 0)
       $scope.hourCount[index] = hours;
     });
+    $scope.checkifPublished();
   }
 
   // check if employee has this position
@@ -269,43 +277,40 @@ angular.module('sequoiaGroveApp')
   $scope.getScheduleTemplate = function(week) {
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
-    
+
     // clear out original template
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
 
-    if(!$scope.ispublished) {
-
-      if (!$rootScope.loggedInUser.isManager) {
-        return;
+    return $http({ url: url, method: "GET", })
+        .success(function (data, status, headers, config) {
+      //$log.debug(data);
+      $rootScope.ispublished = data.ispublished;
+      if (!$scope.loggedInUser.isManager) {
+        if (!data.ispublished){
+          return;
+        }
       }
-    }
+      $scope.template = data.template;
 
-    return $http({
-      url: url,
-      method: "GET",
-    }).success(function (data, status, headers, config) {
-        //$log.debug(data);
-        $scope.template = data.template;
-
-        // keep an original copy of the template, so we can check modifications
-        // on the template against it
-        _.map(data.template, function(t, index, list) {
-          $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-          $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-          $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-          $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-          $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-          $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-          $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
-        });
-        // update count of days and hours per employee
-        $scope.countDays();
-        $scope.countHours();
+      // keep an original copy of the template, so we can check modifications
+      // on the template against it
+      _.map(data.template, function(t, index, list) {
+        $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+        $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+        $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+        $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+        $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+        $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+        $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+      });
+      // update count of days and hours per employee
+      $scope.countDays();
+      $scope.countHours();
 
     }).error(function (data, status, headers, config) {
-        $log.error(status + " Error saving update shifts schedule : " + data);
+      $log.error(status + " Error saving update shifts schedule : " + data);
     });
   }
 
@@ -329,11 +334,28 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
       method: "GET"
     }).success(function (data, status, headers, config) {
-        $scope.ispublished = data.result;
+        $rootScope.ispublished = data.result;
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
     });
+  }
+
+  //send date and employee id as an object thru http request
+  $scope.publishSchedule = function() {
+      var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
+    $http({
+      url: '/sequoiagrove/schedule/publish/',
+      method: "POST",
+      data: obj
+      }).success(function (data, status, headers, config) {
+        $rootScope.ispublished = true;   
+        //$log.debug(data)
+
+    }).error(function (data, status, headers, config) {
+      $log.error(status + " Error posting schedule " + data);
+    });
+
   }
 
 /************** Variable Initialization **************/
@@ -416,7 +438,7 @@ angular.module('sequoiaGroveApp')
 
   }
   $scope.$on('logged in', function(event, args) {
-    $scope.init();
+    //$scope.init();
   });
 
   $scope.personaLogin = function() {

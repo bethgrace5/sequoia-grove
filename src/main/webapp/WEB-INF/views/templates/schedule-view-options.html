@@ -12,11 +12,17 @@
       -->
 
       <!-- highlight logged in user's name -->
-      <button class="btn btn-info"
+      <button class="btn btn-default"
+        ng-hide="highlight"
         ng-disabled = "loading"
         ng-click="selectLoggedInUser()">
-        <div ng-hide="highlight"> highlight me </div>
-        <div ng-show="highlight"> unhighlight me </div>
+        highlighter off
+      </button>
+      <button class="btn btn-info"
+        ng-show="highlight"
+        ng-disabled = "loading"
+        ng-click="selectLoggedInUser()">
+        highlighter on
       </button>
 
       <!-- Filter by User, Location, or Position -->
@@ -32,9 +38,6 @@
         <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
           <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
           <li role="menuitem"><a ng-click="changeType('mine')">Mine</a></li>
-          <li role="separator" class="divider"></li>
-          <li class="dropdown-header">Locations</li>
-          <li ng-repeat = "loc in locations" value ="{{loc}}"><a ng-click="changeType(loc)">{{loc}}</a> </li>
           <li role="separator" class="divider"></li>
           <li class="dropdown-header">Positions</li>
           <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>

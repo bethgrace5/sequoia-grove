@@ -16,6 +16,7 @@
     "moment": "~2.10.6",
     "angular-chart.js": "~0.8.5",
     "angular-persona": "~1.1.0",
+    "angular-material": "~1.0.1",
     "angular-underscore-module": "~1.0.3",
     "underscore": "~1.8.3",
     "font-awesome": "fontawesome#~4.5.0"

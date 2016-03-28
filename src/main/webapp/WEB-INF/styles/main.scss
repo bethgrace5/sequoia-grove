@@ -46,6 +46,9 @@ a:focus {
 .centered-elem {
   text-align: center;
 }
+#main-content {
+  min-height: 70%;
+}
 
 /********************************************
     03. Print_Styling
@@ -59,17 +62,18 @@ a:focus {
   margin: 0 !important;
 }
 .print-table {
-  border-top: none !important;
   height: 10px !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 .print-row {
-  border-top: none !important;
   height: 10px !important;
   font-size: 0.8em;
   padding: 0 !important;
   margin: 0 !important;
+}
+.print-border {
+  border: 1px solid gray;
 }
 
 /********************************************
@@ -106,6 +110,17 @@ a:focus {
   background-color: #ffffb3;
 }
 
+.schedule-message {
+  padding: 30px 0 100px 0;
+  color: #333333;
+  font-size: 1.2em;
+}
+
+.schedule-message-panel {
+  width:80%; 
+  margin:0 auto; 
+  background-color:#e6e6e6;
+}
 /* Availability */
 .avail-edit-select {
   width: 90px;
@@ -304,10 +319,13 @@ a:focus {
   font-size: 1.2em;
   color: #336699;
 }
-
 /********************************************
     08. Employee_List
 *********************************************/
+.employee-list-panel {
+  min-height: 70%;
+}
+
 .clock-input {
   width: 45px;
   margin-left: 10px;
@@ -336,7 +354,7 @@ a:focus {
   margin-top: 0px;
 }
 .emp-list-wrapper {
-  max-height: 500px;
+  height: 70%;
   overflow-y: scroll;
 }
 
@@ -349,6 +367,10 @@ a:focus {
 .footer {
   padding-left: 15px;
   padding-right: 15px;
+}
+.footer-links {
+  margin-left: 20px;
+  padding-left: 20px;
 }
 
 /* Custom page header */
@@ -417,4 +439,28 @@ a:focus {
     border-bottom: 0;
   }
 }
+/********************************************
+    10. Request
+*********************************************/
+.request-panel{
+  border-top:none;
+  padding-top: 30px;
+  min-height: 70%;
+  overflow-y:scroll;
+}
+
+.css-form input.ng-invalid.ng-touched {
+  -webkit-box-shadow: inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  -moz-box-shadow:    inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  box-shadow:         inset 3px 3px 13px -2px rgba(179,0,89,0.75);
+  //background-color: #FA787E;
+}
+
+.css-form input.ng-valid.ng-touched {.
+  //-webkit-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //-moz-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
+  //background-color: #78FA89;
+}
+
 

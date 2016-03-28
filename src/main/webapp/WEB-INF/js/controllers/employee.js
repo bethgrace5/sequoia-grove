@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -21,15 +21,29 @@ angular.module('sequoiaGroveApp')
 
     $scope.activeTab = 'info';
     $scope.current;
-    $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-      'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
+    $scope.selectedEmployee = {
+      'id':0,
+      'isManager':0,
+      'firstName':'',
+      'lastName':'',
+      'birthDate':'',
+      'clock':0,
+      'email':'',
+      'minHrsWeek':'',
+      'maxHrsWeek':'',
+      'phone':0,
+      'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+      'history':[],
+      'positions':[]
+    };
+
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
     $scope.typeFilter = 'current';
+    $scope.birthdate = new Date();
 
 /************** Pure Functions **************/
-
     // switch filter of employee list type for all, current or past
     $scope.changeType = function(type) {
       $scope.typeFilter = type;
@@ -69,6 +83,7 @@ angular.module('sequoiaGroveApp')
         var curid = $scope.employees[i].id;
         if (curid==id) {
           $scope.selectedEmployee = $scope.employees[i];
+          $scope.birthdate = moment($scope.employees[i].birthDate, 'YYYY-MM-DD').toDate();
           break;
         }
       }
@@ -76,10 +91,23 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
-      $scope.selectedEmployee = {'id':0, 'isManager':0, 'firstName':'', 'lastName':'',
-        'birthDate':'', 'clock':0, 'email':'', 'maxHrsWeek':40, 'phone':0};
+      $scope.selectedEmployee = {
+        'id':0,
+        'isManager':0,
+        'firstName':'',
+        'lastName':'',
+        'birthDate':'',
+        'clock':0,
+        'email':'',
+        'minHrsWeek':'',
+        'maxHrsWeek':'',
+        'phone':0,
+        'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
+        'history':[],
+        'positions':[]
+      };
+      $scope.birthDate = '';
     }
-
 /************** HTTP Request Functions **************/
 
     // add a new availability time for an employee
@@ -100,7 +128,7 @@ angular.module('sequoiaGroveApp')
       // make sure all fields are filled in
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
-        $log.debug(avail);
+        //$log.debug(avail);
         $http({
           url: '/sequoiagrove/avail/add',
           method: "POST",
@@ -152,6 +180,9 @@ angular.module('sequoiaGroveApp')
         }).error(function(data, status) {
           $log.debug(status, 'failed to add position(', pid, ') for employee(', obj.eid, ')');
         });
+      }
+      else {
+        $scope.saving = false;
       }
     }
 
@@ -208,29 +239,60 @@ angular.module('sequoiaGroveApp')
     }
 
     // Update Existing employee, or add new
-    $scope.updateEmployee = function() {
+    $scope.updateEmployee = function(form) {
+      //$log.debug(form);
+
+      // validate max hours per week
+      if ((form.maxHrsWeek.$viewValue == '') ||
+          (form.maxHrsWeek.$viewValue < 0) ||
+          (form.maxHrsWeek.$viewValue > 40)) {
+        $scope.selectedEmployee.maxHrsWeek = 40;
+      };
+
+      // validate min hours per week
+      if ((form.minHrsWeek.$viewValue == '') ||
+          (form.minHrsWeek.$viewValue > form.maxHrsWeek.$viewValue) ||
+          (form.minHrsWeek.$viewValue < 0)) {
+        $scope.selectedEmployee.minHrsWeek = 0;
+      };
+
+      // transform firstname to uppercase first letter and lowercase for the rest
+      var firstLetter = $scope.selectedEmployee.firstName.substring(0,1);
+      var theRest = $scope.selectedEmployee.firstName.substring(1,
+          $scope.selectedEmployee.firstName.length);
+
+      $scope.selectedEmployee.firstName =
+        (firstLetter.toUpperCase() + theRest.toLowerCase());
+
+      // transform lastname to uppercase first letter and lowercase for the rest
+      firstLetter = $scope.selectedEmployee.lastName.substring(0,1);
+      theRest = $scope.selectedEmployee.lastName.substring(1,
+          $scope.selectedEmployee.lastName.length);
+
+      $scope.selectedEmployee.lastName =
+        (firstLetter.toUpperCase() + theRest.toLowerCase());
+
+      //TODO if clock number is greater than allowd size, fix it or show error
+
+      // validate the rest of the form
+      if (form.$invalid) {
+        form.firstName.$setTouched();
+        form.lastName.$setTouched();
+        form.email.$setTouched();
+        return;
+      }
+
       // guard against double clicking
       if ($scope.saving) {
         return;
       }
       $scope.saving = true;
       var action = "update";
+      $log.debug($scope.birthdate);
+      $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
         action = "add";
-
-        if ($scope.selectedEmployee.firstName === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.lastName === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.birthdate === '') {
-          return;
-        }
-        if ($scope.selectedEmployee.email === '') {
-          return;
-        }
       }
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
@@ -243,40 +305,62 @@ angular.module('sequoiaGroveApp')
           }
           $scope.selectEmployee($scope.selectedEmployee.id);
           $scope.saving = false;
+          form.$setSubmitted();
         }).error(function(data, status) {
           $log.debug('error with action:', action, status);
         });
     }
 
     // Deactivate (un-employ) an employee
-    $scope.deactivateEmployee = function() {
+    $scope.deactivateEmployee = function(ev) {
       // a user shouldn't be able to unemploy themselves - it would
       // lock them out of the system.
       if ($rootScope.loggedInUser.id === $scope.selectedEmployee.id) {
+        $mdDialog.show(
+            $mdDialog.alert()
+            .clickOutsideToClose(true)
+            .title('Unemploy ' + $scope.selectedEmployee.firstName)
+            .textContent('You cannot unemploy yourself!')
+            .ariaLabel('cannot unemploy yourself')
+            .ok('Got it!')
+            .targetEvent(ev)
+            );
         return
       }
-      $http({
-        url: '/sequoiagrove/employee/deactivate/',
-        method: "POST",
-        data: {'id': $scope.selectedEmployee.id}
-      }).success(function(data, status) {
 
-        // update UI with change
-        $scope.employees = _.map($scope.employees, function(e) {
-          if(e.id === $scope.selectedEmployee.id) {
-            e.isCurrent = false;
-            e.history = _.map(e.history, function(h) {
-              if(h.end === '') {
-                h.end = moment().format('MM-DD-YYYY');
-              }
-              return h;
-            });
-          }
-          return e;
+      // Confirm to unemploy
+      var confirm = $mdDialog.confirm()
+        .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
+        .ariaLabel('Unemploy')
+        .targetEvent(ev)
+        .ok('Unemploy')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        // ok
+        $http({
+          url: '/sequoiagrove/employee/deactivate/',
+          method: "POST",
+          data: {'id': $scope.selectedEmployee.id}
+        }).success(function(data, status) {
+          // update UI with change
+          $scope.employees = _.map($scope.employees, function(e) {
+            if(e.id === $scope.selectedEmployee.id) {
+              e.isCurrent = false;
+              e.history = _.map(e.history, function(h) {
+                if(h.end === '') {
+                  h.end = moment().format('MM-DD-YYYY');
+                }
+                return h;
+              });
+            }
+            return e;
+          });
+        }).error(function(data, status) {
+          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
-
-      }).error(function(data, status) {
-        $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
+      }, function() {
+        // cancel
+        return;
       });
     }
 

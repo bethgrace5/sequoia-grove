@@ -46,6 +46,7 @@ public class EmployeeController
                     Employee employee = new Employee (
                       rs.getInt("id"),
                       rs.getInt("max_hrs_week"),
+                      rs.getInt("min_hrs_week"),
                       rs.getInt("is_manager"),
                       rs.getInt("clock_number"),
                       rs.getString("first_name"),
@@ -128,6 +129,7 @@ public class EmployeeController
           jobject.get("isManager").getAsString(),
           jobject.get("birthDate").getAsString(),
           jobject.get("maxHrsWeek").getAsString(),
+          jobject.get("minHrsWeek").getAsString(),
           jobject.get("phone").getAsString(),
           jobject.get("clock").getAsString(),
           jobject.get("email").getAsString(),
@@ -138,8 +140,9 @@ public class EmployeeController
       jdbcTemplate.update( "update BAJS_employee set first_name = ?, "+
           "last_name    = ?, "+
           "is_manager   = ?, "+
-          "birth_date   = to_date(?, 'yyyy-mm-dd'), "+
+          "birth_date   = to_date(?, 'mm-dd-yyyy'), "+
           "max_hrs_week = ?, "+
+          "min_hrs_week = ?, "+
           "phone_number = ?, "+
           "clock_number = ?, "+
           "email = ?  "+
@@ -168,14 +171,15 @@ public class EmployeeController
             jobject.get("isManager").getAsString(),
             jobject.get("birthDate").getAsString(),
             jobject.get("maxHrsWeek").getAsString(),
+            jobject.get("minHrsWeek").getAsString(),
             jobject.get("phone").getAsString(),
             jobject.get("clock").getAsString(),
             jobject.get("email").getAsString(),
         };
 
         jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
-            "is_manager, birth_date, max_hrs_week, phone_number, clock_number, email) " +
-            "values(?,?,?,?, to_date(?, 'dd-mm-yyyy'), ?, ?, ?, ? )", params);
+            "is_manager, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
+            "values(?,?,?,?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ? )", params);
 
         //activate the employee
         Object[] obj = new Object[] { id };

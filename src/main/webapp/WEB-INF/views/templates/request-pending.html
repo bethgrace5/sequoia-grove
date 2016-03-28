@@ -1,53 +1,92 @@
-<div class="row">
-    <div class="col-sm-12">
-        <p class="lead">
-            Edit Pending Request Template
-        </p>
-    </div>
-</div>
 
 <div class="row request-title">
-    <div class="col-sm-1">
-        <p> Employee </p>
-    </div>
-    <div class="col-sm-2">
-        <p> Start Date </p>
-    </div>
-    <div class="col-sm-2">
-        <p> End Date </p>
-    </div>
-    <div class="col-sm-1">
-        <p> Total Days </p>
-    </div>
+  <div class="col-sm-2">
+    <p> Employee </p>
+  </div>
+  <div class="col-sm-2">
+    <p> Start Date </p>
+  </div>
+  <div class="col-sm-2">
+    <p> End Date </p>
+  </div>
+  <div class="col-sm-1">
+    <p> Days </p>
+  </div>
 </div>
 
-<div  ng-repeat="request in previousRequests">
-    <br/>
-    <div class="row">
-        <div class="col-sm-1">
-            <p> {{request.employee}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.startDate}} </p>
-        </div>
-        <div class="col-sm-2">
-            <p> {{request.endDate}} </p>
-        </div>
-        <div class="col-sm-1">
-            <p> {{request.totalDays}} </p>
-        </div>
-        <div class="col-sm-2">
-            <button class="btn btn-success">
-                Approve
-                <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-            </button>
-        </div>
-        <div class="col-sm-2">
-            <button class="btn btn-danger">
-                Deny
-                <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-            </button>
-        </div>
+
+<div  ng-repeat="request in pendingRequests">
+  <br/>
+  <div class="row">
+    <div class="col-sm-2">
+      <p> {{request.employeeFirstName}} {{request.employeeLastName}} </p>
     </div>
+    <div class="col-sm-2">
+      <p> {{defaultDate(request.startDate)}} </p>
+    </div>
+    <div class="col-sm-2">
+      <p> {{defaultDate(request.endDate)}} </p>
+    </div>
+    <div class="col-sm-1">
+      <p> {{totalDays(request.startDate, request.endDate)}} </p>
+    </div>
+    <div class="col-sm-3">
+      <div class="row">
+    <div class="col-sm-6">
+      <button class="btn btn-success btn-block"
+        ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
+        Approve
+        <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+      </button>
+    </div>
+    <div class="col-sm-6">
+      <button class="btn btn-danger btn-block"
+        ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
+        Deny
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </div>
+      </div>
+    </div>
+    <!--
+    <div class="col-sm-1">
+      <button class="btn btn-primary"
+        ng-click="targetRequest(request)">
+        Modify
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </div>
+    -->
+  </div>
 </div>
+
+<!--
+<div>
+  <div ng-show="seeTargetRequest">
+    <div class="col-md=10">
+      <h3>  {{defaultDate(selectedRequest.startDate)}}
+            {{defaultDate(selectedRequest.endDate)}}
+      </h3>
+    </div>
+    <form>
+      <h4>
+        Starting Date
+        <md-datepicker ng-model="$parent.requestDateStart"
+        md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+        ng-change="updateEnd()">
+        </md-datepicker>
+        Ending Date
+        <md-datepicker ng-model="$parent.requestDateEnd"
+        md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+        </md-datepicker>
+      </h4>
+      <button class="btn btn-primary"
+        ng-click="changeRequestDates()">
+        <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+        Submit
+      </button>
+    </form>
+  </div>
+</div>
+-->
 

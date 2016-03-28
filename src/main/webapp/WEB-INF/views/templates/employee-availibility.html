@@ -2,8 +2,8 @@
 
   <!-- Add New Availability for Current Employee -->
   <div class="row">
-    <label class="col-sm-3 col-sm-offset-1 control-label">Add Availability</label>
-    <div class="col-sm-5">
+    <label class="col-sm-1 col-sm-offset-1 control-label">Add</label>
+    <div class="col-sm-6">
       <!-- TODO set selected values so the fields aren't just blank fields -->
       <select type="text" class="" ng-model="newAvail.day" placeholder="Day">
         <option value="">- Day -</option>
@@ -25,7 +25,7 @@
         <option value="">- End -</option>
       </select>
     </div>
-    <div class="col-sm-1">
+    <div class="col-sm-1 pull-left">
       <button type="button" class="btn btn-success" ng-click="addAvailability()">
         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
       </button>

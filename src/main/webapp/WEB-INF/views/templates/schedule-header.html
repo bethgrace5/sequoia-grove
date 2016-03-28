@@ -1,7 +1,7 @@
-
 <!-- Week Nav and Title -->
 <div class="row hidden-xs">
   <div class="col-sm-12 pull-right">
+  <div class="pull-right" style="color:grey;">{{currentYear}} </div>
     <p class="lead">
       <button type="button" class="btn btn-default week-nav-button"
         aria-label="Left Align"
@@ -9,7 +9,7 @@
         ng-click="changeWeek('subtract')">
           <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
       </button>
-      Week of {{date.mon.disp}} {{currentYear}}
+      Week of {{date.mon.disp}} 
       <button type="button" class="btn btn-default week-nav-button"
         aria-label="Left Align"
         ng-disabled = "loading"
@@ -17,7 +17,6 @@
         <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
       </button>
     </p>
-  {{currentYear}}
   </div>
   <p class="lead text-center">Sequoia Rosedale - Weekly Staff Schedule</p>
 </div>

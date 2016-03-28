@@ -1,0 +1,149 @@
+<div class="row">
+
+  <div class="col-sm-3">
+    <!-- Employee List Panel -->
+    <div class="panel panel-default" style="min-height:60%;">
+      <div class="panel-heading">
+        <p class="lead emp-header">Employees</p>
+      </div>
+
+      <!-- Search Bar -->
+      <div class="form-group">
+        <div class="input-group">
+          <div class="btn btn-default input-group-addon">
+            <span class="glyphicon glyphicon-search"></span>
+          </div>
+          <input type="text" class="form-control" id="em-search" ng-model="empSearch" placeholder="Search...">
+        </div>
+      </div>
+
+      <!-- Clear Form Button -->
+      <button ng-click="clearManagerForm(); empSearch=''"
+        class="btn btn-info btn-block">
+        <div class="pull-left">
+          <i class="glyphicon glyphicon-remove"></i> Clear
+        </div>
+      </button>
+
+      <!-- Employee List -->
+      <div class="list-group emp-list-wrapper">
+        <!-- repeating list of employees -->
+        <div ng-show="seeEmployees" ng-repeat="employee in employees | filter: empSearch">
+          <button ng-click="targetEmployee(employee)"
+            class="list-group-item btn btn-default btn-block"
+            ng-class="{'active': selectedEmployee.id == employee.id}">
+            <div class="pull-left">
+              {{::employee.lastName}}, {{::employee.firstName}}
+            </div>
+          </button>
+        </div>
+      </div>
+    </div> <!-- End Employee List Panel -->
+  </div><!-- End col-sm-3 -->
+
+  <div class="col-sm-9">
+    <div class="row">
+      <div class="col-sm-12">
+        <p class="lead">
+          Manage Requests <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}
+        </p>
+      </div>
+
+      <div class="col-sm-12">
+        <div class="row">
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateStart"
+            ng-disabled="selectedEmployee.id == 0"
+            md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+            ng-change="updateEnd()">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <md-datepicker ng-model="$parent.requestDateEnd"
+            ng-disabled="selectedEmployee.id == 0"
+            md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+            </md-datepicker>
+          </div>
+
+          <div class="col-sm-3" ng-show="seeTargetEmployee">
+            <button class="btn btn-primary"
+              ng-disabled="selectedEmployee.id == 0"
+              ng-click="managerSubmitRequest()">
+              <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
+              submit
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="col-sm-12" ng-show="selectedEmployee.id != 0">
+      <p class="lead" style="padding-top:40px;" >Pending Requests </p>
+      <div class="row request-title">
+        <div class="col-sm-2"> <p> Start Date </p> </div>
+        <div class="col-sm-2"> <p> End Date </p> </div>
+        <div class="col-sm-2"> <p> Days </p> </div>
+      </div>
+
+      <!-- Pending Requests for Selected Employee -->
+      <div  ng-repeat="request in pendingRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}">
+        <br/>
+        <div class="row">
+          <div class="col-sm-2"> <p> {{defaultDate(request.startDate)}} </p> </div>
+          <div class="col-sm-2"> <p> {{defaultDate(request.endDate)}} </p> </div>
+          <div class="col-sm-2">
+            <p> {{totalDays(request.startDate, request.endDate)}} Day(s) </p>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-success btn-block"
+              ng-click="changeRequest(request.requestID, loggedInUser.id, 1 )">
+              Approve
+              <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+            </button>
+          </div>
+          <div class="col-sm-2">
+            <button class="btn btn-danger btn-block"
+              ng-click="changeRequest(request.requestID, loggedInUser.id, 0)">
+              Deny
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <br/>
+
+      <p class="lead" style="padding-top:40px;"> History </p>
+      <div class="row request-title">
+        <div class="col-sm-3"> <p> Start Date </p> </div>
+        <div class="col-sm-3"> <p> End Date </p> </div>
+        <div class="col-sm-2"> <p> Days </p> </div>
+        <div class="col-sm-4"> <p> Status </p> </div>
+      </div>
+
+      <div ng-repeat="request in allRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}"
+        ng-show="selectedEmployee.id != 0">
+        <div class="row">
+          <div class="col-sm-3">
+            <p> {{defaultDate(request.startDate)}} </p>
+          </div>
+          <div class="col-sm-3">
+            <p> {{defaultDate(request.endDate)}} </p>
+          </div>
+          <div class="col-sm-2">
+            <p> {{totalDays(request.startDate, request.endDate)}} </p>
+          </div>
+          <div class="col-sm-4">
+            <p> {{request.status}} by {{request.approverFirstName}} {{request.approverLastName}}</p>
+          </div>
+        </div>
+      </div>
+
+
+    </div>
+  </div>
+
+</div>
+

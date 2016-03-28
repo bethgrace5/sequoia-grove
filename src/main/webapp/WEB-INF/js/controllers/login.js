@@ -20,6 +20,7 @@ angular.module('sequoiaGroveApp')
     $rootScope.loggedIn = false;
     $rootScope.userNotRegistered = false;
     $rootScope.userNotCurrent = false;
+    $rootScope.loginFailed = false;
     $rootScope.loggedInUser = {};
 
     // User tried to go back to the login page when they were alredy logged in.
@@ -33,45 +34,41 @@ angular.module('sequoiaGroveApp')
     $scope.personaLogin = function () {
       $rootScope.userNotRegistered = false;
       $rootScope.userNotCurrent = false;
+      $rootScope.loginFailed = false;
       Persona.request();
     }
 
     // When user has logged in, this will load required data based
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
-      $scope.setScheduleHeader();
 
       // first, build schedule header
-      $q.all([$scope.checkifPublished()]
-      ).then(function(data) {
+      $scope.setScheduleHeader();
 
-        // next, build schedule template
-        $q.all( [$scope.getScheduleTemplate($scope.date.mon.val)]
-        ).then(function(results) {
+      // next, build schedule template
+      $q.all( [$scope.getScheduleTemplate($scope.date.mon.val)]
+      ).then(function(results) {
 
-          // next, if the user is a manager, gather additional needed data
-          if ($rootScope.loggedInUser.isManager) {
+        // next, if the user is a manager, gather additional needed data
+        if ($rootScope.loggedInUser.isManager) {
+          $q.all([ $scope.getEmployees()]
+          ).then(function(results) {
+            $scope.getPositions();
+          })
+        }
 
-            $q.all([ $scope.getEmployees(), $scope.getPositions()]
-            ).then(function(results) {
-              $scope.countDays();
-              $scope.countHours();
-            })
+        // Finally, redirect to home
+        }).then(function(results) {
+          $scope.loading = false;
+          $log.debug('loading complete');
+
+          // redirect to last path, or home if none
+          if ($rootScope.lastPath === '/login' ||
+              $rootScope.lastPath === undefined  ||
+              $rootScope.lastPath === null) {
+            $rootScope.lastPath = '/home';
           }
-
-          // Finally, redirect to home
-          }).then(function(results) {
-            $scope.loading = false;
-            $log.debug('loading complete');
-
-            // redirect to last path, or home if none
-            if ($rootScope.lastPath === '/login' ||
-                $rootScope.lastPath === undefined  ||
-                $rootScope.lastPath === null) {
-              $rootScope.lastPath = '/home';
-            }
-            $location.path( $rootScope.lastPath );
-          });
+          $location.path( $rootScope.lastPath );
         });
     }
 
@@ -115,6 +112,16 @@ angular.module('sequoiaGroveApp')
               $rootScope.loggingIn = false;
               return;
             }
+
+            // the login failed - maybe the domain was incorrect
+            if (data.loginFailed) {
+              $rootScope.loginFailed = true;
+              $log.debug('sign in failed');
+              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+
             // Otherwise, we found the user - save that user's data
             $rootScope.userNotRegistered = false;
             $rootScope.loggedInUser = data.user;

@@ -25,7 +25,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.showDeliveries = false;
-  $scope.highlight = false;
+  $scope.highlight = true;
   $scope.type = 'all';
 
 /************** Pure Functions **************/
