@@ -322,12 +322,15 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
         $scope.employees = data.employees;
+        $log.debug(localStorageService.get('auth_token'));
+        localStorageService.set('auth_token', data.api_token);
+        $log.debug(localStorageService.get('auth_token'));
 
     }).error(function (data, status, headers, config) {
         $log.error(status + " Error obtaining all employee: " + data);
     });
   }
-  
+
   // send http request to back end to check if published
   $scope.checkifPublished = function() {
     return $http({
@@ -349,7 +352,7 @@ angular.module('sequoiaGroveApp')
       method: "POST",
       data: obj
       }).success(function (data, status, headers, config) {
-        $rootScope.ispublished = true;   
+        $rootScope.ispublished = true;
         //$log.debug(data)
 
     }).error(function (data, status, headers, config) {

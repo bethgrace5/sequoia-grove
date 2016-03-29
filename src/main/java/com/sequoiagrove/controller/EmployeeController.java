@@ -69,6 +69,7 @@ public class EmployeeController
                 }
             });
         model.addAttribute("employees", empList);
+        model.addAttribute("api_token", authToken);
         return "jsonTemplate";
     }
 
