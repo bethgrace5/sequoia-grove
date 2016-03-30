@@ -1,3 +1,127 @@
 
 <p/ class="lead"> Manage Deliveries </p>
+<div class="row">
+    <div class="col-sm-2" >
+        <p>Company</p> 
+    </div>
+    <div class="col-sm-1" >
+        <p>Monday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Tuesday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Wednesday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Thursday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Friday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Saturday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Sunday</p> 
+    </div>
+</div>
+    <hr/>
+<div class="row">
+    <div class="col-sm-2">
+        <input type="text" class="form-control"
+            ng-model = "newdelivery.name"/>
+        <hr/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox" 
+        ng-model = "newdelivery.mon"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.tue"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.wed"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.thu"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.fri"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.sat"/>
+    </div>
+    <div class="col-sm-1">
+        <input type="checkbox"
+        ng-model = "newdelivery.sun"/>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-2" >
+        <p>Company</p> 
+    </div>
+    <div class="col-sm-1" >
+        <p>Monday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Tuesday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Wednesday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Thursday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Friday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Saturday</p> 
+    </div>
+    <div class="col-sm-1">
+        <p>Sunday</p>
+    </div>
+</div>
+<hr/>
+<div ng-repeat="d in deliveries">
+    <div class="row">
+        <div class="col-sm-2">
+            <h5>{{d.name}}</h5>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].mon"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].tue"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].wed"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].thu"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].fri"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].sat"/>
+        </div>
+        <div class="col-sm-1">
+            <input type="checkbox"
+            ng-model = "deliveries[$index].sun"/>
+        </div>
+    </div>
+</div>
 

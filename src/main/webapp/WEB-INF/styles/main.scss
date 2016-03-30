@@ -62,17 +62,18 @@ a:focus {
   margin: 0 !important;
 }
 .print-table {
-  border-top: none !important;
   height: 10px !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 .print-row {
-  border-top: none !important;
   height: 10px !important;
   font-size: 0.8em;
   padding: 0 !important;
   margin: 0 !important;
+}
+.print-border {
+  border: 1px solid gray;
 }
 
 /********************************************
@@ -378,6 +379,10 @@ a:focus {
 .footer {
   padding-left: 15px;
   padding-right: 15px;
+}
+.footer-links {
+  margin-left: 20px;
+  padding-left: 20px;
 }
 
 /* Custom page header */
