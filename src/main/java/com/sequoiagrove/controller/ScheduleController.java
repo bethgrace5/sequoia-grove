@@ -164,7 +164,7 @@ public class ScheduleController {
     }
 
   // Add new shift
-    @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
+/*    @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
     public String addShift(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
@@ -317,6 +317,6 @@ public class ScheduleController {
 
         model.addAttribute("result", isPublished);    
         return "jsonTemplate";
-    }
+    }*/
 }
 

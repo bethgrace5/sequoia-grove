@@ -3,6 +3,7 @@ import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import javax.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -70,7 +71,7 @@ public class ManageStore {
         return id;
     }
 
-/* ----- HTTP Mapped Functions -----*/
+/* ----- HTTP Mapped Functions ----- */
   @RequestMapping(value = "/manageStore/get/")
     public String getAllStore(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -80,7 +81,7 @@ public class ManageStore {
 
   // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
-    public String addShift(@RequestBody String data, Model model) throws SQLException {
+    public String addShift(@RequestBody String data, Model model) throws SQLException, NotFoundException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
         JsonElement jelement = new JsonParser().parse(data);
@@ -95,8 +96,8 @@ public class ManageStore {
 
         if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
-            return "jsonTemplate";
-            //return new ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+            //return "jsonTemplate";
+            throw new NotFoundException("One or more fields empty");
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
