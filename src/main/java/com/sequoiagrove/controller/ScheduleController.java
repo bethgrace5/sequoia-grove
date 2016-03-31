@@ -303,7 +303,7 @@ public class ScheduleController {
         sid);
 
         return "jsonTemplate";
-    }
+    }*/
 
   // Check with database if is published or not
     @RequestMapping(value = "/schedule/ispublished/{date}")
@@ -317,6 +317,6 @@ public class ScheduleController {
 
         model.addAttribute("result", isPublished);    
         return "jsonTemplate";
-    }*/
+    }
 }
 
