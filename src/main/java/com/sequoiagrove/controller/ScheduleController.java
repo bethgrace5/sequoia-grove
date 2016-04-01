@@ -3,10 +3,16 @@ package com.sequoiagrove.controller;
 import com.google.gson.*;
 import java.sql.SQLException;
 import java.sql.Date;
+import java.sql.Types;
 import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.sql.ResultSet;
+import org.springframework.jdbc.core.SqlParameterValue;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -131,11 +137,29 @@ public class ScheduleController {
 
         // update database schedule(eid, sid, mon)
         for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("select schedule(?, ?, ?)",
-                change.getEid(),
-                change.getSid(),
-                change.getDate());
+            //jdbcTemplate.update("select schedule(?, ?, ?)",
+                //change.getEid(),
+                //change.getSid(),
+                //change.getDate());
+           System.out.println(change.getEid());
+           System.out.println(change.getSid());
+           System.out.println(change.getDate());
+           System.out.println("");
+
+           Map<String, Object> args = new HashMap<String, Object>(3);
+               args.put("eid", change.getEid());
+               args.put("sid", change.getSid());
+               args.put("d", change.getDate());
+
+          final SimpleJdbcCall funcCall = new SimpleJdbcCall(jdbcTemplate)
+            .withFunctionName("schedule");
+          funcCall.declareParameters(
+              new SqlParameter("eid", Types.INTEGER, change.getEid()),
+              new SqlParameter("sid", Types.INTEGER, change.getSid()),
+              new SqlParameter("d", Types.VARCHAR, change.getDate()));
+          funcCall.executeFunction(void.class, args);
         }
+
         return "jsonTemplate";
     }
 
