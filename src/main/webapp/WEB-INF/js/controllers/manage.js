@@ -65,7 +65,6 @@ angular.module('sequoiaGroveApp')
   $scope.getdeliveries();
 
 /************** Holidays Functions **********************************/
-  $scope.chosenHoliday;
   $scope.holidayStartDate;
   $scope.holidayEndDate;
   $scope.holidayName;
@@ -73,11 +72,6 @@ angular.module('sequoiaGroveApp')
   $scope.holidayDate;
   $scope.holidayType;
   $scope.types = ["Half" , "Full"];
-  /* HTML reminder  (this will be deleted after implemented in html"
-        <input type="text" id="newHoliday" class="form-control"
-        ng-model="newHoliday"
-        placeholder="New Holiday" />
-   */
   //--------------------------
   //Holiday Minor Functions
   //--------------------------
@@ -116,14 +110,14 @@ angular.module('sequoiaGroveApp')
   //Holiday Major Functions
   //--------------------------
   $scope.addNewHoliday = function(){
-    /*
     $log.debug($scope.newHolidayName);
     $log.debug($scope.holidayType);
     $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
     var obj = {
-      "name":$scope.newHolidayName,
-      "date":moment($scope.holidayStartDate).format("MM-DD"),
-      "type":$scope.holidayType
+      "title":$scope.newHolidayName,
+      "date":moment($scope.holidayStartDate).format("MM-DD-YYYY"),
+      "storeOpen":"10",
+      "storeClose":"10"
     }
     $http({
       url: '/sequoiagrove/schedule/submit/new/holiday',
@@ -136,11 +130,9 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error submiting new holiday ', status, data);
     });
-    */
   }
 
   $scope.getAllHolidays = function() {
-    /*
     $http({
       url: '/sequoiagrove/schedule/get/holidays',
     method: "GET"
@@ -149,7 +141,6 @@ angular.module('sequoiaGroveApp')
       $scope.allHolidays = data.holidays;
       $log.debug($scope.allHolidays);
     });
-    */
   }
 
   $scope.changeHolidayDates = function(){
@@ -177,11 +168,11 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.deleteHoliday = function(){
-    /*
     var obj = { 
-      "name":$scope.holidayName,
-      "date":moment($scope.holidayStartDate).format("MM-DD"),
-      "type":$scope.holidayType
+      "title":$scope.holidayName,
+      "date":moment($scope.holidayStartDate).format("MM-DD-YYYY"),
+      "storeOpen":"10",
+      "storeClose":"10"
     }
     $http({
       url: '/sequoiagrove/schedule/delete/holiday',
@@ -194,8 +185,15 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
-    */
   }
+
+  $scope.init = function(){
+    $scope.getAllHolidays();
+  
+  }
+
+  $scope.init();
+  
 
 
 });

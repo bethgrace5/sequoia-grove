@@ -45,7 +45,7 @@ public class HolidaysController {
             public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
               Holiday es = new Holiday(
                 rs.getString("title"),
-                rs.getString("date"),
+                rs.getString("hdate"),
                 rs.getString("store_open"),
                 rs.getString("store_close")
               );
@@ -63,15 +63,15 @@ public class HolidaysController {
       Holiday hol = gson.fromJson(data, Holiday.class);
 
       String title = hol.getTitle();
-      String newDate = hol.getDate();
+      String date = hol.getDate();
       String storeOpen = hol.getStoreOpen();
       String storeClose = hol.getStoreClose();
-
+      System.out.println(title + " " + date + " " + storeOpen + " " + storeClose);
       jdbcTemplate.update(
           "insert into bajs_holiday "+
-          " (title, newDate, store_open, store_close) "+
-          " values(?, ?, ?, ?) ",
-          title, newDate, storeOpen, storeClose 
+          " (title, hdate, store_open, store_close) "+
+          " values(?, to_date(?, 'mm-dd-yyyy') , ?, ?) ",
+          title, date, storeOpen, storeClose 
       );
       return "jsonTemplate";
     }
@@ -106,13 +106,14 @@ public class HolidaysController {
         Holiday hol = gson.fromJson(data, Holiday.class);
 
         String title = hol.getTitle();
-        String newDate = hol.getDate();
+        String date = hol.getDate();
         String storeOpen = hol.getStoreOpen();
         String storeClose = hol.getStoreClose();
+      System.out.println(title + " " + date + " " + storeOpen + " " + storeClose);
 
         jdbcTemplate.update(
         " DELETE FROM bajs_holiday " +
-        " where name = '" + title+ "'"
+        " where title = '" + title+ "'"
         );
         return "jsonTemplate";
       }
