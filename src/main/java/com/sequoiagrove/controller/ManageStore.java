@@ -96,20 +96,19 @@ public class ManageStore {
 
         if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
-            //return "jsonTemplate";
             throw new NotFoundException("One or more fields empty");
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
                 model.addAttribute("invalidTime", true);
-                return "jsonTemplate";
+                throw new IllegalArgumentException("Start time >= End Time");
             }
             Integer.parseInt(pid);
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            return "jsonTemplate";
+            throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
@@ -152,20 +151,20 @@ public class ManageStore {
         if (!validateStrings(
           sid, pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
-            return "jsonTemplate";
+            throw new NotFoundException("One or more fields empty");
         }
         try {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
                 model.addAttribute("invalidTime", true);
-                return "jsonTemplate";
+                throw new IllegalArgumentException("Start time >= End Time");
             }
             Integer.parseInt(pid);
             Integer.parseInt(sid);
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            return "jsonTemplate";
+            throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
@@ -203,14 +202,14 @@ public class ManageStore {
         //model.addAttribute("error", false);
         if (!validateStrings(sid)) {
             model.addAttribute("invalidField", true);
-            return "jsonTemplate";
+            throw new NotFoundException("One or more fields empty");
         }
         try {
             Integer.parseInt(sid);
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            return "jsonTemplate";
+            throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         jdbcTemplate.update( "update BAJS_shift set "+

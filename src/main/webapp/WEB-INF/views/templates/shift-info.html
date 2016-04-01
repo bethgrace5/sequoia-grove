@@ -1,4 +1,24 @@
 <!-- Schedule Shift Edit -->
+
+<!-- Saving Alerts -->
+<button type="button"
+  class="container btn alert alert-success center-block"
+  data-ng-click="flagOff('shiftSaved')" ng-show="shiftSaved">
+  <span class="text-center">
+    <strong>Saved</strong>
+    <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+  </span>
+</button>
+
+<button type="button"
+  class="container btn alert alert-danger center-block"
+  data-ng-click="flagOff('shiftSaveError')" ng-show="shiftSaveError">
+  <span class="text-center">
+    <strong>Error Saving!</strong>
+  </span>
+</button>
+
+<!-- Shift Edit Header -->
 <div class="row request-title">
   <div class="col-sm-2">
     <p>Title</p>
@@ -13,11 +33,16 @@
     <p>Weekends</p>
   </div>
 </div>
+
+<!-- Shift Edit Form -->
 <div class="row">
+
+  <!-- Fields -->
   <div class="col-sm-2">
     <input type="text" class="form-control" placeholder="title..."
       ng-model="shiftInfo.tname" ng-click="alteredTitle">
   </div>
+
   <div class="col-sm-2">
     <!--div class="dropdown">
       <button id="primary-role-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,12 +93,17 @@
     </div>
   </div>
 
+  <!-- Submit Buttons -->
   <div class="col-sm-1" ng-hide="shiftSelected()">
-    <button type="button" class="btn btn-success" ng-click="addShift()">
+    <button type="button"
+      class="btn btn-success"
+      ng-click="addShift()"
+      ng-disabled = "saving">
       <span class="schedule-edit-shift-txt-addshift">Add Shift</span>
       <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     </button>
   </div>
+
   <div class="col-sm-1" ng-hide="!shiftSelected()">
     <!-- visual indication that changes are all saved -->
     <!--button class = "btn btn-success schedule-view-button"
@@ -83,13 +113,20 @@
       <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
     </button-->
     <!-- Default button -->
-    <button type="button" class="btn btn-default schedule-view-button" ng-click="updateShift()">
+    <button type="button"
+      class="btn btn-default schedule-view-button"
+      ng-click="updateShift()"
+      ng-disabled = "saving">
       Save
       <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
     </button>
   </div>
+
   <div class="col-sm-1" ng-hide="!shiftSelected()">
-    <button type="button" class="btn btn-danger" ng-click="deleteShift()">
+    <button type="button"
+      class="btn btn-danger"
+      ng-click="deleteShift()"
+      ng-disabled = "saving">
       Delete
       <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
     </button>

@@ -455,14 +455,13 @@ angular.module('sequoiaGroveApp')
       data: $scope.shiftInfo
     }).success(function (data, status, headers, config) {
       if (status == 200) {
-        // !!!! confirm shift added to user !!!!
         $scope.shiftInfo.sid = data.sid;
         $scope.template.push(angular.copy($scope.shiftInfo));
+        // !!!! confirm shift added to user !!!!
         $scope.clearShiftSelect();
       }
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error adding shift " + data);
-      // !!!! show error to user !!!!
       $scope.clearShiftSelect();
     });
   }

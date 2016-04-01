@@ -12,6 +12,9 @@ angular.module('sequoiaGroveApp')
 .controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location) {
 
   /****************** Local Variables/Objects ***********************/
+  $scope.saving = false;
+  $scope.shiftSaved = false;
+  $scope.shiftSaveError = false;
   $scope.shiftInfo = {
     "location": "",
     "pid": -1,
@@ -59,14 +62,6 @@ angular.module('sequoiaGroveApp')
     }
   };
 
-  /****************** Check and Balances ****************************/
-  $rootScope.lastPath = '/schedule';
-  $rootScope.lastPath = '/request';
-  // user is not logged in
-  if ($rootScope.loggedIn == false) {
-    $location.path('/login');
-  }
-
   $scope.deliveries = [];
   $scope.newdelivery = {
       id: 0,
@@ -78,8 +73,15 @@ angular.module('sequoiaGroveApp')
       fri:false,
       sat:false,
       sun:false 
-  }
+  };
 
+  /****************** Check and Balances ****************************/
+  $rootScope.lastPath = '/schedule';
+  $rootScope.lastPath = '/request';
+  // user is not logged in
+  if ($rootScope.loggedIn == false) {
+    $location.path('/login');
+  }
 
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "holiday";
@@ -93,8 +95,16 @@ angular.module('sequoiaGroveApp')
     return false;
   }
 
+  $scope.flagOff = function(value) {
+    if ($scope[value] === true) {
+      $scope[value] = false;
+    }
+  }
+
   /****************** Shift Edit ************************************/
   $scope.clearShiftSelect = function() {
+    $scope.shiftSaved = false;
+    $scope.shiftSaveError = false;
     $scope.shiftInfo.sid = -1;
     $scope.shiftInfo.pid = -1;
     $scope.shiftInfo.location = '';
@@ -106,6 +116,8 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.selectShift = function(cur) {
+    $scope.shiftSaved = false;
+    $scope.shiftSaveError = false;
     $scope.shiftInfo.sid = cur.sid;
     $scope.shiftInfo.pid = cur.pid;
     $scope.shiftInfo.tname = cur.tname;
@@ -136,6 +148,9 @@ angular.module('sequoiaGroveApp')
 
   // Add new shift to schedule
   $scope.addShift = function() {
+    $scope.shiftSaved = false;
+    $scope.shiftSaveError = false;
+    $scope.saving = true;
     for (var i = 0; i < $scope.positions.length; i++) { 
        if ($scope.shiftInfo.pid === $scope.positions[i].id) {
         $scope.shiftInfo.location = $scope.positions[i].location;
@@ -148,26 +163,24 @@ angular.module('sequoiaGroveApp')
       method: "POST",
       data: $scope.shiftInfo
     }).success(function (data, status, headers, config) {
+      $scope.saving = false;
       if (status == 200) {
-        // !!!! confirm shift added to user !!!!
-        if (data.error === true) {
-          $log.error(status + " Error adding shift " + data);
-        }
-        else {
-          $scope.shiftInfo.sid = data.sid;
-          $scope.template.push(angular.copy($scope.shiftInfo));
-          $scope.clearShiftSelect();
-        }
+        $scope.shiftInfo.sid = data.sid;
+        $scope.template.push(angular.copy($scope.shiftInfo));
+        $scope.shiftSaved = true;
       }
     }).error(function (data, status, headers, config) {
+      $scope.saving = false;
+      $scope.shiftSaveError = true;
       $log.error(status + " Error adding shift " + data);
-      // !!!! show error to user !!!!
-      $scope.clearShiftSelect();
     });
   }
 
-  // Update current shift to schedule
+  // Update current shift in schedule
   $scope.updateShift = function(schd) {
+    $scope.shiftSaved = false;
+    $scope.shiftSaveError = false;
+    $scope.saving = true;
     var cur = -1;
     var schd = {};
     var newData = $scope.shiftInfo;
@@ -178,6 +191,7 @@ angular.module('sequoiaGroveApp')
       }
     }
     if (cur < 0) {
+      $scope.saving = false;
       $log.error("Error updating shift: sid=" + newData.sid + " not found");
     }
     else {
@@ -187,6 +201,7 @@ angular.module('sequoiaGroveApp')
         method: "POST",
         data: $scope.shiftInfo
       }).success(function (data, status, headers, config) {
+        $scope.saving = false;
         if (status == 200) {
           schd.pid = newData.pid;
           schd.location = newData.location;
@@ -195,27 +210,36 @@ angular.module('sequoiaGroveApp')
           schd.weekdayEnd = newData.weekdayEnd;
           schd.weekendStart = newData.weekendStart;
           schd.weekendEnd = newData.weekendEnd;
-          $scope.clearShiftSelect();
+          $scope.shiftSaved = true;
         }
       }).error(function (data, status, headers, config) {
+        $scope.saving = false;
+        $scope.shiftSaveError = true;
         $log.error(status + " Error updating shift " + data);
       });
     }
   }
 
-  // Delete current shift to schedule
+  // Delete current shift from schedule
   $scope.deleteShift = function() {
+    $scope.shiftSaved = false;
+    $scope.shiftSaveError = false;
+    $scope.saving = true;
     var curSid = $scope.shiftInfo.sid;
     $http({
       url: '/sequoiagrove/shift/delete/',
       method: "POST",
       data: $scope.shiftInfo
     }).success(function (data, status, headers, config) {
+      $scope.saving = false;
       if (status == 200) {
         $scope.template = _.without($scope.template, _.findWhere($scope.template, {sid: curSid}));
-        $scope.clearShiftSelect();
+        $scope.shiftSaved = true;
+        $scope.shiftInfo.sid = -1;
       }
     }).error(function (data, status, headers, config) {
+      $scope.saving = false;
+      $scope.shiftSaveError = true;
       $log.error(status + " Error deleting shift " + data);
     });
   }
