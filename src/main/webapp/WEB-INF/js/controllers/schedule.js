@@ -508,11 +508,46 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  //Holidays 
+  $scope.allHolidays;
+  $scope.hCheck;
+  $scope.getAllHolidays = function() {
+    $http({
+      url: '/sequoiagrove/schedule/get/holidays',
+    method: "GET"
+    }).success(function (data, status, headers, config) {
+      $scope.allHolidays = data.holidays;
+      $log.debug($scope.allHolidays);
+    });
+  }
+  $scope.isHoliday = function(date){
+    $scope.hCheck = false;
+    //$log.debug(date); //keep awhile for testing
+    //$log.debug($scope.allHolidays[0].date);
+    angular.forEach($scope.allHolidays,function(value,index){
+      $scope.compareDate(value.date, date);
+    })
+    return $scope.hCheck;
+  }
 
-
+  $scope.compareDate = function(a, b){
+    a = moment(a).format("MM-DD-YYYY");
+    //b = moment(b).format("DD-MM-YYYY");
+    //$log.debug(a);
+    //$log.debug(b);
+    if(moment(a).isSame(b)){
+      $scope.hCheck = true;
+      return true;
+    }
+    else{
+      $scope.hCheck = false;
+      return false;
+    }
+  }
   /************** Controller Initialization **************/
 
   $scope.init = function() {
+    $scope.getAllHolidays();
   }
 
   $scope.init();
