@@ -130,31 +130,25 @@ public class ScheduleController {
 
   // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
-    public String updateSchedule(@RequestBody String data, Model model) throws SQLException {
+    public String updateSchedule(@RequestBody String data, Model model) throws Exception {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-        // update database schedule(eid, sid, mon)
-        for (Scheduled change : scheduleChanges) {
-          Integer count = jdbcTemplate.queryForObject("select count(*) FROM is_scheduled_for WHERE on_date=to_date(?"+
-            ", 'dd-mm-yyyy') and shift_id =?", Integer.class, change.getDate(), change.getSid());
-
-          // no employee has ever been scheduled for this shift and day, insert new.
-          if (count <=0) {
-              jdbcTemplate.update("INSERT INTO is_scheduled_for (shift_id, employee_id, on_date) values(?, ?, to_date(?, 'dd-mm-yyyy'))",
-                  change.getSid(),
-                  change.getEid(),
-                  change.getDate());
+          // update database schedule(eid, sid, mon)
+          for (Scheduled change : scheduleChanges) {
+            try {
+                jdbcTemplate.update("select schedule(?, ?, ?)",
+                    change.getEid(),
+                    change.getSid(),
+                    change.getDate());
+            }
+            catch(Exception e) {
+              // do nothing
+            }
           }
-          // found employee already scheduled for this shift and day, update it.
-          else {
-            jdbcTemplate.update("UPDATE is_scheduled_for SET employee_id=? WHERE on_date=to_date(?, 'dd-mm-yyyy') and shift_id = ?;",
-                change.getEid(), change.getDate(), change.getSid());
-          }
-        }
         return "jsonTemplate";
     }
 
@@ -167,12 +161,17 @@ public class ScheduleController {
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-        // update database
-        for (Scheduled change : scheduleChanges) {
-            jdbcTemplate.update("select delete_schedule(?, ?)",
-                change.getSid(),
-                change.getDate());
-        }
+          // update database
+          for (Scheduled change : scheduleChanges) {
+            try {
+              jdbcTemplate.update("select delete_schedule(?, ?)",
+                  change.getSid(),
+                  change.getDate());
+            }
+            catch(Exception e) {
+              // do nothing
+            }
+          }
         return "jsonTemplate";
     }
 
