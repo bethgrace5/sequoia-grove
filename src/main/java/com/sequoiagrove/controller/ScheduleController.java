@@ -90,8 +90,10 @@ public class ScheduleController {
     public String getScheduleTemplate(Model model, @PathVariable("mon") final String mon) {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
       List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-        "select * from get_schedule('12-10-2015')",
+        "select * from get_schedule(?)",
+        new Object[]{mon},
         new RowMapper<ScheduleTemplate>() {
           public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -137,29 +139,22 @@ public class ScheduleController {
 
         // update database schedule(eid, sid, mon)
         for (Scheduled change : scheduleChanges) {
-            //jdbcTemplate.update("select schedule(?, ?, ?)",
-                //change.getEid(),
-                //change.getSid(),
-                //change.getDate());
-           System.out.println(change.getEid());
-           System.out.println(change.getSid());
-           System.out.println(change.getDate());
-           System.out.println("");
+          Integer count = jdbcTemplate.queryForObject("select count(*) FROM is_scheduled_for WHERE on_date=to_date(?"+
+            ", 'dd-mm-yyyy') and shift_id =?", Integer.class, change.getDate(), change.getSid());
 
-           Map<String, Object> args = new HashMap<String, Object>(3);
-               args.put("eid", change.getEid());
-               args.put("sid", change.getSid());
-               args.put("d", change.getDate());
-
-          final SimpleJdbcCall funcCall = new SimpleJdbcCall(jdbcTemplate)
-            .withFunctionName("schedule");
-          funcCall.declareParameters(
-              new SqlParameter("eid", Types.INTEGER, change.getEid()),
-              new SqlParameter("sid", Types.INTEGER, change.getSid()),
-              new SqlParameter("d", Types.VARCHAR, change.getDate()));
-          funcCall.executeFunction(void.class, args);
+          // no employee has ever been scheduled for this shift and day, insert new.
+          if (count <=0) {
+              jdbcTemplate.update("INSERT INTO is_scheduled_for (shift_id, employee_id, on_date) values(?, ?, to_date(?, 'dd-mm-yyyy'))",
+                  change.getSid(),
+                  change.getEid(),
+                  change.getDate());
+          }
+          // found employee already scheduled for this shift and day, update it.
+          else {
+            jdbcTemplate.update("UPDATE is_scheduled_for SET employee_id=? WHERE on_date=to_date(?, 'dd-mm-yyyy') and shift_id = ?;",
+                change.getEid(), change.getDate(), change.getSid());
+          }
         }
-
         return "jsonTemplate";
     }
 

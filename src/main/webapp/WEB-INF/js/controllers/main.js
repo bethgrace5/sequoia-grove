@@ -275,7 +275,6 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
-    week = '10-12-2016';
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
