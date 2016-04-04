@@ -63,7 +63,7 @@ angular.module('sequoiaGroveApp')
   };
 
   $scope.deliveries = [];
-  $scope.newdelivery = {
+  $scope.newDelivery = {
       id: 0,
       name:"",
       mon: false,
@@ -259,6 +259,50 @@ angular.module('sequoiaGroveApp')
       $log.error('Error getting deliveries ', status, data);
     });
   }
+
+
+  // deleting deliveries
+  $scope.deleteDelivery = function(id,index) {
+      $http({
+url: '/sequoiagrove/delivery/delete/'+ id,
+method: "DELETE"
+}). then (function (success) {
+    // remove fromj list
+    $scope.deliveries.splice(index,1); 
+    $log.debug(success);
+    }, function(failure) {
+      $log.error('Error deleting deliveries ', failure);
+
+    })
+
+}
+  
+// add deliveries
+$scope.addDelivery = function() {
+    $http({
+        url: '/sequoiagrove/delivery/add',
+        method: "POST",
+        data: $scope.newDelivery
+    }).then (function (success) {
+    // add to list
+        $scope.deliveries.push($scope.newDelivery); 
+        $scope.newDelivery = {
+          id: 0,
+          name:"",
+          mon: false,
+          tue:false,
+          wed:false,
+          thu:false,
+          fri:false,
+          sat:false,
+          sun:false 
+        }
+    }, function(failure) {
+        $log.error('Error adding deliveries ', failure);
+
+    })
+
+}
 
   $scope.getdeliveries();
 
