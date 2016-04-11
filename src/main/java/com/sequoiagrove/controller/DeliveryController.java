@@ -52,18 +52,18 @@ public class DeliveryController {
         }
 
     //delete a delivery
-    @RequestMapping(value = "/delivery/{id}")
+    @RequestMapping(value = "/delivery/delete/{id}")
         public String updateSchedule(@PathVariable ("id") String id, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             // update database
-            jdbcTemplate.update("delete from bajs_delivery where id = ?");
+            jdbcTemplate.update("delete from bajs_delivery where id = ?", id);
             return "jsonTemplate";
         }
 
     //update a delivery
     @RequestMapping(value = "/delivery/update")
-        public String UpdateDelivery(@RequestBody String data, Model model) throws SQLException {
+        public String updateDelivery(@RequestBody String data, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             // parse params
@@ -86,9 +86,9 @@ public class DeliveryController {
                     obj);
             return "jsonTemplate";
         }
-    
+   //add a delivery 
     @RequestMapping(value = "/delivery/add")
-        public String AddDelivery(@RequestBody String data, Model model) throws SQLException {
+        public String addDelivery(@RequestBody String data, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             int id = jdbcTemplate.queryForObject("select bajs_delivery_id_sequence.nextval from dual",
@@ -96,14 +96,14 @@ public class DeliveryController {
             // parse params
             JsonElement jelement = new JsonParser().parse(data);
             JsonObject  jobject = jelement.getAsJsonObject();
-            int mon = jobject.get("mon").getAsInt();
-            int tue = jobject.get("tue").getAsInt();
-            int wed = jobject.get("wed").getAsInt();
-            int thu = jobject.get("thu").getAsInt();
-            int fri = jobject.get("fri").getAsInt();
-            int sat = jobject.get("sat").getAsInt();
-            int sun = jobject.get("sun").getAsInt();
             String name = jobject.get("name").getAsString();
+            int mon = jobject.get("mon").getAsString().equals("true")? 1: 0;
+            int tue = jobject.get("tue").getAsString().equals("true")? 1: 0;
+            int wed = jobject.get("wed").getAsString().equals("true")? 1: 0;
+            int thu = jobject.get("thu").getAsString().equals("true")? 1: 0;
+            int fri = jobject.get("fri").getAsString().equals("true")? 1: 0;
+            int sat = jobject.get("sat").getAsString().equals("true")? 1: 0;
+            int sun = jobject.get("sun").getAsString().equals("true")? 1: 0;
 
             // update/add to database
             Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};

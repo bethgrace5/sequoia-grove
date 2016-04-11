@@ -62,17 +62,18 @@ a:focus {
   margin: 0 !important;
 }
 .print-table {
-  border-top: none !important;
   height: 10px !important;
   padding: 0 !important;
   margin: 0 !important;
 }
 .print-row {
-  border-top: none !important;
   height: 10px !important;
   font-size: 0.8em;
   padding: 0 !important;
   margin: 0 !important;
+}
+.print-border {
+  border: 1px solid gray;
 }
 
 /********************************************
@@ -358,7 +359,19 @@ a:focus {
 }
 
 /********************************************
-    09. Default_Settings_Yeoman_put_in
+    09. Manage_Store
+*********************************************/
+/* Shift Edit */
+.shift-list-panel {
+  min-height: 50%;
+}
+.shift-list-wrapper {
+  height: 50%;
+  overflow-y: scroll;
+}
+
+/********************************************
+    10. Default_Settings_Yeoman_put_in
 *********************************************/
 /* Everything but the jumbotron gets side spacing for mobile first views */
 .header,
@@ -366,6 +379,10 @@ a:focus {
 .footer {
   padding-left: 15px;
   padding-right: 15px;
+}
+.footer-links {
+  margin-left: 20px;
+  padding-left: 20px;
 }
 
 /* Custom page header */
@@ -435,7 +452,7 @@ a:focus {
   }
 }
 /********************************************
-    10. Request
+    11. Request
 *********************************************/
 .request-panel{
   border-top:none;

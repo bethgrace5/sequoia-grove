@@ -52,12 +52,13 @@ public class HolidaysController {
               return es;
             }
           });
-          */
-      model.addAttribute("holidays", "");
+      model.addAttribute("holidays", holidayList);
+      */
       return "jsonTemplate";
     }
   @RequestMapping(value = "/schedule/submit/new/holiday")
     public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
+      /*
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Gson gson = new Gson();
       Holiday hol = gson.fromJson(data, Holiday.class);
@@ -73,10 +74,12 @@ public class HolidaysController {
           " values(?, ?, ?) ",
           newName, newType, newDate
       );
+      */
       return "jsonTemplate";
     }
     @RequestMapping(value = "/schedule/update/holiday")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
+        /*
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         Gson gson = new Gson();
 
@@ -95,12 +98,12 @@ public class HolidaysController {
            " where name = " + name
         );
         */
-
         return "jsonTemplate";
       }
     @RequestMapping(value = "/schedule/delete/holiday")
       public String deleteRequest(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        /*
         Gson gson = new Gson();
 
         Holiday hol = gson.fromJson(data, Holiday.class);
@@ -113,6 +116,7 @@ public class HolidaysController {
            " DELETE FROM bajs_holiday " +
            " where name = '" + name + "'"
         );
+        */
         return "jsonTemplate";
       }
 

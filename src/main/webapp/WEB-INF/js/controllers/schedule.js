@@ -35,55 +35,6 @@ angular.module('sequoiaGroveApp')
   $scope.selectedId = 0;
   $scope.newDelivery = '';
   $scope.empEditSearch = '';
-  $scope.selectedShift = {
-    idx : -1
-  };
-  $scope.shiftInfo = {
-    "location": "",
-    "pid": -1,
-    "position": "",
-    "sid": -1,
-    "tname": "",
-    "weekdayStart": "",
-    "weekdayEnd": "",
-    "weekendStart": "",
-    "weekendEnd": "",
-    "mon":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "tue":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "wed":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "thu":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "fri":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sat":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sun":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    }
-  };
 
 /************** Pure Functions **************/
 
@@ -94,45 +45,6 @@ angular.module('sequoiaGroveApp')
 
   $scope.selectEid = function(id) {
     $scope.selectedId = id;
-  }
-
-  $scope.clearShiftSelect = function() {
-    $scope.selectedShift.idx = -1;
-    $scope.shiftInfo.sid = -1;
-    $scope.shiftInfo.pid = -1;
-    $scope.shiftInfo.location = '';
-    $scope.shiftInfo.tname = '';
-    $scope.shiftInfo.weekdayStart = '';
-    $scope.shiftInfo.weekdayEnd = '';
-    $scope.shiftInfo.weekendStart = '';
-    $scope.shiftInfo.weekendEnd = '';
-  }
-
-  $scope.selectShift = function(cur) {
-    $scope.selectedShift.idx = cur;
-    if ($scope.selectedShift.idx != -1) {
-      $scope.shiftInfo.sid = $scope.template[cur].sid;
-      $scope.shiftInfo.pid = $scope.template[cur].pid;
-      $scope.shiftInfo.tname = $scope.template[cur].tname;
-      $scope.shiftInfo.weekdayStart = $scope.template[cur].weekdayStart;
-      $scope.shiftInfo.weekdayEnd = $scope.template[cur].weekdayEnd;
-      $scope.shiftInfo.weekendStart = $scope.template[cur].weekendStart;
-      $scope.shiftInfo.weekendEnd = $scope.template[cur].weekendEnd;
-      for (var i = 0; i < $scope.positions.length; i++) { 
-        if ($scope.shiftInfo.pid === $scope.positions[i].id) {
-          $scope.shiftInfo.location = $scope.positions[i].location;
-          $scope.shiftInfo.position = $scope.positions[i].title;
-          break;
-        }
-      }
-    }
-    else {
-      $scope.clearShiftSelect();
-    }
-  }
-
-  $scope.shiftSelected = function() {
-    return ($scope.selectedShift.idx != -1);
   }
 
   // Filter schedule by selected position
@@ -207,14 +119,6 @@ angular.module('sequoiaGroveApp')
     else {
       style += ' schedule-edit-input-highlight';
     } */
-    return style;
-  }
-
-  $scope.shiftStatus = function(i) {
-    var style = '';
-    if(i===$scope.selectedShift.idx) {
-      style += 'schedule-edit-task-selected';
-    }
     return style;
   }
 
@@ -440,74 +344,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // Add new shift to schedule
-  $scope.addShift = function() {
-    for (var i = 0; i < $scope.positions.length; i++) { 
-       if ($scope.shiftInfo.pid === $scope.positions[i].id) {
-        $scope.shiftInfo.location = $scope.positions[i].location;
-        $scope.shiftInfo.position = $scope.positions[i].title;
-        break;
-      }
-    }
-    $http({
-      url: '/sequoiagrove/shift/add/',
-      method: "POST",
-      data: $scope.shiftInfo
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // !!!! confirm shift added to user !!!!
-        $scope.shiftInfo.sid = data.sid;
-        $scope.template.push(angular.copy($scope.shiftInfo));
-        $scope.clearShiftSelect();
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error adding shift " + data);
-      // !!!! show error to user !!!!
-      $scope.clearShiftSelect();
-    });
-  }
-
-  // Update current shift to schedule
-  $scope.updateShift = function() {
-    var schd = $scope.template[$scope.selectedShift.idx];
-    var newData = $scope.shiftInfo;
-    $http({
-      url: '/sequoiagrove/shift/update/',
-      method: "POST",
-      data: $scope.shiftInfo
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        schd.pid = newData.pid;
-        schd.location = newData.location;
-        schd.tname = newData.tname;
-        schd.weekdayStart = newData.weekdayStart;
-        schd.weekdayEnd = newData.weekdayEnd;
-        schd.weekendStart = newData.weekendStart;
-        schd.weekendEnd = newData.weekendEnd;
-        $scope.clearShiftSelect();
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error updating shift " + data);
-    });
-  }
-
-  // Delete current shift to schedule
-  $scope.deleteShift = function() {
-    var curSid = $scope.shiftInfo.sid;
-    $http({
-      url: '/sequoiagrove/shift/delete/',
-      method: "POST",
-      data: $scope.shiftInfo
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        $scope.template = _.without($scope.template, _.findWhere($scope.template, {sid: curSid}));
-        $scope.clearShiftSelect();
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error deleting shift " + data);
-    });
-  }
-
 /************** Holidays Functions **********************************/
   $scope.chosenHoliday;
   $scope.holidayStartDate;
@@ -555,10 +391,12 @@ angular.module('sequoiaGroveApp')
       return false
     }
   }
+
   //--------------------------
   //Holiday Major Functions
   //--------------------------
   $scope.addNewHoliday = function(){
+    /*
     $log.debug($scope.newHolidayName);
     $log.debug($scope.holidayType);
     $log.debug(moment($scope.holidayStartDate).format("MM-DD"));
@@ -578,9 +416,11 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error submiting new holiday ', status, data);
     });
+    */
   }
 
   $scope.getAllHolidays = function() {
+    /*
     $http({
       url: '/sequoiagrove/schedule/get/holidays',
     method: "GET"
@@ -589,9 +429,11 @@ angular.module('sequoiaGroveApp')
       $scope.allHolidays = data.holidays;
       $log.debug($scope.allHolidays);
     });
+    */
   }
 
   $scope.changeHolidayDates = function(){
+    /*
     var obj = { 
       "name":$scope.holidayName,
       "date":moment($scope.holidayStartDate).format("MM-DD"),
@@ -607,6 +449,7 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
+    */
   }
 
   $scope.selectHoliday = function(name){
@@ -614,6 +457,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.deleteHoliday = function(){
+    /*
     var obj = { 
       "name":$scope.holidayName,
       "date":moment($scope.holidayStartDate).format("MM-DD"),
@@ -630,6 +474,7 @@ angular.module('sequoiaGroveApp')
     .error(function (data, status, headers, config) {
       $log.error('Error changing Holidays ', status, data);
     });
+    */
   }
 
 
