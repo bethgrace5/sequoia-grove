@@ -1,9 +1,5 @@
 /* Holidays where the store is closed for a full or half day*/
-insert into HOLIDAY values( '12/25', 'Christmas',     'full');
-insert into HOLIDAY values( '12/24', 'Christmas Eve', 'half');
-insert into HOLIDAY values( '12/31', 'New Years Eve', 'half');
-insert into HOLIDAY values( '01/01', 'New Years Day', 'half');
-insert into HOLIDAY values( '10/31', 'Halloween',     'half');
-insert into HOLIDAY values( '11/27', 'Thanksgiving',  'half');
-insert into HOLIDAY values( '06/07', 'Easter',        'full');
+insert into HOLIDAY values( to_date('12/25/2015', 'mm/dd/yyyy'), 'Christmas', null, null);
+insert into HOLIDAY values( to_date('12/24/2015', 'mm/dd/yyyy'), 'Christmas Eve', null, null);
+insert into HOLIDAY values( to_date('03/25/2015', 'mm/dd/yyyy'), 'Easter', null, null);
 
