@@ -13,22 +13,20 @@
 
     <!-- Holiday Table -->
     <createTable schemaName="public" tableName="holiday" remarks="holiday data">
-      <column name="hdate" type="varchar(255)">
+      <column name="hdate" type="date">
         <constraints primaryKey="true" nullable="false" />
       </column>
-      <column name="name" type="varchar(255)">
-        <constraints unique="true" nullable="false" />
+      <column name="title" type="varchar(255)">
+        <constraints unique="false" nullable="false" />
       </column>
-      <column name="type" type="varchar(255)">
-        <constraints unique="false" nullable="false"/>
+      <column name="store_open" type="varchar(4)">
+        <constraints unique="false" nullable="true"/>
+      </column>
+      <column name="store_close" type="varchar(4)">
+        <constraints unique="false" nullable="true"/>
       </column>
     </createTable>
 
-    <addDefaultValue schemaName="public"
-      tableName="holiday"
-      columnDataType="varchar(255)"
-      columnName="type"
-      defaultValue="" />
 
   </changeSet>
 
