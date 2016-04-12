@@ -29,58 +29,59 @@ import com.sequoiagrove.model.Holiday;
 
 //BAJS_HOLIDAY
 //String
-//hdate 
+//hdate
 //name
 //type
 
 @Controller
 public class HolidaysController {
 
-  @RequestMapping(value = "/schedule/get/holidays")
+  @RequestMapping(value = "/holiday")
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      /*
       List<Holiday> holidayList = jdbcTemplate.query(
-          "select * from bajs_holiday",
+          "select * from holiday",
           new RowMapper<Holiday>() {
             public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
               Holiday es = new Holiday(
-                rs.getString("name"),
+                rs.getInt("id"),
+                rs.getString("title"),
                 rs.getString("hdate"),
-                rs.getString("type")
+                rs.getString("store_open"),
+                rs.getString("store_close")
               );
               return es;
             }
           });
       model.addAttribute("holidays", holidayList);
-      */
       return "jsonTemplate";
     }
-  @RequestMapping(value = "/schedule/submit/new/holiday")
-    public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
-      /*
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      Gson gson = new Gson();
-      Holiday hol = gson.fromJson(data, Holiday.class);
 
-      String newName = hol.getName();
-      String newDate = hol.getDate();
-      String newType = hol.getType();
-      System.out.println(newName + " " + newDate + " " + newType);
+  @RequestMapping(value = "/holiday/add")
+    public String sumbitNewHoliday(@RequestBody String data, Model model) throws SQLException {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+
+      Object[] params = new Object[] {
+          jobject.get("title").getAsString(),
+          jobject.get("date").getAsString(),
+          jobject.get("storeOpenVal").getAsString(),
+          jobject.get("storeCloseVal").getAsString(),
+      };
 
       jdbcTemplate.update(
-          "insert into bajs_holiday "+
-          " (name, type, hdate) "+
-          " values(?, ?, ?) ",
-          newName, newType, newDate
-      );
-      */
+          "insert into holiday "+
+          " (title, hdate, store_open, store_close) "+
+          " values(?, to_date(?, 'mm-dd-yyyy') , ?, ?) ",
+          params);
       return "jsonTemplate";
     }
+
     @RequestMapping(value = "/schedule/update/holiday")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
-        /*
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        /*
         Gson gson = new Gson();
 
         Holiday hol = gson.fromJson(data, Holiday.class);
@@ -91,7 +92,7 @@ public class HolidaysController {
 
         /*
         jdbcTemplate.update(
-           " update bajs_holiday " +
+           " update holiday " +
            " set " +
            " type = " + newType + ", " +
            " date = " + newDate + " "  +
@@ -100,23 +101,11 @@ public class HolidaysController {
         */
         return "jsonTemplate";
       }
-    @RequestMapping(value = "/schedule/delete/holiday")
-      public String deleteRequest(@RequestBody String data, Model model) throws SQLException {
+
+    @RequestMapping(value = "/holiday/remove/{id}")
+      public String deleteRequest(@PathVariable("id") int id, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        /*
-        Gson gson = new Gson();
-
-        Holiday hol = gson.fromJson(data, Holiday.class);
-
-        String name = hol.getName();
-        String newDate = hol.getDate();
-        String newType = hol.getType();
-
-        jdbcTemplate.update(
-           " DELETE FROM bajs_holiday " +
-           " where name = '" + name + "'"
-        );
-        */
+        jdbcTemplate.update( "delete from holiday where id = ?", id);
         return "jsonTemplate";
       }
 

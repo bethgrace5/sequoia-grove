@@ -11,8 +11,22 @@
 
   <changeSet id="3" author="Bethany Armitage" context="prod or dev or test">
 
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="holiday_id_seq"
+      startValue="1"/>
+
     <!-- Holiday Table -->
     <createTable schemaName="public" tableName="holiday" remarks="holiday data">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
       <column name="hdate" type="date">
         <constraints primaryKey="true" nullable="false" />
       </column>
