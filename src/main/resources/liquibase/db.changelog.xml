@@ -26,16 +26,17 @@
   <include relativeToChangelogFile="true" file="changelogs/010-is-scheduled-for.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/011-requests-vacation.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/012-published-schedule.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/013-schedule-template-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/014-employee-history-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/015-schedule-history-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/016-schedule-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/017-employee-avail-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/018-employee-position-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/019-employee-info-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/020-request-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/021-mock-data.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/022-functions.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/013-delivery.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/014-schedule-template-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/015-employee-history-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/016-schedule-history-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/017-schedule-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/018-employee-avail-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
 
 
 </databaseChangeLog>

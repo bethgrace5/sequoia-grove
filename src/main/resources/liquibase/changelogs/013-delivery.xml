@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="2" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="delivery_id_seq"
+      startValue="1"/>
+
+    <!-- Employee Table -->
+    <createTable schemaName="public" tableName="delivery" remarks="delivery data">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="name" type="varchar(255)">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="mon" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="tue" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="wed" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="thu" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="fri" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="sat" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="sun" type="boolean">
+        <constraints unique="false" nullable="false"  />
+      </column>
+    </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="varchar(255)"
+      columnName="name"
+      defaultValue="delivery" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="mon"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="tue"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="wed"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="thu"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="fri"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="sat"
+      defaultValue="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="delivery"
+      columnDataType="boolean"
+      columnName="sun"
+      defaultValue="false" />
+
+  </changeSet>
+
+</databaseChangeLog>

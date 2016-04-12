@@ -42,6 +42,8 @@
     <rollback/>
     <sqlFile encoding="UTF-8" path="mock-data/holiday.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/delivery.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
 
 
   </changeSet>

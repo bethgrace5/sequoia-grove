@@ -285,6 +285,7 @@ $scope.addDelivery = function() {
         data: $scope.newDelivery
     }).then (function (success) {
     // add to list
+        $scope.newDelivery.id = success.data.id;
         $scope.deliveries.push($scope.newDelivery); 
         $scope.newDelivery = {
           id: 0,
