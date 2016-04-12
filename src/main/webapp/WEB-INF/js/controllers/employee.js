@@ -23,7 +23,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'isManager':0,
+      'isManager':false,
       'firstName':'',
       'lastName':'',
       'birthDate':'',
@@ -93,7 +93,7 @@ angular.module('sequoiaGroveApp')
     $scope.clearEmployee = function() {
       $scope.selectedEmployee = {
         'id':0,
-        'isManager':0,
+        'isManager':false,
         'firstName':'',
         'lastName':'',
         'birthDate':'',

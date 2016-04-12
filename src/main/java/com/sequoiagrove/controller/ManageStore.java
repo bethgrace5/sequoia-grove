@@ -72,12 +72,6 @@ public class ManageStore {
     }
 
 /* ----- HTTP Mapped Functions ----- */
-  @RequestMapping(value = "/manageStore/get/")
-    public String getAllStore(Model model){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-      return "nothing";
-    }
 
   // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)

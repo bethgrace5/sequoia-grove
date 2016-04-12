@@ -51,8 +51,8 @@ public class PositionController {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject ep = jelement.getAsJsonObject();
 
-        String pid = ep.get("pid").getAsString();
-        String eid = ep.get("eid").getAsString();
+        int pid = ep.get("pid").getAsInt();
+        int eid = ep.get("eid").getAsInt();
 
         // see if this is already a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
@@ -64,7 +64,7 @@ public class PositionController {
         if (count <= 0) {
             jdbcTemplate.update("insert into has_position(" +
               "employee_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
-              "values(?, ?, (select current_date from dual), null, 0, 0)", eid, pid);
+              "values(?, ?, current_date, null, false, false)", eid, pid);
         }
         return "jsonTemplate";
     }
@@ -79,8 +79,8 @@ public class PositionController {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject ep = jelement.getAsJsonObject();
 
-        String pid = ep.get("pid").getAsString();
-        String eid = ep.get("eid").getAsString();
+        int pid = ep.get("pid").getAsInt();
+        int eid = ep.get("eid").getAsInt();
 
         // see if this is a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
@@ -91,7 +91,7 @@ public class PositionController {
         // this employee currently has this position. remove it.
         if (count > 0) {
            jdbcTemplate.update(" update has_position " +
-           " set date_removed = (select current_date from dual) " +
+           " set date_removed = current_date " +
            " where employee_id = ? and position_id = ? and date_removed is null", eid, pid);
         }
         return "jsonTemplate";
