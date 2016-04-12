@@ -253,7 +253,6 @@ angular.module('sequoiaGroveApp')
       if (status == 200) {
         // clear update shifts list
         $scope.deliveries = data.delivery; 
-        $log.debug(data.delivery);
       }
     }).error(function (data, status, headers, config) {
       $log.error('Error getting deliveries ', status, data);
@@ -269,7 +268,6 @@ method: "DELETE"
 }). then (function (success) {
     // remove fromj list
     $scope.deliveries.splice(index,1); 
-    $log.debug(success);
     }, function(failure) {
       $log.error('Error deleting deliveries ', failure);
 

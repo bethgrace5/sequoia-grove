@@ -128,13 +128,11 @@ angular.module('sequoiaGroveApp')
       // make sure all fields are filled in
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
-        //$log.debug(avail);
         $http({
           url: '/sequoiagrove/avail/add',
           method: "POST",
           data: avail
         }).success(function(data, status) {
-          $log.debug(data, status);
           // update front end
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
@@ -240,7 +238,6 @@ angular.module('sequoiaGroveApp')
 
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
-      //$log.debug(form);
 
       // validate max hours per week
       if ((form.maxHrsWeek.$viewValue == '') ||
@@ -288,7 +285,6 @@ angular.module('sequoiaGroveApp')
       }
       $scope.saving = true;
       var action = "update";
-      $log.debug($scope.birthdate);
       $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;

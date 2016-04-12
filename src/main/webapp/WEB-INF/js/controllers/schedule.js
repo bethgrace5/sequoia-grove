@@ -482,8 +482,8 @@ angular.module('sequoiaGroveApp')
 
   $scope.init = function() {
     $scope.getAllHolidays();
-    $log.debug("At Init");
-    $log.debug($scope.allHolidays);
+    //$log.debug("At Init");
+    //$log.debug($scope.allHolidays);
   }
 
   $scope.init();

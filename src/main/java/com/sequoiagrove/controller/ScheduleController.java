@@ -186,17 +186,16 @@ public class ScheduleController {
 
         // update database publish(eid, datestring)
         //try {
-        System.out.println(jdbcTemplate.execute("select publish(?, ?)" ,
-            new PreparedStatementCallback<Boolean>(){
-                @Override
-                public Boolean doInPreparedStatement(PreparedStatement ps)
-                throws SQLException, DataAccessException {
-                  ps.setInt(1, eid);
-                  ps.setString(2, date);
-                  return ps.execute();
-                }
-            })
-        );
+        jdbcTemplate.execute("select publish(?, ?)" ,
+          new PreparedStatementCallback<Boolean>(){
+              @Override
+              public Boolean doInPreparedStatement(PreparedStatement ps)
+              throws SQLException, DataAccessException {
+                ps.setInt(1, eid);
+                ps.setString(2, date);
+                return ps.execute();
+              }
+          });
 
         return "jsonTemplate";
     }
