@@ -4,22 +4,33 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 public class Holiday {
-    String name;
+    int id;
+    String title;
     String date;
-    String type;
+    String storeOpen;
+    String storeClose;
 
     public Holiday(){}
-    public Holiday(String name, String date, String type) {
-        this.name = name;
+    public Holiday(int id, String title, String date, String storeOpen, String storeClose) {
+        this.id = id;
+        this.title = title;
         this.date = date;
-        this.type = type;
+        this.storeOpen = storeOpen;
+        this.storeClose = storeClose;
     }
 
-    public void setName(String name){
-      this.name = name;
+    public void setId(int id){
+      this.id = id;
     }
-    public String getName(){
-      return this.name;
+    public int getId(){
+      return this.id;
+    }
+
+    public void setTitle(String title){
+      this.title = title;
+    }
+    public String getTitle(){
+      return this.title;
     }
 
     public void setDate(String date){
@@ -29,10 +40,16 @@ public class Holiday {
       return this.date;
     }
 
-    public void setType(String type){
-      this.type = type;
+    public void setStoreOpen(String storeOpen){
+      this.storeOpen = storeOpen;
     }
-    public String getType(){
-      return this.type;
+    public String getStoreOpen(){
+      return this.storeOpen;
     }
-}
+    public void setStoreClose(String storeClose){
+      this.title = storeClose;
+    }
+    public String getStoreClose(){
+      return this.storeClose;
+    }
+  }

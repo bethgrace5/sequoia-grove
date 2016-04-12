@@ -23,7 +23,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'isManager':0,
+      'isManager':false,
       'firstName':'',
       'lastName':'',
       'birthDate':'',
@@ -93,7 +93,7 @@ angular.module('sequoiaGroveApp')
     $scope.clearEmployee = function() {
       $scope.selectedEmployee = {
         'id':0,
-        'isManager':0,
+        'isManager':false,
         'firstName':'',
         'lastName':'',
         'birthDate':'',
@@ -128,13 +128,11 @@ angular.module('sequoiaGroveApp')
       // make sure all fields are filled in
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
-        //$log.debug(avail);
         $http({
           url: '/sequoiagrove/avail/add',
           method: "POST",
           data: avail
         }).success(function(data, status) {
-          $log.debug(data, status);
           // update front end
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
@@ -240,7 +238,6 @@ angular.module('sequoiaGroveApp')
 
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
-      //$log.debug(form);
 
       // validate max hours per week
       if ((form.maxHrsWeek.$viewValue == '') ||
@@ -288,7 +285,6 @@ angular.module('sequoiaGroveApp')
       }
       $scope.saving = true;
       var action = "update";
-      $log.debug($scope.birthdate);
       $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
@@ -343,6 +339,8 @@ angular.module('sequoiaGroveApp')
           data: {'id': $scope.selectedEmployee.id}
         }).success(function(data, status) {
           // update UI with change
+          // FIXME if the user employs and then unemploys the same day,
+          // it won't reflect the UI chnage shown
           $scope.employees = _.map($scope.employees, function(e) {
             if(e.id === $scope.selectedEmployee.id) {
               e.isCurrent = false;

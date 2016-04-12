@@ -31,18 +31,18 @@ public class DeliveryController {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             List<Delivery> deliveryList = jdbcTemplate.query(
-                    "select * from bajs_delivery",
+                    "select * from delivery",
                     new RowMapper<Delivery>() {
                     public Delivery mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Delivery del = new Delivery(
                         rs.getString("name"),
-                        rs.getInt("mon")==1? true: false,
-                        rs.getInt("tue")==1? true: false,
-                        rs.getInt("wed")==1? true: false,
-                        rs.getInt("thu")==1? true: false,
-                        rs.getInt("fri")==1? true: false,
-                        rs.getInt("sat")==1? true: false,
-                        rs.getInt("sun")==1? true: false,
+                        rs.getBoolean("mon"),
+                        rs.getBoolean("tue"),
+                        rs.getBoolean("wed"),
+                        rs.getBoolean("thu"),
+                        rs.getBoolean("fri"),
+                        rs.getBoolean("sat"),
+                        rs.getBoolean("sun"),
                         rs.getInt("id"));
                     return del;
                     }
@@ -57,7 +57,7 @@ public class DeliveryController {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             // update database
-            jdbcTemplate.update("delete from bajs_delivery where id = ?", id);
+            jdbcTemplate.update("delete from delivery where id = ?", Integer.parseInt(id));
             return "jsonTemplate";
         }
 
@@ -69,19 +69,19 @@ public class DeliveryController {
             // parse params
             JsonElement jelement = new JsonParser().parse(data);
             JsonObject  jobject = jelement.getAsJsonObject();
-            int mon = jobject.get("mon").getAsInt();
-            int tue = jobject.get("tue").getAsInt();
-            int wed = jobject.get("wed").getAsInt();
-            int thu = jobject.get("thu").getAsInt();
-            int fri = jobject.get("fri").getAsInt();
-            int sat = jobject.get("sat").getAsInt();
-            int sun = jobject.get("sun").getAsInt();
+            boolean mon = jobject.get("mon").getAsBoolean();
+            boolean tue = jobject.get("tue").getAsBoolean();
+            boolean wed = jobject.get("wed").getAsBoolean();
+            boolean thu = jobject.get("thu").getAsBoolean();
+            boolean fri = jobject.get("fri").getAsBoolean();
+            boolean sat = jobject.get("sat").getAsBoolean();
+            boolean sun = jobject.get("sun").getAsBoolean();
             int id = jobject.get("id").getAsInt();
             String name = jobject.get("name").getAsString();
 
             // update database
             Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
-            jdbcTemplate.update("update from bajs_delivery set name = ?," + 
+            jdbcTemplate.update("update from delivery set name = ?," + 
                     "mon = ?, tue = ?, wed = ?, thu = ?, fri = ?, sat = ?, sun = ? where id = ?", 
                     obj);
             return "jsonTemplate";
@@ -90,25 +90,25 @@ public class DeliveryController {
     @RequestMapping(value = "/delivery/add")
         public String addDelivery(@RequestBody String data, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-            int id = jdbcTemplate.queryForObject("select bajs_delivery_id_sequence.nextval from dual",
+            int id = jdbcTemplate.queryForObject("select nextval('delivery_id_seq')",
               Integer.class);
             // parse params
             JsonElement jelement = new JsonParser().parse(data);
             JsonObject  jobject = jelement.getAsJsonObject();
             String name = jobject.get("name").getAsString();
-            int mon = jobject.get("mon").getAsString().equals("true")? 1: 0;
-            int tue = jobject.get("tue").getAsString().equals("true")? 1: 0;
-            int wed = jobject.get("wed").getAsString().equals("true")? 1: 0;
-            int thu = jobject.get("thu").getAsString().equals("true")? 1: 0;
-            int fri = jobject.get("fri").getAsString().equals("true")? 1: 0;
-            int sat = jobject.get("sat").getAsString().equals("true")? 1: 0;
-            int sun = jobject.get("sun").getAsString().equals("true")? 1: 0;
+            boolean mon = jobject.get("mon").getAsBoolean();
+            boolean tue = jobject.get("tue").getAsBoolean();
+            boolean wed = jobject.get("wed").getAsBoolean();
+            boolean thu = jobject.get("thu").getAsBoolean();
+            boolean fri = jobject.get("fri").getAsBoolean();
+            boolean sat = jobject.get("sat").getAsBoolean();
+            boolean sun = jobject.get("sun").getAsBoolean();
 
             // update/add to database
             Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
-            jdbcTemplate.update("insert into bajs_delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)", 
+            jdbcTemplate.update("insert into delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)", 
                     obj);
+
             model.addAttribute("id", id);
             return "jsonTemplate";
         }

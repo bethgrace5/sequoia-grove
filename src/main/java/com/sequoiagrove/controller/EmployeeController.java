@@ -32,7 +32,7 @@ public class EmployeeController
     @RequestMapping(value = "/employees")
     public String getAllEmployee(Model model) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        String queryStr = "select * from bajs_employee_info_view";
+        String queryStr = "select * from employee_info_view";
 
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
@@ -41,7 +41,7 @@ public class EmployeeController
                       rs.getInt("id"),
                       rs.getInt("max_hrs_week"),
                       rs.getInt("min_hrs_week"),
-                      rs.getInt("is_manager"),
+                      rs.getBoolean("is_manager"),
                       rs.getInt("clock_number"),
                       rs.getString("first_name"),
                       rs.getString("last_name"),
@@ -117,21 +117,21 @@ public class EmployeeController
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
-      String[] params = {
+      Object[] params = new Object[] {
           jobject.get("firstName").getAsString(),
           jobject.get("lastName").getAsString(),
-          jobject.get("isManager").getAsString(),
+          jobject.get("isManager").getAsBoolean(),
           jobject.get("birthDate").getAsString(),
-          jobject.get("maxHrsWeek").getAsString(),
-          jobject.get("minHrsWeek").getAsString(),
+          jobject.get("maxHrsWeek").getAsInt(),
+          jobject.get("minHrsWeek").getAsInt(),
           jobject.get("phone").getAsString(),
-          jobject.get("clock").getAsString(),
+          jobject.get("clock").getAsInt(),
           jobject.get("email").getAsString(),
-          jobject.get("id").getAsString()
+          jobject.get("id").getAsInt()
       };
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update( "update BAJS_employee set first_name = ?, "+
+      jdbcTemplate.update( "update employee set first_name = ?, "+
           "last_name    = ?, "+
           "is_manager   = ?, "+
           "birth_date   = to_date(?, 'mm-dd-yyyy'), "+
@@ -144,7 +144,7 @@ public class EmployeeController
          params);
 
         // return the id
-        model.addAttribute("id", jobject.get("id").getAsString());
+        model.addAttribute("id", jobject.get("id").getAsInt());
         return "jsonTemplate";
     }
 
@@ -154,37 +154,30 @@ public class EmployeeController
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        // get next sequence id value
-        int id = jdbcTemplate.queryForObject("select bajs_employee_id_sequence.nextval from dual",
-              Integer.class);
+        // get id just used to add employee
+        int id = jdbcTemplate.queryForObject("select nextval('employee_id_seq')", Integer.class);
 
-        String[] params = {
-            id + "",
+        Object[] params = new Object[] {
+            id,
             jobject.get("firstName").getAsString(),
             jobject.get("lastName").getAsString(),
-            jobject.get("isManager").getAsString(),
+            jobject.get("isManager").getAsBoolean(),
             jobject.get("birthDate").getAsString(),
-            jobject.get("maxHrsWeek").getAsString(),
-            jobject.get("minHrsWeek").getAsString(),
+            jobject.get("maxHrsWeek").getAsInt(),
+            jobject.get("minHrsWeek").getAsInt(),
             jobject.get("phone").getAsString(),
-            jobject.get("clock").getAsString(),
+            jobject.get("clock").getAsInt(),
             jobject.get("email").getAsString(),
         };
 
-        jdbcTemplate.update("insert into BAJS_employee (id, first_name, last_name," +
+        // add employee
+        jdbcTemplate.update("insert into employee (id, first_name, last_name," +
             "is_manager, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
-            "values(?,?,?,?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ? )", params);
+            "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ? )", params);
 
-        //activate the employee
-        Object[] obj = new Object[] { id };
-        int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
-            " where employee_id = ? and date_unemployed is null", obj, Integer.class);
+        // activate the employee
+        jdbcTemplate.update("insert into employment_history values( ?, current_date, null)", id);
 
-        // this was NOT a current employee, add a new employment history
-        if (count <= 0){
-          jdbcTemplate.update(" insert into bajs_employment_history " +
-              "values( ?, (select current_date from dual), null) ", id);
-        }
         // return the new id
         model.addAttribute("id", id);
         return "jsonTemplate";
@@ -196,19 +189,33 @@ public class EmployeeController
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
-      String id = jobject.get("id").getAsString();
+      int id = jobject.get("id").getAsInt();
 
       Object[] params = new Object[] { id };
+      Object[] params2 = new Object[] { id, id };
 
-      // make sure this employee is current
-      int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
-          " where employee_id = ? and date_unemployed is null", params, Integer.class);
 
-      // this was a current employee, set date unemployed to today
-      if (count > 0){
-        jdbcTemplate.update(" update bajs_employment_history " +
-            "set date_unemployed = (select current_date from dual) " +
-            "where employee_id = ? and date_unemployed is null", id);
+      // if the user tries to unemploy an employee they just re-employed today, delete the row instead
+      int count = jdbcTemplate.queryForObject(
+        "select count(*) from employment_history where employee_id = ? and date_employed=current_date and date_unemployed is null and " +
+        "(select count(*) from employment_history where employee_id = ?) > 1", params2, Integer.class);
+
+      // special case where user tries to unemploy employee they just reemployed today - deletes row instead
+      if(count > 0) {
+        jdbcTemplate.update(
+            "delete from employment_history where employee_id = ? and date_employed=current_date", params);
+      }
+      // standard procedure, make sure is current then set date unemployed
+      else {
+          // make sure this employee is current
+          count = jdbcTemplate.queryForObject("select count(*) from employment_history " +
+              " where employee_id = ? and date_unemployed is null", params, Integer.class);
+          // this was a current employee, set date unemployed to today
+          if (count > 0){
+            jdbcTemplate.update(" update employment_history " +
+                "set date_unemployed = current_date " +
+                "where employee_id = ? and date_unemployed is null", id);
+          }
       }
         return "jsonTemplate";
     }
@@ -219,21 +226,21 @@ public class EmployeeController
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
-      String id = jobject.get("id").getAsString();
+      int id = jobject.get("id").getAsInt();
 
       Object[] params = new Object[] { id };
 
       // we are assuming the employee id exists. Might need to add a query to double check
-      // "select count(*) from bajs_employee where id = ?"
+      // "select count(*) from employee where id = ?"
 
       // see if this employee current
-      int count = jdbcTemplate.queryForObject("select count(*) from bajs_employment_history " +
+      int count = jdbcTemplate.queryForObject("select count(*) from employment_history " +
           " where employee_id = ? and date_unemployed is null", params, Integer.class);
 
       // this was NOT a current employee, add a new employment history
       if (count <= 0){
-        jdbcTemplate.update(" insert into bajs_employment_history " +
-            "values( ?, (select current_date from dual), null) ", id);
+        jdbcTemplate.update(" insert into employment_history " +
+            "values( ?, current_date, null) ", id);
       }
         return "jsonTemplate";
     }
