@@ -15,6 +15,7 @@ angular.module('sequoiaGroveApp')
   $scope.saving = false;
   $scope.shiftSaved = false;
   $scope.shiftSaveError = false;
+  $scope.deliveries = [];
   $scope.shiftInfo = {
     "location": "",
     "pid": -1,
@@ -25,44 +26,14 @@ angular.module('sequoiaGroveApp')
     "weekdayEnd": "",
     "weekendStart": "",
     "weekendEnd": "",
-    "mon":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "tue":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "wed":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "thu":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "fri":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sat":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sun":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    }
+    "mon":{ "eid": 0, "name": "", "weekday": "" },
+    "tue":{ "eid": 0, "name": "", "weekday": "" },
+    "wed":{ "eid": 0, "name": "", "weekday": "" },
+    "thu":{ "eid": 0, "name": "", "weekday": "" },
+    "fri":{ "eid": 0, "name": "", "weekday": "" },
+    "sat":{ "eid": 0, "name": "", "weekday": "" },
+    "sun":{ "eid": 0, "name": "", "weekday": "" }
   };
-
-  $scope.deliveries = [];
   $scope.newDelivery = {
       id: 0,
       name:"",
