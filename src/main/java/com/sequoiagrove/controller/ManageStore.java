@@ -46,7 +46,7 @@ public class ManageStore {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Object[] obj = new Object[] { startHr, endHr };
-        int count = jdbcTemplate.queryForObject("select count(*) from bajs_hours " +
+        int count = jdbcTemplate.queryForObject("select count(*) from hours " +
             " where start_hour = ? and end_hour = ?", obj, Integer.class);
         return (count > 0);
     }
@@ -59,13 +59,13 @@ public class ManageStore {
         Object[] obj = new Object[] { startHr, endHr };
         if ( checkHoursExist(startHr, endHr) ) {
           id = jdbcTemplate.queryForObject(
-              "select id from bajs_hours where start_hour=? and end_hour=?",
+              "select id from hours where start_hour=? and end_hour=?",
               obj, Integer.class);
         }
         else {
           id = jdbcTemplate.queryForObject(
-              "select bajs_hours_id_sequence.nextval from dual", Integer.class);
-          jdbcTemplate.update(" insert into bajs_hours (id, start_hour, end_hour) " +
+              "select nextval('hours_id_seq')", Integer.class);
+          jdbcTemplate.update(" insert into hours (id, start_hour, end_hour) " +
               "values( ?, ?, ?) ", id, startHr, endHr);
         }
         return id;
@@ -81,24 +81,24 @@ public class ManageStore {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        String pid = jobject.get("pid").getAsString();
+        int pid;
         String tname = jobject.get("tname").getAsString();
         String weekdayStart = jobject.get("weekdayStart").getAsString();
         String weekdayEnd = jobject.get("weekdayEnd").getAsString();
         String weekendStart = jobject.get("weekendStart").getAsString();
         String weekendEnd = jobject.get("weekendEnd").getAsString();
 
-        if (!validateStrings(pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+        if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
             throw new NotFoundException("One or more fields empty");
         }
         try {
+            pid = jobject.get("pid").getAsInt();
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
                 model.addAttribute("invalidTime", true);
                 throw new IllegalArgumentException("Start time >= End Time");
             }
-            Integer.parseInt(pid);
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
@@ -107,19 +107,19 @@ public class ManageStore {
 
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
-        int sid = jdbcTemplate.queryForObject("select bajs_shift_id_sequence.nextval from dual", Integer.class);
+        int sid = jdbcTemplate.queryForObject("select nextval('shift_id_seq')", Integer.class);
 
-        String[] params = {
-            sid + "",
+        Object[] params = new Object[] {
+            sid,
             pid,
             tname,
-            weekdayHourId + "",
-            weekendHourId + ""
+            weekdayHourId,
+            weekendHourId
         };
 
-        jdbcTemplate.update("insert into bajs_shift " +
+        jdbcTemplate.update("insert into shift " +
             "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
-            "values(?, ?, ?, (select current_date from dual), null, ?, ?)", params);
+            "values(?, ?, ?, current_date, null, ?, ?)", params);
 
         model.addAttribute("sid", sid);
 
@@ -134,27 +134,26 @@ public class ManageStore {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        String sid = jobject.get("sid").getAsString();
-        String pid = jobject.get("pid").getAsString();
+        int sid;
+        int pid;
         String tname = jobject.get("tname").getAsString();
         String weekdayStart = jobject.get("weekdayStart").getAsString();
         String weekdayEnd = jobject.get("weekdayEnd").getAsString();
         String weekendStart = jobject.get("weekendStart").getAsString();
         String weekendEnd = jobject.get("weekendEnd").getAsString();
 
-        if (!validateStrings(
-          sid, pid, tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+        if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
             throw new NotFoundException("One or more fields empty");
         }
         try {
+            sid = jobject.get("sid").getAsInt();
+            pid = jobject.get("pid").getAsInt();
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
                 model.addAttribute("invalidTime", true);
                 throw new IllegalArgumentException("Start time >= End Time");
             }
-            Integer.parseInt(pid);
-            Integer.parseInt(sid);
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
@@ -164,15 +163,15 @@ public class ManageStore {
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
 
-        String[] params = {
+        Object[] params = new Object[] { 
             pid,
             tname,
-            weekdayHourId + "",
-            weekendHourId + "",
+            weekdayHourId,
+            weekendHourId,
             sid
         };
 
-        jdbcTemplate.update( "update BAJS_shift set "+
+        jdbcTemplate.update( "update shift set "+
           "position_id = ?, "+
           "task_name = ?, "+
           "weekday_id = ?, "+
@@ -190,24 +189,23 @@ public class ManageStore {
  
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
-
-        String sid = jobject.get("sid").getAsString();
+        int sid;
 
         //model.addAttribute("error", false);
-        if (!validateStrings(sid)) {
+        if (!validateStrings(jobject.get("sid").getAsString())) {
             model.addAttribute("invalidField", true);
             throw new NotFoundException("One or more fields empty");
         }
         try {
-            Integer.parseInt(sid);
+            sid = jobject.get("sid").getAsInt();
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        jdbcTemplate.update( "update BAJS_shift set "+
-          "end_date = (select current_date from dual) "+
+        jdbcTemplate.update( "update shift set "+
+          "end_date = current_date "+
           "where id = ?",
         sid);
 
