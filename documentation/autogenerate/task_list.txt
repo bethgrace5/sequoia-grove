@@ -10,7 +10,7 @@ On back-end:
     3. Prioritize solving each day's shifts by the shortest hast-table (perhaps by sorting an array of hash tables first for each day)
     4. Create a schedule structure exactly like schedule template in which eid's will be plugged in
     5. Schedule the employee with the highest count for each hash table
-    6. Make sure no employee is scheduled more than once in a day:
+    6. Make sure no emloyee is scheduled more than once in a day:
         - maybe have an array of employees for the day currently being completed, add eid's to the array as empoyees are scheduled, for each day scheduled make sure the eid is not already in the list
         - or have second set of hash tables that are used for the actual scheduling, and cut out eid's from all those hash tables as employees are scheduled
     7. Need to make sure employees are scheduled for at least their min hours
@@ -31,4 +31,4 @@ On front-end:
   User Options:
     1. Auto-Generate - pulls schedule template from back-end, like the app has been doing, but the schedule provided is auto-generate (not history)
       a. Same Hour Amount - auto-generator should provide all employees with about the same number of hours
-      b. ???
+      b. No Employee Available - decide how to handle the edge case where no one is available to work a shift
