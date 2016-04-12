@@ -178,6 +178,7 @@ create or replace package body bajs_pkg as
         bajs_schedule_history_view h
         on s.sid=h.sid and h.day = to_date( mon, 'dd-mm-yyyy') + 3
     )
+
     on m_sid = th_sid
     full outer join
     (

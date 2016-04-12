@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="9" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Employee Table -->
+    <createTable schemaName="public" tableName="has_position" remarks="has position data">
+      <column name="employee_id" type="integer">
+        <constraints unique="false" nullable="false"/>
+      </column>
+      <column name="position_id" type="integer">
+        <constraints unique="false" nullable="false"/>
+      </column>
+      <column name="date_acquired" type="date">
+        <constraints unique="false" nullable="false" />
+      </column>
+      <column name="date_removed" type="date">
+        <constraints unique="false" nullable="true"/>
+      </column>
+      <column name="is_primary" type="boolean">
+        <constraints unique="false" nullable="false"/>
+      </column>
+      <column name="is_training" type="boolean">
+        <constraints unique="false" nullable="false"/>
+      </column>
+    </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="date_removed"
+      defaultValue="null" />
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="is_primary"
+      defaultValueBoolean="false" />
+
+    <addDefaultValue schemaName="public"
+      tableName="has_position"
+      columnDataType="integer"
+      columnName="is_training"
+      defaultValueBoolean="false" />
+
+    <addForeignKeyConstraint baseColumnNames="employee_id"
+      baseTableName="has_position"
+      constraintName="fk_position_employee_id"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="employee" />
+
+    <addForeignKeyConstraint baseColumnNames="position_id"
+      baseTableName="has_position"
+      constraintName="fk_position_position_id"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="position" />
+
+  </changeSet>
+
+</databaseChangeLog>

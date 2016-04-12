@@ -13,7 +13,7 @@ public class Employee {
     int id;
     int maxHrsWeek;
     int minHrsWeek;
-    int isManager;
+    boolean isManager;
     int clock;
     boolean isCurrent;
     String firstName;
@@ -31,7 +31,7 @@ public class Employee {
       int id,
       int maxHrsWeek,
       int minHrsWeek,
-      int isManager,
+      boolean isManager,
       int clock,
       String firstName,
       String lastName,
@@ -80,10 +80,10 @@ public class Employee {
         this.minHrsWeek =minHrsWeek;
     }
 
-    public int getIsManager() {
+    public boolean getIsManager() {
         return isManager;
     }
-    public void setIsManager(int isManager) {
+    public void setIsManager(boolean isManager) {
         this.isManager = isManager;
     }
 

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="13" author="Bethany Armitage" context="prod or dev or test">
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="schedule_template_view">
+      select pid, sid, tname, weekend_start_hour as we_st, weekend_end_hour as we_ed, weekday_start_hour as wd_st, weekday_end_hour as wd_ed, location, position
+      from (
+        select s.weekday_id as wd_id, s.weekend_id as we_id, s.id as sid, s.position_id as pid, s.task_name as tname, location, p.title as position
+        from "shift" s
+        inner join position p
+        on p.id=s.position_id and s.end_date is null
+      ) schedule
+      left outer join
+      (
+        select h.id as wehid, h.start_hour as weekend_start_hour, h.end_hour as weekend_end_hour
+        from hours h
+      ) weekendHours
+      on wehid = wd_id
+      left outer join
+      (
+        select h.id as wdhid, h.start_hour as weekday_start_hour, h.end_hour as weekday_end_hour
+        from hours h
+      ) weekdayHours
+      on wdhid = we_id
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>

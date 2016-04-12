@@ -22,3 +22,6 @@ ojdbc6.jar
 
 *~
 *.log
+
+mvc-dispatcher-servlet.xml
+

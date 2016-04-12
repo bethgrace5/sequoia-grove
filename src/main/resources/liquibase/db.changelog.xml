@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+
+  <changeSet author="Bethany Armitage" id="0" context="prod or test or dev">
+    <tagDatabase tag="Version 0.0.0"/>
+  </changeSet>
+
+  <include relativeToChangelogFile="true" file="changelogs/001-hours.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/002-employee.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/003-holiday.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/004-employment-history.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/005-availability.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/006-cannot-work-with.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/007-position.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/008-shift.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/009-has-position.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/010-is-scheduled-for.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/011-requests-vacation.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/012-published-schedule.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/013-delivery.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/014-schedule-template-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/015-employee-history-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/016-schedule-history-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/017-schedule-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/018-employee-avail-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
+
+
+</databaseChangeLog>

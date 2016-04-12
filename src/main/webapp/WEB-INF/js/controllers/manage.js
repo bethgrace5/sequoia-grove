@@ -15,6 +15,7 @@ angular.module('sequoiaGroveApp')
   $scope.saving = false;
   $scope.shiftSaved = false;
   $scope.shiftSaveError = false;
+  $scope.deliveries = [];
   $scope.shiftInfo = {
     "location": "",
     "pid": -1,
@@ -25,44 +26,14 @@ angular.module('sequoiaGroveApp')
     "weekdayEnd": "",
     "weekendStart": "",
     "weekendEnd": "",
-    "mon":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "tue":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "wed":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "thu":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "fri":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sat":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    },
-    "sun":{
-      "eid": 0,
-      "name": "",
-      "weekday": ""
-    }
+    "mon":{ "eid": 0, "name": "", "weekday": "" },
+    "tue":{ "eid": 0, "name": "", "weekday": "" },
+    "wed":{ "eid": 0, "name": "", "weekday": "" },
+    "thu":{ "eid": 0, "name": "", "weekday": "" },
+    "fri":{ "eid": 0, "name": "", "weekday": "" },
+    "sat":{ "eid": 0, "name": "", "weekday": "" },
+    "sun":{ "eid": 0, "name": "", "weekday": "" }
   };
-
-  $scope.deliveries = [];
   $scope.newDelivery = {
       id: 0,
       name:"",
@@ -72,7 +43,7 @@ angular.module('sequoiaGroveApp')
       thu:false,
       fri:false,
       sat:false,
-      sun:false 
+      sun:false
   };
 
   /****************** Check and Balances ****************************/
@@ -125,7 +96,7 @@ angular.module('sequoiaGroveApp')
     $scope.shiftInfo.weekdayEnd = cur.weekdayEnd;
     $scope.shiftInfo.weekendStart = cur.weekendStart;
     $scope.shiftInfo.weekendEnd = cur.weekendEnd;
-    for (var i = 0; i < $scope.positions.length; i++) { 
+    for (var i = 0; i < $scope.positions.length; i++) {
       if ($scope.shiftInfo.pid === $scope.positions[i].id) {
         $scope.shiftInfo.location = $scope.positions[i].location;
         $scope.shiftInfo.position = $scope.positions[i].title;
@@ -151,7 +122,7 @@ angular.module('sequoiaGroveApp')
     $scope.shiftSaved = false;
     $scope.shiftSaveError = false;
     $scope.saving = true;
-    for (var i = 0; i < $scope.positions.length; i++) { 
+    for (var i = 0; i < $scope.positions.length; i++) {
        if ($scope.shiftInfo.pid === $scope.positions[i].id) {
         $scope.shiftInfo.location = $scope.positions[i].location;
         $scope.shiftInfo.position = $scope.positions[i].title;
@@ -252,8 +223,7 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       if (status == 200) {
         // clear update shifts list
-        $scope.deliveries = data.delivery; 
-        $log.debug(data.delivery);
+        $scope.deliveries = data.delivery;
       }
     }).error(function (data, status, headers, config) {
       $log.error('Error getting deliveries ', status, data);
@@ -268,15 +238,14 @@ url: '/sequoiagrove/delivery/delete/'+ id,
 method: "DELETE"
 }). then (function (success) {
     // remove fromj list
-    $scope.deliveries.splice(index,1); 
-    $log.debug(success);
+    $scope.deliveries.splice(index,1);
     }, function(failure) {
       $log.error('Error deleting deliveries ', failure);
 
     })
 
 }
-  
+
 // add deliveries
 $scope.addDelivery = function() {
     $http({
@@ -285,7 +254,8 @@ $scope.addDelivery = function() {
         data: $scope.newDelivery
     }).then (function (success) {
     // add to list
-        $scope.deliveries.push($scope.newDelivery); 
+        $scope.newDelivery.id = success.data.id;
+        $scope.deliveries.push($scope.newDelivery);
         $scope.newDelivery = {
           id: 0,
           name:"",
@@ -295,7 +265,7 @@ $scope.addDelivery = function() {
           thu:false,
           fri:false,
           sat:false,
-          sun:false 
+          sun:false
         }
     }, function(failure) {
         $log.error('Error adding deliveries ', failure);
@@ -305,6 +275,95 @@ $scope.addDelivery = function() {
 }
 
   $scope.getdeliveries();
+
+/************** Holidays Functions **********************************/
+  $scope.holidayDate = new Date();
+  $scope.newHoliday =
+    {'id':0,
+      'title':'',
+      'open':{},
+      'storeOpenVal':'0000',
+      'close':{},
+      'storeCloseVal':'0000',
+      'date':''};
+
+  $scope.compareDate = function(a, b){
+    moment(a).format("MMMM Do, YYYY");
+    moment(b).format("MMMM Do, YYYY");
+    if(moment(a).isSame(b)){
+      return true;
+    }
+    else{
+      return false
+    }
+  }
+
+  //--------------------------
+  //Holiday Major Functions
+  //--------------------------
+  $scope.addNewHoliday = function(){
+    // change date into formatted string 'mm-dd-yyyy'
+    $scope.newHoliday.date = moment($scope.holidayDate).format('MM-DD-YYYY');
+    if ($scope.newHoliday.open.val) {
+      $scope.newHoliday.storeOpenVal  = $scope.newHoliday.open.val;
+      $scope.newHoliday.storeCloseVal = $scope.newHoliday.close.val;
+    }
+
+    $http({ url: '/sequoiagrove/holiday/add',
+      method: "POST",
+      data: $scope.newHoliday
+    }).then(
+      // request was successful
+      function(success) {
+        $scope.newHoliday =
+          {'id':0,
+            'title':'',
+            'open':{},
+            'storeOpenVal':null,
+            'close':{},
+            'storeCloseVal':null,
+            'date':''};
+        $scope.getAllHolidays();
+      },
+      // request failed
+      function(failure) {
+        $log.error('Error submiting new holiday ', failure.config.data);
+    });
+  }
+
+  $scope.getAllHolidays = function() {
+    $http({ url: '/sequoiagrove/holiday',
+      method: "GET"
+    }).then(
+      // request was successful
+      function(success) {
+        $scope.allHolidays = success.data.holidays;
+      },
+      // request failed
+      function(failure) {
+        $log.error('Error getting all holidays', failure);
+    });
+  }
+
+  $scope.deleteHoliday = function(id){
+    $http({ url: '/sequoiagrove/holiday/remove/'+id,
+      method: "POST"
+    }).then(
+      // request was successful
+      function(success) {
+        $scope.getAllHolidays();
+      },
+      // request failed
+      function(failure) {
+        $log.error('Error removing Holiday ', failure.config.url);
+    });
+  }
+
+  $scope.init = function(){
+    $scope.getAllHolidays();
+  }
+
+  $scope.init();
 
 });
 

@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.transaction.support.TransactionTemplate;
+import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,7 @@ public class MainController {
 
     private static DataSource dataSource;
     private static JdbcTemplate jdbcTemplate;
+    private static TransactionTemplate transactionTemplate;
 
     @RequestMapping(value="/", method = RequestMethod.GET)
     public String goHome(ModelMap model) {
