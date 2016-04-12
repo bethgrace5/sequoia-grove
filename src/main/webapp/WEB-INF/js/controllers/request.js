@@ -70,14 +70,14 @@ angular.module('sequoiaGroveApp')
   // Ease_of_Access
   //-----------------
   $scope.totalDays = function(a, b){
-    var date1 = moment(a);
-    var date2 = moment(b)
+    var date1 = moment(a,'YYYY-MM-DD');
+    var date2 = moment(b,'YYYY-MM-DD')
     return date2.diff(date1, 'days') + 1;
   }
 
   //Change Date into a specific format
   $scope.defaultDate = function(a){
-    return moment(a).format("MMMM Do, YYYY");
+    return moment(a, 'YYYY-MM-DD').format("MMMM Do, YYYY");
   }
 
   /****************** Employee_User_Setup ****************************/
@@ -122,11 +122,11 @@ angular.module('sequoiaGroveApp')
       return;
     }
     var message = 
-      'from ' + $scope.defaultDate($scope.requestDateStart) + 
-      ' to ' + $scope.defaultDate($scope.requestDateEnd);
+      'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
+      ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
     
     if($scope.totalDays($scope.requestDateStart, $scope.requestDateEnd ) == 1) {
-      message = "Date: " + $scope.defaultDate($scope.requestDateStart);
+      message = "Date: " + moment($scope.requestDateStart).format("MMMM Do, YYYY");
     }
   
     // Appending dialog to document.body to cover sidenav in docs app
