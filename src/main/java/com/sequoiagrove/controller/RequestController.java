@@ -26,7 +26,7 @@ import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
-/** 
+/**
 RequestController:
 Puts Starting Date, End Date, and Employee ID from the front end to the datebase
 It will also retrieve information from the backend :
@@ -84,7 +84,7 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
   @RequestMapping(value = "/request/get/checked")
     public String getCheckedRequest(Model model){
@@ -111,7 +111,7 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
   @RequestMapping(value = "/request/get/pending")
     public String getPendingRequest(Model model){
@@ -138,7 +138,7 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
     @RequestMapping(value = "/request/get/current/employee/{eid}")
       public String getCurrentEmployeeRequestl(Model model,
@@ -150,7 +150,7 @@ public class RequestController{
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
                   RequestStatus es = new RequestStatus(
-                    rs.getInt("rid"), 
+                    rs.getInt("rid"),
                     rs.getInt("requested_by"),
                     rs.getInt("responded_by"),
                     checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
@@ -169,7 +169,7 @@ public class RequestController{
       }
 
     @RequestMapping(value = "/request/update/{requestID}/{approverID}/{is_approve}")
-      public String updateRequest(Model model, 
+      public String updateRequest(Model model,
           @PathVariable("requestID") int requestID,
           @PathVariable("approverID") int approverID,
           @PathVariable("is_approve") int is_approve) throws SQLException{
@@ -187,7 +187,7 @@ public class RequestController{
             " set is_approved = ?, responded_by = ? where id = ?", params);
 
         return "jsonTemplate";
-      } 
+      }
 
     @RequestMapping(value = "/request/update/dates")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
