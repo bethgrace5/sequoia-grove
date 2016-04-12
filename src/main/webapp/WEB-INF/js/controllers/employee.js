@@ -339,6 +339,8 @@ angular.module('sequoiaGroveApp')
           data: {'id': $scope.selectedEmployee.id}
         }).success(function(data, status) {
           // update UI with change
+          // FIXME if the user employs and then unemploys the same day,
+          // it won't reflect the UI chnage shown
           $scope.employees = _.map($scope.employees, function(e) {
             if(e.id === $scope.selectedEmployee.id) {
               e.isCurrent = false;

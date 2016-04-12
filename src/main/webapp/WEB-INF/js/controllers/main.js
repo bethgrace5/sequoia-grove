@@ -229,7 +229,6 @@ angular.module('sequoiaGroveApp')
       }, 0)
       $scope.hourCount[index] = hours;
     });
-    $scope.checkifPublished();
   }
 
   // check if employee has this position
