@@ -31,7 +31,7 @@
         <constraints unique="false" nullable="false" />
       </column>
       <column name="responded_by" type="integer">
-        <constraints unique="false" nullable="false" />
+        <constraints unique="false" nullable="true" />
       </column>
       <column name="is_approved" type="boolean">
         <constraints unique="false" nullable="false"/>
@@ -54,7 +54,7 @@
       tableName="requests_vacation"
       columnDataType="boolean"
       columnName="is_approved"
-      defaultValue="null" />
+      defaultValue="false" />
 
     <addForeignKeyConstraint baseColumnNames="requested_by"
       baseTableName="requests_vacation"

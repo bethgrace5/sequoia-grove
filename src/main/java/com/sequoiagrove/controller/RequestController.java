@@ -45,7 +45,7 @@ public class RequestController{
       String start = req.getStartDate();
       String end = req.getEndDate();
 
-      int id = jdbcTemplate.queryForObject("select request_id_sequence.nextval from dual",
+      int id = jdbcTemplate.queryForObject("select nextval('requests_id_seq')",
             Integer.class);
 
       jdbcTemplate.update(
@@ -54,7 +54,7 @@ public class RequestController{
           " end_date_time)" +
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
-          id, eid, null, 0, start, end);
+          id, eid, null, false, start, end);
       //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";
@@ -176,12 +176,16 @@ public class RequestController{
         //Make Sure request ID is there too...
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Object[] params = new Object[] {
+          new Boolean((is_approve == 1)? true:false),
+          approverID,
+          requestID
+        };
+
         jdbcTemplate.update("update requests_vacation " +
-            " set" +
-            " is_approved  = " + is_approve +
-            ", responded_by = " + approverID +
-            " where id     = " + requestID
-            );
+            " set is_approved = ?, responded_by = ? where id = ?", params);
+
         return "jsonTemplate";
       } 
 
