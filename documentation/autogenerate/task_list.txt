@@ -2,6 +2,7 @@ On back-end:
 
   Assumptions:
     1. Have lists of employees from database containing the employees scheduled for each shift for the past 10 weeks (lists contain employee id's)
+    2. From database: availability, positions, requests off, cannot work with, min/max hours
 
   Need to do:
     1. Make a hash-table corresponding to each list, where each eid mentioned in the list is a key, and the number of times the eid appears in the list is the value
