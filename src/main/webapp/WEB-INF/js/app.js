@@ -2,13 +2,11 @@
 
 angular.module('sequoiaGroveApp', [
     'LocalStorageModule',
-    'chart.js',
-    'ngAnimate',
     'ngCookies',
     'ngResource',
     'ngRoute',
+    'ngAnimate',
     'ngSanitize',
-    'ngTouch',
     'pascalprecht.translate',
     'persona',
     'ngMaterial',
@@ -61,6 +59,7 @@ angular.module('sequoiaGroveApp', [
           prefix: 'i18n/locale-',
           suffix: '.json'
       });
+      $translateProvider.useSanitizeValueStrategy('sanitize');
 
       // change language to browser's primary content language
       $translateProvider.determinePreferredLanguage( function() {

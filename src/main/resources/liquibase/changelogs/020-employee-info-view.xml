@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="20" author="Bethany Armitage" context="prod or dev or test">
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="employee_info_view">
+      select e.id, first_name, last_name, email, is_manager, birth_date, max_hrs_week,
+        phone_number, clock_number, pid as positions, history, min_hrs_week,
+        concat_ws(' ',
+          concat('mon,', mon::text),
+          concat('tue,', tue::text),
+          concat('wed,', wed::text),
+          concat('thu,', thu::text),
+          concat('fri,', fri::text),
+          concat('sat,', sat::text),
+          concat('sun,', sun::text)) as avail
+      from employee e
+      inner join employee_history_view h
+      on e.id = h.id
+      inner join employee_position_view p
+      on e.id = p.id
+      inner join employee_avail_view a
+      on e.id = a.id
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>

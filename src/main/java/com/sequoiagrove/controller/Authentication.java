@@ -65,7 +65,7 @@ public class Authentication {
           String email = personaResponse.getEmail();
 
           // find this user in database
-          String sql = "select * from bajs_employee where email = ?";
+          String sql = "select * from employee where email = ?";
           try {
           user = (User)jdbcTemplate.queryForObject(
                     sql, new Object[] { email }, new UserRowMapper());
@@ -83,7 +83,7 @@ public class Authentication {
 
             // make sure this is a current employee
             int count = jdbcTemplate.queryForObject(
-                "select count(*) from bajs_employment_history " +
+                "select count(*) from employment_history " +
                 " where employee_id = ? and date_unemployed is null",
                 params, Integer.class);
 

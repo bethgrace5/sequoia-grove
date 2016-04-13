@@ -25,41 +25,47 @@
     <div class="col-sm-1">
         <p>Sunday</p> 
     </div>
+
 </div>
     <hr/>
 <div class="row">
     <div class="col-sm-2">
         <input type="text" class="form-control"
-            ng-model = "newdelivery.name"/>
+            ng-model = "newDelivery.name"/>
         <hr/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox" 
-        ng-model = "newdelivery.mon"/>
+        ng-model = "newDelivery.mon"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.tue"/>
+        ng-model = "newDelivery.tue"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.wed"/>
+        ng-model = "newDelivery.wed"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.thu"/>
+        ng-model = "newDelivery.thu"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.fri"/>
+        ng-model = "newDelivery.fri"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.sat"/>
+        ng-model = "newDelivery.sat"/>
     </div>
     <div class="col-sm-1">
         <input type="checkbox"
-        ng-model = "newdelivery.sun"/>
+        ng-model = "newDelivery.sun"/>
+    </div>
+    <div class="col-sm-1">
+    <button class="btn btn-default" ng-click = "addDelivery()" >
+        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+    </button>
     </div>
 </div>
 <div class="row">
@@ -122,6 +128,10 @@
             <input type="checkbox"
             ng-model = "deliveries[$index].sun"/>
         </div>
+    <button class="btn btn-default" ng-click = "deleteDelivery(d.id,$index)" >
+        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+    </button>
     </div>
+
 </div>
 

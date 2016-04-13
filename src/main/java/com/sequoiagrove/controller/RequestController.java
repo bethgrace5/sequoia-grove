@@ -26,7 +26,7 @@ import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
-/** 
+/**
 RequestController:
 Puts Starting Date, End Date, and Employee ID from the front end to the datebase
 It will also retrieve information from the backend :
@@ -45,16 +45,16 @@ public class RequestController{
       String start = req.getStartDate();
       String end = req.getEndDate();
 
-      int id = jdbcTemplate.queryForObject("select bajs_request_id_sequence.nextval from dual",
+      int id = jdbcTemplate.queryForObject("select nextval('requests_id_seq')",
             Integer.class);
 
       jdbcTemplate.update(
-          "insert into bajs_requests_vacation"+
+          "insert into requests_vacation"+
           "(id, requested_by, responded_by, is_approved, start_date_time," +
           " end_date_time)" +
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
-          id, eid, null, 0, start, end);
+          id, eid, null, false, start, end);
       //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";
@@ -64,7 +64,7 @@ public class RequestController{
     public String getRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view",
+          "select * from request_view",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
               RequestStatus es = new RequestStatus(
@@ -84,13 +84,13 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
   @RequestMapping(value = "/request/get/checked")
     public String getCheckedRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view " +
+          "select * from request_view " +
           "where responded_by IS NOT NULL ",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -111,13 +111,13 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
   @RequestMapping(value = "/request/get/pending")
     public String getPendingRequest(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from bajs_requests_view "+
+          "select * from request_view "+
           "where responded_by IS NULL",
           new RowMapper<RequestStatus>() {
             public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -138,19 +138,19 @@ public class RequestController{
           });
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
-    } 
+    }
 
     @RequestMapping(value = "/request/get/current/employee/{eid}")
       public String getCurrentEmployeeRequestl(Model model,
           @PathVariable("eid") int eid) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
-              "select * from bajs_requests_view " +
+              "select * from request_view " +
               "where requested_by = " + eid,
               new RowMapper<RequestStatus>() {
                 public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
                   RequestStatus es = new RequestStatus(
-                    rs.getInt("rid"), 
+                    rs.getInt("rid"),
                     rs.getInt("requested_by"),
                     rs.getInt("responded_by"),
                     checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
@@ -169,21 +169,25 @@ public class RequestController{
       }
 
     @RequestMapping(value = "/request/update/{requestID}/{approverID}/{is_approve}")
-      public String updateRequest(Model model, 
+      public String updateRequest(Model model,
           @PathVariable("requestID") int requestID,
           @PathVariable("approverID") int approverID,
           @PathVariable("is_approve") int is_approve) throws SQLException{
         //Make Sure request ID is there too...
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        jdbcTemplate.update("update bajs_requests_vacation " +
-            " set" +
-            " is_approved  = " + is_approve +
-            ", responded_by = " + approverID +
-            " where id     = " + requestID
-            );
+
+        Object[] params = new Object[] {
+          new Boolean((is_approve == 1)? true:false),
+          approverID,
+          requestID
+        };
+
+        jdbcTemplate.update("update requests_vacation " +
+            " set is_approved = ?, responded_by = ? where id = ?", params);
+
         return "jsonTemplate";
-      } 
+      }
 
     @RequestMapping(value = "/request/update/dates")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
@@ -195,7 +199,7 @@ public class RequestController{
         String start = req.getStartDate();
         String end = req.getEndDate();
         /*
-           jdbcTemplate.update("update bajs_requests_vacation " +
+           jdbcTemplate.update("update requests_vacation " +
            " set" +
            " start_date_time = " + "to_timestamp(" + start + ", 'mm-dd-yyyy')" +
            " where id = " + eid

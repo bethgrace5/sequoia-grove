@@ -3,6 +3,7 @@ import com.google.gson.*;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ArrayList;
+import javax.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +29,187 @@ import com.sequoiagrove.model.Holiday;
 
 @Controller
 public class ManageStore {
-  @RequestMapping(value = "/manageStore/get/")
-    public String getAllStore(Model model){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-      return "nothing";
+/* ----- Pure Functions ----- */
+   public boolean validateStrings(String... args) {
+        for (String arg : args) {
+            if (arg.isEmpty() || arg == null) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+/* ----- Helper JDBC Functions ----- */
+    public boolean checkHoursExist(String startHr, String endHr) {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        Object[] obj = new Object[] { startHr, endHr };
+        int count = jdbcTemplate.queryForObject("select count(*) from hours " +
+            " where start_hour = ? and end_hour = ?", obj, Integer.class);
+        return (count > 0);
+    }
+
+    public int addHours(String startHr, String endHr) {
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        int id = 0;
+        Object[] obj = new Object[] { startHr, endHr };
+        if ( checkHoursExist(startHr, endHr) ) {
+          id = jdbcTemplate.queryForObject(
+              "select id from hours where start_hour=? and end_hour=?",
+              obj, Integer.class);
+        }
+        else {
+          id = jdbcTemplate.queryForObject(
+              "select nextval('hours_id_seq')", Integer.class);
+          jdbcTemplate.update(" insert into hours (id, start_hour, end_hour) " +
+              "values( ?, ?, ?) ", id, startHr, endHr);
+        }
+        return id;
+    }
+
+/* ----- HTTP Mapped Functions ----- */
+
+  // Add new shift
+    @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
+    public String addShift(@RequestBody String data, Model model) throws SQLException, NotFoundException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+
+        int pid;
+        String tname = jobject.get("tname").getAsString();
+        String weekdayStart = jobject.get("weekdayStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
+        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekendEnd = jobject.get("weekendEnd").getAsString();
+
+        if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+            model.addAttribute("invalidField", true);
+            throw new NotFoundException("One or more fields empty");
+        }
+        try {
+            pid = jobject.get("pid").getAsInt();
+            if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
+              Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
+                model.addAttribute("invalidTime", true);
+                throw new IllegalArgumentException("Start time >= End Time");
+            }
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("invalidInteger", true);
+            throw new IllegalArgumentException("Integer field does not contain integer");
+        }
+
+        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
+        int weekendHourId = addHours(weekendStart, weekendEnd);
+        int sid = jdbcTemplate.queryForObject("select nextval('shift_id_seq')", Integer.class);
+
+        Object[] params = new Object[] {
+            sid,
+            pid,
+            tname,
+            weekdayHourId,
+            weekendHourId
+        };
+
+        jdbcTemplate.update("insert into shift " +
+            "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
+            "values(?, ?, ?, current_date, null, ?, ?)", params);
+
+        model.addAttribute("sid", sid);
+
+        return "jsonTemplate";
+    }
+
+  // Update currently selected shift
+    @RequestMapping(value = "/shift/update", method = RequestMethod.POST)
+    public String updateShift(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+
+        int sid;
+        int pid;
+        String tname = jobject.get("tname").getAsString();
+        String weekdayStart = jobject.get("weekdayStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
+        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekendEnd = jobject.get("weekendEnd").getAsString();
+
+        if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
+            model.addAttribute("invalidField", true);
+            throw new NotFoundException("One or more fields empty");
+        }
+        try {
+            sid = jobject.get("sid").getAsInt();
+            pid = jobject.get("pid").getAsInt();
+            if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
+              Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
+                model.addAttribute("invalidTime", true);
+                throw new IllegalArgumentException("Start time >= End Time");
+            }
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("invalidInteger", true);
+            throw new IllegalArgumentException("Integer field does not contain integer");
+        }
+
+        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
+        int weekendHourId = addHours(weekendStart, weekendEnd);
+
+        Object[] params = new Object[] { 
+            pid,
+            tname,
+            weekdayHourId,
+            weekendHourId,
+            sid
+        };
+
+        jdbcTemplate.update( "update shift set "+
+          "position_id = ?, "+
+          "task_name = ?, "+
+          "weekday_id = ?, "+
+          "weekend_id = ? "+
+          "where id = ?",
+         params);
+
+        return "jsonTemplate";
+    }
+
+  // Delete currently selected shift
+    @RequestMapping(value = "/shift/delete", method = RequestMethod.POST)
+    public String deleteShift(@RequestBody String data, Model model) throws SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+ 
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+        int sid;
+
+        //model.addAttribute("error", false);
+        if (!validateStrings(jobject.get("sid").getAsString())) {
+            model.addAttribute("invalidField", true);
+            throw new NotFoundException("One or more fields empty");
+        }
+        try {
+            sid = jobject.get("sid").getAsInt();
+        }
+        catch (NumberFormatException e) {
+            model.addAttribute("invalidInteger", true);
+            throw new IllegalArgumentException("Integer field does not contain integer");
+        }
+
+        jdbcTemplate.update( "update shift set "+
+          "end_date = current_date "+
+          "where id = ?",
+        sid);
+
+        return "jsonTemplate";
     }
 }
 

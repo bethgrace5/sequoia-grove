@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="22" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Clear all mock data -->
+
+    <!-- alter sequence start values -->
+    <sqlFile encoding="UTF-8" path="sequences/sequences.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+
+    <!-- Insert all mock data -->
+    <sqlFile encoding="UTF-8" path="mock-data/hours.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/employee.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/availability.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/cannot-work-with.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/employment-history.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/shift.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/has-position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/is-scheduled-for.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/requests-vacation.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/published-schedule.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/holiday.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+    <sqlFile encoding="UTF-8" path="mock-data/delivery.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+
+
+  </changeSet>
+
+</databaseChangeLog>

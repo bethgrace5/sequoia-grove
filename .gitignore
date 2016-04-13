@@ -1,6 +1,6 @@
 /dist
 /target
-/src/main/webapp/resources/bower_components
+/src/main/webapp/static/bower_components
 */bower_components
 */node_modules
 node_modules/*
@@ -22,3 +22,6 @@ ojdbc6.jar
 
 *~
 *.log
+
+mvc-dispatcher-servlet.xml
+

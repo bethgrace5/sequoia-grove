@@ -229,7 +229,6 @@ angular.module('sequoiaGroveApp')
       }, 0)
       $scope.hourCount[index] = hours;
     });
-    $scope.checkifPublished();
   }
 
   // check if employee has this position
@@ -285,7 +284,6 @@ angular.module('sequoiaGroveApp')
 
     return $http({ url: url, method: "GET", })
         .success(function (data, status, headers, config) {
-      //$log.debug(data);
       $rootScope.ispublished = data.ispublished;
       if (!$scope.loggedInUser.isManager) {
         if (!data.ispublished){
@@ -310,7 +308,7 @@ angular.module('sequoiaGroveApp')
       $scope.countHours();
 
     }).error(function (data, status, headers, config) {
-      $log.error(status + " Error saving update shifts schedule : " + data);
+      $log.error(status + " Error getting schedule template: " + data);
     });
   }
 
@@ -353,7 +351,7 @@ angular.module('sequoiaGroveApp')
       data: obj
       }).success(function (data, status, headers, config) {
         $rootScope.ispublished = true;
-        //$log.debug(data)
+        $rootScope.ispublished = true;   
 
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error posting schedule " + data);
