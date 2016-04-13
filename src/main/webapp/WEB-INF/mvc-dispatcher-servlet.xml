@@ -13,12 +13,12 @@
     <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
     <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
     <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
-    <mvc:resources mapping="/img/**"       location="/resources/img/"/>
-    <mvc:resources mapping="/i18n/**"      location="/resources/i18n/"/>
-    <mvc:resources mapping="/resources/**" location="/resources/"/>
+    <mvc:resources mapping="/img/**"       location="/static/img/"/>
+    <mvc:resources mapping="/i18n/**"      location="/static/i18n/"/>
+    <mvc:resources mapping="/static/**" location="/static/"/>
     <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
     <mvc:resources mapping="/static/**"    location="/static/" />
-    <mvc:resources mapping="/bower_components/**" location="/resources/bower_components/"/>
+    <mvc:resources mapping="/bower_components/**" location="/static/bower_components/"/>
 
     <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
     <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"> </bean>
