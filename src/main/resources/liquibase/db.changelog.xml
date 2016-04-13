@@ -14,6 +14,7 @@
     <tagDatabase tag="Version 0.0.0"/>
   </changeSet>
 
+  <!-- Base Tables -->
   <include relativeToChangelogFile="true" file="changelogs/001-hours.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/002-employee.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/003-holiday.xml"/>
@@ -27,6 +28,8 @@
   <include relativeToChangelogFile="true" file="changelogs/011-requests-vacation.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/012-published-schedule.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/013-delivery.xml"/>
+
+  <!-- Views -->
   <include relativeToChangelogFile="true" file="changelogs/014-schedule-template-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/015-employee-history-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/016-schedule-history-view.xml"/>
@@ -35,7 +38,11 @@
   <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
+
+  <!-- Mock Data -->
   <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
+
+  <!-- Functions -->
   <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
 
 
