@@ -1,0 +1,35 @@
+On back-end:
+
+  Assumptions:
+    1. Have lists of employees from database containing the employees scheduled for each shift for the past 10 weeks (lists contain employee id's)
+    2. From database: availability, positions, requests off, cannot work with, min/max hours
+
+  Need to do:
+    1. Make a hash-table corresponding to each list, where each eid mentioned in the list is a key, and the number of times the eid appears in the list is the value
+    2. Trim each hash-table by availability and requests off
+        - also add all employees that know the position and are available, but did not appear in the history list from the database
+    3. Prioritize solving each day's shifts by the shortest hast-table (perhaps by sorting an array of hash tables first for each day)
+    4. Create a schedule structure exactly like schedule template in which eid's will be plugged in
+    5. Schedule the employee with the highest count for each hash table
+    6. Make sure no emloyee is scheduled more than once in a day:
+        - maybe have an array of employees for the day currently being completed, add eid's to the array as empoyees are scheduled, for each day scheduled make sure the eid is not already in the list
+        - or have second set of hash tables that are used for the actual scheduling, and cut out eid's from all those hash tables as employees are scheduled
+    7. Need to make sure employees are scheduled for at least their min hours
+    8. Make sure all employees are scheduled for at least X hours?
+        - perhaps have a user option that changes the algorithm used to incorporate this rule, if selected
+    9. Also need to mind cannot_work_with relationships between employees
+        - hash tables will have to be reprioritized once an employee is scheduled, if a canidate employee for one shift cannot work with another employee already scheduled during the same shift (and especially the same location), they MAY receive a lower priority (making sure all employees meet their min hours should be higher priority)
+
+  Technical Issues:
+    1. Incorporate an AI technique for effectively generating the schedule
+      - Genetic Algorithms seem to be used for scheduling problems:
+        https://en.wikipedia.org/wiki/Genetic_algorithm_scheduling
+    2. Implementing Java classes to effectively store data structures for the auto-schedule
+
+
+On front-end:
+
+  User Options:
+    1. Auto-Generate - pulls schedule template from back-end, like the app has been doing, but the schedule provided is auto-generate (not history)
+      a. Same Hour Amount - auto-generator should provide all employees with about the same number of hours
+      b. No Employee Available - decide how to handle the edge case where no one is available to work a shift
