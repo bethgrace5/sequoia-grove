@@ -9,7 +9,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="21" author="Bethany Armitage" context="prod or dev or test">
+  <changeSet id="22" author="Bethany Armitage" context="prod or dev or test">
 
     <!-- Clear all mock data -->
 
