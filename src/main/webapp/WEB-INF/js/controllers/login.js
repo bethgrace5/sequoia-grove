@@ -45,8 +45,8 @@ angular.module('sequoiaGroveApp')
           $scope.countDays();
           $scope.countHours();
           $rootScope.ispublished = localStorageService.get('ispublished');
-          $scope.employees = localStorageService.get('employees');
-          $scope.positions = localStorageService.get('positions');
+          $rootScope.employees = localStorageService.get('employees');
+          $rootScope.positions = localStorageService.get('positions');
           $location.path(localStorageService.get('lastPath'));
         }
         else {
@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp')
           $log.error("Error obtaining schedule template" );
         // successfully got all employees
         }).then(function(success) {
-          $scope.employees = success.data.employees;
+          $rootScope.employees = success.data.employees;
           localStorageService.set('auth_token', success.data.api_token);
           localStorageService.set('employees', success.data.employees);
           return $scope.getPositions();
@@ -96,7 +96,7 @@ angular.module('sequoiaGroveApp')
         // successfully got positions
         }).then(function(success) {
           localStorageService.set('positions', success.data.positions);
-          $scope.positions = success.data.positions;
+          $rootScope.positions = success.data.positions;
            return localStorageService.get('lastPath');
         // failed to get positions
         },function(failure) {
