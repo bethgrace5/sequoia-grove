@@ -142,6 +142,8 @@ public class Authentication {
         System.out.println("signature exception caught");
 
         //don't trust the JWT!
+      } catch(IllegalArgumentException e) {
+        System.out.println("illegal argument exception caught");
       }
       return(subject);
     }

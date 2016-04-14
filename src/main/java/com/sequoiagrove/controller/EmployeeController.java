@@ -36,10 +36,10 @@ public class EmployeeController
             @RequestHeader (value="Authorization", defaultValue = "") String authToken) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
-        System.out.println(Authentication.verifyToken(authToken));
+        //System.out.println(Authentication.verifyToken(authToken));
         System.out.println(authToken);
 
-        String queryStr = "select * from bajs_employee_info_view";
+        String queryStr = "select * from employee_info_view";
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {

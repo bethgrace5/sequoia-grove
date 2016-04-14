@@ -23,7 +23,6 @@ angular.module('sequoiaGroveApp')
 /************** Login Redirect, Containers and UI settings **************/
 
   $rootScope.currentPath = $location.path();
-  $rootScope.lastPath = '/home';
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -258,17 +257,24 @@ angular.module('sequoiaGroveApp')
     $scope.selectedPid = pid;
   }
 
+  $scope.storeOriginalTemplate = function(template) {
+    // keep an original copy of the template, so we can check modifications
+    // on the template against it
+    _.map(template, function(t, index, list) {
+      $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
+      $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
+      $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
+      $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
+      $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
+      $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
+      $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
+    });
+  }
+
 /************** HTTP Request Functions **************/
 
   $scope.getPositions = function() {
-    return $http({
-      url: '/sequoiagrove/position',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.positions = data.positions;
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining position data: " + data);
-    });
+    return $http({ url: '/sequoiagrove/position', method: "GET" });
   }
 
   // Get The Schedule for the week currently being viewed - expects
@@ -281,52 +287,13 @@ angular.module('sequoiaGroveApp')
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
-
-    return $http({ url: url, method: "GET", })
-        .success(function (data, status, headers, config) {
-      $rootScope.ispublished = data.ispublished;
-      if (!$scope.loggedInUser.isManager) {
-        if (!data.ispublished){
-          return;
-        }
-      }
-      $scope.template = data.template;
-
-      // keep an original copy of the template, so we can check modifications
-      // on the template against it
-      _.map(data.template, function(t, index, list) {
-        $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-        $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-        $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-        $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-        $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-        $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-        $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
-      });
-      // update count of days and hours per employee
-      $scope.countDays();
-      $scope.countHours();
-
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error getting schedule template: " + data);
-    });
+    return $http({ 'url': url, 'method': 'GET', });
   }
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
     $scope.loadingMsg = "Obtaining current employee data...";
-    return $http({
-      url: '/sequoiagrove/employees',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $scope.employees = data.employees;
-        $log.debug(localStorageService.get('auth_token'));
-        localStorageService.set('auth_token', data.api_token);
-        $log.debug(localStorageService.get('auth_token'));
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining all employee: " + data);
-    });
+    return $http({ url: '/sequoiagrove/employees', method: "GET" });
   }
 
   // send http request to back end to check if published
@@ -351,7 +318,7 @@ angular.module('sequoiaGroveApp')
       data: obj
       }).success(function (data, status, headers, config) {
         $rootScope.ispublished = true;
-        $rootScope.ispublished = true;   
+        $rootScope.ispublished = true;
 
     }).error(function (data, status, headers, config) {
       $log.error(status + " Error posting schedule " + data);

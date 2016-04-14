@@ -2,39 +2,41 @@
 
 // Factory to inject authorization token with each request sent
 angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
-    function ( $log, localStorageService) {
+  function ( $log, localStorageService) {
+    var canRecover = false;
+    var responseOrNewPromise = false;
 
-  var tokenInjector = {
-    'request': function(config) {
-      // put the token from local storage
-      config.headers['Authorization'] = localStorageService.get('auth_token');
-      return config;
-    },
-    // optional method
-   'requestError': function(rejection) {
-      // do something on error
-      if (canRecover(rejection)) {
-        return responseOrNewPromise
-      }
-      return $q.reject(rejection);
-    },
+    var tokenInjector = {
+      'request': function(config) {
+        // put the token from local storage
+        config.headers['Authorization'] = localStorageService.get('auth_token');
+        return config;
+      },
+      // optional method
+     'requestError': function(rejection) {
+        // do something on error
+        if (canRecover(rejection)) {
+          return responseOrNewPromise
+        }
+        return $q.reject(rejection);
+      },
 
-    'response': function(response) {
-      if(response.auth_token != undefined) {
-        $log.debug(response.auth_token);
+      'response': function(response) {
+        if(response.auth_token != undefined) {
+          $log.debug(response.auth_token);
+        }
+        return response;
+      },
+      // optional method
+     'responseError': function(rejection) {
+        // do something on error
+        if (canRecover(rejection)) {
+          return responseOrNewPromise
+        }
+        return $q.reject(rejection);
       }
-      return response;
-    },
-    // optional method
-   'responseError': function(rejection) {
-      // do something on error
-      if (canRecover(rejection)) {
-        return responseOrNewPromise
-      }
-      return $q.reject(rejection);
+
     }
-
-  }
   return tokenInjector
 });
 

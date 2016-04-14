@@ -87,8 +87,19 @@ angular.module('sequoiaGroveApp', [
   }).
   run (function($rootScope, $injector, $location, $log, localStorageService) {
     //localStorageService.set('auth_token', 'tok');
-
     //$log.debug(localStorageService.get('auth_token'));
+
+    // Set Development Mode - loads app more quickly by reading schedule
+    // template stored in localstorage instead of pulling a new one every time.
+    $rootScope.devMode = true;
+
+
+    // reset login error flags
+    $rootScope.loggedIn = false;
+    $rootScope.userNotRegistered = false;
+    $rootScope.userNotCurrent = false;
+    $rootScope.loginFailed = false;
+    $rootScope.loggedInUser = {};
 
     $location.path( "/login" );
   });

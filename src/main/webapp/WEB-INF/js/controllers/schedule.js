@@ -18,11 +18,12 @@ angular.module('sequoiaGroveApp')
         $scope,
         $timeout,
         $translate,
-        $mdDialog) {
+        $mdDialog,
+        localStorageService) {
 
 
 /************** Login Redirect, Containers and UI settings **************/
-  $rootScope.lastPath = '/schedule';
+  localStorageService.set('lastPath', '/schedule');
   $scope.saving = false;
   $scope.importing = false;
 
