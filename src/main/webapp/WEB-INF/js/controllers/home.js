@@ -14,10 +14,12 @@ angular.module('sequoiaGroveApp')
     $scope,
     $location,
     $rootScope,
-    $translate)
+    $translate,
+    localStorageService)
   {
 
 /************** Login Redirect, Containers and UI settings **************/
+  localStorageService.set('lastPath', '/home');
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {

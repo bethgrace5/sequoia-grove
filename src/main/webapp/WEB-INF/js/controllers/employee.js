@@ -8,11 +8,11 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
-    $rootScope.lastPath = '/employee';
+    localStorageService.set('lastPath', '/employee');
 
     // user is not logged in
     if ($rootScope.loggedIn == false) {

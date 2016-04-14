@@ -15,12 +15,8 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $q,
+        localStorageService,
         Persona){
-    $rootScope.loggedIn = false;
-    $rootScope.userNotRegistered = false;
-    $rootScope.userNotCurrent = false;
-    $rootScope.loginFailed = false;
-    $rootScope.loggedInUser = {};
 
     // User tried to go back to the login page when they were alredy logged in.
     // redirect back to home
@@ -31,9 +27,6 @@ angular.module('sequoiaGroveApp')
 
     // User initialized login, send it to Mozilla Persona
     $scope.personaLogin = function () {
-      $rootScope.userNotRegistered = false;
-      $rootScope.userNotCurrent = false;
-      $rootScope.loginFailed = false;
       Persona.request();
     }
 
@@ -41,47 +34,92 @@ angular.module('sequoiaGroveApp')
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
 
-      // first, build schedule header
+      // build schedule header
       $scope.setScheduleHeader();
 
-      // next, build schedule template
-      $q.all( [$scope.getScheduleTemplate($scope.date.mon.val)]
-      ).then(function(results) {
-
-        // next, if the user is a manager, gather additional needed data
-        if ($rootScope.loggedInUser.isManager) {
-          $q.all([ $scope.getEmployees()]
-          ).then(function(results) {
-            $scope.getPositions();
-          })
+      if($rootScope.devMode) {
+        if (localStorageService.get('template')){
+          // schedule template setup
+          $rootScope.template = localStorageService.get('template');
+          $scope.storeOriginalTemplate($scope.template);
+          $scope.countDays();
+          $scope.countHours();
+          $rootScope.ispublished = localStorageService.get('ispublished');
+          $rootScope.employees = localStorageService.get('employees');
+          $rootScope.positions = localStorageService.get('positions');
+          $location.path(localStorageService.get('lastPath'));
+        }
+        else {
+          $rootScope.devMode = false;
         }
 
-        // Finally, redirect to home
+      }
+
+      if ($rootScope.devMode === false) {
+      // get Schedule Template
+      $scope.getScheduleTemplate($scope.date.mon.val)
+        // successfully got schedule template
+        .then(function(success) {
+          if (success.status === 200) {
+            if (success.data.ispublished === false) {
+              $rootScope.ispublished = false;
+            }
+            if ($rootScope.loggedInUser.isManager === false) {
+              return;
+            }
+            // Keep data retrieved
+            $rootScope.ispublished = success.data.ispublished;
+            localStorageService.set('ispublished', success.data.ispublished);
+            $scope.storeOriginalTemplate(success.data.template);
+            $rootScope.template = success.data.template;
+
+            localStorageService.set('template', success.data.template);
+            // update count of days and hours per employee
+            $scope.countDays();
+            $scope.countHours();
+            // move to next call
+            return $scope.getEmployees();
+          }
+        },
+        // failed to get schedule template
+        function(failure) {
+          $log.error("Error obtaining schedule template" );
+        // successfully got all employees
+        }).then(function(success) {
+          $rootScope.employees = success.data.employees;
+          localStorageService.set('auth_token', success.data.api_token);
+          localStorageService.set('employees', success.data.employees);
+          return $scope.getPositions();
+        // failed to get all employees
+        },function(failure) {
+          $log.error("Error obtaining all employee" );
+        // successfully got positions
+        }).then(function(success) {
+          localStorageService.set('positions', success.data.positions);
+          $rootScope.positions = success.data.positions;
+           return localStorageService.get('lastPath');
+        // failed to get positions
+        },function(failure) {
+          $log.error("Error obtaining position data" );
         }).then(function(results) {
           $scope.loading = false;
           $log.debug('loading complete');
-
-          // redirect to last path, or home if none
-          if ($rootScope.lastPath === '/login' ||
-              $rootScope.lastPath === undefined  ||
-              $rootScope.lastPath === null) {
-            $rootScope.lastPath = '/home';
-          }
-          $location.path( $rootScope.lastPath );
+          // finally, redirect to last path, or home if none
+          $location.path(localStorageService.get('lastPath'));
         });
+      }
     }
 
     // When a user has logged out, this will clear variables to reset
     // the application to a clean state
     $scope.destructData = function() {
       Persona.logout();
-
       //FIXME for now, just cheat it and reload the page,
       // eventually, reset root and main scope variables.
       location.reload();
     }
 
-    
+
 /************** Event Watchers **************/
 
     // When Persona is used to login or logout, it catches the login/logout as needed
@@ -92,7 +130,6 @@ angular.module('sequoiaGroveApp')
         var data = { assertion: assertion };
         $http.post("/sequoiagrove/auth/login/", data).
           success(function(data, status){
-
             // The user with the supplied email was verified by Mozilla Persona,
             // but was not found in the database.
             // Issue warning message, don't redirect to home
@@ -111,7 +148,6 @@ angular.module('sequoiaGroveApp')
               $rootScope.loggingIn = false;
               return;
             }
-
             // the login failed - maybe the domain was incorrect
             if (data.loginFailed) {
               $rootScope.loginFailed = true;
@@ -120,12 +156,12 @@ angular.module('sequoiaGroveApp')
               $rootScope.loggingIn = false;
               return;
             }
-
             // Otherwise, we found the user - save that user's data
             $rootScope.userNotRegistered = false;
             $rootScope.loggedInUser = data.user;
             $rootScope.loggedIn = true;
             $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
+            localStorageService.set('auth_token', data.auth_token);
 
             // then call function to load all required data and redirect to home
             $scope.initializeData();
@@ -141,7 +177,6 @@ angular.module('sequoiaGroveApp')
       }
     });
 
-
     $rootScope.$on('login', function() {
       $scope.personaLogin();
     });
@@ -149,6 +184,5 @@ angular.module('sequoiaGroveApp')
     $rootScope.$on('logout', function() {
       $scope.destructData();
     });
-
 
   });
