@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
 
+import com.sequoiagrove.controller.Authentication;
 import com.sequoiagrove.model.Employee;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
@@ -30,10 +32,14 @@ public class EmployeeController
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model) {
+    public String getAllEmployee(Model model,
+            @RequestHeader (value="Authorization", defaultValue = "") String authToken) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        String queryStr = "select * from employee_info_view";
 
+        //System.out.println(Authentication.verifyToken(authToken));
+        System.out.println(authToken);
+
+        String queryStr = "select * from employee_info_view";
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -63,6 +69,7 @@ public class EmployeeController
                 }
             });
         model.addAttribute("employees", empList);
+        model.addAttribute("api_token", authToken);
         return "jsonTemplate";
     }
 

@@ -24,11 +24,10 @@
 
 
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location) {
+.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService) {
 
   /****************** Check and Balances ****************************/
-  $rootScope.lastPath = '/schedule';
-  $rootScope.lastPath = '/request';
+  localStorageService.set('lastPath', '/request');
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');
@@ -121,14 +120,14 @@ angular.module('sequoiaGroveApp')
       $scope.datesCollidePopup(ev);
       return;
     }
-    var message = 
+    var message =
       'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
       ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
-    
+
     if($scope.totalDays($scope.requestDateStart, $scope.requestDateEnd ) == 1) {
       message = "Date: " + moment($scope.requestDateStart).format("MMMM Do, YYYY");
     }
-  
+
     // Appending dialog to document.body to cover sidenav in docs app
     var confirm = $mdDialog.confirm()
       .title('Would You Like To Submit This Request')
@@ -325,7 +324,6 @@ angular.module('sequoiaGroveApp')
     $scope.getAllRequests();
     $scope.getCurrentEmployeeRequest();
     $scope.getPendingRequests();
-    $scope.getEmployees();
     $scope.testManager();
   }
 

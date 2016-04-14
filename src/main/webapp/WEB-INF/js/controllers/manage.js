@@ -9,7 +9,7 @@
 
 
 angular.module('sequoiaGroveApp')
-.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location) {
+.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService) {
 
   /****************** Local Variables/Objects ***********************/
   $scope.saving = false;
@@ -47,8 +47,7 @@ angular.module('sequoiaGroveApp')
   };
 
   /****************** Check and Balances ****************************/
-  $rootScope.lastPath = '/schedule';
-  $rootScope.lastPath = '/request';
+  localStorageService.set('lastPath', '/manage');
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');

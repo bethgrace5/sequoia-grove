@@ -13,7 +13,7 @@ angular.module('sequoiaGroveApp', [
     'ngMessages',
     'underscore'
   ])
-  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider, 
+  .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
               $logProvider, $compileProvider) {
     $routeProvider
       .when('/', {
@@ -85,6 +85,21 @@ angular.module('sequoiaGroveApp', [
       $compileProvider.debugInfoEnabled(true);
 
   }).
-  run (function($rootScope, $http, $log, $location, Persona) {
+  run (function($rootScope, $injector, $location, $log, localStorageService) {
+    //localStorageService.set('auth_token', 'tok');
+    //$log.debug(localStorageService.get('auth_token'));
+
+    // Set Development Mode - loads app more quickly by reading schedule
+    // template stored in localstorage instead of pulling a new one every time.
+    $rootScope.devMode = true;
+
+
+    // reset login error flags
+    $rootScope.loggedIn = false;
+    $rootScope.userNotRegistered = false;
+    $rootScope.userNotCurrent = false;
+    $rootScope.loginFailed = false;
+    $rootScope.loggedInUser = {};
+
     $location.path( "/login" );
   });
