@@ -109,4 +109,39 @@ public class HolidaysController {
         return "jsonTemplate";
       }
 
+    @RequestMapping(value = "/holiday/get/between/{dateStart}/{dateEnd}")
+      public String getHolidaysBetween(Model model,
+          @PathVariable("dateStart") String dateStart,
+          @PathVariable("dateEnd") String dateEnd ) throws SQLException{
+        //Make Sure request ID is there too...
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        System.out.println(dateStart + " " + dateEnd);
+
+        Object[] params = new Object[] {
+          dateStart,
+          dateEnd
+        };
+        List<Holiday> holidayList = jdbcTemplate.query(
+          "select * from holiday where true " +
+          " and hdate >= to_date(?, 'mm-dd-yyyy') " +
+          " and hdate <= to_date(?, 'mm-dd-yyyy') ", params,
+          new RowMapper<Holiday>() {
+            public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
+              Holiday es = new Holiday(
+                rs.getInt("id"),
+                rs.getString("title"),
+                rs.getString("hdate"),
+                rs.getString("store_open"),
+                rs.getString("store_close")
+              );
+              return es;
+            }
+          });
+       
+        model.addAttribute("holidays", holidayList);
+        return "jsonTemplate";
+      }
+
+
 }
