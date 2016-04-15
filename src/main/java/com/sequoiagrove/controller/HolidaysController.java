@@ -142,6 +142,4 @@ public class HolidaysController {
         model.addAttribute("holidays", holidayList);
         return "jsonTemplate";
       }
-
-
 }
