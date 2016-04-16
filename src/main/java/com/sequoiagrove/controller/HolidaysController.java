@@ -78,7 +78,7 @@ public class HolidaysController {
       return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/schedule/update/holiday")
+    @RequestMapping(value = "/holiday/update")
       public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         /*

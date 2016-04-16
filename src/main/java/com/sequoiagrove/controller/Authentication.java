@@ -8,6 +8,9 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
+import io.jsonwebtoken.MissingClaimException;
+import io.jsonwebtoken.IncorrectClaimException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.io.IOException;
@@ -91,7 +94,9 @@ public class Authentication {
             if (count > 0) {
                 System.out.println(user.getFullname() + " has sucessfully signed in");
                 model.addAttribute("user", user);
-                model.addAttribute("auth_token", getToken());
+                model.addAttribute("auth_token",
+                    getToken(user.getEmail(),
+                      user.getIsManager()? "manager":"employee"));
             }
             else {
                 model.addAttribute("userNotCurrent", true);
@@ -111,41 +116,66 @@ public class Authentication {
     }
 
     // Create initial token upon authorization
-    protected String getToken() {
+    protected static String getToken(String subject, String scope) {
       //byte[] key = getSignatureKey();
       // We need a signing key, so we'll create one just for this example. Usually
       // the key would be read from your application configuration instead.
 
       String jwt =
         Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
-        .setSubject("users/1300819380")
+        //.setSubject(subject)
+        // for now hard code subject, later, change to be related to
+        // this user.
+        .setSubject("token_subject")
         //.setExpiration(expirationDate)
-        //.put("scope", "self api/buy")
+        //.put("scope", scope)
         .signWith(SignatureAlgorithm.HS256,key)
         .compact();
 
       return jwt;
     }
 
-    public static String verifyToken(String jwt) {
+    public static String verifyToken(String jwt, String URI) {
       String subject = "HACKER";
-      try {
-        Jws<Claims> jwtClaims = 
-          Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
-
-        subject = jwtClaims.getBody().getSubject();
-
-        //OK, we can trust this JWT
-        System.out.println(subject);
-
-      } catch (SignatureException e) {
-        System.out.println("signature exception caught");
-
-        //don't trust the JWT!
-      } catch(IllegalArgumentException e) {
-        System.out.println("illegal argument exception caught");
-      }
-      return(subject);
+        try {
+            // Parse jwt
+            Jws<Claims> jwtClaims =
+              Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
+              subject = jwtClaims.getBody().getSubject();
+            try {
+                // Check jwt subject
+                // for now, use hard coded subject, later, check datbase for it
+                Jwts.parser().requireSubject("token_subject").setSigningKey(key).parseClaimsJws(jwt);
+            } catch (MissingClaimException e) {
+                // the parsed JWT did not have the subject field
+                System.out.println("Missing Claim Exception for " + URI
+                    + "\n\t-> No subject field present.");
+                return("invalid");
+            } catch (IncorrectClaimException e) {
+                // the parsed JWT had a sub field, but its value was not equal to 'subject'
+                System.out.println("Incorrect Claim Exception for " + URI
+                    + "\n\t-> Subject field was not what was expected.");
+                return("invalid");
+            }
+            //we can trust this JWT, get the subject
+            //System.out.println(subject);
+        } catch (SignatureException e) {
+            //don't trust the JWT!
+            System.out.println("Signature Exception: " + URI
+                + "\n\t-> cannot trust this token.");
+            return("invalid");
+        } catch (MalformedJwtException e) {
+            // Jwt was not formed correctly (needs 2 dots etc.)
+            System.out.println("Malformed Jwt: " + URI
+                + "\n\t-> needs two dots etc.");
+            return("invalid");
+        } catch (IllegalArgumentException e) {
+            // Jwt String cannot be null or empty
+            System.out.println("Illegal Argument (Jwt): " + URI
+                + "\n\t-> possibly null or empty Jwt.");
+            return("invalid");
+        }
+       return(subject);
     }
 
 }
