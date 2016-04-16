@@ -26,7 +26,6 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
-  $scope.showDeliveries = false;
   $scope.highlight = true;
   $scope.type = 'all';
 

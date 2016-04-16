@@ -43,6 +43,17 @@ angular.module('sequoiaGroveApp')
   // setup containers
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
+  $scope.deliveries = [];
+
+  $scope.viewDeliveries = {
+      'mon':[],
+      'tue':[],
+      'wed':[],
+      'thu':[],
+      'fri':[],
+      'sat':[],
+      'sun':[]
+  }
 
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
@@ -55,7 +66,7 @@ angular.module('sequoiaGroveApp')
   $scope.birthdays = [];
   $scope.holidays = [];
   $rootScope.ispublished = false;
-
+  $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
@@ -87,6 +98,7 @@ angular.module('sequoiaGroveApp')
   }
   // highlight name
   $scope.highlight = false;
+  $rootScope.revealDeliveries = false;
   // flag when set will disable all buttons, to avoid overlapping requests
   $scope.loading = false;
 
@@ -272,11 +284,52 @@ angular.module('sequoiaGroveApp')
   }
 
 /************** HTTP Request Functions **************/
+  // get all existing deliveries
+  $scope.getdeliveries = function() {
+    $http({
+      url: '/sequoiagrove/delivery',
+      method: "GET"
+    }).success(function (data, status, headers, config) {
+        $log.debug(data);
+      if (status == 200) {
+        // clear update shifts list
+        $scope.deliveries = data.delivery;
+        _.map($scope.deliveries,function(item){
+            if(item.mon) {
+                $scope.viewDeliveries.mon.push(item.name);
+            }
+            if(item.tue) {
+                $scope.viewDeliveries.tue.push(item.name);
+            }
+            if(item.wed) {
+                $scope.viewDeliveries.wed.push(item.name);
+            }
+            if(item.thu) {
+                $scope.viewDeliveries.thu.push(item.name);
+            }
+            if(item.fri) {
+                $scope.viewDeliveries.fri.push(item.name);
+            }
+            if(item.sat) {
+                $scope.viewDeliveries.sat.push(item.name);
+            }
+            if(item.sun) {
+                $scope.viewDeliveries.sun.push(item.name);
+            }
+        });
+      }
+    }).error(function (data, status, headers, config) {
+      $log.error('Error getting deliveries ', status, data);
+    });
+  }
 
   $scope.getPositions = function() {
     return $http({ url: '/sequoiagrove/position', method: "GET" });
   }
 
+  $scope.toggleDeliveries = function() {
+      $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
+  }
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {

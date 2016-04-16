@@ -36,6 +36,7 @@ angular.module('sequoiaGroveApp')
 
       // build schedule header
       $scope.setScheduleHeader();
+      $scope.getdeliveries();
 
       if($rootScope.devMode) {
         if (localStorageService.get('template')){
