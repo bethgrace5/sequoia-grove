@@ -37,7 +37,6 @@ angular.module('sequoiaGroveApp')
 
       // build schedule header
       $scope.setScheduleHeader();
-      $scope.getdeliveries();
 
       if($rootScope.devMode) {
         if (localStorageService.get('template')){
@@ -56,6 +55,8 @@ angular.module('sequoiaGroveApp')
         }).then(function(success) {
           // get positions
           return $scope.getPositions();
+        }).then(function(success) {
+          return $scope.getDeliveries();
         }).then(function(success) {
           // finally, redirect to last path, or home if none
           $scope.loading = false;

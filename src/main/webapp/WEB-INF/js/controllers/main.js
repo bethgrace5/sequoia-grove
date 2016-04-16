@@ -287,42 +287,38 @@ angular.module('sequoiaGroveApp')
 
 /************** HTTP Request Functions **************/
   // get all existing deliveries
-  $scope.getdeliveries = function() {
-    $http({
-      url: '/sequoiagrove/delivery',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $log.debug(data);
-      if (status == 200) {
-        // clear update shifts list
-        $scope.deliveries = data.delivery;
-        _.map($scope.deliveries,function(item){
+  $scope.getDeliveries = function() {
+    return $http({url: '/sequoiagrove/delivery', method: "GET" })
+      .then(function(success) {
+        if (success.status == 200) {
+          $scope.deliveries = success.data.delivery;
+          _.map($scope.deliveries,function(item){
             if(item.mon) {
-                $scope.viewDeliveries.mon.push(item.name);
+              $scope.viewDeliveries.mon.push(item.name);
             }
             if(item.tue) {
-                $scope.viewDeliveries.tue.push(item.name);
+              $scope.viewDeliveries.tue.push(item.name);
             }
             if(item.wed) {
-                $scope.viewDeliveries.wed.push(item.name);
+              $scope.viewDeliveries.wed.push(item.name);
             }
             if(item.thu) {
-                $scope.viewDeliveries.thu.push(item.name);
+              $scope.viewDeliveries.thu.push(item.name);
             }
             if(item.fri) {
-                $scope.viewDeliveries.fri.push(item.name);
+              $scope.viewDeliveries.fri.push(item.name);
             }
             if(item.sat) {
-                $scope.viewDeliveries.sat.push(item.name);
+              $scope.viewDeliveries.sat.push(item.name);
             }
             if(item.sun) {
-                $scope.viewDeliveries.sun.push(item.name);
+              $scope.viewDeliveries.sun.push(item.name);
             }
-        });
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error('Error getting deliveries ', status, data);
-    });
+          });
+        }
+      },function(failure) {
+        $log.error('Error getting deliveries ');
+      });
   }
 
   $scope.getPositions = function() {
