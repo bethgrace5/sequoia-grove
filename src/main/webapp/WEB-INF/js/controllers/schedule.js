@@ -281,6 +281,13 @@ angular.module('sequoiaGroveApp')
       return (shift.eid !== 0);
     });
 
+    // don't actually save if in dev mode
+    if($rootScope.devMode) {
+      $scope.updateShifts = [];
+      $scope.deleteSchedule();
+      return;
+    }
+
     $http({
       url: '/sequoiagrove/schedule/update/',
       method: "POST",
@@ -302,6 +309,14 @@ angular.module('sequoiaGroveApp')
 
   // Delete these shift schedulings
   $scope.deleteSchedule = function() {
+
+    // don't actually delete if in dev mode
+    if($rootScope.devMode) {
+      $scope.deleteShifts = [];
+      $scope.saving = false;
+      return;
+    }
+
     $http({
       url: '/sequoiagrove/schedule/delete/',
       method: "DELETE",

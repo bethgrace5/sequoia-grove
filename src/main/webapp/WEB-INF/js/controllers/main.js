@@ -281,6 +281,8 @@ angular.module('sequoiaGroveApp')
       $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
       $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
     });
+    $scope.countDays();
+    $scope.countHours();
   }
 
 /************** HTTP Request Functions **************/
@@ -324,7 +326,12 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.getPositions = function() {
-    return $http({ url: '/sequoiagrove/position', method: "GET" });
+    return $http({ url: '/sequoiagrove/position', method: "GET" })
+      .then(function(success) {
+        $rootScope.positions = success.data.positions;
+      },function(failure) {
+        $log.error("Error obtaining position data" );
+      });
   }
 
   $scope.toggleDeliveries = function() {
@@ -333,6 +340,7 @@ angular.module('sequoiaGroveApp')
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
+
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
@@ -340,13 +348,68 @@ angular.module('sequoiaGroveApp')
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
-    return $http({ 'url': url, 'method': 'GET', });
+
+    // if it's in dev mode, and we already have
+    // a template in localstorage, return.
+    if($rootScope.devMode) {
+      if ($rootScope.template) {
+        $log.debug('Warning: devMode on. This is not current schedule data');
+        $rootScope.ispublished = true;
+        return $q(function(resolve, reject) {
+          resolve();
+        });
+      }
+    }
+    // get template
+    return $http({ 'url': url, 'method': 'GET', }).then(
+      function(success) {
+
+        if (success.status === 200) {
+          if (success.data.ispublished === false) {
+            $rootScope.ispublished = false;
+          }
+          if ($rootScope.loggedInUser.isManager === false) {
+            return;
+          }
+          // Keep data retrieved
+          $rootScope.ispublished = success.data.ispublished;
+          $scope.storeOriginalTemplate(success.data.template);
+          $rootScope.template = success.data.template;
+          if ($rootScope.devMode) {
+            localStorageService.set('template', JSON.stringify($rootScope.template));
+          }
+        }
+      },
+      function(failure) {
+          $log.error("Error obtaining schedule template" );
+      });
   }
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
     $scope.loadingMsg = "Obtaining current employee data...";
-    return $http({ url: '/sequoiagrove/employees', method: "GET" });
+
+    // if it's in dev mode, and we already have
+    // employees in localstorage, return.
+    if($rootScope.devMode) {
+      if ($rootScope.employees) {
+        $log.debug('Warning: devMode on. This is not current employee data');
+        return $q(function(resolve, reject) {
+          resolve();
+        });
+      }
+    }
+
+    return $http({ url: '/sequoiagrove/employees', method: "GET" })
+      .then(function(success) {
+        $rootScope.employees = success.data.employees;
+        localStorageService.set('auth_token', success.data.api_token);
+        if ($rootScope.devMode) {
+          localStorageService.set('employees', JSON.stringify($rootScope.employees));
+        }
+      },function(failure) {
+          $log.error("Error obtaining all employees" );
+      });
   }
 
   // send http request to back end to check if published

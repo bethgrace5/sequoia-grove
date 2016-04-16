@@ -33,6 +33,7 @@ angular.module('sequoiaGroveApp')
     // When user has logged in, this will load required data based
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
+      var gotTemplate = false;
 
       // build schedule header
       $scope.setScheduleHeader();
@@ -40,75 +41,27 @@ angular.module('sequoiaGroveApp')
 
       if($rootScope.devMode) {
         if (localStorageService.get('template')){
-          // schedule template setup
-          $rootScope.template = localStorageService.get('template');
-          $scope.storeOriginalTemplate($scope.template);
-          $scope.countDays();
-          $scope.countHours();
-          $rootScope.ispublished = localStorageService.get('ispublished');
-          $rootScope.employees = localStorageService.get('employees');
-          $rootScope.positions = localStorageService.get('positions');
-          $location.path(localStorageService.get('lastPath'));
+          $rootScope.template = JSON.parse(localStorageService.get('template'));
         }
-        else {
-          $rootScope.devMode = false;
+        if(localStorageService.get('employees')) {
+          $rootScope.employees = JSON.parse(localStorageService.get('employees'));
         }
-
       }
 
-      if ($rootScope.devMode === false) {
       // get Schedule Template
       $scope.getScheduleTemplate($scope.date.mon.val)
-        // successfully got schedule template
         .then(function(success) {
-          if (success.status === 200) {
-            if (success.data.ispublished === false) {
-              $rootScope.ispublished = false;
-            }
-            if ($rootScope.loggedInUser.isManager === false) {
-              return;
-            }
-            // Keep data retrieved
-            $rootScope.ispublished = success.data.ispublished;
-            localStorageService.set('ispublished', success.data.ispublished);
-            $scope.storeOriginalTemplate(success.data.template);
-            $rootScope.template = success.data.template;
-
-            localStorageService.set('template', success.data.template);
-            // update count of days and hours per employee
-            $scope.countDays();
-            $scope.countHours();
-            // move to next call
-            return $scope.getEmployees();
-          }
-        },
-        // failed to get schedule template
-        function(failure) {
-          $log.error("Error obtaining schedule template" );
-        // successfully got all employees
+          // get all employees
+          return $scope.getEmployees();
         }).then(function(success) {
-          $rootScope.employees = success.data.employees;
-          localStorageService.set('auth_token', success.data.api_token);
-          localStorageService.set('employees', success.data.employees);
+          // get positions
           return $scope.getPositions();
-        // failed to get all employees
-        },function(failure) {
-          $log.error("Error obtaining all employee" );
-        // successfully got positions
         }).then(function(success) {
-          localStorageService.set('positions', success.data.positions);
-          $rootScope.positions = success.data.positions;
-           return localStorageService.get('lastPath');
-        // failed to get positions
-        },function(failure) {
-          $log.error("Error obtaining position data" );
-        }).then(function(results) {
+          // finally, redirect to last path, or home if none
           $scope.loading = false;
           $log.debug('loading complete');
-          // finally, redirect to last path, or home if none
           $location.path(localStorageService.get('lastPath'));
-        });
-      }
+      });
     }
 
     // When a user has logged out, this will clear variables to reset
