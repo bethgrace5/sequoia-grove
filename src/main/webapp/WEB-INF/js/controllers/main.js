@@ -43,6 +43,17 @@ angular.module('sequoiaGroveApp')
   // setup containers
   $scope.currentEmployees = [];
   $scope.allEmployees = [];
+  $scope.deliveries = [];
+
+  $scope.viewDeliveries = {
+      'mon':[],
+      'tue':[],
+      'wed':[],
+      'thu':[],
+      'fri':[],
+      'sat':[],
+      'sun':[]
+  }
 
   // shifts that were changed from old shifts and need to be saved to database
   $scope.updateShifts = [];
@@ -55,7 +66,7 @@ angular.module('sequoiaGroveApp')
   $scope.birthdays = [];
   $scope.holidays = [];
   $rootScope.ispublished = false;
-
+  $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
@@ -87,6 +98,7 @@ angular.module('sequoiaGroveApp')
   }
   // highlight name
   $scope.highlight = false;
+  $rootScope.revealDeliveries = false;
   // flag when set will disable all buttons, to avoid overlapping requests
   $scope.loading = false;
 
@@ -269,17 +281,62 @@ angular.module('sequoiaGroveApp')
       $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
       $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
     });
+    $scope.countDays();
+    $scope.countHours();
   }
 
 /************** HTTP Request Functions **************/
-
-  $scope.getPositions = function() {
-    return $http({ url: '/sequoiagrove/position', method: "GET" });
+  // get all existing deliveries
+  $scope.getDeliveries = function() {
+    return $http({url: '/sequoiagrove/delivery', method: "GET" })
+      .then(function(success) {
+        if (success.status == 200) {
+          $scope.deliveries = success.data.delivery;
+          _.map($scope.deliveries,function(item){
+            if(item.mon) {
+              $scope.viewDeliveries.mon.push(item.name);
+            }
+            if(item.tue) {
+              $scope.viewDeliveries.tue.push(item.name);
+            }
+            if(item.wed) {
+              $scope.viewDeliveries.wed.push(item.name);
+            }
+            if(item.thu) {
+              $scope.viewDeliveries.thu.push(item.name);
+            }
+            if(item.fri) {
+              $scope.viewDeliveries.fri.push(item.name);
+            }
+            if(item.sat) {
+              $scope.viewDeliveries.sat.push(item.name);
+            }
+            if(item.sun) {
+              $scope.viewDeliveries.sun.push(item.name);
+            }
+          });
+        }
+      },function(failure) {
+        $log.error('Error getting deliveries ');
+      });
   }
 
+  $scope.getPositions = function() {
+    return $http({ url: '/sequoiagrove/position', method: "GET" })
+      .then(function(success) {
+        $rootScope.positions = success.data.positions;
+      },function(failure) {
+        $log.error("Error obtaining position data" );
+      });
+  }
+
+  $scope.toggleDeliveries = function() {
+      $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
+  }
   // Get The Schedule for the week currently being viewed - expects
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
+
     $scope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
@@ -287,13 +344,68 @@ angular.module('sequoiaGroveApp')
     $scope.originalTemplate = [];
     $scope.deleteShifts = [];
     $scope.updateShifts = [];
-    return $http({ 'url': url, 'method': 'GET', });
+
+    // if it's in dev mode, and we already have
+    // a template in localstorage, return.
+    if($rootScope.devMode) {
+      if ($rootScope.template) {
+        $log.debug('Warning: devMode on. This is not current schedule data');
+        $rootScope.ispublished = true;
+        return $q(function(resolve, reject) {
+          resolve();
+        });
+      }
+    }
+    // get template
+    return $http({ 'url': url, 'method': 'GET', }).then(
+      function(success) {
+
+        if (success.status === 200) {
+          if (success.data.ispublished === false) {
+            $rootScope.ispublished = false;
+          }
+          if ($rootScope.loggedInUser.isManager === false) {
+            return;
+          }
+          // Keep data retrieved
+          $rootScope.ispublished = success.data.ispublished;
+          $scope.storeOriginalTemplate(success.data.template);
+          $rootScope.template = success.data.template;
+          if ($rootScope.devMode) {
+            localStorageService.set('template', JSON.stringify($rootScope.template));
+          }
+        }
+      },
+      function(failure) {
+          $log.error("Error obtaining schedule template" );
+      });
   }
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
     $scope.loadingMsg = "Obtaining current employee data...";
-    return $http({ url: '/sequoiagrove/employees', method: "GET" });
+
+    // if it's in dev mode, and we already have
+    // employees in localstorage, return.
+    if($rootScope.devMode) {
+      if ($rootScope.employees) {
+        $log.debug('Warning: devMode on. This is not current employee data');
+        return $q(function(resolve, reject) {
+          resolve();
+        });
+      }
+    }
+
+    return $http({ url: '/sequoiagrove/employees', method: "GET" })
+      .then(function(success) {
+        $rootScope.employees = success.data.employees;
+        localStorageService.set('auth_token', success.data.api_token);
+        if ($rootScope.devMode) {
+          localStorageService.set('employees', JSON.stringify($rootScope.employees));
+        }
+      },function(failure) {
+          $log.error("Error obtaining all employees" );
+      });
   }
 
   // send http request to back end to check if published

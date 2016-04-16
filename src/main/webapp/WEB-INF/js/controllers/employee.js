@@ -238,6 +238,10 @@ angular.module('sequoiaGroveApp')
 
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
+      if($rootScope.devMode) {
+        $scope.saving = false;
+        return;
+      }
 
       // validate max hours per week
       if ((form.maxHrsWeek.$viewValue == '') ||

@@ -5,9 +5,9 @@
     <div class="pull-left">
 
       <!-- Show Deliveries-->
-      <button ng-hide="deliveries.length<=0" class="btn btn-default" ng-click="showDeliveries=!showDeliveries">
-        <div ng-hide="showDeliveries"> show deliveries </div>
-        <div ng-show="showDeliveries"> hide deliveries </div>
+      <button class="btn btn-default" ng-click="toggleDeliveries()">
+        <div ng-hide="revealDeliveries"> show deliveries </div>
+        <div ng-show="revealDeliveries"> hide deliveries </div>
       </button>
       
 

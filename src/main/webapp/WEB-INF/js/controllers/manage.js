@@ -15,7 +15,6 @@ angular.module('sequoiaGroveApp')
   $scope.saving = false;
   $scope.shiftSaved = false;
   $scope.shiftSaveError = false;
-  $scope.deliveries = [];
   $scope.shiftInfo = {
     "location": "",
     "pid": -1,
@@ -214,20 +213,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // get all existing deliveries
-  $scope.getdeliveries = function() {
-    $http({
-      url: '/sequoiagrove/delivery',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-      if (status == 200) {
-        // clear update shifts list
-        $scope.deliveries = data.delivery;
-      }
-    }).error(function (data, status, headers, config) {
-      $log.error('Error getting deliveries ', status, data);
-    });
-  }
 
 
   // deleting deliveries
@@ -273,7 +258,6 @@ $scope.addDelivery = function() {
 
 }
 
-  $scope.getdeliveries();
 
 /************** Holidays Functions **********************************/
   $scope.holidayDate = new Date();
