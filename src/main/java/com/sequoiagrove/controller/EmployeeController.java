@@ -32,12 +32,8 @@ public class EmployeeController
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model,
-            @RequestHeader (value="Authorization", defaultValue = "") String authToken) {
+    public String getAllEmployee(Model model) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        //System.out.println(Authentication.verifyToken(authToken));
-        System.out.println(authToken);
 
         String queryStr = "select * from employee_info_view";
         List<Employee> empList = jdbcTemplate.query( queryStr,
@@ -69,7 +65,6 @@ public class EmployeeController
                 }
             });
         model.addAttribute("employees", empList);
-        model.addAttribute("api_token", authToken);
         return "jsonTemplate";
     }
 

@@ -33,8 +33,16 @@
     </bean>
 
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
+      <property name="dataSource" ref="dataSource"/>
     </bean>
+
+    <mvc:interceptors>
+      <mvc:interceptor>
+        <mvc:mapping path="/employees" />
+        <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+      </mvc:interceptor>
+    </mvc:interceptors>
+
 
 
 </beans>
