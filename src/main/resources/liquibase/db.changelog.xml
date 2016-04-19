@@ -28,6 +28,7 @@
   <include relativeToChangelogFile="true" file="changelogs/011-requests-vacation.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/012-published-schedule.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/013-delivery.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/024-session.xml"/>
 
   <!-- Views -->
   <include relativeToChangelogFile="true" file="changelogs/014-schedule-template-view.xml"/>
