@@ -62,8 +62,8 @@ public class Authentication {
     protected String loginWithToken(Model model, @ModelAttribute("subject") String subject ) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         System.out.println("from loginwithtoken: " + subject);
-        Model.addAttribute("subject", subject);
-        Model.addAttribute("valid", true);
+        model.addAttribute("subject", subject);
+        model.addAttribute("valid", true);
         return "jsonTemplate";
     }
 
