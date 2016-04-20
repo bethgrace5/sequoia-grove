@@ -27,7 +27,59 @@ angular.module('sequoiaGroveApp')
 
     // User initialized login, send it to Mozilla Persona
     $scope.personaLogin = function () {
-      Persona.request();
+      $log.debug("calling persona login");
+      var token = localStorageService.get('auth_token');
+
+      if (token) {
+        $log.debug('found token: ', token);
+        $scope.verifyToken(token).then(
+          function(success) {
+              if(success) {
+                $log.debug(success);
+              }
+              else {
+                //Persona.request();
+              }
+          }, function(failure) {
+          });
+              //if(success.data.isValid) {
+                //$log.debug("token is valid");
+              //}
+              //else {
+                //$log.debug("token is Not valid");
+                //Persona.request();
+              //}
+            //}, function(failure) {
+              //$log.debug('Error verifying token.');
+            //});
+        // check if token is valid
+      }
+      else {
+        $log.debug('no token found');
+        Persona.request();
+      }
+      // if there is a valid token in local storage, go
+      // check it with /sequoiagrove/auth/login-with-tokenk
+      //
+      //
+      // else
+    }
+
+    $scope.verifyToken = function(token) {
+      return $http({
+        url: '/sequoiagrove/auth/loginwithtoken',
+        method: "POST",
+        data: {'auth_token':token} }).then(
+          function(success) {
+            $log.debug(success);
+            if (success.data.valid) {
+            $log.debug('returning valid');
+              return success.data;
+            }
+          }, function(failure) {
+            $log.debug('error verifying token');
+            return false;
+        });
     }
 
     // When user has logged in, this will load required data based

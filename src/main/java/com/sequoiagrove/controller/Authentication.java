@@ -33,6 +33,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -48,6 +49,23 @@ import com.sequoiagrove.controller.MainController;
 public class Authentication {
   private final String USER_AGENT = "Mozilla/5.0";
   private static Key key = MacProvider.generateKey();
+
+  @ModelAttribute("subject")
+    public String getSubject(HttpServletRequest request)
+    {
+      System.out.println("in model attribute: " + request.getAttribute("subject"));
+      return (String) request.getAttribute("subject");
+    }
+
+    // Verify mozilla persona token received
+    @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
+    protected String loginWithToken(Model model, @ModelAttribute("subject") String subject ) throws ServletException, IOException, SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        System.out.println("from loginwithtoken: " + subject);
+        Model.addAttribute("subject", subject);
+        Model.addAttribute("valid", true);
+        return "jsonTemplate";
+    }
 
     // Verify mozilla persona token received
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)

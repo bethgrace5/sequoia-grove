@@ -2,6 +2,7 @@ package com.sequoiagrove.controller;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import org.springframework.web.servlet.ModelAndView;
 
 import org.springframework.stereotype.Component;
@@ -17,13 +18,17 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         //System.out.println(request.getHeader("Authorization"));
         // TODO verify authorization token by checking session table
         String URI = request.getRequestURI();
-        System.out.println(URI);
-        String subject =
+        //System.out.println(URI);
+        String verificationResponse =
           Authentication.verifyToken(request.getHeader("Authorization"), URI);
+        System.out.println("subject from interceptor: " + verificationResponse);
 
-        if (subject.equals("invalid")) {
+        if (verificationResponse.equals("invalid")) {
           return false;
         }
+
+        // get the email from the parsed token
+        request.setAttribute("subject", verificationResponse);
 
         // if valid, generate new token, and update table
         return true;
