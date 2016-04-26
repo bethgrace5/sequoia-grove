@@ -1,34 +1,81 @@
+
 <div class="container">
-  <div class="hidden-print text-center" style="height: 300px;">
-    <p class="lead">
-    <a ng-hide="loggingIn" style="cursor:pointer;" ng-click="personaLogin()">Sign in to continue</a>
-    <p ng-show="loggingIn">
-      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
-      {{loadingMsg}}
-    </p>
-    </p>
-    <p ng-show="userNotRegistered">
-    <strong style="color:b30000;">{{loggedInUser.email}}</strong>
-    is not a registered user.
-    </p>
-    <p ng-show="userNotRegistered">
-    If you have an account, ask an administrator to verify your email.
-    </p>
-    <p ng-show="userNotCurrent">
-    <strong style="color:b30000;">{{loggedInUser.email}}</strong>
-    is not a current employee.
-    </p>
-    <p ng-show="userNotCurrent">
-    If you are a current employee, ask an administrator to verify your email and employment status.
-    </p>
-    <p ng-show="loginFailed">
-    <strong style="color:b30000;">Sign in failed...</strong>
-    </p>
-    <!--
-      <button type="button" ng-click="login()" class="btn btn-default">
-      <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
-      Sign in with Persona
-      </button>
-      -->
+  <div class="panel panel-default hidden-print" style="height: 300px;">
+    <div class="row panel-body">
+      <div class="col-sm-6 col-sm-offset-3">
+        <form>
+          <div class="form-group">
+            <label for="login-email">Email</label>
+            <input id="login-email" class="form-control" type="email"
+            ng-disabled="loggingIn"
+            ng-model="email"/>
+          </div>
+          <div class="form-group">
+            <label for="login-password">Password</label>
+            <input id="login-password" class="form-control" type="password"
+            ng-model="password"
+            ng-disabled="loggingIn"
+            />
+          </div>
+          <div class="form-group">
+            <label for="login-remember">Remember Me</label>
+            <input id="login-remember" type="checkbox"
+            ng-disabled="loggingIn"
+            ng-click="updateRemember()"
+            ng-model="remember"/>
+          </div>
+          <div class="form-group">
+            <label for="dev-mode">Dev Mode</label>
+            <input id="dev-mode" type="checkbox"
+            ng-disabled="loggingIn"
+            ng-click="updateDevMode()"
+            ng-model="devMode"/>
+          </div>
+        </form>
+        <div class="text-center">
+          <button class="btn btn-primary form-control"
+            ng-disabled="loggingIn"
+            ng-click="appLogin()">
+            Sign In!
+          </button>
+          <p class="lead">
+            <p ng-show="loggingIn">
+              <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+              {{loadingMsg}}
+            </p>
+          </p>
+        </div>
+
+        <!-- Error Messages -->
+        <div style="color:b30000; height:30px;">
+          <p ng-show="blankEmailOrPassword">
+            <strong>{{loggedInUser.email}}</strong>
+            Please supply an email and password to continue.
+          </p>
+          <p ng-show="userNotRegistered">
+            <strong>{{loggedInUser.email}}</strong>
+            is not a registered user.
+          </p>
+          <p ng-show="userNotRegistered">
+            If you have an account, ask an administrator to verify your email.
+          </p>
+          <p ng-show="userNotCurrent">
+            <strong>{{loggedInUser.email}}</strong>
+            is not a current employee.
+          </p>
+          <p ng-show="userNotCurrent">
+            If you are a current employee, ask an administrator to verify your email and employment status.
+          </p>
+          <p ng-show="loginFailed">
+            <strong>Sign in failed...</strong>
+          </p>
+        </div>
+      </div>
+    </div>
   </div>
+  <a class="lead pull-right" style="cursor:pointer;"
+    ng-disabled="loggingIn">
+    Need an account?
+  </a>
+</div>
 </div>

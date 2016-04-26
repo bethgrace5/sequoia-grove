@@ -15,8 +15,19 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $q,
-        localStorageService,
-        Persona){
+        localStorageService){
+
+    $scope.email = $rootScope.loggedInUser.email;
+    $scope.password = '1234';
+    $scope.remember = true;
+
+    $scope.updateRemember = function() {
+      if ($scope.remember) {
+      }
+      else {
+        localStorageService.remove('email');
+      }
+    }
 
     // User tried to go back to the login page when they were alredy logged in.
     // redirect back to home
@@ -25,60 +36,70 @@ angular.module('sequoiaGroveApp')
       $rootScope.loggingIn = false;
     }
 
-    // User initialized login, send it to Mozilla Persona
-    $scope.personaLogin = function () {
-      $log.debug("calling persona login");
-      var token = localStorageService.get('auth_token');
+    // User initialized login
+    $scope.appLogin = function() {
+      $rootScope.loggingIn = true;
 
-      if (token) {
-        $log.debug('found token: ', token);
-        $scope.verifyToken(token).then(
-          function(success) {
-              if(success) {
-                $log.debug(success);
-              }
-              else {
-                //Persona.request();
-              }
-          }, function(failure) {
-          });
-              //if(success.data.isValid) {
-                //$log.debug("token is valid");
-              //}
-              //else {
-                //$log.debug("token is Not valid");
-                //Persona.request();
-              //}
-            //}, function(failure) {
-              //$log.debug('Error verifying token.');
-            //});
-        // check if token is valid
-      }
-      else {
-        $log.debug('no token found');
-        Persona.request();
-      }
-      // if there is a valid token in local storage, go
-      // check it with /sequoiagrove/auth/login-with-tokenk
-      //
-      //
-      // else
-    }
+      // reset login error flags
+      $rootScope.loggedIn = false;
+      $rootScope.blankEmailOrPassword = false;
+      $rootScope.userNotRegistered = false;
+      $rootScope.userNotCurrent = false;
+      $rootScope.loginFailed = false;
 
-    $scope.verifyToken = function(token) {
-      return $http({
-        url: '/sequoiagrove/auth/loginwithtoken',
-        method: "POST",
-        data: {'auth_token':token} }).then(
-          function(success) {
-            $log.debug(success);
-            if (success.data.valid) {
-            $log.debug('returning valid');
-              return success.data;
+      $http.post("/sequoiagrove/auth/login/", {'email':$scope.email, 'password':$scope.password}).
+        then(function(success){
+          $log.debug(success);
+            // Blank Email or Password
+            if (success.data.blankEmailOrPassword) {
+              $rootScope.blankEmailOrPassword = true;
+              $log.debug(success.data.email, 'blank email or password supplied');
+              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
             }
-          }, function(failure) {
-            $log.debug('error verifying token');
-            return false;
+            // The user with the supplied email was not found in the database.
+            // Issue warning message, don't redirect to home
+            if (success.data.userNotRegistered) {
+              $rootScope.userNotRegistered = true;
+              $log.debug(success.data.email, 'not registered with this application');
+              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+            // The user has been unemployed from the company
+            if (success.data.userNotCurrent) {
+              $rootScope.userNotCurrent = true;
+              $log.debug(success.data.email, 'is not a current employee');
+              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+            // the login failed - maybe the domain was incorrect
+            if (success.data.loginFailed) {
+              $rootScope.loginFailed = true;
+              $log.debug('sign in failed');
+              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
+              $rootScope.loggingIn = false;
+              return;
+            }
+            // Otherwise, we found the user - save that user's data
+            $rootScope.userNotRegistered = false;
+            $rootScope.loggedInUser = success.data.user;
+            localStorageService.set('auth_token', success.data.auth_token);
+
+            // TODO if the user wants to save their email
+
+            if ($scope.remember && success.data.user) {
+              localStorageService.set('email', JSON.stringify(success.data.user.email));
+            }
+
+            // then call function to load all required data and redirect to home
+            // this sets logged in after data has loaded.
+            $scope.initializeData();
+        },
+        function(error) {
+          $log.debug(error);
         });
     }
 
@@ -113,83 +134,94 @@ angular.module('sequoiaGroveApp')
           // finally, redirect to last path, or home if none
           $scope.loading = false;
           $log.debug('loading complete');
+          $rootScope.loggingIn = false;
+
+          $rootScope.loggedIn = true;
+          //$log.debug('logged in as', success.data.user.fullname, "(",success.data.user.email, ")");
           $location.path(localStorageService.get('lastPath'));
       });
+    }
+
+  // check if token and session is valid
+  $scope.validateToken = function() {
+    return $http({
+      url: '/sequoiagrove/auth/loginwithtoken',
+      method: "POST",
+      data: {'auth_token':$rootScope.token}
+    }).then(
+        function(success) {
+          $log.debug("success");
+          $rootScope.hasValidToken = success.data.valid;
+
+          if (success.data.valid) {
+            $rootScope.token = success.data.token;
+            localStorageService.set('auth_token', success.data.auth_token);
+
+            $rootScope.userNotRegistered = false;
+            $rootScope.loggedInUser = success.data.user;
+
+            // save user
+            if ($scope.remember && success.data.user) {
+              localStorageService.set('email', JSON.stringify(success.data.user.email));
+            }
+            // then call function to load all required data and redirect to home
+            // this sets logged in after data has loaded.
+            $scope.initializeData();
+          }
+        }, function(failure) {
+          $log.debug('error verifying token');
+      })
     }
 
     // When a user has logged out, this will clear variables to reset
     // the application to a clean state
     $scope.destructData = function() {
-      Persona.logout();
-      //FIXME for now, just cheat it and reload the page,
-      // eventually, reset root and main scope variables.
-      location.reload();
-    }
+      localStorageService.remove('auth_token');
 
+      // reset login error flags
+      $rootScope.loggedIn = false;
+      $rootScope.blankEmailOrPassword = false;
+      $rootScope.userNotRegistered = false;
+      $rootScope.userNotCurrent = false;
+      $rootScope.loginFailed = false;
+      $rootScope.token = '';
+      $rootScope.hasValidToken = false;
+      $rootScope.initializedData = false;
+      $rootScope.loggedInUser= {'email':JSON.parse(localStorageService.get('email'))};
+
+      $rootScope.employees = [];
+      $rootScope.positions = [];
+      $rootScope.deliveries = [];
+      $rootScope.template = [];
+      $scope.originalTemplate = [];
+      $scope.deleteShifts = [];
+      $scope.updateShifts = [];
+      $location.path('/login');
+
+      //TODO send request to remove user's session from session table
+    }
 
 /************** Event Watchers **************/
 
-    // When Persona is used to login or logout, it catches the login/logout as needed
-    Persona.watch({
-      // User attempted to log in
-      onlogin: function(assertion) {
-        $rootScope.loggingIn = true;
-        var data = { assertion: assertion };
-        $http.post("/sequoiagrove/auth/login/", data).
-          success(function(data, status){
-            // The user with the supplied email was verified by Mozilla Persona,
-            // but was not found in the database.
-            // Issue warning message, don't redirect to home
-            if (data.userNotRegistered) {
-              $rootScope.userNotRegistered = true;
-              $log.debug(data.email, 'not registered with this application');
-              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // The user has been unemployed from the company
-            if (data.userNotCurrent) {
-              $rootScope.userNotCurrent = true;
-              $log.debug(data.email, 'is not a current employee');
-              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // the login failed - maybe the domain was incorrect
-            if (data.loginFailed) {
-              $rootScope.loginFailed = true;
-              $log.debug('sign in failed');
-              $rootScope.loggedInUser = {'email':data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // Otherwise, we found the user - save that user's data
-            $rootScope.userNotRegistered = false;
-            $rootScope.loggedInUser = data.user;
-            $rootScope.loggedIn = true;
-            $log.debug('logged in as', data.user.fullname, "(",data.user.email, ")");
-            localStorageService.set('auth_token', data.auth_token);
-
-            // then call function to load all required data and redirect to home
-            $scope.initializeData();
-          });
-      },
-      onlogout: function() {
-        $rootScope.loggedIn = false;
-        $rootScope.loggingIn = false;
-        $rootScope.loggedInUser = {};
-        $rootScope.$apply();
-        $location.path( "/login" );
-        // Stuff
-      }
-    });
+    if ($rootScope.token) {
+      $rootScope.loggingIn = true;
+      $log.debug('would validating token in login...');
+      $scope.validateToken().then(
+        function(success) {
+          //$log.debug(success);
+        }, function(failure) {
+          //$log.debug(failure);
+      });
+    }
 
     $rootScope.$on('login', function() {
-      $scope.personaLogin();
+      $log.debug('caught login in login');
+      $scope.login();
     });
 
     $rootScope.$on('logout', function() {
       $scope.destructData();
     });
+
 
   });

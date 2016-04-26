@@ -17,7 +17,6 @@ angular.module('sequoiaGroveApp')
     $scope,
     $translate,
     localStorageService,
-    Persona,
     $q){
 
 /************** Login Redirect, Containers and UI settings **************/
@@ -40,9 +39,13 @@ angular.module('sequoiaGroveApp')
     $scope.$broadcast('translate');
   };
 
+  // toggle dev mode
+  $scope.updateDevMode = function() {
+    $rootScope.devMode = !$rootScope.devMode;
+    localStorageService.set('devMode', $rootScope.devMode);
+  }
+
   // setup containers
-  $scope.currentEmployees = [];
-  $scope.allEmployees = [];
   $scope.deliveries = [];
 
   $scope.viewDeliveries = {
@@ -71,7 +74,7 @@ angular.module('sequoiaGroveApp')
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
-  $scope.loadingMsg = "Verifying user with Application...";
+  $rootScope.loadingMsg = "Verifying user with Application...";
   $scope.selectedPid = 0;
 
   // container for displaying the date header
@@ -288,6 +291,16 @@ angular.module('sequoiaGroveApp')
 /************** HTTP Request Functions **************/
   // get all existing deliveries
   $scope.getDeliveries = function() {
+    $scope.deliveries = [];
+    $scope.viewDeliveries = {
+      'mon':[],
+      'tue':[],
+      'wed':[],
+      'thu':[],
+      'fri':[],
+      'sat':[],
+      'sun':[]
+    }
     return $http({url: '/sequoiagrove/delivery', method: "GET" })
       .then(function(success) {
         if (success.status == 200) {
@@ -337,7 +350,7 @@ angular.module('sequoiaGroveApp')
   // a moment object for week
   $scope.getScheduleTemplate = function(week) {
 
-    $scope.loadingMsg = "Obtaining current schedule data...";
+    $rootScope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/' + week;
 
     // clear out original template
@@ -383,7 +396,7 @@ angular.module('sequoiaGroveApp')
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
-    $scope.loadingMsg = "Obtaining current employee data...";
+    $rootScope.loadingMsg = "Obtaining current employee data...";
 
     // if it's in dev mode, and we already have
     // employees in localstorage, return.
@@ -521,10 +534,11 @@ angular.module('sequoiaGroveApp')
     //$scope.init();
   });
 
-  $scope.personaLogin = function() {
+  $scope.appLogin = function() {
+    $log.debug('broadcast login from main');
     $rootScope.$broadcast('login');
   }
-  $scope.personaLogout = function() {
+  $scope.destructData = function() {
     $rootScope.$broadcast('logout');
   }
 

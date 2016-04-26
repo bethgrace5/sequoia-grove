@@ -1,9 +1,6 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
-import info.modprobe.browserid.BrowserIDResponse.Status;
-import info.modprobe.browserid.BrowserIDResponse;
-import info.modprobe.browserid.Verifier;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -57,44 +54,62 @@ public class Authentication {
       return (String) request.getAttribute("subject");
     }
 
-    // Verify mozilla persona token received
+    // Verify token received
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
-    protected String loginWithToken(Model model, @ModelAttribute("subject") String subject ) throws ServletException, IOException, SQLException {
+    protected String loginWithToken(Model model, @ModelAttribute("subject") String subject) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        System.out.println("from loginwithtoken: " + subject);
+        User user = new User(0, "Bethany Armitage", "Bethany", "Armitage", "bethgrace5@gmail.com", true);
+
+        // TODO see if token is valid
+        // if so, get user info, build user object
+        // and get new token to send back
+
         model.addAttribute("subject", subject);
         model.addAttribute("valid", true);
-        return "jsonTemplate";
+        model.addAttribute("user", user);
+        model.addAttribute("auth_token", getToken("token_subject",
+              user.getIsManager()? "manager":"employee"));
+
+      return "jsonTemplate";
     }
 
-    // Verify mozilla persona token received
+    // Verify token received
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
     protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         User user = new User(0, "", "", "", "", false);
+        String email = "";
+        String password = "";
 
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
-        final String assertion = jobject.get("assertion").getAsString();
-        final String audience = "http://localhost:8080";
-        final Verifier verifier = new Verifier();
-        final BrowserIDResponse personaResponse = verifier.verify(assertion,audience);
-        final Status status = personaResponse.getStatus();
-
-        if (status == Status.OK) {
-          // Authentication with Persona was successful
-          String email = personaResponse.getEmail();
 
           // find this user in database
           String sql = "select * from employee where email = ?";
           try {
-          user = (User)jdbcTemplate.queryForObject(
-                    sql, new Object[] { email }, new UserRowMapper());
-          } catch (EmptyResultDataAccessException e) {
+            email = jobject.get("email").getAsString();
+            password = jobject.get("password").getAsString();
 
+            // Blank Email or Password
+            if (email.equals("") || password.equals("")) {
+              throw new NullPointerException();
+            }
+
+            System.out.println(email);
+            System.out.println(password);
+
+            user = (User)jdbcTemplate.queryForObject(
+                      sql, new Object[] { email }, new UserRowMapper());
+          } catch (EmptyResultDataAccessException e) {
             // this user does not exist in the database
             model.addAttribute("userNotRegistered", true);
             model.addAttribute("email", email);
+            return "jsonTemplate";
+          } catch (NullPointerException e) {
+            // the email or password was blank user does not exist in the database
+            model.addAttribute("blankEmailOrPassword", true);
+            model.addAttribute("email", email);
+            model.addAttribute("password", password);
             return "jsonTemplate";
           }
 
@@ -122,14 +137,6 @@ public class Authentication {
             }
 
           }
-        }
-        // Authentication with Persona failed
-        else {
-          model.addAttribute("user", user);
-          model.addAttribute("email", "");
-          model.addAttribute("loginFailed", true);
-          System.out.println("Sign in failed...");
-        }
         return "jsonTemplate";
     }
 
