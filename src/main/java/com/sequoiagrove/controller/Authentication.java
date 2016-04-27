@@ -44,7 +44,6 @@ import com.sequoiagrove.controller.MainController;
 
 @Controller
 public class Authentication {
-  private final String USER_AGENT = "Mozilla/5.0";
   private static Key key = MacProvider.generateKey();
 
   @ModelAttribute("subject")

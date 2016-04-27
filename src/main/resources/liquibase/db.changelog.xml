@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
 
 <databaseChangeLog
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
@@ -13,6 +13,7 @@
   <changeSet author="Bethany Armitage" id="0" context="prod or test or dev">
     <tagDatabase tag="Version 0.0.0"/>
   </changeSet>
+
 
   <!-- Base Tables -->
   <include relativeToChangelogFile="true" file="changelogs/001-hours.xml"/>
@@ -50,5 +51,13 @@
 
 
 
+  <!-- Misc -->
+  <!-- rename employee to user, add classification for user, 
+       add permission for user, add password column to user -->
+  <include relativeToChangelogFile="true" file="changelogs/026-rename-user-add-classification-and-permissions.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/027-prefix-tables.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/028-prefix-views-functions-and-sequences.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/029-update-views.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/030-update-functions.xml"/>
 
 </databaseChangeLog>
