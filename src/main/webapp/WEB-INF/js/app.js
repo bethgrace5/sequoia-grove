@@ -86,8 +86,6 @@ angular.module('sequoiaGroveApp', [
 
 
   }).run (function($sha, $q, $rootScope, $injector, $location, $log, $http, localStorageService) {
-    //localStorageService.set('auth_token', 'tok');
-    //$log.debug(localStorageService.get('auth_token'));
 
     $sha.setConfig({
       algorithm: 'SHA-512',
@@ -98,7 +96,7 @@ angular.module('sequoiaGroveApp', [
     // Set Development Mode - loads app more quickly by reading schedule
     // template stored in localstorage instead of pulling a new one every time.
     $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
-    $log.debug($rootScope.devMode);
+    //$log.debug($rootScope.devMode);
 
     // reset login error flags
     $rootScope.loggedIn = false;
@@ -113,11 +111,7 @@ angular.module('sequoiaGroveApp', [
 
     var email = JSON.parse(localStorageService.get('email'));
     $log.debug("saved email: ", email);
-    var token = localStorageService.get('auth_token');
     if(email) {
       $rootScope.loggedInUser.email = email;
-    }
-    if(token) {
-      $rootScope.token = token;
     }
   });

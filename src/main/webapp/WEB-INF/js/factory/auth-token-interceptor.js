@@ -9,7 +9,10 @@ angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
     var tokenInjector = {
       'request': function(config) {
         // put the token from local storage into the request
-        config.headers['Authorization'] = localStorageService.get('auth_token');
+        var token = localStorageService.get('auth_token');
+        if (token) {
+          config.headers['Authorization'] = token;
+        }
         return config;
       },
       // optional method
@@ -21,8 +24,8 @@ angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
         return $q.reject(rejection);
       },
       'response': function(response) {
-        if(response.auth_token != undefined) {
-          localStorageService.set('auth_token', response.auth_token);
+        if(response.data.auth_token != undefined) {
+          localStorageService.set('auth_token', response.data.auth_token);
         }
         return response;
       },

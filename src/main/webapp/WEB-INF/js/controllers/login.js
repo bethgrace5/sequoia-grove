@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp')
             // Otherwise, we found the user - save that user's data
             $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
-            localStorageService.set('auth_token', success.data.auth_token);
+            //localStorageService.set('auth_token', success.data.auth_token);
 
             // TODO if the user wants to save their email
 
@@ -135,7 +135,6 @@ angular.module('sequoiaGroveApp')
           $scope.loading = false;
           $log.debug('loading complete');
           $rootScope.loggingIn = false;
-
           $rootScope.loggedIn = true;
           //$log.debug('logged in as', success.data.user.fullname, "(",success.data.user.email, ")");
           $location.path(localStorageService.get('lastPath'));
@@ -155,7 +154,7 @@ angular.module('sequoiaGroveApp')
 
           if (success.data.valid) {
             $rootScope.token = success.data.token;
-            localStorageService.set('auth_token', success.data.auth_token);
+            //localStorageService.set('auth_token', success.data.auth_token);
 
             $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
@@ -176,7 +175,7 @@ angular.module('sequoiaGroveApp')
     // When a user has logged out, this will clear variables to reset
     // the application to a clean state
     $scope.destructData = function() {
-      localStorageService.remove('auth_token');
+      //localStorageService.remove('auth_token');
 
       // reset login error flags
       $rootScope.loggedIn = false;

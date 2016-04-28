@@ -412,7 +412,6 @@ angular.module('sequoiaGroveApp')
     return $http({ url: '/sequoiagrove/employees', method: "GET" })
       .then(function(success) {
         $rootScope.employees = success.data.employees;
-        localStorageService.set('auth_token', success.data.api_token);
         if ($rootScope.devMode) {
           localStorageService.set('employees', JSON.stringify($rootScope.employees));
         }

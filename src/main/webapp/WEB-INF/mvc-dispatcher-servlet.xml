@@ -42,7 +42,7 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/position" />
+      <mvc:mapping path="/position*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>

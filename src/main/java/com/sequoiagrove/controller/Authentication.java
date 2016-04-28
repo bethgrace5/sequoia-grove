@@ -21,6 +21,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.security.SecureRandom;
+import java.math.BigInteger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -44,18 +46,12 @@ import com.sequoiagrove.controller.MainController;
 
 @Controller
 public class Authentication {
+  private static SecureRandom random = new SecureRandom();
   private static Key key = MacProvider.generateKey();
-
-  @ModelAttribute("subject")
-    public String getSubject(HttpServletRequest request)
-    {
-      System.out.println("in model attribute: " + request.getAttribute("subject"));
-      return (String) request.getAttribute("subject");
-    }
 
     // Verify token received
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
-    protected String loginWithToken(Model model, @ModelAttribute("subject") String subject) throws ServletException, IOException, SQLException {
+    protected String loginWithToken(Model model) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         User user = new User(51, "Bethany Armitage", "Bethany", "Armitage", "bethgrace5@gmail.com", true);
 
@@ -63,11 +59,9 @@ public class Authentication {
         // if so, get user info, build user object
         // and get new token to send back
 
-        model.addAttribute("subject", subject);
         model.addAttribute("valid", true);
         model.addAttribute("user", user);
-        model.addAttribute("auth_token", getToken("token_subject",
-              user.getIsManager()? "manager":"employee"));
+        model.addAttribute("auth_token", getToken(user.getId()));
 
       return "jsonTemplate";
     }
@@ -123,9 +117,7 @@ public class Authentication {
             if (count > 0) {
                 System.out.println(user.getFullname() + " has sucessfully signed in");
                 model.addAttribute("user", user);
-                model.addAttribute("auth_token",
-                    getToken(user.getEmail(),
-                      user.getIsManager()? "manager":"employee"));
+                model.addAttribute("auth_token", getToken(user.getId()));
             }
             else {
                 model.addAttribute("userNotCurrent", true);
@@ -137,23 +129,35 @@ public class Authentication {
     }
 
     // Create initial token upon authorization
-    protected static String getToken(String subject, String scope) {
-      //byte[] key = getSignatureKey();
-      // We need a signing key, so we'll create one just for this example. Usually
-      // the key would be read from your application configuration instead.
+    protected static String getToken(int userId) {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        //byte[] key = getSignatureKey();
+        // We need a signing key, so we'll create one just for this example. Usually
+        // the key would be read from your application configuration instead.
+        String crypticSessionId = nextSessionId();
 
-      String jwt =
-        Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
-        //.setSubject(subject)
-        // for now hard code subject, later, change to be related to
-        // this user.
-        .setSubject("token_subject")
-        //.setExpiration(expirationDate)
-        //.put("scope", scope)
-        .signWith(SignatureAlgorithm.HS256,key)
-        .compact();
+        // clear any sessions with this user's id
+        jdbcTemplate.update( "delete from sequ_session where user_id = ?",
+            new Object [] { userId });
 
-      return jwt;
+        // create a new session for this user
+        jdbcTemplate.update(
+            "insert into sequ_session(expiration_date, user_id, token) " +
+            " values((select current_timestamp + interval '18 hours'), ?, ?)",
+            new Object [] { userId, crypticSessionId });
+
+        String jwt =
+          Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
+          //.setSubject(subject)
+          // for now hard code subject, later, change to be related to
+          // this user.
+          .setSubject(crypticSessionId)
+          //.setExpiration(expirationDate)
+          //.put("scope", scope)
+          .signWith(SignatureAlgorithm.HS256,key)
+          .compact();
+
+        return jwt;
     }
 
     public static String verifyToken(String jwt, String URI) {
@@ -165,8 +169,7 @@ public class Authentication {
               subject = jwtClaims.getBody().getSubject();
             try {
                 // Check jwt subject
-                // for now, use hard coded subject, later, check datbase for it
-                Jwts.parser().requireSubject("token_subject").setSigningKey(key).parseClaimsJws(jwt);
+                //Jwts.parser().requireSubject("token_subject").setSigningKey(key).parseClaimsJws(jwt);
             } catch (MissingClaimException e) {
                 // the parsed JWT did not have the subject field
                 System.out.println("Missing Claim Exception for " + URI
@@ -197,6 +200,10 @@ public class Authentication {
             return("invalid");
         }
        return(subject);
+    }
+
+    public static String nextSessionId() {
+        return new BigInteger(130, random).toString(32);
     }
 
 }
