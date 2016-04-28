@@ -42,47 +42,6 @@ import org.springframework.transaction.TransactionStatus;
 @Controller
 public class ScheduleController {
 
-/* ----- Pure Functions ----- */
-   public boolean validateStrings(String... args) {
-        for (String arg : args) {
-            if (arg.isEmpty() || arg == null) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-/* ----- Helper JDBC Functions ----- */
-    public boolean checkHoursExist(String startHr, String endHr) {
-
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        Object[] obj = new Object[] { startHr, endHr };
-        int count = jdbcTemplate.queryForObject("select count(*) from hours " +
-            " where start_hour = ? and end_hour = ?", obj, Integer.class);
-        return (count > 0);
-    }
-
-    public int addHours(String startHr, String endHr) {
-
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        int id = 0;
-        Object[] obj = new Object[] { startHr, endHr };
-        if ( checkHoursExist(startHr, endHr) ) {
-          id = jdbcTemplate.queryForObject(
-              "select id from hours where start_hour=? and end_hour=?",
-              obj, Integer.class);
-        }
-        else {
-          id = jdbcTemplate.queryForObject(
-              "select hours_id_sequence.nextval from dual", Integer.class);
-          jdbcTemplate.update(" insert into hours (id, start_hour, end_hour) " +
-              "values( ?, ?, ?) ", id, startHr, endHr);
-        }
-        return id;
-    }
-
 /* ----- HTTP Mapped Functions -----*/
   // Get current schedule template (current shifts) dd-mm-yyyy
   @RequestMapping(value = "/schedule/template/{mon}")
@@ -91,7 +50,7 @@ public class ScheduleController {
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
       List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-        "select * from get_schedule(?)",
+        "select * from sequ_get_schedule(?)",
         new Object[]{mon},
         new RowMapper<ScheduleTemplate>() {
           public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -119,7 +78,7 @@ public class ScheduleController {
         });
 
       Integer count = jdbcTemplate.queryForObject(
-          "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+          "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
 
       model.addAttribute("ispublished", (count!=null && count > 0));
       model.addAttribute("template", schTempList);
@@ -139,7 +98,7 @@ public class ScheduleController {
           // update database schedule(eid, sid, mon)
           for (Scheduled change : scheduleChanges) {
             try {
-                jdbcTemplate.update("select schedule(?, ?, ?)",
+                jdbcTemplate.update("select sequ_schedule(?, ?, ?)",
                     change.getEid(),
                     change.getSid(),
                     change.getDate());
@@ -163,7 +122,7 @@ public class ScheduleController {
           // update database
           for (Scheduled change : scheduleChanges) {
             try {
-              jdbcTemplate.update("select delete_schedule(?, ?)",
+              jdbcTemplate.update("select sequ_delete_schedule(?, ?)",
                   change.getSid(),
                   change.getDate());
             }
@@ -186,7 +145,7 @@ public class ScheduleController {
 
         // update database publish(eid, datestring)
         //try {
-        jdbcTemplate.execute("select publish(?, ?)" ,
+        jdbcTemplate.execute("select sequ_publish(?, ?)" ,
           new PreparedStatementCallback<Boolean>(){
               @Override
               public Boolean doInPreparedStatement(PreparedStatement ps)
@@ -206,7 +165,7 @@ public class ScheduleController {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Integer count = jdbcTemplate.queryForObject(
-                "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+                "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
 
         boolean isPublished =  (count != null && count > 0);
 

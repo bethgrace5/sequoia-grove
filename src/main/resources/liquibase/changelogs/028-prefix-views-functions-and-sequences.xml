@@ -13,7 +13,7 @@
 
     <!-- Sequences -->
     <sql>ALTER SEQUENCE delivery_id_seq RENAME TO sequ_delivery_sequence</sql>
-    <sql>ALTER SEQUENCE employee_id_seq RENAME TO sequ_employee_sequence</sql>
+    <sql>ALTER SEQUENCE employee_id_seq RENAME TO sequ_user_sequence</sql>
     <sql>ALTER SEQUENCE holiday_id_seq  RENAME TO sequ_holiday_sequence</sql>
     <sql>ALTER SEQUENCE hours_id_seq    RENAME TO sequ_hours_sequence</sql>
     <sql>ALTER SEQUENCE position_id_seq RENAME TO sequ_position_sequence</sql>

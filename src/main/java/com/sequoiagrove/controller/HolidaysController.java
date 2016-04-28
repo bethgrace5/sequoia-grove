@@ -40,7 +40,7 @@ public class HolidaysController {
     public String getAllHolidays(Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<Holiday> holidayList = jdbcTemplate.query(
-          "select * from holiday",
+          "select * from sequ_holiday",
           new RowMapper<Holiday>() {
             public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
               Holiday es = new Holiday(
@@ -71,7 +71,7 @@ public class HolidaysController {
       };
 
       jdbcTemplate.update(
-          "insert into holiday "+
+          "insert into sequ_holiday "+
           " (title, hdate, store_open, store_close) "+
           " values(?, to_date(?, 'mm-dd-yyyy') , ?, ?) ",
           params);
@@ -105,7 +105,7 @@ public class HolidaysController {
     @RequestMapping(value = "/holiday/remove/{id}")
       public String deleteRequest(@PathVariable("id") int id, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        jdbcTemplate.update( "delete from holiday where id = ?", id);
+        jdbcTemplate.update( "delete from sequ_holiday where id = ?", id);
         return "jsonTemplate";
       }
 
@@ -123,7 +123,7 @@ public class HolidaysController {
           dateEnd
         };
         List<Holiday> holidayList = jdbcTemplate.query(
-          "select * from holiday where true " +
+          "select * from sequ_holiday where true " +
           " and hdate >= to_date(?, 'mm-dd-yyyy') " +
           " and hdate <= to_date(?, 'mm-dd-yyyy') ", params,
           new RowMapper<Holiday>() {

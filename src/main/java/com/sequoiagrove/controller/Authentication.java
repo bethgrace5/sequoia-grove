@@ -57,7 +57,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
     protected String loginWithToken(Model model, @ModelAttribute("subject") String subject) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, "Bethany Armitage", "Bethany", "Armitage", "bethgrace5@gmail.com", true);
+        User user = new User(51, "Bethany Armitage", "Bethany", "Armitage", "bethgrace5@gmail.com", true);
 
         // TODO see if token is valid
         // if so, get user info, build user object
@@ -84,7 +84,7 @@ public class Authentication {
         JsonObject  jobject = jelement.getAsJsonObject();
 
           // find this user in database
-          String sql = "select * from employee where email = ?";
+          String sql = "select * from sequ_user where email = ?";
           try {
             email = jobject.get("email").getAsString();
             password = jobject.get("password").getAsString();
@@ -118,8 +118,8 @@ public class Authentication {
 
             // make sure this is a current employee
             int count = jdbcTemplate.queryForObject(
-                "select count(*) from employment_history " +
-                " where employee_id = ? and date_unemployed is null",
+                "select count(*) from sequ_employment_history " +
+                " where user_id = ? and date_unemployed is null",
                 params, Integer.class);
 
             // Success! This employee is currently employed

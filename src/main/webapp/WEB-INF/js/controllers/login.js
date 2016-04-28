@@ -49,7 +49,6 @@ angular.module('sequoiaGroveApp')
 
       $http.post("/sequoiagrove/auth/login/", {'email':$scope.email, 'password':$scope.password}).
         then(function(success){
-          $log.debug(success);
             // Blank Email or Password
             if (success.data.blankEmailOrPassword) {
               $rootScope.blankEmailOrPassword = true;

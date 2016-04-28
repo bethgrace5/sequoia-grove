@@ -46,7 +46,7 @@ public class ManageStore {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Object[] obj = new Object[] { startHr, endHr };
-        int count = jdbcTemplate.queryForObject("select count(*) from hours " +
+        int count = jdbcTemplate.queryForObject("select count(*) from sequ_hours " +
             " where start_hour = ? and end_hour = ?", obj, Integer.class);
         return (count > 0);
     }
@@ -59,13 +59,13 @@ public class ManageStore {
         Object[] obj = new Object[] { startHr, endHr };
         if ( checkHoursExist(startHr, endHr) ) {
           id = jdbcTemplate.queryForObject(
-              "select id from hours where start_hour=? and end_hour=?",
+              "select id from sequ_hours where start_hour=? and end_hour=?",
               obj, Integer.class);
         }
         else {
           id = jdbcTemplate.queryForObject(
-              "select nextval('hours_id_seq')", Integer.class);
-          jdbcTemplate.update(" insert into hours (id, start_hour, end_hour) " +
+              "select nextval('sequ_hours_sequence')", Integer.class);
+          jdbcTemplate.update(" insert into sequ_hours (id, start_hour, end_hour) " +
               "values( ?, ?, ?) ", id, startHr, endHr);
         }
         return id;
@@ -107,7 +107,7 @@ public class ManageStore {
 
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
-        int sid = jdbcTemplate.queryForObject("select nextval('shift_id_seq')", Integer.class);
+        int sid = jdbcTemplate.queryForObject("select nextval('sequ_shift_seqence')", Integer.class);
 
         Object[] params = new Object[] {
             sid,
@@ -117,7 +117,7 @@ public class ManageStore {
             weekendHourId
         };
 
-        jdbcTemplate.update("insert into shift " +
+        jdbcTemplate.update("insert into sequ_shift " +
             "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
             "values(?, ?, ?, current_date, null, ?, ?)", params);
 
@@ -171,7 +171,7 @@ public class ManageStore {
             sid
         };
 
-        jdbcTemplate.update( "update shift set "+
+        jdbcTemplate.update( "update sequ_shift set "+
           "position_id = ?, "+
           "task_name = ?, "+
           "weekday_id = ?, "+
@@ -204,7 +204,7 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        jdbcTemplate.update( "update shift set "+
+        jdbcTemplate.update( "update sequ_shift set "+
           "end_date = current_date "+
           "where id = ?",
         sid);

@@ -28,7 +28,7 @@ public class AvailabilityController {
         JsonObject  jobject = jelement.getAsJsonObject();
 
         String day = jobject.get("day").getAsString();
-        String eid = jobject.get("eid").getAsString();
+        int eid = jobject.get("eid").getAsInt();
         String start = jobject.get("start").getAsString();
         String end = jobject.get("end").getAsString();
 
@@ -37,18 +37,18 @@ public class AvailabilityController {
 
         // see if this is a current position that the employee has
         int count = jdbcTemplate.queryForInt(
-            "select count(*) from availability where employee_id = ?"+
+            "select count(*) from sequ_availability where user_id = ?"+
             " and day = ? and startt = ?", eid, day, start);
 
         // we found a match, update the end time
         if (count > 0) {
-           jdbcTemplate.update(" update availability set endt = ? " +
-           " where employee_id = ? and day = ? and startt = ?", end, eid, day, start);
+           jdbcTemplate.update(" update sequ_availability set endt = ? " +
+           " where user_id = ? and day = ? and startt = ?", end, eid, day, start);
         }
         // no match was found, add new availability
         else {
-           jdbcTemplate.update(" insert into  availability " +
-               "( employee_id, day, startt, endt ) values(?, ?, ?, ?)",
+           jdbcTemplate.update(" insert into  sequ_availability " +
+               "( user_id, day, startt, endt ) values(?, ?, ?, ?)",
                eid, day, start, end);
         }
         return "jsonTemplate";
@@ -62,8 +62,8 @@ public class AvailabilityController {
           @PathVariable("startt") String startt) throws SQLException {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      jdbcTemplate.update("delete from availability " +
-        "where employee_id = ? and day = ? and startt = ?", eid, day, startt);
+      jdbcTemplate.update("delete from sequ_availability " +
+        "where user_id = ? and day = ? and startt = ?", eid, day, startt);
 
         return "jsonTemplate";
     }

@@ -21,19 +21,19 @@ import com.sequoiagrove.model.Position;
 public class PositionController {
     private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
 
-    // Get Basic position info (id, title and location)
+    // Get Basic position info (id, title and area)
     @RequestMapping(value = "/position")
     public String getPositions(Model model){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         List<Position> posList = jdbcTemplate.query(
-            "select id, title, location from position order by location, title",
+            "select id, title, area from sequ_position order by area, title",
             new RowMapper<Position>() {
                 public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Position pos = new Position(
                         rs.getInt("id"),
                         rs.getString("title"),
-                        rs.getString("location"));
+                        rs.getString("area"));
                     return pos;
                 }
         });
@@ -57,13 +57,13 @@ public class PositionController {
         // see if this is already a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
         int count = jdbcTemplate.queryForObject(
-            "select count(*) from has_position where employee_id = ?"+
+            "select count(*) from sequ_has_position where user_id = ?"+
             " and position_id = ? and date_removed is null", obj, Integer.class);
 
         // this employee does not currently have this position. add it.
         if (count <= 0) {
-            jdbcTemplate.update("insert into has_position(" +
-              "employee_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
+            jdbcTemplate.update("insert into sequ_has_position(" +
+              "user_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
               "values(?, ?, current_date, null, false, false)", eid, pid);
         }
         return "jsonTemplate";
@@ -85,14 +85,14 @@ public class PositionController {
         // see if this is a current position that the employee has
         Object[] obj = new Object[] { eid, pid };
         int count = jdbcTemplate.queryForObject(
-            "select count(*) from has_position where employee_id = ?"+
+            "select count(*) from sequ_has_position where user_id = ?"+
             " and position_id = ? and date_removed is null", obj, Integer.class);
 
         // this employee currently has this position. remove it.
         if (count > 0) {
-           jdbcTemplate.update(" update has_position " +
+           jdbcTemplate.update(" update sequ_has_position " +
            " set date_removed = current_date " +
-           " where employee_id = ? and position_id = ? and date_removed is null", eid, pid);
+           " where user_id = ? and position_id = ? and date_removed is null", eid, pid);
         }
         return "jsonTemplate";
     }

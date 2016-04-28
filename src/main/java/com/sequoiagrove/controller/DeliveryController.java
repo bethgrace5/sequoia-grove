@@ -31,7 +31,7 @@ public class DeliveryController {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             List<Delivery> deliveryList = jdbcTemplate.query(
-                    "select * from delivery",
+                    "select * from sequ_delivery",
                     new RowMapper<Delivery>() {
                     public Delivery mapRow(ResultSet rs, int rowNum) throws SQLException {
                     Delivery del = new Delivery(
@@ -57,7 +57,7 @@ public class DeliveryController {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
             // update database
-            jdbcTemplate.update("delete from delivery where id = ?", Integer.parseInt(id));
+            jdbcTemplate.update("delete from sequ_delivery where id = ?", Integer.parseInt(id));
             return "jsonTemplate";
         }
 
@@ -81,7 +81,7 @@ public class DeliveryController {
 
             // update database
             Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
-            jdbcTemplate.update("update from delivery set name = ?," + 
+            jdbcTemplate.update("update sequ_delivery set name = ?," + 
                     "mon = ?, tue = ?, wed = ?, thu = ?, fri = ?, sat = ?, sun = ? where id = ?", 
                     obj);
             return "jsonTemplate";
@@ -90,7 +90,7 @@ public class DeliveryController {
     @RequestMapping(value = "/delivery/add")
         public String addDelivery(@RequestBody String data, Model model) throws SQLException {
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-            int id = jdbcTemplate.queryForObject("select nextval('delivery_id_seq')",
+            int id = jdbcTemplate.queryForObject("select nextval('sequ_delivery_sequence')",
               Integer.class);
             // parse params
             JsonElement jelement = new JsonParser().parse(data);
@@ -106,7 +106,7 @@ public class DeliveryController {
 
             // update/add to database
             Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
-            jdbcTemplate.update("insert into delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)", 
+            jdbcTemplate.update("insert into sequ_delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)", 
                     obj);
 
             model.addAttribute("id", id);
