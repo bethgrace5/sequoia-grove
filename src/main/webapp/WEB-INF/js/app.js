@@ -10,7 +10,8 @@ angular.module('sequoiaGroveApp', [
     'pascalprecht.translate',
     'ngMaterial',
     'ngMessages',
-    'underscore'
+    'underscore',
+    'dn.sha'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
               $logProvider, $compileProvider) {
@@ -83,9 +84,16 @@ angular.module('sequoiaGroveApp', [
       /* Increase application performance when false, default is true */
       $compileProvider.debugInfoEnabled(true);
 
-  }).run (function($q, $rootScope, $injector, $location, $log, $http, localStorageService) {
+
+  }).run (function($sha, $q, $rootScope, $injector, $location, $log, $http, localStorageService) {
     //localStorageService.set('auth_token', 'tok');
     //$log.debug(localStorageService.get('auth_token'));
+
+    $sha.setConfig({
+      algorithm: 'SHA-512',
+      inputType: 'TEXT',
+      returnType: 'HEX',
+      secretType: 'TEXT'});
 
     // Set Development Mode - loads app more quickly by reading schedule
     // template stored in localstorage instead of pulling a new one every time.

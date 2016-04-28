@@ -15,6 +15,7 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $q,
+        $sha,
         localStorageService){
 
     $scope.email = $rootScope.loggedInUser.email;
@@ -43,11 +44,11 @@ angular.module('sequoiaGroveApp')
       // reset login error flags
       $rootScope.loggedIn = false;
       $rootScope.blankEmailOrPassword = false;
-      $rootScope.userNotRegistered = false;
+      $rootScope.invalidEmailOrPassword = false;
       $rootScope.userNotCurrent = false;
       $rootScope.loginFailed = false;
 
-      $http.post("/sequoiagrove/auth/login/", {'email':$scope.email, 'password':$scope.password}).
+      $http.post("/sequoiagrove/auth/login/", {'email':$scope.email, 'password':$sha.hash($scope.password)}).
         then(function(success){
             // Blank Email or Password
             if (success.data.blankEmailOrPassword) {
@@ -59,8 +60,8 @@ angular.module('sequoiaGroveApp')
             }
             // The user with the supplied email was not found in the database.
             // Issue warning message, don't redirect to home
-            if (success.data.userNotRegistered) {
-              $rootScope.userNotRegistered = true;
+            if (success.data.invalidEmailOrPassword) {
+              $rootScope.invalidEmailOrPassword = true;
               $log.debug(success.data.email, 'not registered with this application');
               $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
               $rootScope.loggingIn = false;
@@ -83,7 +84,7 @@ angular.module('sequoiaGroveApp')
               return;
             }
             // Otherwise, we found the user - save that user's data
-            $rootScope.userNotRegistered = false;
+            $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
             localStorageService.set('auth_token', success.data.auth_token);
 
@@ -156,7 +157,7 @@ angular.module('sequoiaGroveApp')
             $rootScope.token = success.data.token;
             localStorageService.set('auth_token', success.data.auth_token);
 
-            $rootScope.userNotRegistered = false;
+            $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
 
             // save user
@@ -180,7 +181,7 @@ angular.module('sequoiaGroveApp')
       // reset login error flags
       $rootScope.loggedIn = false;
       $rootScope.blankEmailOrPassword = false;
-      $rootScope.userNotRegistered = false;
+      $rootScope.invalidEmailOrPassword = false;
       $rootScope.userNotCurrent = false;
       $rootScope.loginFailed = false;
       $rootScope.token = '';

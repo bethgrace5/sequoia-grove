@@ -1,6 +1,6 @@
 
 <div class="container">
-  <div class="panel panel-default hidden-print" style="height: 300px;">
+  <div class="panel panel-default hidden-print" style="height: 400px;">
     <div class="row panel-body">
       <div class="col-sm-6 col-sm-offset-3">
         <form>
@@ -14,8 +14,7 @@
             <label for="login-password">Password</label>
             <input id="login-password" class="form-control" type="password"
             ng-model="password"
-            ng-disabled="loggingIn"
-            />
+            ng-disabled="loggingIn"/>
           </div>
           <div class="form-group">
             <label for="login-remember">Remember Me</label>
@@ -45,22 +44,23 @@
             </p>
           </p>
         </div>
+      </div>
 
-        <!-- Error Messages -->
-        <div style="color:b30000; height:30px;">
+      <!-- Error Messages -->
+      <div class="row panel-body text-center" style="color:b30000;">
+        <div class="col-sm-12">
           <p ng-show="blankEmailOrPassword">
             <strong>{{loggedInUser.email}}</strong>
             Please supply an email and password to continue.
           </p>
-          <p ng-show="userNotRegistered">
-            <strong>{{loggedInUser.email}}</strong>
-            is not a registered user.
+          <p ng-show="invalidEmailOrPassword">
+            Invalid email or password <strong>({{loggedInUser.email}})</strong>
           </p>
-          <p ng-show="userNotRegistered">
-            If you have an account, ask an administrator to verify your email.
+          <p style="color:black;" ng-show="invalidEmailOrPassword">
+            If your company has an account, ask an administrator to verify your email,
+            or reset your password.
           </p>
           <p ng-show="userNotCurrent">
-            <strong>{{loggedInUser.email}}</strong>
             is not a current employee.
           </p>
           <p ng-show="userNotCurrent">
@@ -71,11 +71,11 @@
           </p>
         </div>
       </div>
+
     </div>
   </div>
   <a class="lead pull-right" style="cursor:pointer;"
     ng-disabled="loggingIn">
     Need an account?
   </a>
-</div>
 </div>

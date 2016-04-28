@@ -84,7 +84,7 @@ public class Authentication {
         JsonObject  jobject = jelement.getAsJsonObject();
 
           // find this user in database
-          String sql = "select * from sequ_user where email = ?";
+          String sql = "select * from sequ_user where email = ? and password = ?";
           try {
             email = jobject.get("email").getAsString();
             password = jobject.get("password").getAsString();
@@ -94,14 +94,11 @@ public class Authentication {
               throw new NullPointerException();
             }
 
-            System.out.println(email);
-            System.out.println(password);
-
             user = (User)jdbcTemplate.queryForObject(
-                      sql, new Object[] { email }, new UserRowMapper());
+                      sql, new Object[] { email, password }, new UserRowMapper());
           } catch (EmptyResultDataAccessException e) {
             // this user does not exist in the database
-            model.addAttribute("userNotRegistered", true);
+            model.addAttribute("invalidEmailOrPassword", true);
             model.addAttribute("email", email);
             return "jsonTemplate";
           } catch (NullPointerException e) {
