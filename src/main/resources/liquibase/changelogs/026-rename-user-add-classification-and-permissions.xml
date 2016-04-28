@@ -58,6 +58,12 @@
       oldColumnName="employee_id"
       tableName="employment_history"/>
 
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="session"/>
+
     <!-- rename position location to area to not be confused with new location table-->
     <renameColumn schemaName="public"
       newColumnName="area"
