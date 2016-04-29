@@ -46,22 +46,46 @@ import com.sequoiagrove.controller.MainController;
 
 @Controller
 public class Authentication {
-  private static SecureRandom random = new SecureRandom();
-  private static Key key = MacProvider.generateKey();
+    private static SecureRandom random = new SecureRandom();
+    private static Key key = MacProvider.generateKey();
+
+  @ModelAttribute("userID")
+    public Integer getId(HttpServletRequest request) {
+      return (Integer) request.getAttribute("userID");
+    }
+
+    //TODO make method for logout that deletes the user's session from the table
+    // ....
+    // ....
 
     // Verify token received
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
-    protected String loginWithToken(Model model) throws ServletException, IOException, SQLException {
+    protected String loginWithToken(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(51, "Bethany Armitage", "Bethany", "Armitage", "bethgrace5@gmail.com", true);
+        User user = new User(0, "", "", "", "", false);
 
-        // TODO see if token is valid
-        // if so, get user info, build user object
+        String sql = "select * from sequ_user where id = ?";
+        user = (User)jdbcTemplate.queryForObject(sql, new Object[] { id, }, new UserRowMapper());
+
+        // make sure this is a current employee
+        Object[] params = new Object[] { id };
+        int count = jdbcTemplate.queryForObject(
+            "select count(*) from sequ_employment_history " +
+            " where user_id = ? and date_unemployed is null",
+            params, Integer.class);
+
+        // Success! This employee is currently employed
+        if (count > 0) {
+            System.out.println(user.getFullname() + " has sucessfully signed in");
+            model.addAttribute("user", user);
+        }
+        else {
+            model.addAttribute("userNotCurrent", true);
+        }
+
+        // get user info, build user object
         // and get new token to send back
-
         model.addAttribute("valid", true);
-        model.addAttribute("user", user);
-        model.addAttribute("auth_token", getToken(user.getId()));
 
       return "jsonTemplate";
     }
@@ -140,6 +164,7 @@ public class Authentication {
         jdbcTemplate.update( "delete from sequ_session where user_id = ?",
             new Object [] { userId });
 
+        System.out.println("4. Update session with subject\n\t" + crypticSessionId);
         // create a new session for this user
         jdbcTemplate.update(
             "insert into sequ_session(expiration_date, user_id, token) " +

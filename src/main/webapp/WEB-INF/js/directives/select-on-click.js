@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', function ($window, $timeout, $log, $rootScope) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory) {
   return {
     restrict: 'A',
     scope: false,
@@ -34,12 +34,12 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
 
         // the name is blank - add it to delete list
         if(this.value.length === 0) {
-          $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
+          scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date});
+          //FIXME update scheduleFactory template to reflect change, or just
+          //leave it for scope template?
           $scope.template[attrs.idx][attrs.day].eid = 0;
         }
-
         var employee = $scope.getEmployeeByname(this.value);;
-
         // Found Employee!
         if (employee.id !== 0) {
           // remove warning class and update template with new id
@@ -55,7 +55,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           }
 
           // 2. update change lists
-          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date);
+          scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied
           element.context.classList.add('schedule-edit-input-warn');

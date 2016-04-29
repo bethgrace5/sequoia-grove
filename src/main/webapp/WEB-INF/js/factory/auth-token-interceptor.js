@@ -2,9 +2,9 @@
 
 // Factory to inject authorization token with each request sent
 angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
-  function ( $log, localStorageService) {
-    var canRecover = false;
-    var responseOrNewPromise = false;
+  function ( $log, localStorageService, $q) {
+    //var canRecover = false;
+    //var responseOrNewPromise = false;
 
     var tokenInjector = {
       'request': function(config) {
@@ -18,9 +18,9 @@ angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
       // optional method
      'requestError': function(rejection) {
         // do something on error
-        if (canRecover(rejection)) {
-          return responseOrNewPromise
-        }
+        //if (canRecover(rejection)) {
+          //return responseOrNewPromise
+        //}
         return $q.reject(rejection);
       },
       'response': function(response) {
@@ -32,9 +32,9 @@ angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
       // optional method
      'responseError': function(rejection) {
         // do something on error
-        if (canRecover(rejection)) {
-          return responseOrNewPromise
-        }
+        //if (canRecover(rejection)) {
+          //return responseOrNewPromise
+        //}
         return $q.reject(rejection);
       }
     }

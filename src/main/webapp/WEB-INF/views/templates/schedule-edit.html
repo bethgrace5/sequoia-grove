@@ -25,7 +25,7 @@
       shiftEnd={{t.weekdayEnd}}
       ng-click="selectEid(t.mon.eid)"
       type="text"
-      ng-disabled="{{isHoliday(date.mon.val)}}"
+      ng-disabled="saving"
       ng-class="inputStatus(t.mon.eid, t.sid)"
       ng-model="t.mon.name">
     </div>

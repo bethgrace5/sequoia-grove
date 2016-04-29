@@ -16,6 +16,7 @@ angular.module('sequoiaGroveApp')
         $scope,
         $q,
         $sha,
+        scheduleFactory,
         localStorageService){
 
     $scope.email = $rootScope.loggedInUser.email;
@@ -106,38 +107,32 @@ angular.module('sequoiaGroveApp')
     // When user has logged in, this will load required data based
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
-      var gotTemplate = false;
-
-      // build schedule header
-      $scope.setScheduleHeader();
-
-      if($rootScope.devMode) {
-        if (localStorageService.get('template')){
-          $rootScope.template = JSON.parse(localStorageService.get('template'));
-        }
-        if(localStorageService.get('employees')) {
-          $rootScope.employees = JSON.parse(localStorageService.get('employees'));
-        }
-      }
-
-      // get Schedule Template
-      $scope.getScheduleTemplate($scope.date.mon.val)
-        .then(function(success) {
-          // get all employees
-          return $scope.getEmployees();
+      //if($rootScope.devMode) {
+        //if (localStorageService.get('template')){
+          //$rootScope.template = JSON.parse(localStorageService.get('template'));
+        //}
+        //if(localStorageService.get('employees')) {
+          //$rootScope.employees = JSON.parse(localStorageService.get('employees'));
+        //}
+      //}
+      scheduleFactory.setManagePrivelage();
+      scheduleFactory.init().then(
+          function(success) {
+            return $scope.getEmployees();
+          }).then(function(success) {
+            // get positions
+            return $scope.getPositions();
         }).then(function(success) {
-          // get positions
-          return $scope.getPositions();
+            return $scope.getDeliveries();
         }).then(function(success) {
-          return $scope.getDeliveries();
-        }).then(function(success) {
-          // finally, redirect to last path, or home if none
-          $scope.loading = false;
-          $log.debug('loading complete');
-          $rootScope.loggingIn = false;
-          $rootScope.loggedIn = true;
-          //$log.debug('logged in as', success.data.user.fullname, "(",success.data.user.email, ")");
-          $location.path(localStorageService.get('lastPath'));
+            // finally, redirect to last path, or home if none
+            $scope.loading = false;
+            $log.debug('loading complete');
+            $rootScope.loggingIn = false;
+            $rootScope.loggedIn = true;
+            $rootScope.$broadcast('loggedIn');
+            //$log.debug('logged in as', success.data.user.fullname, "(",success.data.user.email, ")");
+            $location.path(localStorageService.get('lastPath'));
       });
     }
 
@@ -149,7 +144,7 @@ angular.module('sequoiaGroveApp')
       data: {'auth_token':$rootScope.token}
     }).then(
         function(success) {
-          $log.debug("success");
+          $log.debug(success);
           $rootScope.hasValidToken = success.data.valid;
 
           if (success.data.valid) {
@@ -168,7 +163,9 @@ angular.module('sequoiaGroveApp')
             $scope.initializeData();
           }
         }, function(failure) {
-          $log.debug('error verifying token');
+          //$log.debug('error verifying token');
+          // reset data
+          $scope.destructData();
       })
     }
 
@@ -178,6 +175,7 @@ angular.module('sequoiaGroveApp')
       //localStorageService.remove('auth_token');
 
       // reset login error flags
+      $rootScope.loggingIn = false;
       $rootScope.loggedIn = false;
       $rootScope.blankEmailOrPassword = false;
       $rootScope.invalidEmailOrPassword = false;
@@ -188,23 +186,13 @@ angular.module('sequoiaGroveApp')
       $rootScope.initializedData = false;
       $rootScope.loggedInUser= {'email':JSON.parse(localStorageService.get('email'))};
 
-      $rootScope.employees = [];
-      $rootScope.positions = [];
-      $rootScope.deliveries = [];
-      $rootScope.template = [];
-      $scope.originalTemplate = [];
-      $scope.deleteShifts = [];
-      $scope.updateShifts = [];
       $location.path('/login');
-
-      //TODO send request to remove user's session from session table
     }
 
 /************** Event Watchers **************/
 
     if ($rootScope.token) {
       $rootScope.loggingIn = true;
-      $log.debug('would validating token in login...');
       $scope.validateToken().then(
         function(success) {
           //$log.debug(success);
@@ -214,13 +202,11 @@ angular.module('sequoiaGroveApp')
     }
 
     $rootScope.$on('login', function() {
-      $log.debug('caught login in login');
-      $scope.login();
+      $scope.appLogin();
     });
 
     $rootScope.$on('logout', function() {
       $scope.destructData();
     });
-
 
   });

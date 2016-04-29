@@ -39,7 +39,7 @@
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
         ng-disabled = "saving"
-        ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
+        ng-hide = "changesMade"
         ng-click = "saveSchedule()">
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
@@ -52,7 +52,7 @@
       <!-- Default button -->
       <button class = "btn btn-default"
         ng-disabled = "saving"
-        ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
+        ng-show = "changesMade"
         ng-disabled = "saving";
         ng-click = "saveSchedule()">
         Save Changes
@@ -61,14 +61,14 @@
 
       <button class = "btn btn-default"
         ng-click = "publishSchedule()"
-        ng-hide = "ispublished"
+        ng-hide = "isPublished"
         ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
       
       <button class = "btn btn-primary"
-        ng-show = "ispublished"
+        ng-show = "isPublished"
         ng-disabled = "saving">
         Published
         <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
