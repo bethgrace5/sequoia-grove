@@ -38,12 +38,16 @@
   <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
   <!-- Mock Data -->
   <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
 
   <!-- Functions -->
   <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
+
+
+
 
 
 </databaseChangeLog>
