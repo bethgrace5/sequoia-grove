@@ -14,6 +14,9 @@ import org.springframework.ui.ModelMap;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import java.util.Arrays;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -29,6 +32,12 @@ import com.sequoiagrove.model.Holiday;
 
 @Controller
 public class ManageStore {
+
+  @ModelAttribute("scope")
+    public ArrayList<String> getId(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return new ArrayList<String>(Arrays.asList(csvPermissions.split(",")));
+    }
 
 /* ----- Pure Functions ----- */
    public boolean validateStrings(String... args) {

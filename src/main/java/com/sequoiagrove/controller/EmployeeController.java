@@ -1,6 +1,9 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.bind.annotation.RequestBody;
 import java.sql.SQLException;
@@ -29,11 +32,22 @@ import com.sequoiagrove.model.WeeklyAvail;
 @Controller
 public class EmployeeController
 {
+  @ModelAttribute("scope")
+    public List<String> getId(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return Arrays.asList(csvPermissions.split(","));
+    }
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model) {
+    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        // the token did not have the required permissions, return 403 status
+        if (!permissions.contains("manage-employees")) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
 
         String queryStr = "select * from sequ_user_info_view";
         List<Employee> empList = jdbcTemplate.query( queryStr,

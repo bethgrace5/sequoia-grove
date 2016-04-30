@@ -209,7 +209,7 @@ public class Authentication {
         jdbcTemplate.update( "delete from sequ_session where user_id = ?",
             new Object [] { userId });
 
-        System.out.println("4. Update session with subject\n\t" + crypticSessionId);
+        //System.out.println("4. Update session with subject\n\t" + crypticSessionId);
         // create a new session for this user
         jdbcTemplate.update(
             "insert into sequ_session(expiration_date, user_id, token) " +

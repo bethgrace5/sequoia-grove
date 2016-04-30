@@ -25,22 +25,21 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // TODO verify authorization token by checking session table
         String URI = request.getRequestURI();
         //System.out.println(URI);
-        System.out.println("1. Intercepter recieved Authorization\n\t" +
-            request.getHeader("Authorization") + "\n" + URI);
+        //System.out.println("1. Intercepter recieved Authorization\n\t" +
+            //request.getHeader("Authorization") + "\n" + URI);
 
         Map<String, String> verificationResponse =
           Authentication.verifyToken(request.getHeader("Authorization"), URI);
 
         String subject = verificationResponse.get("subject");
         String scope = verificationResponse.get("scope");
-        System.out.println("2. Verification Response parsed subject as\n\t" + subject);
-        System.out.println("TOKEN SCOPE: " + scope);
+        //System.out.println("2. Verification Response parsed subject as\n\t" + subject);
 
         if (subject.equals("invalid")) {
             // TODO since token was invalid, remove session so they need to
             // login with username/password, also we need to send back a 400
             // response code so the application knows they were unauthorized
-            System.out.println("Error: Verification Response was 'invalid'");
+            //System.out.println("Error: Verification Response was 'invalid'");
             response.setStatus( HttpServletResponse.SC_FORBIDDEN );
             return false;
         }
@@ -54,9 +53,9 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             id = jdbcTemplate.queryForObject(
                 "select user_id from sequ_session where token = ?",
                 params, Integer.class);
-            System.out.println("3. Found session token in table for user\n\t" + id);
+            //System.out.println("3. Found session token in table for user\n\t" + id);
           } catch (EmptyResultDataAccessException e) {
-            System.out.println("3. No session token found for user\n\t");
+            //System.out.println("3. No session token found for user\n\t");
             return false;
           }
         }
@@ -74,7 +73,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
       //System.out.println("POST HANDLE SCOPE:       " + (String) request.getAttribute("scope"));
         String token = Authentication.getToken((Integer)request.getAttribute("userID"), (String)request.getAttribute("scope"));
-        System.out.println("5. Send back JWT \n\t" + token);
+
+        // Check for any errors, and change status accordingly
+        Integer status = (Integer) modelAndView.getModelMap().get("errorStatus");
+        if (status != null) {
+            response.setStatus(status);
+        }
+
+        //System.out.println("5. Send back JWT \n\t" + token);
         modelAndView.getModelMap().put("auth_token", token);
     }
 
