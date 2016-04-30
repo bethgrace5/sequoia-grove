@@ -62,9 +62,25 @@ public class Authentication {
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
     protected String loginWithToken(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, "", "", "", "", false);
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
 
-        String sql = "select * from sequ_user where id = ?";
+        String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
+            "from ( " +
+                "select user_id, STRING_AGG(permission_id || '', ',' ORDER BY user_id) AS permissions " +
+                "from sequ_user_permission p " +
+                "group by user_id " +
+                ") as perm " +
+            "right outer join " +
+            "( " +
+             "select * from sequ_user " +
+             "where id = ? " +
+             ") as sess " +
+            "on perm.user_id = sess.id " +
+            "left outer join " +
+            "( " +
+             "select title, id from sequ_classification " +
+             ") as class " +
+            "on sess.classification_id = class.id; ";
         user = (User)jdbcTemplate.queryForObject(sql, new Object[] { id, }, new UserRowMapper());
 
         // make sure this is a current employee
@@ -94,15 +110,30 @@ public class Authentication {
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
     protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, "", "", "", "", false);
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
         String email = "";
         String password = "";
 
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-          // find this user in database
-          String sql = "select * from sequ_user where email = ? and password = ?";
+        String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
+            "from ( " +
+                "select user_id, STRING_AGG(permission_id || '', ',' ORDER BY user_id) AS permissions " +
+                "from sequ_user_permission p " +
+                "group by user_id " +
+                ") as perm " +
+            "right outer join " +
+            "( " +
+             "select * from sequ_user " +
+             "where email = ? and password = ?" +
+             ") as sess " +
+            "on perm.user_id = sess.id " +
+            "left outer join " +
+            "( " +
+             "select title, id from sequ_classification " +
+             ") as class " +
+            "on sess.classification_id = class.id; ";
           try {
             email = jobject.get("email").getAsString();
             password = jobject.get("password").getAsString();
@@ -141,7 +172,7 @@ public class Authentication {
             if (count > 0) {
                 System.out.println(user.getFullname() + " has sucessfully signed in");
                 model.addAttribute("user", user);
-                model.addAttribute("auth_token", getToken(user.getId()));
+                model.addAttribute("auth_token", getToken(user.getId(), user.getPermissions()));
             }
             else {
                 model.addAttribute("userNotCurrent", true);
@@ -153,7 +184,7 @@ public class Authentication {
     }
 
     // Create initial token upon authorization
-    protected static String getToken(int userId) {
+    protected static String getToken(int userId, String scope) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         //byte[] key = getSignatureKey();
         // We need a signing key, so we'll create one just for this example. Usually
@@ -173,12 +204,12 @@ public class Authentication {
 
         String jwt =
           Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
+          .claim("scope", scope)
           //.setSubject(subject)
           // for now hard code subject, later, change to be related to
           // this user.
           .setSubject(crypticSessionId)
           //.setExpiration(expirationDate)
-          //.put("scope", scope)
           .signWith(SignatureAlgorithm.HS256,key)
           .compact();
 

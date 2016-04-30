@@ -59,5 +59,6 @@
   <include relativeToChangelogFile="true" file="changelogs/028-prefix-views-functions-and-sequences.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/029-update-views.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/030-update-functions.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/031-permission-mock-data.xml"/>
 
 </databaseChangeLog>

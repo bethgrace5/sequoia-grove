@@ -154,6 +154,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         //update schedule template
         initSchedule().then(function(success) {
           deferred.resolve(success);
+          notifyObservers();
         },function(failure) {
           deferred.reject(error);
         });
@@ -355,18 +356,22 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // rewrite current schedule with last week's data
   var importLastWeek = function() {
+    var deferred = $q.defer();
     deleteShifts = [];
-    importing = true;
+    updateShifts = [];
     // set monday a week back in time
     monday  = moment(monday,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
     initSchedule().then(function(data) {
       // add all shifts to update shifts, so they can be saved for this week
       angular.copy(originalTemplate, updateShifts);
+      deferred.resolve(data);
     });
+    return deferred.promise;
   }
 
   // Publish the schedule
   var publishSchedule = function() {
+    var deferred = $q.defer();
     var obj = {'date':header.mon.val, 'eid': $rootScope.loggedInUser.id};
     $http({
       url: '/sequoiagrove/schedule/publish/',
@@ -374,9 +379,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       data: obj
     }).then(function(success) {
       isPublished = true;
+      deferred.resolve(success);
     },function (failure) {
       $log.error(" Error posting schedule ");
     });
+    return deferred.promise;
   }
 
 
@@ -422,12 +429,23 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
     service.clear          = function() { clearSchedule(); };
-    service.publish        = function() { publishSchedule(); };
-    service.importLastWeek = function() { importLastWeek(); };
+    service.publish        = function() { return publishSchedule(); };
+    service.importLastWeek = function() { return importLastWeek(); };
     service.getDayCount     = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
     service.changesMade    = function() {
       return (updateShifts.length + deleteShifts.length) > 0;
+    };
+    service.saveSchedule = function() {
+      var deferred = $q.defer();
+      saveSchedule().then(
+          function(success) {
+            return deleteSchedule();
+          }).then( function(success) {
+            // saved and then deleted
+            deferred.resolve(success);
+          });
+      return deferred.promise;
     };
   }
 

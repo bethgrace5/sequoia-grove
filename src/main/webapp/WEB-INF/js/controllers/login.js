@@ -87,10 +87,12 @@ angular.module('sequoiaGroveApp')
             // Otherwise, we found the user - save that user's data
             $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
+            $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
             //localStorageService.set('auth_token', success.data.auth_token);
 
             // TODO if the user wants to save their email
 
+            $log.debug(success.data.user);
             if ($scope.remember && success.data.user) {
               localStorageService.set('email', JSON.stringify(success.data.user.email));
             }
@@ -153,6 +155,7 @@ angular.module('sequoiaGroveApp')
 
             $rootScope.invalidEmailOrPassword = false;
             $rootScope.loggedInUser = success.data.user;
+            $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
 
             // save user
             if ($scope.remember && success.data.user) {

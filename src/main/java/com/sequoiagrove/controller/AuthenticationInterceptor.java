@@ -69,7 +69,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     // Post Handler for after request
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        String token = Authentication.getToken((Integer)request.getAttribute("userID"));
+        String token = Authentication.getToken((Integer)request.getAttribute("userID"), "TODO put string permissions here" );
         System.out.println("5. Send back JWT \n\t" + token);
         modelAndView.getModelMap().put("auth_token", token);
     }

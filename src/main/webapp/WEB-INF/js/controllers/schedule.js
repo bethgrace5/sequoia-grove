@@ -19,13 +19,13 @@ angular.module('sequoiaGroveApp')
         $timeout,
         $translate,
         $mdDialog,
+        scheduleFactory,
         localStorageService) {
 
 
 /************** Login Redirect, Containers and UI settings **************/
   localStorageService.set('lastPath', '/schedule');
   $scope.saving = false;
-  $scope.importing = false;
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -129,5 +129,32 @@ angular.module('sequoiaGroveApp')
     } */
     return style;
   }
+
+  $scope.saveSchedule = function() {
+    $scope.saving = true;
+    scheduleFactory.saveSchedule().then(
+      function(success) {
+        $scope.saving = false;
+      });
+  }
+
+  $scope.clearSchedule = function() {
+    scheduleFactory.clear();
+  }
+
+  $scope.importLastWeek = function() {
+    $scope.saving = true;
+    scheduleFactory.importLastWeek().then(
+      function(success) {
+        $log.debug(success);
+        $scope.saving = false;
+      });
+  }
+
+  var updateChangesMade = function(){
+    $log.debug('update template schedule.js');
+    $scope.template = scheduleFactory.getTemplate();
+  }
+  scheduleFactory.registerObserverCallback(updateChangesMade);
 
 });
