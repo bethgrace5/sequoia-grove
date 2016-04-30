@@ -1,5 +1,7 @@
 package com.sequoiagrove.controller;
 
+import java.util.Map;
+import java.util.HashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,16 +25,18 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         // TODO verify authorization token by checking session table
         String URI = request.getRequestURI();
         //System.out.println(URI);
-        System.out.println("1. Intercepter recieved Authorization\n\t" + 
+        System.out.println("1. Intercepter recieved Authorization\n\t" +
             request.getHeader("Authorization") + "\n" + URI);
 
-        String verificationResponse =
+        Map<String, String> verificationResponse =
           Authentication.verifyToken(request.getHeader("Authorization"), URI);
 
-        System.out.println("2. Verification Response parsed subject as\n\t" + 
-            verificationResponse);
+        String subject = verificationResponse.get("subject");
+        String scope = verificationResponse.get("scope");
+        System.out.println("2. Verification Response parsed subject as\n\t" + subject);
+        System.out.println("TOKEN SCOPE: " + scope);
 
-        if (verificationResponse.equals("invalid")) {
+        if (subject.equals("invalid")) {
             // TODO since token was invalid, remove session so they need to
             // login with username/password, also we need to send back a 400
             // response code so the application knows they were unauthorized
@@ -41,15 +45,12 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             return false;
         }
         else {
-          Object[] params = new Object[] { verificationResponse };
+          Object[] params = new Object[] { subject };
           try {
             // search for token in database
             // TODO check expirationdate to make sure it's not expired,
             // if it is expired, delete the token from the session table
             // and send back a 400 authorization error
-            // TODO change this query to join with the permissions table, so
-            // we can extract the permissions to set on the model, and then
-            // use them to verify that the user is allowed to continue
             id = jdbcTemplate.queryForObject(
                 "select user_id from sequ_session where token = ?",
                 params, Integer.class);
@@ -62,6 +63,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
         // get the user id from the parsed token
         request.setAttribute("userID", id);
+        // get the permissions allowed for the token
+        request.setAttribute("scope", scope);
 
         // if valid, generate new token, and update table
         return true;
@@ -69,7 +72,8 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     // Post Handler for after request
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        String token = Authentication.getToken((Integer)request.getAttribute("userID"), "TODO put string permissions here" );
+      //System.out.println("POST HANDLE SCOPE:       " + (String) request.getAttribute("scope"));
+        String token = Authentication.getToken((Integer)request.getAttribute("userID"), (String)request.getAttribute("scope"));
         System.out.println("5. Send back JWT \n\t" + token);
         modelAndView.getModelMap().put("auth_token", token);
     }

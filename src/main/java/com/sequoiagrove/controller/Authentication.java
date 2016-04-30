@@ -16,6 +16,8 @@ import java.net.URL;
 import java.security.Key;
 import java.sql.SQLException;
 import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.HashMap;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -65,22 +67,28 @@ public class Authentication {
         User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
 
         String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
-            "from ( " +
-                "select user_id, STRING_AGG(permission_id || '', ',' ORDER BY user_id) AS permissions " +
-                "from sequ_user_permission p " +
-                "group by user_id " +
-                ") as perm " +
-            "right outer join " +
-            "( " +
-             "select * from sequ_user " +
-             "where id = ? " +
-             ") as sess " +
-            "on perm.user_id = sess.id " +
-            "left outer join " +
-            "( " +
-             "select title, id from sequ_classification " +
-             ") as class " +
-            "on sess.classification_id = class.id; ";
+          "from (  " +
+              "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
+              "from ( " +
+                "select * from " +
+                "sequ_user_permission a  " +
+                "full outer join " +
+                "sequ_permission b " +
+                "on a.permission_id = b.id " +
+                ") p  " +
+              "group by user_id " +
+              ") as perm  " +
+          "right outer join  " +
+          "(  " +
+           "select * from sequ_user  " +
+           "where id = ?  " +
+          ") as sess  " +
+          "on perm.user_id = sess.id  " +
+          "left outer join  " +
+          "(  " +
+           "select title, id from sequ_classification  " +
+          ") as class  " +
+          "on sess.classification_id = class.id ";
         user = (User)jdbcTemplate.queryForObject(sql, new Object[] { id, }, new UserRowMapper());
 
         // make sure this is a current employee
@@ -118,22 +126,28 @@ public class Authentication {
         JsonObject  jobject = jelement.getAsJsonObject();
 
         String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
-            "from ( " +
-                "select user_id, STRING_AGG(permission_id || '', ',' ORDER BY user_id) AS permissions " +
-                "from sequ_user_permission p " +
-                "group by user_id " +
-                ") as perm " +
-            "right outer join " +
-            "( " +
-             "select * from sequ_user " +
-             "where email = ? and password = ?" +
-             ") as sess " +
-            "on perm.user_id = sess.id " +
-            "left outer join " +
-            "( " +
-             "select title, id from sequ_classification " +
-             ") as class " +
-            "on sess.classification_id = class.id; ";
+          "from (  " +
+              "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
+              "from ( " +
+                "select * from " +
+                "sequ_user_permission a  " +
+                "full outer join " +
+                "sequ_permission b " +
+                "on a.permission_id = b.id " +
+                ") p  " +
+              "group by user_id " +
+              ") as perm  " +
+          "right outer join  " +
+          "(  " +
+           "select * from sequ_user  " +
+           "where email = ? and password = ?" +
+          ") as sess  " +
+          "on perm.user_id = sess.id  " +
+          "left outer join  " +
+          "(  " +
+           "select title, id from sequ_classification  " +
+          ") as class  " +
+          "on sess.classification_id = class.id ";
           try {
             email = jobject.get("email").getAsString();
             password = jobject.get("password").getAsString();
@@ -205,6 +219,7 @@ public class Authentication {
         String jwt =
           Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
           .claim("scope", scope)
+          //.put("scope", scope)
           //.setSubject(subject)
           // for now hard code subject, later, change to be related to
           // this user.
@@ -216,26 +231,34 @@ public class Authentication {
         return jwt;
     }
 
-    public static String verifyToken(String jwt, String URI) {
+    public static Map<String, String> verifyToken(String jwt, String URI) {
+      Map<String, String> token = new HashMap<String, String>();
       String subject = "HACKER";
         try {
             // Parse jwt
             Jws<Claims> jwtClaims =
               Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
               subject = jwtClaims.getBody().getSubject();
+              token.put("subject", jwtClaims.getBody().getSubject());
+              token.put("scope", jwtClaims.getBody().get("scope").toString());
+              //token = jwtClaims.getBody();
             try {
                 // Check jwt subject
-                //Jwts.parser().requireSubject("token_subject").setSigningKey(key).parseClaimsJws(jwt);
+                //Jwts.parser().require("scope", "this_scope").setSigningKey(key).parseClaimsJws(jwt);
             } catch (MissingClaimException e) {
                 // the parsed JWT did not have the subject field
                 System.out.println("Missing Claim Exception for " + URI
                     + "\n\t-> No subject field present.");
-                return("invalid");
+            token.put("scope", "none");
+            token.put("subject", "invalid");
+            return token;
             } catch (IncorrectClaimException e) {
                 // the parsed JWT had a sub field, but its value was not equal to 'subject'
                 System.out.println("Incorrect Claim Exception for " + URI
                     + "\n\t-> Subject field was not what was expected.");
-                return("invalid");
+            token.put("scope", "none");
+            token.put("subject", "invalid");
+            return token;
             }
             //we can trust this JWT, get the subject
             //System.out.println(subject);
@@ -243,19 +266,25 @@ public class Authentication {
             //don't trust the JWT!
             System.out.println("Signature Exception: " + URI
                 + "\n\t-> cannot trust this token.");
-            return("invalid");
+            token.put("scope", "none");
+            token.put("subject", "invalid");
+            return token;
         } catch (MalformedJwtException e) {
             // Jwt was not formed correctly (needs 2 dots etc.)
             System.out.println("Malformed Jwt: " + URI
                 + "\n\t-> needs two dots etc.");
-            return("invalid");
+            token.put("scope", "none");
+            token.put("subject", "invalid");
+            return token;
         } catch (IllegalArgumentException e) {
             // Jwt String cannot be null or empty
             System.out.println("Illegal Argument (Jwt): " + URI
                 + "\n\t-> possibly null or empty Jwt.");
-            return("invalid");
+            token.put("scope", "none");
+            token.put("subject", "invalid");
+            return token;
         }
-       return(subject);
+       return(token);
     }
 
     public static String nextSessionId() {
