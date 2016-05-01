@@ -85,7 +85,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     $http({ 'url': url, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
-            isPublished = success.data.ispublished;
+            isPublished = success.data.isPublished;
             schedule = success.data.template;
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
@@ -95,7 +95,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           }
           deferred.reject();
         }, function(failure) {
-          $log.error("Error obtaining schedule template" );
           deferred.reject(failure);
         });
     return deferred.promise;
@@ -126,8 +125,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         //deleteSchedule();
       }
     },function(error) {
-      $log.error("Error saving schedule");
-      deferred.reject(data);
+      deferred.reject(error);
     });
     return deferred.promise;
   }
@@ -160,7 +158,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         });
       }
     },function(error) {
-        $log.error('Error deleting schedule ');
         deferred.reject(error);
     });
     return deferred.promise;
@@ -379,9 +376,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       data: obj
     }).then(function(success) {
       isPublished = true;
-      deferred.resolve(success);
+      deferred.resolve(true);
     },function (failure) {
-      $log.error(" Error posting schedule ");
+      deferred.reject(false);
     });
     return deferred.promise;
   }
@@ -438,13 +435,25 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     };
     service.saveSchedule = function() {
       var deferred = $q.defer();
-      saveSchedule().then(
-          function(success) {
-            return deleteSchedule();
-          }).then( function(success) {
-            // saved and then deleted
-            deferred.resolve(success);
-          });
+      if (updateShifts.length > 0) {
+        saveSchedule().then(
+            function(success) {
+              if (deleteShifts.length > 0) {
+                return deleteSchedule();
+              }
+            }).then( function(success) {
+              // saved and then deleted
+              deferred.resolve(success);
+            });
+      }
+      else if (deleteShifts.length > 0) {
+        deleteSchedule().then(function(success) {
+          deferred.resolve(success);
+        },function(error) {
+          deferred.reject(error);
+        });
+      }
+
       return deferred.promise;
     };
   }

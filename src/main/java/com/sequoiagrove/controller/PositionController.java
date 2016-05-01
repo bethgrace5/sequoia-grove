@@ -4,12 +4,16 @@ import com.google.gson.*;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +25,23 @@ import com.sequoiagrove.model.Position;
 public class PositionController {
     private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
 
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getId(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return Arrays.asList(csvPermissions.split(","));
+    }
+
     // Get Basic position info (id, title and area)
     @RequestMapping(value = "/position")
-    public String getPositions(Model model){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    public String getPositions(Model model, @ModelAttribute("scope") List<String> permissions){
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
 
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         List<Position> posList = jdbcTemplate.query(
             "select id, title, area from sequ_position order by area, title",
             new RowMapper<Position>() {
@@ -43,9 +59,14 @@ public class PositionController {
 
     // Add a current position for an employee
     @RequestMapping(value = "/position/add/")
-    public String addPosition(Model model, @RequestBody String data) throws SQLException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    public String addPosition(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
 
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         // Parse the body to position object
         Gson gson = new Gson();
         JsonElement jelement = new JsonParser().parse(data);
@@ -71,7 +92,13 @@ public class PositionController {
 
     // Remove a current position from an employee
     @RequestMapping(value = "/position/remove/")
-    public String removePosition(Model model, @RequestBody String data) throws SQLException {
+    public String removePosition(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // Parse the body to position object

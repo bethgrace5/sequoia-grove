@@ -2,23 +2,28 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.Gson;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Controller;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import java.sql.ResultSet;
+import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
@@ -35,8 +40,23 @@ It will also retrieve information from the backend :
 
 @Controller
 public class RequestController{
+
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getId(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return Arrays.asList(csvPermissions.split(","));
+    }
+
   @RequestMapping(value = "/request/submit")
-    public String sumbitRequest(@RequestBody String data, Model model) throws SQLException {
+    public String sumbitRequest(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+      // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
+          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          return "jsonTemplate";
+      }
+
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Gson gson = new Gson();
       Request req = gson.fromJson(data, Request.class);
@@ -61,7 +81,14 @@ public class RequestController{
     }
 
   @RequestMapping(value = "/request/get")
-    public String getRequest(Model model){
+    public String getRequest( @ModelAttribute("scope") List<String> permissions, Model model){
+
+      // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          return "jsonTemplate";
+      }
+
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
           "select * from sequ_request_view",
@@ -87,7 +114,14 @@ public class RequestController{
     }
 
   @RequestMapping(value = "/request/get/checked")
-    public String getCheckedRequest(Model model){
+    public String getCheckedRequest(Model model, @ModelAttribute("scope") List<String> permissions){
+
+      // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          return "jsonTemplate";
+      }
+
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
           "select * from sequ_request_view " +
@@ -114,7 +148,14 @@ public class RequestController{
     }
 
   @RequestMapping(value = "/request/get/pending")
-    public String getPendingRequest(Model model){
+    public String getPendingRequest(Model model, @ModelAttribute("scope") List<String> permissions){
+
+      // the token did not have the required permissions, return 403 status
+      if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          return "jsonTemplate";
+      }
+
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<RequestStatus> requestList = jdbcTemplate.query(
           "select * from sequ_request_view "+
@@ -141,8 +182,15 @@ public class RequestController{
     }
 
     @RequestMapping(value = "/request/get/current/employee/{eid}")
-      public String getCurrentEmployeeRequestl(Model model,
+      public String getCurrentEmployeeRequestl(Model model, @ModelAttribute("scope") List<String> permissions,
           @PathVariable("eid") int eid) throws SQLException {
+
+            // the token did not have the required permissions, return 403 status
+            if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
+                model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+                return "jsonTemplate";
+            }
+
             JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
             List<RequestStatus> requestList = jdbcTemplate.query(
               "select * from sequ_request_view " +
@@ -169,10 +217,16 @@ public class RequestController{
       }
 
     @RequestMapping(value = "/request/update/{requestID}/{approverID}/{is_approve}")
-      public String updateRequest(Model model,
+      public String updateRequest(Model model, @ModelAttribute("scope") List<String> permissions,
           @PathVariable("requestID") int requestID,
           @PathVariable("approverID") int approverID,
           @PathVariable("is_approve") int is_approve) throws SQLException{
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         //Make Sure request ID is there too...
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -190,7 +244,14 @@ public class RequestController{
       }
 
     @RequestMapping(value = "/request/update/dates")
-      public String changeRequestDates(@RequestBody String data, Model model) throws SQLException {
+      public String changeRequestDates(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         Gson gson = new Gson();
         Request req = gson.fromJson(data, Request.class);

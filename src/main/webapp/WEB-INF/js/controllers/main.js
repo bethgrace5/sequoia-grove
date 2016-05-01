@@ -172,8 +172,6 @@ angular.module('sequoiaGroveApp')
             }
           });
         }
-      },function(failure) {
-        $log.error('Error getting deliveries ');
       });
   }
 
@@ -181,8 +179,6 @@ angular.module('sequoiaGroveApp')
     return $http({ url: '/sequoiagrove/position', method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
-      },function(failure) {
-        $log.error("Error obtaining position data" );
       });
   }
 
@@ -211,8 +207,6 @@ angular.module('sequoiaGroveApp')
         if ($rootScope.devMode) {
           localStorageService.set('employees', JSON.stringify($rootScope.employees));
         }
-      },function(failure) {
-          $log.error("Error obtaining all employees" );
       });
   }
 
@@ -323,14 +317,16 @@ angular.module('sequoiaGroveApp')
       return;
     }
     $scope.loadingWeek = true;
-    $log.debug(operation);
     scheduleFactory.changeWeek(operation).then(
         function(success) {
           $scope.template = success.template;
-          $scope.isPublished = success.ispublished;
+          $scope.isPublished = success.isPublished;
           $scope.loadingWeek = false;
-        },function(failure) {
-      });
+        });
+  }
+
+  $scope.publishSchedule = function() {
+    $scope.isPublished = scheduleFactory.publish();
   }
 
   var updateChangesMade = function(){

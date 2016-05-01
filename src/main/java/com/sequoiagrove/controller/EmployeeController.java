@@ -1,28 +1,27 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.sql.Types;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.stereotype.Controller;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.controller.Authentication;
 import com.sequoiagrove.model.Employee;
@@ -32,6 +31,7 @@ import com.sequoiagrove.model.WeeklyAvail;
 @Controller
 public class EmployeeController
 {
+  // extract scope from request
   @ModelAttribute("scope")
     public List<String> getId(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
@@ -44,12 +44,12 @@ public class EmployeeController
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // the token did not have the required permissions, return 403 status
-        if (!permissions.contains("manage-employees")) {
+        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
             model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
-        String queryStr = "select * from sequ_user_info_view";
+        String queryStr = "select * from sequ_user_info_view order by last_name";
         List<Employee> empList = jdbcTemplate.query( queryStr,
             new RowMapper<Employee>() {
                 public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -128,7 +128,12 @@ public class EmployeeController
     }
 
     @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
-    public String updateEmployee(Model model, @RequestBody String data) throws SQLException {
+    public String updateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
 
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
@@ -165,7 +170,12 @@ public class EmployeeController
     }
 
     @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
-    public String addEmployee(Model model, @RequestBody String data) throws SQLException {
+    public String addEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!permissions.contains("manage-employees")) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
@@ -201,7 +211,12 @@ public class EmployeeController
 
     // Deactivate (un-employ) an employee
     @RequestMapping(value = "/employee/deactivate", method=RequestMethod.POST)
-    public String deactivateEmployee(Model model, @RequestBody String data) throws SQLException {
+    public String deactivateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!permissions.contains("manage-employees")) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
@@ -238,7 +253,12 @@ public class EmployeeController
 
     // Activate (re-employ) an employee
     @RequestMapping(value = "/employee/activate", method=RequestMethod.POST)
-    public String activateEmployee(Model model, @RequestBody String data) throws SQLException {
+    public String activateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!permissions.contains("manage-employees")) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();

@@ -42,6 +42,22 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/employee/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/update" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/deactivate/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/activate/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/employee*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
@@ -54,6 +70,10 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/avail/remove/*/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/avail/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
@@ -62,7 +82,23 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/holiday/*" />
+      <mvc:mapping path="/holiday/get/between/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/remove/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/update" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -70,10 +106,68 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/position/add/" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position/remove/" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/position/*" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/request/update/dates" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/update/*/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/current/employee/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/pending" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/checked" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/request/submit/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/delete/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/update/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/template/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/publish/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>

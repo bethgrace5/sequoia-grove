@@ -1,26 +1,26 @@
 package com.sequoiagrove.controller; 
 import com.google.gson.*;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.NotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import java.util.Arrays;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.stereotype.Controller;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import java.sql.ResultSet;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
@@ -33,10 +33,11 @@ import com.sequoiagrove.model.Holiday;
 @Controller
 public class ManageStore {
 
+  // extract scope from request
   @ModelAttribute("scope")
-    public ArrayList<String> getId(HttpServletRequest request) {
+    public List<String> getId(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
-      return new ArrayList<String>(Arrays.asList(csvPermissions.split(",")));
+      return Arrays.asList(csvPermissions.split(","));
     }
 
 /* ----- Pure Functions ----- */
@@ -84,7 +85,13 @@ public class ManageStore {
 
   // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
-    public String addShift(@RequestBody String data, Model model) throws SQLException, NotFoundException {
+    public String addShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException, NotFoundException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
         JsonElement jelement = new JsonParser().parse(data);
@@ -117,6 +124,7 @@ public class ManageStore {
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
         int sid = jdbcTemplate.queryForObject("select nextval('sequ_shift_seqence')", Integer.class);
+            //"values(?, ?, ?, current_date, null, ?, ?)", params);
 
         Object[] params = new Object[] {
             sid,
@@ -126,9 +134,6 @@ public class ManageStore {
             weekendHourId
         };
 
-        jdbcTemplate.update("insert into sequ_shift " +
-            "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
-            "values(?, ?, ?, current_date, null, ?, ?)", params);
 
         model.addAttribute("sid", sid);
 
@@ -137,7 +142,13 @@ public class ManageStore {
 
   // Update currently selected shift
     @RequestMapping(value = "/shift/update", method = RequestMethod.POST)
-    public String updateShift(@RequestBody String data, Model model) throws SQLException {
+    public String updateShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
         JsonElement jelement = new JsonParser().parse(data);
@@ -193,7 +204,13 @@ public class ManageStore {
 
   // Delete currently selected shift
     @RequestMapping(value = "/shift/delete", method = RequestMethod.POST)
-    public String deleteShift(@RequestBody String data, Model model) throws SQLException {
+    public String deleteShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
  
         JsonElement jelement = new JsonParser().parse(data);

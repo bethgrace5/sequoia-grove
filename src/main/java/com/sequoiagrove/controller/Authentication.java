@@ -66,7 +66,7 @@ public class Authentication {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
 
-        String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
+        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
           "from (  " +
               "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
               "from ( " +
@@ -125,7 +125,7 @@ public class Authentication {
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        String sql = "select perm.user_id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
+        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
           "from (  " +
               "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
               "from ( " +
@@ -204,25 +204,36 @@ public class Authentication {
         // We need a signing key, so we'll create one just for this example. Usually
         // the key would be read from your application configuration instead.
         String crypticSessionId = nextSessionId();
+        int count = 0;
 
-        // clear any sessions with this user's id
-        jdbcTemplate.update( "delete from sequ_session where user_id = ?",
-            new Object [] { userId });
-
-        //System.out.println("4. Update session with subject\n\t" + crypticSessionId);
         // create a new session for this user
-        jdbcTemplate.update(
-            "insert into sequ_session(expiration_date, user_id, token) " +
-            " values((select current_timestamp + interval '18 hours'), ?, ?)",
-            new Object [] { userId, crypticSessionId });
+
+        try {
+          count = jdbcTemplate.queryForObject(
+              "select count(*) from sequ_session where user_id = ?",
+              new Object[] { userId, }, Integer.class);
+        } catch(EmptyResultDataAccessException e) {
+          // no results found, count is zero
+        };
+
+        // update session
+        if (count > 0 ) {
+          jdbcTemplate.update(
+              "update sequ_session set expiration_date = (select current_timestamp + interval '18 hours'), " +
+              "token = ? where user_id = ? ",
+              new Object [] { crypticSessionId, userId });
+        }
+        // insert new session
+        else {
+          jdbcTemplate.update(
+              "insert into sequ_session (expiration_date, token, user_id ) " +
+              "values((select current_timestamp + interval '18 hours'), ?, ?)",
+              new Object [] { crypticSessionId, userId });
+        }
 
         String jwt =
           Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
           .claim("scope", scope)
-          //.put("scope", scope)
-          //.setSubject(subject)
-          // for now hard code subject, later, change to be related to
-          // this user.
           .setSubject(crypticSessionId)
           //.setExpiration(expirationDate)
           .signWith(SignatureAlgorithm.HS256,key)
@@ -236,11 +247,10 @@ public class Authentication {
       String subject = "HACKER";
         try {
             // Parse jwt
-            Jws<Claims> jwtClaims =
-              Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
-              subject = jwtClaims.getBody().getSubject();
-              token.put("subject", jwtClaims.getBody().getSubject());
-              token.put("scope", jwtClaims.getBody().get("scope").toString());
+            Jws<Claims> jwtClaims = Jwts.parser().setSigningKey(key).parseClaimsJws(jwt);
+            subject = jwtClaims.getBody().getSubject();
+            token.put("subject", jwtClaims.getBody().getSubject());
+            token.put("scope", jwtClaims.getBody().get("scope").toString());
               //token = jwtClaims.getBody();
             try {
                 // Check jwt subject
@@ -261,7 +271,6 @@ public class Authentication {
             return token;
             }
             //we can trust this JWT, get the subject
-            //System.out.println(subject);
         } catch (SignatureException e) {
             //don't trust the JWT!
             System.out.println("Signature Exception: " + URI

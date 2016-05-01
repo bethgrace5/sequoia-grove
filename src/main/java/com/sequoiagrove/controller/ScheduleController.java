@@ -1,18 +1,18 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.*;
-import java.sql.SQLException;
 import java.sql.Date;
-import java.sql.Types;
 import java.sql.PreparedStatement;
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
 import java.sql.ResultSet;
-import org.springframework.jdbc.core.SqlParameterValue;
-import org.springframework.jdbc.core.SqlParameter;
-import org.springframework.jdbc.core.simple.SimpleJdbcCall;
+import java.sql.SQLException;
+import java.sql.Types;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.DataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,32 +20,41 @@ import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.SqlParameter;
+import org.springframework.jdbc.core.SqlParameterValue;
+import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.support.TransactionCallback;
 import org.springframework.transaction.support.TransactionTemplate;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sequoiagrove.model.ScheduleTemplate;
-import com.sequoiagrove.model.Day;
-import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
-import org.springframework.transaction.TransactionStatus;
-
+import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.ScheduleTemplate;
+import com.sequoiagrove.model.Scheduled;
 
 @Controller
 public class ScheduleController {
 
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getId(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return Arrays.asList(csvPermissions.split(","));
+    }
+
 /* ----- HTTP Mapped Functions -----*/
   // Get current schedule template (current shifts) dd-mm-yyyy
   @RequestMapping(value = "/schedule/template/{mon}")
-    public String getScheduleTemplate(Model model, @PathVariable("mon") final String mon) {
+    public String getScheduleTemplate(Model model, @ModelAttribute("scope") List<String> permissions, @PathVariable("mon") final String mon) {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
@@ -80,7 +89,7 @@ public class ScheduleController {
       Integer count = jdbcTemplate.queryForObject(
           "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
 
-      model.addAttribute("ispublished", (count!=null && count > 0));
+      model.addAttribute("isPublished", (count!=null && count > 0));
       model.addAttribute("template", schTempList);
       return "jsonTemplate";
   }
@@ -88,7 +97,14 @@ public class ScheduleController {
 
   // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
-    public String updateSchedule(@RequestBody String data, Model model) throws Exception {
+    public String updateSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws Exception {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
@@ -112,7 +128,14 @@ public class ScheduleController {
 
   // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
-    public String deleteSchedule(@RequestBody String data, Model model) throws SQLException {
+    public String deleteSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
@@ -134,7 +157,14 @@ public class ScheduleController {
     }
 
     @RequestMapping(value = "/schedule/publish")
-    public String publishSchedule(@RequestBody String data, Model model) throws SQLException {
+    public String publishSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
+            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // parse params
@@ -161,7 +191,7 @@ public class ScheduleController {
 
   // Check with database if is published or not
     @RequestMapping(value = "/schedule/ispublished/{date}")
-    public String checkifPublished( @PathVariable("date") String mon, Model model) throws SQLException {
+    public String checkifPublished( @PathVariable("date") String mon, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         Integer count = jdbcTemplate.queryForObject(
