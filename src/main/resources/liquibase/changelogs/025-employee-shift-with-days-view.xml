@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="25" author="Ted Pascua" context="prod or dev or test">
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="employee_shift_view">
+      SELECT foo.employee_id,
+      foo.shift_id,
+      foo.on_date,
+      foo.day
+      FROM ( SELECT s.employee_id,
+      s.shift_id,
+      s.on_date,
+      to_char(s.on_date::timestamp with time zone, 'D'::text) AS day
+      FROM is_scheduled_for s) foo;
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>
