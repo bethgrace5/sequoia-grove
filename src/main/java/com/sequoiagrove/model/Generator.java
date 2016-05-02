@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.*;
 
-class Generator{
+public class Generator{
   HashMap
     <Integer, HashMap<Integer, HashMap<Integer, Integer> > > generator;
     //[Day [ Shift [Employee, amount of time work] ] ]
@@ -19,6 +19,15 @@ class Generator{
     generator = new HashMap
       <Integer, HashMap<Integer, HashMap<Integer, Integer> > >();
   }
+  public void insert(Integer day,
+                     Integer shift,
+                     Integer employee,
+                     Integer amount){
+
+    addDay(day);
+    addShift(day, shift);
+    addEmployee(day, shift, employee, amount);
+  }
 
   public void addDay(Integer day){
     if(generator.containsKey(day)) return;
@@ -31,7 +40,7 @@ class Generator{
     generator.get(day).put(shift, new HashMap<Integer, Integer>());
   }
 
-  public void addEmployee(String day,
+  public void addEmployee(Integer day,
                           Integer shift,
                           Integer employee,
                           Integer amount){
