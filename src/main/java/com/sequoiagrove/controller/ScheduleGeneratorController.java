@@ -34,6 +34,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.Generator;
+import com.sequoiagrove.model.DayShiftEmployee;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
 import org.springframework.transaction.TransactionStatus;
@@ -86,6 +88,40 @@ public class ScheduleGeneratorController {
        group by shift_id
     */
   }
+  @RequestMapping(value = "/generator/build")
+    public String buildGenerator(Model model){
+/*
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      Generator generator;
+      generator = new Generator();
+      List<DayShiftEmployee> dayShiftEmployeeList = jdbcTemplate.query(
+        " select day, shift_id, employee_id, count(*) AS worked" +
+        " from employee_shift_view " +
+        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
+        " group by day, shift_id, employee_id " +
+        " order by day, shift_id, employee_id ",
+      //I need way to build Generator without the DayShiftEmployee
+          //"also day might be A String"
+          new RowMapper<DayShiftEmployee>() {
+            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
+              DayShiftEmployee es = new DayShiftEmployee(
+                rs.getInt("day"),//This Might Be Wrong?
+                rs.getInt("shift_id"),
+                rs.getInt("employee_id"),
+                rs.getInt("worked")
+              );
+
+              generator.insert(rs.getInt("day"), rs.getInt("shift_id"),
+                               rs.getInt("employee_id"), rs.getInt("worked")
+                              );
+
+              return es;
+            }
+          });
+      //model.addAttribute("holidays", holidayList);
+*/
+      return "jsonTemplate";
+    }
 
 }
 
