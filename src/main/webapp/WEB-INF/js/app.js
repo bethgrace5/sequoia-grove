@@ -96,27 +96,21 @@ angular.module('sequoiaGroveApp', [
     // Set Development Mode - loads app more quickly by reading schedule
     // template stored in localstorage instead of pulling a new one every time.
     $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
-    //$log.debug($rootScope.devMode);
 
     // reset login error flags
     $rootScope.loggedIn = false;
-    $rootScope.blankEmailOrPassword = false;
-    $rootScope.userNotRegistered = false;
-    $rootScope.userNotCurrent = false;
+    $rootScope.errorMessage = '';
     $rootScope.loginFailed = false;
     $rootScope.token = '';
     $rootScope.hasValidToken = false;
-    $rootScope.initializedData = false;
     $rootScope.loggedInUser= {'email':''};
 
     var email = JSON.parse(localStorageService.get('email'));
     var token = localStorageService.get('auth_token');
-    $log.debug("saved email: ", email);
     if(email) {
       $rootScope.loggedInUser.email = email;
     }
     if(token) {
       $rootScope.token = token;
-      $log.debug(token);
     }
   });

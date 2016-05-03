@@ -14,7 +14,6 @@ angular.module('sequoiaGroveApp')
         $log,
         $rootScope,
         $scope,
-        $q,
         $sha,
         scheduleFactory,
         localStorageService){
@@ -40,83 +39,45 @@ angular.module('sequoiaGroveApp')
 
     // User initialized login
     $scope.appLogin = function() {
-      $rootScope.loggingIn = true;
-
       // reset login error flags
+      $rootScope.loggingIn = true;
       $rootScope.loggedIn = false;
-      $rootScope.blankEmailOrPassword = false;
-      $rootScope.invalidEmailOrPassword = false;
-      $rootScope.userNotCurrent = false;
-      $rootScope.loginFailed = false;
+      $rootScope.errorMessage = '';
 
       $http.post("/sequoiagrove/auth/login/", {'email':$scope.email, 'password':$sha.hash($scope.password)}).
         then(function(success){
-            // Blank Email or Password
-            if (success.data.blankEmailOrPassword) {
-              $rootScope.blankEmailOrPassword = true;
-              $log.debug(success.data.email, 'blank email or password supplied');
-              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // The user with the supplied email was not found in the database.
-            // Issue warning message, don't redirect to home
-            if (success.data.invalidEmailOrPassword) {
-              $rootScope.invalidEmailOrPassword = true;
-              $log.debug(success.data.email, 'not registered with this application');
-              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // The user has been unemployed from the company
-            if (success.data.userNotCurrent) {
-              $rootScope.userNotCurrent = true;
-              $log.debug(success.data.email, 'is not a current employee');
-              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // the login failed - maybe the domain was incorrect
-            if (success.data.loginFailed) {
-              $rootScope.loginFailed = true;
-              $log.debug('sign in failed');
-              $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
-              $rootScope.loggingIn = false;
-              return;
-            }
-            // Otherwise, we found the user - save that user's data
-            $rootScope.invalidEmailOrPassword = false;
-            $rootScope.loggedInUser = success.data.user;
-            $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
-            //localStorageService.set('auth_token', success.data.auth_token);
+          if (success.data.loginFailed) {
+            $scope.errorMessage = success.data.message;
+            $rootScope.loggedInUser = {'email':success.data.email, 'isManager':false};
+            $rootScope.loggingIn = false;
+            return;
+          }
+          // Otherwise, we found the user - save that user's data
+          $rootScope.errorMessage = ''
+          $rootScope.loggedInUser = success.data.user;
+          $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
 
-            // TODO if the user wants to save their email
-
-            $log.debug(success.data.user);
-            if ($scope.remember && success.data.user) {
-              localStorageService.set('email', JSON.stringify(success.data.user.email));
-            }
-
-            // then call function to load all required data and redirect to home
-            // this sets logged in after data has loaded.
-            $scope.initializeData();
-        },
-        function(error) {
-          $log.debug(error);
+          // if the user wants to save their email, put it in localstorage
+          if ($scope.remember && success.data.user) {
+            localStorageService.set('email', JSON.stringify(success.data.user.email));
+          }
+          // load all required data and redirect to home
+          $scope.initializeData();
         });
     }
 
     // When user has logged in, this will load required data based
     // on user access level, and then redirect to home.
     $scope.initializeData = function() {
-      //if($rootScope.devMode) {
-        //if (localStorageService.get('template')){
-          //$rootScope.template = JSON.parse(localStorageService.get('template'));
-        //}
-        //if(localStorageService.get('employees')) {
-          //$rootScope.employees = JSON.parse(localStorageService.get('employees'));
-        //}
-      //}
+      // pull data from localstorage, if it's availabile
+      if($rootScope.devMode) {
+        if (localStorageService.get('template')){
+          $rootScope.template = JSON.parse(localStorageService.get('template'));
+        }
+        if(localStorageService.get('employees')) {
+          $rootScope.employees = JSON.parse(localStorageService.get('employees'));
+        }
+      }
       scheduleFactory.setManagePrivelage();
       scheduleFactory.init().then(
           function(success) {
@@ -133,7 +94,6 @@ angular.module('sequoiaGroveApp')
             $rootScope.loggingIn = false;
             $rootScope.loggedIn = true;
             $rootScope.$broadcast('loggedIn');
-            //$log.debug('logged in as', success.data.user.fullname, "(",success.data.user.email, ")");
             $location.path(localStorageService.get('lastPath'));
       });
     }
@@ -142,8 +102,7 @@ angular.module('sequoiaGroveApp')
   $scope.validateToken = function() {
     return $http({
       url: '/sequoiagrove/auth/loginwithtoken',
-      method: "POST",
-      data: {'auth_token':$rootScope.token}
+      method: "POST", data: {'auth_token':$rootScope.token}
     }).then(
         function(success) {
           $log.debug(success);
@@ -151,9 +110,7 @@ angular.module('sequoiaGroveApp')
 
           if (success.data.valid) {
             $rootScope.token = success.data.token;
-            //localStorageService.set('auth_token', success.data.auth_token);
-
-            $rootScope.invalidEmailOrPassword = false;
+            $rootScope.errorMessage = '';
             $rootScope.loggedInUser = success.data.user;
             $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
 
@@ -166,7 +123,6 @@ angular.module('sequoiaGroveApp')
             $scope.initializeData();
           }
         }, function(failure) {
-          //$log.debug('error verifying token');
           // reset data
           $scope.destructData();
       })
@@ -175,41 +131,30 @@ angular.module('sequoiaGroveApp')
     // When a user has logged out, this will clear variables to reset
     // the application to a clean state
     $scope.destructData = function() {
+      // reset login error flags
       $rootScope.loggingIn = false;
       $rootScope.loggedIn = false;
-      $rootScope.blankEmailOrPassword = false;
-      $rootScope.invalidEmailOrPassword = false;
-      $rootScope.userNotCurrent = false;
-      $rootScope.loginFailed = false;
+      $rootScope.errorMessage = '';
       $rootScope.token = '';
       $rootScope.hasValidToken = false;
-      $rootScope.initializedData = false;
       $rootScope.loggedInUser= {'email':JSON.parse(localStorageService.get('email'))};
-        return $http({
-        url: '/sequoiagrove/auth/logout',
-        method: "POST"
-            }).then( function(success) {
-    // put everything in here
 
-      $location.path('/login');
-    });
-      //localStorageService.remove('auth_token');
-
-      // reset login error flags
-    }
-
-/************** Event Watchers **************/
-
-    if ($rootScope.token) {
-      $rootScope.loggingIn = true;
-      $scope.validateToken().then(
-        function(success) {
-          //$log.debug(success);
-        }, function(failure) {
-          //$log.debug(failure);
+      // remove session
+      return $http({ url: '/sequoiagrove/auth/logout', method: "POST" })
+        .then( function(success) {
+          $location.path('/login');
       });
     }
 
+    // we found a token, check if it is valid
+    if ($rootScope.token) {
+      $rootScope.loggingIn = true;
+      $scope.validateToken().then(
+        function(success) { 
+      });
+    }
+
+/************** Event Watchers **************/
     $rootScope.$on('login', function() {
       $scope.appLogin();
     });

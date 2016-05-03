@@ -153,9 +153,12 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    $log.debug('update template schedule.js');
+    //$log.debug('update template schedule.js');
     $scope.template = scheduleFactory.getTemplate();
     $scope.weekList = scheduleFactory.getWeekList();
+    $scope.dayCount = scheduleFactory.getDayCount();
+    $scope.hourCount = scheduleFactory.getHourCount();
+    $scope.changesMade = scheduleFactory.changesMade();
   }
   scheduleFactory.registerObserverCallback(updateChangesMade);
 

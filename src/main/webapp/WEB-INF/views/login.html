@@ -49,26 +49,8 @@
       <!-- Error Messages -->
       <div class="row panel-body text-center" style="color:b30000;">
         <div class="col-sm-12">
-          <p ng-show="blankEmailOrPassword">
-            <strong>{{loggedInUser.email}}</strong>
-            Please supply an email and password to continue.
-          </p>
-          <p ng-show="invalidEmailOrPassword">
-            Invalid email or password <strong>({{loggedInUser.email}})</strong>
-          </p>
-          <p style="color:black;" ng-show="invalidEmailOrPassword">
-            If your company has an account, ask an administrator to verify your email,
-            or reset your password.
-          </p>
-          <p ng-show="userNotCurrent">
-            is not a current employee.
-          </p>
-          <p ng-show="userNotCurrent">
-            If you are a current employee, ask an administrator to verify your email and employment status.
-          </p>
-          <p ng-show="loginFailed">
-            <strong>Sign in failed...</strong>
-          </p>
+          <p ng-show="errorMessage.length > 0"> {{errorMessage}} </p>
+          <p ng-show="loginFailed"> <strong>Sign in failed...</strong> </p>
         </div>
       </div>
 

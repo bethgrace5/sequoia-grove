@@ -96,14 +96,12 @@ public class Authentication {
             model.addAttribute("user", user);
         }
         else {
-            model.addAttribute("userNotCurrent", true);
+            model.addAttribute("loginFailed", true);
+            model.addAttribute("message",
+                "If you are a current employee, ask an administrator to verify your email");
         }
-
-        // get user info, build user object
-        // and get new token to send back
         model.addAttribute("valid", true);
-
-      return "jsonTemplate";
+        return "jsonTemplate";
     }
 
     // Verify token received
@@ -116,6 +114,8 @@ public class Authentication {
 
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
+
+        //FIXME when session already exists, it throws error from duplicate key
 
         String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
           "from (  " +
@@ -153,14 +153,15 @@ public class Authentication {
                       sql, new Object[] { email, password }, new UserRowMapper());
           } catch (EmptyResultDataAccessException e) {
             // this user does not exist in the database
-            model.addAttribute("invalidEmailOrPassword", true);
+            model.addAttribute("loginFailed", true);
+            model.addAttribute("message", "Invalid email or password. " + email +
+                ". If your company has an account, ask an administrator to verify your email");
             model.addAttribute("email", email);
             return "jsonTemplate";
           } catch (NullPointerException e) {
             // the email or password was blank user does not exist in the database
-            model.addAttribute("blankEmailOrPassword", true);
-            model.addAttribute("email", email);
-            model.addAttribute("password", password);
+            model.addAttribute("loginFailed", true);
+            model.addAttribute("message", "Blank email or password, please supply an email and password to continue.");
             return "jsonTemplate";
           }
 
@@ -181,7 +182,9 @@ public class Authentication {
                 model.addAttribute("auth_token", getToken(user.getId(), user.getPermissions()));
             }
             else {
-                model.addAttribute("userNotCurrent", true);
+                model.addAttribute("loginFailed", true);
+                model.addAttribute("message",
+                    "If you are a current employee, ask an administrator to verify your email.");
                 model.addAttribute("email", email);
             }
 

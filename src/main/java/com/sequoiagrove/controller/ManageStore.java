@@ -125,7 +125,7 @@ public class ManageStore {
 
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
-        int sid = jdbcTemplate.queryForObject("select nextval('sequ_shift_seqence')", Integer.class);
+        int sid = jdbcTemplate.queryForObject("select nextval('sequ_shift_sequence')", Integer.class);
             //"values(?, ?, ?, current_date, null, ?, ?)", params);
 
         Object[] params = new Object[] {
