@@ -1,5 +1,7 @@
-package com.sequoiagrove.controller; 
-import com.google.gson.*;
+package com.sequoiagrove.controller;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -35,7 +37,7 @@ public class ManageStore {
 
   // extract scope from request
   @ModelAttribute("scope")
-    public List<String> getId(HttpServletRequest request) {
+    public List<String> getPermissions(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
       return Arrays.asList(csvPermissions.split(","));
     }
@@ -93,7 +95,7 @@ public class ManageStore {
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -150,7 +152,7 @@ public class ManageStore {
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -183,7 +185,7 @@ public class ManageStore {
         int weekdayHourId = addHours(weekdayStart, weekdayEnd);
         int weekendHourId = addHours(weekendStart, weekendEnd);
 
-        Object[] params = new Object[] { 
+        Object[] params = new Object[] {
             pid,
             tname,
             weekdayHourId,
@@ -212,7 +214,7 @@ public class ManageStore {
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         int sid;

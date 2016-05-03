@@ -1,6 +1,9 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,7 +50,7 @@ public class ScheduleController {
 
   // extract scope from request
   @ModelAttribute("scope")
-    public List<String> getId(HttpServletRequest request) {
+    public List<String> getPermissions(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
       return Arrays.asList(csvPermissions.split(","));
     }

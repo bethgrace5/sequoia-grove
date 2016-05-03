@@ -1,20 +1,19 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.*;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,7 +32,7 @@ public class EmployeeController
 {
   // extract scope from request
   @ModelAttribute("scope")
-    public List<String> getId(HttpServletRequest request) {
+    public List<String> getPermissions(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
       return Arrays.asList(csvPermissions.split(","));
     }

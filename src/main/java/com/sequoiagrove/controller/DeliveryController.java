@@ -1,25 +1,22 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.*;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.Delivery;
 import com.sequoiagrove.controller.MainController;
@@ -29,7 +26,7 @@ public class DeliveryController {
 
   // extract scope from request
   @ModelAttribute("scope")
-    public List<String> getId(HttpServletRequest request) {
+    public List<String> getPermissions(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
       return Arrays.asList(csvPermissions.split(","));
     }

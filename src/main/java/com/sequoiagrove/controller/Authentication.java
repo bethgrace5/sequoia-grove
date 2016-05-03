@@ -1,6 +1,8 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.*;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -11,36 +13,22 @@ import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.security.Key;
 import java.sql.SQLException;
-import java.util.concurrent.TimeUnit;
 import java.util.Map;
 import java.util.HashMap;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.security.SecureRandom;
 import java.math.BigInteger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
@@ -51,7 +39,7 @@ public class Authentication {
     private static SecureRandom random = new SecureRandom();
     private static Key key = MacProvider.generateKey();
 
-  @ModelAttribute("userID")
+    @ModelAttribute("userID")
     public Integer getId(HttpServletRequest request) {
       return (Integer) request.getAttribute("userID");
     }
@@ -60,7 +48,7 @@ public class Authentication {
     protected String logout(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         jdbcTemplate.update("delete from sequ_session where user_id=?", id);
-            model.addAttribute("errorStatus",200);
+        model.addAttribute("status",200);
         return "jsonTemplate";
     }
 

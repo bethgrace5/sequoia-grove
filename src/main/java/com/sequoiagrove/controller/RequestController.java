@@ -43,7 +43,7 @@ public class RequestController{
 
   // extract scope from request
   @ModelAttribute("scope")
-    public List<String> getId(HttpServletRequest request) {
+    public List<String> getPermissions(HttpServletRequest request) {
       String csvPermissions = (String) request.getAttribute("scope");
       return Arrays.asList(csvPermissions.split(","));
     }
