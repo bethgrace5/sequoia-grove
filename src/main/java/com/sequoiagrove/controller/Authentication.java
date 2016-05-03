@@ -56,9 +56,13 @@ public class Authentication {
       return (Integer) request.getAttribute("userID");
     }
 
-    //TODO make method for logout that deletes the user's session from the table
-    // ....
-    // ....
+    @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
+    protected String logout(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        jdbcTemplate.update("delete from sequ_session where user_id=?", id);
+            model.addAttribute("errorStatus",200);
+        return "jsonTemplate";
+    }
 
     // Verify token received
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)

@@ -18,16 +18,16 @@ import com.sequoiagrove.controller.MainController;
 @Component
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
-    // Pre Handler for before request
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+
+    // Pre Handler for before request
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         int id = 0;
-        // TODO verify authorization token by checking session table
-        String URI = request.getRequestURI();
+        String URI = 
+        request.getRequestURI();
 
-        Map<String, String> verificationResponse =
-          Authentication.verifyToken(request.getHeader("Authorization"), URI);
-
+        Map<String, String> verificationResponse = Authentication.verifyToken(request.getHeader("Authorization"), URI);
+        
         String subject = verificationResponse.get("subject");
         String scope = verificationResponse.get("scope");
 
@@ -35,7 +35,10 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             // TODO since token was invalid, remove session so they need to
             // login with username/password, also we need to send back a 400
             // response code so the application knows they were unauthorized
-            response.setStatus( HttpServletResponse.SC_FORBIDDEN );
+            //JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+            jdbcTemplate.update("delete from sequ_session" +
+            " where token=?", subject);
+            response.setStatus( HttpServletResponse.SC_UNAUTHORIZED);
             return false;
         }
         else {
@@ -46,7 +49,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
             // if it is expired, delete the token from the session table
             // and send back a 400 authorization error
             id = jdbcTemplate.queryForObject(
-                "select user_id from sequ_session where token = ?",
+                "select user_id from sequ_session where token=? and expiration_date>current_timestamp",
                 params, Integer.class);
           } catch (EmptyResultDataAccessException e) {
             response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
@@ -66,13 +69,14 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
     // Post Handler for after request
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object o, ModelAndView modelAndView) throws Exception {
-        String token = Authentication.getToken((Integer)request.getAttribute("userID"), (String)request.getAttribute("scope"));
 
         // Check for any errors, and change status accordingly
         Integer status = (Integer) modelAndView.getModelMap().get("errorStatus");
         if (status != null) {
             response.setStatus(status);
+            return;
         }
+        String token = Authentication.getToken((Integer)request.getAttribute("userID"), (String)request.getAttribute("scope"));
 
         modelAndView.getModelMap().put("auth_token", token);
     }

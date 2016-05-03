@@ -175,9 +175,6 @@ angular.module('sequoiaGroveApp')
     // When a user has logged out, this will clear variables to reset
     // the application to a clean state
     $scope.destructData = function() {
-      //localStorageService.remove('auth_token');
-
-      // reset login error flags
       $rootScope.loggingIn = false;
       $rootScope.loggedIn = false;
       $rootScope.blankEmailOrPassword = false;
@@ -188,8 +185,17 @@ angular.module('sequoiaGroveApp')
       $rootScope.hasValidToken = false;
       $rootScope.initializedData = false;
       $rootScope.loggedInUser= {'email':JSON.parse(localStorageService.get('email'))};
+        return $http({
+        url: '/sequoiagrove/auth/logout',
+        method: "POST"
+            }).then( function(success) {
+    // put everything in here
 
       $location.path('/login');
+    });
+      //localStorageService.remove('auth_token');
+
+      // reset login error flags
     }
 
 /************** Event Watchers **************/
