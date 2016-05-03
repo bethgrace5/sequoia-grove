@@ -6,6 +6,7 @@
     <div class="pull-left">
       <!-- Filter by User, Location, or Position -->
       <div class="dropdown pull-left" dropdown is-open=true>
+
         <button type="button" id="dropDownMenu1"
           class="btn btn-info" data-toggle="dropdown"
           ng-click="importLastWeek()"
@@ -14,6 +15,14 @@
           Import Last Week <!--<span class="caret"></span>-->
           <span class="glyphicon glyphicon-arrow-down"></span>
         </button>
+
+        <button class = "btn btn-info"
+          ng-click = "autoGenerate()"
+          ng-disabled = "saving">
+          Auto-Generate
+          <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
+        </button>
+
       </div>
     </div>
 
@@ -63,13 +72,6 @@
         ng-disabled = "saving">
         Published
         <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
-      </button>
-
-      <button class = "btn btn-primary"
-        ng-click = "autoGenerate()"
-        ng-disabled = "saving">
-        Auto-Generate
-        <span class="glyphicon glyphicon glyphicon-knight" aria-hidden="true"></span>
       </button>
 
     </form>

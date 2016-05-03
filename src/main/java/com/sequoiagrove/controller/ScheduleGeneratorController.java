@@ -84,7 +84,7 @@ public class ScheduleGeneratorController {
        from employee_shift_view p
        where p.on_date >= '2016-03-21' AND p.on_date <= '2016-04-30' AND p.day = '1'
        group by shift_id
-       */
+    */
   }
 
 }
