@@ -142,11 +142,12 @@ angular.module('sequoiaGroveApp')
     scheduleFactory.clear();
   }
 
-  $scope.importLastWeek = function() {
+  $scope.importWeek = function(index) {
+    $scope.selectWeek(index);
+    var week = $scope.weekList[index].val;
     $scope.saving = true;
-    scheduleFactory.importLastWeek().then(
+    scheduleFactory.importWeek(week).then(
       function(success) {
-        $log.debug(success);
         $scope.saving = false;
       });
   }
@@ -154,6 +155,7 @@ angular.module('sequoiaGroveApp')
   var updateChangesMade = function(){
     $log.debug('update template schedule.js');
     $scope.template = scheduleFactory.getTemplate();
+    $scope.weekList = scheduleFactory.getWeekList();
   }
   scheduleFactory.registerObserverCallback(updateChangesMade);
 

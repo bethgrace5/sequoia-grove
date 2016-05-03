@@ -25,6 +25,9 @@ angular.module('sequoiaGroveApp')
 
   $scope.loadingWeek = false;
   $rootScope.currentPath = $location.path();
+  $scope.selectedWeek = 0;
+  $scope.weekLabel = '';
+  $scope.weekList = [];
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -297,7 +300,13 @@ angular.module('sequoiaGroveApp')
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
+    $scope.weekList = scheduleFactory.getWeekList();
   });
+
+  $scope.selectWeek = function(index) {
+    $scope.selectedWeek = index;
+  }
+
 
   // called from header menu
   $scope.appLogin = function() {
@@ -313,6 +322,7 @@ angular.module('sequoiaGroveApp')
 
   // advance or go back weeks in time
   $scope.changeWeek = function(operation) {
+    $scope.selectWeek(0);
     if ($scope.loadingWeek) {
       return;
     }
@@ -330,7 +340,7 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    //$scope.date = scheduleFactory.getHeader();
+    $scope.template = scheduleFactory.getTemplate();
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();

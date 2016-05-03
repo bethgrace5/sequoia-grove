@@ -4,25 +4,18 @@
   <div class="col-sm-12">
 
     <div class="pull-left">
-      <!-- Filter by User, Location, or Position -->
       <div class="dropdown pull-left" dropdown is-open=true>
-
-        <button type="button" id="dropDownMenu1"
-          class="btn btn-info" data-toggle="dropdown"
-          ng-click="importLastWeek()"
-          ng-disabled = "saving"
-          aria-haspopup="true" aria-expanded="true">
-          Import Last Week <!--<span class="caret"></span>-->
-          <span class="glyphicon glyphicon-arrow-down"></span>
+        <button type="button" id="selectWeek" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="true"
+          class="btn btn-info"
+          ng-disabled = "loading">
+          Import {{weekList[selectedWeek].name}} <span class="caret"></span>
         </button>
-
-        <button class = "btn btn-info"
-          ng-click = "autoGenerate()"
-          ng-disabled = "saving">
-          Auto-Generate
-          <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
-        </button>
-
+        <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
+          <li ng-repeat = "w in weekList" value ="{{w.name}}">
+            <a ng-click="importWeek($index)">{{w.name}}</a>
+          </li>
+        </ul>
       </div>
     </div>
 

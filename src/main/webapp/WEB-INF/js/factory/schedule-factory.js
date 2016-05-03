@@ -9,6 +9,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var schedule = [];
   var isPublished = false;
   var header = { mon:{val:'', disp:''}, tue:{val:'', disp:''}, wed:{val:'', disp:''},thu:{val:'', disp:''}, fri:{val:'', disp:''}, sat:{val:'', disp:''}, sun:{val:'', disp:''}};
+  var weekList;
 
   // Exposed to users with 'manage schedule' privelage through service
   var dayCount = [];
@@ -62,6 +63,24 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     header.sun.val  = moment(monday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
     header.sun.disp = moment(monday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
     year = moment(monday, 'DD-MM-YYYY').format('YYYY');
+    buildWeekList();
+  }
+
+  var buildWeekList = function() {
+    var weeks = [
+      moment(monday, 'DD-MM-YYYY').subtract(7,  'days').format('DD-MM-YYYY'),
+      moment(monday, 'DD-MM-YYYY').subtract(14, 'days').format('DD-MM-YYYY'),
+      moment(monday, 'DD-MM-YYYY').subtract(21, 'days').format('DD-MM-YYYY'),
+      moment(monday, 'DD-MM-YYYY').subtract(28, 'days').format('DD-MM-YYYY'),
+      moment(monday, 'DD-MM-YYYY').subtract(35, 'days').format('DD-MM-YYYY')
+    ]
+    weekList = [
+      {'name':moment(weeks[0], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[0]},
+      {'name':moment(weeks[1], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[1]},
+      {'name':moment(weeks[2], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[2]},
+      {'name':moment(weeks[3], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[3]},
+      {'name':moment(weeks[4], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[4]}
+    ]
   }
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
@@ -91,11 +110,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             if ($rootScope.devMode) {
               localStorageService.set('template', JSON.stringify(success.data.template));
             }
+            storeOriginalTemplate();
             deferred.resolve(success.data);
+            notifyObservers();
           }
           deferred.reject();
-        }, function(failure) {
-          deferred.reject(failure);
         });
     return deferred.promise;
   }
@@ -352,15 +371,16 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // rewrite current schedule with last week's data
-  var importLastWeek = function() {
+  var importWeek = function(mondayOfWeek) {
     var deferred = $q.defer();
     deleteShifts = [];
     updateShifts = [];
-    // set monday a week back in time
-    monday  = moment(monday,'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+    // set monday back in time
+    monday = mondayOfWeek;
     initSchedule().then(function(data) {
       // add all shifts to update shifts, so they can be saved for this week
       angular.copy(originalTemplate, updateShifts);
+      notifyObservers();
       deferred.resolve(data);
     });
     return deferred.promise;
@@ -392,12 +412,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       initHeader();
       initSchedule().then(
           function(success) {
-            storeOriginalTemplate();
             countDays();
             countHours();
             deferred.resolve(success);
-          }, function(failure) {
-            deferred.reject(failure);
           });
       return deferred.promise;
     }
@@ -407,15 +424,18 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       if (operation == 'add') {
         monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
       }
-      else{
+      else if (operation == 'subtract'){
         monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
       }
-      $log.debug(monday);
+      else {
+        monday = operation;
+      }
       initSchedule().then(
         function(success) {
           initHeader(); // update schedule header to reflect new dates
           countDays(); // NOTE Added for those with manage schedule privelage
           countHours(); // NOTE Added for those with manage schedule privelage
+          buildWeekList();
           notifyObservers();
           deferred.resolve(success);
         },function(failure) {
@@ -423,12 +443,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       });
       return deferred.promise;
     },
+    service.getWeekList    = function() { return weekList};
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
     service.clear          = function() { clearSchedule(); };
     service.publish        = function() { return publishSchedule(); };
-    service.importLastWeek = function() { return importLastWeek(); };
-    service.getDayCount     = function() { return dayCount; };
+    service.importWeek     = function(mon) { return importWeek(mon); };
+    service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
     service.changesMade    = function() {
       return (updateShifts.length + deleteShifts.length) > 0;
@@ -443,7 +464,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
               }
             }).then( function(success) {
               // saved and then deleted
+            }).then( function(success) {
+              initSchedule();
               deferred.resolve(success);
+              notifyObservers();
             });
       }
       else if (deleteShifts.length > 0) {
@@ -465,14 +489,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var deferred = $q.defer();
       initMonday();
       initHeader();
-      initSchedule().then(
-          function(success) {
-            $log.debug(success);
-            deferred.resolve(success);
-          }, function(failure) {
-            $log.debug(failure);
-            deferred.reject(failure);
-          });
+      initSchedule().then(function(success) {
+        deferred.resolve(success);
+      });
       return deferred.promise;
     },
     // update monday, change header, and request corresponding schedule
@@ -481,18 +500,20 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       if (operation == 'add') {
         monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
       }
-      else{
+      else if (operation == 'subtract'){
         monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
       }
+      else {
+        monday = operation;
+      }
       initHeader(); // update schedule header to reflect new dates
-      initSchedule().then( // update schedule template
-        function(success) {
+      initSchedule().then(
+         function(success){ // update schedule template function(success) {
           countDays(); // NOTE Added for those with manage schedule privelage
           countHours(); // NOTE Added for those with manage schedule privelage
+          buildWeekList();
           notifyObservers();
           deferred.resolve(success);
-        },function(failure) {
-          deferred.reject(failure);
       });
       return deferred.promise;
     },
