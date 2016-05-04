@@ -124,7 +124,7 @@ public class ScheduleController {
       model.addAttribute("ispublished", (count!=null && count > 0));
       model.addAttribute("template", schTempList);
       return "jsonTemplate";
-}
+  }
 
 
   // Update current schedule template (current shifts) dd/mm/yyyy

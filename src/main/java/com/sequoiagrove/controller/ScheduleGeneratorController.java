@@ -88,9 +88,9 @@ public class ScheduleGeneratorController {
        group by shift_id
     */
   }
-  @RequestMapping(value = "/generator/build")
-    public String buildGenerator(Model model){
-/*
+  @RequestMapping(value = "/schedule/autogen")
+  public String buildGenerator(Model model){
+  /*
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Generator generator;
       generator = new Generator();
@@ -119,9 +119,9 @@ public class ScheduleGeneratorController {
             }
           });
       //model.addAttribute("holidays", holidayList);
-*/
+  */
       return "jsonTemplate";
-    }
+  }
 
 }
 

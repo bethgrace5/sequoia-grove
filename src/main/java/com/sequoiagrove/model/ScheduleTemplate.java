@@ -50,7 +50,8 @@ public class ScheduleTemplate {
         Day thu,
         Day fri,
         Day sat,
-        Day sun) {
+        Day sun
+     ) {
             this.sid = sid;
             this.pid = pid;
             this.tname = tname;

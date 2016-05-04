@@ -8,7 +8,7 @@ import java.util.*;
 public class Generator{
   HashMap
     <String, HashMap<Integer, HashMap<Integer, Integer> > > generator;
-    //[Day [ Shift [Employee, amount of time work] ] ]
+    //[Day [ Shift [Employee, number of weeks scheduled] ] ]
 
   String startDate;
   String endDate;
@@ -19,7 +19,8 @@ public class Generator{
     generator = new HashMap
       <String, HashMap<Integer, HashMap<Integer, Integer> > >();
   }
-  public void insert(Integer day,
+
+  public void insert(String  day,
                      Integer shift,
                      Integer employee,
                      Integer amount){
@@ -40,7 +41,7 @@ public class Generator{
     generator.get(day).put(shift, new HashMap<Integer, Integer>());
   }
 
-  public void addEmployee(Integer day,
+  public void addEmployee(String  day,
                           Integer shift,
                           Integer employee,
                           Integer amount){
@@ -53,49 +54,54 @@ public class Generator{
   }
 
   public void printAllDays(){
-    //for (Integer key : generator.keySet()) {
-    //  System.out.println(key + " ");
-    //}
+    for (String key : generator.keySet()) {
+      System.out.println(key + " ");
+    }
   }
 
-  public void printAllShiftInADay(String day){
-    //for (Integer key : generator.get(day).keySet()) {
-    //  System.out.println(key + " ");
-    //}
+  public void printAllShiftsInDay(String day){
+    for (Integer key : generator.get(day).keySet()) {
+      System.out.println(key + " ");
+    }
   }
 
- public void printAllEmployeeInAShift(String day, String shift){
-    //for (Integer key : generator.get(day).get(shift).keySet()){
-    //  System.out.println(key + " " +
-    //      generator.get(day).get(shift).get(key));
-    //}
+ public void printAllEmployeesInShift(String day, Integer shift){
+    for (Integer key : generator.get(day).get(shift).keySet()){
+      System.out.println(key + " " +
+        generator.get(day).get(shift).get(key));
+    }
  }
+
  public void printFormation(){
-   /*for (Integer key1 : generator.keySet()) {
-     System.out.println(key1 + " ");
+   for (String dayKey : generator.keySet()) {
+     System.out.println(dayKey);
 
-     for (Integer key2 : generator.get(key1).keySet()) {
-       System.out.println("\t"+ key2 + " ");
+     for (Integer shiftKey : generator.get(dayKey).keySet()) {
+       System.out.println("   " + shiftKey);
 
-       for (Integer key3 : generator.get(key1).get(key2).keySet()){
-         System.out.println("\t\t" + key3 + " " +
-             generator.get(key1).get(key2).get(key3));
+       for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
+         System.out.println("      " + empKey + " " +
+             generator.get(dayKey).get(shiftKey).get(empKey));
        }
      }
-   }*/
+   }
  }
 
  public void trimByListRestriction(){
  }
+
  public void trimByRestriction(String person1, String person2){
  }
+
  public void trimByUnavaliablity(String person1, String date){
  }
+
  public void removeEmployee(Integer day, Integer shift, Integer employee){
    generator.get(day).get(shift).remove(employee);
  }
+
  public boolean checkEmployeeIf(
-                             Integer day,
+                             String  day,
                              Integer shift, 
                              Integer employee1,
                              Integer employee2){
@@ -106,5 +112,4 @@ public class Generator{
       }
    return false;
  }
-
 }
