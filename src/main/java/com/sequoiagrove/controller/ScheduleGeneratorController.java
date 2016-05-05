@@ -88,8 +88,16 @@ public class ScheduleGeneratorController {
        group by shift_id
     */
   }
-  @RequestMapping(value = "/schedule/autogen/{mon}/{historyStart}/{historyEnd}")
-  public String buildGenerator(Model model){
+  @RequestMapping(value = "/schedule/autogen")
+  public String buildGenerator(@RequestBody String data, Model model){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+      // parse params
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      final String mon = jobject.get("mon").getAsString();
+      final String historyStart = jobject.get("historyStart").getAsString();
+      final String historyEnd = jobject.get("historyEnd").getAsString();
   /*
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Generator generator;
@@ -120,10 +128,51 @@ public class ScheduleGeneratorController {
           });
       //model.addAttribute("holidays", holidayList);
   */
-    // construct schedule template using {mon}
+
+      // Add all employees with corresponding Position into hash map for each slot
+      // (Already Done????)
+
+      // Trim hash maps by Requests Off and Availabilities
+
+      // Construct schedule template using {mon} to get correct shifts
+      // !!!!! all employees are null/0, check if mon is passed correctly !!!!!
+      List<ScheduleTemplate> schTempList = jdbcTemplate.query(
+        "select * from get_schedule(?)",
+        new Object[]{mon},
+        new RowMapper<ScheduleTemplate>() {
+          public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
+
+            ScheduleTemplate schTmp = new ScheduleTemplate(
+                rs.getInt("sid"),
+                rs.getInt("pid"),
+                rs.getString("location"),
+                rs.getString("tname"),
+                rs.getString("pos"),
+                rs.getString("wd_st"),// weekday start
+                rs.getString("wd_ed"),// weekday end
+                rs.getString("we_st"),// weekend start
+                rs.getString("we_ed"),// weekend end
+                new Day("mon", rs.getString("mon"), rs.getInt("mon_eid")),
+                new Day("tue", rs.getString("tue"), rs.getInt("tue_eid")),
+                new Day("wed", rs.getString("wed"), rs.getInt("wed_eid")),
+                new Day("thu", rs.getString("thu"), rs.getInt("thu_eid")),
+                new Day("fri", rs.getString("fri"), rs.getInt("fri_eid")),
+                new Day("sat", rs.getString("sat"), rs.getInt("sat_eid")),
+                new Day("sun", rs.getString("sun"), rs.getInt("sun_eid")) );
+
+            return schTmp;
+          }
+        });
+
+      Integer count = jdbcTemplate.queryForObject(
+          "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+      
+      // Insert employees into shift slots using AI
+
+      model.addAttribute("ispublished", (count!=null && count > 0));
+      model.addAttribute("template", schTempList);
 
       return "jsonTemplate";
   }
-
 }
 
