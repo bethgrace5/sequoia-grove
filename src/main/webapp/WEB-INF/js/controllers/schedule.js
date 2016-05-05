@@ -37,6 +37,9 @@ angular.module('sequoiaGroveApp')
   $scope.empEditSearch = '';
 
   $scope.autoGenOptions = {
+    "mon": "",
+    "historyStart": -1,
+    "historyEnd": -1,
     "weeksInHistory": 6,
     "emptyShiftThreshold": 0.1
   };
@@ -358,7 +361,11 @@ angular.module('sequoiaGroveApp')
 
     $scope.saving = true;
     var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
-
+    $scope.autoGenOptions.historyEnd =
+      moment(
+        $scope.date.mon.val, 'DD-MM-YYYY'
+      ).subtract(daysHist, 'days').format('DD-MM-YYYY');
+    $scope.autoGenOptions.historyStart = moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY');
     $http({
       url: '/sequoiagrove/schedule/autogen/'
       + $scope.date.mon.val + '/'
