@@ -34,8 +34,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
+
 import com.sequoiagrove.model.Generator;
 import com.sequoiagrove.model.DayShiftEmployee;
+import com.sequoiagrove.model.Request;
+
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
 import org.springframework.transaction.TransactionStatus;
@@ -88,9 +91,9 @@ public class ScheduleGeneratorController {
        group by shift_id
     */
   }
-  @RequestMapping(value = "/schedule/autogen")
+  //[mon]
+  @RequestMapping(value = "/schedule/autogen/{mon}")
   public String buildGenerator(Model model){
-  /*
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       Generator generator;
       generator = new Generator();
@@ -111,17 +114,28 @@ public class ScheduleGeneratorController {
                 rs.getInt("worked")
               );
 
-              generator.insert(rs.getInt("day"), rs.getInt("shift_id"),
-                               rs.getInt("employee_id"), rs.getInt("worked")
-                              );
-
               return es;
             }
-          });
-      //model.addAttribute("holidays", holidayList);
-  */
+      });
+      for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
+        generator.add(convertDay(dayShiftEmployeeList.get(i).getDay()),
+                      dayShiftEmployeeList.get(i).getShift(),
+                      dayShiftEmployeeList.get(i).getEmployee(),
+                      dayShiftEmployeeList.get(i).getWorked() );
+      }
+      //generator.printFormation();
       return "jsonTemplate";
   }
 
+  String convertDay(Integer value){
+    if(value == 1) return "mon";
+    if(value == 2) return "tue";
+    if(value == 3) return "wen";
+    if(value == 4) return "thu";
+    if(value == 5) return "fri";
+    if(value == 6) return "sat";
+    if(value == 7) return "sun";
+    return "-------";
+  }
 }
 

@@ -377,4 +377,13 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+
+  $scope.init = function() {
+    $log.debug("test");
+    $scope.autoGenerate();
+  }
+
+  $scope.init();
+
+
 });

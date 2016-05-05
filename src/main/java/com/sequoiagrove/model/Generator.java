@@ -3,6 +3,9 @@ import java.sql.Date;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.sequoiagrove.model.Employee;
+import com.sequoiagrove.model.Request;
+
 import java.util.*;
 
 public class Generator{
@@ -12,6 +15,8 @@ public class Generator{
 
   String startDate;
   String endDate;
+  Employee employees[];
+  Request requests[];
   //Or
   //String date[7]
 
@@ -52,6 +57,17 @@ public class Generator{
 
     generator.get(day).get(shift).put(employee, amount);
   }
+
+  public void add(String  day,
+                          Integer shift,
+                          Integer employee,
+                          Integer amount){
+    addDay(day);
+    addShift(day, shift);
+    addEmployee(day, shift, employee,  amount);
+
+  } 
+
 
   public void printAllDays(){
     for (String key : generator.keySet()) {
@@ -95,7 +111,10 @@ public class Generator{
 
  public void trimByUnavaliablity(String person1, String date){
  }
-
+ public void trimByRequest(){
+  //TODO: Somehow get A Request List and compare to the employees and 
+  //      in the week.
+ }
  public void removeEmployee(Integer day, Integer shift, Integer employee){
    generator.get(day).get(shift).remove(employee);
  }

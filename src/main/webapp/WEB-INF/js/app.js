@@ -91,7 +91,7 @@ angular.module('sequoiaGroveApp', [
 
     // Set Development Mode - loads app more quickly by reading schedule
     // template stored in localstorage instead of pulling a new one every time.
-    $rootScope.devMode = true;
+    $rootScope.devMode = false;
 
 
     // reset login error flags
