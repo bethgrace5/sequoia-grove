@@ -345,19 +345,25 @@ angular.module('sequoiaGroveApp')
   $scope.autoGenerate = function() {
 
     if ($scope.saving) {
+      $log.debug("cannot make request, currently saving");
       return;
     }
 
     // don't actually auto-gen if in dev mode
-    if($rootScope.devMode) {
-      $scope.saving = false;
-      return;
-    }
+    //if($rootScope.devMode) {
+    //  $log.debug("in debug mode, http request not made");
+    //  $scope.saving = false;
+    //  return;
+    //}
 
     $scope.saving = true;
+    var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
 
     $http({
-      url: '/sequoiagrove/schedule/autogen/',
+      url: '/sequoiagrove/schedule/autogen/'
+      + $scope.date.mon.val + '/'
+      + moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY') + '/'
+      + moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(daysHist, 'days').format('DD-MM-YYYY'),
       method: "POST",
       data: $scope.autoGenOptions
     }).success( function(data, status, headers, config) {

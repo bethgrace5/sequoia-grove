@@ -88,7 +88,7 @@ public class ScheduleGeneratorController {
        group by shift_id
     */
   }
-  @RequestMapping(value = "/schedule/autogen")
+  @RequestMapping(value = "/schedule/autogen/{mon}/{historyStart}/{historyEnd}")
   public String buildGenerator(Model model){
   /*
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -120,6 +120,10 @@ public class ScheduleGeneratorController {
           });
       //model.addAttribute("holidays", holidayList);
   */
+    int shiftCount = 1;
+    // count number of shifts in a day
+    // construct schedule template using this count
+
       return "jsonTemplate";
   }
 
