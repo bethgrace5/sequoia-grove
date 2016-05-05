@@ -13,12 +13,17 @@ public class User {
     String fullname;
     String firstname;
     String lastname;
+    String phone;
     String email;
-    String permissions;
     String classification;
+    boolean isCurrent;
+    List<Duration> history = new ArrayList<Duration>();
+    List<String> positions = new ArrayList<String>();
+    List<String> permissions = new ArrayList<String>();
+    WeeklyAvail avail = new WeeklyAvail();
 
     public User(){}
-    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, String permissions, String classification) {
+    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, String classification) {
         this.id = id;
         this.clockNumber = clockNumber;
         this.maxHours = maxHours;
@@ -31,6 +36,24 @@ public class User {
         this.permissions = permissions;
         this.classification = classification;
     }
+    
+    public User( int id, int maxHrsWeek, int minHrsWeek, List<String> permissions, int clock, String firstName, String lastName, String phone, String email, Date birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent) {
+        this.id = id;
+        this.maxHrsWeek = maxHours;
+        this.minHrsWeek = minHours;
+        this.clock = clock;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phone = phone;
+        this.email = email;
+        this.birthDate = birthDate;
+        this.history = history;
+        this.positions = positions;
+        this.avail = avail;
+        this.isCurrent = isCurrent;
+        this.permissions = permissions;
+    }
+
 
     public int getId() {
         return id;
