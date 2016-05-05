@@ -52,7 +52,7 @@
 
 
   <!-- Misc -->
-  <!-- rename employee to user, add classification for user, 
+  <!-- rename employee to user, add classification for user,
        add permission for user, add password column to user -->
   <include relativeToChangelogFile="true" file="changelogs/026-rename-user-add-classification-and-permissions.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/027-prefix-tables.xml"/>

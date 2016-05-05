@@ -56,7 +56,7 @@ public class EmployeeController
                       rs.getInt("id"),
                       rs.getInt("max_hrs_week"),
                       rs.getInt("min_hrs_week"),
-                      rs.getBoolean("is_manager"),
+                      true, //FIXME for now, set manager true, later set classification
                       rs.getInt("clock_number"),
                       rs.getString("first_name"),
                       rs.getString("last_name"),
@@ -66,14 +66,7 @@ public class EmployeeController
                       parseHistory(rs.getString("history")),
                       parsePositions(rs.getString("positions")),
                       parseAvailability(rs.getString("avail")),
-                      false);
-
-                      // if the history end is an empty string, employee is current
-                      employee.setIsCurrent(
-                        employee.getHistory()
-                          .get(employee.getHistory().size() - 1)
-                          .getEnd() == ""
-                      );
+                      (rs.getInt("is_current") == 1)? true: false );
                     return employee;
                 }
             });
@@ -124,6 +117,14 @@ public class EmployeeController
         return new ArrayList<String>();
       }
       return new ArrayList<String>(Arrays.asList(pos.split(",")));
+    }
+
+    // change Permissions string to list of java objects
+    public List<String> parsePermissions(String permissions) {
+      if (permissions == null) {
+        return new ArrayList<String>();
+      }
+      return new ArrayList<String>(Arrays.asList(permissions.split(",")));
     }
 
     @RequestMapping(value = "/employee/update", method = RequestMethod.POST)

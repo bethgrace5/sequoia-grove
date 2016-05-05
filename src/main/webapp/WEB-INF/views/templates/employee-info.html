@@ -69,13 +69,25 @@
             <md-datepicker ng-model="$parent.birthdate"> </md-datepicker>
         </div>
 
-        <label for="manager" class="col-sm-2 control-label"> Manager </label>
+        <label for="classification" class="col-sm-2 control-label"> Classification </label>
         <div class="col-sm-4">
-        <input name="isManager" type="checkbox" id="manager"
-            ng-model="selectedEmployee.isManager"
-            ng-disabled="loggedInUser.id == selectedEmployee.id"/>
-        </div>
-      </div>
+          <div class="pull-left">
+            <div class="dropdown pull-left" dropdown is-open=true>
+              <button type="button" id="selectClassification" data-toggle="dropdown"
+                aria-haspopup="true" aria-expanded="true"
+                ng-disabled = "loggedInUser.id === selectedEmployee.id"
+                class="btn btn-default">
+                {{selectedEmployee.classification}} <span class="caret"></span>
+              </button>
+              <ul class="dropdown-menu" role="menu" 
+                ng-model="selectedEmployee.classification"
+                arial-labelledby="selectClassification">
+                <li value ="employee"> <a ng-click="selectedEmployee.classification = 'Employee'">Employee</a> </li>
+                <li value ="manager"> <a ng-click="selectedEmployee.classification = 'Manager'">Manager</a> </li>
+                <li value ="accountHolder"> <a ng-click="selectedEmployee.classification = 'Account Holder'">Account Holder</a> </li>
+              </ul>
+            </div>
+          </div>
 
     </form>
   </div>
