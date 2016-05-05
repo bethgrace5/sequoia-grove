@@ -120,9 +120,7 @@ public class ScheduleGeneratorController {
           });
       //model.addAttribute("holidays", holidayList);
   */
-    int shiftCount = 1;
-    // count number of shifts in a day
-    // construct schedule template using this count
+    // construct schedule template using {mon}
 
       return "jsonTemplate";
   }
