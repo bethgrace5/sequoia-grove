@@ -27,6 +27,7 @@ import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.SuperUserRowMapper;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
+import com.sequoiagrove.controller.EmployeeController;
 
 @Controller
 public class EmployeeController
@@ -34,8 +35,19 @@ public class EmployeeController
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
-      String csvPermissions = (String) request.getAttribute("scope");
-      return Arrays.asList(csvPermissions.split(","));
+        //return Arrays.asList(csvPermissions.split(","));
+        List<String> permissions = new ArrayList<String>();
+        try {
+        permissions =  EmployeeController.parsePermissions(
+            request.getAttribute("scope").toString());
+
+        System.out.println(permissions.size());
+        System.out.println(permissions.toString());
+        } catch( NullPointerException e) {
+          System.out.println("caught null pointer exception get permissions");
+          return null;
+        };
+        return permissions;
     }
 
     // Get All Employees with the availability, positions, and employment history
@@ -111,23 +123,30 @@ public class EmployeeController
     @RequestMapping(value = "/employee/update", method = RequestMethod.POST)
     public String updateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
+        try {
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
+        }
+        }
+        catch (NullPointerException e) {
+          System.out.println("No permissions found (interceptor didn't fire)");
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+          return "jsonTemplate";
         }
 
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
       Object[] params = new Object[] {
-          jobject.get("firstName").getAsString(),
-          jobject.get("lastName").getAsString(),
-          jobject.get("isManager").getAsBoolean(),
+          jobject.get("firstname").getAsString(),
+          jobject.get("lastname").getAsString(),
+          //jobject.get("classification").getAsBoolean(),
           jobject.get("birthDate").getAsString(),
-          jobject.get("maxHrsWeek").getAsInt(),
-          jobject.get("minHrsWeek").getAsInt(),
+          jobject.get("maxHours").getAsInt(),
+          jobject.get("minHours").getAsInt(),
           jobject.get("phone").getAsString(),
-          jobject.get("clock").getAsInt(),
+          jobject.get("clockNumber").getAsInt(),
           jobject.get("email").getAsString(),
           jobject.get("id").getAsInt()
       };
@@ -135,7 +154,6 @@ public class EmployeeController
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       jdbcTemplate.update( "update sequ_user set first_name = ?, "+
           "last_name    = ?, "+
-          "is_manager   = ?, "+
           "birth_date   = to_date(?, 'mm-dd-yyyy'), "+
           "max_hrs_week = ?, "+
           "min_hrs_week = ?, "+
@@ -166,20 +184,20 @@ public class EmployeeController
 
         Object[] params = new Object[] {
             id,
-            jobject.get("firstName").getAsString(),
-            jobject.get("lastName").getAsString(),
-            jobject.get("isManager").getAsBoolean(),
+            jobject.get("firstname").getAsString(),
+            jobject.get("lastname").getAsString(),
+            //jobject.get("classification").getAsBoolean(),
             jobject.get("birthDate").getAsString(),
-            jobject.get("maxHrsWeek").getAsInt(),
-            jobject.get("minHrsWeek").getAsInt(),
+            jobject.get("maxHours").getAsInt(),
+            jobject.get("minHours").getAsInt(),
             jobject.get("phone").getAsString(),
-            jobject.get("clock").getAsInt(),
+            jobject.get("clockNumber").getAsInt(),
             jobject.get("email").getAsString(),
         };
 
         // add employee
         jdbcTemplate.update("insert into sequ_user (id, first_name, last_name," +
-            "is_manager, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
+            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
             "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ? )", params);
 
         // activate the employee

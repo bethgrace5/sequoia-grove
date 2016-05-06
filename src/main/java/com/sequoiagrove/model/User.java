@@ -65,10 +65,17 @@ public class User {
         this.id = id;
     }
 
-    public int getClocknumber() {
+    public boolean getIsCurrent() {
+        return isCurrent;
+    }
+    public void setIsCurrent(boolean isCurrent) {
+        this.isCurrent = isCurrent;
+    }
+
+    public int getClockNumber() {
         return clockNumber;
     }
-    public void setClocknumber(int clockNumber) {
+    public void setClockNumber(int clockNumber) {
         this.clockNumber = clockNumber;
     }
 

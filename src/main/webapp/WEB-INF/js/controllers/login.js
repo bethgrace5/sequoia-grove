@@ -15,7 +15,9 @@ angular.module('sequoiaGroveApp')
         $rootScope,
         $scope,
         $sha,
+        $timeout,
         scheduleFactory,
+        userFactory,
         localStorageService){
 
     $scope.email = $rootScope.loggedInUser.email;
@@ -78,10 +80,15 @@ angular.module('sequoiaGroveApp')
           $rootScope.employees = JSON.parse(localStorageService.get('employees'));
         }
       }
+      // TODO only set manage privelage if user has permission manage schedule
       scheduleFactory.setManagePrivelage();
+      // TODO only set manage privelage if user has permission manage employees
+      userFactory.setManagePrivelage();
       scheduleFactory.init().then(
           function(success) {
-            return $scope.getEmployees();
+            $timeout(function() {
+              return userFactory.init();
+            })
           }).then(function(success) {
             // get positions
             return $scope.getPositions();
@@ -113,6 +120,7 @@ angular.module('sequoiaGroveApp')
             $rootScope.errorMessage = '';
             $rootScope.loggedInUser = success.data.user;
             $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
+            $log.debug($rootScope.loggedInUser);
 
             // save user
             if ($scope.remember && success.data.user) {

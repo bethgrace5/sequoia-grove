@@ -15,13 +15,14 @@ angular.module('sequoiaGroveApp')
     $rootScope,
     $route,
     $scope,
+    $timeout,
     $translate,
     localStorageService,
     scheduleFactory,
+    userFactory,
     $q){
 
 /************** Login Redirect, Containers and UI settings **************/
-
 
   $scope.loadingWeek = false;
   $rootScope.currentPath = $location.path();
@@ -137,6 +138,7 @@ angular.module('sequoiaGroveApp')
 /************** HTTP Request Functions **************/
   // get all existing deliveries
   $scope.getDeliveries = function() {
+    var deferred = $q.defer();
     $scope.deliveries = [];
     $scope.viewDeliveries = {
       'mon':[],
@@ -147,7 +149,7 @@ angular.module('sequoiaGroveApp')
       'sat':[],
       'sun':[]
     }
-    return $http({url: '/sequoiagrove/delivery', method: "GET" })
+    $http({url: '/sequoiagrove/delivery', method: "GET" })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;
@@ -175,14 +177,19 @@ angular.module('sequoiaGroveApp')
             }
           });
         }
+        deferred.resolve(success);
       });
+    return deferred.promise;
   }
 
   $scope.getPositions = function() {
-    return $http({ url: '/sequoiagrove/position', method: "GET" })
+    var deferred = $q.defer();
+    $http({ url: '/sequoiagrove/position', method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
+        deferred.resolve(success);
       });
+    return deferred.promise;
   }
 
   $scope.toggleDeliveries = function() {
@@ -191,6 +198,7 @@ angular.module('sequoiaGroveApp')
 
   // Get All Employees with their id
   $scope.getEmployees = function() {
+    var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current employee data...";
 
     // if it's in dev mode, and we already have
@@ -198,19 +206,19 @@ angular.module('sequoiaGroveApp')
     if($rootScope.devMode) {
       if ($rootScope.employees) {
         $log.debug('Warning: devMode on. This is not current employee data');
-        return $q(function(resolve, reject) {
-          resolve();
-        });
+        deferred.resolve();
       }
     }
 
-    return $http({ url: '/sequoiagrove/employees', method: "GET" })
+    $http({ url: '/sequoiagrove/employees', method: "GET" })
       .then(function(success) {
         $rootScope.employees = success.data.employees;
         if ($rootScope.devMode) {
           localStorageService.set('employees', JSON.stringify($rootScope.employees));
         }
+        deferred.resolve(success);
       });
+    return deferred.promise;
   }
 
 
@@ -301,12 +309,18 @@ angular.module('sequoiaGroveApp')
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
     $scope.weekList = scheduleFactory.getWeekList();
+    $timeout(function() {
+      $scope.employees = userFactory.getUsers();
+    },100);
   });
 
   $scope.selectWeek = function(index) {
     $scope.selectedWeek = index;
   }
 
+    $scope.up = function() {
+      $scope.employees = userFactory.getUsers();
+    }
 
   // called from header menu
   $scope.appLogin = function() {

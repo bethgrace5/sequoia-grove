@@ -61,13 +61,13 @@
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === true"
             ng-click="deactivateEmployee($event)"
-            class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstName}}
+            class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstname}}
           </button>
           <!-- Employ this past employee -->
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === false"
             ng-click="activateEmployee()"
-            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstName}}
+            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstname}}
           </button>
           <p class="lead emp-header">Employment History</p>
         </div>

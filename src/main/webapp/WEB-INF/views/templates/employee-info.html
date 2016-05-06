@@ -21,20 +21,20 @@
     <form name="employeeform" class="form-horizontal css-form" novalidate>
       <div class="form-group">
 
-        <label for="firstName" class="col-sm-2 control-label">Name</label>
+        <label for="firstname" class="col-sm-2 control-label">Name</label>
         <div class="col-sm-4">
-          <input name="firstName" type="text" id="firstName" class="form-control" required=""
-          ng-model="selectedEmployee.firstName"
+          <input name="firstname" type="text" id="firstname" class="form-control" required=""
+          ng-model="selectedEmployee.firstname"
           placeholder="First" />
-          <input name="lastName" type="text" id="lastName" class="form-control" required=""
-          ng-model="selectedEmployee.lastName"
+          <input name="lastname" type="text" id="lastname" class="form-control" required=""
+          ng-model="selectedEmployee.lastname"
           placeholder="Last" />
         </div>
 
-        <label for="clock" class="col-sm-2 control-label">Number</label>
+        <label for="clockNumber" class="col-sm-2 control-label">Number</label>
         <div class="col-sm-4">
-          <input name="number" type="number" id="clock" class="form-control"
-            ng-model="selectedEmployee.clock"
+          <input name="clockNumber" type="number" id="clockNumber" class="form-control"
+            ng-model="selectedEmployee.clockNumber"
             placeholder="#" />
         </div>
 
@@ -54,13 +54,13 @@
 
         <label for="max" class="col-sm-2 control-label">Hours</label>
         <div class="col-sm-2">
-          <input name="minHrsWeek" type="number" id="min" class="form-control"
-            ng-model="selectedEmployee.minHrsWeek"
+          <input name="minHours" type="number" id="min" class="form-control"
+            ng-model="selectedEmployee.minHours"
             placeholder="Minimum" />
         </div>
         <div class="col-sm-2">
-          <input name="maxHrsWeek" type="number" id="clock" class="form-control"
-            ng-model="selectedEmployee.maxHrsWeek"
+          <input name="maxHours" type="number" id="maxHours" class="form-control"
+            ng-model="selectedEmployee.maxHours"
             placeholder="Maximum" />
           </div>
 

@@ -406,6 +406,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
+    //TODO set a boolean saying that this user has manage schedule privelage
     service.init = function() {
       var deferred = $q.defer();
       initMonday();

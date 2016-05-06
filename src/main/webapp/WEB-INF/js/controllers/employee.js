@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -24,8 +24,8 @@ angular.module('sequoiaGroveApp')
     $scope.selectedEmployee = {
       'id':0,
       'classification':'',
-      'firstName':'',
-      'lastName':'',
+      'firstname':'',
+      'lastname':'',
       'birthDate':'',
       'clock':0,
       'email':'',
@@ -94,8 +94,8 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee = {
         'id':0,
         'classification':'',
-        'firstName':'',
-        'lastName':'',
+        'firstname':'',
+        'lastname':'',
         'birthDate':'',
         'clock':0,
         'email':'',
@@ -258,27 +258,27 @@ angular.module('sequoiaGroveApp')
       };
 
       // transform firstname to uppercase first letter and lowercase for the rest
-      var firstLetter = $scope.selectedEmployee.firstName.substring(0,1);
-      var theRest = $scope.selectedEmployee.firstName.substring(1,
-          $scope.selectedEmployee.firstName.length);
+      var firstLetter = $scope.selectedEmployee.firstname.substring(0,1);
+      var theRest = $scope.selectedEmployee.firstname.substring(1,
+          $scope.selectedEmployee.firstname.length);
 
-      $scope.selectedEmployee.firstName =
+      $scope.selectedEmployee.firstname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
       // transform lastname to uppercase first letter and lowercase for the rest
-      firstLetter = $scope.selectedEmployee.lastName.substring(0,1);
-      theRest = $scope.selectedEmployee.lastName.substring(1,
-          $scope.selectedEmployee.lastName.length);
+      firstLetter = $scope.selectedEmployee.lastname.substring(0,1);
+      theRest = $scope.selectedEmployee.lastname.substring(1,
+          $scope.selectedEmployee.lastname.length);
 
-      $scope.selectedEmployee.lastName =
+      $scope.selectedEmployee.lastname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
       //TODO if clock number is greater than allowd size, fix it or show error
 
       // validate the rest of the form
       if (form.$invalid) {
-        form.firstName.$setTouched();
-        form.lastName.$setTouched();
+        form.firstname.$setTouched();
+        form.lastname.$setTouched();
         form.email.$setTouched();
         return;
       }
@@ -319,7 +319,7 @@ angular.module('sequoiaGroveApp')
         $mdDialog.show(
             $mdDialog.alert()
             .clickOutsideToClose(true)
-            .title('Unemploy ' + $scope.selectedEmployee.firstName)
+            .title('Unemploy ' + $scope.selectedEmployee.firstname)
             .textContent('You cannot unemploy yourself!')
             .ariaLabel('cannot unemploy yourself')
             .ok('Got it!')
@@ -330,7 +330,7 @@ angular.module('sequoiaGroveApp')
 
       // Confirm to unemploy
       var confirm = $mdDialog.confirm()
-        .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
+        .title('Unemploy ' + $scope.selectedEmployee.firstname + '?')
         .ariaLabel('Unemploy')
         .targetEvent(ev)
         .ok('Unemploy')

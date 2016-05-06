@@ -13,7 +13,7 @@ public class UserRowMapper implements RowMapper {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User();
         user.setId(rs.getInt("id"));
-        user.setClocknumber(rs.getInt("clock_number"));
+        user.setClockNumber(rs.getInt("clock_number"));
         user.setMaxHours(rs.getInt("max_hrs_week"));
         user.setMinHours(rs.getInt("min_hrs_week"));
         user.setBirthDate(rs.getString("birth_date"));
