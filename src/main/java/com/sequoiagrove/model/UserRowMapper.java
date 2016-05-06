@@ -1,9 +1,10 @@
 
 package com.sequoiagrove.model;
 
+import com.sequoiagrove.controller.EmployeeController;
+import com.sequoiagrove.model.User;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.springframework.jdbc.core.RowMapper;
 
 public class UserRowMapper implements RowMapper {
@@ -20,7 +21,7 @@ public class UserRowMapper implements RowMapper {
         user.setFirstname(rs.getString("first_name"));
         user.setLastname(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
-        user.setPermissions(rs.getString("permissions"));
+        EmployeeController.parsePermissions(rs.getString("permissions"));
         user.setClassification(rs.getString("classification"));
         return user;
     }

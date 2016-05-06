@@ -31,9 +31,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.sequoiagrove.model.User;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.controller.MainController;
-
+import org.springframework.util.StringUtils;
 @Controller
 public class Authentication {
     private static SecureRandom random = new SecureRandom();
@@ -56,7 +59,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
     protected String loginWithToken(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , "");
 
         String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, title as classification " +
           "from (  " +
@@ -108,7 +111,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
     protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", "", "");
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , "");
         String email = "";
         String password = "";
 
@@ -179,7 +182,14 @@ public class Authentication {
             if (count > 0) {
                 System.out.println(user.getFullname() + " has sucessfully signed in");
                 model.addAttribute("user", user);
-                model.addAttribute("auth_token", getToken(user.getId(), user.getPermissions()));
+                //get ArrayList of permissions from user object
+                List<String> permissions = user.getPermissions();
+                //Construct an empty Array of size of that array List
+                String[] param = new String[permissions.size()];
+                //fill in empty array with our array list as an array
+                param = permissions.toArray(param);
+                model.addAttribute("auth_token", getToken(user.getId(), 
+                    StringUtils.arrayToDelimitedString(param, ",")));
             }
             else {
                 model.addAttribute("loginFailed", true);

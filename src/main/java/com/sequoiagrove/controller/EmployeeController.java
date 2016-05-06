@@ -23,7 +23,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.controller.Authentication;
-import com.sequoiagrove.model.Employee;
+import com.sequoiagrove.model.User;
+import com.sequoiagrove.model.SuperUserRowMapper;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
 
@@ -49,33 +50,13 @@ public class EmployeeController
         }
 
         String queryStr = "select * from sequ_user_info_view order by last_name";
-        List<Employee> empList = jdbcTemplate.query( queryStr,
-            new RowMapper<Employee>() {
-                public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Employee employee = new Employee (
-                      rs.getInt("id"),
-                      rs.getInt("max_hrs_week"),
-                      rs.getInt("min_hrs_week"),
-                      true, //FIXME for now, set manager true, later set classification
-                      rs.getInt("clock_number"),
-                      rs.getString("first_name"),
-                      rs.getString("last_name"),
-                      rs.getString("phone_number"),
-                      rs.getString("email"),
-                      rs.getDate("birth_date"),
-                      parseHistory(rs.getString("history")),
-                      parsePositions(rs.getString("positions")),
-                      parseAvailability(rs.getString("avail")),
-                      (rs.getInt("is_current") == 1)? true: false );
-                    return employee;
-                }
-            });
+        List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
         model.addAttribute("employees", empList);
         return "jsonTemplate";
     }
 
     // change availability string to java object
-    public WeeklyAvail parseAvailability(String avail) {
+    public static WeeklyAvail parseAvailability(String avail) {
 
       WeeklyAvail entireAvail = new WeeklyAvail();
 
@@ -95,7 +76,7 @@ public class EmployeeController
     }
 
     // change History string to list of java objects
-    public List<Duration> parseHistory(String hist) {
+    public static List<Duration> parseHistory(String hist) {
       List<Duration> historyList = new ArrayList<Duration>();
 
       String[] histories = hist.split(",");
@@ -112,7 +93,7 @@ public class EmployeeController
     }
 
     // change Position string to list of java objects
-    public List<String> parsePositions(String pos) {
+    public static List<String> parsePositions(String pos) {
       if (pos == null) {
         return new ArrayList<String>();
       }
@@ -120,7 +101,7 @@ public class EmployeeController
     }
 
     // change Permissions string to list of java objects
-    public List<String> parsePermissions(String permissions) {
+    public static List<String> parsePermissions(String permissions) {
       if (permissions == null) {
         return new ArrayList<String>();
       }
