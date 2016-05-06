@@ -66,7 +66,7 @@ public class HolidaysController {
 
       // the token did not have the required permissions, return 403 status
       if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
       }
 
@@ -94,7 +94,7 @@ public class HolidaysController {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -124,7 +124,7 @@ public class HolidaysController {
       public String deleteRequest(@PathVariable("id") int id, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -139,7 +139,7 @@ public class HolidaysController {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 

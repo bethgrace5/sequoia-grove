@@ -91,7 +91,7 @@ public class ManageStore {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -148,7 +148,7 @@ public class ManageStore {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -210,7 +210,7 @@ public class ManageStore {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();

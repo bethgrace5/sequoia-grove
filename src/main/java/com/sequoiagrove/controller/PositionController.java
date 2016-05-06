@@ -40,7 +40,7 @@ public class PositionController {
     public String getPositions(Model model, @ModelAttribute("scope") List<String> permissions){
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -65,7 +65,7 @@ public class PositionController {
     public String addPosition(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -98,7 +98,7 @@ public class PositionController {
     public String removePosition(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 

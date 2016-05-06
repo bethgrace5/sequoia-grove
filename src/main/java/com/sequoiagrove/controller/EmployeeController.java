@@ -45,7 +45,7 @@ public class EmployeeController
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -112,7 +112,7 @@ public class EmployeeController
     public String updateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -154,7 +154,7 @@ public class EmployeeController
     public String addEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!permissions.contains("manage-employees")) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -195,7 +195,7 @@ public class EmployeeController
     public String deactivateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!permissions.contains("manage-employees")) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -237,7 +237,7 @@ public class EmployeeController
     public String activateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         if (!permissions.contains("manage-employees")) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();

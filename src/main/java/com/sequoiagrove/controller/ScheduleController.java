@@ -91,7 +91,7 @@ public class ScheduleController {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -122,7 +122,7 @@ public class ScheduleController {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
@@ -151,7 +151,7 @@ public class ScheduleController {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 

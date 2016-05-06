@@ -53,7 +53,7 @@ public class RequestController{
 
       // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
-          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
       }
 
@@ -85,7 +85,7 @@ public class RequestController{
 
       // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
       }
 
@@ -118,7 +118,7 @@ public class RequestController{
 
       // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
       }
 
@@ -152,7 +152,7 @@ public class RequestController{
 
       // the token did not have the required permissions, return 403 status
       if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-          model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
       }
 
@@ -187,7 +187,7 @@ public class RequestController{
 
             // the token did not have the required permissions, return 403 status
             if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
-                model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+                model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
                 return "jsonTemplate";
             }
 
@@ -224,7 +224,7 @@ public class RequestController{
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
         //Make Sure request ID is there too...
@@ -248,7 +248,7 @@ public class RequestController{
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-            model.addAttribute("errorStatus", HttpServletResponse.SC_FORBIDDEN);
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
 
