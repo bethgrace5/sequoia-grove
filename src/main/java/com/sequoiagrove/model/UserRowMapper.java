@@ -21,7 +21,7 @@ public class UserRowMapper implements RowMapper {
         user.setFirstname(rs.getString("first_name"));
         user.setLastname(rs.getString("last_name"));
         user.setEmail(rs.getString("email"));
-        EmployeeController.parsePermissions(rs.getString("permissions"));
+        user.setPermissions(EmployeeController.parsePermissions(rs.getString("permissions")));
         user.setClassification(rs.getString("classification"));
         return user;
     }

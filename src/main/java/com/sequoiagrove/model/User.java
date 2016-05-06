@@ -144,7 +144,7 @@ public class User {
     public List<String> getPermissions() {
         return permissions;
     }
-    public void setPermissions(List<String> Permissions) {
+    public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
     }
 
