@@ -38,17 +38,15 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         function(success) {
           if (success.status === 200) {
             $timeout(function() {
-                // anything you want can go here and will safely be run on the next digest.
-                users = success.data.employees;
-            // Keep a copy of schedule retrieved to compare against changes later
-            if ($rootScope.devMode) {
-              localStorageService.set('users', JSON.stringify(success.data.users));
-            }
-            deferred.resolve(success.data);
-            notifyObservers();
-            })
+              // anything you want can go here and will safely be run on the next digest.
+              users = success.data.employees;
+              // Keep a copy of schedule retrieved to compare against changes later
+              if ($rootScope.devMode) {
+                localStorageService.set('users', JSON.stringify(success.data.users));
+              }
+              deferred.resolve();
+            });
           }
-          deferred.reject();
         });
     return deferred.promise;
   }

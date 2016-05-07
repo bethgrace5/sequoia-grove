@@ -19,29 +19,38 @@ angular.module('sequoiaGroveApp')
       $location.path('/login');
     }
 
+    // TODO eventually build this object by pulling from database
+    $scope.classifications = [
+      {'disp':'Employee', 'val':1},
+      {'disp':'Manager',  'val':2},
+      {'disp':'Account Holder', 'val':3},
+      {'disp':'Admin', 'val':4}
+    ]
+    $scope.selectedClassification = 0;
+
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classification':'',
+      'classification': 0,
       'firstname':'',
       'lastname':'',
       'birthDate':'',
-      'clock':0,
+      'clockNumber':0,
       'email':'',
-      'minHrsWeek':'',
-      'maxHrsWeek':'',
+      'maxHours':'',
+      'minHours':'',
       'phone':0,
       'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
       'history':[],
       'positions':[]
     };
+    $scope.birthday = new Date();
 
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
     $scope.saving = false;
     $scope.typeFilter = 'current';
-    $scope.birthdate = new Date();
 
 /************** Pure Functions **************/
     // switch filter of employee list type for all, current or past
@@ -77,13 +86,23 @@ angular.module('sequoiaGroveApp')
       $scope.newAvail.end = end;
     }
 
+    $scope.selectClassification = function(index) {
+      $scope.selectedClassification = index;
+    }
+
     $scope.selectEmployee = function(id) {
+
       var length = $scope.employees.length;
       for(var i = 0; i < length; i++) {
         var curid = $scope.employees[i].id;
         if (curid==id) {
           $scope.selectedEmployee = $scope.employees[i];
-          $scope.birthdate = moment($scope.employees[i].birthDate, 'YYYY-MM-DD').toDate();
+          _.map($scope.classifications,function(item, index){
+            if(parseInt(item.val) === parseInt($scope.selectedEmployee.classification)) {
+              $scope.selectedClassification = index;
+            }
+          });
+          $scope.birthday = moment($scope.employees[i].birthDate, 'MM-DD-YYYY').toDate();
           break;
         }
       }
@@ -91,22 +110,22 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
+      $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification':'',
+        'classification': $scope.classifications[selectedClassification].val,
         'firstname':'',
         'lastname':'',
         'birthDate':'',
-        'clock':0,
+        'clockNumber':0,
         'email':'',
-        'minHrsWeek':'',
-        'maxHrsWeek':'',
+        'maxHours':'',
+        'minHours':'',
         'phone':0,
         'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
         'history':[],
         'positions':[]
       };
-      $scope.birthDate = '';
     }
 /************** HTTP Request Functions **************/
 
@@ -242,19 +261,18 @@ angular.module('sequoiaGroveApp')
         $scope.saving = false;
         return;
       }
-
       // validate max hours per week
-      if ((form.maxHrsWeek.$viewValue == '') ||
-          (form.maxHrsWeek.$viewValue < 0) ||
-          (form.maxHrsWeek.$viewValue > 40)) {
-        $scope.selectedEmployee.maxHrsWeek = 40;
+      if ((form.maxHours.$viewValue == '') ||
+          (form.maxHours.$viewValue < 0) ||
+          (form.maxHours.$viewValue > 40)) {
+        $scope.selectedEmployee.maxHours = 40;
       };
 
       // validate min hours per week
-      if ((form.minHrsWeek.$viewValue == '') ||
-          (form.minHrsWeek.$viewValue > form.maxHrsWeek.$viewValue) ||
-          (form.minHrsWeek.$viewValue < 0)) {
-        $scope.selectedEmployee.minHrsWeek = 0;
+      if ((form.minHours.$viewValue == '') ||
+          (form.minHours.$viewValue > form.minHours.$viewValue) ||
+          (form.minHours.$viewValue < 0)) {
+        $scope.selectedEmployee.minHours = 0;
       };
 
       // transform firstname to uppercase first letter and lowercase for the rest
@@ -273,7 +291,11 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee.lastname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
-      //TODO if clock number is greater than allowd size, fix it or show error
+      var cid = $scope.classifications[$scope.selectedClassification].val;
+      $scope.selectedEmployee.classificationId = cid;
+      $scope.selectedEmployee.classification = cid;
+
+      //TODO if clock number is greater than allowed size, fix it or show error
 
       // validate the rest of the form
       if (form.$invalid) {
@@ -289,7 +311,8 @@ angular.module('sequoiaGroveApp')
       }
       $scope.saving = true;
       var action = "update";
-      $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
+      $scope.selectedEmployee.birthDate = moment($scope.birthday).format('MM-DD-YYYY');
+
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
         action = "add";

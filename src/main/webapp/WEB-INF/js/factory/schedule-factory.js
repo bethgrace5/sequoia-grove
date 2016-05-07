@@ -433,12 +433,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       initSchedule().then(
         function(success) {
-          initHeader(); // update schedule header to reflect new dates
-          countDays(); // NOTE Added for those with manage schedule privelage
-          countHours(); // NOTE Added for those with manage schedule privelage
-          buildWeekList();
-          notifyObservers();
-          deferred.resolve(success);
+          $timeout(function() {
+            initHeader(); // update schedule header to reflect new dates
+            countDays(); // NOTE Added for those with manage schedule privelage
+            countHours(); // NOTE Added for those with manage schedule privelage
+            buildWeekList();
+            notifyObservers();
+            deferred.resolve(success);
+          });
         },function(failure) {
           deferred.reject(failure);
       });

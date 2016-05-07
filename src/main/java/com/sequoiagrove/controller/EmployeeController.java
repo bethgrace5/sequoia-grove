@@ -141,13 +141,13 @@ public class EmployeeController
       Object[] params = new Object[] {
           jobject.get("firstname").getAsString(),
           jobject.get("lastname").getAsString(),
-          //jobject.get("classification").getAsBoolean(),
           jobject.get("birthDate").getAsString(),
           jobject.get("maxHours").getAsInt(),
           jobject.get("minHours").getAsInt(),
           jobject.get("phone").getAsString(),
           jobject.get("clockNumber").getAsInt(),
           jobject.get("email").getAsString(),
+          jobject.get("classificationId").getAsInt(),
           jobject.get("id").getAsInt()
       };
 
@@ -159,7 +159,8 @@ public class EmployeeController
           "min_hrs_week = ?, "+
           "phone_number = ?, "+
           "clock_number = ?, "+
-          "email = ?  "+
+          "email = ?, "+
+          "classification_id = ?  "+
           "where id = ?",
          params);
 
@@ -186,19 +187,19 @@ public class EmployeeController
             id,
             jobject.get("firstname").getAsString(),
             jobject.get("lastname").getAsString(),
-            //jobject.get("classification").getAsBoolean(),
             jobject.get("birthDate").getAsString(),
             jobject.get("maxHours").getAsInt(),
             jobject.get("minHours").getAsInt(),
             jobject.get("phone").getAsString(),
             jobject.get("clockNumber").getAsInt(),
             jobject.get("email").getAsString(),
+            jobject.get("classificationId").getAsInt()
         };
 
         // add employee
         jdbcTemplate.update("insert into sequ_user (id, first_name, last_name," +
-            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email) " +
-            "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ? )", params);
+            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email, classification_id) " +
+            "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ? )", params);
 
         // activate the employee
         jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null)", id);

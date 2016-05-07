@@ -61,5 +61,6 @@
   <include relativeToChangelogFile="true" file="changelogs/030-update-functions.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/031-permission-mock-data.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/032-default-test-password.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/033-user-info-notes-birthday-format.xml"/>
 
 </databaseChangeLog>

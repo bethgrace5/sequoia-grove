@@ -86,15 +86,14 @@ angular.module('sequoiaGroveApp')
       userFactory.setManagePrivelage();
       scheduleFactory.init().then(
           function(success) {
-            $timeout(function() {
-              return userFactory.init();
-            })
+            return userFactory.init();
           }).then(function(success) {
             // get positions
             return $scope.getPositions();
         }).then(function(success) {
             return $scope.getDeliveries();
         }).then(function(success) {
+          $log.debug(success);
             // finally, redirect to last path, or home if none
             $scope.loading = false;
             $log.debug('loading complete');

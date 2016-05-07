@@ -1,12 +1,11 @@
-
 package com.sequoiagrove.model;
 
 import java.sql.ResultSet;
-import com.sequoiagrove.controller.EmployeeController;
 import java.sql.SQLException;
-import com.sequoiagrove.model.User;
-
 import org.springframework.jdbc.core.RowMapper;
+
+import com.sequoiagrove.model.User;
+import com.sequoiagrove.controller.EmployeeController;
 
 public class SuperUserRowMapper implements RowMapper {
 
