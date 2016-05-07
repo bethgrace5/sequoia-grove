@@ -41,10 +41,8 @@ public class EmployeeController
         permissions =  EmployeeController.parsePermissions(
             request.getAttribute("scope").toString());
 
-        System.out.println(permissions.size());
-        System.out.println(permissions.toString());
         } catch( NullPointerException e) {
-          System.out.println("caught null pointer exception get permissions");
+          System.out.println("caught null pointer exception get permissions employee controller");
           return null;
         };
         return permissions;

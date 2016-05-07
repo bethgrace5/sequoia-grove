@@ -93,7 +93,6 @@ angular.module('sequoiaGroveApp')
         }).then(function(success) {
             return $scope.getDeliveries();
         }).then(function(success) {
-          $log.debug(success);
             // finally, redirect to last path, or home if none
             $scope.loading = false;
             $log.debug('loading complete');
@@ -111,7 +110,6 @@ angular.module('sequoiaGroveApp')
       method: "POST", data: {'auth_token':$rootScope.token}
     }).then(
         function(success) {
-          $log.debug(success);
           $rootScope.hasValidToken = success.data.valid;
 
           if (success.data.valid) {
@@ -119,7 +117,7 @@ angular.module('sequoiaGroveApp')
             $rootScope.errorMessage = '';
             $rootScope.loggedInUser = success.data.user;
             $rootScope.loggedInUser.isManager = success.data.user.classification != 'employee';
-            $log.debug($rootScope.loggedInUser);
+            //$log.debug($rootScope.loggedInUser);
 
             // save user
             if ($scope.remember && success.data.user) {

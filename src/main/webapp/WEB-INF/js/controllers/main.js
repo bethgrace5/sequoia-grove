@@ -301,7 +301,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $rootScope.$on('loggedIn', function(event, args) {
-    $log.debug('caught logged in at main');
+    //$log.debug('caught logged in at main');
     $scope.template = scheduleFactory.getTemplate();
     $scope.date = scheduleFactory.getHeader();
     $scope.isPublished = scheduleFactory.isPublished();

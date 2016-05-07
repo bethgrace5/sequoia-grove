@@ -1,7 +1,7 @@
 'use strict';
 
 // Factory to inject authorization token with each request sent
-angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, localStorageService, $q, $http, $rootScope) {
+angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, localStorageService, $q, $http, $rootScope, $timeout) {
   var service = {};
   var observerCallbacks = [];
 
@@ -468,9 +468,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             }).then( function(success) {
               // saved and then deleted
             }).then( function(success) {
-              initSchedule();
-              deferred.resolve(success);
-              notifyObservers();
+              initSchedule().then(function(success) {
+                countDays();
+                countHours();
+                buildWeekList();
+                notifyObservers();
+                deferred.resolve(success);
+              });
             });
       }
       else if (deleteShifts.length > 0) {
