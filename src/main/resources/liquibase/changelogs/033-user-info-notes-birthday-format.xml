@@ -25,7 +25,7 @@
 
     <!-- remove is_manager from user info view, and add permissions -->
     <createView viewName="sequ_user_info_view" replaceIfExists="true" schemaName="public">
-      select e.id, first_name, last_name, email, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions,
+      select e.id, first_name, last_name, email, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
               phone_number, clock_number, pid as positions, history, min_hrs_week, c.id as classification,
               concat_ws(' ',
                 concat('mon,', mon::text),
