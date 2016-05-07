@@ -1,23 +1,34 @@
+//Generator
+//  Info:
+//
+//-------------------
+//Directory
+//-------------------
+//  Variables_Hold
+//  Building
+//  Database_Gathering
+//  Triming
+//  Soon_to_be_Organized
+//  Testing
+//-------------------
+//
 package com.sequoiagrove.model;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
 import com.sequoiagrove.model.Employee;
 import com.sequoiagrove.model.Request;
-
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import com.sequoiagrove.controller.MainController;
-
 import java.util.*;
 
-//TODO: Need to Swap Functions arounds and organize them by sections
-
 public class Generator{
+  //-------------------------
+  //  Variables_Hold
+  //-------------------------
   HashMap
     <String, HashMap<Integer, HashMap<Integer, Integer> > > generator;
     //[Day [ Shift [Employee, number of weeks scheduled] ] ]
@@ -26,22 +37,13 @@ public class Generator{
   String endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
   Request requests[];
-  //Or
-  //String date[7]
 
+  //-----------------------------------
+  //  Building
+  //-----------------------------------
   public Generator(){
     generator = new HashMap
       <String, HashMap<Integer, HashMap<Integer, Integer> > >();
-  }
-
-  public void insert(String  day,
-                     Integer shift,
-                     Integer employee,
-                     Integer amount){
-
-    addDay(day);
-    addShift(day, shift);
-    addEmployee(day, shift, employee, amount);
   }
 
   public void addDay(String day){
@@ -63,10 +65,24 @@ public class Generator{
     if(!generator.containsKey(day)) return;
     if(!generator.get(day).containsKey(shift)) return;
     if(generator.get(day).get(shift).containsKey(employee)) return;
-
     generator.get(day).get(shift).put(employee, amount);
   }
 
+  public void add(String  day,
+                          Integer shift,
+                          Integer employee,
+                          Integer amount){
+    //This Is Diffrent from addEmployee, as it calls all other 3
+    //function to build while making sure keys exists for eachother
+    addDay(day);
+    addShift(day, shift);
+    addEmployee(day, shift, employee,  amount);
+
+  }
+
+  //----------------------------------
+  //  Database_Gathering
+  //---------------------------------
   public void getPastInformation(String startDate, String endDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     dayShiftEmployeeList = jdbcTemplate.query(
@@ -129,16 +145,12 @@ public class Generator{
   }
 
   public WeeklyAvail parseAvailability(String avail) {
-
       WeeklyAvail entireAvail = new WeeklyAvail();
-
       // split string into array with one string per day
       String[] weekdays = avail.split("\\s+");
-
       // for each day, add it to the weekly availability
       for (String d : weekdays) {
         String[] day = d.split(",");
-
         for(int i=1; i<day.length; i++) {
           String[] times = day[i].split(":");
           entireAvail.add(day[0], times[0], times[1]);
@@ -150,7 +162,6 @@ public class Generator{
     // change History string to list of java objects
     public List<Duration> parseHistory(String hist) {
       List<Duration> historyList = new ArrayList<Duration>();
-
       String[] histories = hist.split(",");
       for (String h : histories) {
         String[] times = h.split(":");
@@ -181,19 +192,50 @@ public class Generator{
     if(value == 5) return "fri";
     if(value == 6) return "sat";
     if(value == 7) return "sun";
-    return "-------";
+    return "---";
   }
 
-  public void add(String  day,
-                          Integer shift,
-                          Integer employee,
-                          Integer amount){
-    addDay(day);
-    addShift(day, shift);
-    addEmployee(day, shift, employee,  amount);
+ //----------------------------------
+ //  Triming
+ //---------------------------------
+ public void trimByListRestriction(){
+ }
 
-  }
+ public void trimByRestriction(String person1, String person2){
+ }
 
+ public void trimByUnavaliablity(String person1, String date){
+ }
+ public void trimByRequest(){
+  //TODO: Somehow get A Request List and compare to the employees and 
+  //      in the week.
+ }
+ public void removeEmployee(Integer day, Integer shift, Integer employee){
+   generator.get(day).get(shift).remove(employee);
+ }
+
+ //----------------------------------
+ //Soon_to_be_Organized
+ //----------------------------------
+ // use this as a temporary way place to add function
+ //
+ public boolean checkEmployeeIf(
+                             String  day,
+                             Integer shift, 
+                             Integer employee1,
+                             Integer employee2){
+   if(generator.get(day).get(shift).containsKey(employee1) &&
+      generator.get(day).get(shift).containsKey(employee2)){
+
+        return true;
+      }
+   return false;
+ }
+
+  //----------------------------------
+  // Testing
+  //----------------------------------
+  //  Used Primarily to Test The Class
   public void printAllDays(){
     for (String key : generator.keySet()) {
       System.out.println(key + " ");
@@ -228,33 +270,4 @@ public class Generator{
    }
  }
 
-
- public void trimByListRestriction(){
- }
-
- public void trimByRestriction(String person1, String person2){
- }
-
- public void trimByUnavaliablity(String person1, String date){
- }
- public void trimByRequest(){
-  //TODO: Somehow get A Request List and compare to the employees and 
-  //      in the week.
- }
- public void removeEmployee(Integer day, Integer shift, Integer employee){
-   generator.get(day).get(shift).remove(employee);
- }
-
- public boolean checkEmployeeIf(
-                             String  day,
-                             Integer shift, 
-                             Integer employee1,
-                             Integer employee2){
-   if(generator.get(day).get(shift).containsKey(employee1) &&
-      generator.get(day).get(shift).containsKey(employee2)){
-
-        return true;
-      }
-   return false;
- }
 }
