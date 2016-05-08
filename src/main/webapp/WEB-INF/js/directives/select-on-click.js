@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory, userFactory) {
   return {
     restrict: 'A',
     scope: false,

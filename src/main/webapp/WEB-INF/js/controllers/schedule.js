@@ -105,7 +105,7 @@ angular.module('sequoiaGroveApp')
   $scope.getEmployeeByname = function(name) {
     var employee = {'id':0};
     _.map($scope.employees, function(e) {
-      if(_.isMatch(e, {'firstName':name})) {
+      if(_.isMatch(e, {'firstname':name})) {
         employee = e;
       }
     });
