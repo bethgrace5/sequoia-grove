@@ -55,6 +55,7 @@ public class ScheduleController {
           public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             ScheduleTemplate schTmp = new ScheduleTemplate(
+                rs.getInt("index"),
                 rs.getInt("sid"),
                 rs.getInt("pid"),
                 rs.getString("location"),

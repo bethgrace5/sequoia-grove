@@ -85,12 +85,30 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     ]
   }
 
+  var insertSpacers = function() {
+    $timeout(function() {
+    var i = 0;
+      _.map(schedule, function(item, index) {
+        //$log.debug('new index', item.newIndex, ' old index ', item.index);
+      });
+    }, 1000);
+    //$log.debug(schedule);
+      //if(item.idx != i) {
+        //$log.debug('adding spacer');
+        //return [{'isSpacer':true}, item];
+      //}
+      //else {
+        //i++;
+        //return item;
+      //}
+    //$log.debug(_.flatten(sch, true));
+  }
+
   // Get The Schedule for the week currently being viewed - expects a moment object for week
   var initSchedule = function() {
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/sequoiagrove/schedule/template/' + monday;
-    // if it's in dev mode, and we already have
+    var url = '/sequoiagrove/schedule/template/' + monday; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     if($rootScope.devMode) {
       var temp = localStorageService.get('template');
@@ -114,6 +132,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             }
             storeOriginalTemplate();
             deferred.resolve(success.data);
+            insertSpacers();
             notifyObservers();
           }
           deferred.reject();
@@ -201,15 +220,22 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var saveShifts = function() {
     var deferred = $q.defer();
+      _.map(schedule, function(item, index) {
+      });
     shiftIndices = _.map(schedule, function(item, index) {
       // use 'sid' and 'eid' to reuse a java class
-      if (item.sid) {
-        return {'sid':item.sid, 'eid':item.index};
+      if (!item.isSpacer ) {
+        return {'sid':item.sid, 'eid':item.newIndex};
       }
       else {
         return {'sid':0, 'eid':0};
       }
     });
+
+    shiftIndices = _.filter(shiftIndices, function(item, index) {
+      return item.sid != 0;
+    });
+
     $http({
       url: '/sequoiagrove/schedule/shiftIndices',
       method: "POST",
@@ -218,7 +244,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       shiftIndices = [];
       deferred.resolve(true);
     },function (failure) {
-      deferred.reject(false);
+      //deferred.reject(false);
     });
     return deferred.promise;
   }

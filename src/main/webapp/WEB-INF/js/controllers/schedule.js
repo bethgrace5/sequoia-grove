@@ -27,6 +27,16 @@ angular.module('sequoiaGroveApp')
   localStorageService.set('lastPath', '/schedule');
   $scope.saving = false;
 
+  $scope.getIndex = function(has, gets) {
+    if(has) {
+      return has;
+    }
+    else {
+      return gets;
+    }
+
+  }
+
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $location.path('/login');

@@ -13,6 +13,7 @@ import com.sequoiagrove.model.Day;
 
 public class ScheduleTemplate {
   /* Class Variables */
+    int index;
     int sid;
     int pid;
     String tname;
@@ -35,6 +36,7 @@ public class ScheduleTemplate {
     public ScheduleTemplate(){}
   /* Constructor */
     public ScheduleTemplate(
+        int index,
         int sid,
         int pid,
         String location,
@@ -50,8 +52,8 @@ public class ScheduleTemplate {
         Day thu,
         Day fri,
         Day sat,
-        Day sun
-     ) {
+        Day sun) {
+            this.index = index;
             this.sid = sid;
             this.pid = pid;
             this.tname = tname;
@@ -70,6 +72,14 @@ public class ScheduleTemplate {
             this.sun = sun;
     }// end constructor
 
+    // get shift index
+    public int getIndex() {
+        return index;
+    }
+    // set shift id
+    public void setIndex(int index) {
+        this.index = index;
+    }
     // get shift id
     public int getSid() {
         return sid;
