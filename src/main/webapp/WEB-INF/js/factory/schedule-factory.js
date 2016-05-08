@@ -246,6 +246,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       data: shiftIndices
     }).then(function(success) {
       shiftIndices = [];
+      movedShifts = false;
+      notifyObservers();
       deferred.resolve(true);
     },function (failure) {
       //deferred.reject(false);
