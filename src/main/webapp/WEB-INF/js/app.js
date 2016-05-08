@@ -11,7 +11,8 @@ angular.module('sequoiaGroveApp', [
     'ngMaterial',
     'ngMessages',
     'underscore',
-    'dn.sha'
+    'dn.sha',
+    'as.sortable'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
               $logProvider, $compileProvider) {

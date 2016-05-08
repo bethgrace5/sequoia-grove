@@ -117,8 +117,8 @@ a:focus {
 }
 
 .schedule-message-panel {
-  width:80%; 
-  margin:0 auto; 
+  width:80%;
+  margin:0 auto;
   background-color:#e6e6e6;
 }
 /* Availability */
@@ -169,7 +169,8 @@ a:focus {
 }
 .schedule-edit-task-names{
   font-size: 1em;
-  margin:0 auto;
+  margin:0;
+  padding:0;
 }
 .schedule-edit-task-selected{
   background-color: #66ffd7;
@@ -205,7 +206,8 @@ a:focus {
 .schedule-edit-panel {
   /*background-color: #edf6f7;*/
   min-height: 70%;
-  width: 87%;
+  width: 90%;
+  min-width:1080px;
 }
 .schedule-edit-panel-header div{
   min-width: 9%;
@@ -255,7 +257,7 @@ a:focus {
 .weekday-title div{
   font-size: 1.1em;
   color: #336699;
-  padding: 0;
+  padding-left: 30px;
 }
 
 .schedule-times {

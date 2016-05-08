@@ -1,11 +1,14 @@
 
 <!-- shifts -->
-<div ng-repeat="t in template" ng-show="filterSchedule(t.pid)">
+<ul data-as-sortable="board.dragControlListeners" data-ng-model="template">
+<li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
   <div class="row">
     <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
-    <div class="col-sm-2 schedule-edit-task-names selectable-elem" ng-click="selectShift($index)">
-      <span ng-class="shiftStatus($index)">{{t.tname}}</span>
+    <div class="col-sm-2 schedule-edit-task-names" ng-click="selectShift($index)">
+      <div data-as-sortable-item-handle>
+        <span>{{t.tname}}</span>
+      </div>
     </div>
 
 <!-- weekday times -->
@@ -138,5 +141,6 @@
     </div>
 
   </div>
-</div>
+</li>
+</ul>
 
