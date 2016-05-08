@@ -146,6 +146,7 @@ public class EmployeeController
           jobject.get("clockNumber").getAsInt(),
           jobject.get("email").getAsString(),
           jobject.get("classificationId").getAsInt(),
+          jobject.get("notes").getAsString(),
           jobject.get("id").getAsInt()
       };
 
@@ -158,7 +159,8 @@ public class EmployeeController
           "phone_number = ?, "+
           "clock_number = ?, "+
           "email = ?, "+
-          "classification_id = ?  "+
+          "classification_id = ?,  "+
+          "notes  = ?  "+
           "where id = ?",
          params);
 
@@ -191,13 +193,14 @@ public class EmployeeController
             jobject.get("phone").getAsString(),
             jobject.get("clockNumber").getAsInt(),
             jobject.get("email").getAsString(),
-            jobject.get("classificationId").getAsInt()
+            jobject.get("classificationId").getAsInt(),
+            jobject.get("notes").getAsString()
         };
 
         // add employee
         jdbcTemplate.update("insert into sequ_user (id, first_name, last_name," +
-            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email, classification_id) " +
-            "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ? )", params);
+            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email, classification_id, notes) " +
+            "values(?, ?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ? )", params);
 
         // activate the employee
         jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null)", id);

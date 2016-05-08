@@ -11,6 +11,7 @@ public class User {
     int clockNumber;
     int maxHours;
     int minHours;
+    String notes;
     String birthDate;
     String fullname;
     String firstname;
@@ -38,8 +39,8 @@ public class User {
         this.permissions = permissions;
         this.classification = classification;
     }
-    
-    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, String classification) {
+
+    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, String classification, String notes) {
         this.id = id;
         this.maxHours= maxHours;
         this.minHours= minHours;
@@ -55,6 +56,7 @@ public class User {
         this.isCurrent = isCurrent;
         this.permissions = permissions;
         this.classification = classification;
+        this.notes = notes;
     }
 
 
@@ -167,5 +169,12 @@ public class User {
     }
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getNotes() {
+        return notes;
+    }
+    public void setNotes(String notes) {
+        this.notes = notes;
     }
 }

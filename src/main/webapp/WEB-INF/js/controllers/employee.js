@@ -33,6 +33,7 @@ angular.module('sequoiaGroveApp')
     $scope.selectedEmployee = {
       'id':0,
       'classification': 0,
+      'notes': '',
       'firstname':'',
       'lastname':'',
       'birthDate':'',
@@ -114,6 +115,7 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee = {
         'id':0,
         'classification': $scope.classifications[selectedClassification].val,
+        'notes': '',
         'firstname':'',
         'lastname':'',
         'birthDate':'',
