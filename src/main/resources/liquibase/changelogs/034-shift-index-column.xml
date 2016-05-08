@@ -23,6 +23,152 @@
       columnName="index"
       defaultValue="0" />
 
+    <sql>
+      drop view sequ_sch_view;
+      drop view sequ_sch_hist_view;
+      drop view sequ_sch_template_view;
+    </sql>
+
+    <!-- Update schedule template view to return index of shifts -->
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_sch_template_view">
+      select index, pid, sid, tname, weekend_start_hour as we_st, weekend_end_hour as we_ed, weekday_start_hour as wd_st, weekday_end_hour as wd_ed, area, position
+      from (
+      select index, s.weekday_id as wd_id, s.weekend_id as we_id, s.id as sid, s.position_id as pid, s.task_name as tname, area, p.title as position
+      from "sequ_shift" s
+      inner join sequ_position p
+      on p.id=s.position_id and s.end_date is null
+      ) schedule
+      left outer join
+      (
+      select h.id as wehid, h.start_hour as weekend_start_hour, h.end_hour as weekend_end_hour
+      from sequ_hours h
+      ) weekendHours
+      on wehid = wd_id
+      left outer join
+      (
+      select h.id as wdhid, h.start_hour as weekday_start_hour, h.end_hour as weekday_end_hour
+      from sequ_hours h
+      ) weekdayHours
+      on wdhid = we_id
+    </createView>
+
+    <!-- Update schedule history view to return index of shifts -->
+    <createView schemaName="public"
+      viewName="sequ_sch_hist_view">
+      select * from (
+      select index, sid, eid, fname, day/*, to_char(to_date(day,'dd/mm/yyyy'), 'DAY') as weekday*/
+      from
+      (
+      select *
+      from sequ_sch_template_view
+      ) schtmp
+      natural join
+      (
+      select i.user_id as eid, i.shift_id as sid, i.on_date as day
+      from sequ_is_scheduled_for i
+      ) scheduled
+      natural join
+      (
+      select e.id as eid, e.first_name as fname
+      from sequ_user e
+      ) emp
+      ) sch_hist_view
+      order by day
+    </createView>
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_sch_view">
+        select index, m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, area, position,
+            mon,     tue,     wed,     thu,     fri,     sat,     sun, 
+            mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
+        from (
+            -- Monday
+            /*  monday gathers the shift information for the week, while subsequent days
+             *  only gather the names for the employees scheduled based on the shift
+             */
+            select s.index, s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.area, 
+                s.position, h.fname as mon, h.eid as mon_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('23-11-2015', 'dd-mm-yyyy')
+        ) mm
+        full outer join
+        (
+            -- Tuesday
+            select s.sid as t_sid, h.fname as tue, h.eid as tue_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('24-11-2015', 'dd-mm-yyyy')
+        ) tt
+        on m_sid = t_sid
+        full outer join
+        (
+            -- Wednesday
+            select s.sid as w_sid, h.fname as wed, h.eid as wed_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('25-11-2015', 'dd-mm-yyyy')
+        ) ww
+        on m_sid = w_sid
+        full outer join
+        (
+            -- Thursday
+            select s.sid as th_sid, h.fname as thu, h.eid as thu_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('26-11-2015', 'dd-mm-yyyy')
+        ) th
+        on m_sid = th_sid
+        full outer join
+        (
+            -- Friday
+            select s.sid as f_sid, h.fname as fri, h.eid as fri_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('27-11-2015', 'dd-mm-yyyy')
+        ) ff
+        on m_sid = f_sid
+        full outer join
+        (
+            -- Saturday
+            select s.sid as sa_sid, h.fname as sat, h.eid as sat_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('28-11-2015', 'dd-mm-yyyy')
+        ) sa
+        on m_sid = sa_sid
+        full outer join
+        (
+            -- Sunday
+            select s.sid as su_sid, h.fname as sun, h.eid as sun_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid 
+            --and h.day = to_date('29-11-2015', 'dd-mm-yyyy')
+        ) su
+        on m_sid = su_sid
+        --order by wd_st, area, we_st
+    </createView>
+
+    <!-- Update get schedule function to return index of shifts -->
+    <sqlFile encoding="UTF-8" path="functions/addShift.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+
   </changeSet>
 
 </databaseChangeLog>
