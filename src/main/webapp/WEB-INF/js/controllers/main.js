@@ -24,19 +24,6 @@ angular.module('sequoiaGroveApp')
 
 /************** Login Redirect, Containers and UI settings **************/
 
-  $scope.dragControlListeners = {
-      'accept': function (sourceItemHandleScope, destSortableScope) {return boolean},//override to determine drag is allowed or not. default is true.
-      'itemMoved': function (event) {},
-      'orderChanged': function(event) {},
-      'containment': '#board',//optional param.
-      'clone': true,//optional param for clone feature.
-      'allowDuplicates': false //optional param allows duplicates to be dropped.
-    };
-
-    $scope.dragControlListeners1 = {
-      'containment': '#board', //optional param.
-      'allowDuplicates': true //optional param allows duplicates to be dropped.
-    };
 
   $scope.loadingWeek = false;
   $rootScope.currentPath = $location.path();

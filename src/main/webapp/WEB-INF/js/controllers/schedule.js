@@ -46,6 +46,41 @@ angular.module('sequoiaGroveApp')
 
 /************** Pure Functions **************/
 
+  $scope.items = [{'isSpacer':true}];
+
+  $scope.bardDragControlListeners = {
+      'accept': function(sourceItemHandleScope, destSortableScope){
+          return true; //override to determine drag is allowed or not. default is true.
+        },
+      'itemMoved': function(event){
+        //$log.debug('item moved');
+        //$log.debug(event);
+        },
+      'orderChanged': function(event){
+        $log.debug('order changed');
+        $log.debug(event);
+        },
+      //'containment': '#board',//optional param.
+      //'clone': false,//optional param for clone feature.
+      //'allowDuplicates': false //optional param allows duplicates to be dropped.
+    };
+  $scope.gapDragControlListeners = {
+      'accept': function(sourceItemHandleScope, destSortableScope){
+          return true; //override to determine drag is allowed or not. default is true.
+        },
+      'itemMoved': function(event){
+        //$log.debug('item moved');
+        //$log.debug(event);
+        },
+      'orderChanged': function(event){
+        $log.debug('order changed');
+        $log.debug(event);
+        },
+      //'containment': '#board',//optional param.
+      'clone': true,//optional param for clone feature.
+      //'allowDuplicates': false //optional param allows duplicates to be dropped.
+    };
+
   // Call browser to print schedule on paper
   $scope.print = function() {
     $window.print();
