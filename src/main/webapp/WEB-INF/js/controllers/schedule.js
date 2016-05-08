@@ -56,7 +56,7 @@ angular.module('sequoiaGroveApp')
 
 /************** Pure Functions **************/
 
-  $scope.items = [{'isSpacer':true}];
+  $scope.items = [{'isSpacer':true, 'index':-1}];
 
   $scope.boardDragControlListeners = {
       'accept': function(sourceItemHandleScope, destSortableScope){

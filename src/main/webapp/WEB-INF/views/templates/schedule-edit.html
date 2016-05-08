@@ -14,7 +14,7 @@
 
 <!-- shifts -->
 <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
-<li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
+<li data-ng-repeat="t in template track by $index" data-as-sortable-item ng-show="filterSchedule(t.pid)">
   <div class="row">
     <div ng-hide=true>
       {{t.newIndex = $index}}

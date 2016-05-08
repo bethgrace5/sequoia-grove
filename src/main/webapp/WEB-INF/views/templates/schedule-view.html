@@ -27,7 +27,7 @@
   </div>
 
   <!-- shifts -->
-  <div ng-repeat="t in template">
+  <div ng-repeat="t in template track by $index">
     <div class="row schedule-view-row"
       ng-show="filterByType(t.location, t.position, loggedInUser.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 

@@ -95,9 +95,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var temp =  _.map(schedule, function(item, index) {
         if(item.newIndex != item.index - spaceCount) {
           spaceCount++;
-          return [{'isSpacer':true}, item];
+          //$log.debug('spacer at index ',index);
+          return [{'isSpacer':true, 'index':-1}, item];
         }
         else {
+          //$log.debug('no spacer at index ', item.index);
           return item;
         }
       });
@@ -222,21 +224,29 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var saveShifts = function() {
     var deferred = $q.defer();
-      _.map(schedule, function(item, index) {
-      });
     shiftIndices = _.map(schedule, function(item, index) {
-      // use 'sid' and 'eid' to reuse a java class
-      if (!item.isSpacer ) {
-        return {'sid':item.sid, 'eid':item.newIndex};
-      }
-      else {
+      if (item.isSpacer == true) {
+        //$log.debug('found spacer');
         return {'sid':0, 'eid':0};
       }
+      else {
+        $log.debug('item.isSpacer = ',item.isSpacer);
+      // use 'sid' and 'eid' to reuse a java class
+      if (item.isSpacer == undefined) {
+        //$log.debug('would not insert spacer at index: ',index);
+      }
+      else {
+        $log.debug('insert spacer at index: ',index);
+      }
+        return {'sid':item.sid, 'eid':index};
+      }
     });
+    $log.debug(shiftIndices.length);
 
     shiftIndices = _.filter(shiftIndices, function(item, index) {
       return item.sid != 0;
     });
+    $log.debug(shiftIndices.length);
 
     $http({
       url: '/sequoiagrove/schedule/shiftIndices',
@@ -401,36 +411,45 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     updateShifts = [];
     deleteShifts = [];
     // add all shifts to delete list if they weren't already blank
-    _.map(schedule, function(t, index, list) {
-      if (t.mon.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.mon.val});
+    schedule = _.map(schedule, function(t, index, list) {
+      if(t.isSpacer == true) {
+        $log.debug('found spacer');
+        return {'isSpacer':true, 'index':-1};
       }
-      if (t.tue.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.tue.val});
+      else {
+        t.newIndex = index;
+        t.index = index;
+        if (t.mon.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.mon.val});
+        }
+        if (t.tue.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.tue.val});
+        }
+        if (t.wed.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.wed.val});
+        }
+        if (t.thu.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.thu.val});
+        }
+        if (t.fri.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.fri.val});
+        }
+        if (t.sat.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.sat.val});
+        }
+        if (t.sun.eid !== 0) {
+          deleteShifts.push({'sid':t.sid, 'date':header.sun.val});
+        }
+        // update template so view reflects changes
+        t.mon.name = ""; t.mon.eid = 0;
+        t.tue.name = ""; t.tue.eid = 0;
+        t.wed.name = ""; t.wed.eid = 0;
+        t.thu.name = ""; t.thu.eid = 0;
+        t.fri.name = ""; t.fri.eid = 0;
+        t.sat.name = ""; t.sat.eid = 0;
+        t.sun.name = ""; t.sun.eid = 0;
+        return t;
       }
-      if (t.wed.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.wed.val});
-      }
-      if (t.thu.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.thu.val});
-      }
-      if (t.fri.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.fri.val});
-      }
-      if (t.sat.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.sat.val});
-      }
-      if (t.sun.eid !== 0) {
-        deleteShifts.push({'sid':t.sid, 'date':header.sun.val});
-      }
-      // update template so view reflects changes
-      t.mon.name = ""; t.mon.eid = 0;
-      t.tue.name = ""; t.tue.eid = 0;
-      t.wed.name = ""; t.wed.eid = 0;
-      t.thu.name = ""; t.thu.eid = 0;
-      t.fri.name = ""; t.fri.eid = 0;
-      t.sat.name = ""; t.sat.eid = 0;
-      t.sun.name = ""; t.sun.eid = 0;
     });
     notifyObservers();
   }
