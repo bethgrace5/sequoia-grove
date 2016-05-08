@@ -48,13 +48,13 @@ angular.module('sequoiaGroveApp')
 
   $scope.items = [{'isSpacer':true}];
 
-  $scope.bardDragControlListeners = {
+  $scope.boardDragControlListeners = {
       'accept': function(sourceItemHandleScope, destSortableScope){
           return true; //override to determine drag is allowed or not. default is true.
         },
       'itemMoved': function(event){
-        //$log.debug('item moved');
-        //$log.debug(event);
+        $log.debug('item moved');
+        $log.debug(event);
         },
       'orderChanged': function(event){
         $log.debug('order changed');
@@ -69,8 +69,8 @@ angular.module('sequoiaGroveApp')
           return true; //override to determine drag is allowed or not. default is true.
         },
       'itemMoved': function(event){
-        //$log.debug('item moved');
-        //$log.debug(event);
+        $log.debug('item moved');
+        $log.debug(event);
         },
       'orderChanged': function(event){
         $log.debug('order changed');

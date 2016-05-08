@@ -70,6 +70,10 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/schedule/shiftIndices*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/schedule/template/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>

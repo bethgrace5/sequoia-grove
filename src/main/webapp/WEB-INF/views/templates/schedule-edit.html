@@ -16,6 +16,9 @@
 <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
 <li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
   <div class="row">
+    <div ng-hide=true>
+      {{t.index = $index}}
+    </div>
     <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
     <div class="col-sm-2 schedule-edit-task-names" ng-click="selectShift($index)">

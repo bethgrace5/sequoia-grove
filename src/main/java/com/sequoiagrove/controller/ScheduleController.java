@@ -84,6 +84,35 @@ public class ScheduleController {
       return "jsonTemplate";
   }
 
+  // Get current schedule template (current shifts) dd-mm-yyyy
+  @RequestMapping(value = "/schedule/shiftIndices")
+    public String saveShifts(Model model,  @RequestBody String data, @ModelAttribute("scope") List<String> permissions) {
+        // the token did not have the required permissions, return 403 status
+        if (!permissions.contains("manage-schedule")) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        // Parse the list of params to array of Strings
+        // reuse Scheduled class where sid = shift id and eid = index
+        Gson gson = new Gson();
+        Scheduled [] shiftChanges = gson.fromJson(data, Scheduled[].class);
+
+          for (Scheduled item : shiftChanges) {
+            try {
+              jdbcTemplate.update("update sequ_shift set index = ? where id = ?",
+                  item.getEid(), item.getSid());
+            }
+            catch(DataIntegrityViolationException e) {
+              System.out.println(e);
+              // do nothing
+            }
+          }
+        return "jsonTemplate";
+  }
+
+
 
   // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")

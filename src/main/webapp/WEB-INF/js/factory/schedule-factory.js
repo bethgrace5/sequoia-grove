@@ -19,6 +19,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var originalTemplate = [];
   var deleteShifts = [];
   var updateShifts = [];
+  var shiftIndices = [];
   var year = '';
   var monday  = '';
   var daysAgo = 0;
@@ -195,6 +196,26 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
       originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
     });
+  }
+
+  var saveShifts = function() {
+    var deferred = $q.defer();
+    shiftIndices = _.map(schedule, function(item, index) {
+      // use 'sid' and 'eid' to reuse a java class
+      return {'sid':item.sid, 'eid':item.index};
+    });
+    $log.debug(shiftIndices);
+    $http({
+      url: '/sequoiagrove/schedule/shiftIndices',
+      method: "POST",
+      data: shiftIndices
+    }).then(function(success) {
+      shiftIndices = [];
+      deferred.resolve(true);
+    },function (failure) {
+      deferred.reject(false);
+    });
+    return deferred.promise;
   }
 
   // calculate duration by using formatted time strings as input
@@ -466,6 +487,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
                 return deleteSchedule();
               }
             }).then( function(success) {
+               return saveShifts();
               // saved and then deleted
             }).then( function(success) {
               initSchedule().then(function(success) {
@@ -479,7 +501,15 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       else if (deleteShifts.length > 0) {
         deleteSchedule().then(function(success) {
-          deferred.resolve(success);
+           return saveShifts();
+        }).then(function(success){
+          initSchedule().then(function(success) {
+            countDays();
+            countHours();
+            buildWeekList();
+            notifyObservers();
+            deferred.resolve(success);
+          });
         },function(error) {
           deferred.reject(error);
         });
