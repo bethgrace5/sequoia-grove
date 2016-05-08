@@ -207,7 +207,8 @@ a:focus {
   /*background-color: #edf6f7;*/
   min-height: 70%;
   width: 90%;
-  min-width:1080px;
+  min-width:1090px;
+  margin-right: 13%;
 }
 .schedule-edit-panel-header div{
   min-width: 9%;
@@ -221,7 +222,7 @@ a:focus {
   margin-top: 75px;
   position:fixed;
   right: 0;
-  max-height: 70%;
+  max-height: 60%;
   overflow-y: scroll;
   width: 13%;
 }

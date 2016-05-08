@@ -210,7 +210,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return {'sid':0, 'eid':0};
       }
     });
-    $log.debug(shiftIndices);
     $http({
       url: '/sequoiagrove/schedule/shiftIndices',
       method: "POST",
