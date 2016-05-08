@@ -31,6 +31,10 @@
     <div class="row schedule-view-row"
       ng-show="filterByType(t.location, t.position, loggedInUser.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
 
+      <div ng-hide=true>
+        {{t.newIndex = $index}}
+      </div>
+
       <div ng-hide="t.isSpacer">
         <!-- shift title -->
         <div class="col-sm-2 col-sm-offset-0" >

@@ -93,9 +93,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // without any spacers.
     // index is the old index saved from the database
     var temp =  _.map(schedule, function(item, index) {
-        $log.debug('new index', item.newIndex, ' old index ', item.index);
         if(item.newIndex != item.index - spaceCount) {
-          $log.debug('insert spacer');
           spaceCount++;
           return [{'isSpacer':true}, item];
         }
@@ -284,6 +282,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // iterate the template to count hours for each employee
+  // FIXME, logic to count it incorrect, needs to iterate each day
   var countHours = function() {
     var count = [];
     _.map(schedule, function(item) {
@@ -293,9 +292,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var duration = 0;
       if (item.day !== 'sat' && item.day !== 'sun') { // get weeday duration
         duration = getShiftDuration(item.weekdayStart, item.weekdayEnd);
+        item = _.extend(item, {'weekdayDuration':duration});
       }
       else { //get weekend duration
         duration = getShiftDuration(item.weekendStart, item.weekendEnd);
+        item = _.extend(item, {'weekendDuration':duration});
       }
       count.push({'eid':item.mon.eid, 'duration':duration});
       count.push({'eid':item.tue.eid, 'duration':duration});
