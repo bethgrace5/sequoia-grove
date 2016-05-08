@@ -53,12 +53,12 @@ angular.module('sequoiaGroveApp')
           return true; //override to determine drag is allowed or not. default is true.
         },
       'itemMoved': function(event){
-        $log.debug('item moved');
-        $log.debug(event);
+        scheduleFactory.setMovedShifts();
+        //$log.debug(event);
         },
       'orderChanged': function(event){
-        $log.debug('order changed');
-        $log.debug(event);
+        scheduleFactory.setMovedShifts();
+        //$log.debug(event);
         },
       //'containment': '#board',//optional param.
       //'clone': false,//optional param for clone feature.
@@ -69,12 +69,12 @@ angular.module('sequoiaGroveApp')
           return true; //override to determine drag is allowed or not. default is true.
         },
       'itemMoved': function(event){
-        $log.debug('item moved');
-        $log.debug(event);
+        scheduleFactory.setMovedShifts();
+        //$log.debug(event);
         },
       'orderChanged': function(event){
-        $log.debug('order changed');
-        $log.debug(event);
+        scheduleFactory.setMovedShifts();
+        //$log.debug(event);
         },
       //'containment': '#board',//optional param.
       'clone': true,//optional param for clone feature.

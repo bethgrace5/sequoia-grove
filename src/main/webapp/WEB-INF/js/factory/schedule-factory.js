@@ -23,6 +23,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var year = '';
   var monday  = '';
   var daysAgo = 0;
+  var movedShifts = false;
 
 
   //call this when you know 'foo' has been changed
@@ -202,7 +203,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var deferred = $q.defer();
     shiftIndices = _.map(schedule, function(item, index) {
       // use 'sid' and 'eid' to reuse a java class
-      return {'sid':item.sid, 'eid':item.index};
+      if (item.sid) {
+        return {'sid':item.sid, 'eid':item.index};
+      }
+      else {
+        return {'sid':0, 'eid':0};
+      }
     });
     $log.debug(shiftIndices);
     $http({
@@ -229,6 +235,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var countDays = function() {
     var shifts = [[],[],[],[],[],[],[]];
     _.map(schedule, function(item) { // collect employee names for each day
+      if(item.isSpacer) {
+        return;
+      }
       shifts[0] = _.union(shifts[0], [item.mon.eid]);
       shifts[1] = _.union(shifts[1], [item.tue.eid]);
       shifts[2] = _.union(shifts[2], [item.wed.eid]);
@@ -247,6 +256,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var countHours = function() {
     var count = [];
     _.map(schedule, function(item) {
+      if(item.isSpacer) {
+        return;
+      }
       var duration = 0;
       if (item.day !== 'sat' && item.day !== 'sun') { // get weeday duration
         duration = getShiftDuration(item.weekdayStart, item.weekdayEnd);
@@ -476,8 +488,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
     service.changesMade    = function() {
-      return (updateShifts.length + deleteShifts.length) > 0;
+      return ((updateShifts.length + deleteShifts.length) > 0) || movedShifts;
     };
+    service.setMovedShifts   = function() { movedShifts = true; notifyObservers() };
     service.saveSchedule = function() {
       var deferred = $q.defer();
       if (updateShifts.length > 0) {
@@ -512,6 +525,15 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           });
         },function(error) {
           deferred.reject(error);
+        });
+      }
+      else {
+        saveShifts().then(function(success) {
+            countDays();
+            countHours();
+            buildWeekList();
+            notifyObservers();
+            deferred.resolve(success);
         });
       }
 
