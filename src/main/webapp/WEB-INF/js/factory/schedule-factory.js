@@ -88,20 +88,24 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var insertSpacers = function() {
     $timeout(function() {
     var i = 0;
-      _.map(schedule, function(item, index) {
-        //$log.debug('new index', item.newIndex, ' old index ', item.index);
+    var spaceCount = 0;
+    // newIndex is the one currently positioned on the schedule
+    // without any spacers.
+    // index is the old index saved from the database
+    var temp =  _.map(schedule, function(item, index) {
+        $log.debug('new index', item.newIndex, ' old index ', item.index);
+        if(item.newIndex != item.index - spaceCount) {
+          $log.debug('insert spacer');
+          spaceCount++;
+          return [{'isSpacer':true}, item];
+        }
+        else {
+          return item;
+        }
       });
+    schedule = _.flatten(temp, true);
+    notifyObservers();
     }, 1000);
-    //$log.debug(schedule);
-      //if(item.idx != i) {
-        //$log.debug('adding spacer');
-        //return [{'isSpacer':true}, item];
-      //}
-      //else {
-        //i++;
-        //return item;
-      //}
-    //$log.debug(_.flatten(sch, true));
   }
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
