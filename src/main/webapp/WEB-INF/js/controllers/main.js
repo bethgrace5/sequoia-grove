@@ -348,7 +348,7 @@ angular.module('sequoiaGroveApp')
           $scope.isPublished = success.isPublished;
           // this will reload the employees and their availability,
           // and check it against the current schedule
-          $rootScope.broadcast('editEmployee');
+          $rootScope.$broadcast('editEmployee');
           $scope.loadingWeek = false;
         });
   }

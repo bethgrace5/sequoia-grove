@@ -184,6 +184,7 @@ angular.module('sequoiaGroveApp')
     scheduleFactory.saveSchedule().then(
       function(success) {
         $scope.saving = false;
+        $rootScope.$broadcast('editEmployee');
       });
   }
 
@@ -198,6 +199,7 @@ angular.module('sequoiaGroveApp')
     scheduleFactory.importWeek(week).then(
       function(success) {
         $scope.saving = false;
+        $rootScope.$broadcast('editEmployee');
       });
   }
 
@@ -208,9 +210,6 @@ angular.module('sequoiaGroveApp')
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
-    $timeout(function() {
-      $scope.initAvailSchedule();
-    });
   }
 
   $scope.initAvailSchedule();
