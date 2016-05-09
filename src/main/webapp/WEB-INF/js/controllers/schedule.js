@@ -20,6 +20,7 @@ angular.module('sequoiaGroveApp')
         $translate,
         $mdDialog,
         scheduleFactory,
+        userFactory,
         localStorageService) {
 
 
@@ -129,40 +130,38 @@ angular.module('sequoiaGroveApp')
 
   // get if employee is available
   $scope.employeeIsAvailable = function(attrs, employee) {
-    var avail = [];
-    var isAvailable = false;
+    return userFactory.isAvailable( 
+        employee.id, attrs.day, attrs.shiftstart, attrs.shiftend);
+  }
 
-    // 1. get employee availability
-    avail = _.map(employee.avail[attrs.day], function(a) {
-      return {
-        'start':moment(attrs.date +' '+ a.start, 'DD-MM-YYYY HHmm'),
-        'end':moment(attrs.date +' '+ a.end, 'DD-MM-YYYY HHmm')
+  $scope.initAvailSchedule = function() {
+    $scope.template = _.map ($scope.template, function(item, index) {
+      if (item.isSpacer) {
+        return {'isSpacer':true, 'index':-1};
       }
-    });
-    if (avail.length <=0 ) {
-      return false;
-    }
-
-    // 2. determine shift duration times
-    var shiftStart = moment(attrs.date + ' ' + attrs.shiftstart, 'DD-MM-YYYY HHmm');
-    var shiftEnd = moment(attrs.date + ' ' + attrs.shiftend, 'DD-MM-YYYY HHmm');
-
-    // 3. check employee availability against shift duration
-    _.map(avail, function(a, index) {
-      if ((a.start.isBefore(shiftStart, 'minute') || a.start.isSame(shiftStart, 'minute')) && (a.end.isAfter(shiftEnd, 'minute') || a.end.isSame(shiftEnd, 'minute'))) {
-        isAvailable = true;
+      else {
+        item.mon = _.extend(item.mon, {'available': userFactory.isAvailable(item.mon.eid, 'mon', item.weekdayStart, item.weekdayEnd)});
+        item.tue = _.extend(item.tue, {'available': userFactory.isAvailable(item.tue.eid, 'tue', item.weekdayStart, item.weekdayEnd)});
+        item.wed = _.extend(item.wed, {'available': userFactory.isAvailable(item.wed.eid, 'wed', item.weekdayStart, item.weekdayEnd)});
+        item.thu = _.extend(item.thu, {'available': userFactory.isAvailable(item.thu.eid, 'thu', item.weekdayStart, item.weekdayEnd)});
+        item.fri = _.extend(item.fri, {'available': userFactory.isAvailable(item.fri.eid, 'fri', item.weekdayStart, item.weekdayEnd)});
+        item.sat = _.extend(item.sat, {'available': userFactory.isAvailable(item.sat.eid, 'sat', item.weekdayStart, item.weekdayEnd)});
+        item.sun = _.extend(item.sun, {'available': userFactory.isAvailable(item.sun.eid, 'sun', item.weekdayStart, item.weekdayEnd)});
       }
+      return item;
     });
-    return isAvailable;
   }
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId) {
+  $scope.inputStatus = function(id, shiftId, available) {
     var style = 'form-control schedule-edit-input';
 
     // Highlight all occurences of the employee that was clicked
     if (id == $scope.selectedId) {
       style += ' schedule-edit-highlight';
+    }
+    if (available == false) {
+      style += ' schedule-edit-input-error';
     }
     // Dummy Error/Warning Application
     /* // apply an error
@@ -209,7 +208,18 @@ angular.module('sequoiaGroveApp')
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
+    $timeout(function() {
+      $scope.initAvailSchedule();
+    });
   }
+
+  $scope.initAvailSchedule();
   scheduleFactory.registerObserverCallback(updateChangesMade);
+
+  $rootScope.$on('editEmployee', function(event, args) {
+    userFactory.init();
+    $scope.initAvailSchedule();
+  });
+
 
 });

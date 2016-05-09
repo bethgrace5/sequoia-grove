@@ -91,6 +91,10 @@ a:focus {
 .position-button-active {
   background-color: yellow;
 }
+.schedule-console {
+  margin-right: 20px;
+  margin-left: 20px;
+}
 
 /********************************************
     05. Schedule_View
@@ -486,7 +490,7 @@ a:focus {
 
 .as-sortable-item {
     border: none;
-    background-color: #ffffff;
+    background-color: transparent;;
 }
 
 .as-sortable-item-handle {

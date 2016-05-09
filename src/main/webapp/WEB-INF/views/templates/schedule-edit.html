@@ -1,16 +1,24 @@
 
-
-<ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
-  <li data-ng-repeat="item in items" data-as-sortable-item>
-    <div data-as-sortable-item-handle>
-      <button type="button" style="cursor:inherit" class="btn btn-default" >
-        <!--ng-click="template.unshift({'isSpacer':true})"-->
-        <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-        Spacer
-      </button>
+<div class="well well-sm schedule-console">
+  <div class="row">
+    <div class="col-sm-2">
+      <ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
+        <li data-ng-repeat="item in items" data-as-sortable-item>
+          <div data-as-sortable-item-handle>
+            <button type="button" style="cursor:inherit" class="btn btn-default" >
+              <!--ng-click="template.unshift({'isSpacer':true})"-->
+              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+              Spacer
+            </button>
+          </div>
+        </li>
+      </ul>
     </div>
-  </li>
-</ul>
+    <div class="col-sm-9" >
+      Info
+    </div>
+  </div>
+</div>
 
 <!-- shifts -->
 <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
@@ -22,7 +30,7 @@
       <div class="col-sm-2 schedule-edit-task-names">
         <span>{{t.tname}}</span>
         <div ng-show="t.isSpacer">
-          <button type="button" style="cursor:inherit;" class="btn btn-info" >
+          <button type="button" style="cursor:inherit;" class="btn btn-default" >
             <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
             Spacer
           </button>
@@ -52,7 +60,7 @@
         ng-click="selectEid(t.mon.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.mon.eid, t.sid)"
+        ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available)"
         ng-model="t.mon.name">
       </div>
 
@@ -69,7 +77,7 @@
         ng-click="selectEid(t.tue.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.tue.eid, t.sid)"
+        ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available)"
         ng-model="t.tue.name">
       </div>
 
@@ -86,7 +94,7 @@
         ng-click="selectEid(t.wed.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.wed.eid, t.sid)"
+        ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available)"
         ng-model="t.wed.name">
       </div>
 
@@ -103,7 +111,7 @@
         ng-click="selectEid(t.thu.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.thu.eid, t.sid)"
+        ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available)"
         ng-model="t.thu.name">
       </div>
 
@@ -120,7 +128,7 @@
         ng-click="selectEid(t.fri.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.fri.eid, t.sid)"
+        ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available)"
         ng-model="t.fri.name">
       </div>
 
@@ -142,7 +150,7 @@
         ng-click="selectEid(t.sat.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.sat.eid, t.sid)"
+        ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available)"
         ng-model="t.sat.name">
       </div>
 
@@ -159,7 +167,7 @@
         ng-click="selectEid(t.sun.eid)"
         type="text"
         ng-disabled="saving"
-        ng-class="inputStatus(t.sun.eid, t.sid)"
+        ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available)"
         ng-model="t.sun.name">
       </div>
     </div>

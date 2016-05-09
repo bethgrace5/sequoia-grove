@@ -158,6 +158,7 @@ angular.module('sequoiaGroveApp')
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
+          $rootScope.$broadcast('editEmployee');
         }).error(function(data, status) {
           $log.debug(data, status);
         });
@@ -223,6 +224,7 @@ angular.module('sequoiaGroveApp')
             method: "POST"
         }).success(function(data, status) {
           $scope.saving = false;
+          $rootScope.$broadcast('editEmployee');
         });
     }
 

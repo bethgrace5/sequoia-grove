@@ -11,6 +11,9 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
   // Exposed to users with 'manage schedule' privelage through service
   var users = [];
 
+  // internal variables
+  var availMap = {};
+
   //call this when you know 'foo' has been changed
   var notifyObservers = function(){
     angular.forEach(observerCallbacks, function(callback){
@@ -51,6 +54,70 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     return deferred.promise;
   }
 
+  var buildAvailability = function() {
+    // create map with key as eid and value as each object
+    availMap = _.indexBy(users, function(item, index) {
+      return item.id;
+    });
+  
+    // narrow each object to only have availability
+    availMap = _.mapObject(availMap, function(val, key) {
+      return _.pick(val, 'avail');
+    });
+
+    // change strings to moment objects
+    availMap = _.mapObject(availMap, function(val, key) {
+      return {
+        'mon':_.map(val.avail['mon'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'tue':_.map(val.avail['tue'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'wed':_.map(val.avail['wed'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'thu':_.map(val.avail['thu'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'fri':_.map(val.avail['fri'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'sat':_.map(val.avail['sat'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        }),
+        'sun':_.map(val.avail['sun'], function(d, index) {
+          return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
+        })
+      }
+    }) 
+    //$log.debug(isAvailable(3, 'mon', '0700', '1500'));
+  }
+
+  var isAvailable = function(eid, day, start, end) {
+    var isAvailable = false;
+
+    // 1. get availability
+    if (availMap[eid]) {
+      var avail = availMap[eid][day];
+    }
+    else {
+      return false;
+    }
+
+    // 2. determine shift duration times
+    var shiftStart = moment(start, 'HHmm');
+    var shiftEnd = moment(end, 'HHmm');
+
+    // 3. check employee availability against shift duration
+    _.map(avail, function(a, index) {
+      if ((a.start.isBefore(shiftStart, 'minute') || a.start.isSame(shiftStart, 'minute')) && (a.end.isAfter(shiftEnd, 'minute') || a.end.isSame(shiftEnd, 'minute'))) {
+        isAvailable = true;
+      }
+    });
+    return isAvailable;
+  }
+
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
@@ -58,11 +125,17 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
       var deferred = $q.defer();
       initUsers().then(
           function(success) {
-            deferred.resolve(success);
+            $timeout(function() {
+              buildAvailability();
+              deferred.resolve(success);
+            });
           });
       return deferred.promise;
     }
     service.getUsers = function() { return users};
+    service.isAvailable = function(eid, day, start, end) { 
+      return isAvailable(eid, day, start, end)
+    };
     // TODO include add availability, remove availabilty, add postion, remove position
     // update employee, deactivate employee, activate employee
   }

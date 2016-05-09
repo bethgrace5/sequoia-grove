@@ -92,13 +92,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // index is the old index saved from the database
     var temp =  _.map(schedule, function(item, index) {
         if(index != item.index - spaceCount) {
-          $log.debug(item.index < 0);
           spaceCount++;
-          //$log.debug('spacer at index ',index);
           return [{'isSpacer':true, 'index':-1}, item];
         }
         else {
-          //$log.debug('no spacer at index ', item.index);
           return item;
         }
       });
@@ -147,7 +144,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var saveSchedule = function() {
     var deferred = $q.defer();
     if(updateShifts.length <= 0) {
-      $log.debug('no changes to save');
       deferred.resolve();
       return deferred.promise
     }
@@ -223,21 +219,17 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var deferred = $q.defer();
     shiftIndices = _.map(schedule, function(item, index) {
       if (item.isSpacer == true) {
-        $log.debug( "space");
         return {'sid':0, 'eid':0};
       }
       else {
-        $log.debug( index);
       // use 'sid' and 'eid' to reuse a java class
         return {'sid':item.sid, 'eid':index};
       }
     });
-    $log.debug(shiftIndices.length);
 
     shiftIndices = _.filter(shiftIndices, function(item, index) {
       return item.sid != 0;
     });
-    $log.debug(shiftIndices.length);
 
     $http({
       url: '/sequoiagrove/schedule/shiftIndices',
@@ -404,7 +396,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // add all shifts to delete list if they weren't already blank
     schedule = _.map(schedule, function(t, index, list) {
       if(t.isSpacer == true) {
-        $log.debug('found spacer');
         return {'isSpacer':true, 'index':-1};
       }
       else {
