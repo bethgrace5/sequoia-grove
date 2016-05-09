@@ -21,7 +21,7 @@
       tableName="sequ_shift"
       columnDataType="integer"
       columnName="index"
-      defaultValue="0" />
+      defaultValue="null" />
 
     <sql>
       drop view sequ_sch_view;

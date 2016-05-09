@@ -89,11 +89,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     $timeout(function() {
     var i = 0;
     var spaceCount = 0;
-    // newIndex is the one currently positioned on the schedule
-    // without any spacers.
     // index is the old index saved from the database
     var temp =  _.map(schedule, function(item, index) {
-        if(item.newIndex != item.index - spaceCount) {
+        if(index != item.index - spaceCount) {
+          $log.debug(item.index < 0);
           spaceCount++;
           //$log.debug('spacer at index ',index);
           return [{'isSpacer':true, 'index':-1}, item];
@@ -147,6 +146,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Save Schedule
   var saveSchedule = function() {
     var deferred = $q.defer();
+    if(updateShifts.length <= 0) {
+      $log.debug('no changes to save');
+      deferred.resolve();
+      return deferred.promise
+    }
+
     // remove any blank names from update list
     updateShifts = _.filter(updateShifts, function(shift) {
       return (shift.eid !== 0);
@@ -154,7 +159,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // don't actually save if in dev mode
     if($rootScope.devMode) {
       updateShifts = [];
-      deleteSchedule();
       return;
     }
     $http({
@@ -166,10 +170,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         // clear update shifts list
         updateShifts = [];
         deferred.resolve(success);
-        //deleteSchedule();
       }
-    },function(error) {
-      deferred.reject(error);
     });
     return deferred.promise;
   }
@@ -181,6 +182,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Delete these shift schedulings
   var deleteSchedule = function() {
     var deferred = $q.defer();
+    if(deleteShifts.length <= 0) {
+      deferred.resolve();
+      return deferred.promise
+    }
     // don't actually delete if in dev mode
     if($rootScope.devMode) {
       deleteShifts = [];
@@ -193,16 +198,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     }).then( function(success) {
       if (success.status == 200) {
         deleteShifts = []; // clear delete shifts list
-        //update schedule template
-        initSchedule().then(function(success) {
-          deferred.resolve(success);
-          notifyObservers();
-        },function(failure) {
-          deferred.reject(error);
-        });
+        deferred.resolve(success);
       }
-    },function(error) {
-        deferred.reject(error);
     });
     return deferred.promise;
   }
@@ -226,18 +223,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var deferred = $q.defer();
     shiftIndices = _.map(schedule, function(item, index) {
       if (item.isSpacer == true) {
-        //$log.debug('found spacer');
+        $log.debug( "space");
         return {'sid':0, 'eid':0};
       }
       else {
-        $log.debug('item.isSpacer = ',item.isSpacer);
+        $log.debug( index);
       // use 'sid' and 'eid' to reuse a java class
-      if (item.isSpacer == undefined) {
-        //$log.debug('would not insert spacer at index: ',index);
-      }
-      else {
-        $log.debug('insert spacer at index: ',index);
-      }
         return {'sid':item.sid, 'eid':index};
       }
     });
@@ -417,8 +408,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return {'isSpacer':true, 'index':-1};
       }
       else {
-        t.newIndex = index;
-        t.index = index;
         if (t.mon.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.mon.val});
         }
@@ -544,50 +533,23 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.setMovedShifts   = function() { movedShifts = true; notifyObservers() };
     service.saveSchedule = function() {
       var deferred = $q.defer();
-      if (updateShifts.length > 0) {
-        saveSchedule().then(
-            function(success) {
-              if (deleteShifts.length > 0) {
-                return deleteSchedule();
-              }
-            }).then( function(success) {
-               return saveShifts();
-              // saved and then deleted
-            }).then( function(success) {
-              initSchedule().then(function(success) {
-                countDays();
-                countHours();
-                buildWeekList();
-                notifyObservers();
-                deferred.resolve(success);
-              });
-            });
-      }
-      else if (deleteShifts.length > 0) {
-        deleteSchedule().then(function(success) {
-           return saveShifts();
-        }).then(function(success){
-          initSchedule().then(function(success) {
-            countDays();
-            countHours();
-            buildWeekList();
-            notifyObservers();
-            deferred.resolve(success);
-          });
-        },function(error) {
-          deferred.reject(error);
-        });
-      }
-      else {
-        saveShifts().then(function(success) {
-            countDays();
-            countHours();
-            buildWeekList();
-            notifyObservers();
-            deferred.resolve(success);
-        });
-      }
-
+      // Save Shift Indices
+      saveShifts().then(function(success) {
+        // Save Deleted cells
+        return deleteSchedule();
+      }).then(function(success) {
+        // Save Updated cells
+        return saveSchedule();
+      }).then(function(success) {
+        // get updated schedule back from database
+        return initSchedule();
+      }).then(function(success) {
+        countDays();
+        countHours();
+        buildWeekList();
+        notifyObservers();
+        deferred.resolve(success);
+      });
       return deferred.promise;
     };
   }

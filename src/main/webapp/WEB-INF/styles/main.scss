@@ -15,6 +15,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   07. Site_Header_and_Navbar
   08. Employee_List
   09. Default_settings_Yeoman_put_in
+  10. style for ng-sortable
 
 *********************************************/
 
@@ -171,12 +172,6 @@ a:focus {
   font-size: 1em;
   margin:0;
   padding:0;
-}
-.schedule-edit-task-selected{
-  background-color: #66ffd7;
-  border-radius: 0.3em;
-  padding-left: 3px;
-  padding-right: 3px;
 }
 .schedule-edit{
   font-size: 1em;
@@ -478,4 +473,35 @@ a:focus {
   //background-color: #78FA89;
 }
 
+/* ******************************************* */
+/* 10. style for ng-sortable */
+/* ******************************************* */
+
+.as-sortable-item, .as-sortable-placeholder {
+    min-height: 20px;
+    margin: 0;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.as-sortable-item {
+    border: none;
+    background-color: #ffffff;
+}
+
+.as-sortable-item-handle {
+}
+
+.as-sortable-placeholder {
+    border: 1px dashed darkgrey;
+    box-sizing: border-box;
+    background-color: #dbdbdb;
+}
+
+.as-sortable-drag {
+    opacity: 0.7;
+}
+
+.as-sortable-hidden {
+}
 

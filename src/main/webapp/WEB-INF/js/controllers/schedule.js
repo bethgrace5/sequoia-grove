@@ -60,6 +60,8 @@ angular.module('sequoiaGroveApp')
 
   $scope.boardDragControlListeners = {
       'accept': function(sourceItemHandleScope, destSortableScope){
+        //$log.debug(sourceItemHandleScope);
+        //$log.debug(destSortableScope);
           return true; //override to determine drag is allowed or not. default is true.
         },
       'itemMoved': function(event){
@@ -70,6 +72,9 @@ angular.module('sequoiaGroveApp')
         scheduleFactory.setMovedShifts();
         //$log.debug(event);
         },
+      'removeItem': function(index) {
+        return false;
+      }
       //'containment': '#board',//optional param.
       //'clone': false,//optional param for clone feature.
       //'allowDuplicates': false //optional param allows duplicates to be dropped.
