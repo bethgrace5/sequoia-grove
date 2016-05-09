@@ -2,17 +2,6 @@
 <div class="well well-sm schedule-console">
   <div class="row">
     <div class="col-sm-2">
-      <ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
-        <li data-ng-repeat="item in items" data-as-sortable-item>
-          <div data-as-sortable-item-handle>
-            <button type="button" style="cursor:inherit" class="btn btn-default" >
-              <!--ng-click="template.unshift({'isSpacer':true})"-->
-              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-              Spacer
-            </button>
-          </div>
-        </li>
-      </ul>
     </div>
     <div class="col-sm-9" >
       Info
@@ -20,6 +9,17 @@
   </div>
 </div>
 
+<ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
+  <li data-ng-repeat="item in items" data-as-sortable-item>
+    <div data-as-sortable-item-handle>
+      <button type="button" style="cursor:inherit" class="btn btn-default" >
+        <!--ng-click="template.unshift({'isSpacer':true})"-->
+        <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+        Spacer
+      </button>
+    </div>
+  </li>
+</ul>
 <!-- shifts -->
 <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
 <li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
