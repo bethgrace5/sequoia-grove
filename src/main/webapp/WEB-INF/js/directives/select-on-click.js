@@ -40,7 +40,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           $scope.template[attrs.idx][attrs.day].eid = 0;
         }
         var employee = $scope.getEmployeeByname(this.value);;
-        // Found Employee!
+        // found employee!
         if (employee.id !== 0) {
           // remove warning class and update template with new id
           element.context.classList.remove('schedule-edit-input-warn');
@@ -49,9 +49,22 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           // 1. Check availability
           if ($scope.employeeIsAvailable(attrs, employee)) {
             element.context.classList.add('schedule-edit-highlight');
+            if (_.has($scope.template[attrs.day], "available")) {
+              $scope.template[attrs.idx][attrs.day].available = true;
+            }
+            else {
+              $scope.template[attrs.idx][attrs.day] =
+                _.extend($scope.template[attrs.idx][attrs.day], {'available':true});
+            }
           }
           else { // the employee is not available
             element.context.classList.add('schedule-edit-input-error');
+            if (_.has($scope.template[attrs.day], "available")) {
+              $scope.template[attrs.idx][attrs.day].available = false;
+            }
+            else {
+              $scope.template[attrs.idx][attrs.day] = _.extend($scope.template[attrs.idx][attrs.day], {'available':false});
+            }
           }
 
           // 2. update change lists
@@ -61,7 +74,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           element.context.classList.add('schedule-edit-input-warn');
         }
 
-        $scope.selectEid(employee.id);
+        $scope.selectEid($scope.template[attrs.idx], attrs.day);
         $scope.$apply();
       }); // end 'keyup' function
 
