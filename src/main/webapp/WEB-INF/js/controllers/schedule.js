@@ -46,6 +46,8 @@ angular.module('sequoiaGroveApp')
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
+  $scope.errors = {'available': true};
+  $scope.selectedName = '';
 
   $scope.autoGenOptions = {
     "mon": "",
@@ -102,8 +104,23 @@ angular.module('sequoiaGroveApp')
     $window.print();
   }
 
-  $scope.selectEid = function(id) {
-    $scope.selectedId = id;
+  $scope.selectEid = function(t, day) {
+    if (t[day]) {
+      $scope.selectedId = t[day].eid;
+      if ($scope.selectedId === 0) {
+        $scope.errors.available = true;
+        $scope.selectedId = 0;
+      }
+      else {
+        $scope.selectedName = t[day].name;
+        $scope.errors.available = t[day].available;
+      }
+    }
+    else {
+      // t is undefined, set to default
+      $scope.errors.available = true;
+      $scope.selectedId = 0;
+    }
   }
 
   // Filter schedule by selected position

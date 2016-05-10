@@ -15,7 +15,7 @@
       </ul>
     </div>
     <div class="col-sm-9" >
-      Info
+      <p ng-hide="errors.available"> {{selectedName}} is not available </p>
     </div>
   </div>
 </div>
@@ -57,7 +57,7 @@
         day="mon"
         shiftStart={{t.weekdayStart}}
         shiftEnd={{t.weekdayEnd}}
-        ng-click="selectEid(t.mon.eid)"
+        ng-click="selectEid(t, 'mon')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available)"
@@ -74,7 +74,7 @@
         day="tue"
         shiftStart={{t.weekdayStart}}
         shiftEnd={{t.weekdayEnd}}
-        ng-click="selectEid(t.tue.eid)"
+        ng-click="selectEid(t, 'tue')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available)"
@@ -91,7 +91,7 @@
         day="wed"
         shiftStart={{t.weekdayStart}}
         shiftEnd={{t.weekdayEnd}}
-        ng-click="selectEid(t.wed.eid)"
+        ng-click="selectEid(t, 'wed')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available)"
@@ -108,7 +108,7 @@
         day="thu"
         shiftStart={{t.weekdayStart}}
         shiftEnd={{t.weekdayEnd}}
-        ng-click="selectEid(t.thu.eid)"
+        ng-click="selectEid(t, 'thu')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available)"
@@ -125,7 +125,7 @@
         day="fri"
         shiftStart={{t.weekdayStart}}
         shiftEnd={{t.weekdayEnd}}
-        ng-click="selectEid(t.fri.eid)"
+        ng-click="selectEid(t, 'fri')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available)"
@@ -147,7 +147,7 @@
         day="sat"
         shiftStart={{t.weekendStart}}
         shiftEnd={{t.weekendEnd}}
-        ng-click="selectEid(t.sat.eid)"
+        ng-click="selectEid(t, 'sat')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available)"
@@ -164,7 +164,7 @@
         day="sun"
         shiftStart={{t.weekendStart}}
         shiftEnd={{t.weekendEnd}}
-        ng-click="selectEid(t.sun.eid)"
+        ng-click="selectEid(t, 'sun')"
         type="text"
         ng-disabled="saving"
         ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available)"
