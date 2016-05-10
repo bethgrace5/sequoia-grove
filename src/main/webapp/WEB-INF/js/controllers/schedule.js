@@ -46,8 +46,12 @@ angular.module('sequoiaGroveApp')
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
-  $scope.errors = {'available': true};
-  $scope.selectedName = '';
+  $scope.errors = {
+    'selectedName':'',
+    'available':true, 
+    'hasPosition':true,
+    'selectedPosition':''
+  };
 
   $scope.autoGenOptions = {
     "mon": "",
@@ -104,21 +108,37 @@ angular.module('sequoiaGroveApp')
     $window.print();
   }
 
+  // set selected id when clicking employee list in schedule
+  $scope.selectFromList = function(eid) {
+    $scope.selectedId = eid;
+    // clear errors
+    $scope.errors = {
+      'selectedName':'',
+      'available':true, 
+      'hasPosition':true,
+      'selectedPosition':''
+    };
+  }
+
   $scope.selectEid = function(t, day) {
     if (t[day]) {
       $scope.selectedId = t[day].eid;
       if ($scope.selectedId === 0) {
         $scope.errors.available = true;
+        $scope.errors.hasPosition = true;
         $scope.selectedId = 0;
       }
       else {
-        $scope.selectedName = t[day].name;
+        $scope.errors.selectedName = t[day].name;
+        $scope.errors.selectedPosition = t.position;
         $scope.errors.available = t[day].available;
+        $scope.errors.hasPosition = t[day].hasPosition;
       }
     }
     else {
       // t is undefined, set to default
       $scope.errors.available = true;
+      $scope.errors.hasPosition = true;
       $scope.selectedId = 0;
     }
   }
@@ -147,10 +167,22 @@ angular.module('sequoiaGroveApp')
 
   // get if employee is available
   $scope.employeeIsAvailable = function(attrs, employee) {
-    return userFactory.isAvailable( 
+    return userFactory.isAvailable(
         employee.id, attrs.day, attrs.shiftstart, attrs.shiftend);
   }
 
+  $scope.employeeHasPosition = function(uid, pid) {
+    if (pid === -1) {
+      pid = $scope.selectedPid;
+    }
+    if (pid === 0) {
+      return true;
+    }
+    return userFactory.hasPosition(uid, pid);
+  }
+
+  // filter schedule to determine if the scheduled employee has availability
+  // adds 'availabe' attribute to that day for error checking
   $scope.initAvailSchedule = function() {
     $scope.template = _.map ($scope.template, function(item, index) {
       if (item.isSpacer) {
@@ -169,8 +201,30 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  // filter schedule to determine if the scheduled employee has the position
+  // adds 'hasPosition' attribute to that day for error checking
+  $scope.initPositionsSchedule = function() {
+    $scope.template = _.map ($scope.template, function(item, index) {
+      if (item.isSpacer) {
+        return {'isSpacer':true, 'index':-1};
+      }
+      else {
+        item.mon = _.extend(item.mon, {'hasPosition': userFactory.hasPosition(item.mon.eid, item.pid)});
+        item.tue = _.extend(item.tue, {'hasPosition': userFactory.hasPosition(item.tue.eid, item.pid)});
+        item.wed = _.extend(item.wed, {'hasPosition': userFactory.hasPosition(item.wed.eid, item.pid)});
+        item.thu = _.extend(item.thu, {'hasPosition': userFactory.hasPosition(item.thu.eid, item.pid)});
+        item.fri = _.extend(item.fri, {'hasPosition': userFactory.hasPosition(item.fri.eid, item.pid)});
+        item.sat = _.extend(item.sat, {'hasPosition': userFactory.hasPosition(item.sat.eid, item.pid)});
+        item.sun = _.extend(item.sun, {'hasPosition': userFactory.hasPosition(item.sun.eid, item.pid)});
+      }
+      return item;
+    });
+  }
+
+
+
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId, available) {
+  $scope.inputStatus = function(id, shiftId, available, hasPosition) {
     var style = 'form-control schedule-edit-input';
 
     // Highlight all occurences of the employee that was clicked
@@ -178,6 +232,9 @@ angular.module('sequoiaGroveApp')
       style += ' schedule-edit-highlight';
     }
     if (available == false) {
+      style += ' schedule-edit-input-error';
+    }
+    if (hasPosition == false) {
       style += ' schedule-edit-input-error';
     }
     // Dummy Error/Warning Application
@@ -230,11 +287,14 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.initAvailSchedule();
+  $scope.initPositionsSchedule();
+
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
   $rootScope.$on('editEmployee', function(event, args) {
     userFactory.init();
     $scope.initAvailSchedule();
+    $scope.initPositionsSchedule();
   });
 
 

@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory, userFactory) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', 'userFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory, userFactory) {
   return {
     restrict: 'A',
     scope: false,
@@ -67,7 +67,31 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             }
           }
 
-          // 2. update change lists
+          // 2. check that they have the position
+          var hasPosition = userFactory.hasPosition(parseInt(employee.id), parseInt(attrs.pid));
+          if (hasPosition) {
+            $log.debug('employee has position');
+            element.context.classList.add('schedule-edit-highlight');
+            if (_.has($scope.template[attrs.day], "hasPosition")) {
+              $scope.template[attrs.idx][attrs.day].hasPosition = true;
+            }
+            else {
+              $scope.template[attrs.idx][attrs.day] =
+                _.extend($scope.template[attrs.idx][attrs.day], {'hasPosition':true});
+            }
+          }
+          else {
+            $log.debug('employee does not have position');
+            element.context.classList.add('schedule-edit-input-error');
+            if (_.has($scope.template[attrs.day], "hasPosition")) {
+              $scope.template[attrs.idx][attrs.day].hasPosition = false;
+            }
+            else {
+              $scope.template[attrs.idx][attrs.day] = _.extend($scope.template[attrs.idx][attrs.day], {'hasPosition':false});
+            }
+          }
+
+          // 3. update change lists
           scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied

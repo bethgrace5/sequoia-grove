@@ -197,32 +197,6 @@ angular.module('sequoiaGroveApp')
       $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
   }
 
-  // Get All Employees with their id
-  $scope.getEmployees = function() {
-    var deferred = $q.defer();
-    $rootScope.loadingMsg = "Obtaining current employee data...";
-
-    // if it's in dev mode, and we already have
-    // employees in localstorage, return.
-    if($rootScope.devMode) {
-      if ($rootScope.employees) {
-        $log.debug('Warning: devMode on. This is not current employee data');
-        deferred.resolve();
-      }
-    }
-
-    $http({ url: '/sequoiagrove/employees', method: "GET" })
-      .then(function(success) {
-        $rootScope.employees = success.data.employees;
-        if ($rootScope.devMode) {
-          localStorageService.set('employees', JSON.stringify($rootScope.employees));
-        }
-        deferred.resolve(success);
-      });
-    return deferred.promise;
-  }
-
-
 /************** Variable Initialization **************/
 
   // TODO function to find birthdays this week

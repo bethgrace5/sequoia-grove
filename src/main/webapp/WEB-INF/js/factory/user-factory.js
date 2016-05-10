@@ -13,6 +13,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
 
   // internal variables
   var availMap = {};
+  var positionMap = {};
 
   //call this when you know 'foo' has been changed
   var notifyObservers = function(){
@@ -59,7 +60,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     availMap = _.indexBy(users, function(item, index) {
       return item.id;
     });
-  
+
     // narrow each object to only have availability
     availMap = _.mapObject(availMap, function(val, key) {
       return _.pick(val, 'avail');
@@ -90,7 +91,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
           return {'start':moment(d.start, 'HHmm'), 'end':moment(d.end, 'HHmm')};
         })
       }
-    }) 
+    })
     //$log.debug(isAvailable(3, 'mon', '0700', '1500'));
   }
 
@@ -118,6 +119,39 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     return isAvailable;
   }
 
+  var buildPositions = function() {
+    // create map with key as eid and value as each object
+    positionMap = _.indexBy(users, function(item, index) {
+      return item.id;
+    });
+
+    // narrow each object to only have positions
+    // probably doing unnecessary things, but it works.
+    positionMap = _.mapObject(positionMap, function(val, key) {
+        return _.mapObject(
+          _.values(_.pick(val, 'positions')),
+          function(val, key) { 
+            return  _.map(val, function(item) {
+              return parseInt(item);
+          });
+        });
+      });
+
+    // rearrange
+    positionMap = _.mapObject(positionMap, function(val, key) {
+      if (val[0]) {
+        return val[0];
+      }
+      else {
+        return [];
+      }
+    });
+  }
+
+  var hasPosition = function(uid, pid) {
+    return _.contains(positionMap[uid], pid);
+  }
+
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
@@ -127,14 +161,18 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
           function(success) {
             $timeout(function() {
               buildAvailability();
+              buildPositions();
               deferred.resolve(success);
             });
           });
       return deferred.promise;
     }
     service.getUsers = function() { return users};
-    service.isAvailable = function(eid, day, start, end) { 
+    service.isAvailable = function(eid, day, start, end) {
       return isAvailable(eid, day, start, end)
+    };
+    service.hasPosition = function(uid, pid) {
+      return hasPosition(uid, pid);
     };
     // TODO include add availability, remove availabilty, add postion, remove position
     // update employee, deactivate employee, activate employee

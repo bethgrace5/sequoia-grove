@@ -15,7 +15,25 @@
       </ul>
     </div>
     <div class="col-sm-9" >
-      <p ng-hide="errors.available"> {{selectedName}} is not available </p>
+      <div ng-hide="errors.available && errors.hasPosition">
+
+        <!-- Error messages -->
+        <strong style="color: #9900cc">{{errors.selectedName}}</strong>
+
+        <!-- Not Available -->
+          <span ng-hide="errors.available">
+          is 
+          <span style="color:#b30086"> not available</span> 
+            <span ng-hide="errors.hasPosition"> and </span>
+          </span>
+
+        <!-- Does not have position-->
+          <span ng-hide="errors.hasPosition"> 
+            does not have the position
+          <span style="color:#b30086"> {{errors.selectedPosition}}</span>
+        </span>
+
+      </div>
     </div>
   </div>
 </div>
@@ -53,6 +71,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.mon.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.mon.val}}
@@ -62,7 +81,7 @@
           ng-click="selectEid(t, 'mon')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available)"
+          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available, t.mon.hasPosition)"
           ng-model="t.mon.name">
         </div>
 
@@ -70,6 +89,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.tue.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.tue.val}}
@@ -79,7 +99,7 @@
           ng-click="selectEid(t, 'tue')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available)"
+          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available, t.tue.hasPosition)"
           ng-model="t.tue.name">
         </div>
 
@@ -87,6 +107,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.wed.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.wed.val}}
@@ -96,7 +117,7 @@
           ng-click="selectEid(t, 'wed')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available)"
+          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available, t.wed.hasPosition)"
           ng-model="t.wed.name">
         </div>
 
@@ -104,6 +125,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.thu.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.thu.val}}
@@ -113,7 +135,7 @@
           ng-click="selectEid(t, 'thu')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available)"
+          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available, t.thu.hasPosition)"
           ng-model="t.thu.name">
         </div>
 
@@ -121,6 +143,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.fri.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.fri.val}}
@@ -130,7 +153,7 @@
           ng-click="selectEid(t, 'fri')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available)"
+          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available, t.fri.hasPosition)"
           ng-model="t.fri.name">
         </div>
 
@@ -143,6 +166,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.sat.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.sat.val}}
@@ -152,7 +176,7 @@
           ng-click="selectEid(t, 'sat')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available)"
+          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available, t.sat.hasPosition)"
           ng-model="t.sat.name">
         </div>
 
@@ -160,6 +184,7 @@
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
           eid={{t.sun.eid}}
+          pid={{t.pid}}
           sid={{t.sid}}
           idx={{$index}}
           date={{date.sun.val}}
@@ -169,7 +194,7 @@
           ng-click="selectEid(t, 'sun')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available)"
+          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available, t.sun.hasPosition)"
           ng-model="t.sun.name">
         </div>
       </div>

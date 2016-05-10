@@ -195,6 +195,7 @@ angular.module('sequoiaGroveApp')
           data: obj
         }).success(function(data, status, headers, config) {
             $scope.saving = false;
+            $rootScope.$broadcast('editEmployee');
             // update front end
             $scope.selectedEmployee.positions.push(pid);
         }).error(function(data, status) {
@@ -254,6 +255,7 @@ angular.module('sequoiaGroveApp')
         data: obj
       }).success(function(data, status) {
         $scope.saving = false;
+        $rootScope.$broadcast('editEmployee');
       }).error(function(data, status) {
         $log.debug('error removing position',pid,'from',eid);
       });

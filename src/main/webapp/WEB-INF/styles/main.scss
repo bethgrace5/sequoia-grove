@@ -80,6 +80,14 @@ a:focus {
 /********************************************
     04. Schedule_Edit
 *********************************************/
+.data-view {
+  max-height: 30%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-left:10px;
+  margin-left:10px;
+  width: 100%;
+}
 .position-button-bar {
   margin: 0 auto;
 }
