@@ -88,9 +88,12 @@ public class Generator{
     dayShiftEmployeeList = jdbcTemplate.query(
         " select day, shift_id, employee_id, count(*) AS worked" +
         " from employee_shift_view " +
-        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
+        " where on_date >= to_date(?, 'mm-dd-yyyy') AND " +
+        " on_date <= to_date(?, 'mm-dd-yyyy') " +
         " group by day, shift_id, employee_id " +
         " order by day, shift_id, employee_id ",
+
+
           new RowMapper<DayShiftEmployee>() {
             public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
               DayShiftEmployee es = new DayShiftEmployee(
@@ -101,7 +104,7 @@ public class Generator{
               );
               return es;
             }
-      });
+      }, startDate, endDate);
       for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
         add(convertDay(dayShiftEmployeeList.get(i).getDay()),
                       dayShiftEmployeeList.get(i).getShift(),
