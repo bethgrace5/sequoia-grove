@@ -71,18 +71,3 @@
   </div>
 </div> <!-- End Schedule Edit Options -->
 
-<!-- Filter/ Narrow Schedule by location/shift -->
-<div class="position-button-bar">
-  <div ng-repeat="pos in positions">
-    <button
-      class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-show = "$index == 0"
-      ng-click="selectPosition(0)">
-      All
-    </button>
-    <button class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-click="selectPosition(pos.id)">
-      {{pos.title}}
-    </button>
-  </div>
-</div>

@@ -132,10 +132,6 @@ angular.module('sequoiaGroveApp')
     return hasPosition;
   }
 
-  $scope.selectPosition = function(pid) {
-    $scope.selectedPid = pid;
-  }
-
 /************** HTTP Request Functions **************/
   // get all existing deliveries
   $scope.getDeliveries = function() {

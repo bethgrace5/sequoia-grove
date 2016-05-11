@@ -43,6 +43,8 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
+  $scope.selectedPid = 0;
+  $scope.selectedPosition = 'All';
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
@@ -64,6 +66,12 @@ angular.module('sequoiaGroveApp')
 /************** Pure Functions **************/
 
   $scope.items = [{'isSpacer':true, 'index':-1}];
+
+  $scope.selectPosition = function(pid, title) {
+    $scope.selectedPid = pid;
+    $scope.selectedPosition = title;
+  }
+
 
   $scope.boardDragControlListeners = {
       'accept': function(sourceItemHandleScope, destSortableScope){

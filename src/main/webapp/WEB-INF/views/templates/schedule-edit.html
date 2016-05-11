@@ -5,7 +5,7 @@
       <ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
         <li data-ng-repeat="item in items" data-as-sortable-item>
           <div data-as-sortable-item-handle>
-            <button type="button" style="cursor:inherit" class="btn btn-default" >
+            <button type="button" style="cursor:inherit" class="btn btn-info position-button" >
               <!--ng-click="template.unshift({'isSpacer':true})"-->
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
               Spacer
@@ -14,7 +14,29 @@
         </li>
       </ul>
     </div>
-    <div class="col-sm-9" >
+    <div class="col-sm-2">
+      <!-- Filter/ Narrow Schedule by location/shift -->
+      <div class="position-button-bar">
+        <!-- Filter by Position -->
+        <div class="dropdown pull-left" dropdown is-open=true>
+          <button type="button"
+            id="selectPosition"
+            class="btn btn-primary position-button"
+            data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true">
+            {{selectedPosition}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" rol="menu" arial-labelledby="selectPosition">
+            <li role="menuitem"><a ng-click="selectPosition(0, 'all')">All</a></li>
+            <li ng-repeat = "pos in positions" value ="{{pos.id}}">
+            <a ng-click="selectPosition(pos.id, pos.title)">{{pos.title}}</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-sm-8" >
       <div ng-hide="errors.available && errors.hasPosition">
 
         <!-- Error messages -->
@@ -48,9 +70,9 @@
 
       <div data-as-sortable-item-handle>
         <div class="col-sm-2 schedule-edit-task-names">
-          <span>{{t.tname}}</span>
+          <span ng-click="selectPosition(t.pid, t.position)">{{t.tname}}</span>
           <div ng-show="t.isSpacer">
-            <button type="button" style="cursor:inherit;" class="btn btn-default" >
+            <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
               Spacer
             </button>
