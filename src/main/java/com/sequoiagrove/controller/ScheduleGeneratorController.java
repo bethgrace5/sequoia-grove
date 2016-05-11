@@ -105,34 +105,8 @@ public class ScheduleGeneratorController {
 
       Generator generator;
       generator = new Generator();
-      List<DayShiftEmployee> dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, employee_id, count(*) AS worked" +
-        " from employee_shift_view " +
-        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-        " group by day, shift_id, employee_id " +
-        " order by day, shift_id, employee_id ",
-      //I need way to build Generator without the DayShiftEmployee
-          //"also day might be A String"
-          new RowMapper<DayShiftEmployee>() {
-            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-              DayShiftEmployee es = new DayShiftEmployee(
-                rs.getInt("day"),//This Might Be Wrong?
-                rs.getInt("shift_id"),
-                rs.getInt("employee_id"),
-                rs.getInt("worked")
-              );
-
-              return es;
-            }
-      });
-      for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
-        generator.add(convertDay(dayShiftEmployeeList.get(i).getDay()),
-                      dayShiftEmployeeList.get(i).getShift(),
-                      dayShiftEmployeeList.get(i).getEmployee(),
-                      dayShiftEmployeeList.get(i).getWorked() );
-      }
-      //generator.printFormation();
-
+      generator.getPastInformation(historyStart, historyEnd);
+      generator.getEmployeeInformation(historyStart, historyEnd);
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)
@@ -191,5 +165,38 @@ public class ScheduleGeneratorController {
     return "-------";
   }
 
+  void generatorBuildList(Generator generator, String data){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      // parse params
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+
+      List<DayShiftEmployee> dayShiftEmployeeList = jdbcTemplate.query(
+        " select day, shift_id, employee_id, count(*) AS worked" +
+        " from employee_shift_view " +
+        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
+        " group by day, shift_id, employee_id " +
+        " order by day, shift_id, employee_id ",
+      //I need way to build Generator without the DayShiftEmployee
+          //"also day might be A String"
+          new RowMapper<DayShiftEmployee>() {
+            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
+              DayShiftEmployee es = new DayShiftEmployee(
+                rs.getInt("day"),//This Might Be Wrong?
+                rs.getInt("shift_id"),
+                rs.getInt("employee_id"),
+                rs.getInt("worked")
+              );
+              return es;
+            }
+      });
+      for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
+        generator.add(convertDay(dayShiftEmployeeList.get(i).getDay()),
+                      dayShiftEmployeeList.get(i).getShift(),
+                      dayShiftEmployeeList.get(i).getEmployee(),
+                      dayShiftEmployeeList.get(i).getWorked() );
+      }
+      generator.printFormation();
+  }
 }
 
