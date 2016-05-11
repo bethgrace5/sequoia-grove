@@ -45,7 +45,7 @@
 
   <!-- Functions -->
   <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
-
+  <include relativeToChangelogFile="true" file="changelogs/026-get-current-shifts.xml"/>
 
 
 
