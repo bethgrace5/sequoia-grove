@@ -46,6 +46,7 @@ angular.module('sequoiaGroveApp')
       'history':[],
       'positions':[]
     };
+    $log.debug($scope.selectedEmployee.clockNumber);
     $scope.birthday = new Date();
 
     $scope.newAvail = {day:'', start:'', end:''};
@@ -111,10 +112,12 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
+        //$log.debug($scope.classifications);
+        //return;
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification': $scope.classifications[selectedClassification].val,
+        'classification': $scope.classifications[$scope.selectedClassification].val,
         'notes': '',
         'firstname':'',
         'lastname':'',
@@ -323,6 +326,7 @@ angular.module('sequoiaGroveApp')
         $scope.saving = false;
         action = "add";
       }
+      $log.debug($scope.selectedEmployee);
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
           // upate front end
@@ -336,7 +340,7 @@ angular.module('sequoiaGroveApp')
           $scope.saving = false;
           form.$setSubmitted();
         }).error(function(data, status) {
-          $log.debug('error with action:', action, status);
+          $log.debug('error with action:', action, status,data);
         });
     }
 

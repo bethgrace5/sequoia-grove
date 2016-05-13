@@ -18,15 +18,17 @@ public class User {
     String lastname;
     String phone;
     String email;
-    String classification;
+    int classificationId;
+    String classificationTitle;
     boolean isCurrent;
     List<Duration> history = new ArrayList<Duration>();
     List<String> positions = new ArrayList<String>();
     List<String> permissions = new ArrayList<String>();
     WeeklyAvail avail = new WeeklyAvail();
-
+    
     public User(){}
-    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, String classification) {
+    //User RowMapper
+    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
         this.id = id;
         this.clockNumber = clockNumber;
         this.maxHours = maxHours;
@@ -37,10 +39,12 @@ public class User {
         this.lastname = lastname;
         this.email = email;
         this.permissions = permissions;
-        this.classification = classification;
+        this.classificationId = classificationId;
+        this.classificationTitle = classificationTitle;
     }
 
-    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, String classification, String notes) {
+    //SuperUserRowmapper - uses this constructor
+    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
         this.id = id;
         this.maxHours= maxHours;
         this.minHours= minHours;
@@ -55,7 +59,8 @@ public class User {
         this.avail = avail;
         this.isCurrent = isCurrent;
         this.permissions = permissions;
-        this.classification = classification;
+        this.classificationId = classificationId;
+        this.classificationTitle = classificationTitle;
         this.notes = notes;
     }
 
@@ -130,11 +135,18 @@ public class User {
       this.email = email;
     }
 
-    public void setClassification(String classification) {
-        this.classification = classification;
+    public void setClassificationId(int classificationId) {
+        this.classificationId = classificationId;
     }
-    public String getClassification() {
-        return classification;
+    public int getClassificationId() {
+        return classificationId;
+    }
+    
+    public void setClassificationTitle(String classificationTitle) {
+        this.classificationTitle = classificationTitle;
+    }
+    public String getClassificationTitle() {
+        return classificationTitle;
     }
 
     public List<Duration> getHistory() {
