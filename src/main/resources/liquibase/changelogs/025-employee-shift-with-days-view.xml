@@ -13,16 +13,16 @@
 
     <createView replaceIfExists="true"
       schemaName="public"
-      viewName="employee_shift_view">
-      SELECT foo.employee_id,
+      viewName="sequ_employee_shift_view">
+      SELECT foo.user_id,
       foo.shift_id,
       foo.on_date,
       foo.day
-      FROM ( SELECT s.employee_id,
+      FROM ( SELECT s.user_id,
       s.shift_id,
       s.on_date,
       to_char(s.on_date::timestamp with time zone, 'D'::text) AS day
-      FROM is_scheduled_for s) foo;
+      FROM sequ_is_scheduled_for s) foo;
     </createView>
 
   </changeSet>

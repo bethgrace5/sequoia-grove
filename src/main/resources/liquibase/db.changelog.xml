@@ -40,16 +40,12 @@
   <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
   <!-- Mock Data -->
   <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
 
   <!-- Functions -->
   <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/026-get-current-shifts.xml"/>
-
-
 
   <!-- Misc -->
   <!-- rename employee to user, add classification for user,
@@ -64,5 +60,8 @@
   <include relativeToChangelogFile="true" file="changelogs/033-user-info-notes-birthday-format.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/034-shift-index-column.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/035-user-info-classification.xml"/>
+
+  <include relativeToChangelogFile="true" file="changelogs/026-get-current-shifts.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
 </databaseChangeLog>
