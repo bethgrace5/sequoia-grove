@@ -61,7 +61,7 @@ public class Authentication {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , 0, "");
 
-        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification " +
+        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification_title " +
           "from (  " +
               "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
               "from ( " +
@@ -120,7 +120,7 @@ public class Authentication {
 
         //FIXME when session already exists, it throws error from duplicate key
 
-        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification " +
+        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification_title " +
           "from (  " +
               "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
               "from ( " +
