@@ -62,6 +62,41 @@ angular.module('sequoiaGroveApp')
     "weeksInHistory": 6,
     "emptyShiftThreshold": 0.1
   };
+  // Auto-Fill schedule based on history
+  $scope.autoGenerate = function() {
+
+    if ($scope.saving) {
+      return;
+    }
+
+    // don't actually auto-gen if in dev mode
+    if($rootScope.devMode) {
+      $scope.saving = false;
+      return;
+    }
+
+    $scope.saving = true;
+
+    $http({
+      url: '/sequoiagrove/schedule/autogen/',
+      method: "POST",
+      data: $scope.autoGenOptions
+    }).success( function(data, status, headers, config) {
+      if (status == 200) {
+        //$scope.updateShifts = [];
+        //$scope.deleteShifts = [];
+        // insert new shifts into schedule
+        $scope.saving = false;
+      }
+      else {
+        $log.error(status + " Error auto-generating schedule " + data);
+        $scope.saving = false;
+      }
+    }).error( function(data, status, headers, config) {
+      $log.error(status + " Error auto-generating schedule " + data);
+      $scope.saving = false;
+    });
+  }
 
 /************** Pure Functions **************/
 

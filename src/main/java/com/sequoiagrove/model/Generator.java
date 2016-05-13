@@ -89,17 +89,17 @@ public class Generator{
   public void getPastInformation(String startDate, String endDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, employee_id, count(*) AS worked" +
-        " from employee_shift_view " +
+        " select day, shift_id, user_id, count(*) AS worked" +
+        " from sequ_employee_shift_view " +
         " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-        " group by day, shift_id, employee_id " +
-        " order by day, shift_id, employee_id ",
+        " group by day, shift_id, user_id " +
+        " order by day, shift_id, user_id ",
           new RowMapper<DayShiftEmployee>() {
             public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
               DayShiftEmployee es = new DayShiftEmployee(
                 rs.getInt("day"),
                 rs.getInt("shift_id"),
-                rs.getInt("employee_id"),
+                rs.getInt("user_id"),
                 rs.getInt("worked")
               );
               return es;
@@ -116,7 +116,7 @@ public class Generator{
 
   public void getEmployeeInformation(String startDate, String endDate){
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        String queryStr = "select * from employee_info_view";
+        String queryStr = "select * from sequ_user_info_view";
         List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
   }
 
