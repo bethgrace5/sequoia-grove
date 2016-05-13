@@ -59,7 +59,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/loginwithtoken", method = RequestMethod.POST)
     protected String loginWithToken(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , "");
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , 0, "");
 
         String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification " +
           "from (  " +
@@ -111,7 +111,7 @@ public class Authentication {
     @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
     protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>() , "");
+        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
         String email = "";
         String password = "";
 
