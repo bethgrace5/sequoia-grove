@@ -63,5 +63,6 @@
   <include relativeToChangelogFile="true" file="changelogs/032-default-test-password.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/033-user-info-notes-birthday-format.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/034-shift-index-column.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/035-user-info-classification.xml"/>
 
 </databaseChangeLog>
