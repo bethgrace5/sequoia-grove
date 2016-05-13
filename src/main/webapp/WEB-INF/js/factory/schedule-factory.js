@@ -91,7 +91,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var spaceCount = 0;
     // index is the old index saved from the database
     var temp =  _.map(schedule, function(item, index) {
-        if(index != item.index - spaceCount) {
+        if(index != (item.index - spaceCount)) {
+          if(item.index == 0) { //new schedules all have 0 index
+            return item;
+          }
           spaceCount++;
           return [{'isSpacer':true, 'index':-1}, item];
         }

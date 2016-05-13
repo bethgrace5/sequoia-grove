@@ -7,10 +7,13 @@
       <div class="dropdown pull-left" dropdown is-open=true>
         <button type="button" id="selectWeek" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="true"
-          class="btn btn-info"
-          ng-disabled = "loading">
+          class="btn btn-info pull-left"
+          ng-disabled = "loading || saving || importing">
           Import {{weekList[selectedWeek].name}} <span class="caret"></span>
         </button>
+        <div ng-show="importing" class="pull-left">
+          <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+        </div>
         <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
           <li ng-repeat = "w in weekList" value ="{{w.name}}">
             <a ng-click="importWeek($index)">{{w.name}}</a>
@@ -22,8 +25,7 @@
     <form class="pull-right">
       <!-- Download and Print Options -->
       <button ng-click="clearSchedule()" 
-        ng-disabled = "saving"
-        ng-disabled = "saving";
+        ng-disabled = "saving || importing"
         class="btn btn-default btn-warning">
         Clear
         <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -31,21 +33,19 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
-        ng-disabled = "saving"
+        ng-disabled = "saving || importing"
         ng-hide = "changesMade">
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
       </button>
-      <div style="position:absolute; right:21%; top:10%;"
-        ng-show="saving || importing">
-      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+      <div class="pull-left" ng-show="saving">
+        <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
       </div>
 
       <!-- Default button -->
       <button class = "btn btn-default"
-        ng-disabled = "saving"
+        ng-disabled = "saving || importing"
         ng-show = "changesMade"
-        ng-disabled = "saving";
         ng-click = "saveSchedule()">
         Save Changes
         <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
@@ -54,7 +54,7 @@
       <button class = "btn btn-default"
         ng-click = "publishSchedule()"
         ng-hide = "isPublished"
-        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0">
+        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0 || importing">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
