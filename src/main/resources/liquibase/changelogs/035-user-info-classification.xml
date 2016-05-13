@@ -29,13 +29,13 @@
       from sequ_user e
       inner join sequ_user_history_view h
       on e.id = h.id
-      inner join sequ_user_position_view p
+      full outer join sequ_user_position_view p
       on e.id = p.id
-      inner join sequ_user_avail_view a
+      full outer join sequ_user_avail_view a
       on e.id = a.id
       inner join sequ_classification c
       on e.classification_id = c.id
-      inner join
+      full outer join
       (select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions
       from (
       select * from
