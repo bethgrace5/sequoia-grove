@@ -5,14 +5,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class Holiday {
     int id;
+    int weekday;
     String title;
     String date;
     String storeOpen;
     String storeClose;
 
     public Holiday(){}
-    public Holiday(int id, String title, String date, String storeOpen, String storeClose) {
+    public Holiday(int id, int weekday, String title, String date, String storeOpen, String storeClose) {
         this.id = id;
+        this.weekday = weekday;
         this.title = title;
         this.date = date;
         this.storeOpen = storeOpen;
@@ -24,6 +26,13 @@ public class Holiday {
     }
     public int getId(){
       return this.id;
+    }
+
+    public void setWeekday(int weekday){
+      this.weekday = weekday;
+    }
+    public int getWeekday(){
+      return this.weekday;
     }
 
     public void setTitle(String title){

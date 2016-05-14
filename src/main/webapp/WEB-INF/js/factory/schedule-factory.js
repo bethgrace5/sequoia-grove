@@ -8,7 +8,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Exposed to all users through service
   var schedule = [];
   var isPublished = false;
-  var header = { mon:{val:'', disp:''}, tue:{val:'', disp:''}, wed:{val:'', disp:''},thu:{val:'', disp:''}, fri:{val:'', disp:''}, sat:{val:'', disp:''}, sun:{val:'', disp:''}};
+  var header = {
+    mon:{val:'', disp:'', holiday:{}},
+    tue:{val:'', disp:'', holiday:{}},
+    wed:{val:'', disp:'', holiday:{}},
+    thu:{val:'', disp:'', holiday:{}},
+    fri:{val:'', disp:'', holiday:{}},
+    sat:{val:'', disp:'', holiday:{}},
+    sun:{val:'', disp:'', holiday:{}}};
   var weekList;
 
   // Exposed to users with 'manage schedule' privelage through service
@@ -24,6 +31,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var monday  = '';
   var daysAgo = 0;
   var movedShifts = false;
+  var holidays = [];
+  var extendEnd = 2;
+  var extendStart = 2;
 
 
   //call this when you know 'foo' has been changed
@@ -106,6 +116,83 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     notifyObservers();
     }, 1000);
   }
+
+  var initHolidays = function() {
+    var deferred = $q.defer();
+    $http({ url: '/sequoiagrove/holiday/get/between/'+
+      moment(header.mon.val, 'DD-MM-YYYY').format('MM-DD-YYYY') + '/' +
+      moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
+      .then(function(success) {
+        holidays = success.data.holidays;
+        $log.debug('holidays', holidays);
+
+        _.map(holidays, function(h, index) {
+          var d = parseInt(h.weekday);
+          if(d === 2) { header.mon.holiday = h; }
+          if(d === 3) { header.tue.holiday = h; }
+          if(d === 4) { header.wed.holiday = h; }
+          if(d === 5) { header.thu.holiday = h; }
+          if(d === 6) { header.fri.holiday = h; }
+          if(d === 7) { header.sat.holiday = h; }
+          if(d === 1) { header.sun.holiday = h; }
+        });
+        addHolidays();
+        deferred.resolve(success);
+      });
+    return deferred.promise;
+  }
+
+  var addHolidays = function() {
+    $log.debug('add holidays');
+    _.map(schedule, function(item, index) {
+      if (!_.isEmpty(header.mon.holiday)) {
+        if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'mon')) {
+          item.mon = _.extend(item.mon, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.tue.holiday)) {
+        if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'tue')) {
+          item.tue = _.extend(item.tue, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.wed.holiday)) {
+        if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'wed')) {
+          item.wed = _.extend(item.wed, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.thu.holiday)) {
+        if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'thu')) {
+          item.thu = _.extend(item.thu, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.fri.holiday)) {
+        if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'fri')) {
+          item.fri = _.extend(item.fri, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.sat.holiday)) {
+        if (!shiftIsSchedulable( item.weekendStart, item.weekendEnd, 'sat')) {
+          item.sat = _.extend(item.sat, {'holiday': true});
+        }
+      };
+      if (!_.isEmpty(header.sun.holiday)) {
+        if (!shiftIsSchedulable( item.weekendStart, item.weekendEnd, 'sun')) {
+          item.sun = _.extend(item.sun, {'holiday': true});
+        }
+      };
+    });
+    notifyObservers();
+  }
+
+  var shiftIsSchedulable = function(start, end, day) {
+      // determine shift duration times
+      var shiftStart = moment(start, 'HHmm').subtract(parseInt(extendStart), 'hours');
+      var shiftEnd = moment(end, 'HHmm').subtract(parseInt(extendEnd), 'hours');
+      var storeOpen = moment(header[day].holiday.storeOpen, 'HHmm');
+      var storeClose = moment(header[day].holiday.storeClose, 'HHmm');
+      return ((shiftEnd.isSame(storeClose, 'minute') || shiftEnd.isBefore(storeClose, 'minute')) 
+          && (shiftStart.isAfter(storeOpen, 'minute') || shiftStart.isSame(storeOpen, 'minute')));
+  };
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
   var initSchedule = function() {
@@ -482,8 +569,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           function(success) {
             countDays();
             countHours();
-            deferred.resolve(success);
-          });
+            return initHolidays();
+          }).then(function(success) {
+          deferred.resolve(success);
+      });
       return deferred.promise;
     }
     // same as above, but counts days and hours when changing weeks
@@ -506,10 +595,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             countHours(); // NOTE Added for those with manage schedule privelage
             buildWeekList();
             notifyObservers();
-            deferred.resolve(success);
+            return initHolidays();
           });
         },function(failure) {
           deferred.reject(failure);
+      }).then(function(success) {
+        deferred.resolve(success);
       });
       return deferred.promise;
     },
@@ -541,6 +632,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         countDays();
         countHours();
         buildWeekList();
+        addHolidays();
         notifyObservers();
         deferred.resolve(success);
       });
@@ -586,6 +678,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     'getHeader':   function() { return header; },
     'getTemplate': function() { return schedule; },
     'isPublished': function() { return isPublished; },
+    'extendEnd': function(extend) { 
+      extendEnd = extend; 
+      addHolidays();
+    },
+    'extendStart': function(extend) { 
+      extendStart = extend; 
+      addHolidays();
+    },
     'setManagePrivelage': function() { setManagePrivelage(); }
   }
 

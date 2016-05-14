@@ -117,7 +117,7 @@
           ng-click="selectEid(t, 'mon')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available, t.mon.hasPosition)"
+          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available, t.mon.hasPosition, t.mon.holiday)"
           ng-model="t.mon.name">
         </div>
 
@@ -135,7 +135,7 @@
           ng-click="selectEid(t, 'tue')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available, t.tue.hasPosition)"
+          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available, t.tue.hasPosition, t.tue.holiday)"
           ng-model="t.tue.name">
         </div>
 
@@ -153,7 +153,7 @@
           ng-click="selectEid(t, 'wed')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available, t.wed.hasPosition)"
+          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available, t.wed.hasPosition, t.wed.holiday)"
           ng-model="t.wed.name">
         </div>
 
@@ -171,7 +171,7 @@
           ng-click="selectEid(t, 'thu')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available, t.thu.hasPosition)"
+          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available, t.thu.hasPosition, t.thu.holiday)"
           ng-model="t.thu.name">
         </div>
 
@@ -189,7 +189,7 @@
           ng-click="selectEid(t, 'fri')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available, t.fri.hasPosition)"
+          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available, t.fri.hasPosition, t.fri.holiday)"
           ng-model="t.fri.name">
         </div>
 
@@ -212,7 +212,7 @@
           ng-click="selectEid(t, 'sat')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available, t.sat.hasPosition)"
+          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available, t.sat.hasPosition, t.sat.holiday)"
           ng-model="t.sat.name">
         </div>
 
@@ -230,7 +230,7 @@
           ng-click="selectEid(t, 'sun')"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available, t.sun.hasPosition)"
+          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available, t.sun.hasPosition, t.sun.holiday)"
           ng-model="t.sun.name">
         </div>
       </div>

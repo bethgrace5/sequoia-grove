@@ -9,7 +9,7 @@
 
 
 angular.module('sequoiaGroveApp')
-.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService) {
+.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory) {
 
   /****************** Local Variables/Objects ***********************/
   $scope.saving = false;
@@ -44,6 +44,13 @@ angular.module('sequoiaGroveApp')
       sat:false,
       sun:false
   };
+
+  $scope.setExtend = function() {
+    $scope.extendStart = parseInt($scope.extendStart);
+    $scope.extendEnd = parseInt($scope.extendEnd);
+    scheduleFactory.extendStart($scope.extendStart);
+    scheduleFactory.extendEnd($scope.extendEnd);
+  }
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/manage');

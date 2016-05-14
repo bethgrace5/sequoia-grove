@@ -184,6 +184,15 @@ a:focus {
   border: 1px solid rgba(204, 0, 0, 0.7);
   background-color: #FFCCCC;
 }
+/* error on edit schedule input box */
+.schedule-edit-input-holiday{
+  background-color: #e6ccff;
+}
+.schedule-edit-input-holiday:focus {
+  box-shadow: 0 0 5px rgba(92, 0, 153, 1);
+  border: 1px solid rgba(92, 0, 153, 0.7);
+  background-color: #d9b3ff;
+}
 .schedule-edit-task-names{
   font-size: 1em;
   margin:0;

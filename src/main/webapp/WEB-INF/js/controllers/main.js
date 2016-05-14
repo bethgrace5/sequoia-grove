@@ -31,6 +31,10 @@ angular.module('sequoiaGroveApp')
   $scope.weekLabel = '';
   $scope.weekList = [];
 
+  // extend shift duration for holiday closes
+  $scope.extendStart = 2;
+  $scope.extendEnd = 2;
+
   // user is not logged in
   if ($rootScope.loggedIn == false) {
     $rootScope.lastPath = $location.path();

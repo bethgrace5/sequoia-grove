@@ -48,7 +48,7 @@ angular.module('sequoiaGroveApp')
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
-  $scope.hideSpacers = false;
+  $scope.hideSpacers = true;
   $scope.toggleHideSpacers = function() {
     $scope.hideSpacers = !$scope.hideSpacers;
   }
@@ -271,8 +271,9 @@ angular.module('sequoiaGroveApp')
 
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId, available, hasPosition) {
+  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
     var style = 'form-control schedule-edit-input';
+
 
     // Highlight all occurences of the employee that was clicked
     if (id == $scope.selectedId) {
@@ -283,6 +284,9 @@ angular.module('sequoiaGroveApp')
     }
     if (hasPosition == false) {
       style += ' schedule-edit-input-error';
+    }
+    if (holiday) {
+      style += ' schedule-edit-input-holiday';
     }
     // Dummy Error/Warning Application
     /* // apply an error
