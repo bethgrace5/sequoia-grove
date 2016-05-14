@@ -4,11 +4,22 @@
     <div class="col-sm-2">
       <ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
         <li data-ng-repeat="item in items" data-as-sortable-item>
-          <div data-as-sortable-item-handle>
-            <button type="button" style="cursor:inherit" class="btn btn-info position-button" >
+        <!-- Spacers active -->
+          <div data-as-sortable-item-handle ng-hide="hideSpacers" >
+            <button type="button" style="cursor:inherit" class="btn btn-info position-button"
+              ng-click="toggleHideSpacers();">
               <!--ng-click="template.unshift({'isSpacer':true})"-->
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-              Spacer
+              spacer on
+            </button>
+          </div>
+          <!-- Spacers inactive -->
+          <div ng-show="hideSpacers" >
+            <button type="button" style="cursor:inherit" class="btn btn-default position-button"
+              ng-click="toggleHideSpacers();">
+              <!--ng-click="template.unshift({'isSpacer':true})"-->
+              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+              spacer off
             </button>
           </div>
         </li>
@@ -28,7 +39,7 @@
           </button>
           <ul class="dropdown-menu" rol="menu" arial-labelledby="selectPosition">
             <li role="menuitem"><a ng-click="selectPosition(0, 'all')">All</a></li>
-            <li ng-repeat = "pos in positions" value ="{{pos.id}}">
+            <li ng-repeat = "pos in positions" value ="pos.title">
             <a ng-click="selectPosition(pos.id, pos.title)">{{pos.title}}</a>
             </li>
           </ul>
@@ -68,15 +79,18 @@
     <div class="row">
       <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
+      <!-- Spacer -->
       <div data-as-sortable-item-handle>
         <div class="col-sm-2 schedule-edit-task-names">
           <span ng-click="selectPosition(t.pid, t.position)">{{t.tname}}</span>
-          <div ng-show="t.isSpacer">
-            <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
-              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-              Spacer
-            </button>
-            <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template.splice($index, 1)"></span>
+          <div ng-hide="hideSpacers">
+            <div ng-show="t.isSpacer">
+              <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
+                <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+                Spacer
+              </button>
+              <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template.splice($index, 1)"></span>
+            </div>
           </div>
         </div>
 

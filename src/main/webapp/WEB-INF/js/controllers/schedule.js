@@ -48,6 +48,10 @@ angular.module('sequoiaGroveApp')
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
+  $scope.hideSpacers = false;
+  $scope.toggleHideSpacers = function() {
+    $scope.hideSpacers = !$scope.hideSpacers;
+  }
   $scope.errors = {
     'selectedName':'',
     'available':true, 
