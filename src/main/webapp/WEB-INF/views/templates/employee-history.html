@@ -1,9 +1,9 @@
 <div class="request-title">
-  <div class="row emp-repeated-row emp-history-row" ng-repeat="h in selectedEmployee.history">
-    <div class="col-sm-6 col-sm-offset-1">
-      <div class="emp-history">{{formatEmploymentHistory(h.start)}}</div>
-      <div class="emp-history emp-history-dash">-</div>
-      <div class="emp-history">{{formatEmploymentHistory(h.end)}}</div>
+  <div class="row" ng-repeat="h in selectedEmployee.history">
+    <div class="col-sm-11 col-sm-offset-1">
+      <span>{{formatEmploymentHistory(h.start)}}</span>
+      <span>-</span>
+      <span>{{formatEmploymentHistory(h.end)}}</span>
     </div>
   </div>
 </div>

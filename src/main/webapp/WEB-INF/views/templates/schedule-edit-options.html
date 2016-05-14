@@ -7,7 +7,7 @@
 
       <button class = "btn btn-info"
         ng-click = "autoGenerate()"
-        ng-disabled = "saving">
+        ng-disabled = "saving || importing || loading">
         Auto-Generate
         <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
       </button>
@@ -32,7 +32,7 @@
     <form class="pull-right">
       <!-- Download and Print Options -->
       <button ng-click="clearSchedule()" 
-        ng-disabled = "saving || importing"
+        ng-disabled = "saving || importing || loading"
         class="btn btn-default btn-warning">
         Clear
         <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -40,7 +40,7 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
-        ng-disabled = "saving || importing"
+        ng-disabled = "saving || importing || loading"
         ng-hide = "changesMade">
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
@@ -51,7 +51,7 @@
 
       <!-- Default button -->
       <button class = "btn btn-default"
-        ng-disabled = "saving || importing"
+        ng-disabled = "saving || importing || loading"
         ng-show = "changesMade"
         ng-click = "saveSchedule()">
         Save Changes
@@ -61,14 +61,14 @@
       <button class = "btn btn-default"
         ng-click = "publishSchedule()"
         ng-hide = "isPublished"
-        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0 || importing">
+        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0 || importing || loading">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
       
       <button class = "btn btn-primary"
         ng-show = "isPublished"
-        ng-disabled = "saving">
+        ng-disabled = "saving || loading || importing">
         Published
         <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
       </button>

@@ -107,7 +107,7 @@ angular.module('sequoiaGroveApp', [
     $rootScope.loggedInUser= {'email':''};
 
     var email = JSON.parse(localStorageService.get('email'));
-    var token = localStorageService.get('auth_token');
+    var token = JSON.parse(localStorageService.get('auth_token'));
     if(email) {
       $rootScope.loggedInUser.email = email;
     }

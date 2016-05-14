@@ -79,7 +79,7 @@
                   class="btn btn-default">
                   {{classifications[selectedClassification].disp}} <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" role="menu" 
+                <ul class="dropdown-menu" role="menu"
                   ng-model="selectedClassification" arial-labelledby="selectClassification">
                   <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
                 </ul>
