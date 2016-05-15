@@ -43,6 +43,8 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
+  $scope.aList = {};
+  $scope.pList = {};
   $scope.selectedPid = 0;
   $scope.selectedPosition = 'All';
   $scope.activeTab = 'schedule';
@@ -167,7 +169,9 @@ angular.module('sequoiaGroveApp')
     };
   }
 
-  $scope.selectEid = function(t, day) {
+  $scope.selectEid = function(t, day, al, pl) {
+    $scope.aList = al;
+    $scope.pList = pl;
     if (t[day]) {
       $scope.selectedId = t[day].eid;
       if ($scope.selectedId === 0) {
@@ -178,8 +182,8 @@ angular.module('sequoiaGroveApp')
       else {
         $scope.errors.selectedName = t[day].name;
         $scope.errors.selectedPosition = t.position;
-        $scope.errors.available = t[day].available;
-        $scope.errors.hasPosition = t[day].hasPosition;
+        $scope.errors.available = t[day].hasAvailability[$scope.selectedId];
+        $scope.errors.hasPosition = t[day].hasPosition[$scope.selectedId];
       }
     }
     else {
@@ -228,79 +232,59 @@ angular.module('sequoiaGroveApp')
     return userFactory.hasPosition(uid, pid);
   }
 
-  // filter schedule to determine if the scheduled employee has availability
-  // adds 'availabe' attribute to that day for error checking
-  $scope.initAvailSchedule = function() {
-    $scope.template = _.map ($scope.template, function(item, index) {
-      if (item.isSpacer) {
-        return {'isSpacer':true, 'index':-1};
+  $scope.employeeListHighlight = function(id) {
+    var style = 'form-control schedule-edit-input';
+    if (id == $scope.selectedId) {
+      style += ' schedule-edit-highlight';
+    }
+    if ($scope.aList && $scope.pList) {
+      if ($scope.aList[id] && $scope.pList[id]) {
+        style += ' schedule-edit-input-avail';
       }
-      else {
-        item.mon = _.extend(item.mon, {'available': userFactory.isAvailable(item.mon.eid, 'mon', item.weekdayStart, item.weekdayEnd)});
-        item.tue = _.extend(item.tue, {'available': userFactory.isAvailable(item.tue.eid, 'tue', item.weekdayStart, item.weekdayEnd)});
-        item.wed = _.extend(item.wed, {'available': userFactory.isAvailable(item.wed.eid, 'wed', item.weekdayStart, item.weekdayEnd)});
-        item.thu = _.extend(item.thu, {'available': userFactory.isAvailable(item.thu.eid, 'thu', item.weekdayStart, item.weekdayEnd)});
-        item.fri = _.extend(item.fri, {'available': userFactory.isAvailable(item.fri.eid, 'fri', item.weekdayStart, item.weekdayEnd)});
-        item.sat = _.extend(item.sat, {'available': userFactory.isAvailable(item.sat.eid, 'sat', item.weekdayStart, item.weekdayEnd)});
-        item.sun = _.extend(item.sun, {'available': userFactory.isAvailable(item.sun.eid, 'sun', item.weekdayStart, item.weekdayEnd)});
-      }
-      return item;
-    });
-  }
-
-  // filter schedule to determine if the scheduled employee has the position
-  // adds 'hasPosition' attribute to that day for error checking
-  $scope.initPositionsSchedule = function() {
-    $scope.template = _.map ($scope.template, function(item, index) {
-      if (item.isSpacer) {
-        return {'isSpacer':true, 'index':-1};
-      }
-      else {
-        item.mon = _.extend(item.mon, {'hasPosition': userFactory.hasPosition(item.mon.eid, item.pid)});
-        item.tue = _.extend(item.tue, {'hasPosition': userFactory.hasPosition(item.tue.eid, item.pid)});
-        item.wed = _.extend(item.wed, {'hasPosition': userFactory.hasPosition(item.wed.eid, item.pid)});
-        item.thu = _.extend(item.thu, {'hasPosition': userFactory.hasPosition(item.thu.eid, item.pid)});
-        item.fri = _.extend(item.fri, {'hasPosition': userFactory.hasPosition(item.fri.eid, item.pid)});
-        item.sat = _.extend(item.sat, {'hasPosition': userFactory.hasPosition(item.sat.eid, item.pid)});
-        item.sun = _.extend(item.sun, {'hasPosition': userFactory.hasPosition(item.sun.eid, item.pid)});
-      }
-      return item;
-    });
-  }
+    }
+    return style;
+  };
 
 
 
   // validation for schedule edit input
   $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
     var style = 'form-control schedule-edit-input';
-
-
+    if ($rootScope.readyToSchedule === false) {
+      return style;
+    }
+    if ($scope.selectedId === 0 ) {
+      if (holiday) {
+        style += ' schedule-edit-input-holiday';
+      }
+      return style;
+    }
+    if (available === undefined) {
+      if (id == $scope.selectedId) {
+        style += ' schedule-edit-highlight';
+      }
+      return style;
+    }
     // Highlight all occurences of the employee that was clicked
     if (id == $scope.selectedId) {
       style += ' schedule-edit-highlight';
     }
-    if (available == false) {
+    else {
+      if (available[$scope.selectedId] && hasPosition[$scope.selectedId]) {
+        if( !holiday) {
+          style += ' schedule-edit-input-avail';
+        }
+      }
+    }
+    if (available[id] === false) {
       style += ' schedule-edit-input-error';
     }
-    if (hasPosition == false) {
+    else if (hasPosition[id] == false) {
       style += ' schedule-edit-input-error';
     }
     if (holiday) {
       style += ' schedule-edit-input-holiday';
     }
-    // Dummy Error/Warning Application
-    /* // apply an error
-    if (weekday=='monday' && shiftId == '3') {
-      style += ' schedule-edit-input-error';
-    }
-    // apply a warning
-    else if(weekday=='thursday' && shiftId == '2') {
-      style += ' schedule-edit-input-warn';
-    }
-    // no warnings or errors
-    else {
-      style += ' schedule-edit-input-highlight';
-    } */
     return style;
   }
 
@@ -337,9 +321,6 @@ angular.module('sequoiaGroveApp')
     $scope.changesMade = scheduleFactory.changesMade();
   }
 
-  $scope.initAvailSchedule();
-  $scope.initPositionsSchedule();
-
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
   $rootScope.$on('editEmployee', function(event, args) {
@@ -351,6 +332,4 @@ angular.module('sequoiaGroveApp')
       $scope.loadingWeek = false;
     });
   });
-
-
 });

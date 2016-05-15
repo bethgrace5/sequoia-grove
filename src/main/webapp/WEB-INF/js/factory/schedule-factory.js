@@ -124,7 +124,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
       .then(function(success) {
         holidays = success.data.holidays;
-        $log.debug('holidays', holidays);
 
         _.map(holidays, function(h, index) {
           var d = parseInt(h.weekday);
@@ -143,7 +142,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   var addHolidays = function() {
-    $log.debug('add holidays');
     _.map(schedule, function(item, index) {
       if (!_.isEmpty(header.mon.holiday)) {
         if (!shiftIsSchedulable( item.weekdayStart, item.weekdayEnd, 'mon')) {

@@ -82,7 +82,7 @@ a:focus {
 *********************************************/
 .data-view {
   min-height: 300px;
-  max-height: 30%;
+  /*max-height: 30%;*/
   overflow-y: scroll;
   overflow-x: hidden;
   padding-left:10px;
@@ -182,9 +182,9 @@ a:focus {
 .schedule-edit-input-error:focus {
   box-shadow: 0 0 5px rgba(204, 0, 0, 1);
   border: 1px solid rgba(204, 0, 0, 0.7);
-  background-color: #FFCCCC;
+  /*background-color: #FFCCCC;*/
 }
-/* error on edit schedule input box */
+/* holiday on edit schedule input box */
 .schedule-edit-input-holiday{
   background-color: #e6ccff;
 }
@@ -192,6 +192,10 @@ a:focus {
   box-shadow: 0 0 5px rgba(92, 0, 153, 1);
   border: 1px solid rgba(92, 0, 153, 0.7);
   background-color: #d9b3ff;
+}
+/* availability and has position for selected */
+.schedule-edit-input-avail{
+  background-color: #e6ffb3;
 }
 .schedule-edit-task-names{
   font-size: 1em;

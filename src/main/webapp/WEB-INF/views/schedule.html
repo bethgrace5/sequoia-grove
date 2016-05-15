@@ -35,7 +35,7 @@
     <div class="panel-body">
       <div ng-if="e.isCurrent" ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="employeeHasPosition(e.id, -1)">
         <span
-          ng-class="{true:'form-control schedule-edit-input schedule-edit-highlight', false:'form-control schedule-edit-input'}[e.id==selectedId]"
+          ng-class="employeeListHighlight(e.id)"
           ng-click="selectFromList(e.id)">
           <div style="width:70px; float:left;"> {{e.firstname}} </div>
           <div style="float:left;">{{dayCount[e.id]}}d {{hourCount[e.id]}}h </div>

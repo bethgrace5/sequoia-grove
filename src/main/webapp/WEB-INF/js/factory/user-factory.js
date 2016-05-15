@@ -92,7 +92,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         })
       }
     })
-    //$log.debug(isAvailable(3, 'mon', '0700', '1500'));
   }
 
   var isAvailable = function(eid, day, start, end) {
