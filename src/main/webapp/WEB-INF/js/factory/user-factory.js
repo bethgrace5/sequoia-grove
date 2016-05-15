@@ -145,7 +145,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         return [];
       }
     });
-    $log.debug(positionMap);
   }
 
   var hasPosition = function(uid, pid) {

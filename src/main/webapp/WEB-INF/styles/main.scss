@@ -1,3 +1,6 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
@@ -257,24 +260,6 @@ a:focus {
   right: 0;
   width: 13%;
 }
-/* shift edit */
-.schedule-edit-shift-panel {
-  width: 87%;
-}
-.schedule-edit-shift-select {
-  width: auto;
-  margin: 5px;
-}
-.schedule-edit-shift-txt-addshift {
-  padding-right: 0.1em;
-}
-.schedule-edit-shift-btn-newshift {
-  padding-right: 0.5em;
-  padding-left: 0.5em;
-}
-.schedule-edit-shift-droprow {
-  margin-top: 10px;
-}
 
 /********************************************
     06. Schedule_Header
@@ -383,6 +368,23 @@ a:focus {
   height: 50%;
   overflow-y: scroll;
 }
+.hide-fade.ng-hide-add, .hide-fade.ng-hide-remove {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  display:block!important;
+}
+.hide-fade.ng-hide-add.ng-hide-add-active,
+.hide-fade.ng-hide-remove {
+  transition:0.5s linear all;
+  opacity:0;
+}
+.hide-fade.ng-hide-add,
+.hide-fade.ng-hide-remove.ng-hide-remove-active {
+  transition:0.8s linear all;
+  opacity:1;
+}
 
 /********************************************
     10. Default_Settings_Yeoman_put_in
@@ -475,7 +477,7 @@ a:focus {
   overflow-y:scroll;
 }
 
-.css-form input.ng-invalid.ng-touched {
+.css-form *.ng-invalid.ng-touched {
   -webkit-box-shadow: inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   -moz-box-shadow:    inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   box-shadow:         inset 3px 3px 13px -2px rgba(179,0,89,0.75);

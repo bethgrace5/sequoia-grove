@@ -1,6 +1,6 @@
 
 <!-- Search Bar-->
-<div class="form-group">
+<ldiv class="form-group">
   <div class="input-group">
     <div class="btn btn-default input-group-addon">
       <span class="glyphicon glyphicon-search"></span>
@@ -15,15 +15,15 @@
   </div>
 </div>
 
-<!-- Clear Form For New Employee -->
-<button ng-click="clearShiftSelect()"
+<!-- Clear Form For New Shift -->
+<button ng-click="cleanupShiftEdit(false)"
   class="btn btn-success btn-block">
   <div class="pull-left">
     <i class="glyphicon glyphicon-plus"></i> Add New
   </div>
 </button>
 
-<!-- Repeating List of Employees-->
+<!-- Repeating List of Shifts-->
 <div class="list-group shift-list-wrapper">
   <div ng-repeat="s in template | filter : shiftSearch">
     <div ng-hide="s.isSpacer">
