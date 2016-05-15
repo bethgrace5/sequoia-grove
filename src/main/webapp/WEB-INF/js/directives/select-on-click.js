@@ -35,9 +35,11 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         // the name is blank - add it to delete list
         if(this.value.length === 0) {
           scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date});
-          //FIXME update scheduleFactory template to reflect change, or just
-          //leave it for scope template?
+          element.context.classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = 0;
+          $scope.selectEid(0);
+          $scope.$apply();
+          return;
         }
         var employee = $scope.getEmployeeByname(this.value);;
         // found employee!

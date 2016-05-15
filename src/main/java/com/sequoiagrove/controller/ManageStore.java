@@ -10,6 +10,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.NotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -53,32 +54,23 @@ public class ManageStore {
     }
 
 /* ----- Helper JDBC Functions ----- */
-    public boolean checkHoursExist(String startHr, String endHr) {
-
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        Object[] obj = new Object[] { startHr, endHr };
-        int count = jdbcTemplate.queryForObject("select count(*) from sequ_hours " +
-            " where start_hour = ? and end_hour = ?", obj, Integer.class);
-        return (count > 0);
-    }
-
     public int addHours(String startHr, String endHr) {
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         int id = 0;
         Object[] obj = new Object[] { startHr, endHr };
-        if ( checkHoursExist(startHr, endHr) ) {
+
+        try {
           id = jdbcTemplate.queryForObject(
               "select id from sequ_hours where start_hour=? and end_hour=?",
               obj, Integer.class);
-        }
-        else {
-          id = jdbcTemplate.queryForObject(
-              "select nextval('sequ_hours_sequence')", Integer.class);
-          jdbcTemplate.update(" insert into sequ_hours (id, start_hour, end_hour) " +
-              "values( ?, ?, ?) ", id, startHr, endHr);
+
+        } catch (EmptyResultDataAccessException e) {
+          id = jdbcTemplate.queryForObject(" insert into sequ_hours (id, start_hour, end_hour) " + 
+              " values( (select nextval('sequ_hours_sequence')), ?, ?) returning currval('sequ_hours_sequence')", obj, Integer.class );
+
+          //id = jdbcTemplate.queryForObject( "select currval('sequ_hours_sequence')", obj, Integer.class);
         }
         return id;
     }
@@ -102,8 +94,7 @@ public class ManageStore {
         int pid;
         String tname = jobject.get("tname").getAsString();
         String weekdayStart = jobject.get("weekdayStart").getAsString();
-        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
-        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString(); String weekendStart = jobject.get("weekendStart").getAsString();
         String weekendEnd = jobject.get("weekendEnd").getAsString();
 
         if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
@@ -123,21 +114,16 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
-        int weekendHourId = addHours(weekendStart, weekendEnd);
-        int sid = jdbcTemplate.queryForObject("select nextval('sequ_shift_sequence')", Integer.class);
-            //"values(?, ?, ?, current_date, null, ?, ?)", params);
+        Object[] params = new Object[] { 
+            pid, 
+            tname, 
+            addHours(weekdayStart, weekdayEnd), 
+            addHours(weekendStart, weekendEnd) };
 
-        Object[] params = new Object[] {
-            sid,
-            pid,
-            tname,
-            weekdayHourId,
-            weekendHourId
-        };
+        int id = jdbcTemplate.queryForObject( "insert into sequ_shift(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id, index) " +
+            "values((select nextval('sequ_shift_sequence')), ?, ?, current_date, null, ?, ?, 99) returning currval('sequ_shift_sequence')", params, Integer.class);
 
-
-        model.addAttribute("sid", sid);
+        model.addAttribute("sid", id);
 
         return "jsonTemplate";
     }
@@ -182,16 +168,12 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
-        int weekendHourId = addHours(weekendStart, weekendEnd);
-
-        Object[] params = new Object[] {
-            pid,
-            tname,
-            weekdayHourId,
-            weekendHourId,
-            sid
-        };
+        Object[] params = new Object[] { 
+            pid, 
+            tname, 
+            addHours(weekdayStart, weekdayEnd), 
+            addHours(weekendStart, weekendEnd),
+            sid };
 
         jdbcTemplate.update( "update sequ_shift set "+
           "position_id = ?, "+

@@ -391,6 +391,7 @@ angular.module('sequoiaGroveApp')
             }
             return e;
           });
+          $rootScope.$broadcast('editEmployee');
         }).error(function(data, status) {
           $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
@@ -417,7 +418,7 @@ angular.module('sequoiaGroveApp')
           }
           return e;
         });
-
+        $rootScope.$broadcast('editEmployee');
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });

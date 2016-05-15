@@ -109,6 +109,7 @@ angular.module('sequoiaGroveApp')
   $scope.items = [{'isSpacer':true, 'index':-1}];
 
   $scope.selectPosition = function(pid, title) {
+    $log.debug(pid, title);
     $scope.selectedPid = pid;
     $scope.selectedPosition = title;
   }
@@ -222,21 +223,18 @@ angular.module('sequoiaGroveApp')
         employee.id, attrs.day, attrs.shiftstart, attrs.shiftend);
   }
 
-  $scope.employeeHasPosition = function(uid, pid) {
-    if (pid === -1) {
-      pid = $scope.selectedPid;
-    }
-    if (pid === 0) {
+  $scope.employeeHasPosition = function(uid) {
+    if ($scope.selectedPid === 0) {
       return true;
     }
-    return userFactory.hasPosition(uid, pid);
+    return userFactory.hasPosition(uid, $scope.selectedPid);
   }
 
   $scope.employeeListHighlight = function(id) {
     var style = 'form-control schedule-edit-input';
-    if (id == $scope.selectedId) {
-      style += ' schedule-edit-highlight';
-    }
+    //if (id == $scope.selectedId) {
+      //style += ' schedule-edit-highlight';
+    //}
     if ($scope.aList && $scope.pList) {
       if ($scope.aList[id] && $scope.pList[id]) {
         style += ' schedule-edit-input-avail';
@@ -251,12 +249,6 @@ angular.module('sequoiaGroveApp')
   $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
     var style = 'form-control schedule-edit-input';
     if ($rootScope.readyToSchedule === false) {
-      return style;
-    }
-    if ($scope.selectedId === 0 ) {
-      if (holiday) {
-        style += ' schedule-edit-input-holiday';
-      }
       return style;
     }
     if (available === undefined) {
@@ -313,7 +305,6 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    //$log.debug('update template schedule.js');
     $scope.template = scheduleFactory.getTemplate();
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.dayCount = scheduleFactory.getDayCount();

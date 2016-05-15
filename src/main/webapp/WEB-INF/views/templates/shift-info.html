@@ -1,4 +1,3 @@
-<!-- Schedule Shift Edit -->
 
 <!-- Saving Alerts -->
 <button type="button"
@@ -18,117 +17,63 @@
   </span>
 </button>
 
-<!-- Shift Edit Header -->
-<div class="row request-title">
-  <div class="col-sm-2">
-    <p>Title</p>
-  </div>
-  <div class="col-sm-2">
-    <p>Position</p>
-  </div>
-  <div class="col-sm-3">
-    <p>Weekdays</p>
-  </div>
-  <div class="col-sm-3">
-    <p>Weekends</p>
-  </div>
-</div>
-
 <!-- Shift Edit Form -->
-<div class="row">
+<form class="request-title">
+  <div class="row">
 
-  <!-- Fields -->
-  <div class="col-sm-2">
-    <input type="text" class="form-control" placeholder="title..."
-      ng-model="shiftInfo.tname" ng-click="alteredTitle">
-  </div>
+    <!-- Title -->
+    <div class="form-group col-sm-3">
+      <label for="shiftTitle"> Title </label>
+      <input id="shiftTitle" type="text" class="form-control" placeholder="title..."
+        ng-model="selectedShift.tname" ng-click="alteredTitle">
+    </div>
 
-  <div class="col-sm-2">
-    <!--div class="dropdown">
-      <button id="primary-role-dropdown" type="button" class="btn btn-default" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        Select
-        <span class="caret"></span>
-      </button>
-      <ul class="dropdown-menu" aria-labelledby="primary-role-dropdown">
-        <li ng-repeat="position in positions">{{position.title}}</li>
-      </ul>
-    </div-->
-    <select class="schedule-edit-shift-select" placeholder="Position"
-      ng-model="shiftInfo.pid" ng-options="option.id as option.title for option in positions">
-      <option value="">- Position -</option>
-    </select>
-  </div>
+    <!-- Position -->
+    <div class="form-group col-sm-3">
+      <label for="shiftPosition"> Position </label>
+      <select id="shiftPosition" class="form-control" placeholder="Position" ng-model="selectedShift.pid" ng-options="option.id as option.title for option in positions">
+        <option value="">- Position -</option>
+      </select>
+    </div>
 
-  <div class="col-sm-3">
-    <div class="row">
-      <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" placeholder="Weekday Start"
-          ng-model="shiftInfo.weekdayStart" ng-options="option.val as option.disp for option in times.start">
-          <option value="">- Start -</option>
-        </select>
-      </div>
-      <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" placeholder="Weekday End"
-          ng-model="shiftInfo.weekdayEnd" ng-options="option.val as option.disp for option in times.end">
-          <option value="">- End -</option>
-        </select>
+    <!-- Weekday Hours -->
+    <div class="form-group col-sm-3">
+      <label> Weekdays </label>
+      <div class="row">
+        <div class="col-sm-6">
+          <select id="shiftWeekdayStart" class="form-control" placeholder="Weekday Start"
+            ng-model="selectedShift.weekdayStart" ng-options="option.val as option.disp for option in times.start">
+            <option value="">- Start -</option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <select id="shiftWeekdayEnd" class="form-control" placeholder="Weekday End"
+            ng-model="selectedShift.weekdayEnd" ng-options="option.val as option.disp for option in times.end">
+            <option value="">- End -</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="col-sm-3">
-    <div class="row">
-      <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" placeholder="Weekend Start"
-          ng-model="shiftInfo.weekendStart" ng-options="option.val as option.disp for option in times.start">
-          <option value="">- Start -</option>
-        </select>
-      </div>
-      <div class="col-sm-5">
-        <select class="schedule-edit-shift-select" placeholder="Weekend End"
-          ng-model="shiftInfo.weekendEnd" ng-options="option.val as option.disp for option in times.end">
-          <option value="">- End -</option>
-        </select>
+    <!-- Weekend Hours -->
+    <div class="form-group col-sm-3">
+      <label>Weekends</label>
+      <div class="row">
+        <div class="col-sm-6">
+          <select id="shiftWeekendStart" class="form-control" placeholder="Weekend Start"
+            ng-model="selectedShift.weekendStart" ng-options="option.val as option.disp for option in times.start">
+            <option value="">- Start -</option>
+          </select>
+        </div>
+        <div class="col-sm-6">
+          <select id="shiftWeekendEnd" class="form-control" placeholder="Weekend End"
+            ng-model="selectedShift.weekendEnd" ng-options="option.val as option.disp for option in times.end">
+            <option value="">- End -</option>
+          </select>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Submit Buttons -->
-  <div class="col-sm-1" ng-hide="shiftSelected()">
-    <button type="button"
-      class="btn btn-success"
-      ng-click="addShift()"
-      ng-disabled = "saving">
-      <span class="schedule-edit-shift-txt-addshift">Add Shift</span>
-      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
-    </button>
   </div>
+</form>
 
-  <div class="col-sm-1" ng-hide="!shiftSelected()">
-    <!-- visual indication that changes are all saved -->
-    <!--button class = "btn btn-success schedule-view-button"
-      ng-show = ""
-      ng-click = "">
-      Save
-      <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
-    </button-->
-    <!-- Default button -->
-    <button type="button"
-      class="btn btn-default schedule-view-button"
-      ng-click="updateShift()"
-      ng-disabled = "saving">
-      Save
-      <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
-    </button>
-  </div>
-
-  <div class="col-sm-1" ng-hide="!shiftSelected()">
-    <button type="button"
-      class="btn btn-danger"
-      ng-click="deleteShift()"
-      ng-disabled = "saving">
-      Delete
-      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-    </button>
-  </div>
-</div>

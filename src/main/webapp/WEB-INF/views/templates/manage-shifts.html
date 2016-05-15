@@ -1,43 +1,68 @@
-<p/ class="lead"> Manage Shifts </p>
+<p class="lead"> Manage Shifts </p>
 <div class="row">
 
-    <div class="col-sm-3">
-      <div class="panel panel-default shift-list-panel">
-        <div class="panel-heading">
-          <!-- Filter by User, Location, or Position -->
-          <!--div class="dropdown pull-right" dropdown is-open=true>
+  <!-- List Shifts Panel-->
+  <div class="col-sm-3">
+    <div class="panel panel-default shift-list-panel">
+      <div class="panel-heading">
+        <p class="lead">Shift List</p>
+      </div>
+      <div class="panel-body">
+        <ng-include src="'views/templates/shift-list.html'"></ng-include>
+      </div>
+    </div>
+  </div> <!-- end column 3 -->
+
+  <!-- Manage Shifts Panel-->
+  <div class="col-sm-9">
+    <div class="panel panel-default shift-info-panel">
+      <div class="panel-heading">
+        <div class="row">
+
+          <!-- Title -->
+          <div class="col-sm-8">
+            <p class="lead">Shift Edit</p>
+          </div>
+
+          <div class="col-sm-2">
+            <!-- Save Existing Shift -->
             <button type="button"
-            ng-disabled = "loading"
-              id="shiftDropdown"
-              class="btn btn-default"
-              data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="true">
-              {{typeFilter}}<span class="caret"></span>
+              class="btn btn-default form-control"
+              ng-show="$parent.selectedShift.sid > 0"
+              ng-click="$parent.updateShift()"
+              ng-disabled = "saving">
+              Save
+              <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
             </button>
-            <ul class="dropdown-menu" rol="menu" arial-labelledby="shiftDropdown">
-              <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
-              <li role="separator" class="divider"></li>
-              <li role="menuitem"><a ng-click="changeType('current')">Current</a></li>
-              <li role="menuitem"><a ng-click="changeType('past')">Past</a></li>
-            </ul>
-          </div-->
-          <p class="lead">Shift List</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/shift-list.html'"></ng-include>
+          </div>
+
+          <div class="col-sm-2">
+            <!-- Add New Shift -->
+            <button type="button" class="btn btn-success form-control"
+              ng-show="$parent.selectedShift.sid <= 0"
+              ng-click="$parent.addShift()"
+              ng-disabled = "saving">
+              Add Shift
+              <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+            </button>
+            <button type="button"
+              class="btn btn-danger form-control"
+              ng-show="$parent.selectedShift.sid > 0"
+              ng-click="$parent.deleteShift()"
+              ng-disabled = "saving">
+              Delete
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+            </button>
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <div class="col-sm-9">
-      <div class="panel panel-default shift-info-panel">
-        <div class="panel-heading">
-          <p class="lead">Shift Edit</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/shift-info.html'"></ng-include>
-        </div>
+      <div class="panel-body">
+        <ng-include src="'views/templates/shift-info.html'"></ng-include>
       </div>
-    </div>
 
-</div>
+    </div> <!-- end manage shifts panel -->
+  </div><!-- end column 9 -->
+
+</div><!-- end row -->

@@ -33,7 +33,7 @@
 
   <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
     <div class="panel-body">
-      <div ng-if="e.isCurrent" ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="employeeHasPosition(e.id, -1)">
+      <div ng-if="e.isCurrent" ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="employeeHasPosition(e.id)">
         <span
           ng-class="employeeListHighlight(e.id)"
           ng-click="selectFromList(e.id)">

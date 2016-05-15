@@ -145,10 +145,11 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         return [];
       }
     });
+    $log.debug(positionMap);
   }
 
   var hasPosition = function(uid, pid) {
-    return _.contains(positionMap[uid], pid);
+    return _.contains(positionMap[parseInt(uid)], parseInt(pid));
   }
 
   // if User has manage schedule privelages, extend functionality
