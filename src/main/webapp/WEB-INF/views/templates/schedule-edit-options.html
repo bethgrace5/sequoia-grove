@@ -5,9 +5,9 @@
 
     <div class="pull-left">
 
-      <button class = "btn btn-info"
-        ng-click = "autoGenerate()"
-        ng-disabled = "saving || importing || loading">
+      <button class="btn btn-info pull-left"
+        ng-click="autoGenerate()"
+        ng-disabled="saving || importing || loading">
         Auto-Generate
         <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
       </button>
@@ -16,16 +16,17 @@
           aria-haspopup="true" aria-expanded="true"
           class="btn btn-info pull-left"
           ng-disabled = "loading || saving || importing">
-          Import {{weekList[selectedWeek].name}} <span class="caret"></span>
+          Import {{weekList[selectedWeek].name}} <span class="caret"> </span>
         </button>
-        <div ng-show="importing" class="pull-left">
-          <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
-        </div>
         <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
           <li ng-repeat = "w in weekList" value ="{{w.name}}">
             <a ng-click="importWeek($index)">{{w.name}}</a>
           </li>
         </ul>
+      </div>
+      <!-- importing spinner -->
+      <div ng-show="importing" class="pull-left spinner-fade">
+        <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
       </div>
     </div>
 
@@ -45,7 +46,9 @@
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
       </button>
-      <div class="pull-left" ng-show="saving">
+
+      <!-- saving spinner -->
+      <div ng-hide="!saving" class="pull-left spinner-fade">
         <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
       </div>
 

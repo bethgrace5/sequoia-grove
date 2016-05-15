@@ -179,7 +179,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         }
       };
     });
-    notifyObservers();
   }
 
   var shiftIsSchedulable = function(start, end, day) {
@@ -221,7 +220,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             storeOriginalTemplate();
             deferred.resolve(success.data);
             insertSpacers();
-            notifyObservers();
           }
           deferred.reject();
         });
@@ -569,6 +567,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             countHours();
             return initHolidays();
           }).then(function(success) {
+          notifyObservers();
           deferred.resolve(success);
       });
       return deferred.promise;
@@ -679,10 +678,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     'extendEnd': function(extend) { 
       extendEnd = extend; 
       addHolidays();
+      notifyObservers();
     },
     'extendStart': function(extend) { 
       extendStart = extend; 
       addHolidays();
+      notifyObservers();
     },
     'setManagePrivelage': function() { setManagePrivelage(); }
   }

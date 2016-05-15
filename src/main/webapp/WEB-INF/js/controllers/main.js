@@ -30,6 +30,7 @@ angular.module('sequoiaGroveApp')
   $scope.selectedWeek = 0;
   $scope.weekLabel = '';
   $scope.weekList = [];
+  $scope.template = {};
 
   // extend shift duration for holiday closes
   $scope.extendStart = 2;
@@ -443,15 +444,7 @@ angular.module('sequoiaGroveApp')
       return;
     }
     $scope.loadingWeek = true;
-    scheduleFactory.changeWeek(operation).then(
-        function(success) {
-          $scope.template = success.template;
-          $scope.isPublished = success.isPublished;
-          // this will reload the employees and their availability,
-          // and check it against the current schedule
-          $scope.loadingWeek = false;
-          $rootScope.$broadcast('editEmployee');
-        });
+    scheduleFactory.changeWeek(operation);
   }
 
   $scope.publishSchedule = function() {
@@ -465,6 +458,8 @@ angular.module('sequoiaGroveApp')
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
     $scope.weekList = scheduleFactory.getWeekList();
+    $scope.loadingWeek = false;
+    $log.debug('update changes made');
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
   //schedule factory now in control of updateChangesMade()

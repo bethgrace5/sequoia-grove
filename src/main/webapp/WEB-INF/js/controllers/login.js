@@ -74,7 +74,7 @@ angular.module('sequoiaGroveApp')
       // pull data from localstorage, if it's availabile
       if($rootScope.devMode) {
         if (localStorageService.get('template')){
-          $rootScope.template = JSON.parse(localStorageService.get('template'));
+          $scope.template = JSON.parse(localStorageService.get('template'));
         }
         if(localStorageService.get('employees')) {
           $rootScope.employees = JSON.parse(localStorageService.get('employees'));
