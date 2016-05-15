@@ -218,8 +218,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
               localStorageService.set('template', JSON.stringify(success.data.template));
             }
             storeOriginalTemplate();
-            deferred.resolve(success.data);
             insertSpacers();
+            deferred.resolve(success.data);
           }
           deferred.reject();
         });
@@ -291,13 +291,15 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var storeOriginalTemplate = function() {
     originalTemplate = []; // clear originalTemplate
     _.map(schedule, function(t, index, list) {
-      originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':header.mon.val});
-      originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':header.tue.val});
-      originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':header.wed.val});
-      originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':header.thu.val});
-      originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':header.fri.val});
-      originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
-      originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
+      if (!t.isSpacer) {
+        originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':header.mon.val});
+        originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':header.tue.val});
+        originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':header.wed.val});
+        originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':header.thu.val});
+        originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':header.fri.val});
+        originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
+        originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
+      }
     });
   }
 
@@ -477,6 +479,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // adds all shifts to delete list, so they are deleted when save is clicked
   var clearSchedule = function() {
+    var oldDeleteShifts = deleteShifts;
+    var countChanges = 0;
     updateShifts = [];
     deleteShifts = [];
     // add all shifts to delete list if they weren't already blank
@@ -487,24 +491,31 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       else {
         if (t.mon.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.mon.val});
+          countChanges++;
         }
         if (t.tue.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.tue.val});
+          countChanges++;
         }
         if (t.wed.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.wed.val});
+          countChanges++;
         }
         if (t.thu.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.thu.val});
+          countChanges++;
         }
         if (t.fri.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.fri.val});
+          countChanges++;
         }
         if (t.sat.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.sat.val});
+          countChanges++;
         }
         if (t.sun.eid !== 0) {
           deleteShifts.push({'sid':t.sid, 'date':header.sun.val});
+          countChanges++;
         }
         // update template so view reflects changes
         t.mon.name = ""; t.mon.eid = 0;
@@ -517,7 +528,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return t;
       }
     });
-    notifyObservers();
+    storeOriginalTemplate();
+    // no changes were added to delete list
+    if (countChanges === 0) {
+      //FIXME how to handle clicking clear twice,
+      // can't just reset to old delete shifts, because
+      // what if one change was added, it wouldn't keep all the deletions
+      //$log.debug('no changes to clear');
+    }
   }
 
   // rewrite current schedule with last week's data
@@ -604,7 +622,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.getWeekList    = function() { return weekList};
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
-    service.clear          = function() { clearSchedule(); };
+    service.clear          = function() { clearSchedule(); notifyObservers(); };
     service.publish        = function() { return publishSchedule(); };
     service.importWeek     = function(mon) { return importWeek(mon); };
     service.getDayCount    = function() { return dayCount; };
@@ -617,14 +635,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var deferred = $q.defer();
       // Save Shift Indices
       saveShifts().then(function(success) {
-        // Save Deleted cells
-        return deleteSchedule();
-      }).then(function(success) {
         // Save Updated cells
         return saveSchedule();
       }).then(function(success) {
-        // get updated schedule back from database
-        return initSchedule();
+        // Save Deleted cells
+        return deleteSchedule();
       }).then(function(success) {
         countDays();
         countHours();

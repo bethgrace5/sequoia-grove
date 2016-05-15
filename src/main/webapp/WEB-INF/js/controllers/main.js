@@ -444,7 +444,12 @@ angular.module('sequoiaGroveApp')
       return;
     }
     $scope.loadingWeek = true;
-    scheduleFactory.changeWeek(operation);
+    scheduleFactory.changeWeek(operation).then(function(success) {
+      $timeout(function() {
+        $scope.initAvailSchedule();
+        $scope.initPositionsSchedule();
+      });
+    });
   }
 
   $scope.publishSchedule = function() {

@@ -284,13 +284,18 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
     scheduleFactory.saveSchedule().then(
       function(success) {
-        $rootScope.$broadcast('editEmployee');
-        $scope.saving = false;
+        $timeout(function() {
+          $rootScope.$broadcast('editEmployee');
+          $scope.saving = false;
+        });
       });
   }
 
   $scope.clearSchedule = function() {
     scheduleFactory.clear();
+    $timeout(function() {
+      $rootScope.$broadcast('editEmployee');
+    });
   }
 
   $scope.importWeek = function(index) {
