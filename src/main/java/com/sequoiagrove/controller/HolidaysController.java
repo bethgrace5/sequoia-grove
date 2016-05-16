@@ -143,14 +143,8 @@ public class HolidaysController {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-
-        //Make Sure request ID is there too...
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        Object[] params = new Object[] {
-          dateStart,
-          dateEnd
-        };
+        Object[] params = new Object[] { dateStart, dateEnd };
         List<Holiday> holidayList = jdbcTemplate.query(
           "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day " +
           " from sequ_holiday where true " +
@@ -169,7 +163,6 @@ public class HolidaysController {
               return es;
             }
           });
-
         model.addAttribute("holidays", holidayList);
         return "jsonTemplate";
       }

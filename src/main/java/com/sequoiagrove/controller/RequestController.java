@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -279,6 +280,49 @@ public class RequestController{
         if(approval == true) return "Approved";
         else return "Denied";
       }
+    }
+
+    @RequestMapping(value = "/request/{start}/{end}")
+      public String getRequestInterval(@PathVariable("start") String start, @PathVariable("end") String end, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
+
+        Object[] params = new Object[] { start, start, end, end };
+
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+        List<RequestStatus> requestList = new ArrayList<RequestStatus>();
+        //try {
+        requestList = jdbcTemplate.query(
+            "select * from sequ_request_view " +
+            "where (start_date_time <= to_date(?, 'dd-mm-yyyy') and end_date_time >= to_date(?, 'dd-mm-yyyy') ) " +
+            "or (end_date_time >= to_date(?, 'dd-mm-yyyy') and start_date_time <= to_date(?, 'dd-mm-yyyy')) " +
+            "and is_approved = true", params,
+            new RowMapper<RequestStatus>() {
+              public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+                RequestStatus es = new RequestStatus(
+                  rs.getInt("rid"),
+                  rs.getInt("requested_by"),
+                  rs.getInt("responded_by"),
+                  checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
+                  rs.getString("start_date_time"),
+                  rs.getString("end_date_time"),
+                  rs.getString("requester_first_name"),
+                  rs.getString("requester_last_name"),
+                  rs.getString("responder_first_name"),
+                  rs.getString("responder_last_name")
+                  );
+                return es;
+              }
+            });
+        //} catch (EmptyResultDataAccessException e) {
+        //
+        //};
+        model.addAttribute("requests", requestList);
+        return "jsonTemplate";
     }
 
 }

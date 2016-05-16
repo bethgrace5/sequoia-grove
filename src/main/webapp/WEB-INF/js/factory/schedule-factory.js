@@ -34,6 +34,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var holidays = [];
   var extendEnd = 2;
   var extendStart = 2;
+  var requests = {};
 
 
   //call this when you know 'foo' has been changed
@@ -77,6 +78,80 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     year = moment(monday, 'DD-MM-YYYY').format('YYYY');
     buildWeekList();
   }
+
+  var initRequests = function() {
+    var deferred = $q.defer();
+    $http({ 'url': '/sequoiagrove/request/'+header.mon.val+'/'+header.sun.val, 'method': 'GET', }).then(
+        function(success) {
+          if (success.status === 200) {
+            requests = _.object(_.map(success.data.requests, function(item, index) {
+              var start = moment(item.startDate, 'YYYY-MM-DD');
+              var end = moment(item.endDate, 'YYYY-MM-DD');
+
+              // if start is before monday, make it equal to monday
+              if (start.isBefore(moment(header.mon.val, 'DD-MM-YYYY'))) {
+                start = moment(header.mon.val, 'DD-MM-YYYY');
+              }
+
+              // if end is after sunday, make it equal to sunday
+              if (end.isAfter(moment(header.sun.val, 'DD-MM-YYYY'))) {
+                end = moment(header.sun.val, 'DD-MM-YYYY');
+              }
+
+              var duration = end.diff(start, 'days')
+              var weekdays = {'mon':false, 'tue':false, 'wed':false, 'thu':false, 'fri':false, 'sat':false, 'sun':false}
+
+              // get start
+              if(start.format('dddd') === 'Monday') {
+                weekdays.mon = true;
+                if(duration > 0) { weekdays.tue = true; duration--; }
+                if(duration > 0) { weekdays.wed = true; duration--; }
+                if(duration > 0) { weekdays.thu = true; duration--; }
+                if(duration > 0) { weekdays.fri = true; duration--; }
+                if(duration > 0) { weekdays.sat = true; duration--; }
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Tuesday') {
+                weekdays.tue = true;
+                if(duration > 0) { weekdays.wed = true; duration--; }
+                if(duration > 0) { weekdays.thu = true; duration--; }
+                if(duration > 0) { weekdays.fri = true; duration--; }
+                if(duration > 0) { weekdays.sat = true; duration--; }
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Wednesday') {
+                weekdays.wed = true;
+                if(duration > 0) { weekdays.thu = true; duration--; }
+                if(duration > 0) { weekdays.fri = true; duration--; }
+                if(duration > 0) { weekdays.sat = true; duration--; }
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Thursday') {
+                weekdays.thu = true;
+                if(duration > 0) { weekdays.fri = true; duration--; }
+                if(duration > 0) { weekdays.sat = true; duration--; }
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Friday') {
+                weekdays.fri = true;
+                if(duration > 0) { weekdays.sat = true; duration--; }
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Saturday') {
+                weekdays.sat = true;
+                if(duration > 0) { weekdays.sun = true; duration--; }
+              }
+              else if(start.format('dddd') === 'Sunday') {
+                weekdays.sun = true;
+              }
+              return [item.employeeID, weekdays]
+            }));
+            deferred.resolve();
+          }
+        });
+
+    return deferred.promise;
+  };
 
   var buildWeekList = function() {
     var weeks = [
@@ -124,19 +199,37 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
       .then(function(success) {
         holidays = success.data.holidays;
-
-        _.map(holidays, function(h, index) {
-          var d = parseInt(h.weekday);
-          if(d === 2) { header.mon.holiday = h; }
-          if(d === 3) { header.tue.holiday = h; }
-          if(d === 4) { header.wed.holiday = h; }
-          if(d === 5) { header.thu.holiday = h; }
-          if(d === 6) { header.fri.holiday = h; }
-          if(d === 7) { header.sat.holiday = h; }
-          if(d === 1) { header.sun.holiday = h; }
-        });
-        addHolidays();
-        deferred.resolve(success);
+        if (holidays.length <= 0) {
+          deferred.resolve(success);
+          header.mon.holiday = {};
+          header.tue.holiday = {};
+          header.wed.holiday = {};
+          header.thu.holiday = {};
+          header.fri.holiday = {};
+          header.sat.holiday = {};
+          header.sun.holiday = {};
+        }
+        else {
+          _.map(holidays, function(h, index) {
+            var d = parseInt(h.weekday);
+            if(d === 2) { header.mon.holiday = h; }
+            else { header.mon.holiday = {} }
+            if(d === 3) { header.tue.holiday = h; }
+            else { header.tue.holiday = {} }
+            if(d === 4) { header.wed.holiday = h; }
+            else { header.wed.holiday = {} }
+            if(d === 5) { header.thu.holiday = h; }
+            else { header.thu.holiday = {} }
+            if(d === 6) { header.fri.holiday = h; }
+            else { header.fri.holiday = {} }
+            if(d === 7) { header.sat.holiday = h; }
+            else { header.sat.holiday = {} }
+            if(d === 1) { header.sun.holiday = h; }
+            else { header.sun.holiday = {} }
+          });
+          addHolidays();
+          deferred.resolve(success);
+        }
       });
     return deferred.promise;
   }
@@ -187,7 +280,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var shiftEnd = moment(end, 'HHmm').subtract(parseInt(extendEnd), 'hours');
       var storeOpen = moment(header[day].holiday.storeOpen, 'HHmm');
       var storeClose = moment(header[day].holiday.storeClose, 'HHmm');
-      return ((shiftEnd.isSame(storeClose, 'minute') || shiftEnd.isBefore(storeClose, 'minute')) 
+      return ((shiftEnd.isSame(storeClose, 'minute') || shiftEnd.isBefore(storeClose, 'minute'))
           && (shiftStart.isAfter(storeOpen, 'minute') || shiftStart.isSame(storeOpen, 'minute')));
   };
 
@@ -585,9 +678,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             countHours();
             return initHolidays();
           }).then(function(success) {
-          notifyObservers();
-          deferred.resolve(success);
-      });
+            return initRequests();
+          }).then(function(success) {
+            notifyObservers();
+            deferred.resolve(success);
+          });
       return deferred.promise;
     }
     // same as above, but counts days and hours when changing weeks
@@ -604,17 +699,17 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       initSchedule().then(
         function(success) {
-          $timeout(function() {
-            initHeader(); // update schedule header to reflect new dates
-            countDays(); // NOTE Added for those with manage schedule privelage
-            countHours(); // NOTE Added for those with manage schedule privelage
-            buildWeekList();
-            notifyObservers();
-            return initHolidays();
-          });
+          initHeader(); // update schedule header to reflect new dates
+          countDays(); // NOTE Added for those with manage schedule privelage
+          countHours(); // NOTE Added for those with manage schedule privelage
+          buildWeekList();
+          return initHolidays();
         },function(failure) {
           deferred.reject(failure);
       }).then(function(success) {
+        return initRequests();
+      }).then(function(success) {
+        notifyObservers();
         deferred.resolve(success);
       });
       return deferred.promise;
@@ -627,6 +722,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.importWeek     = function(mon) { return importWeek(mon); };
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
+    service.getRequests   = function() { return requests; };
     service.changesMade    = function() {
       return ((updateShifts.length + deleteShifts.length) > 0) || movedShifts;
     };
@@ -641,10 +737,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         // Save Deleted cells
         return deleteSchedule();
       }).then(function(success) {
+        return initHolidays();
+      }).then(function(success) {
         countDays();
         countHours();
         buildWeekList();
-        addHolidays();
         notifyObservers();
         deferred.resolve(success);
       });
@@ -678,7 +775,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       initHeader(); // update schedule header to reflect new dates
       initSchedule().then(
-         function(success){ // update schedule template function(success) {
+         function(success) {
           countDays(); // NOTE Added for those with manage schedule privelage
           countHours(); // NOTE Added for those with manage schedule privelage
           buildWeekList();
@@ -690,13 +787,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     'getHeader':   function() { return header; },
     'getTemplate': function() { return schedule; },
     'isPublished': function() { return isPublished; },
-    'extendEnd': function(extend) { 
-      extendEnd = extend; 
+    'extendEnd': function(extend) {
+      extendEnd = extend;
       addHolidays();
       notifyObservers();
     },
-    'extendStart': function(extend) { 
-      extendStart = extend; 
+    'extendStart': function(extend) {
+      extendStart = extend;
       addHolidays();
       notifyObservers();
     },

@@ -230,11 +230,12 @@ angular.module('sequoiaGroveApp')
     return userFactory.hasPosition(uid, $scope.selectedPid);
   }
 
+  // highlights the list on the side
   $scope.employeeListHighlight = function(id) {
     var style = 'form-control schedule-edit-input';
-    //if (id == $scope.selectedId) {
-      //style += ' schedule-edit-highlight';
-    //}
+    if (id == $scope.selectedId) {
+      style += ' schedule-edit-highlight';
+    }
     if ($scope.aList && $scope.pList) {
       if ($scope.aList[id] && $scope.pList[id]) {
         style += ' schedule-edit-input-avail';
@@ -242,8 +243,6 @@ angular.module('sequoiaGroveApp')
     }
     return style;
   };
-
-
 
   // validation for schedule edit input
   $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
@@ -315,6 +314,7 @@ angular.module('sequoiaGroveApp')
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
+    $scope.requests = scheduleFactory.getRequests();
   }
 
   scheduleFactory.registerObserverCallback(updateChangesMade);

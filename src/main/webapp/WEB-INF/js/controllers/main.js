@@ -76,7 +76,7 @@ angular.module('sequoiaGroveApp')
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
   $scope.birthdays = [];
-  $scope.holidays = [];
+  //$scope.holidays = [];
   $rootScope.isPublished = false;
   $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
@@ -205,8 +205,8 @@ angular.module('sequoiaGroveApp')
   $scope.birthdays.push({name:"Jem", date:"10/13"});
 
   // TODO function to find holidays this week
-  $scope.holidays.push({name:"Christmas", date:"12/25"});
-  $scope.holidays.push({name:"New Years Day", date:"01/01"});
+  //$scope.holidays.push({name:"Christmas", date:"12/25"});
+  //$scope.holidays.push({name:"New Years Day", date:"01/01"});
 
   $scope.times = {
     // start times start at the earlist shift start and increment by half
@@ -302,6 +302,7 @@ angular.module('sequoiaGroveApp')
 
   // filter schedule to determine if the scheduled employee has availability
   // adds 'available' attribute to that day for error checking
+  // removes availability if request for vacation was approved
   $scope.initAvailSchedule = function() {
     $scope.template = _.map ($scope.template, function(item, index) {
       if (item.isSpacer) {
@@ -309,54 +310,75 @@ angular.module('sequoiaGroveApp')
       }
       else {
         //item.mon = _.extend(item.mon, {'available': userFactory.isAvailable(item.mon.eid, 'mon', item.weekdayStart, item.weekdayEnd)});
-        item.mon = _.extend(item.mon, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'mon', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.mon = _.extend(item.mon, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].mon) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'mon', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.tue = _.extend(item.tue, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'tue', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.tue = _.extend(item.tue, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].tue) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'tue', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.wed = _.extend(item.wed, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'wed', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.wed = _.extend(item.wed, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].wed) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'wed', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.thu = _.extend(item.thu, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'thu', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.thu = _.extend(item.thu, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].thu) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'thu', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.fri = _.extend(item.fri, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'fri', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.fri = _.extend(item.fri, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].fri) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'fri', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.sat = _.extend(item.sat, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'sat', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.sat = _.extend(item.sat, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].sat) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'sat', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
-        item.sun = _.extend(item.sun, {'hasAvailability': 
-          _.object(
-            _.map($scope.employees, function(e, index) {
-              return [e.id, userFactory.isAvailable(e.id, 'sun', item.weekdayStart, item.weekdayEnd)]
-            })
-          )
+        item.sun = _.extend(item.sun, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].sun) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'sun', item.weekdayStart, item.weekdayEnd)]
+          }))
         });
       }
       return item;
@@ -371,49 +393,49 @@ angular.module('sequoiaGroveApp')
         return {'isSpacer':true, 'index':-1};
       }
       else {
-        item.mon = _.extend(item.mon, {'hasPosition': 
+        item.mon = _.extend(item.mon, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.tue = _.extend(item.tue, {'hasPosition': 
+        item.tue = _.extend(item.tue, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.wed = _.extend(item.wed, {'hasPosition': 
+        item.wed = _.extend(item.wed, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.thu = _.extend(item.thu, {'hasPosition': 
+        item.thu = _.extend(item.thu, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.fri = _.extend(item.fri, {'hasPosition': 
+        item.fri = _.extend(item.fri, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.sat = _.extend(item.sat, {'hasPosition': 
+        item.sat = _.extend(item.sat, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
             })
           )
         });
-        item.sun = _.extend(item.sun, {'hasPosition': 
+        item.sun = _.extend(item.sun, {'hasPosition':
           _.object(
             _.map($scope.employees, function(e, index) {
               return [e.id, userFactory.hasPosition(e.id, item.pid)]
@@ -463,8 +485,8 @@ angular.module('sequoiaGroveApp')
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
     $scope.weekList = scheduleFactory.getWeekList();
+    $scope.requests = scheduleFactory.getRequests();
     $scope.loadingWeek = false;
-    $log.debug('update changes made');
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
   //schedule factory now in control of updateChangesMade()

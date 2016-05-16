@@ -129,7 +129,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     positionMap = _.mapObject(positionMap, function(val, key) {
         return _.mapObject(
           _.values(_.pick(val, 'positions')),
-          function(val, key) { 
+          function(val, key) {
             return  _.map(val, function(item) {
               return parseInt(item);
           });
