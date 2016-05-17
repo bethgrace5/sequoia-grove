@@ -4,33 +4,36 @@
   <div class="col-sm-12">
 
     <div class="pull-left">
-      <!-- Filter by User, Location, or Position -->
+
+      <button class="btn btn-info pull-left"
+        ng-click="autoGenerate()"
+        ng-disabled="saving || importing || loading">
+        Auto-Generate
+        <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
+      </button>
       <div class="dropdown pull-left" dropdown is-open=true>
-
-        <button type="button" id="dropDownMenu1"
-          class="btn btn-info" data-toggle="dropdown"
-          ng-click="importLastWeek()"
-          ng-disabled = "saving"
-          aria-haspopup="true" aria-expanded="true">
-          Import Last Week <!--<span class="caret"></span>-->
-          <span class="glyphicon glyphicon-arrow-down"></span>
+        <button type="button" id="selectWeek" data-toggle="dropdown"
+          aria-haspopup="true" aria-expanded="true"
+          class="btn btn-info pull-left"
+          ng-disabled = "loading || saving || importing">
+          Import {{weekList[selectedWeek].name}} <span class="caret"> </span>
         </button>
-
-        <button class = "btn btn-info"
-          ng-click = "autoGenerate()"
-          ng-disabled = "saving">
-          Auto-Generate
-          <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
-        </button>
-
+        <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
+          <li ng-repeat = "w in weekList" value ="{{w.name}}">
+            <a ng-click="importWeek($index)">{{w.name}}</a>
+          </li>
+        </ul>
+      </div>
+      <!-- importing spinner -->
+      <div ng-show="importing" class="pull-left spinner-fade">
+        <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
       </div>
     </div>
 
     <form class="pull-right">
       <!-- Download and Print Options -->
       <button ng-click="clearSchedule()" 
-        ng-disabled = "saving"
-        ng-disabled = "saving";
+        ng-disabled = "saving || importing || loading"
         class="btn btn-default btn-warning">
         Clear
         <span class="glyphicon glyphicon glyphicon-remove" aria-hidden="true"></span>
@@ -38,22 +41,21 @@
 
       <!-- visual indication that changes are all saved -->
       <button class = "btn btn-success"
-        ng-disabled = "saving"
-        ng-show = "updateShifts.length<=0 && deleteShifts.length<=0"
-        ng-click = "saveSchedule()">
+        ng-disabled = "saving || importing || loading"
+        ng-hide = "changesMade">
         Saved
         <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
       </button>
-      <div style="position:absolute; right:21%; top:10%;"
-        ng-show="saving || importing">
-      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+
+      <!-- saving spinner -->
+      <div ng-hide="!saving" class="pull-left spinner-fade">
+        <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
       </div>
 
       <!-- Default button -->
       <button class = "btn btn-default"
-        ng-disabled = "saving"
-        ng-hide = "updateShifts.length<=0 && deleteShifts.length<=0"
-        ng-disabled = "saving";
+        ng-disabled = "saving || importing || loading"
+        ng-show = "changesMade"
         ng-click = "saveSchedule()">
         Save Changes
         <!--<span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>-->
@@ -61,15 +63,15 @@
 
       <button class = "btn btn-default"
         ng-click = "publishSchedule()"
-        ng-hide = "ispublished"
-        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0">
+        ng-hide = "isPublished"
+        ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0 || importing || loading">
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
       
       <button class = "btn btn-primary"
-        ng-show = "ispublished"
-        ng-disabled = "saving">
+        ng-show = "isPublished"
+        ng-disabled = "saving || loading || importing">
         Published
         <span class="glyphicon glyphicon glyphicon-ok" aria-hidden="true"></span>
       </button>
@@ -79,18 +81,3 @@
   </div>
 </div> <!-- End Schedule Edit Options -->
 
-<!-- Filter/ Narrow Schedule by location/shift -->
-<div class="position-button-bar">
-  <div ng-repeat="pos in positions">
-    <button
-      class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-show = "$index == 0"
-      ng-click="selectPosition(0)">
-      All
-    </button>
-    <button class="btn btn-default btn-small pull-left clear-both position-button"
-      ng-click="selectPosition(pos.id)">
-      {{pos.title}}
-    </button>
-  </div>
-</div>

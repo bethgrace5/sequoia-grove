@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
 
 <databaseChangeLog
   xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
@@ -14,6 +14,7 @@
     <tagDatabase tag="Version 0.0.0"/>
   </changeSet>
 
+
   <!-- Base Tables -->
   <include relativeToChangelogFile="true" file="changelogs/001-hours.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/002-employee.xml"/>
@@ -28,6 +29,7 @@
   <include relativeToChangelogFile="true" file="changelogs/011-requests-vacation.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/012-published-schedule.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/013-delivery.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/024-session.xml"/>
 
   <!-- Views -->
   <include relativeToChangelogFile="true" file="changelogs/014-schedule-template-view.xml"/>
@@ -38,16 +40,28 @@
   <include relativeToChangelogFile="true" file="changelogs/019-employee-position-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/020-employee-info-view.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/021-request-view.xml"/>
-  <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
   <!-- Mock Data -->
   <include relativeToChangelogFile="true" file="changelogs/022-mock-data.xml"/>
 
   <!-- Functions -->
   <include relativeToChangelogFile="true" file="changelogs/023-functions.xml"/>
+
+  <!-- Misc -->
+  <!-- rename employee to user, add classification for user,
+       add permission for user, add password column to user -->
+  <include relativeToChangelogFile="true" file="changelogs/026-rename-user-add-classification-and-permissions.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/027-prefix-tables.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/028-prefix-views-functions-and-sequences.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/029-update-views.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/030-update-functions.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/031-permission-mock-data.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/032-default-test-password.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/033-user-info-notes-birthday-format.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/034-shift-index-column.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/035-user-info-classification.xml"/>
+
   <include relativeToChangelogFile="true" file="changelogs/026-get-current-shifts.xml"/>
-
-
-
+  <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
 </databaseChangeLog>

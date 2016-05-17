@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="28" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Sequences -->
+    <sql>ALTER SEQUENCE delivery_id_seq RENAME TO sequ_delivery_sequence</sql>
+    <sql>ALTER SEQUENCE employee_id_seq RENAME TO sequ_user_sequence</sql>
+    <sql>ALTER SEQUENCE holiday_id_seq  RENAME TO sequ_holiday_sequence</sql>
+    <sql>ALTER SEQUENCE hours_id_seq    RENAME TO sequ_hours_sequence</sql>
+    <sql>ALTER SEQUENCE position_id_seq RENAME TO sequ_position_sequence</sql>
+    <sql>ALTER SEQUENCE requests_id_seq RENAME TO sequ_requests_sequence</sql>
+    <sql>ALTER SEQUENCE shift_id_seq    RENAME TO sequ_shift_sequence</sql>
+
+    <!-- Functions -->
+    <sql>ALTER FUNCTION delete_schedule(integer, character varying) RENAME TO sequ_delete_schedule</sql>
+    <sql>ALTER FUNCTION get_schedule(character varying) RENAME TO sequ_get_schedule</sql>
+    <sql>ALTER FUNCTION publish(integer, character varying) RENAME TO sequ_publish</sql>
+    <sql>ALTER FUNCTION schedule(integer, integer, character varying) RENAME TO sequ_schedule</sql>
+
+    <!-- Views -->
+    <renameView schemaName="public" newViewName="sequ_user_avail_view" oldViewName="employee_avail_view" />
+    <renameView schemaName="public" newViewName="sequ_user_history_view" oldViewName="employee_history_view" />
+    <renameView schemaName="public" newViewName="sequ_user_info_view" oldViewName="employee_info_view" />
+    <renameView schemaName="public" newViewName="sequ_user_position_view" oldViewName="employee_position_view" />
+    <renameView schemaName="public" newViewName="sequ_request_view" oldViewName="request_view" />
+    <renameView schemaName="public" newViewName="sequ_sch_hist_view" oldViewName="schedule_history_view" />
+    <renameView schemaName="public" newViewName="sequ_sch_template_view" oldViewName="schedule_template_view" />
+    <renameView schemaName="public" newViewName="sequ_sch_view" oldViewName="schedule_view" />
+
+  </changeSet>
+
+</databaseChangeLog>

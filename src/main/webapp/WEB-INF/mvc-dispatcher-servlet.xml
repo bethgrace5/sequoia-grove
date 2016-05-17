@@ -1,40 +1,211 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:context="http://www.springframework.org/schema/context"
-    xmlns:mvc="http://www.springframework.org/schema/mvc"
-    xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:context="http://www.springframework.org/schema/context"
+  xmlns:mvc="http://www.springframework.org/schema/mvc"
+  xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
-    <!--Setting the context-->
-    <context:component-scan base-package="com.sequoiagrove.controller" />
-    <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
+  <!--Setting the context-->
+  <context:component-scan base-package="com.sequoiagrove.controller" />
+  <context:property-placeholder location="/WEB-INF/jdbc.properties"/>
 
-    <mvc:annotation-driven />
-    <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
-    <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
-    <mvc:resources mapping="/img/**"       location="/static/img/"/>
-    <mvc:resources mapping="/i18n/**"      location="/static/i18n/"/>
-    <mvc:resources mapping="/static/**" location="/static/"/>
-    <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
-    <mvc:resources mapping="/static/**"    location="/static/" />
-    <mvc:resources mapping="/bower_components/**" location="/static/bower_components/"/>
+  <mvc:annotation-driven />
+  <mvc:resources mapping="/styles/**"    location="/WEB-INF/styles/"/>
+  <mvc:resources mapping="/js/**"        location="/WEB-INF/js/"/>
+  <mvc:resources mapping="/views/**"     location="/WEB-INF/views/"/>
+  <mvc:resources mapping="/img/**"       location="/static/img/"/>
+  <mvc:resources mapping="/i18n/**"      location="/static/i18n/"/>
+  <mvc:resources mapping="/static/**" location="/static/"/>
+  <mvc:resources mapping="/webjars/**"   location="classpath:/META-INF/resources/webjars/"/>
+  <mvc:resources mapping="/static/**"    location="/static/" />
+  <mvc:resources mapping="/bower_components/**" location="/static/bower_components/"/>
 
-    <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
-    <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"> </bean>
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> </bean>
+  <bean name="jsonTemplate" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"></bean>
+  <bean name="viewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver"> </bean>
+  <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> </bean>
 
 
-    <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
-      <property name="driverClassName" value="org.postgresql.Driver"/>
-      <property name="url" value="${jdbc.url}" />
-      <property name="username" value="${jdbc.username}"/>
-      <property name="password" value="${jdbc.password}"/>
-    </bean>
+  <bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+    <property name="driverClassName" value="org.postgresql.Driver"/>
+    <property name="url" value="${jdbc.url}" />
+    <property name="username" value="${jdbc.username}"/>
+    <property name="password" value="${jdbc.password}"/>
+  </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+  <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+    <property name="dataSource" ref="dataSource"/>
+  </bean>
 
+  <mvc:interceptors>
+    <mvc:interceptor>
+      <mvc:mapping path="/auth/loginwithtoken" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/auth/logout" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/update" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/deactivate/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee/activate/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/employee*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/shiftIndices*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/template/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/avail/remove/*/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/avail/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/delivery/delete/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/delivery/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/delivery*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/get/between/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/remove/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/update" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/shift/add/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/shift/update/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/shift/delete/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position/add/" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position/remove/" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position/*" /> <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/update/dates" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/update/*/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/current/employee/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/pending" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get/checked" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/get" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/submit*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/request/*/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/delete/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/update/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/template/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/publish/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/autogen/" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+  </mvc:interceptors>
 
 </beans>

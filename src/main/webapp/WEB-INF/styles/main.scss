@@ -1,3 +1,6 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
@@ -15,6 +18,7 @@ $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/boots
   07. Site_Header_and_Navbar
   08. Employee_List
   09. Default_settings_Yeoman_put_in
+  10. style for ng-sortable
 
 *********************************************/
 
@@ -79,16 +83,32 @@ a:focus {
 /********************************************
     04. Schedule_Edit
 *********************************************/
+.data-view {
+  min-height: 300px;
+  /*max-height: 30%;*/
+  overflow-y: scroll;
+  overflow-x: hidden;
+  padding-left:10px;
+  margin-left:10px;
+  width: 100%;
+  margin-top:0;
+  margin-bottom: 3px;
+}
 .position-button-bar {
   margin: 0 auto;
 }
 .position-button {
   margin: 0.6em;
-  min-width: 5em;
+  min-width: 7em;
   border: none;
 }
 .position-button-active {
   background-color: yellow;
+}
+.schedule-console {
+  margin-right: 20px;
+  margin-left: 20px;
+  margin-bottom: 3px;
 }
 
 /********************************************
@@ -117,8 +137,8 @@ a:focus {
 }
 
 .schedule-message-panel {
-  width:80%; 
-  margin:0 auto; 
+  width:80%;
+  margin:0 auto;
   background-color:#e6e6e6;
 }
 /* Availability */
@@ -165,17 +185,25 @@ a:focus {
 .schedule-edit-input-error:focus {
   box-shadow: 0 0 5px rgba(204, 0, 0, 1);
   border: 1px solid rgba(204, 0, 0, 0.7);
-  background-color: #FFCCCC;
+  /*background-color: #FFCCCC;*/
+}
+/* holiday on edit schedule input box */
+.schedule-edit-input-holiday{
+  background-color: #e6ccff;
+}
+.schedule-edit-input-holiday:focus {
+  box-shadow: 0 0 5px rgba(92, 0, 153, 1);
+  border: 1px solid rgba(92, 0, 153, 0.7);
+  background-color: #d9b3ff;
+}
+/* availability and has position for selected */
+.schedule-edit-input-avail{
+  background-color: #e6ffb3;
 }
 .schedule-edit-task-names{
   font-size: 1em;
-  margin:0 auto;
-}
-.schedule-edit-task-selected{
-  background-color: #66ffd7;
-  border-radius: 0.3em;
-  padding-left: 3px;
-  padding-right: 3px;
+  margin:0;
+  padding:0;
 }
 .schedule-edit{
   font-size: 1em;
@@ -205,7 +233,9 @@ a:focus {
 .schedule-edit-panel {
   /*background-color: #edf6f7;*/
   min-height: 70%;
-  width: 87%;
+  width: 90%;
+  min-width:1090px;
+  margin-right: 13%;
 }
 .schedule-edit-panel-header div{
   min-width: 9%;
@@ -219,7 +249,7 @@ a:focus {
   margin-top: 75px;
   position:fixed;
   right: 0;
-  max-height: 70%;
+  max-height: 60%;
   overflow-y: scroll;
   width: 13%;
 }
@@ -230,24 +260,6 @@ a:focus {
   right: 0;
   width: 13%;
 }
-/* shift edit */
-.schedule-edit-shift-panel {
-  width: 87%;
-}
-.schedule-edit-shift-select {
-  width: auto;
-  margin: 5px;
-}
-.schedule-edit-shift-txt-addshift {
-  padding-right: 0.1em;
-}
-.schedule-edit-shift-btn-newshift {
-  padding-right: 0.5em;
-  padding-left: 0.5em;
-}
-.schedule-edit-shift-droprow {
-  margin-top: 10px;
-}
 
 /********************************************
     06. Schedule_Header
@@ -255,7 +267,7 @@ a:focus {
 .weekday-title div{
   font-size: 1.1em;
   color: #336699;
-  padding: 0;
+  padding-left: 30px;
 }
 
 .schedule-times {
@@ -337,21 +349,8 @@ a:focus {
 .emp-text-row {
   margin-bottom: 10px;
 }
-.emp-repeated-row {
-  line-height: 1;
-  margin-bottom: 7px;
-}
-.emp-history {
-  display: inline;
-}
 .emp-history-dash {
   margin: 0px 30px 0px 30px;
-}
-.emp-history-row {
-  margin-top: 15px;
-}
-.emp-history-row:first-of-type {
-  margin-top: 0px;
 }
 .emp-list-wrapper {
   height: 70%;
@@ -368,6 +367,48 @@ a:focus {
 .shift-list-wrapper {
   height: 50%;
   overflow-y: scroll;
+}
+
+/* ng hide fade transitions*/
+.hide-fade.ng-hide-add, .hide-fade.ng-hide-remove {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  display:block!important;
+}
+/* ng-hide leave */
+.hide-fade.ng-hide-add.ng-hide-add-active,
+.hide-fade.ng-hide-remove {
+  transition: 0.5s ease all;
+  opacity:0;
+}
+/* ng-hide enter */
+.hide-fade.ng-hide-add,
+.hide-fade.ng-hide-remove.ng-hide-remove-active {
+  transition:0.5s ease all;
+  opacity:1;
+}
+
+/* spinner fade transitions*/
+.spinner-fade.ng-hide-add, .spinner-fade.ng-hide-remove {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  display:block!important;
+}
+/* spinner leave */
+.spinner-fade.ng-hide-add.ng-hide-add-active,
+.spinner-fade.ng-hide-remove {
+  transition: 1s ease all;
+  opacity:0;
+}
+/* spinner enter */
+.spinner-fade.ng-hide-add,
+.spinner-fade.ng-hide-remove.ng-hide-remove-active {
+  transition:0.2s linear all;
+  opacity:1;
 }
 
 /********************************************
@@ -461,7 +502,7 @@ a:focus {
   overflow-y:scroll;
 }
 
-.css-form input.ng-invalid.ng-touched {
+.css-form *.ng-invalid.ng-touched {
   -webkit-box-shadow: inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   -moz-box-shadow:    inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   box-shadow:         inset 3px 3px 13px -2px rgba(179,0,89,0.75);
@@ -475,4 +516,35 @@ a:focus {
   //background-color: #78FA89;
 }
 
+/* ******************************************* */
+/* 10. style for ng-sortable */
+/* ******************************************* */
+
+.as-sortable-item, .as-sortable-placeholder {
+    min-height: 20px;
+    margin: 0;
+    padding-left: 10px;
+    border-radius: 5px;
+}
+
+.as-sortable-item {
+    border: none;
+    background-color: transparent;;
+}
+
+.as-sortable-item-handle {
+}
+
+.as-sortable-placeholder {
+    border: 1px dashed darkgrey;
+    box-sizing: border-box;
+    background-color: #dbdbdb;
+}
+
+.as-sortable-drag {
+    opacity: 0.7;
+}
+
+.as-sortable-hidden {
+}
 

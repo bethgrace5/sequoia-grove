@@ -17,15 +17,13 @@
         <button type="button"
           class="btn btn-clear"
           ng-disabled="loading"
-          ng-click="personaLogout()">
-          <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
+          ng-click="destructData()">
           Hello, {{loggedInUser.firstname}}! (Sign out)
         </button>
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button ng-disabled="loggingIn || loading" type="button" ng-click="personaLogin()" class="btn btn-clear">
-          <img style="height:20px; with: 20px;" src="img/persona-logo-glyph.png"></img>
+        <button ng-disabled="loggingIn || loading" type="button" ng-click="appLogin()" class="btn btn-clear">
           Sign in / Sign up
         </button>
       </span>
@@ -57,7 +55,7 @@
 
             <!-- manager only options -->
             <li role="presentation"
-              ng-show="loggedInUser.isManager"
+              ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/employee')">
               <a href="#/employee">
                 <span class="glyphicon glyphicon-user"></span>
@@ -65,7 +63,7 @@
               </a>
             </li>
             <li role="presentation"
-              ng-show="loggedInUser.isManager"
+              ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/schedule')">
               <a href="#/schedule">
                 <span class="glyphicon glyphicon-calendar"></span>
@@ -73,7 +71,7 @@
               </a>
             </li>
             <li role="presentation"
-              ng-show="loggedInUser.isManager"
+              ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/manage')">
               <a href="#/manage">
                 <span class="glyphicon glyphicon-paperclip"></span>

@@ -84,9 +84,9 @@ public class ScheduleGeneratorController {
 
   void placeHolder123(){
     /*
-       select shift_id as shift, STRING_AGG(employee_id || '', ',' ORDER BY shift_id)
+       select shift_id as shift, STRING_AGG(user_id || '', ',' ORDER BY shift_id)
        AS eids
-       from employee_shift_view p
+       from sequ_employee_shift_view p
        where p.on_date >= '2016-03-21' AND p.on_date <= '2016-04-30' AND p.day = '1'
        group by shift_id
     */
@@ -106,7 +106,8 @@ public class ScheduleGeneratorController {
       Generator generator;
       generator = new Generator();
       generator.getPastInformation(historyStart, historyEnd);
-      generator.getEmployeeInformation(historyStart, historyEnd);
+      generator.getEmployeeInformation(historyStart, historyEnd); // !!! WRONG DATES !!!
+      generator.getShiftInformation(mon);
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)
@@ -116,12 +117,13 @@ public class ScheduleGeneratorController {
       // Construct schedule template using {mon} to get correct shifts
       // !!!!! all employees are null/0, check if mon is passed correctly !!!!!
       List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-        "select * from get_schedule(?)",
+        "select * from sequ_get_schedule(?)",
         new Object[]{mon},
         new RowMapper<ScheduleTemplate>() {
           public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
             ScheduleTemplate schTmp = new ScheduleTemplate(
+                rs.getInt("index"),
                 rs.getInt("sid"),
                 rs.getInt("pid"),
                 rs.getString("location"),
@@ -144,7 +146,7 @@ public class ScheduleGeneratorController {
         });
 
       Integer count = jdbcTemplate.queryForObject(
-          "SELECT count(*) FROM published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+          "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
       
       // Insert employees into shift slots using AI
 
@@ -172,11 +174,11 @@ public class ScheduleGeneratorController {
       JsonObject  jobject = jelement.getAsJsonObject();
 
       List<DayShiftEmployee> dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, employee_id, count(*) AS worked" +
-        " from employee_shift_view " +
+        " select day, shift_id, user_id, count(*) AS worked" +
+        " from sequ_employee_shift_view " +
         " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-        " group by day, shift_id, employee_id " +
-        " order by day, shift_id, employee_id ",
+        " group by day, shift_id, user_id " +
+        " order by day, shift_id, user_id ",
       //I need way to build Generator without the DayShiftEmployee
           //"also day might be A String"
           new RowMapper<DayShiftEmployee>() {
@@ -184,7 +186,7 @@ public class ScheduleGeneratorController {
               DayShiftEmployee es = new DayShiftEmployee(
                 rs.getInt("day"),//This Might Be Wrong?
                 rs.getInt("shift_id"),
-                rs.getInt("employee_id"),
+                rs.getInt("user_id"),
                 rs.getInt("worked")
               );
               return es;

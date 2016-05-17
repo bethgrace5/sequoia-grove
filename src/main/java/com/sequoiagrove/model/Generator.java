@@ -16,14 +16,17 @@ package com.sequoiagrove.model;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.sequoiagrove.model.Employee;
-import com.sequoiagrove.model.Request;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+
 import com.sequoiagrove.controller.MainController;
-import java.util.*;
+import com.sequoiagrove.model.User;
+import com.sequoiagrove.model.UserRowMapper;
+import com.sequoiagrove.model.Request;
+import com.sequoiagrove.model.Shift;
 
 public class Generator{
   //-------------------------
@@ -33,11 +36,12 @@ public class Generator{
     <String, HashMap<Integer, HashMap<Integer, Integer> > > generator;
   //[Day [ Shift [Employee, number of weeks scheduled] ] ]
   //
-  List<Employee> employeeList;
+  List<User> employeeList;
 
   String startDate;
   String endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
+  List<Shift> shifts;
   Request requests[];
 
   //-----------------------------------
@@ -88,23 +92,20 @@ public class Generator{
   //  Database_Gathering
   //---------------------------------
   public void getPastInformation(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, employee_id, count(*) AS worked" +
-        " from employee_shift_view " +
-        " where on_date <= to_date(?, 'mm-dd-yyyy') AND " +
-        " on_date >= to_date(?, 'mm-dd-yyyy') " +
-        " group by day, shift_id, employee_id " +
-        " order by day, shift_id, employee_id ",
-
-
-        new RowMapper<DayShiftEmployee>() {
-          public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-            DayShiftEmployee es = new DayShiftEmployee(
-              rs.getInt("day"),
-              rs.getInt("shift_id"),
-              rs.getInt("employee_id"),
-              rs.getInt("worked")
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      dayShiftEmployeeList = jdbcTemplate.query(
+        " select day, shift_id, user_id, count(*) AS worked" +
+        " from sequ_employee_shift_view " +
+        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
+        " group by day, shift_id, user_id " +
+        " order by day, shift_id, user_id ",
+          new RowMapper<DayShiftEmployee>() {
+            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
+              DayShiftEmployee es = new DayShiftEmployee(
+                rs.getInt("day"),
+                rs.getInt("shift_id"),
+                rs.getInt("user_id"),
+                rs.getInt("worked")
               );
             return es;
           }
@@ -118,70 +119,11 @@ public class Generator{
     printFormation();
   }
 
-  public List<Employee> getEmployees(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    String queryStr = "select * from employee_info_view";
-    List<Employee> empList = jdbcTemplate.query( queryStr,
-        new RowMapper<Employee>() {
-          public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Employee employee = new Employee (
-              rs.getInt("id"),
-              rs.getInt("max_hrs_week"),
-              rs.getInt("min_hrs_week"),
-              rs.getBoolean("is_manager"),
-              rs.getInt("clock_number"),
-              rs.getString("first_name"),
-              rs.getString("last_name"),
-              rs.getString("phone_number"),
-              rs.getString("email"),
-              rs.getDate("birth_date"),
-              parseHistory(rs.getString("history")),
-              parsePositions(rs.getString("positions")),
-              parseAvailability(rs.getString("avail")),
-              false);
-            // if the history end is an empty string, employee is current
-            employee.setIsCurrent(
-              employee.getHistory()
-              .get(employee.getHistory().size() - 1)
-              .getEnd() == ""
-              );
-            return employee;
-          }
-        });
-    return empList;
-  }
-
-  public void getEmployeeInformation(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    String queryStr = "select * from employee_info_view";
-    List<Employee> empList = jdbcTemplate.query( queryStr,
-        new RowMapper<Employee>() {
-          public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Employee employee = new Employee (
-              rs.getInt("id"),
-              rs.getInt("max_hrs_week"),
-              rs.getInt("min_hrs_week"),
-              rs.getBoolean("is_manager"),
-              rs.getInt("clock_number"),
-              rs.getString("first_name"),
-              rs.getString("last_name"),
-              rs.getString("phone_number"),
-              rs.getString("email"),
-              rs.getDate("birth_date"),
-              parseHistory(rs.getString("history")),
-              parsePositions(rs.getString("positions")),
-              parseAvailability(rs.getString("avail")),
-              false);
-
-            // if the history end is an empty string, employee is current
-            employee.setIsCurrent(
-              employee.getHistory()
-              .get(employee.getHistory().size() - 1)
-              .getEnd() == ""
-              );
-            return employee;
-          }
-        });
+  public List<User> getEmployeeInformation(String startDate, String endDate){
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      String queryStr = "select * from sequ_user_info_view";
+      List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
+      return empList;
   }
 
 
@@ -284,6 +226,10 @@ public class Generator{
     return new ArrayList<String>(Arrays.asList(pos.split(",")));
   }
 
+  public void getShiftInformation(String mon) {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
+  }
 
   public String convertDay(Integer value){
     if(value == 1) return "mon";

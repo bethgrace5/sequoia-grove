@@ -54,6 +54,16 @@
         </div>
       </div>
 
+      <!-- Permissions
+      <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
+        <div class="panel-heading">
+          <p class="lead emp-header">Permissions</p>
+        </div>
+        <div class="panel-body">
+          <ng-include src="'views/templates/employee-permissions.html'"></ng-include>
+        </div>
+      </div> -->
+
       <!-- Employment History  -->
       <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
         <div class="panel-heading">
@@ -61,13 +71,13 @@
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === true"
             ng-click="deactivateEmployee($event)"
-            class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstName}}
+            class = "btn btn-info pull-right">Unemploy {{selectedEmployee.firstname}}
           </button>
           <!-- Employ this past employee -->
           <button type = "button"
             ng-show="selectedEmployee.isCurrent === false"
             ng-click="activateEmployee()"
-            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstName}}
+            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstname}}
           </button>
           <p class="lead emp-header">Employment History</p>
         </div>

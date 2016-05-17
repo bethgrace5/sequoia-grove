@@ -5,7 +5,7 @@
 </div>
 <!-- Print Version -->
 <div class="container-fluid visible-print-block schedule-view-options">
-  <div ng-show="ispublished">
+  <div ng-show="isPublished">
     <ng-include src="'views/templates/schedule-view-print.html'"></ng-include>
   </div>
 </div>
@@ -17,10 +17,10 @@
     <ng-include src="'views/templates/schedule-header.html'"></ng-include>
     <br/>
     <!-- Schedule -->
-    <div ng-show="ispublished">
+    <div ng-show="isPublished">
       <ng-include src="'views/templates/schedule-view.html'" ></ng-include>
     </div>
-    <div class="panel panel-default schedule-message-panel"  ng-hide="ispublished">
+    <div class="panel panel-default schedule-message-panel"  ng-hide="isPublished">
       <div class="panel-body">
         <p class="text-center schedule-message"> This week's schedule isn't ready to be viewed yet</p>
       </div>

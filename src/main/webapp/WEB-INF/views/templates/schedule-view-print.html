@@ -56,23 +56,26 @@
     </td>
 
     <td class="print-row print-border">
-      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) >= 7"
-        class="glyphicon glyphicon-star">
-      </span>
-      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) < 7 &&
-        shiftDuration(t.weekdayStart, t.weekdayEnd) >= 4"
-        class="glyphicon glyphicon-star-empty">
-      </span>
-      <span ng-show="shiftDuration(t.weekdayStart, t.weekdayEnd) < 4"
-        class="glyphicon glyphicon-minus">
-      </span>
-      {{::shiftDuration(t.weekdayStart, t.weekdayEnd)}} hrs
+      <div ng-hide="t.isSpacer">
+        <span ng-show="t.weekdayDuration >= 7"
+          class="glyphicon glyphicon-star">
+        </span>
+        <span ng-show="t.weekdayDuration < 7 && t.weekdayDuration >= 4"
+          class="glyphicon glyphicon-star-empty">
+        </span>
+        <span ng-show="t.weekdayDuration < 4"
+          class="glyphicon glyphicon-minus">
+        </span>
+        {{:: t.weekdayDuration}} hrs
+      </div>
     </td>
 
     <!-- weekday times -->
     <!--<div ng-show="t.wd_st != 0">-->
     <td class="print-row  print-border">
-      {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
+      <div ng-hide="t.isSpacer">
+        {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
+      </div>
     </td>
     <!--</div>-->
 
@@ -101,23 +104,26 @@
       {{t.fri.name}}
     </td>
 
-    <td class="print-row print-border">
-      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) >= 7"
-        class="glyphicon glyphicon-star">
-      </span>
-      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) < 7 &&
-        shiftDuration(t.weekendStart, t.weekendEnd) >= 4"
-        class="glyphicon glyphicon-star-empty">
-      </span>
-      <span ng-show="shiftDuration(t.weekendStart, t.weekendEnd) < 4"
-        class="glyphicon glyphicon-minus">
-      </span>
-      {{::shiftDuration(t.weekendStart, t.weekendEnd)}} hrs
+    <td ng-hide="t.isSpacer" class="print-row print-border">
+      <div ng-hide="t.isSpacer">
+        <span ng-show="t.weekendDuration >= 7"
+          class="glyphicon glyphicon-star">
+        </span>
+        <span ng-show="t.weekendDuration< 7 && t.weekendDuration>= 4"
+          class="glyphicon glyphicon-star-empty">
+        </span>
+        <span ng-show="t.weekendDuration < 4"
+          class="glyphicon glyphicon-minus">
+        </span>
+        {{t.weekendDuration}} hrs
+      </div>
     </td>
     <!-- weekend times -->
       <!--<div ng-show="t.we_st != 0">-->
     <td class="print-row  print-border">
-      {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
+      <div ng-hide="t.isSpacer">
+        {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
+      </div>
     </td>
       <!--</div>-->
 

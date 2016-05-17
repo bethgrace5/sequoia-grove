@@ -1,7 +1,7 @@
 
 // select the entire text of an input on one click
 // used in schedule edit
-angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', function ($window, $timeout, $log, $rootScope) {
+angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeout', '$log', '$rootScope', 'scheduleFactory', 'userFactory', function ($window, $timeout, $log, $rootScope, scheduleFactory, userFactory) {
   return {
     restrict: 'A',
     scope: false,
@@ -34,34 +34,42 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
 
         // the name is blank - add it to delete list
         if(this.value.length === 0) {
-          $scope.addToDeleteList({'sid': attrs.sid, 'date':attrs.date});
+          scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date});
+          element.context.classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = 0;
+          $scope.selectEid(0);
+          $scope.$apply();
+          return;
         }
-
         var employee = $scope.getEmployeeByname(this.value);;
-
-        // Found Employee!
+        // found employee!
         if (employee.id !== 0) {
           // remove warning class and update template with new id
           element.context.classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = employee.id;
 
           // 1. Check availability
-          if ($scope.employeeIsAvailable(attrs, employee)) {
+          if ($scope.template[attrs.idx][attrs.day].hasAvailability[employee.id]) {
             element.context.classList.add('schedule-edit-highlight');
-          }
-          else { // the employee is not available
+          } else { // the employee is not available
             element.context.classList.add('schedule-edit-input-error');
           }
 
-          // 2. update change lists
-          $scope.trackScheduleChange(employee.id, attrs.sid, attrs.date);
+          // 2. check that they have the position
+          if ($scope.template[attrs.idx][attrs.day].hasPosition[employee.id]) {
+            element.context.classList.add('schedule-edit-highlight');
+          } else {
+            element.context.classList.add('schedule-edit-input-error');
+          }
+
+          // 3. update change lists
+          scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied
           element.context.classList.add('schedule-edit-input-warn');
         }
 
-        $scope.selectEid(employee.id);
+        $scope.selectEid($scope.template[attrs.idx], attrs.day);
         $scope.$apply();
       }); // end 'keyup' function
 

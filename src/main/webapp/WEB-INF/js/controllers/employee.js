@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -19,29 +19,49 @@ angular.module('sequoiaGroveApp')
       $location.path('/login');
     }
 
+    // TODO eventually build this object by pulling from database
+    $scope.classifications = [
+      {'disp':'Employee', 'val':1},
+      {'disp':'Manager',  'val':2},
+      {'disp':'Account Holder', 'val':3},
+      {'disp':'Admin', 'val':4}
+    ]
+    $scope.permissions = [
+      {'disp':'submit-requests-off', 'val':2},
+      {'disp':'manage-employees', 'val':3},
+      {'disp':'manage-requests', 'val':4},
+      {'disp':'manage-schedule', 'val':5},
+      {'disp':'get-other-store-info', 'val':6},
+      {'disp':'manage-store', 'val':7},
+      {'disp':'edit-user-permissions', 'val':8}
+    ]
+    $scope.selectedClassification = 0;
+
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'isManager':false,
-      'firstName':'',
-      'lastName':'',
+      'classification': 0,
+      'notes': '',
+      'firstname':'',
+      'lastname':'',
       'birthDate':'',
-      'clock':0,
+      'clockNumber':0,
       'email':'',
-      'minHrsWeek':'',
-      'maxHrsWeek':'',
+      'maxHours':'',
+      'minHours':'',
       'phone':0,
       'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
       'history':[],
       'positions':[]
     };
+    $scope.birthday = new Date();
 
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
+    $scope.newPermission = {};
     $scope.saving = false;
     $scope.typeFilter = 'current';
-    $scope.birthdate = new Date();
 
 /************** Pure Functions **************/
     // switch filter of employee list type for all, current or past
@@ -77,13 +97,23 @@ angular.module('sequoiaGroveApp')
       $scope.newAvail.end = end;
     }
 
+    $scope.selectClassification = function(index) {
+      $scope.selectedClassification = index;
+    }
+
     $scope.selectEmployee = function(id) {
+
       var length = $scope.employees.length;
       for(var i = 0; i < length; i++) {
         var curid = $scope.employees[i].id;
         if (curid==id) {
           $scope.selectedEmployee = $scope.employees[i];
-          $scope.birthdate = moment($scope.employees[i].birthDate, 'YYYY-MM-DD').toDate();
+          _.map($scope.classifications,function(item, index){
+            if(parseInt(item.val) === parseInt($scope.selectedEmployee.classification)) {
+              $scope.selectedClassification = index;
+            }
+          });
+          $scope.birthday = moment($scope.employees[i].birthDate, 'MM-DD-YYYY').toDate();
           break;
         }
       }
@@ -91,22 +121,23 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
+      $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'isManager':false,
-        'firstName':'',
-        'lastName':'',
+        'classification': $scope.classifications[$scope.selectedClassification].val,
+        'notes': '',
+        'firstname':'',
+        'lastname':'',
         'birthDate':'',
-        'clock':0,
+        'clockNumber':0,
         'email':'',
-        'minHrsWeek':'',
-        'maxHrsWeek':'',
+        'maxHours':'',
+        'minHours':'',
         'phone':0,
         'avail':{'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[], 'sat':[], 'sun':[]},
         'history':[],
         'positions':[]
       };
-      $scope.birthDate = '';
     }
 /************** HTTP Request Functions **************/
 
@@ -137,10 +168,19 @@ angular.module('sequoiaGroveApp')
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
+          $rootScope.$broadcast('editEmployee');
         }).error(function(data, status) {
           $log.debug(data, status);
         });
       }
+    }
+
+    $scope.addPermission = function() {
+      $log.debug('add permission ',$scope.newPermission.disp);
+    }
+
+    $scope.removePermission = function(name) {
+      $log.debug('remove permission ', name);
     }
 
     $scope.getPositionTitle = function(pid) {
@@ -173,6 +213,7 @@ angular.module('sequoiaGroveApp')
           data: obj
         }).success(function(data, status, headers, config) {
             $scope.saving = false;
+            $rootScope.$broadcast('editEmployee');
             // update front end
             $scope.selectedEmployee.positions.push(pid);
         }).error(function(data, status) {
@@ -202,6 +243,7 @@ angular.module('sequoiaGroveApp')
             method: "POST"
         }).success(function(data, status) {
           $scope.saving = false;
+          $rootScope.$broadcast('editEmployee');
         });
     }
 
@@ -231,6 +273,7 @@ angular.module('sequoiaGroveApp')
         data: obj
       }).success(function(data, status) {
         $scope.saving = false;
+        $rootScope.$broadcast('editEmployee');
       }).error(function(data, status) {
         $log.debug('error removing position',pid,'from',eid);
       });
@@ -242,43 +285,46 @@ angular.module('sequoiaGroveApp')
         $scope.saving = false;
         return;
       }
-
       // validate max hours per week
-      if ((form.maxHrsWeek.$viewValue == '') ||
-          (form.maxHrsWeek.$viewValue < 0) ||
-          (form.maxHrsWeek.$viewValue > 40)) {
-        $scope.selectedEmployee.maxHrsWeek = 40;
+      if ((form.maxHours.$viewValue == '') ||
+          (form.maxHours.$viewValue < 0) ||
+          (form.maxHours.$viewValue > 40)) {
+        $scope.selectedEmployee.maxHours = 40;
       };
 
       // validate min hours per week
-      if ((form.minHrsWeek.$viewValue == '') ||
-          (form.minHrsWeek.$viewValue > form.maxHrsWeek.$viewValue) ||
-          (form.minHrsWeek.$viewValue < 0)) {
-        $scope.selectedEmployee.minHrsWeek = 0;
+      if ((form.minHours.$viewValue == '') ||
+          (form.minHours.$viewValue > form.minHours.$viewValue) ||
+          (form.minHours.$viewValue < 0)) {
+        $scope.selectedEmployee.minHours = 0;
       };
 
       // transform firstname to uppercase first letter and lowercase for the rest
-      var firstLetter = $scope.selectedEmployee.firstName.substring(0,1);
-      var theRest = $scope.selectedEmployee.firstName.substring(1,
-          $scope.selectedEmployee.firstName.length);
+      var firstLetter = $scope.selectedEmployee.firstname.substring(0,1);
+      var theRest = $scope.selectedEmployee.firstname.substring(1,
+          $scope.selectedEmployee.firstname.length);
 
-      $scope.selectedEmployee.firstName =
+      $scope.selectedEmployee.firstname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
       // transform lastname to uppercase first letter and lowercase for the rest
-      firstLetter = $scope.selectedEmployee.lastName.substring(0,1);
-      theRest = $scope.selectedEmployee.lastName.substring(1,
-          $scope.selectedEmployee.lastName.length);
+      firstLetter = $scope.selectedEmployee.lastname.substring(0,1);
+      theRest = $scope.selectedEmployee.lastname.substring(1,
+          $scope.selectedEmployee.lastname.length);
 
-      $scope.selectedEmployee.lastName =
+      $scope.selectedEmployee.lastname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
-      //TODO if clock number is greater than allowd size, fix it or show error
+      var cid = $scope.classifications[$scope.selectedClassification].val;
+      $scope.selectedEmployee.classificationId = cid;
+      $scope.selectedEmployee.classification = cid;
+
+      //TODO if clock number is greater than allowed size, fix it or show error
 
       // validate the rest of the form
       if (form.$invalid) {
-        form.firstName.$setTouched();
-        form.lastName.$setTouched();
+        form.firstname.$setTouched();
+        form.lastname.$setTouched();
         form.email.$setTouched();
         return;
       }
@@ -289,10 +335,16 @@ angular.module('sequoiaGroveApp')
       }
       $scope.saving = true;
       var action = "update";
-      $scope.selectedEmployee.birthDate = moment($scope.birthdate).format('MM-DD-YYYY');
+      $scope.selectedEmployee.birthDate = moment($scope.birthday).format('MM-DD-YYYY');
+
       if ($scope.selectedEmployee.id === 0) {
         $scope.saving = false;
         action = "add";
+      }
+
+      // set null notes to empty string
+      if (!$scope.selectedEmployee.notes) {
+        $scope.selectedEmployee.notes = '';
       }
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
@@ -307,7 +359,7 @@ angular.module('sequoiaGroveApp')
           $scope.saving = false;
           form.$setSubmitted();
         }).error(function(data, status) {
-          $log.debug('error with action:', action, status);
+          $log.debug('error with action:', action, status,data);
         });
     }
 
@@ -319,7 +371,7 @@ angular.module('sequoiaGroveApp')
         $mdDialog.show(
             $mdDialog.alert()
             .clickOutsideToClose(true)
-            .title('Unemploy ' + $scope.selectedEmployee.firstName)
+            .title('Unemploy ' + $scope.selectedEmployee.firstname)
             .textContent('You cannot unemploy yourself!')
             .ariaLabel('cannot unemploy yourself')
             .ok('Got it!')
@@ -330,7 +382,7 @@ angular.module('sequoiaGroveApp')
 
       // Confirm to unemploy
       var confirm = $mdDialog.confirm()
-        .title('Unemploy ' + $scope.selectedEmployee.firstName + '?')
+        .title('Unemploy ' + $scope.selectedEmployee.firstname + '?')
         .ariaLabel('Unemploy')
         .targetEvent(ev)
         .ok('Unemploy')
@@ -357,6 +409,7 @@ angular.module('sequoiaGroveApp')
             }
             return e;
           });
+          $rootScope.$broadcast('editEmployee');
         }).error(function(data, status) {
           $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
@@ -383,7 +436,7 @@ angular.module('sequoiaGroveApp')
           }
           return e;
         });
-
+        $rootScope.$broadcast('editEmployee');
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });

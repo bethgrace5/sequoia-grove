@@ -2,40 +2,41 @@
 
 // Factory to inject authorization token with each request sent
 angular.module('sequoiaGroveApp').factory('authTokenInterceptor',
-  function ( $log, localStorageService) {
-    var canRecover = false;
-    var responseOrNewPromise = false;
+  function ( $log, localStorageService, $q) {
+    //var canRecover = false;
+    //var responseOrNewPromise = false;
 
     var tokenInjector = {
       'request': function(config) {
-        // put the token from local storage
-        config.headers['Authorization'] = localStorageService.get('auth_token');
+        // put the token from local storage into the request
+        var token = JSON.parse(localStorageService.get('auth_token'));
+        if (token) {
+          config.headers['Authorization'] = token;
+        }
         return config;
       },
       // optional method
      'requestError': function(rejection) {
         // do something on error
-        if (canRecover(rejection)) {
-          return responseOrNewPromise
-        }
+        //if (canRecover(rejection)) {
+          //return responseOrNewPromise
+        //}
         return $q.reject(rejection);
       },
-
       'response': function(response) {
-        if(response.auth_token != undefined) {
-          $log.debug(response.auth_token);
+        if(response.data.auth_token != undefined) {
+          localStorageService.set('auth_token', JSON.stringify(response.data.auth_token));
         }
         return response;
       },
       // optional method
      'responseError': function(rejection) {
         // do something on error
-        if (canRecover(rejection)) {
-          return responseOrNewPromise
-        }
+        //if (canRecover(rejection)) {
+          //return responseOrNewPromise
+        //}
         return $q.reject(rejection);
       }
-
     }
   return tokenInjector
 });

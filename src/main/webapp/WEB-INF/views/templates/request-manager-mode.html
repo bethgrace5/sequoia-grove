@@ -33,7 +33,7 @@
             class="list-group-item btn btn-default btn-block"
             ng-class="{'active': selectedEmployee.id == employee.id}">
             <div class="pull-left">
-              {{::employee.lastName}}, {{::employee.firstName}}
+              {{::employee.lastname}}, {{::employee.firstname}}
             </div>
           </button>
         </div>
@@ -45,7 +45,7 @@
     <div class="row">
       <div class="col-sm-12">
         <p class="lead">
-          Manage Requests <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstName}}
+          Manage Requests <span ng-show="selectedEmployee.id != 0">for</span> {{selectedEmployee.firstname}}
         </p>
       </div>
 
@@ -88,7 +88,7 @@
       </div>
 
       <!-- Pending Requests for Selected Employee -->
-      <div  ng-repeat="request in pendingRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}">
+      <div  ng-repeat="request in pendingRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstname}">
         <br/>
         <div class="row">
           <div class="col-sm-2"> <p> {{defaultDate(request.startDate)}} </p> </div>
@@ -123,7 +123,7 @@
         <div class="col-sm-4"> <p> Status </p> </div>
       </div>
 
-      <div ng-repeat="request in allRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstName}"
+      <div ng-repeat="request in allRequests | filter:{employeeID:selectedEmployee.id, employeeFirstName:selectedEmployee.firstname}"
         ng-show="selectedEmployee.id != 0">
         <div class="row">
           <div class="col-sm-3">

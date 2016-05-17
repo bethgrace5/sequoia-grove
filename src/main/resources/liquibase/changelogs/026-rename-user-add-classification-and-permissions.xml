@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="26" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Add password and classification columns to employee -->
+    <addColumn schemaName="public" tableName="employee">
+      <column name="password" type="varchar(255)"/>
+      <column name="classification_id" type="integer"/>
+    </addColumn>
+
+    <!-- rename employee to user in table and where referenced-->
+    <renameTable newTableName="user"
+      oldTableName="employee"
+      schemaName="public"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user1_id"
+      columnDataType="int"
+      oldColumnName="employee1_id"
+      tableName="cannot_work_with"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user2_id"
+      columnDataType="int"
+      oldColumnName="employee2_id"
+      tableName="cannot_work_with"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="availability"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="is_scheduled_for"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="has_position"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="employment_history"/>
+
+    <renameColumn schemaName="public"
+      newColumnName="user_id"
+      columnDataType="int"
+      oldColumnName="employee_id"
+      tableName="session"/>
+
+    <!-- rename position location to area to not be confused with new location table-->
+    <renameColumn schemaName="public"
+      newColumnName="area"
+      columnDataType="int"
+      oldColumnName="location"
+      tableName="position"/>
+
+    <!-- Classification Table -->
+    <createTable schemaName="public" tableName="classification" remarks="type of user">
+      <column name="id" type="integer">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="title" type="varchar(255)">
+        <constraints unique="true" nullable="false"  />
+      </column>
+    </createTable>
+
+    <!-- User Table References Classification Table -->
+    <addForeignKeyConstraint baseColumnNames="classification_id"
+      baseTableName="user"
+      constraintName="fk_user_to_classification"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="classification" />
+
+
+    <!-- By Default all users are classified as Employee -->
+    <addDefaultValue schemaName="public"
+      tableName="user"
+      columnDataType="integer"
+      columnName="classification_id"
+      defaultValue="1" />
+
+    <!-- Permission Table -->
+    <createTable schemaName="public" tableName="permission" remarks="permission of user">
+      <column name="id" type="integer">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="title" type="varchar(255)">
+        <constraints unique="true" nullable="false" />
+      </column>
+    </createTable>
+
+    <!-- User Permissions Join Table -->
+    <createTable schemaName="public" tableName="user_permissions" remarks="user permission join table">
+      <column name="user_id" type="integer">
+        <constraints nullable="false" />
+      </column>
+      <column name="permission_id" type="integer">
+        <constraints nullable="false" />
+      </column>
+    </createTable>
+
+    <addForeignKeyConstraint baseColumnNames="user_id"
+      baseTableName="user_permissions"
+      constraintName="fk_user_permission_user_id"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="user" />
+
+    <addForeignKeyConstraint baseColumnNames="permission_id"
+      baseTableName="user_permissions"
+      constraintName="fk_user_permission_permission_id"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="permission" />
+
+  </changeSet>
+
+</databaseChangeLog>

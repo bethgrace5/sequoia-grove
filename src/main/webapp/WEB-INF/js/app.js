@@ -8,10 +8,11 @@ angular.module('sequoiaGroveApp', [
     'ngAnimate',
     'ngSanitize',
     'pascalprecht.translate',
-    'persona',
     'ngMaterial',
     'ngMessages',
-    'underscore'
+    'underscore',
+    'dn.sha',
+    'as.sortable'
   ])
   .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
               $logProvider, $compileProvider) {
@@ -84,22 +85,33 @@ angular.module('sequoiaGroveApp', [
       /* Increase application performance when false, default is true */
       $compileProvider.debugInfoEnabled(true);
 
-  }).
-  run (function($rootScope, $injector, $location, $log, localStorageService) {
-    //localStorageService.set('auth_token', 'tok');
-    //$log.debug(localStorageService.get('auth_token'));
+
+  }).run (function($sha, $q, $rootScope, $injector, $location, $log, $http, localStorageService) {
+
+    $sha.setConfig({
+      algorithm: 'SHA-512',
+      inputType: 'TEXT',
+      returnType: 'HEX',
+      secretType: 'TEXT'});
 
     // Set Development Mode - loads app more quickly by reading schedule
     // template stored in localstorage instead of pulling a new one every time.
-    $rootScope.devMode = false;
-
+    $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
 
     // reset login error flags
     $rootScope.loggedIn = false;
-    $rootScope.userNotRegistered = false;
-    $rootScope.userNotCurrent = false;
+    $rootScope.errorMessage = '';
     $rootScope.loginFailed = false;
-    $rootScope.loggedInUser = {};
+    $rootScope.token = '';
+    $rootScope.hasValidToken = false;
+    $rootScope.loggedInUser= {'email':''};
 
-    $location.path( "/login" );
+    var email = JSON.parse(localStorageService.get('email'));
+    var token = JSON.parse(localStorageService.get('auth_token'));
+    if(email) {
+      $rootScope.loggedInUser.email = email;
+    }
+    if(token) {
+      $rootScope.token = token;
+    }
   });

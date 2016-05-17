@@ -33,11 +33,11 @@
 
   <div class="panel panel-default employee-schedule-edit-panel pull-right clear-both">
     <div class="panel-body">
-      <div ng-if="e.isCurrent" ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="employeeHasPosition(e.id, -1)">
+      <div ng-if="e.isCurrent" ng-repeat="e in employees | filter:empEditSearch" class="row" ng-show="employeeHasPosition(e.id)">
         <span
-        ng-class="inputStatus(e.id, 'monday', t.sid)"
-        ng-click="selectEid(e.id)">
-          <div style="width:70px; float:left;"> {{e.firstName}} </div>
+          ng-class="employeeListHighlight(e.id)"
+          ng-click="selectFromList(e.id)">
+          <div style="width:70px; float:left;"> {{e.firstname}} </div>
           <div style="float:left;">{{dayCount[e.id]}}d {{hourCount[e.id]}}h </div>
         </span>
       </div>

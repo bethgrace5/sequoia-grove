@@ -72,3 +72,29 @@
   </div>
 </div>
 
+<div class="row request-title">
+  <div class="col-sm-2">
+    <span class="pull-left"> Schedule shifts up to </span>
+  </div>
+    <div class="col-sm-1">
+      <input step="1" ng-model="$parent.extendStart" 
+      ng-change="setExtend()" class="form-control" type="number"/>
+  </div>
+  <div class="col-sm-5">
+    <span class="pull-left">hours before store open</span>
+  </div>
+</div>
+
+<div class="row request-title">
+  <div class="col-sm-2">
+    <span class="pull-left"> Schedule shifts up to </span>
+  </div>
+    <div class="col-sm-1">
+      <input step="1" ng-model="$parent.extendEnd"
+     ng-change="setExtend()" class="form-control" type="number"/>
+  </div>
+  <div class="col-sm-5">
+    <span class="pull-left">hours after store close</span>
+  </div>
+</div>
+

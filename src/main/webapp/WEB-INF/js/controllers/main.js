@@ -15,14 +15,26 @@ angular.module('sequoiaGroveApp')
     $rootScope,
     $route,
     $scope,
+    $timeout,
     $translate,
     localStorageService,
-    Persona,
+    scheduleFactory,
+    userFactory,
     $q){
 
 /************** Login Redirect, Containers and UI settings **************/
 
+
+  $scope.loadingWeek = false;
   $rootScope.currentPath = $location.path();
+  $scope.selectedWeek = 0;
+  $scope.weekLabel = '';
+  $scope.weekList = [];
+  $scope.template = {};
+
+  // extend shift duration for holiday closes
+  $scope.extendStart = 2;
+  $scope.extendEnd = 2;
 
   // user is not logged in
   if ($rootScope.loggedIn == false) {
@@ -31,6 +43,8 @@ angular.module('sequoiaGroveApp')
       $location.path('/login');
     }
   }
+
+
   // Locale settings
   $scope.lang = 'en';
   $scope.changeLanguage = function (langKey) {
@@ -40,9 +54,13 @@ angular.module('sequoiaGroveApp')
     $scope.$broadcast('translate');
   };
 
+  // toggle dev mode
+  $scope.updateDevMode = function() {
+    $rootScope.devMode = !$rootScope.devMode;
+    localStorageService.set('devMode', $rootScope.devMode);
+  }
+
   // setup containers
-  $scope.currentEmployees = [];
-  $scope.allEmployees = [];
   $scope.deliveries = [];
 
   $scope.viewDeliveries = {
@@ -55,35 +73,18 @@ angular.module('sequoiaGroveApp')
       'sun':[]
   }
 
-  // shifts that were changed from old shifts and need to be saved to database
-  $scope.updateShifts = [];
-  $scope.originalTemplate = [];
-  // when the schedule is cleared, any saved shifts are deleted
-  $scope.deleteShifts = [];
-  $scope.barChart = { labels:[],  data:[[]], series:["names"]};
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
   $scope.birthdays = [];
-  $scope.holidays = [];
-  $rootScope.ispublished = false;
+  //$scope.holidays = [];
+  $rootScope.isPublished = false;
   $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
   $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
   $scope.currentYear = "";
-  $scope.loadingMsg = "Verifying user with Application...";
+  $rootScope.loadingMsg = "Verifying user with Application...";
   $scope.selectedPid = 0;
-
-  // container for displaying the date header
-  // val 'DD-MM-YYYY' format, disp 'MMM-D' format
-  $scope.date = {
-    mon:{val:'', disp:''},
-    tue:{val:'', disp:''},
-    wed:{val:'', disp:''},
-    thu:{val:'', disp:''},
-    fri:{val:'', disp:''},
-    sat:{val:'', disp:''},
-    sun:{val:'', disp:''}};
 
   // UI 'Active' Tab Settings
   $scope.changeTab = function(tab) {
@@ -104,77 +105,6 @@ angular.module('sequoiaGroveApp')
 
 /************** Pure Functions **************/
 
-  // Set Schedule Header Dates, and Date String Values
-  $scope.setScheduleHeader = function() {
-    var daysAgo = 0;
-    var dayName = moment().format('dddd');
-    var mondayDateString = '';
-
-    //Figure out how many days ago monday was
-    if (dayName != 'Monday') {
-      while(dayName != 'Monday') {
-        daysAgo++;
-        dayName = moment().subtract(daysAgo, 'days').format('dddd');
-        mondayDateString = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
-      }
-    }
-    else {
-      mondayDateString = moment().subtract(0, 'days').format('DD-MM-YYYY');
-    }
-
-    // Setup Monday
-    $scope.date.mon.val = mondayDateString;
-    $scope.date.mon.disp = moment().subtract(daysAgo, 'days').format('MMM-D');
-
-    // Use Monday to setup the rest of the weekdays
-    $scope.date.tue.val  = moment(mondayDateString, 'DD-MM-YYYY').add(1, 'days').format('DD-MM-YYYY');
-    $scope.date.tue.disp = moment(mondayDateString, 'DD-MM-YYYY').add(1, 'days').format('MMM-D');
-    $scope.date.wed.val  = moment(mondayDateString, 'DD-MM-YYYY').add(2, 'days').format('DD-MM-YYYY');
-    $scope.date.wed.disp = moment(mondayDateString, 'DD-MM-YYYY').add(2, 'days').format('MMM-D');
-    $scope.date.thu.val  = moment(mondayDateString, 'DD-MM-YYYY').add(3, 'days').format('DD-MM-YYYY');
-    $scope.date.thu.disp = moment(mondayDateString, 'DD-MM-YYYY').add(3, 'days').format('MMM-D');
-    $scope.date.fri.val  = moment(mondayDateString, 'DD-MM-YYYY').add(4, 'days').format('DD-MM-YYYY');
-    $scope.date.fri.disp = moment(mondayDateString, 'DD-MM-YYYY').add(4, 'days').format('MMM-D');
-    $scope.date.sat.val  = moment(mondayDateString, 'DD-MM-YYYY').add(5, 'days').format('DD-MM-YYYY');
-    $scope.date.sat.disp = moment(mondayDateString, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
-    $scope.date.sun.val  = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
-    $scope.date.sun.disp = moment(mondayDateString, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
-
-    $scope.currentYear = moment(mondayDateString, 'DD-MM-YYYY').format('YYYY');
-  }
-
-  // View Next or Previous Week
-  $scope.changeWeek = function(operation) {
-    var nextMonday = '';
-
-    // Set Monday Next Week
-    if (operation == 'add') {
-      nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
-    }
-    // Set Monday Previous Week
-    else{
-      nextMonday = moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
-    }
-
-    // Adjust the rest of the weekdays to match Monday
-    $scope.date.mon.val  = moment(nextMonday, 'DD-MM-YYYY').add(0, 'days').format('DD-MM-YYYY');
-    $scope.date.mon.disp = moment(nextMonday, 'DD-MM-YYYY').add(0, 'days').format('MMM-D');
-    $scope.date.tue.val  = moment(nextMonday, 'DD-MM-YYYY').add(1, 'days').format('DD-MM-YYYY');
-    $scope.date.tue.disp = moment(nextMonday, 'DD-MM-YYYY').add(1, 'days').format('MMM-D');
-    $scope.date.wed.val  = moment(nextMonday, 'DD-MM-YYYY').add(2, 'days').format('DD-MM-YYYY');
-    $scope.date.wed.disp = moment(nextMonday, 'DD-MM-YYYY').add(2, 'days').format('MMM-D');
-    $scope.date.thu.val  = moment(nextMonday, 'DD-MM-YYYY').add(3, 'days').format('DD-MM-YYYY');
-    $scope.date.thu.disp = moment(nextMonday, 'DD-MM-YYYY').add(3, 'days').format('MMM-D');
-    $scope.date.fri.val  = moment(nextMonday, 'DD-MM-YYYY').add(4, 'days').format('DD-MM-YYYY');
-    $scope.date.fri.disp = moment(nextMonday, 'DD-MM-YYYY').add(4, 'days').format('MMM-D');
-    $scope.date.sat.val  = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('DD-MM-YYYY');
-    $scope.date.sat.disp = moment(nextMonday, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
-    $scope.date.sun.val  = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
-    $scope.date.sun.disp = moment(nextMonday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
-
-    $scope.getScheduleTemplate($scope.date.mon.val);
-  }
-
   $scope.formatTime = function(t, ampm) {
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
@@ -182,64 +112,6 @@ angular.module('sequoiaGroveApp')
       return moment(t, 'HHmm').format('h:mm a');
     }
     return moment(t, 'HHmm').format('h:mm');
-  }
-
-  $scope.shiftDuration = function(start, end) {
-    return moment(end, 'HHmm').diff(moment(start, 'HHmm'), 'hours', true);
-  }
-
-  // count the number of days an employee is scheduled, if they are scheduled
-  // twice on a day, it still counts as one day.
-  $scope.countDays = function() {
-    var shifts = [[],[],[],[],[],[],[]];
-
-    _.map($scope.template, function(item) {
-      shifts[0] = _.union(shifts[0], [item.mon.eid]);
-      shifts[1] = _.union(shifts[1], [item.tue.eid]);
-      shifts[2] = _.union(shifts[2], [item.wed.eid]);
-      shifts[3] = _.union(shifts[3], [item.thu.eid]);
-      shifts[4] = _.union(shifts[4], [item.fri.eid]);
-      shifts[5] = _.union(shifts[5], [item.sat.eid]);
-      shifts[6] = _.union(shifts[6], [item.sun.eid]);
-    });
-
-    // get day count for each employee, format is: [ {'eid':'count'}, ... ]
-    $scope.dayCount = _.countBy((_.flatten(shifts)), function(id){
-      return id;
-    });
-  }
-
-  $scope.countHours = function() {
-    var count = [];
-
-    _.map($scope.template, function(item) {
-      var duration = 0;
-      if (item.day !== 'sat' && item.day !== 'sun') {
-        duration = $scope.shiftDuration(item.weekdayStart, item.weekdayEnd);
-      }
-      else {
-        duration = $scope.shiftDuration(item.weekendStart, item.weekendEnd);
-      }
-      count.push({'eid':item.mon.eid, 'duration':duration});
-      count.push({'eid':item.tue.eid, 'duration':duration});
-      count.push({'eid':item.wed.eid, 'duration':duration});
-      count.push({'eid':item.thu.eid, 'duration':duration});
-      count.push({'eid':item.fri.eid, 'duration':duration});
-      count.push({'eid':item.sat.eid, 'duration':duration});
-      count.push({'eid':item.sun.eid, 'duration':duration});
-    });
-
-    // get hour count for each employee, format is: [ {'eid':'count'}, ... ]
-    $scope.hourCount = _.groupBy(count, function(item){
-      return item.eid;
-    });
-
-    _.map($scope.hourCount, function(items, index) {
-      var hours =  _.reduce(items, function(memo, item) {
-        return memo + item.duration;
-      }, 0)
-      $scope.hourCount[index] = hours;
-    });
   }
 
   // check if employee has this position
@@ -265,30 +137,21 @@ angular.module('sequoiaGroveApp')
     return hasPosition;
   }
 
-  $scope.selectPosition = function(pid) {
-    $scope.selectedPid = pid;
-  }
-
-  $scope.storeOriginalTemplate = function(template) {
-    // keep an original copy of the template, so we can check modifications
-    // on the template against it
-    _.map(template, function(t, index, list) {
-      $scope.originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':$scope.date.mon.val});
-      $scope.originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':$scope.date.tue.val});
-      $scope.originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':$scope.date.wed.val});
-      $scope.originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':$scope.date.thu.val});
-      $scope.originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':$scope.date.fri.val});
-      $scope.originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':$scope.date.sat.val});
-      $scope.originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':$scope.date.sun.val});
-    });
-    $scope.countDays();
-    $scope.countHours();
-  }
-
 /************** HTTP Request Functions **************/
   // get all existing deliveries
   $scope.getDeliveries = function() {
-    return $http({url: '/sequoiagrove/delivery', method: "GET" })
+    var deferred = $q.defer();
+    $scope.deliveries = [];
+    $scope.viewDeliveries = {
+      'mon':[],
+      'tue':[],
+      'wed':[],
+      'thu':[],
+      'fri':[],
+      'sat':[],
+      'sun':[]
+    }
+    $http({url: '/sequoiagrove/delivery', method: "GET" })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;
@@ -316,126 +179,23 @@ angular.module('sequoiaGroveApp')
             }
           });
         }
-      },function(failure) {
-        $log.error('Error getting deliveries ');
+        deferred.resolve(success);
       });
+    return deferred.promise;
   }
 
   $scope.getPositions = function() {
-    return $http({ url: '/sequoiagrove/position', method: "GET" })
+    var deferred = $q.defer();
+    $http({ url: '/sequoiagrove/position', method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
-      },function(failure) {
-        $log.error("Error obtaining position data" );
+        deferred.resolve(success);
       });
+    return deferred.promise;
   }
 
   $scope.toggleDeliveries = function() {
       $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
-  }
-  // Get The Schedule for the week currently being viewed - expects
-  // a moment object for week
-  $scope.getScheduleTemplate = function(week) {
-
-    $scope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/sequoiagrove/schedule/template/' + week;
-
-    // clear out original template
-    $scope.originalTemplate = [];
-    $scope.deleteShifts = [];
-    $scope.updateShifts = [];
-
-    // if it's in dev mode, and we already have
-    // a template in localstorage, return.
-    if($rootScope.devMode) {
-      if ($rootScope.template) {
-        $log.debug('Warning: devMode on. This is not current schedule data');
-        $rootScope.ispublished = true;
-        return $q(function(resolve, reject) {
-          resolve();
-        });
-      }
-    }
-    // get template
-    return $http({ 'url': url, 'method': 'GET', }).then(
-      function(success) {
-
-        if (success.status === 200) {
-          if (success.data.ispublished === false) {
-            $rootScope.ispublished = false;
-          }
-          if ($rootScope.loggedInUser.isManager === false) {
-            return;
-          }
-          // Keep data retrieved
-          $rootScope.ispublished = success.data.ispublished;
-          $scope.storeOriginalTemplate(success.data.template);
-          $rootScope.template = success.data.template;
-          if ($rootScope.devMode) {
-            localStorageService.set('template', JSON.stringify($rootScope.template));
-          }
-        }
-      },
-      function(failure) {
-          $log.error("Error obtaining schedule template" );
-      });
-  }
-
-  // Get All Employees with their id
-  $scope.getEmployees = function() {
-    $scope.loadingMsg = "Obtaining current employee data...";
-
-    // if it's in dev mode, and we already have
-    // employees in localstorage, return.
-    if($rootScope.devMode) {
-      if ($rootScope.employees) {
-        $log.debug('Warning: devMode on. This is not current employee data');
-        return $q(function(resolve, reject) {
-          resolve();
-        });
-      }
-    }
-
-    return $http({ url: '/sequoiagrove/employees', method: "GET" })
-      .then(function(success) {
-        $rootScope.employees = success.data.employees;
-        localStorageService.set('auth_token', success.data.api_token);
-        if ($rootScope.devMode) {
-          localStorageService.set('employees', JSON.stringify($rootScope.employees));
-        }
-      },function(failure) {
-          $log.error("Error obtaining all employees" );
-      });
-  }
-
-  // send http request to back end to check if published
-  $scope.checkifPublished = function() {
-    return $http({
-      url: '/sequoiagrove/schedule/ispublished/' + $scope.date.mon.val,
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-        $rootScope.ispublished = data.result;
-
-    }).error(function (data, status, headers, config) {
-        $log.error(status + " Error obtaining all employee: " + data);
-    });
-  }
-
-  //send date and employee id as an object thru http request
-  $scope.publishSchedule = function() {
-      var obj = {'date':$scope.date.mon.val, 'eid': $rootScope.loggedInUser.id};
-    $http({
-      url: '/sequoiagrove/schedule/publish/',
-      method: "POST",
-      data: obj
-      }).success(function (data, status, headers, config) {
-        $rootScope.ispublished = true;
-        $rootScope.ispublished = true;
-
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error posting schedule " + data);
-    });
-
   }
 
 /************** Variable Initialization **************/
@@ -445,8 +205,8 @@ angular.module('sequoiaGroveApp')
   $scope.birthdays.push({name:"Jem", date:"10/13"});
 
   // TODO function to find holidays this week
-  $scope.holidays.push({name:"Christmas", date:"12/25"});
-  $scope.holidays.push({name:"New Years Day", date:"01/01"});
+  //$scope.holidays.push({name:"Christmas", date:"12/25"});
+  //$scope.holidays.push({name:"New Years Day", date:"01/01"});
 
   $scope.times = {
     // start times start at the earlist shift start and increment by half
@@ -513,19 +273,222 @@ angular.module('sequoiaGroveApp')
         $location.path('/login');
       //}
     }
-
     $scope.changeTab('/home');
-
   }
-  $scope.$on('logged in', function(event, args) {
-    //$scope.init();
+
+  $rootScope.$on('loggedIn', function(event, args) {
+    //$log.debug('caught logged in at main');
+    $scope.template = scheduleFactory.getTemplate();
+    $scope.date = scheduleFactory.getHeader();
+    $scope.isPublished = scheduleFactory.isPublished();
+    $scope.dayCount = scheduleFactory.getDayCount();
+    $scope.hourCount = scheduleFactory.getHourCount();
+    $scope.changesMade = scheduleFactory.changesMade();
+    $scope.weekList = scheduleFactory.getWeekList();
+    $timeout(function() {
+      $scope.employees = userFactory.getUsers();
+      $scope.initPositionsSchedule();
+      $scope.initAvailSchedule();
+    });
   });
 
-  $scope.personaLogin = function() {
+  $scope.selectWeek = function(index) {
+    $scope.selectedWeek = index;
+  }
+
+    $scope.up = function() {
+      $scope.employees = userFactory.getUsers();
+    }
+
+  // filter schedule to determine if the scheduled employee has availability
+  // adds 'available' attribute to that day for error checking
+  // removes availability if request for vacation was approved
+  $scope.initAvailSchedule = function() {
+    $scope.template = _.map ($scope.template, function(item, index) {
+      if (item.isSpacer) {
+        return {'isSpacer':true, 'index':-1};
+      }
+      else {
+        //item.mon = _.extend(item.mon, {'available': userFactory.isAvailable(item.mon.eid, 'mon', item.weekdayStart, item.weekdayEnd)});
+        item.mon = _.extend(item.mon, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].mon) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'mon', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.tue = _.extend(item.tue, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].tue) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'tue', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.wed = _.extend(item.wed, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].wed) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'wed', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.thu = _.extend(item.thu, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].thu) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'thu', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.fri = _.extend(item.fri, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].fri) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'fri', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.sat = _.extend(item.sat, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].sat) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'sat', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+        item.sun = _.extend(item.sun, {'hasAvailability':
+          _.object( _.map($scope.employees, function(e, index) {
+            if ($scope.requests[e.id]) {
+              if ($scope.requests[e.id].sun) {
+                return [e.id, false]
+              }
+            }
+            return [e.id, userFactory.isAvailable(e.id, 'sun', item.weekdayStart, item.weekdayEnd)]
+          }))
+        });
+      }
+      return item;
+    });
+  }
+
+  // filter schedule to determine if the scheduled employee has availability
+  // adds 'available' attribute to that day for error checking
+  $scope.initPositionsSchedule = function() {
+    $scope.template = _.map ($scope.template, function(item, index) {
+      if (item.isSpacer) {
+        return {'isSpacer':true, 'index':-1};
+      }
+      else {
+        item.mon = _.extend(item.mon, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.tue = _.extend(item.tue, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.wed = _.extend(item.wed, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.thu = _.extend(item.thu, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.fri = _.extend(item.fri, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.sat = _.extend(item.sat, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+        item.sun = _.extend(item.sun, {'hasPosition':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, userFactory.hasPosition(e.id, item.pid)]
+            })
+          )
+        });
+      }
+      return item;
+    });
+  }
+
+  // called from header menu
+  $scope.appLogin = function() {
+    $log.debug('broadcast login from main');
     $rootScope.$broadcast('login');
   }
-  $scope.personaLogout = function() {
+
+  // called from header menu
+  $scope.destructData = function() {
+    $log.debug('broadcast logout from main');
     $rootScope.$broadcast('logout');
   }
+
+  // advance or go back weeks in time
+  $scope.changeWeek = function(operation) {
+    $scope.selectWeek(0);
+    if ($scope.loadingWeek) {
+      return;
+    }
+    $scope.loadingWeek = true;
+    scheduleFactory.changeWeek(operation).then(function(success) {
+      $timeout(function() {
+        $scope.initAvailSchedule();
+        $scope.initPositionsSchedule();
+      });
+    });
+  }
+
+  $scope.publishSchedule = function() {
+    $scope.isPublished = scheduleFactory.publish();
+  }
+
+  var updateChangesMade = function(){
+    //$log.debug('update template main.js');
+    $scope.template = scheduleFactory.getTemplate();
+    $scope.dayCount = scheduleFactory.getDayCount();
+    $scope.hourCount = scheduleFactory.getHourCount();
+    $scope.changesMade = scheduleFactory.changesMade();
+    $scope.weekList = scheduleFactory.getWeekList();
+    $scope.requests = scheduleFactory.getRequests();
+    $scope.loadingWeek = false;
+  };
+  scheduleFactory.registerObserverCallback(updateChangesMade);
+  //schedule factory now in control of updateChangesMade()
 
 });

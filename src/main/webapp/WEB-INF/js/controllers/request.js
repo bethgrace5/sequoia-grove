@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp')
   $scope.userRequests;
 
   $scope.getCurrentEmployeeRequest = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/request/get/current/employee/'+
       $rootScope.loggedInUser.id,
       method: "POST"
@@ -100,19 +100,14 @@ angular.module('sequoiaGroveApp')
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
-    $http({
-      url: '/sequoiagrove/request/submit/',
-    method: "POST",
-    data: JSON.stringify(obj)
-    })
-    .success(function (data, status, headers, config) {
-      $scope.getCurrentEmployeeRequest();
-      $scope.getPendingRequests();
-      $scope.getAllRequests();
-    })
-    .error(function (data, status, headers, config) {
-      $log.error('Error submiting request ', status, data);
-    });
+    $http({ url: '/sequoiagrove/request/submit/', method: "POST", data: JSON.stringify(obj)})
+      .then(function (success){
+        return $scope.getCurrentEmployeeRequest()
+      }).then(function(success) {
+        return $scope.getPendingRequests();
+      }).then(function(success) {
+        $scope.getAllRequests();
+      });
   }
 
   $scope.confirmSubmit = function(ev) {
@@ -201,24 +196,20 @@ angular.module('sequoiaGroveApp')
   $scope.pendingRequests;
 
   $scope.getAllRequests = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/request/get/checked',
       method: "GET"
     }).success(function (data, status, headers, config) {
       $scope.allRequests = data.requestStatus;
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining all requests: " + data);
     });
   }
 
   $scope.getPendingRequests = function() {
-    $http({
+    return $http({
       url: '/sequoiagrove/request/get/pending',
       method: "GET"
     }).success(function (data, status, headers, config) {
       $scope.pendingRequests = data.requestStatus;
-    }).error(function (data, status, headers, config) {
-      $log.error(status + " Error obtaining pending requests: " + data);
     });
   }
 
@@ -247,11 +238,9 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $scope.getPendingRequests();
-      $scope.getAllRequests();
-    })
-    .error(function (data, status, headers, config) {
-      $log.error('Error submiting request ', status, data);
+      $scope.getPendingRequests().then(function(success) {
+        return $scope.getAllRequests();
+      })
     });
   }
 
@@ -261,9 +250,11 @@ angular.module('sequoiaGroveApp')
       $requestID + '/' + $approverID + '/' + $is_approve,
     method: "POST"
     }).success(function(data, status) {
-      $scope.getPendingRequests();
-      $scope.getCurrentEmployeeRequest();
-      $scope.getAllRequests();
+      $scope.getCurrentEmployeeRequest().then(function(success) {
+        return $scope.getAllRequests();
+      }).then(function(success) {
+        return $scope.getPendingRequests();
+      });
     });
   }
 
@@ -276,11 +267,6 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/update/dates',
     method: "POST",
     data: JSON.stringify(obj)
-    })
-    .success(function (data, status, headers, config) {
-    })
-    .error(function (data, status, headers, config) {
-      $log.error('Error submiting request ', status, data);
     });
   }
 
@@ -312,19 +298,14 @@ angular.module('sequoiaGroveApp')
   }
 
   //********** Initialize Testing Extreme ***************************\
-  $scope.testManager = function(){
-    if ($rootScope.loggedInUser.isManager) {
-    }
-    else{
-    }
-  }
 
   $scope.init = function(){
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
-    $scope.getAllRequests();
-    $scope.getCurrentEmployeeRequest();
-    $scope.getPendingRequests();
-    $scope.testManager();
+    $scope.getAllRequests().then(function(success) {
+      return $scope.getCurrentEmployeeRequest();
+    }).then(function(success) {
+      return $scope.getPendingRequests();
+    });
   }
 
   $scope.init();

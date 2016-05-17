@@ -1,23 +1,29 @@
-package com.sequoiagrove.controller; 
-import com.google.gson.*;
+package com.sequoiagrove.controller;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.NotFoundException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.ui.ModelMap;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Controller;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import java.sql.ResultSet;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
@@ -30,6 +36,13 @@ import com.sequoiagrove.model.Holiday;
 @Controller
 public class ManageStore {
 
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getPermissions(HttpServletRequest request) {
+      String csvPermissions = (String) request.getAttribute("scope");
+      return Arrays.asList(csvPermissions.split(","));
+    }
+
 /* ----- Pure Functions ----- */
    public boolean validateStrings(String... args) {
         for (String arg : args) {
@@ -41,32 +54,23 @@ public class ManageStore {
     }
 
 /* ----- Helper JDBC Functions ----- */
-    public boolean checkHoursExist(String startHr, String endHr) {
-
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        Object[] obj = new Object[] { startHr, endHr };
-        int count = jdbcTemplate.queryForObject("select count(*) from hours " +
-            " where start_hour = ? and end_hour = ?", obj, Integer.class);
-        return (count > 0);
-    }
-
     public int addHours(String startHr, String endHr) {
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         int id = 0;
         Object[] obj = new Object[] { startHr, endHr };
-        if ( checkHoursExist(startHr, endHr) ) {
+
+        try {
           id = jdbcTemplate.queryForObject(
-              "select id from hours where start_hour=? and end_hour=?",
+              "select id from sequ_hours where start_hour=? and end_hour=?",
               obj, Integer.class);
-        }
-        else {
-          id = jdbcTemplate.queryForObject(
-              "select nextval('hours_id_seq')", Integer.class);
-          jdbcTemplate.update(" insert into hours (id, start_hour, end_hour) " +
-              "values( ?, ?, ?) ", id, startHr, endHr);
+
+        } catch (EmptyResultDataAccessException e) {
+          id = jdbcTemplate.queryForObject(" insert into sequ_hours (id, start_hour, end_hour) " + 
+              " values( (select nextval('sequ_hours_sequence')), ?, ?) returning currval('sequ_hours_sequence')", obj, Integer.class );
+
+          //id = jdbcTemplate.queryForObject( "select currval('sequ_hours_sequence')", obj, Integer.class);
         }
         return id;
     }
@@ -75,17 +79,22 @@ public class ManageStore {
 
   // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
-    public String addShift(@RequestBody String data, Model model) throws SQLException, NotFoundException {
+    public String addShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException, NotFoundException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
         int pid;
         String tname = jobject.get("tname").getAsString();
         String weekdayStart = jobject.get("weekdayStart").getAsString();
-        String weekdayEnd = jobject.get("weekdayEnd").getAsString();
-        String weekendStart = jobject.get("weekendStart").getAsString();
+        String weekdayEnd = jobject.get("weekdayEnd").getAsString(); String weekendStart = jobject.get("weekendStart").getAsString();
         String weekendEnd = jobject.get("weekendEnd").getAsString();
 
         if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
@@ -105,32 +114,31 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
-        int weekendHourId = addHours(weekendStart, weekendEnd);
-        int sid = jdbcTemplate.queryForObject("select nextval('shift_id_seq')", Integer.class);
+        Object[] params = new Object[] { 
+            pid, 
+            tname, 
+            addHours(weekdayStart, weekdayEnd), 
+            addHours(weekendStart, weekendEnd) };
 
-        Object[] params = new Object[] {
-            sid,
-            pid,
-            tname,
-            weekdayHourId,
-            weekendHourId
-        };
+        int id = jdbcTemplate.queryForObject( "insert into sequ_shift(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id, index) " +
+            "values((select nextval('sequ_shift_sequence')), ?, ?, current_date, null, ?, ?, 99) returning currval('sequ_shift_sequence')", params, Integer.class);
 
-        jdbcTemplate.update("insert into shift " +
-            "(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id) " +
-            "values(?, ?, ?, current_date, null, ?, ?)", params);
-
-        model.addAttribute("sid", sid);
+        model.addAttribute("sid", id);
 
         return "jsonTemplate";
     }
 
   // Update currently selected shift
     @RequestMapping(value = "/shift/update", method = RequestMethod.POST)
-    public String updateShift(@RequestBody String data, Model model) throws SQLException {
+    public String updateShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -160,18 +168,14 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        int weekdayHourId = addHours(weekdayStart, weekdayEnd);
-        int weekendHourId = addHours(weekendStart, weekendEnd);
-
         Object[] params = new Object[] { 
-            pid,
-            tname,
-            weekdayHourId,
-            weekendHourId,
-            sid
-        };
+            pid, 
+            tname, 
+            addHours(weekdayStart, weekdayEnd), 
+            addHours(weekendStart, weekendEnd),
+            sid };
 
-        jdbcTemplate.update( "update shift set "+
+        jdbcTemplate.update( "update sequ_shift set "+
           "position_id = ?, "+
           "task_name = ?, "+
           "weekday_id = ?, "+
@@ -184,9 +188,15 @@ public class ManageStore {
 
   // Delete currently selected shift
     @RequestMapping(value = "/shift/delete", method = RequestMethod.POST)
-    public String deleteShift(@RequestBody String data, Model model) throws SQLException {
+    public String deleteShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
- 
+
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         int sid;
@@ -204,7 +214,7 @@ public class ManageStore {
             throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        jdbcTemplate.update( "update shift set "+
+        jdbcTemplate.update( "update sequ_shift set "+
           "end_date = current_date "+
           "where id = ?",
         sid);
