@@ -16,17 +16,17 @@ package com.sequoiagrove.model;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.*;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import com.sequoiagrove.model.User;
-import com.sequoiagrove.model.Request;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
-import com.sequoiagrove.controller.MainController;
-import java.util.*;
 
+import com.sequoiagrove.controller.MainController;
 import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
+import com.sequoiagrove.model.Request;
+import com.sequoiagrove.model.Shift;
 
 public class Generator{
   //-------------------------
@@ -39,6 +39,7 @@ public class Generator{
   String startDate;
   String endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
+  List<Shift> shifts;
   Request requests[];
 
   //-----------------------------------
@@ -87,8 +88,8 @@ public class Generator{
   //  Database_Gathering
   //---------------------------------
   public void getPastInformation(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    dayShiftEmployeeList = jdbcTemplate.query(
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      dayShiftEmployeeList = jdbcTemplate.query(
         " select day, shift_id, user_id, count(*) AS worked" +
         " from sequ_employee_shift_view " +
         " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
@@ -115,9 +116,14 @@ public class Generator{
   }
 
   public void getEmployeeInformation(String startDate, String endDate){
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        String queryStr = "select * from sequ_user_info_view";
-        List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      String queryStr = "select * from sequ_user_info_view";
+      List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
+  }
+
+  public void getShiftInformation(String mon) {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
   }
 
   public String convertDay(Integer value){

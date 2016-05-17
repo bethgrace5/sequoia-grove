@@ -6,23 +6,28 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class Shift {
     int sid;
     int pid;
-    String tname; 
-    String wd_st;
-    String wd_ed;
-    String we_st;
-    String we_ed;
+    String tname;
+    String startDate;
+    String endDate;
+    String weekdayStart;
+    String weekdayEnd;
+    String weekendStart;
+    String weekendEnd;
 
     public Shift(){}
     public Shift(int sid, int pid, String tname,
-      String wd_st, String wd_ed, 
-      String we_st, String we_ed) {
+      String startDate, String endDate,
+      String weekdayStart, String weekdayEnd, 
+      String weekendStart, String weekendEnd) {
         this.sid = sid;
         this.pid = pid;
         this.tname = tname;
-        this.wd_st = wd_st;
-        this.wd_ed = wd_ed;
-        this.we_st = we_st;
-        this.we_ed = we_ed;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.weekdayStart = weekdayStart;
+        this.weekdayEnd = weekdayEnd;
+        this.weekendStart = weekendStart;
+        this.weekendEnd = weekendEnd;
     }
 
     public int getSid() {
@@ -46,31 +51,45 @@ public class Shift {
         this.tname = tname;
     }
 
-    public String getWd_st() {
-        return wd_st;
+    public String getStartDate() {
+        return startDate;
     }
-    public void setWd_st(String wd_st) {
-        this.wd_st = wd_st;
-    }
-
-    public String getWd_ed() {
-        return wd_ed;
-    }
-    public void setWd_ed(String wd_ed) {
-        this.wd_ed = wd_ed;
+    public void setStartDate(String sDate) {
+        this.startDate = sDate;
     }
 
-    public String getWe_st() {
-        return we_st;
+    public String getEndDate() {
+        return endDate;
     }
-    public void setWe_st(String we_st) {
-        this.we_st = we_st;
+    public void setEndDate(String eDate) {
+        this.endDate = eDate;
     }
 
-    public String getWe_ed() {
-        return we_ed;
+    public String getWeekdayStart() {
+        return weekdayStart;
     }
-    public void setWe_ed(String we_ed) {
-        this.we_ed = we_ed;
+    public void setWeekdayStart(String weekdayStart) {
+        this.weekdayStart = weekdayStart;
+    }
+
+    public String getWeekdayEnd() {
+        return weekdayEnd;
+    }
+    public void setWeekdayEnd(String weekdayEnd) {
+        this.weekdayEnd = weekdayEnd;
+    }
+
+    public String getWeekendStart() {
+        return weekendStart;
+    }
+    public void setWeekendStart(String weekendStart) {
+        this.weekendStart = weekendStart;
+    }
+
+    public String getWeekendEnd() {
+        return weekendEnd;
+    }
+    public void setWeekendEnd(String weekendEnd) {
+        this.weekendEnd = weekendEnd;
     }
 }
