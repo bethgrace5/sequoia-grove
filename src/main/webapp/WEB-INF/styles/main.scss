@@ -1,3 +1,6 @@
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+    display: none !important;
+  }
 $icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
 // bower:scss
 @import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
@@ -82,7 +85,7 @@ a:focus {
 *********************************************/
 .data-view {
   min-height: 300px;
-  max-height: 30%;
+  /*max-height: 30%;*/
   overflow-y: scroll;
   overflow-x: hidden;
   padding-left:10px;
@@ -182,7 +185,20 @@ a:focus {
 .schedule-edit-input-error:focus {
   box-shadow: 0 0 5px rgba(204, 0, 0, 1);
   border: 1px solid rgba(204, 0, 0, 0.7);
-  background-color: #FFCCCC;
+  /*background-color: #FFCCCC;*/
+}
+/* holiday on edit schedule input box */
+.schedule-edit-input-holiday{
+  background-color: #e6ccff;
+}
+.schedule-edit-input-holiday:focus {
+  box-shadow: 0 0 5px rgba(92, 0, 153, 1);
+  border: 1px solid rgba(92, 0, 153, 0.7);
+  background-color: #d9b3ff;
+}
+/* availability and has position for selected */
+.schedule-edit-input-avail{
+  background-color: #e6ffb3;
 }
 .schedule-edit-task-names{
   font-size: 1em;
@@ -243,24 +259,6 @@ a:focus {
   position: fixed;
   right: 0;
   width: 13%;
-}
-/* shift edit */
-.schedule-edit-shift-panel {
-  width: 87%;
-}
-.schedule-edit-shift-select {
-  width: auto;
-  margin: 5px;
-}
-.schedule-edit-shift-txt-addshift {
-  padding-right: 0.1em;
-}
-.schedule-edit-shift-btn-newshift {
-  padding-right: 0.5em;
-  padding-left: 0.5em;
-}
-.schedule-edit-shift-droprow {
-  margin-top: 10px;
 }
 
 /********************************************
@@ -371,6 +369,48 @@ a:focus {
   overflow-y: scroll;
 }
 
+/* ng hide fade transitions*/
+.hide-fade.ng-hide-add, .hide-fade.ng-hide-remove {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  display:block!important;
+}
+/* ng-hide leave */
+.hide-fade.ng-hide-add.ng-hide-add-active,
+.hide-fade.ng-hide-remove {
+  transition: 0.5s ease all;
+  opacity:0;
+}
+/* ng-hide enter */
+.hide-fade.ng-hide-add,
+.hide-fade.ng-hide-remove.ng-hide-remove-active {
+  transition:0.5s ease all;
+  opacity:1;
+}
+
+/* spinner fade transitions*/
+.spinner-fade.ng-hide-add, .spinner-fade.ng-hide-remove {
+  -webkit-transition:all linear 1s;
+  -moz-transition:all linear 1s;
+  -o-transition:all linear 1s;
+  transition:all linear 1s;
+  display:block!important;
+}
+/* spinner leave */
+.spinner-fade.ng-hide-add.ng-hide-add-active,
+.spinner-fade.ng-hide-remove {
+  transition: 1s ease all;
+  opacity:0;
+}
+/* spinner enter */
+.spinner-fade.ng-hide-add,
+.spinner-fade.ng-hide-remove.ng-hide-remove-active {
+  transition:0.2s linear all;
+  opacity:1;
+}
+
 /********************************************
     10. Default_Settings_Yeoman_put_in
 *********************************************/
@@ -462,7 +502,7 @@ a:focus {
   overflow-y:scroll;
 }
 
-.css-form input.ng-invalid.ng-touched {
+.css-form *.ng-invalid.ng-touched {
   -webkit-box-shadow: inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   -moz-box-shadow:    inset 3px 3px 13px -2px rgba(179,0,89,0.75);
   box-shadow:         inset 3px 3px 13px -2px rgba(179,0,89,0.75);

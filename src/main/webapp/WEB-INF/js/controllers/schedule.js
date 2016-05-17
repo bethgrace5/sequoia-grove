@@ -43,11 +43,17 @@ angular.module('sequoiaGroveApp')
     $location.path('/login');
   }
 
+  $scope.aList = {};
+  $scope.pList = {};
   $scope.selectedPid = 0;
   $scope.selectedPosition = 'All';
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
+  $scope.hideSpacers = true;
+  $scope.toggleHideSpacers = function() {
+    $scope.hideSpacers = !$scope.hideSpacers;
+  }
   $scope.errors = {
     'selectedName':'',
     'available':true, 
@@ -103,6 +109,7 @@ angular.module('sequoiaGroveApp')
   $scope.items = [{'isSpacer':true, 'index':-1}];
 
   $scope.selectPosition = function(pid, title) {
+    $log.debug(pid, title);
     $scope.selectedPid = pid;
     $scope.selectedPosition = title;
   }
@@ -163,7 +170,9 @@ angular.module('sequoiaGroveApp')
     };
   }
 
-  $scope.selectEid = function(t, day) {
+  $scope.selectEid = function(t, day, al, pl) {
+    $scope.aList = al;
+    $scope.pList = pl;
     if (t[day]) {
       $scope.selectedId = t[day].eid;
       if ($scope.selectedId === 0) {
@@ -174,8 +183,8 @@ angular.module('sequoiaGroveApp')
       else {
         $scope.errors.selectedName = t[day].name;
         $scope.errors.selectedPosition = t.position;
-        $scope.errors.available = t[day].available;
-        $scope.errors.hasPosition = t[day].hasPosition;
+        $scope.errors.available = t[day].hasAvailability[$scope.selectedId];
+        $scope.errors.hasPosition = t[day].hasPosition[$scope.selectedId];
       }
     }
     else {
@@ -214,85 +223,59 @@ angular.module('sequoiaGroveApp')
         employee.id, attrs.day, attrs.shiftstart, attrs.shiftend);
   }
 
-  $scope.employeeHasPosition = function(uid, pid) {
-    if (pid === -1) {
-      pid = $scope.selectedPid;
-    }
-    if (pid === 0) {
+  $scope.employeeHasPosition = function(uid) {
+    if ($scope.selectedPid === 0) {
       return true;
     }
-    return userFactory.hasPosition(uid, pid);
+    return userFactory.hasPosition(uid, $scope.selectedPid);
   }
 
-  // filter schedule to determine if the scheduled employee has availability
-  // adds 'availabe' attribute to that day for error checking
-  $scope.initAvailSchedule = function() {
-    $scope.template = _.map ($scope.template, function(item, index) {
-      if (item.isSpacer) {
-        return {'isSpacer':true, 'index':-1};
+  // highlights the list on the side
+  $scope.employeeListHighlight = function(id) {
+    var style = 'form-control schedule-edit-input';
+    if (id == $scope.selectedId) {
+      style += ' schedule-edit-highlight';
+    }
+    if ($scope.aList && $scope.pList) {
+      if ($scope.aList[id] && $scope.pList[id]) {
+        style += ' schedule-edit-input-avail';
       }
-      else {
-        item.mon = _.extend(item.mon, {'available': userFactory.isAvailable(item.mon.eid, 'mon', item.weekdayStart, item.weekdayEnd)});
-        item.tue = _.extend(item.tue, {'available': userFactory.isAvailable(item.tue.eid, 'tue', item.weekdayStart, item.weekdayEnd)});
-        item.wed = _.extend(item.wed, {'available': userFactory.isAvailable(item.wed.eid, 'wed', item.weekdayStart, item.weekdayEnd)});
-        item.thu = _.extend(item.thu, {'available': userFactory.isAvailable(item.thu.eid, 'thu', item.weekdayStart, item.weekdayEnd)});
-        item.fri = _.extend(item.fri, {'available': userFactory.isAvailable(item.fri.eid, 'fri', item.weekdayStart, item.weekdayEnd)});
-        item.sat = _.extend(item.sat, {'available': userFactory.isAvailable(item.sat.eid, 'sat', item.weekdayStart, item.weekdayEnd)});
-        item.sun = _.extend(item.sun, {'available': userFactory.isAvailable(item.sun.eid, 'sun', item.weekdayStart, item.weekdayEnd)});
-      }
-      return item;
-    });
-  }
-
-  // filter schedule to determine if the scheduled employee has the position
-  // adds 'hasPosition' attribute to that day for error checking
-  $scope.initPositionsSchedule = function() {
-    $scope.template = _.map ($scope.template, function(item, index) {
-      if (item.isSpacer) {
-        return {'isSpacer':true, 'index':-1};
-      }
-      else {
-        item.mon = _.extend(item.mon, {'hasPosition': userFactory.hasPosition(item.mon.eid, item.pid)});
-        item.tue = _.extend(item.tue, {'hasPosition': userFactory.hasPosition(item.tue.eid, item.pid)});
-        item.wed = _.extend(item.wed, {'hasPosition': userFactory.hasPosition(item.wed.eid, item.pid)});
-        item.thu = _.extend(item.thu, {'hasPosition': userFactory.hasPosition(item.thu.eid, item.pid)});
-        item.fri = _.extend(item.fri, {'hasPosition': userFactory.hasPosition(item.fri.eid, item.pid)});
-        item.sat = _.extend(item.sat, {'hasPosition': userFactory.hasPosition(item.sat.eid, item.pid)});
-        item.sun = _.extend(item.sun, {'hasPosition': userFactory.hasPosition(item.sun.eid, item.pid)});
-      }
-      return item;
-    });
-  }
-
-
+    }
+    return style;
+  };
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId, available, hasPosition) {
+  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
     var style = 'form-control schedule-edit-input';
-
+    if ($rootScope.readyToSchedule === false) {
+      return style;
+    }
+    if (available === undefined) {
+      if (id == $scope.selectedId) {
+        style += ' schedule-edit-highlight';
+      }
+      return style;
+    }
     // Highlight all occurences of the employee that was clicked
     if (id == $scope.selectedId) {
       style += ' schedule-edit-highlight';
     }
-    if (available == false) {
-      style += ' schedule-edit-input-error';
-    }
-    if (hasPosition == false) {
-      style += ' schedule-edit-input-error';
-    }
-    // Dummy Error/Warning Application
-    /* // apply an error
-    if (weekday=='monday' && shiftId == '3') {
-      style += ' schedule-edit-input-error';
-    }
-    // apply a warning
-    else if(weekday=='thursday' && shiftId == '2') {
-      style += ' schedule-edit-input-warn';
-    }
-    // no warnings or errors
     else {
-      style += ' schedule-edit-input-highlight';
-    } */
+      if (available[$scope.selectedId] && hasPosition[$scope.selectedId]) {
+        if( !holiday) {
+          style += ' schedule-edit-input-avail';
+        }
+      }
+    }
+    if (available[id] === false) {
+      style += ' schedule-edit-input-error';
+    }
+    else if (hasPosition[id] == false) {
+      style += ' schedule-edit-input-error';
+    }
+    if (holiday) {
+      style += ' schedule-edit-input-holiday';
+    }
     return style;
   }
 
@@ -300,13 +283,18 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
     scheduleFactory.saveSchedule().then(
       function(success) {
-        $rootScope.$broadcast('editEmployee');
-        $scope.saving = false;
+        $timeout(function() {
+          $rootScope.$broadcast('editEmployee');
+          $scope.saving = false;
+        });
       });
   }
 
   $scope.clearSchedule = function() {
     scheduleFactory.clear();
+    $timeout(function() {
+      $rootScope.$broadcast('editEmployee');
+    });
   }
 
   $scope.importWeek = function(index) {
@@ -321,16 +309,13 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    //$log.debug('update template schedule.js');
     $scope.template = scheduleFactory.getTemplate();
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
     $scope.changesMade = scheduleFactory.changesMade();
+    $scope.requests = scheduleFactory.getRequests();
   }
-
-  $scope.initAvailSchedule();
-  $scope.initPositionsSchedule();
 
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
@@ -343,6 +328,4 @@ angular.module('sequoiaGroveApp')
       $scope.loadingWeek = false;
     });
   });
-
-
 });

@@ -4,11 +4,22 @@
     <div class="col-sm-2">
       <ul data-as-sortable="gapDragControlListeners" data-ng-model="items">
         <li data-ng-repeat="item in items" data-as-sortable-item>
-          <div data-as-sortable-item-handle>
-            <button type="button" style="cursor:inherit" class="btn btn-info position-button" >
+        <!-- Spacers active -->
+          <div data-as-sortable-item-handle ng-hide="hideSpacers" >
+            <button type="button" style="cursor:inherit" class="btn btn-info position-button"
+              ng-click="toggleHideSpacers();">
               <!--ng-click="template.unshift({'isSpacer':true})"-->
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-              Spacer
+              spacer on
+            </button>
+          </div>
+          <!-- Spacers inactive -->
+          <div ng-show="hideSpacers" >
+            <button type="button" style="cursor:inherit" class="btn btn-default position-button"
+              ng-click="toggleHideSpacers();">
+              <!--ng-click="template.unshift({'isSpacer':true})"-->
+              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+              spacer off
             </button>
           </div>
         </li>
@@ -28,7 +39,7 @@
           </button>
           <ul class="dropdown-menu" rol="menu" arial-labelledby="selectPosition">
             <li role="menuitem"><a ng-click="selectPosition(0, 'all')">All</a></li>
-            <li ng-repeat = "pos in positions" value ="{{pos.id}}">
+            <li ng-repeat = "pos in positions" value ="pos.title">
             <a ng-click="selectPosition(pos.id, pos.title)">{{pos.title}}</a>
             </li>
           </ul>
@@ -68,15 +79,18 @@
     <div class="row">
       <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
+      <!-- Spacer -->
       <div data-as-sortable-item-handle>
         <div class="col-sm-2 schedule-edit-task-names">
           <span ng-click="selectPosition(t.pid, t.position)">{{t.tname}}</span>
-          <div ng-show="t.isSpacer">
-            <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
-              <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
-              Spacer
-            </button>
-            <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template.splice($index, 1)"></span>
+          <div ng-hide="hideSpacers">
+            <div ng-show="t.isSpacer">
+              <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
+                <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
+                Spacer
+              </button>
+              <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template.splice($index, 1)"></span>
+            </div>
           </div>
         </div>
 
@@ -100,10 +114,10 @@
           day="mon"
           shiftStart={{t.weekdayStart}}
           shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'mon')"
+          ng-click="selectEid(t, 'mon', t.mon.hasAvailability, t.mon.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.available, t.mon.hasPosition)"
+          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.hasAvailability, t.mon.hasPosition, t.mon.holiday)"
           ng-model="t.mon.name">
         </div>
 
@@ -118,10 +132,10 @@
           day="tue"
           shiftStart={{t.weekdayStart}}
           shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'tue')"
+          ng-click="selectEid(t, 'tue', t.tue.hasAvailability, t.tue.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.available, t.tue.hasPosition)"
+          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.hasAvailability, t.tue.hasPosition, t.tue.holiday)"
           ng-model="t.tue.name">
         </div>
 
@@ -136,10 +150,10 @@
           day="wed"
           shiftStart={{t.weekdayStart}}
           shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'wed')"
+          ng-click="selectEid(t, 'wed', t.wed.hasAvailability, t.wed.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.available, t.wed.hasPosition)"
+          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.hasAvailability, t.wed.hasPosition, t.wed.holiday)"
           ng-model="t.wed.name">
         </div>
 
@@ -154,10 +168,10 @@
           day="thu"
           shiftStart={{t.weekdayStart}}
           shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'thu')"
+          ng-click="selectEid(t, 'thu', t.thu.hasAvailability, t.thu.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.available, t.thu.hasPosition)"
+          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.hasAvailability, t.thu.hasPosition, t.thu.holiday)"
           ng-model="t.thu.name">
         </div>
 
@@ -172,10 +186,10 @@
           day="fri"
           shiftStart={{t.weekdayStart}}
           shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'fri')"
+          ng-click="selectEid(t, 'fri', t.fri.hasAvailability, t.fri.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.available, t.fri.hasPosition)"
+          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.hasAvailability, t.fri.hasPosition, t.fri.holiday)"
           ng-model="t.fri.name">
         </div>
 
@@ -195,10 +209,10 @@
           day="sat"
           shiftStart={{t.weekendStart}}
           shiftEnd={{t.weekendEnd}}
-          ng-click="selectEid(t, 'sat')"
+          ng-click="selectEid(t, 'sat', t.sat.hasAvailability, t.sat.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.available, t.sat.hasPosition)"
+          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.hasAvailability, t.sat.hasPosition, t.sat.holiday)"
           ng-model="t.sat.name">
         </div>
 
@@ -213,10 +227,10 @@
           day="sun"
           shiftStart={{t.weekendStart}}
           shiftEnd={{t.weekendEnd}}
-          ng-click="selectEid(t, 'sun')"
+          ng-click="selectEid(t, 'sun', t.sat.hasAvailability, t.sat.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.available, t.sun.hasPosition)"
+          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.hasAvailability, t.sun.hasPosition, t.sun.holiday)"
           ng-model="t.sun.name">
         </div>
       </div>

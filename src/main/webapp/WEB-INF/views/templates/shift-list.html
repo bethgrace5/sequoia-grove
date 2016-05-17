@@ -1,6 +1,6 @@
 
 <!-- Search Bar-->
-<div class="form-group">
+<ldiv class="form-group">
   <div class="input-group">
     <div class="btn btn-default input-group-addon">
       <span class="glyphicon glyphicon-search"></span>
@@ -15,22 +15,24 @@
   </div>
 </div>
 
-<!-- Clear Form For New Employee -->
-<button ng-click="clearShiftSelect()"
+<!-- Clear Form For New Shift -->
+<button ng-click="cleanupShiftEdit(false)"
   class="btn btn-success btn-block">
   <div class="pull-left">
     <i class="glyphicon glyphicon-plus"></i> Add New
   </div>
 </button>
 
-<!-- Repeating List of Employees-->
+<!-- Repeating List of Shifts-->
 <div class="list-group shift-list-wrapper">
   <div ng-repeat="s in template | filter : shiftSearch">
-    <button ng-click="selectShift(s)"
-      class="list-group-item btn btn-default btn-block"
-      ng-class="{'active': shiftInfo.sid===s.sid}">
-      <div class="pull-left" ng-model="template">
-        {{s.tname}} , ({{s.weekdayStart}}-{{s.weekdayEnd}})
+    <div ng-hide="s.isSpacer">
+      <button ng-click="selectShift(s)"
+        class="list-group-item btn btn-default btn-block"
+        ng-class="{'active': selectedShift.sid===s.sid}">
+        <div class="pull-left" ng-model="template">
+          {{s.tname}} ({{s.weekdayStart}}-{{s.weekdayEnd}})
+        </div>
       </div>
     </button>
   </div>

@@ -44,11 +44,12 @@ public class HolidaysController {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       List<Holiday> holidayList = jdbcTemplate.query(
-          "select * from sequ_holiday",
+          "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day from sequ_holiday",
           new RowMapper<Holiday>() {
             public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
               Holiday es = new Holiday(
                 rs.getInt("id"),
+                rs.getInt("day"),
                 rs.getString("title"),
                 rs.getString("hdate"),
                 rs.getString("store_open"),
@@ -142,23 +143,18 @@ public class HolidaysController {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-
-        //Make Sure request ID is there too...
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        System.out.println(dateStart + " " + dateEnd);
-
-        Object[] params = new Object[] {
-          dateStart,
-          dateEnd
-        };
+        Object[] params = new Object[] { dateStart, dateEnd };
         List<Holiday> holidayList = jdbcTemplate.query(
-          "select * from sequ_holiday where true " +
+          "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day " +
+          " from sequ_holiday where true " +
           " and hdate >= to_date(?, 'mm-dd-yyyy') " +
           " and hdate <= to_date(?, 'mm-dd-yyyy') ", params,
           new RowMapper<Holiday>() {
             public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
               Holiday es = new Holiday(
                 rs.getInt("id"),
+                rs.getInt("day"),
                 rs.getString("title"),
                 rs.getString("hdate"),
                 rs.getString("store_open"),
@@ -167,7 +163,6 @@ public class HolidaysController {
               return es;
             }
           });
-
         model.addAttribute("holidays", holidayList);
         return "jsonTemplate";
       }

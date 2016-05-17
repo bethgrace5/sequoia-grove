@@ -26,6 +26,15 @@ angular.module('sequoiaGroveApp')
       {'disp':'Account Holder', 'val':3},
       {'disp':'Admin', 'val':4}
     ]
+    $scope.permissions = [
+      {'disp':'submit-requests-off', 'val':2},
+      {'disp':'manage-employees', 'val':3},
+      {'disp':'manage-requests', 'val':4},
+      {'disp':'manage-schedule', 'val':5},
+      {'disp':'get-other-store-info', 'val':6},
+      {'disp':'manage-store', 'val':7},
+      {'disp':'edit-user-permissions', 'val':8}
+    ]
     $scope.selectedClassification = 0;
 
     $scope.activeTab = 'info';
@@ -50,6 +59,7 @@ angular.module('sequoiaGroveApp')
 
     $scope.newAvail = {day:'', start:'', end:''};
     $scope.newPos = {};
+    $scope.newPermission = {};
     $scope.saving = false;
     $scope.typeFilter = 'current';
 
@@ -163,6 +173,14 @@ angular.module('sequoiaGroveApp')
           $log.debug(data, status);
         });
       }
+    }
+
+    $scope.addPermission = function() {
+      $log.debug('add permission ',$scope.newPermission.disp);
+    }
+
+    $scope.removePermission = function(name) {
+      $log.debug('remove permission ', name);
     }
 
     $scope.getPositionTitle = function(pid) {
@@ -391,6 +409,7 @@ angular.module('sequoiaGroveApp')
             }
             return e;
           });
+          $rootScope.$broadcast('editEmployee');
         }).error(function(data, status) {
           $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
@@ -417,7 +436,7 @@ angular.module('sequoiaGroveApp')
           }
           return e;
         });
-
+        $rootScope.$broadcast('editEmployee');
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });

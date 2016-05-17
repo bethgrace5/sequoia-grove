@@ -92,7 +92,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         })
       }
     })
-    //$log.debug(isAvailable(3, 'mon', '0700', '1500'));
   }
 
   var isAvailable = function(eid, day, start, end) {
@@ -130,7 +129,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     positionMap = _.mapObject(positionMap, function(val, key) {
         return _.mapObject(
           _.values(_.pick(val, 'positions')),
-          function(val, key) { 
+          function(val, key) {
             return  _.map(val, function(item) {
               return parseInt(item);
           });
@@ -149,7 +148,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
   }
 
   var hasPosition = function(uid, pid) {
-    return _.contains(positionMap[uid], pid);
+    return _.contains(positionMap[parseInt(uid)], parseInt(pid));
   }
 
   // if User has manage schedule privelages, extend functionality

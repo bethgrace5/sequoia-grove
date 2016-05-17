@@ -181,10 +181,8 @@ public class EmployeeController
         JsonObject  jobject = jelement.getAsJsonObject();
 
         // get id just used to add employee
-        int id = jdbcTemplate.queryForObject("select nextval('sequ_user_sequence')", Integer.class);
 
         Object[] params = new Object[] {
-            id,
             jobject.get("firstname").getAsString(),
             jobject.get("lastname").getAsString(),
             jobject.get("birthDate").getAsString(),
@@ -198,12 +196,66 @@ public class EmployeeController
         };
 
         // add employee
-        jdbcTemplate.update("insert into sequ_user (id, first_name, last_name," +
-            " birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, email, classification_id, notes) " +
-            "values(?, ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ?)", params);
+        int id = jdbcTemplate.queryForObject(
+            "insert into sequ_user ( " +
+            "id, " +
+            "first_name,   " +
+            "last_name,    " +
+            "birth_date,   " +
+            "max_hrs_week, " +
+            "min_hrs_week, " +
+            "phone_number, " +
+            "clock_number, " +
+            "email,        " +
+            "classification_id, " +
+            "notes)        " +
+            "values((select nextval('sequ_user_sequence')), ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ?) returning currval('sequ_user_sequence')", params, Integer.class);
 
         // activate the employee
         jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null)", id);
+
+        // give default permissions
+        int classid = jobject.get("classificationId").getAsInt();
+
+        /* User permissions
+         * 1: admin
+         * 2: submit-reuquests-off
+         * 3: manage-employees
+         * 4: manage-requests
+         * 5: manage-schedule
+         * 6: get-other-store-info
+         * 7: manage-store
+         * 8: edit-user-permissions
+         * 9: admin
+         */
+        int [] employeePermissions = {2};
+        int [] managerPermissions = {2, 3, 4, 5, 7,};
+        int [] accountHolderPermissions = {2, 3, 4, 5, 6, 7, 8, 9};
+
+        String addPermissionSQL = 
+            "INSERT INTO sequ_user_permission (user_id, permission_id) SELECT ?, ? " +
+            "WHERE NOT EXISTS ( " +
+              "SELECT * FROM sequ_user_permission WHERE user_id = ? and permission_id = ? " +
+            ");";
+
+        if (classid == 1) { // employee was added
+          for(int i=0; i<employeePermissions.length; i++) {
+            jdbcTemplate.update( addPermissionSQL, id, employeePermissions[i], id, employeePermissions[i]);
+          }
+        }
+        if (classid == 2) { // manager was added
+          for(int i=0; i<managerPermissions.length; i++) {
+            jdbcTemplate.update( addPermissionSQL, id, managerPermissions[i], id, managerPermissions[i]);
+          }
+        }
+        if (classid == 3) { // account holder was added
+          //TODO when add multiple location, this means a new account was setup.
+          for(int i=0; i<accountHolderPermissions.length; i++) {
+            jdbcTemplate.update( addPermissionSQL, id, accountHolderPermissions[i], id, accountHolderPermissions[i]);
+          }
+        }
+        // no way to add a user as an admin, that must be done manually
+        // update sequ_user set classification_id = 4 where id = ?
 
         // return the new id
         model.addAttribute("id", id);
