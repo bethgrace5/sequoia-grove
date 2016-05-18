@@ -51,7 +51,9 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
         window.open('https://accounts.google.com/logout', '_blank');
       });
   }
-
+  window.onSignIn = onSignIn;
+  window.signOut = signOut;
+  window.switchUser = switchUser;
   // When user has logged in, this will load required data based
   // on user access level, and then redirect to home.
   $scope.initializeData = function(isManager) {
@@ -99,9 +101,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   }
 
   // make functions available to 'onclick' in window
-  window.onSignIn = onSignIn;
-  window.signOut = signOut;
-  window.switchUser = switchUser;
 
   //var googleDiv = angular.element( document.querySelector( '#google-signin' ) );
   //$timeout(function() {

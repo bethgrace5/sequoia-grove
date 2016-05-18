@@ -31,9 +31,7 @@
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
         <!-- Google Sign in button -->
-        <div id="google-signin">
-          <div class="g-signin2" ng-click="onSignIn(this.data-onsuccess)" data-onsuccess="onSignIn"></div>
-        </div>
+        <div class="g-signin2" data-onsuccess="onSignIn"></div>
       </span>
 
       <!-- navigation menu -->
