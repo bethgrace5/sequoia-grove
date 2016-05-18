@@ -5,9 +5,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
   var service = {};
   var observerCallbacks = [];
 
-  // Exposed to all users through service
-  var loggedInUser = {};
-
   // Exposed to users with 'manage schedule' privelage through service
   var users = [];
 
@@ -151,6 +148,13 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     return _.contains(positionMap[parseInt(uid)], parseInt(pid));
   }
 
+  var getSelf = function() {
+    var deferred = $q.defer();
+    $log.debug('would load data about this user, if they have permission to edit themself');
+    deferred.resolve();
+    return deferred.promise;
+  }
+
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
@@ -179,9 +183,12 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
 
   // Exposed factory functionality
   var service = {
-    'setLoggedInUser':    function(user) { loggedInUser = user; },
-    'getLoggedInUser':    function() { return loggedInUser; },
-    'setManagePrivelage': function() { setManagePrivelage(); }
+    'init': function() {
+      return getSelf();
+    },
+    'setManagePrivelage': function() {
+      setManagePrivelage();
+    }
   }
 
   // register observers

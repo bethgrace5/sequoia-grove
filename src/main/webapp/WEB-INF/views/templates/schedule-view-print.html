@@ -48,7 +48,7 @@
 
 <!-- shifts -->
   <tr ng-repeat="t in template"
-    ng-show="filterByType(t.location, t.position, loggedInUser.id, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)">
+    ng-show="filterByType(t.location, t.position, t)">
 
     <!-- shift title -->
     <td class="print-row print-border">

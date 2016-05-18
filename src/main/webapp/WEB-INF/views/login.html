@@ -1,42 +1,12 @@
 
 <div class="container">
-  <div class="panel panel-default hidden-print" style="height: 400px;">
+  <div class="panel panel-default hidden-print" style="height: 200px;">
     <div class="row panel-body">
-      <div class="col-sm-6 col-sm-offset-3">
-        <form>
-          <div class="form-group">
-            <label for="login-email">Email</label>
-            <input id="login-email" class="form-control" type="email"
-            ng-disabled="loggingIn"
-            ng-model="email"/>
-          </div>
-          <div class="form-group">
-            <label for="login-password">Password</label>
-            <input id="login-password" class="form-control" type="password"
-            ng-model="password"
-            ng-disabled="loggingIn"/>
-          </div>
-          <div class="form-group">
-            <label for="login-remember">Remember Me</label>
-            <input id="login-remember" type="checkbox"
-            ng-disabled="loggingIn"
-            ng-click="updateRemember()"
-            ng-model="remember"/>
-          </div>
-          <div class="form-group">
-            <label for="dev-mode">Dev Mode</label>
-            <input id="dev-mode" type="checkbox"
-            ng-disabled="loggingIn"
-            ng-click="updateDevMode()"
-            ng-model="devMode"/>
-          </div>
-        </form>
+      <div class="col-sm-8 col-sm-offset-2">
         <div class="text-center">
-          <button class="btn btn-primary form-control"
-            ng-disabled="loggingIn"
-            ng-click="appLogin()">
-            Sign In!
-          </button>
+          <p class="lead" ng-hide="loggingIn"> 
+            Sequoia Grove Employee Scheduling
+          </p>
           <p class="lead">
             <p ng-show="loggingIn">
               <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
@@ -60,4 +30,11 @@
     ng-disabled="loggingIn">
     Need an account?
   </a>
+  <div class="form-group">
+    <label for="dev-mode">Dev Mode</label>
+    <input id="dev-mode" type="checkbox"
+    ng-disabled="loggingIn"
+    ng-click="updateDevMode()"
+    ng-model="devMode"/>
+  </div>
 </div>

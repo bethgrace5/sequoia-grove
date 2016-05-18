@@ -7,43 +7,27 @@
  * # MainCtrl
  * Controller of the sequoiaGroveApp
  */
-angular.module('sequoiaGroveApp')
-  .controller('MainCtrl', function (
-    $http,
-    $location,
-    $log,
-    $rootScope,
-    $route,
-    $scope,
-    $timeout,
-    $translate,
-    localStorageService,
-    scheduleFactory,
-    userFactory,
-    $q){
+angular.module('sequoiaGroveApp').controller('MainCtrl', function (
+    $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
+    localStorageService, scheduleFactory, userFactory, loginFactory, $q ){
 
 /************** Login Redirect, Containers and UI settings **************/
-
-
-  $scope.loadingWeek = false;
-  $rootScope.currentPath = $location.path();
-  $scope.selectedWeek = 0;
-  $scope.weekLabel = '';
-  $scope.weekList = [];
-  $scope.template = {};
-
-  // extend shift duration for holiday closes
-  $scope.extendStart = 2;
-  $scope.extendEnd = 2;
-
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if (loginFactory.isLoggedIn() == false) {
     $rootScope.lastPath = $location.path();
     if ($location.path() != '/login') {
       $location.path('/login');
     }
   }
+  $rootScope.currentPath = $location.path();
 
+  // UI 'Active' Tab Settings
+  $scope.changeTab = function(tab) {
+    if(tab == $location.path().substring(0,$location.path().length)) {
+      return "active";
+    }
+    return "";
+  }
 
   // Locale settings
   $scope.lang = 'en';
@@ -60,22 +44,28 @@ angular.module('sequoiaGroveApp')
     localStorageService.set('devMode', $rootScope.devMode);
   }
 
+  $scope.loadingWeek = false;
+  $scope.selectedWeek = 0;
+  $scope.weekLabel = '';
+  $scope.weekList = [];
+  $scope.template = {};
+  $scope.highlight = false;
+  $rootScope.revealDeliveries = false;
+  // flag when set will disable all buttons, to avoid overlapping requests
+  $scope.loading = false;
+
+  // extend shift duration for holiday closes
+  $scope.extendStart = 2;
+  $scope.extendEnd = 2;
+
   // setup containers
   $scope.deliveries = [];
-
-  $scope.viewDeliveries = {
-      'mon':[],
-      'tue':[],
-      'wed':[],
-      'thu':[],
-      'fri':[],
-      'sat':[],
-      'sun':[]
-  }
+  $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
+      'sat':[], 'sun':[] }
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
-  $scope.birthdays = [];
+  //$scope.birthdays = [];
   //$scope.holidays = [];
   $rootScope.isPublished = false;
   $rootScope.showDeliveries = true;
@@ -86,22 +76,7 @@ angular.module('sequoiaGroveApp')
   $rootScope.loadingMsg = "Verifying user with Application...";
   $scope.selectedPid = 0;
 
-  // UI 'Active' Tab Settings
-  $scope.changeTab = function(tab) {
-      var path = $location.path();
-      var length = path.length;
-      if(tab == path.substring(0,length)) {
-          return "active";
-      }
-      else {
-          return "";
-      }
-  }
   // highlight name
-  $scope.highlight = false;
-  $rootScope.revealDeliveries = false;
-  // flag when set will disable all buttons, to avoid overlapping requests
-  $scope.loading = false;
 
 /************** Pure Functions **************/
 
@@ -123,7 +98,6 @@ angular.module('sequoiaGroveApp')
       return true;
     }
     var hasPosition = false;
-
     // find if this employee knows the selected position
     _.map($scope.employees, function(e) {
       if (e.id === eid) {
@@ -137,20 +111,27 @@ angular.module('sequoiaGroveApp')
     return hasPosition;
   }
 
+  $scope.getPositions = function() {
+    var deferred = $q.defer();
+    $http({ url: '/sequoiagrove/position', method: "GET" })
+      .then(function(success) {
+        $rootScope.positions = success.data.positions;
+        deferred.resolve(success);
+      });
+    return deferred.promise;
+  }
+
 /************** HTTP Request Functions **************/
+  $scope.toggleDeliveries = function() {
+    $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
+  }
+
   // get all existing deliveries
   $scope.getDeliveries = function() {
     var deferred = $q.defer();
     $scope.deliveries = [];
-    $scope.viewDeliveries = {
-      'mon':[],
-      'tue':[],
-      'wed':[],
-      'thu':[],
-      'fri':[],
-      'sat':[],
-      'sun':[]
-    }
+    $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
+      'sat':[], 'sun':[] }
     $http({url: '/sequoiagrove/delivery', method: "GET" })
       .then(function(success) {
         if (success.status == 200) {
@@ -184,25 +165,12 @@ angular.module('sequoiaGroveApp')
     return deferred.promise;
   }
 
-  $scope.getPositions = function() {
-    var deferred = $q.defer();
-    $http({ url: '/sequoiagrove/position', method: "GET" })
-      .then(function(success) {
-        $rootScope.positions = success.data.positions;
-        deferred.resolve(success);
-      });
-    return deferred.promise;
-  }
-
-  $scope.toggleDeliveries = function() {
-      $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
-  }
 
 /************** Variable Initialization **************/
 
   // TODO function to find birthdays this week
-  $scope.birthdays.push({name:"Amelia", date:"10/10"});
-  $scope.birthdays.push({name:"Jem", date:"10/13"});
+  //$scope.birthdays.push({name:"Amelia", date:"10/10"});
+  //$scope.birthdays.push({name:"Jem", date:"10/13"});
 
   // TODO function to find holidays this week
   //$scope.holidays.push({name:"Christmas", date:"12/25"});
@@ -267,11 +235,9 @@ angular.module('sequoiaGroveApp')
   // Initialize controller
   $scope.init = function() {
     // user is not logged in, redirect to login
-    if ($rootScope.loggedIn == false) {
+    if (loginFactory.loggedIn() == false) {
       $rootScope.lastPath = $location.path();
-      //if ($location.path() != '/login') {
-        $location.path('/login');
-      //}
+      $location.path('/login');
     }
     $scope.changeTab('/home');
   }
@@ -281,24 +247,24 @@ angular.module('sequoiaGroveApp')
     $scope.template = scheduleFactory.getTemplate();
     $scope.date = scheduleFactory.getHeader();
     $scope.isPublished = scheduleFactory.isPublished();
-    $scope.dayCount = scheduleFactory.getDayCount();
-    $scope.hourCount = scheduleFactory.getHourCount();
-    $scope.changesMade = scheduleFactory.changesMade();
+    if (loginFactory.getUser().isManager) {
+      $scope.dayCount = scheduleFactory.getDayCount();
+      $scope.hourCount = scheduleFactory.getHourCount();
+      $scope.changesMade = scheduleFactory.changesMade();
+    }
     $scope.weekList = scheduleFactory.getWeekList();
     $timeout(function() {
-      $scope.employees = userFactory.getUsers();
-      $scope.initPositionsSchedule();
-      $scope.initAvailSchedule();
+      if (loginFactory.getUser().isManager) {
+        $scope.employees = userFactory.getUsers();
+        $scope.initPositionsSchedule();
+        $scope.initAvailSchedule();
+      }
     });
   });
 
   $scope.selectWeek = function(index) {
     $scope.selectedWeek = index;
   }
-
-    $scope.up = function() {
-      $scope.employees = userFactory.getUsers();
-    }
 
   // filter schedule to determine if the scheduled employee has availability
   // adds 'available' attribute to that day for error checking
@@ -447,18 +413,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  // called from header menu
-  $scope.appLogin = function() {
-    $log.debug('broadcast login from main');
-    $rootScope.$broadcast('login');
-  }
-
-  // called from header menu
-  $scope.destructData = function() {
-    $log.debug('broadcast logout from main');
-    $rootScope.$broadcast('logout');
-  }
-
   // advance or go back weeks in time
   $scope.changeWeek = function(operation) {
     $scope.selectWeek(0);
@@ -474,21 +428,27 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.publishSchedule = function() {
-    $scope.isPublished = scheduleFactory.publish();
-  }
-
   var updateChangesMade = function(){
     //$log.debug('update template main.js');
     $scope.template = scheduleFactory.getTemplate();
-    $scope.dayCount = scheduleFactory.getDayCount();
-    $scope.hourCount = scheduleFactory.getHourCount();
-    $scope.changesMade = scheduleFactory.changesMade();
+    if (loginFactory.getUser().isManager) {
+      $scope.dayCount = scheduleFactory.getDayCount();
+      $scope.hourCount = scheduleFactory.getHourCount();
+      $scope.changesMade = scheduleFactory.changesMade();
+      $scope.requests = scheduleFactory.getRequests();
+    }
     $scope.weekList = scheduleFactory.getWeekList();
-    $scope.requests = scheduleFactory.getRequests();
     $scope.loadingWeek = false;
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
   //schedule factory now in control of updateChangesMade()
+
+  // fires when the user has logged in or out
+  var updateUser = function(){
+    $scope.loggedInUser = loginFactory.getUser();
+    $scope.loggedIn = loginFactory.isLoggedIn();
+  };
+
+  loginFactory.registerObserverCallback(updateUser);
 
 });

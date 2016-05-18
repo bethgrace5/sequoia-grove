@@ -104,6 +104,11 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  $scope.publishSchedule = function() {
+    $scope.isPublished = scheduleFactory.publish();
+  }
+
+
 /************** Pure Functions **************/
 
   $scope.items = [{'isSpacer':true, 'index':-1}];

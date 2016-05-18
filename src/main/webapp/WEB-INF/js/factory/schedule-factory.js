@@ -797,6 +797,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       addHolidays();
       notifyObservers();
     },
+    'getWeekList': function() { return weekList},
     'setManagePrivelage': function() { setManagePrivelage(); }
   }
 

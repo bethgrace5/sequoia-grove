@@ -13,19 +13,27 @@
         </button>
       </div>
 
+      <!-- User Name, photo, and dropdown menu for signout options -->
       <span ng-show="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button type="button"
-          class="btn btn-clear"
-          ng-disabled="loading"
-          ng-click="destructData()">
-          Hello, {{loggedInUser.firstname}}! (Sign out)
-        </button>
+        <div style="cursor:pointer;" class="dropdown pull-right" dropdown is-open=true>
+          <p aria-haspopup="true" aria-expanded="true" data-toggle="dropdown" style="color:white; display:inline;">Hello, {{loggedInUser.name}}</p>
+          <span aria-haspopup="true" aria-expanded="true" data-toggle="dropdown" style="color:white" class="caret"></span>
+          <!-- Google User Profile Photo -->
+          <img style="width:30px; height:30px; border-radius:5px; display:inline;" id="signoutDropdown" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
+          src="{{loggedInUser.profile_photo}}"></img>
+          <!-- Filter by User, Location, or Position -->
+          <ul class="dropdown-menu" role="menu" arial-labelledby="signoutDropdown">
+            <li role="menuitem"><a onclick="signOut();">Sign out</a></li>
+            <li role="menuitem"><a href="#" onclick="switchUser();">Not {{loggedInUser.firstname}}?</a></li>
+          </ul>
+        </div>
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
-        <button ng-disabled="loggingIn || loading" type="button" ng-click="appLogin()" class="btn btn-clear">
-          Sign in / Sign up
-        </button>
+        <!-- Google Sign in button -->
+        <div id="google-signin">
+          <div class="g-signin2" ng-click="onSignIn(this.data-onsuccess)" data-onsuccess="onSignIn"></div>
+        </div>
       </span>
 
       <!-- navigation menu -->
@@ -40,7 +48,7 @@
               ng-class="changeTab('/home')">
               <a href="#/home">
                 <span class="glyphicon glyphicon-home"></span>
-                {{'HEADER_TAB_HOME' | translate}} 
+                {{'HEADER_TAB_HOME' | translate}}
               </a>
             </li>
             <li ng-show="loggedIn" role="presentation"

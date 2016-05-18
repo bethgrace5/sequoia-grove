@@ -22,14 +22,14 @@
 //| ?????
 //| Initialize_Testing_Extreme
 
-
-angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService) {
+angular.module('sequoiaGroveApp').controller('RequestCtrl', function(
+    $scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService,
+    loginFactory ){
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if ($scope.loggedIn == false) {
     $location.path('/login');
   }
 
@@ -51,8 +51,7 @@ angular.module('sequoiaGroveApp')
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
       $scope.requestDateEnd = $scope.requestDateStart;
     }
-  }
-
+  } 
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "submit";
 
@@ -88,7 +87,7 @@ angular.module('sequoiaGroveApp')
   $scope.getCurrentEmployeeRequest = function() {
     return $http({
       url: '/sequoiagrove/request/get/current/employee/'+
-      $rootScope.loggedInUser.id,
+      loginFactory.getUser().id,
       method: "POST"
     }).success(function(data, status) {
       $scope.userRequests = data.request;
@@ -96,7 +95,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.submitRequest = function(){
-    var obj = { "eid": $rootScope.loggedInUser.id,
+    var obj = { "eid": loginFactory.getUser().id,
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
@@ -104,10 +103,13 @@ angular.module('sequoiaGroveApp')
       .then(function (success){
         return $scope.getCurrentEmployeeRequest()
       }).then(function(success) {
-        return $scope.getPendingRequests();
-      }).then(function(success) {
-        $scope.getAllRequests();
-      });
+        if (loginFactory.getUser().isManager) {
+          $scope.getPendingRequests().
+          then(function(success) {
+            $scope.getAllRequests();
+          });
+        }
+    });
   }
 
   $scope.confirmSubmit = function(ev) {
@@ -301,11 +303,16 @@ angular.module('sequoiaGroveApp')
 
   $scope.init = function(){
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
-    $scope.getAllRequests().then(function(success) {
+    if (loginFactory.getUser().isManager) {
+      $scope.getAllRequests().then(function(success) {
+        return $scope.getCurrentEmployeeRequest();
+      }).then(function(success) {
+        return $scope.getPendingRequests();
+      });
+    }
+    else {
       return $scope.getCurrentEmployeeRequest();
-    }).then(function(success) {
-      return $scope.getPendingRequests();
-    });
+    };
   }
 
   $scope.init();

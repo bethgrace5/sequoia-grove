@@ -232,7 +232,7 @@ public class EmployeeController
         int [] managerPermissions = {2, 3, 4, 5, 7,};
         int [] accountHolderPermissions = {2, 3, 4, 5, 6, 7, 8, 9};
 
-        String addPermissionSQL = 
+        String addPermissionSQL =
             "INSERT INTO sequ_user_permission (user_id, permission_id) SELECT ?, ? " +
             "WHERE NOT EXISTS ( " +
               "SELECT * FROM sequ_user_permission WHERE user_id = ? and permission_id = ? " +
