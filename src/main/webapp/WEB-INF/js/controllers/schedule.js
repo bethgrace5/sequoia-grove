@@ -83,8 +83,22 @@ angular.module('sequoiaGroveApp')
 
     $scope.saving = true;
 
+    var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
+    $scope.autoGenOptions.mon = $scope.date.mon.val;
+    $scope.autoGenOptions.historyEnd =
+      moment(
+        $scope.date.mon.val, 'DD-MM-YYYY'
+      ).subtract(daysHist, 'days').format('DD-MM-YYYY');
+    $scope.autoGenOptions.historyStart =
+      moment(
+        $scope.date.mon.val, 'DD-MM-YYYY'
+      ).subtract(1, 'days').format('DD-MM-YYYY');
+
     $http({
       url: '/sequoiagrove/schedule/autogen/',
+      //  + $scope.date.mon.val + '/'
+      //  + moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY') + '/'
+      //  + moment($scope.date.mon.val, 'DD-MM-YYYY').subtract(daysHist, 'days').format('DD-MM-YYYY'),
       method: "POST",
       data: $scope.autoGenOptions
     }).success( function(data, status, headers, config) {
@@ -95,11 +109,11 @@ angular.module('sequoiaGroveApp')
         $scope.saving = false;
       }
       else {
-        $log.error(status + " Error auto-generating schedule " + data);
+        $log.error(status + " No Error: Could no auto-generate schedule " + data);
         $scope.saving = false;
       }
     }).error( function(data, status, headers, config) {
-      $log.error(status + " Error auto-generating schedule " + data);
+      $log.error(status + " Error while auto-generating schedule " + data);
       $scope.saving = false;
     });
   }

@@ -27,89 +27,160 @@ import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Shift;
+import com.sequoiagrove.model.ShiftRowMapper;
 
 public class Generator{
   //-------------------------
   //  Variables_Hold
   //-------------------------
   HashMap
-    <String, HashMap<Integer, HashMap<Integer, Integer> > > generator;
+    <String, HashMap <Integer, HashMap <Integer, Integer>>> generator;
   //[Day [ Shift [Employee, number of weeks scheduled] ] ]
   //
-  List<User> employeeList;
 
   String startDate;
   String endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
+  List<User> employeeList;
   List<Shift> shifts;
   Request requests[];
 
   //-----------------------------------
-  //  Building
+  //  Constructors
   //-----------------------------------
   public Generator(){
     generator = new HashMap
-      <String, HashMap<Integer, HashMap<Integer, Integer> > >();
+      <String, HashMap <Integer, HashMap <Integer, Integer>>>();
     startDate = "dog";
     endDate = "cat";
   }
 
-  public void addDay(String day){
+  public Generator(
+    HashMap
+      <String, HashMap <Integer, HashMap <Integer, Integer>>> generator,
+    String startDate,
+    String endDate,
+    List<DayShiftEmployee> dayShiftEmployeeList,
+    List<User> employeeList,
+    List<Shift> shifts,
+    Request requests[]
+  ) {
+    this.generator = generator;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.dayShiftEmployeeList = dayShiftEmployeeList;
+    this.employeeList = employeeList;
+    this.shifts = shifts;
+    this.requests = requests;
+  }
+
+  public Generator(
+    final String mon, final String historyStart, final String historyEnd
+  ) {
+    setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd)); // !!! THROWS EXCEPTION !!!
+    printDayShiftEmployeeList();
+    //fillGenerator();
+    //setEmployeeList(getEmployeeInformation());
+    setShifts(getShiftInformation(mon));
+    // still need to get requests
+    startDate = mon; // ??? not sure if correct ???
+    //endDate = historyEnd; // ?? not sure if correct ??
+  }
+
+  //-----------------------------------
+  //  Getters & Setters
+  //-----------------------------------
+  public void setGenerator(HashMap
+    <String, HashMap <Integer, HashMap <Integer, Integer>>> generator)
+  {
+    this.generator = generator;
+  }
+  public HashMap getGenerator() {
+    return generator;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setDayShiftEmployeeList(List<DayShiftEmployee> dayShiftEmployeeList) {
+    this.dayShiftEmployeeList = dayShiftEmployeeList;
+  }
+  public List<DayShiftEmployee> getDayShiftEmployeeList() {
+    return dayShiftEmployeeList;
+  }
+
+  public void setEmployeeList(List<User> employeeList) {
+    this.employeeList = employeeList;
+  }
+  public List<User> getEmployeeList() {
+    return employeeList;
+  }
+
+  public void setShifts(List<Shift> shifts) {
+    this.shifts = shifts;
+  }
+  public List<Shift> getShifts() {
+    return shifts;
+  }
+
+  public void setRequests(Request requests[]) {
+    this.requests = requests;
+  }
+  public Request[] getRequests() {
+    return requests;
+  }
+
+  //-----------------------------------
+  //  Building HashMap
+  //-----------------------------------
+  public void addDay(String day) {
     if(generator.containsKey(day)) return;
     generator.put(day, new HashMap<Integer, HashMap<Integer, Integer>>());
   }
 
-  public void addShift(String day, Integer shift){
+  public void addShift(String day, Integer shift) {
     if(!generator.containsKey(day)) return;
     if(generator.get(day).containsKey(shift)) return;
     generator.get(day).put(shift, new HashMap<Integer, Integer>());
   }
 
-  public void addEmployee(String  day,
+  public void addEmployee(
+      String  day,
       Integer shift,
       Integer employee,
-      Integer amount){
-
+      Integer amount
+  ) {
     if(!generator.containsKey(day)) return;
     if(!generator.get(day).containsKey(shift)) return;
     if(generator.get(day).get(shift).containsKey(employee)) return;
     generator.get(day).get(shift).put(employee, amount);
   }
 
-  public void add(String  day,
+  public void add(
+      String  day,
       Integer shift,
       Integer employee,
-      Integer amount){
+      Integer amount
+  ) {
     //This Is Diffrent from addEmployee, as it calls all other 3
     //function to build while making sure keys exists for eachother
     addDay(day);
     addShift(day, shift);
     addEmployee(day, shift, employee,  amount);
-
   }
 
-  //----------------------------------
-  //  Database_Gathering
-  //---------------------------------
-  public void getPastInformation(String startDate, String endDate){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, user_id, count(*) AS worked" +
-        " from sequ_employee_shift_view " +
-        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-        " group by day, shift_id, user_id " +
-        " order by day, shift_id, user_id ",
-          new RowMapper<DayShiftEmployee>() {
-            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-              DayShiftEmployee es = new DayShiftEmployee(
-                rs.getInt("day"),
-                rs.getInt("shift_id"),
-                rs.getInt("user_id"),
-                rs.getInt("worked")
-              );
-            return es;
-          }
-        }, startDate, endDate);
+  public void fillGenerator() {
     for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
       add(convertDay(dayShiftEmployeeList.get(i).getDay()),
           dayShiftEmployeeList.get(i).getShift(),
@@ -119,13 +190,48 @@ public class Generator{
     printFormation();
   }
 
-  public List<User> getEmployeeInformation(String startDate, String endDate){
+  //----------------------------------
+  //  Database_Gathering
+  //---------------------------------
+  public List<DayShiftEmployee> getPastInformation(String startDate, String endDate) {
+    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    List<DayShiftEmployee> temp = jdbcTemplate.query(
+      " select day, shift_id, user_id, count(*) AS worked" +
+      " from sequ_employee_shift_view " +
+      " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
+      " group by day, shift_id, user_id " +
+      " order by day, shift_id, user_id ",
+      new RowMapper<DayShiftEmployee>() {
+        public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
+          DayShiftEmployee es = new DayShiftEmployee(
+            rs.getInt("day"),
+            rs.getInt("shift_id"),
+            rs.getInt("user_id"),
+            rs.getInt("worked")
+          );
+          return es;
+        }
+      }//, startDate, endDate
+    );
+    return temp;
+  }
+
+  public List<User> getEmployeeInformation(){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       String queryStr = "select * from sequ_user_info_view";
       List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
       return empList;
   }
 
+  public List<Shift> getShiftInformation(String mon) {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      String queryStr = "select * from sequ_get_current_shifts(?)";
+      List<Shift> shiftList = jdbcTemplate.query(
+        queryStr,
+        new Object[]{mon},
+        new ShiftRowMapper());
+      return shiftList;
+  }
 
   public void getRequest(String startDate, String endDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -152,7 +258,7 @@ public class Generator{
         }, startDate, endDate);
   }
 
-    public List<RequestStatus> getRequestObject(String startDate, String endDate){
+  public List<RequestStatus> getRequestObject(String startDate, String endDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     List<RequestStatus> requestList = jdbcTemplate.query(
         "select * from request_view " +
@@ -224,11 +330,6 @@ public class Generator{
       return new ArrayList<String>();
     }
     return new ArrayList<String>(Arrays.asList(pos.split(",")));
-  }
-
-  public void getShiftInformation(String mon) {
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
   }
 
   public String convertDay(Integer value){
@@ -314,6 +415,34 @@ public class Generator{
               generator.get(dayKey).get(shiftKey).get(empKey));
         }
       }
+    }
+  }
+
+  public void printShiftList() {
+    System.out.println("SID PID TNAME");
+    System.out.println("  STARTDATE   ENDDATE     WDSTART WDEND  WESTART WEEND");
+    for (Shift cur : shifts) {
+      System.out.printf(
+        "\n%-3d %-3d %-30s\n  %-11s %-11s %-6s %-6s %-6s %-6s\n",
+        cur.getSid(),
+        cur.getPid(),
+        cur.getTname(),
+        cur.getStartDate(),
+        cur.getEndDate(),
+        cur.getWeekdayStart(),
+        cur.getWeekdayEnd(),
+        cur.getWeekendStart(),
+        cur.getWeekendEnd()
+      );
+    }
+  }
+
+  public void printDayShiftEmployeeList() {
+    System.out.println("DAY SHIFT EMP WORKED");
+    for (DayShiftEmployee cur : dayShiftEmployeeList) {
+      System.out.printf("%-3d %-5d %-3d %-6d\n",
+        cur.getDay(), cur.getShift(), cur.getEmployee(), cur.getWorked()
+      );
     }
   }
 

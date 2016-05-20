@@ -1,0 +1,35 @@
+package com.sequoiagrove.model;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import org.springframework.jdbc.core.RowMapper;
+
+import com.sequoiagrove.model.Shift;
+
+public class ShiftRowMapper implements RowMapper {
+
+    public Shift mapRow(ResultSet rs, int rowNum) throws SQLException {
+        Shift temp = new Shift(); 
+        temp.setSid(rs.getInt("sid"));
+        temp.setPid(rs.getInt("pid"));
+        temp.setTname(rs.getString("task_name"));
+        temp.setStartDate(rs.getString("start_date"));
+        temp.setEndDate(rs.getString("end_date"));
+        temp.setWeekdayStart(rs.getString("weekday_start"));
+        temp.setWeekdayEnd(rs.getString("weekday_end"));
+        temp.setWeekendStart(rs.getString("weekend_start"));
+        temp.setWeekendEnd(rs.getString("weekend_end"));
+        /*System.out.println(
+          temp.getSid() + " " +
+          temp.getPid() + " " +
+          temp.getTname() + " " +
+          temp.getStartDate() + " " +
+          temp.getEndDate() + " " +
+          temp.getWeekdayStart() + " " +
+          temp.getWeekdayEnd() + " " +
+          temp.getWeekendStart() + " " +
+          temp.getWeekendEnd()
+        );*/
+        return temp;
+    }
+}
