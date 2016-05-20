@@ -17,10 +17,15 @@
       </div>
 
       <!-- Error Messages -->
-      <div class="row panel-body text-center" style="color:b30000;">
+      <div class="row panel-body text-center">
         <div class="col-sm-12">
-          <p ng-show="errorMessage.length > 0"> {{errorMessage}} </p>
-          <p ng-show="loginFailed"> <strong>Sign in failed...</strong> </p>
+          <div ng-show="errorMessage.length > 0"> 
+            <p> <strong>Sign in failed...</strong> </p>
+            <p style="color:red;">{{errorMessage}}</p>
+            <a href="#" onclick="switchUser();">
+              Not {{}}?
+            </a>
+          </div>
         </div>
       </div>
 

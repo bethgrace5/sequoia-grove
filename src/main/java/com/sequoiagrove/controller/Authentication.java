@@ -153,8 +153,9 @@ public class Authentication {
               // user does not exist in the database
               System.out.println("user does not exist in database");
               model.addAttribute("loginFailed", true);
-              model.addAttribute("message", "Invalid email. " + email +
-                  "If your company has an account, ask an administrator to verify your email");
+              model.addAttribute("reason", "Invalid email");
+              model.addAttribute("message", "If your company has an account, ask an administrator to verify your email");
+              model.addAttribute("email", email);
               model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
               return "jsonTemplate";
           } catch (NullPointerException e) {

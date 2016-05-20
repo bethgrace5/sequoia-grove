@@ -52,6 +52,7 @@ angular.module('sequoiaGroveApp').controller('RequestCtrl', function(
       $scope.requestDateEnd = $scope.requestDateStart;
     }
   } 
+
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "submit";
 

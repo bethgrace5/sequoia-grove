@@ -20,20 +20,16 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
     var deferred = $q.defer();
     $http.post("/sequoiagrove/auth/login/", {'email':user.email, 'idtoken':user.token}).
       then(function(success){
-        if (success.status === 200) {
-          if (success.data.loginFailed) {
-            deferred.resolve(success.data);
-          }
+        if (success.data.loginFailed) {
+          deferred.reject(success.data);
+          user = {};
+          loggedIn = false;
+        }
+        else {
           // TODO get more explicit permissions for UI control
           user.isManager = parseInt(success.data.user.classificationId) !== 1;
           user.id = success.data.user.id;
           deferred.resolve(user.isManager);
-        }
-        else {
-          deferred.reject(success.data.message);
-          loggedIn = false;
-          user = {};
-          signOut(gapi);
         }
       }
     );
@@ -104,6 +100,8 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
             loggedIn = true;
             notifyObservers();
             deferred.resolve(success);
+          }, function(failure) {
+            deferred.reject(failure);
           });
       });
     return deferred.promise;

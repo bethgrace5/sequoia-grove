@@ -279,8 +279,17 @@ angular.module('sequoiaGroveApp')
       });
     }
 
+    // TODO function to reset the indication of saved
+
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
+      $log.debug(form);
+
+      // TODO don't send the form if it hasn't been changed
+      // just directly jump to show that it was saved
+      // (you will need a variable to know it was saved)
+      // (!$dirty)
+
       if($rootScope.devMode) {
         $scope.saving = false;
         return;
@@ -320,6 +329,7 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee.classification = cid;
 
       //TODO if clock number is greater than allowed size, fix it or show error
+      //limit to 2 digits
 
       // validate the rest of the form
       if (form.$invalid) {
@@ -350,6 +360,7 @@ angular.module('sequoiaGroveApp')
         .success(function(data, status){
           // upate front end
           if (action === 'add') {
+          //TODO  (you will need a variable to know it was saved)
             $scope.selectedEmployee.isCurrent = true;
             $scope.selectedEmployee.id = data.id;
             $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
@@ -359,6 +370,8 @@ angular.module('sequoiaGroveApp')
           $scope.saving = false;
           form.$setSubmitted();
         }).error(function(data, status) {
+          // TODO show error saving indication, be able to reset it with
+          // the same reset for the saved indication
           $log.debug('error with action:', action, status,data);
         });
     }

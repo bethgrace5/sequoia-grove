@@ -25,6 +25,12 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       then(function(success) {
         // initialize data
         $scope.initializeData(success);
+      },function(failure) {
+        $scope.errorMessage = failure.message;
+        $log.debug(failure);
+        $rootScope.loggingIn = false;
+        $rootScope.loggedIn = false;
+        gapi.auth2.getAuthInstance().signOut();
       });
   }
 

@@ -1,11 +1,13 @@
 <div class="panel panel-default">
   <div class="panel-heading">
+    <!-- Add button shows for new employees -->
     <button class = "btn btn-info pull-right"
         ng-show="selectedEmployee.id === 0"
         ng-click="updateEmployee(employeeform)">
       <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
       Add
     </button>
+    <!-- Save button shows for new employees -->
     <div ng-hide = "selectedEmployee.id === 0">
       <button class = "btn btn-primary pull-right"
           ng-click="updateEmployee(employeeform)">
