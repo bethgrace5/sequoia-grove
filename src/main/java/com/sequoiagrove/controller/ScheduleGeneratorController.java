@@ -106,7 +106,8 @@ public class ScheduleGeneratorController {
       Generator generator;
       generator = new Generator();
       generator.getPastInformation(historyStart, historyEnd);
-      generator.getEmployeeInformation(historyStart, historyEnd);
+      generator.getEmployeeInformation(historyStart, historyEnd); // !!! WRONG DATES !!!
+      generator.getShiftInformation(mon);
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)
