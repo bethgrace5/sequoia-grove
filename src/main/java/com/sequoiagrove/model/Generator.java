@@ -77,14 +77,16 @@ public class Generator{
   public Generator(
     final String mon, final String historyStart, final String historyEnd
   ) {
+    generator = new HashMap
+      <String, HashMap <Integer, HashMap <Integer, Integer>>>();
     setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd)); // !!! THROWS EXCEPTION !!!
-    printDayShiftEmployeeList();
-    //fillGenerator();
+    //printDayShiftEmployeeList();
+    fillGenerator();
     //setEmployeeList(getEmployeeInformation());
     setShifts(getShiftInformation(mon));
     // still need to get requests
-    startDate = mon; // ??? not sure if correct ???
-    //endDate = historyEnd; // ?? not sure if correct ??
+    startDate = mon;
+    //endDate = historyEnd; // ?? not sure if needed ??
   }
 
   //-----------------------------------
@@ -181,11 +183,11 @@ public class Generator{
   }
 
   public void fillGenerator() {
-    for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
-      add(convertDay(dayShiftEmployeeList.get(i).getDay()),
-          dayShiftEmployeeList.get(i).getShift(),
-          dayShiftEmployeeList.get(i).getEmployee(),
-          dayShiftEmployeeList.get(i).getWorked() );
+    for (DayShiftEmployee cur : dayShiftEmployeeList) {
+      add(convertDay(cur.getDay()),
+          cur.getShift(),
+          cur.getEmployee(),
+          cur.getWorked() );
     }
     printFormation();
   }
@@ -404,16 +406,19 @@ public class Generator{
   }
 
   public void printFormation(){
+    System.out.println("DAY");
+    System.out.println("   SHIFT: {EMP, AMT}, {EMP, AMT}, ...");
     for (String dayKey : generator.keySet()) {
       System.out.println(dayKey);
 
       for (Integer shiftKey : generator.get(dayKey).keySet()) {
-        System.out.println("   " + shiftKey);
+        System.out.printf("   %-5d: ", shiftKey);
 
         for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
-          System.out.println("      " + empKey + " " +
+          System.out.printf("{%-3d, %-3d}, ", empKey,
               generator.get(dayKey).get(shiftKey).get(empKey));
         }
+        System.out.printf("\n");
       }
     }
   }
