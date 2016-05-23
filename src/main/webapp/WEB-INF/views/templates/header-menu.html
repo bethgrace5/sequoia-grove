@@ -31,7 +31,11 @@
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
         <!-- Google Sign in button -->
-        <div class="g-signin2" data-onsuccess="onSignIn"></div>
+        <div class="g-signin2" 
+          data-accesstype="offline"
+          data-onsuccess="onSignIn">
+          <!--data-redirecturi="http://localhost:8080/sequoiagrove"-->
+        </div>
       </span>
 
       <!-- navigation menu -->

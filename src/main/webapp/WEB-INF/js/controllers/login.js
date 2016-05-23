@@ -27,7 +27,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
         $scope.initializeData(success);
       },function(failure) {
         $scope.errorMessage = failure.message;
-        $log.debug(failure);
         $rootScope.loggingIn = false;
         $rootScope.loggedIn = false;
         gapi.auth2.getAuthInstance().signOut();
@@ -53,8 +52,8 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     loginFactory.switchUser(gapi).
       then(function(success) {
         $rootScope.lastPath = "";
-        $location.path('/login');
         window.open('https://accounts.google.com/logout', '_blank');
+        $location.path('/login');
       });
   }
   window.onSignIn = onSignIn;
@@ -106,12 +105,10 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     });
   }
 
-  // make functions available to 'onclick' in window
+  //var updateLoginFlags = function() {
+    //$log.debug('notify login observers');
+  //}
 
-  //var googleDiv = angular.element( document.querySelector( '#google-signin' ) );
-  //$timeout(function() {
-    //$scope.googleDiv = '<div class="g-signin2" ng-click="onSignIn(this.data-onsuccess)" data-onsuccess="onSignIn"></div>';  
-    //$scope.$apply();
-  //});
+  //scheduleFactory.registerObserverCallback(updateLoginFlags);
 
 });
