@@ -80,9 +80,9 @@ public class Generator{
     generator = new HashMap
       <String, HashMap <Integer, HashMap <Integer, Integer>>>();
     setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd)); // !!! THROWS EXCEPTION !!!
-    //printDayShiftEmployeeList();
     fillGenerator();
-    //setEmployeeList(getEmployeeInformation());
+    setEmployeeList(getEmployeeInformation());
+    printEmployeeList();
     setShifts(getShiftInformation(mon));
     // still need to get requests
     startDate = mon;
@@ -189,7 +189,7 @@ public class Generator{
           cur.getEmployee(),
           cur.getWorked() );
     }
-    printFormation();
+    //printFormation();
   }
 
   //----------------------------------
@@ -199,10 +199,12 @@ public class Generator{
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     List<DayShiftEmployee> temp = jdbcTemplate.query(
       " select day, shift_id, user_id, count(*) AS worked" +
-      " from sequ_employee_shift_view " +
-      " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-      " group by day, shift_id, user_id " +
-      " order by day, shift_id, user_id ",
+      " from sequ_employee_shift_view" +
+      " where on_date >= to_date(?, 'dd-mm-yyyy')" +
+      " AND on_date <= to_date(?, 'dd-mm-yyyy')" +
+      " group by day, shift_id, user_id" +
+      " order by day, shift_id, user_id",
+      new Object[]{startDate, endDate},
       new RowMapper<DayShiftEmployee>() {
         public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
           DayShiftEmployee es = new DayShiftEmployee(
@@ -213,7 +215,7 @@ public class Generator{
           );
           return es;
         }
-      }//, startDate, endDate
+      }
     );
     return temp;
   }
@@ -221,7 +223,7 @@ public class Generator{
   public List<User> getEmployeeInformation(){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       String queryStr = "select * from sequ_user_info_view";
-      List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
+      List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
       return empList;
   }
 
@@ -448,6 +450,60 @@ public class Generator{
       System.out.printf("%-3d %-5d %-3d %-6d\n",
         cur.getDay(), cur.getShift(), cur.getEmployee(), cur.getWorked()
       );
+    }
+  }
+
+  public void printEmployeeList() {
+    System.out.println("EMP FIRST_NAME LAST_NAME IS_CURRENT");
+    System.out.println("  DAY{START-STOP,...} ...");
+    System.out.println("  PID,...");
+    for (User cur : employeeList) {
+      System.out.printf(
+        "\n%-3d %-10s %-10s %b\n  ",
+        cur.getId(), cur.getFirstname(), cur.getLastname(), cur.getIsCurrent()
+      );
+      WeeklyAvail avl = cur.getAvail();
+
+      System.out.printf("mon{");
+      for (Duration dur : avl.getMon()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("tue{");
+      for (Duration dur : avl.getTue()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("wed{");
+      for (Duration dur : avl.getWed()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("thu{");
+      for (Duration dur : avl.getThu()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("fri{");
+      for (Duration dur : avl.getFri()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("sat{");
+      for (Duration dur : avl.getSat()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}  ");
+      System.out.printf("sun{");
+      for (Duration dur : avl.getSun()) {
+        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+      }
+      System.out.printf("}\n");
+
+      for (String pos : cur.getPositions()) {
+        System.out.printf("%s, ", pos);
+      }
+      System.out.printf("\n");
     }
   }
 
