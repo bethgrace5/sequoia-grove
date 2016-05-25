@@ -81,12 +81,11 @@ public class Generator{
   ) {
     generator = new HashMap
       <String, HashMap <Integer, HashMap <Integer, Integer>>>();
-    setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd)); // !!! THROWS EXCEPTION !!!
+    setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd));
     fillGenerator();
     setEmployeeList(getEmployeeInformation());
     setShifts(getShiftInformation(mon));
     setRequests(getRequestInformation(mon));
-    // print requests to check query
     startDate = mon;
     //endDate = historyEnd; // ?? not sure if needed ??
   }
@@ -242,73 +241,24 @@ public class Generator{
   public List<Request> getRequestInformation(String startDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     List<Request> requestList = jdbcTemplate.query(
-        "select * from sequ_request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy')+integer'7'" +
-        " AND end_date_time >= to_date(?, 'mm-dd-yyyy')" +
-        " AND is_approved = true",
-        new RowMapper<Request>() {
-          public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
-            Request es = new Request(
-              rs.getInt("rid"),
-              rs.getString("start_date_time"),
-              rs.getString("end_date_time")
-            );
-            return es;
-          }
-        }, startDate, startDate);
+      "select * from sequ_request_view " +
+      " where start_date_time <= to_date(?, 'dd-mm-yyyy')+integer'7'" +
+      " AND end_date_time >= to_date(?, 'dd-mm-yyyy')" +
+      " AND is_approved = true",
+      new Object[]{startDate, startDate},
+      new RowMapper<Request>() {
+        public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
+          Request es = new Request(
+            rs.getInt("requested_by"),
+            rs.getString("start_date_time"),
+            rs.getString("end_date_time")
+          );
+          return es;
+        }
+      }
+    );
     return requestList;
   }
-
-  /*public void getRequest(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    List<RequestStatus> requestList = jdbcTemplate.query(
-        "select * from request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy' AND" +
-        "       end_date_time >= to_date(?, 'mm-dd-yyyy') ",
-        new RowMapper<RequestStatus>() {
-          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-            RequestStatus es = new RequestStatus(
-              rs.getInt("rid"),
-              rs.getInt("requested_by"),
-              rs.getInt("responded_by"),
-              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-              rs.getString("start_date_time"),
-              rs.getString("end_date_time"),
-              rs.getString("requester_first_name"),
-              rs.getString("requester_last_name"),
-              rs.getString("responder_first_name"),
-              rs.getString("responder_last_name")
-              );
-            return es;
-          }
-        }, startDate, endDate);
-  }
-
-  public List<RequestStatus> getRequestObject(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    List<RequestStatus> requestList = jdbcTemplate.query(
-        "select * from request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy' AND" +
-        "       end_date_time >= to_date(?, 'mm-dd-yyyy') ",
-        new RowMapper<RequestStatus>() {
-          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-            RequestStatus es = new RequestStatus(
-              rs.getInt("rid"),
-              rs.getInt("requested_by"),
-              rs.getInt("responded_by"),
-              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-              rs.getString("start_date_time"),
-              rs.getString("end_date_time"),
-              rs.getString("requester_first_name"),
-              rs.getString("requester_last_name"),
-              rs.getString("responder_first_name"),
-              rs.getString("responder_last_name")
-              );
-            return es;
-          }
-        }, startDate, endDate);
-    return requestList;
-  }*/
 
   public String checkStatus(Integer responder, boolean approval){
     // System.out.println(responder + " and request is " +  approval);
@@ -394,17 +344,16 @@ public class Generator{
   // use this as a temporary way place to add function
   //
   public boolean checkEmployeeIf(
-      String  day,
-      Integer shift, 
-      Integer employee1,
-      Integer employee2){
+    String  day,
+    Integer shift, 
+    Integer employee1,
+    Integer employee2)
+  {
     if(generator.get(day).get(shift).containsKey(employee1) &&
-        generator.get(day).get(shift).containsKey(employee2)){
-
-      return true;
-        }
+      generator.get(day).get(shift).containsKey(employee2))
+    { return true; }
     return false;
-      }
+  }
 
   //----------------------------------
   // Testing
@@ -471,6 +420,16 @@ public class Generator{
     for (DayShiftEmployee cur : dayShiftEmployeeList) {
       System.out.printf("%-3d %-5d %-3d %-6d\n",
         cur.getDay(), cur.getShift(), cur.getEmployee(), cur.getWorked()
+      );
+    }
+  }
+
+  public void printRequestList() {
+    System.out.println("EID START_DATE END_DATE");
+    for (Request cur : requests) {
+      System.out.printf(
+        "%-3d %-10s %-10s\n",
+        cur.eid, cur.startDate, cur.endDate
       );
     }
   }
