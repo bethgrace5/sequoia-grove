@@ -84,9 +84,9 @@ public class Generator{
     setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd)); // !!! THROWS EXCEPTION !!!
     fillGenerator();
     setEmployeeList(getEmployeeInformation());
-    printEmployeeList();
     setShifts(getShiftInformation(mon));
-    // still need to get requests
+    setRequests(getRequestInformation(mon));
+    // print requests to check query
     startDate = mon;
     //endDate = historyEnd; // ?? not sure if needed ??
   }
@@ -239,26 +239,19 @@ public class Generator{
       return shiftList;
   }
 
-  public List<RequestStatus> getRequestInformation(String startDate){
+  public List<Request> getRequestInformation(String startDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    List<RequestStatus> requestList = jdbcTemplate.query(
+    List<Request> requestList = jdbcTemplate.query(
         "select * from sequ_request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy'" +
+        " where start_date_time <= to_date(?, 'mm-dd-yyyy')+integer'7'" +
         " AND end_date_time >= to_date(?, 'mm-dd-yyyy')" +
         " AND is_approved = true",
-        new RowMapper<RequestStatus>() {
-          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-            RequestStatus es = new RequestStatus(
+        new RowMapper<Request>() {
+          public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
+            Request es = new Request(
               rs.getInt("rid"),
-              rs.getInt("requested_by"),
-              rs.getInt("responded_by"),
-              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
               rs.getString("start_date_time"),
-              rs.getString("end_date_time"),
-              rs.getString("requester_first_name"),
-              rs.getString("requester_last_name"),
-              rs.getString("responder_first_name"),
-              rs.getString("responder_last_name")
+              rs.getString("end_date_time")
             );
             return es;
           }

@@ -19,17 +19,6 @@ public class ShiftRowMapper implements RowMapper {
         temp.setWeekdayEnd(rs.getString("weekday_end"));
         temp.setWeekendStart(rs.getString("weekend_start"));
         temp.setWeekendEnd(rs.getString("weekend_end"));
-        /*System.out.println(
-          temp.getSid() + " " +
-          temp.getPid() + " " +
-          temp.getTname() + " " +
-          temp.getStartDate() + " " +
-          temp.getEndDate() + " " +
-          temp.getWeekdayStart() + " " +
-          temp.getWeekdayEnd() + " " +
-          temp.getWeekendStart() + " " +
-          temp.getWeekendEnd()
-        );*/
         return temp;
     }
 }
