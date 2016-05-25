@@ -106,7 +106,6 @@ public class ScheduleGeneratorController {
 
       Generator generator;
       generator = new Generator(mon, historyStart, historyEnd);
-      // MOVED INITIALIZATION INTO CONSTRUCTOR
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)

@@ -43,7 +43,8 @@ public class Generator{
   List<DayShiftEmployee> dayShiftEmployeeList;
   List<User> employeeList;
   List<Shift> shifts;
-  Request requests[];
+  //Request requests[];
+  List<Request> requests;
 
   //-----------------------------------
   //  Constructors
@@ -63,7 +64,8 @@ public class Generator{
     List<DayShiftEmployee> dayShiftEmployeeList,
     List<User> employeeList,
     List<Shift> shifts,
-    Request requests[]
+    //Request requests[]
+    List<Request> requests
   ) {
     this.generator = generator;
     this.startDate = startDate;
@@ -136,10 +138,10 @@ public class Generator{
     return shifts;
   }
 
-  public void setRequests(Request requests[]) {
+  public void setRequests(List<Request> requests) {
     this.requests = requests;
   }
-  public Request[] getRequests() {
+  public List<Request> getRequests() {
     return requests;
   }
 
@@ -237,7 +239,34 @@ public class Generator{
       return shiftList;
   }
 
-  public void getRequest(String startDate, String endDate){
+  public List<RequestStatus> getRequestInformation(String startDate){
+    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    List<RequestStatus> requestList = jdbcTemplate.query(
+        "select * from sequ_request_view " +
+        " where start_date_time <= to_date(?, 'mm-dd-yyyy'" +
+        " AND end_date_time >= to_date(?, 'mm-dd-yyyy')" +
+        " AND is_approved = true",
+        new RowMapper<RequestStatus>() {
+          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
+            RequestStatus es = new RequestStatus(
+              rs.getInt("rid"),
+              rs.getInt("requested_by"),
+              rs.getInt("responded_by"),
+              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
+              rs.getString("start_date_time"),
+              rs.getString("end_date_time"),
+              rs.getString("requester_first_name"),
+              rs.getString("requester_last_name"),
+              rs.getString("responder_first_name"),
+              rs.getString("responder_last_name")
+            );
+            return es;
+          }
+        }, startDate, startDate);
+    return requestList;
+  }
+
+  /*public void getRequest(String startDate, String endDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
     List<RequestStatus> requestList = jdbcTemplate.query(
         "select * from request_view " +
@@ -286,7 +315,7 @@ public class Generator{
           }
         }, startDate, endDate);
     return requestList;
-  }
+  }*/
 
   public String checkStatus(Integer responder, boolean approval){
     // System.out.println(responder + " and request is " +  approval);

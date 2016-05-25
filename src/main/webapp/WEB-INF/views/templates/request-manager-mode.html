@@ -54,7 +54,7 @@
           <div class="col-sm-3" ng-show="seeTargetEmployee">
             <md-datepicker ng-model="$parent.requestDateStart"
             ng-disabled="selectedEmployee.id == 0"
-            md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+            md-placeholder="Starting Date"
             ng-change="updateEnd()">
             </md-datepicker>
           </div>
@@ -62,7 +62,7 @@
           <div class="col-sm-3" ng-show="seeTargetEmployee">
             <md-datepicker ng-model="$parent.requestDateEnd"
             ng-disabled="selectedEmployee.id == 0"
-            md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+            md-placeholder="Ending Date">
             </md-datepicker>
           </div>
 
