@@ -9,12 +9,17 @@ public class Shift {
     String tname;
     String startDate;
     String endDate;
-    String weekdayStart;
-    String weekdayEnd;
-    String weekendStart;
-    String weekendEnd;
+//    String weekdayStart;
+//    String weekdayEnd;
+//    String weekendStart;
+//    String weekendEnd;
+    Duration weekday;
+    Duration weekend;
 
-    public Shift(){}
+    public Shift(){
+        this.weekday = new Duration();
+        this.weekend = new Duration(); 
+    }
     public Shift(int sid, int pid, String tname,
       String startDate, String endDate,
       String weekdayStart, String weekdayEnd, 
@@ -24,10 +29,12 @@ public class Shift {
         this.tname = tname;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.weekdayStart = weekdayStart;
-        this.weekdayEnd = weekdayEnd;
-        this.weekendStart = weekendStart;
-        this.weekendEnd = weekendEnd;
+        this.weekday = new Duration();
+        this.weekend = new Duration();
+        this.weekday.setStartNum(weekdayStart);
+        this.weekday.setEndNum(weekdayEnd);
+        this.weekend.setStartNum(weekendStart);
+        this.weekend.setEndNum(weekendEnd);
     }
 
     public int getSid() {
@@ -65,31 +72,43 @@ public class Shift {
         this.endDate = eDate;
     }
 
-    public String getWeekdayStart() {
-        return weekdayStart;
+    public int getWeekdayStart() {
+        return weekday.getStartNum();
     }
     public void setWeekdayStart(String weekdayStart) {
-        this.weekdayStart = weekdayStart;
+        this.weekday.setStartNum(weekdayStart);
+    }
+    public void setWeekdayStart(int weekdayStart) {
+        this.weekday.setStartNum(weekdayStart);
     }
 
-    public String getWeekdayEnd() {
-        return weekdayEnd;
+    public int getWeekdayEnd() {
+        return weekday.getEndNum();
     }
     public void setWeekdayEnd(String weekdayEnd) {
-        this.weekdayEnd = weekdayEnd;
+        this.weekday.setEndNum(weekdayEnd);
+    }
+    public void setWeekdayEnd(int weekdayEnd) {
+        this.weekday.setEndNum(weekdayEnd);
     }
 
-    public String getWeekendStart() {
-        return weekendStart;
+    public int getWeekendStart() {
+        return weekend.getStartNum();
     }
     public void setWeekendStart(String weekendStart) {
-        this.weekendStart = weekendStart;
+        this.weekend.setStartNum(weekendStart);
+    }
+    public void setWeekendStart(int weekendStart) {
+        this.weekend.setStartNum(weekendStart);
     }
 
-    public String getWeekendEnd() {
-        return weekendEnd;
+    public int getWeekendEnd() {
+        return weekend.getEndNum();
     }
     public void setWeekendEnd(String weekendEnd) {
-        this.weekendEnd = weekendEnd;
+        this.weekend.setEndNum(weekendEnd);
+    }
+    public void setWeekendEnd(int weekendEnd) {
+        this.weekend.setEndNum(weekendEnd);
     }
 }

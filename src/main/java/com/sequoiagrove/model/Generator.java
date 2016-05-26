@@ -401,7 +401,7 @@ public class Generator{
     System.out.println("  STARTDATE   ENDDATE     WDSTART WDEND  WESTART WEEND");
     for (Shift cur : shifts) {
       System.out.printf(
-        "\n%-3d %-3d %-30s\n  %-11s %-11s %-6s %-6s %-6s %-6s\n",
+        "\n%-3d %-3d %-30s\n  %-11s %-11s %-6d %-6d %-6d %-6d\n",
         cur.getSid(),
         cur.getPid(),
         cur.getTname(),
@@ -447,42 +447,42 @@ public class Generator{
 
       System.out.printf("mon{");
       for (Duration dur : avl.getMon()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("tue{");
       for (Duration dur : avl.getTue()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("wed{");
       for (Duration dur : avl.getWed()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("thu{");
       for (Duration dur : avl.getThu()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("fri{");
       for (Duration dur : avl.getFri()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("sat{");
       for (Duration dur : avl.getSat()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}  ");
       System.out.printf("sun{");
       for (Duration dur : avl.getSun()) {
-        System.out.printf("%s-%s, ", dur.getStart(), dur.getEnd());
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
       }
       System.out.printf("}\n");
 
       for (String pos : cur.getPositions()) {
-        System.out.printf("%s, ", pos);
+        System.out.printf("  %s, ", pos);
       }
       System.out.printf("\n");
     }
