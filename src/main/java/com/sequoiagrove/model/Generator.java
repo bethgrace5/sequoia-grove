@@ -355,6 +355,21 @@ public class Generator{
     return false;
   }
 
+  Integer getShiftWithEmployee(String name, String dayKey){
+      for (Integer shiftKey : generator.get(dayKey).keySet()) {
+        for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
+          if(generator.get(dayKey).get(shiftKey).containsKey(name)){
+            return shiftKey;
+          }
+        }
+      }
+    return -1;
+  }
+  void searchEmployee(String name, String dayKey){
+    Integer shiftAt = getShiftWithEmployee(name, dayKey);
+    if(shiftAt < 0) return;
+    generator.get(dayKey).get(shiftAt).remove(name);
+  }
   //----------------------------------
   // Testing
   //----------------------------------
