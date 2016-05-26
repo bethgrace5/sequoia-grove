@@ -333,6 +333,17 @@ public class Generator{
   public void trimByRequest(){
     //TODO: Somehow get A Request List and compare to the employees and 
     //      in the week.
+    List<Request> tmpRequestList 
+      = new ArrayList<Request>(getRequestInformation(startDate));
+
+    Integer shift = -1;
+    for (Request temp : tmpRequestList) {
+      //TODO: new Request Object that has days instead of dates
+      //shift = getShiftWithEmployee(temp.getEid, temp.getDay)
+      if(shift > 0){
+        //removeEmployee(temp.day, shift, temp.Eid);
+      }
+    }
   }
   public void removeEmployee(Integer day, Integer shift, Integer employee){
     generator.get(day).get(shift).remove(employee);
@@ -355,7 +366,7 @@ public class Generator{
     return false;
   }
 
-  Integer getShiftWithEmployee(String name, String dayKey){
+  int getShiftWithEmployee(String name, String dayKey){
       for (Integer shiftKey : generator.get(dayKey).keySet()) {
         for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
           if(generator.get(dayKey).get(shiftKey).containsKey(name)){
@@ -366,6 +377,7 @@ public class Generator{
     return -1;
   }
   void searchEmployee(String name, String dayKey){
+    //TODO: need to revise this
     Integer shiftAt = getShiftWithEmployee(name, dayKey);
     if(shiftAt < 0) return;
     generator.get(dayKey).get(shiftAt).remove(name);
