@@ -21,6 +21,7 @@ angular.module('sequoiaGroveApp')
         $mdDialog,
         scheduleFactory,
         userFactory,
+        loginFactory,
         localStorageService) {
 
 
@@ -105,7 +106,13 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.publishSchedule = function() {
-    $scope.isPublished = scheduleFactory.publish();
+    var id = loginFactory.getUser().id;
+    scheduleFactory.publish(id).then(function(success) {
+      $timeout(function() {
+        $scope.isPublished = success;
+        $rootScope.$apply();
+      });
+    });
   }
 
 
@@ -114,7 +121,6 @@ angular.module('sequoiaGroveApp')
   $scope.items = [{'isSpacer':true, 'index':-1}];
 
   $scope.selectPosition = function(pid, title) {
-    $log.debug(pid, title);
     $scope.selectedPid = pid;
     $scope.selectedPosition = title;
   }

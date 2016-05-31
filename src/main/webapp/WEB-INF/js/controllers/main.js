@@ -67,7 +67,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // used to check that updating a shift is making a chage or not
   //$scope.birthdays = [];
   //$scope.holidays = [];
-  $rootScope.isPublished = false;
+  //$scope.isPublished = false;
+  $scope.isPublished = false;
   $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
   $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
@@ -424,6 +425,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $timeout(function() {
         $scope.initAvailSchedule();
         $scope.initPositionsSchedule();
+        $scope.isPublished = scheduleFactory.isPublished();
       });
     });
   }
@@ -437,6 +439,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
     }
+    $scope.isPublished = scheduleFactory.isPublished();
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.loadingWeek = false;
   };

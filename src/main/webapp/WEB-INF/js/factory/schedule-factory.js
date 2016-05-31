@@ -648,15 +648,16 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // Publish the schedule
-  var publishSchedule = function() {
+  var publishSchedule = function(userId) {
     var deferred = $q.defer();
-    var obj = {'date':header.mon.val, 'eid': $rootScope.loggedInUser.id};
+    var obj = {'date':header.mon.val, 'eid': userId};
     $http({
       url: '/sequoiagrove/schedule/publish/',
       method: "POST",
       data: obj
     }).then(function(success) {
       isPublished = true;
+      notifyObservers();
       deferred.resolve(true);
     },function (failure) {
       deferred.reject(false);
@@ -718,7 +719,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
     service.clear          = function() { clearSchedule(); notifyObservers(); };
-    service.publish        = function() { return publishSchedule(); };
+    service.publish        = function(userId) { return publishSchedule(userId); };
     service.importWeek     = function(mon) { return importWeek(mon); };
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
