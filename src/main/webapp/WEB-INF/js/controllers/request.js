@@ -24,7 +24,7 @@
 
 
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService) {
+.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService) {
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
@@ -210,8 +210,12 @@ angular.module('sequoiaGroveApp')
       method: "GET"
     }).success(function (data, status, headers, config) {
       $scope.pendingRequests = data.requestStatus;
+      $timeout(function() {
+        $rootScope.requestsNum = $scope.pendingRequests.length;
+      })
     });
   }
+
 
   //----------------------------------
   //Manager_Change_Submit_Request

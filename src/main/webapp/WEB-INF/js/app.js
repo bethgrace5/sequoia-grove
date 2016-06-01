@@ -103,6 +103,7 @@ angular.module('sequoiaGroveApp', [
     $rootScope.errorMessage = '';
     $rootScope.loginFailed = false;
     $rootScope.token = '';
+    $rootScope.requestsNum = 0;
     $rootScope.hasValidToken = false;
     $rootScope.loggedInUser= {'email':''};
 

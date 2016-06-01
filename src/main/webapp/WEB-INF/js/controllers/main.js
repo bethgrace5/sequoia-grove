@@ -474,6 +474,10 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+ /*$scope.$on('requestchanged', function() {
+        $log.debug('hey, requestsNum has changed!', $scope.requestsNum);
+    });*/
+
   $scope.publishSchedule = function() {
     $scope.isPublished = scheduleFactory.publish();
   }

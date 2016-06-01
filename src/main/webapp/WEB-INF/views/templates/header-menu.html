@@ -47,8 +47,9 @@
               ng-disabled="loading"
               ng-class="changeTab('/request')">
               <a href="#/request">
-                <span class="glyphicon glyphicon-flag"></span>
+                <span class="badge"></span>
                 {{ 'HEADER_TAB_REQUESTS' | translate}}
+                <span class="badge badge-primary"  ng-hide = "requestsNum <= 0">{{requestsNum}}</span>
               </a>
             <!--<span class="glyphicon glyphicon-sunglasses"></span>-->
             </li>
