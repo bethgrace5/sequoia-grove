@@ -395,6 +395,68 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     });
   }
 
+  // filter schedule to determine if the scheduled employee is current
+  // adds 'isCurrent' attribute to that day for error checking
+  $scope.initIsCurrentSchedule = function() {
+    $scope.template = _.map ($scope.template, function(item, index) {
+      if (item.isSpacer) {
+        return {'isSpacer':true, 'index':-1};
+      }
+      else {
+        item.mon = _.extend(item.mon, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.tue = _.extend(item.tue, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.wed = _.extend(item.wed, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.thu = _.extend(item.thu, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.fri = _.extend(item.fri, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.sat = _.extend(item.sat, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+        item.sun = _.extend(item.sun, {'isCurrent':
+          _.object(
+            _.map($scope.employees, function(e, index) {
+              return [e.id, e.isCurrent]
+            })
+          )
+        });
+      }
+      return item;
+    });
+  }
+
   // advance or go back weeks in time
   $scope.changeWeek = function(operation) {
     $scope.selectWeek(0);
@@ -406,6 +468,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $timeout(function() {
         $scope.initAvailSchedule();
         $scope.initPositionsSchedule();
+        $scope.initIsCurrentSchedule();
         $scope.isPublished = scheduleFactory.isPublished();
       });
     });
@@ -440,6 +503,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $scope.employees = userFactory.getUsers();
         $scope.initPositionsSchedule();
         $scope.initAvailSchedule();
+        $scope.initIsCurrentSchedule();
       }
       $rootScope.$apply();
     });

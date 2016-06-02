@@ -48,21 +48,28 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           element.context.classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = employee.id;
 
-          // 1. Check availability
+          // 1. check that they are current
+          if (employee.isCurrent) {
+            element.context.classList.add('schedule-edit-highlight');
+          } else { //employee is not current
+            element.context.classList.add('schedule-edit-input-error');
+          }
+
+          // 2. Check availability
           if ($scope.template[attrs.idx][attrs.day].hasAvailability[employee.id]) {
             element.context.classList.add('schedule-edit-highlight');
           } else { // the employee is not available
             element.context.classList.add('schedule-edit-input-error');
           }
 
-          // 2. check that they have the position
+          // 3. check that they have the position
           if ($scope.template[attrs.idx][attrs.day].hasPosition[employee.id]) {
             element.context.classList.add('schedule-edit-highlight');
           } else {
             element.context.classList.add('schedule-edit-input-error');
           }
 
-          // 3. update change lists
+          // 4. update change lists
           scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied

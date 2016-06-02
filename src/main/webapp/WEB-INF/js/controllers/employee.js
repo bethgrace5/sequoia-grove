@@ -459,6 +459,7 @@ angular.module('sequoiaGroveApp')
     //$log.debug('fire update employee');
     $scope.initAvailSchedule();
     $scope.initPositionsSchedule();
+    $scope.initIsCurrentSchedule();
   }
   userFactory.registerObserverCallback(fireUpdate);
 

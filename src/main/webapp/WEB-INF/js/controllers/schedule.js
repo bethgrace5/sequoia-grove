@@ -59,6 +59,7 @@ angular.module('sequoiaGroveApp')
     'selectedName':'',
     'available':true, 
     'hasPosition':true,
+    'isCurrent':true,
     'selectedPosition':''
   };
 
@@ -177,7 +178,8 @@ angular.module('sequoiaGroveApp')
       'selectedName':'',
       'available':true, 
       'hasPosition':true,
-      'selectedPosition':''
+      'selectedPosition':'',
+      'isCurrent':true
     };
   }
 
@@ -189,6 +191,7 @@ angular.module('sequoiaGroveApp')
       if ($scope.selectedId === 0) {
         $scope.errors.available = true;
         $scope.errors.hasPosition = true;
+        $scope.errors.isCurrent = true;
         $scope.selectedId = 0;
       }
       else {
@@ -196,12 +199,14 @@ angular.module('sequoiaGroveApp')
         $scope.errors.selectedPosition = t.position;
         $scope.errors.available = t[day].hasAvailability[$scope.selectedId];
         $scope.errors.hasPosition = t[day].hasPosition[$scope.selectedId];
+        $scope.errors.isCurrent = t[day].isCurrent[$scope.selectedId];
       }
     }
     else {
       // t is undefined, set to default
       $scope.errors.available = true;
       $scope.errors.hasPosition = true;
+      $scope.errors.isCurrent = true;
       $scope.selectedId = 0;
     }
   }
@@ -256,7 +261,7 @@ angular.module('sequoiaGroveApp')
   };
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
+  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday, current) {
     var style = 'form-control schedule-edit-input';
     if ($rootScope.readyToSchedule === false) {
       return style;
@@ -282,6 +287,9 @@ angular.module('sequoiaGroveApp')
       style += ' schedule-edit-input-error';
     }
     else if (hasPosition[id] == false) {
+      style += ' schedule-edit-input-error';
+    }
+    else if (current[id] === false) {
       style += ' schedule-edit-input-error';
     }
     if (holiday) {

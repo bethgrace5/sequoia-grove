@@ -29,7 +29,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
       var temp = localStorageService.get('users');
         if (temp) {
           users = JSON.parse(temp);
-          $log.debug('Warning: devMode on. This is not current schedule data');
+          $log.debug('Warning: devMode on. This is not current user data');
           return $q(function(resolve, reject) {
             resolve();
           });
