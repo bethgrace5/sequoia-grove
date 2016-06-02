@@ -97,9 +97,6 @@ Schedule Edit
 Schedule Edit
 ![schedule edit view 2](views/screenshots/schedule2.png)
 ---
-Schedule Edit
-![schedule edit view 2](views/screenshots/schedule2.png)
----
 Manage Holiday
 ![schedule edit view 2](views/screenshots/manage-holiday.png)
 ---
