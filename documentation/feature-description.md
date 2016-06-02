@@ -68,44 +68,45 @@ employed for the company, not counting any past lengths of employment.
 
 Screenshots
 --
-View the current schedule (Employee and Manager) manager options shown on toolbar at the top
-![alt text](views/screenshot-home.png)
+Login 
+![login view](screenshots/views/login1.png)
 ---
-submit requests off, and view status of your previous submissions (Employee and Manager)
-![alt text](views/screenshot-request-submit.png)
+View Schedule 
+![home view](screenshots/views/home.png)
 ---
-Approve or Deny the status of requests submitted (Manager)
-![alt text](views/screenshot-request-pending.png)
+Employee Edit
+![employee view](screenshots/views/employee1.png)
+![employee view](screenshots/views/employee2.png)
+![employee view](screenshots/views/employee3.png)
 ---
-View the history and status of all requests submitted by all employees (Manager only)
-![alt text](views/screenshot-request-history.png)
+Submit Requests
+![request submit view](screenshots/views/request-submit.png)
 ---
-Edit/Create current and future schedules (Manager only)
-
-*(in progress..)*
-
+Pending Requests
+![request pending view](screenshots/views/request-pending.png)
 ---
-View past schedules (Manager only)
-
-*(in progress..)*
-
+Request History
+![request history view](screenshots/views/request-history.png)
 ---
-Edit weekly deliveries - add/delete deliveries, change delivery days (Manager only)
-![alt text](views/screenshot-schedule-delivery-edit.png)
-
+Manage Requests
+![request history view](screenshots/views/request-manage.png)
 ---
-Edit shifts - add/delete shifts, edit shift hours (Manager only)
-
-*(in progress..)*
-
+Schedule Edit
+![schedule edit view 1](screenshots/views/schedule1.png)
 ---
-Create employees, edit their information, edit their roles (Manager only)
-
-*(in progress..)*
-
+Schedule Edit
+![schedule edit view 2](screenshots/views/schedule2.png)
 ---
-Edit employee availability
-
-*(in progress..)*
-
+Schedule Edit
+![schedule edit view 2](screenshots/views/schedule2.png)
+---
+Manage Holiday
+![schedule edit view 2](screenshots/views/manage-holiday.png)
+---
+Manage Shift
+![schedule edit view 2](screenshots/views/manage-shift.png)
+---
+Manage Delivery
+![schedule edit view 2](screenshots/views/manage-delivery.png)
+---
 
