@@ -483,8 +483,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   }
 
   var updateChangesMade = function(){
-    //$log.debug('update changes made');
     $scope.template = scheduleFactory.getTemplate();
+    //$log.debug('update changes made');
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
       $scope.hourCount = scheduleFactory.getHourCount();

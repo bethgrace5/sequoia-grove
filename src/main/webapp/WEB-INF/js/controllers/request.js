@@ -108,9 +108,8 @@ angular.module('sequoiaGroveApp')
       }).then(function(success) {
         if (loginFactory.getUser().isManager) {
           //$scope.getPendingRequests().
-          requestFactory.init().
-          then(function(success) {
-            $scope.pendingRequests = success.requestStatus;
+          requestFactory.init().then(function(success) {
+            $scope.pendingRequests = success.data.requestStatus;
             $scope.getAllRequests();
           });
         }
@@ -238,8 +237,8 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-          requestFactory.init().then(function(success) {
-            $scope.pendingRequests = success.requestStatus;
+      requestFactory.init().then(function(success) {
+        $scope.pendingRequests = success.requestStatus;
         return $scope.getAllRequests();
       })
     });
@@ -254,9 +253,9 @@ angular.module('sequoiaGroveApp')
       $scope.getCurrentEmployeeRequest().then(function(success) {
         return $scope.getAllRequests();
       }).then(function(success) {
-          requestFactory.init().then(function(success) {
-            $scope.pendingRequests = success.requestStatus;
-          });
+        requestFactory.init().then(function(success) {
+          $scope.pendingRequests = success.data.requestStatus;
+        });
         //return $scope.getPendingRequests();
       });
     });
@@ -318,6 +317,5 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
-
 
 });

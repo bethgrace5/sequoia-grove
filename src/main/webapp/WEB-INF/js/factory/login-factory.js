@@ -5,7 +5,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   var service = {};
   var observerCallbacks = [];
 
-  var user = {};
+  var user = {'isManager':false};
   var loggedIn = false;
 
   // call this to notify observers
@@ -120,7 +120,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
     var deferred = $q.defer();
     signOut(gapi).then(function() {
         destructData().then(function() {
-          user = {};
+          user = {'isManager':false};
           loggedIn = false;
           notifyObservers();
           deferred.resolve();
@@ -136,7 +136,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
       then(function(success) {
         destructData().
         then(function() {
-          user = {};
+          user = {'isManager':false};
           loggedIn = false;
           notifyObservers();
           deferred.resolve();

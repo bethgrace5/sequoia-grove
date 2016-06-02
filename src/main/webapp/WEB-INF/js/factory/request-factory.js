@@ -19,28 +19,52 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
     $http({
       url: '/sequoiagrove/request/get/pending',
       method: "GET"
-    }).success(function (data, status, headers, config) {
-      pendingRequests = data.requestStatus;
+    }).then(function(success) {
+      pendingRequests = success.data.requestStatus;
       requestsNum = pendingRequests.length;
       notifyObservers();
-      deferred.resolve(data);
+      deferred.resolve(success);
     });
     return deferred.promise;
   }
 
 
-  // Exposed factory functionality
-  var service = {
-    'init': function() {
-      return initPending();
-    },
-    'getNumberPending': function() {
+  var setManagePrivelage = function() {
+    service.init = function() {
+        return initPending();
+    };
+    service.getNumberPending = function() {
       return requestsNum;
-    },
-    'getPending': function() {
+    };
+    service.getPending = function() {
       return pendingRequests;
+    };
+    service.removeManagePrivelage = function() {
+      service = removeManagePrivelage();
     }
   }
+
+  var removeManagePrivelage = function() {
+  // Exposed factory functionality
+    return {
+      'init': function() {
+      },
+      'getNumberPending': function() {
+        return 0;
+      },
+      'getPending': function() {
+        return [];
+      },
+      'setManagePrivelage': function() {
+        setManagePrivelage();
+      },
+      'removeManagePrivelage': function() {
+        // do nothing
+      }
+    }
+  }
+
+  var service = removeManagePrivelage();
 
   // register observers
   service.registerObserverCallback = function(callback){

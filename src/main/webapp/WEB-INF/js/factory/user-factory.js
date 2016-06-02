@@ -180,17 +180,28 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     };
     // TODO include add availability, remove availabilty, add postion, remove position
     // update employee, deactivate employee, activate employee
+    service.removeManagePrivelage = function() {
+      service = removeManagePrivelage();
+    }
+
   }
 
-  // Exposed factory functionality
-  var service = {
-    'init': function() {
-      return getSelf();
-    },
-    'setManagePrivelage': function() {
-      setManagePrivelage();
+  var removeManagePrivelage = function() {
+    // Exposed factory functionality
+    return {
+      'init': function() {
+        return getSelf();
+      },
+      'setManagePrivelage': function() {
+        setManagePrivelage();
+      },
+      'removeManagePrivelage': function() {
+        // do nothing
+      }
     }
   }
+
+  var service = removeManagePrivelage();
 
   // register observers
   service.registerObserverCallback = function(callback){

@@ -748,59 +748,70 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       });
       return deferred.promise;
     };
+    service.removeManagePrivelage = function() {
+      service = removeManagePrivelage();
+    }
   }
 
-  // Exposed factory functionality
-  var service = {
-    // Initialize monday, set schedule header, get schedule template
-    'init':function() {
-      var deferred = $q.defer();
-      initMonday();
-      initHeader();
-      initSchedule().then(function(success) {
-        deferred.resolve(success);
-      });
-      return deferred.promise;
-    },
-    // update monday, change header, and request corresponding schedule
-    'changeWeek':function(operation) {
-      var deferred = $q.defer();
-      if (operation == 'add') {
-        monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
-      }
-      else if (operation == 'subtract'){
-        monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
-      }
-      else {
-        monday = operation;
-      }
-      initHeader(); // update schedule header to reflect new dates
-      initSchedule().then(
-         function(success) {
-          countDays(); // NOTE Added for those with manage schedule privelage
-          countHours(); // NOTE Added for those with manage schedule privelage
-          buildWeekList();
-          notifyObservers();
+  var removeManagePrivelage = function() {
+    // Exposed factory functionality
+    return {
+      // Initialize monday, set schedule header, get schedule template
+      'init':function() {
+        var deferred = $q.defer();
+        initMonday();
+        initHeader();
+        initSchedule().then(function(success) {
           deferred.resolve(success);
-      });
-      return deferred.promise;
-    },
-    'getHeader':   function() { return header; },
-    'getTemplate': function() { return schedule; },
-    'isPublished': function() { return isPublished; },
-    'extendEnd': function(extend) {
-      extendEnd = extend;
-      addHolidays();
-      notifyObservers();
-    },
-    'extendStart': function(extend) {
-      extendStart = extend;
-      addHolidays();
-      notifyObservers();
-    },
-    'getWeekList': function() { return weekList},
-    'setManagePrivelage': function() { setManagePrivelage(); }
+        });
+        return deferred.promise;
+      },
+      // update monday, change header, and request corresponding schedule
+      'changeWeek':function(operation) {
+        var deferred = $q.defer();
+        if (operation == 'add') {
+          monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
+        }
+        else if (operation == 'subtract'){
+          monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+        }
+        else {
+          monday = operation;
+        }
+        initHeader(); // update schedule header to reflect new dates
+        initSchedule().then(
+           function(success) {
+            countDays(); // NOTE Added for those with manage schedule privelage
+            countHours(); // NOTE Added for those with manage schedule privelage
+            buildWeekList();
+            notifyObservers();
+            deferred.resolve(success);
+        });
+        return deferred.promise;
+      },
+      'getHeader':   function() { return header; },
+      'getTemplate': function() { return schedule; },
+      'isPublished': function() { return isPublished; },
+      'extendEnd': function(extend) {
+        extendEnd = extend;
+        addHolidays();
+        notifyObservers();
+      },
+      'extendStart': function(extend) {
+        extendStart = extend;
+        addHolidays();
+        notifyObservers();
+      },
+      'getWeekList': function() { return weekList},
+      'setManagePrivelage': function() { setManagePrivelage(); },
+      'removeManagePrivelage': function() {
+        $log.debug('remove manage service');
+        // do nothing
+      }
+    }
   }
+
+  var service = removeManagePrivelage();
 
   // register observers
   service.registerObserverCallback = function(callback){

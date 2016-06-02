@@ -8,7 +8,7 @@
  * Controller of the sequoiaGroveApp
  */
 angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
-  $http, $location, $log, $rootScope, $scope, $timeout, scheduleFactory,
+  $window, $http, $location, $log, $rootScope, $scope, $timeout, scheduleFactory,
   userFactory, loginFactory, requestFactory, localStorageService, $q ){
   $scope.attemptedLogin = {};
 
@@ -112,7 +112,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       then(function(success) {
         $rootScope.lastPath = "";
         window.open('https://accounts.google.com/logout', '_blank');
-        $location.path('/login');
+        $window.location.reload();
       });
   }
 
@@ -146,6 +146,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     if (isManager) {
       scheduleFactory.setManagePrivelage(); // needs permission manage-schedule
       userFactory.setManagePrivelage(); //needs permission manage-employees
+      requestFactory.setManagePrivelage(); //needs permission manage-employees
     }
     return scheduleFactory.init()
    .then(function(success) { // initialize schedule factory
