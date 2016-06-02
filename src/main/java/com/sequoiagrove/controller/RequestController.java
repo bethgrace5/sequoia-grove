@@ -2,6 +2,9 @@
 package com.sequoiagrove.controller;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -59,15 +62,24 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      Gson gson = new Gson();
+      /*Gson gson = new Gson();
       Request req = gson.fromJson(data, Request.class);
 
       int eid = req.getEid();
-      String start = req.getStartDate();
-      String end = req.getEndDate();
+      String start = req.getStartDateString();
+      String end = req.getEndDateString();*/
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
 
       int id = jdbcTemplate.queryForObject("select nextval('sequ_requests_sequence')",
             Integer.class);
+      Object[] params = new Object[] {
+        id, 
+        jobject.get("eid").getAsInt(),
+        null, false,
+        jobject.get("startDate").getAsString(),
+        jobject.get("endDate").getAsString(),
+      };
 
       jdbcTemplate.update(
           "insert into sequ_requests_vacation"+
@@ -75,7 +87,7 @@ public class RequestController{
           " end_date_time)" +
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
-          id, eid, null, false, start, end);
+          params);
       //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";
@@ -254,16 +266,27 @@ public class RequestController{
         }
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        Gson gson = new Gson();
-        Request req = gson.fromJson(data, Request.class);
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+        Object[] params = new Object[] { 
+          jobject.get("eid").getAsInt(),
+          jobject.get("startDate").getAsString(),
+          jobject.get("endDate").getAsString(),
+        };
 
-        int eid = req.getEid();
-        String start = req.getStartDate();
-        String end = req.getEndDate();
+        // !!!!! Changed Request Class !!!!! (no longer works like this)
+        //Gson gson = new Gson();
+        //Request req = gson.fromJson(data, Request.class);
+
+        //int eid = req.getEid();
+        //String start = req.getStartDateString();
+        //String end = req.getEndDateString();
+        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
         /*
            jdbcTemplate.update("update requests_vacation " +
            " set" +
-           " start_date_time = " + "to_timestamp(" + start + ", 'mm-dd-yyyy')" +
+           " start_date_time = " + "to_timestamp(" + start + ", 'yyyy-mm-dd')" +
            " where id = " + eid
            );
            */

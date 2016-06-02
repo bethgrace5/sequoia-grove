@@ -7,16 +7,12 @@ public class Shift {
     int sid;
     int pid;
     String tname;
-    String startDate;
-    String endDate;
-//    String weekdayStart;
-//    String weekdayEnd;
-//    String weekendStart;
-//    String weekendEnd;
+    Duration active;
     Duration weekday;
     Duration weekend;
 
     public Shift(){
+        this.active = new Duration();
         this.weekday = new Duration();
         this.weekend = new Duration(); 
     }
@@ -27,10 +23,11 @@ public class Shift {
         this.sid = sid;
         this.pid = pid;
         this.tname = tname;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.active = new Duration();
         this.weekday = new Duration();
         this.weekend = new Duration();
+        this.active.setStartDate(startDate);
+        this.active.setEndDate(endDate);
         this.weekday.setStartNum(weekdayStart);
         this.weekday.setEndNum(weekdayEnd);
         this.weekend.setStartNum(weekendStart);
@@ -56,20 +53,6 @@ public class Shift {
     }
     public void setTname(String tname) {
         this.tname = tname;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-    public void setStartDate(String sDate) {
-        this.startDate = sDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-    public void setEndDate(String eDate) {
-        this.endDate = eDate;
     }
 
     public int getWeekdayStart() {
@@ -110,5 +93,26 @@ public class Shift {
     }
     public void setWeekendEnd(int weekendEnd) {
         this.weekend.setEndNum(weekendEnd);
+    }
+
+    public Duration getActive() {
+        return this.active;
+    }
+    public void setActive(Duration active) {
+        this.active = active;
+    }
+
+    public DateCustom getStartDate() {
+        return this.active.getStartDate();
+    }
+    public void setStartDate(String startDate) {
+        this.active.setStartDate(startDate);
+    }
+
+    public DateCustom getEndDate() {
+        return this.active.getEndDate();
+    }
+    public void setEndDate(String endDate) {
+        this.active.setEndDate(endDate);
     }
 }

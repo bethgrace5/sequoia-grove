@@ -432,8 +432,8 @@ public class Generator{
         cur.getSid(),
         cur.getPid(),
         cur.getTname(),
-        cur.getStartDate(),
-        cur.getEndDate(),
+        cur.active.getStartDate(),
+        cur.active.getEndDate(),
         cur.getWeekdayStart(),
         cur.getWeekdayEnd(),
         cur.getWeekendStart(),
@@ -456,7 +456,7 @@ public class Generator{
     for (Request cur : requests) {
       System.out.printf(
         "%-3d %-10s %-10s\n",
-        cur.eid, cur.startDate, cur.endDate
+        cur.getEid(), cur.timeOff.getStartDate(), cur.timeOff.getEndDate()
       );
     }
   }
