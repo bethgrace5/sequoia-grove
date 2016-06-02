@@ -23,7 +23,7 @@
 //| Initialize_Testing_Extreme
 
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService, loginFactory ){
+.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService, loginFactory, requestFactory ){
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
@@ -104,8 +104,10 @@ angular.module('sequoiaGroveApp')
         return $scope.getCurrentEmployeeRequest()
       }).then(function(success) {
         if (loginFactory.getUser().isManager) {
-          $scope.getPendingRequests().
+          //$scope.getPendingRequests().
+          requestFactory.init().
           then(function(success) {
+            $scope.pendingRequests = success.requestStatus;
             $scope.getAllRequests();
           });
         }
@@ -113,10 +115,10 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.confirmSubmit = function(ev) {
-    if($scope.checkDatesCollide()){
-      $scope.datesCollidePopup(ev);
-      return;
-    }
+    //if($scope.checkDatesCollide()){
+      //$scope.datesCollidePopup(ev);
+      //return;
+    //}
     var message =
       'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
       ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
@@ -146,6 +148,7 @@ angular.module('sequoiaGroveApp')
     // Appending dialog to document.body to cover sidenav in docs app
     // Modal dialogs should fully cover application
     // to prevent interaction outside of dialog
+    /*
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -156,6 +159,7 @@ angular.module('sequoiaGroveApp')
         .ok('Got it!')
         .targetEvent(ev)
     );
+    */
   };
 
   //---------------
@@ -206,19 +210,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.getPendingRequests = function() {
-    return $http({
-      url: '/sequoiagrove/request/get/pending',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-      $scope.pendingRequests = data.requestStatus;
-      $timeout(function() {
-        $rootScope.requestsNum = $scope.pendingRequests.length;
-      })
-    });
-  }
-
-
   //----------------------------------
   //Manager_Change_Submit_Request
   //----------------------------------
@@ -244,7 +235,8 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $scope.getPendingRequests().then(function(success) {
+          requestFactory.init().then(function(success) {
+            $scope.pendingRequests = success.requestStatus;
         return $scope.getAllRequests();
       })
     });
@@ -259,7 +251,10 @@ angular.module('sequoiaGroveApp')
       $scope.getCurrentEmployeeRequest().then(function(success) {
         return $scope.getAllRequests();
       }).then(function(success) {
-        return $scope.getPendingRequests();
+          requestFactory.init().then(function(success) {
+            $scope.pendingRequests = success.requestStatus;
+          });
+        //return $scope.getPendingRequests();
       });
     });
   }
@@ -311,8 +306,8 @@ angular.module('sequoiaGroveApp')
       $scope.getAllRequests().then(function(success) {
         return $scope.getCurrentEmployeeRequest();
       }).then(function(success) {
-        return $scope.getPendingRequests();
-      });
+        return requestFactory.init();
+      })
     }
     else {
       return $scope.getCurrentEmployeeRequest();
@@ -320,4 +315,6 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.init();
+
+
 });

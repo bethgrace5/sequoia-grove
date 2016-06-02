@@ -9,7 +9,7 @@
  */
 angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   $http, $location, $log, $rootScope, $scope, $timeout, scheduleFactory,
-  userFactory, loginFactory, localStorageService, $q ){
+  userFactory, loginFactory, requestFactory, localStorageService, $q ){
   $scope.attemptedLogin = {};
 
   // User tried to go back to the login page when they were alredy logged in.
@@ -154,6 +154,8 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       return $scope.getPositions()
     }).then(function(success) {
       return $scope.getDeliveries(); // get deliveries
+    }).then(function(success) {
+      return requestFactory.init(); // get deliveries
     })
   }
 });

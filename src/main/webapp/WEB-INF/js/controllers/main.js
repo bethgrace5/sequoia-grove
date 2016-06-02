@@ -9,7 +9,7 @@
  */
 angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
-    localStorageService, scheduleFactory, userFactory, loginFactory, $q ){
+    localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
 
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
@@ -427,6 +427,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.hourCount = scheduleFactory.getHourCount();
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
+      $scope.pendingRequests = requestFactory.getPending();
+      $rootScope.requestsNum = requestFactory.getNumberPending();
     }
     $timeout(function() {
       $scope.date = scheduleFactory.getHeader();
@@ -440,7 +442,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $scope.initAvailSchedule();
       }
       $rootScope.$apply();
-    },100);
+    });
 
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
@@ -453,5 +455,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   };
 
   loginFactory.registerObserverCallback(updateUser);
+
+  var requestChange = function() {
+    $scope.requestsNum = requestFactory.getNumberPending();
+  };
+
+  requestFactory.registerObserverCallback(requestChange);
 
 });
