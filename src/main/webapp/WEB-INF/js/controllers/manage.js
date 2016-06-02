@@ -104,8 +104,8 @@ angular.module('sequoiaGroveApp')
   $scope.verifyShift = function() {
     // to add, at the very minumum, we need pid, taskName, 
     // weekdayStart hours and weekdayEnd hours
-    $log.debug($scope.selectedShift);
-    $log.debug($scope.shiftForm.form);
+    //$log.debug($scope.selectedShift);
+    //$log.debug($scope.shiftForm.form);
 
     //TODO if weekend is not set, set it to weekday times
 
@@ -125,7 +125,7 @@ angular.module('sequoiaGroveApp')
       return false;
     }
     else {
-      $log.debug('form was dirty');
+      //$log.debug('form was dirty');
     }
     return true;
   }

@@ -57,7 +57,9 @@
           <span ng-hide="errors.available">
             is
             <span style="color:#b30086"> not available</span><span ng-hide="errors.hasPosition || errors.isCurrent">,</span>
-            <span ng-show="errors.hasPosition || errors.isCurrent"> and </span>
+            <span ng-hide="errors.hasPosition && errors.isCurrent"> 
+              <span ng-show="errors.hasPosition || errors.isCurrent"> and </span>
+            </span>
           </span>
 
         <!-- Does not have position-->
