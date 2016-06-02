@@ -69,44 +69,44 @@ employed for the company, not counting any past lengths of employment.
 Screenshots
 --
 Login 
-![login view](screenshots/views/login1.png)
+![login view](views/screenshots/login1.png)
 ---
 View Schedule 
-![home view](screenshots/views/home.png)
+![home view](views/screenshots/home.png)
 ---
 Employee Edit
-![employee view](screenshots/views/employee1.png)
-![employee view](screenshots/views/employee2.png)
-![employee view](screenshots/views/employee3.png)
+![employee view](views/screenshots/employee1.png)
+![employee view](views/screenshots/employee2.png)
+![employee view](views/screenshots/employee3.png)
 ---
 Submit Requests
-![request submit view](screenshots/views/request-submit.png)
+![request submit view](views/screenshots/request-submit.png)
 ---
 Pending Requests
-![request pending view](screenshots/views/request-pending.png)
+![request pending view](views/screenshots/request-pending.png)
 ---
 Request History
-![request history view](screenshots/views/request-history.png)
+![request history view](views/screenshots/request-history.png)
 ---
 Manage Requests
-![request history view](screenshots/views/request-manage.png)
+![request history view](views/screenshots/request-manage.png)
 ---
 Schedule Edit
-![schedule edit view 1](screenshots/views/schedule1.png)
+![schedule edit view 1](views/screenshots/schedule1.png)
 ---
 Schedule Edit
-![schedule edit view 2](screenshots/views/schedule2.png)
+![schedule edit view 2](views/screenshots/schedule2.png)
 ---
 Schedule Edit
-![schedule edit view 2](screenshots/views/schedule2.png)
+![schedule edit view 2](views/screenshots/schedule2.png)
 ---
 Manage Holiday
-![schedule edit view 2](screenshots/views/manage-holiday.png)
+![schedule edit view 2](views/screenshots/manage-holiday.png)
 ---
 Manage Shift
-![schedule edit view 2](screenshots/views/manage-shift.png)
+![schedule edit view 2](views/screenshots/manage-shift.png)
 ---
 Manage Delivery
-![schedule edit view 2](screenshots/views/manage-delivery.png)
+![schedule edit view 2](views/screenshots/manage-delivery.png)
 ---
 
