@@ -295,7 +295,6 @@ angular.module('sequoiaGroveApp')
     scheduleFactory.saveSchedule().then(
       function(success) {
         $timeout(function() {
-          $rootScope.$broadcast('editEmployee');
           $scope.saving = false;
         });
       });
@@ -303,9 +302,6 @@ angular.module('sequoiaGroveApp')
 
   $scope.clearSchedule = function() {
     scheduleFactory.clear();
-    $timeout(function() {
-      $rootScope.$broadcast('editEmployee');
-    });
   }
 
   $scope.importWeek = function(index) {
@@ -314,7 +310,6 @@ angular.module('sequoiaGroveApp')
     $scope.importing = true;
     scheduleFactory.importWeek(week).then(
       function(success) {
-        $rootScope.$broadcast('editEmployee');
         $scope.importing = false;
       });
   }
@@ -330,13 +325,5 @@ angular.module('sequoiaGroveApp')
 
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
-  $rootScope.$on('editEmployee', function(event, args) {
-    userFactory.init().then(function(success) {
-      $scope.initAvailSchedule();
-      $scope.initPositionsSchedule();
-      $scope.saving = false;
-      $scope.importing = false;
-      $scope.loadingWeek = false;
-    });
-  });
+
 });

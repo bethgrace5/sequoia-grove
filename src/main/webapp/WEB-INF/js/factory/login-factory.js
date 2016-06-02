@@ -40,11 +40,9 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   function destructData() {
     var deferred = $q.defer();
     // remove session
-    $http({ url: '/sequoiagrove/auth/logout', method: "POST" }).
-      then( function(success) {
-        deferred.resolve(success);
-      }
-    );
+    $http({ url: '/sequoiagrove/auth/logout', method: "POST" }).then( function(success) {
+      deferred.resolve(success);
+    });
     return deferred.promise;
   }
 
@@ -72,7 +70,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   function signOut(gapi) {
     var deferred = $q.defer();
     var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
+    auth2.signOut().then(function() {
       deferred.resolve();
     });
     return deferred.promise;
@@ -93,27 +91,31 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   // sign in - first calls google then this app
   service.signIn = function(googleUser, gapi) {
     var deferred = $q.defer();
-    googleSignIn(googleUser, gapi).
-      then(function() {
-        appSignIn(gapi).
-          then(function(success) {
-            loggedIn = true;
-            notifyObservers();
-            deferred.resolve(success);
-          }, function(failure) {
-            deferred.reject(failure);
-          });
-      });
+    // if the user successfully signed in with google
+    if(gapi.auth2.getAuthInstance().isSignedIn.get()) {
+      googleSignIn(googleUser, gapi).
+        then(function() {
+          appSignIn(gapi).
+            then(function(success) {
+              loggedIn = true;
+              notifyObservers();
+              deferred.resolve(success);
+            }, function(failure) {
+              deferred.reject(failure);
+            });
+        });
+    }
+    else {
+      deferred.reject(false);
+    }
     return deferred.promise;
   };
 
   // sign out - first calls google then this app
   service.signOut = function(gapi) {
     var deferred = $q.defer();
-    signOut(gapi).
-      then(function() {
-        destructData().
-        then(function() {
+    signOut(gapi).then(function() {
+        destructData().then(function() {
           user = {};
           loggedIn = false;
           notifyObservers();

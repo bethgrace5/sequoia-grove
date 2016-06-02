@@ -245,22 +245,23 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $rootScope.$on('loggedIn', function(event, args) {
     //$log.debug('caught logged in at main');
-    $scope.template = scheduleFactory.getTemplate();
-    $scope.date = scheduleFactory.getHeader();
-    $scope.isPublished = scheduleFactory.isPublished();
-    if (loginFactory.getUser().isManager) {
-      $scope.dayCount = scheduleFactory.getDayCount();
-      $scope.hourCount = scheduleFactory.getHourCount();
-      $scope.changesMade = scheduleFactory.changesMade();
-    }
-    $scope.weekList = scheduleFactory.getWeekList();
-    $timeout(function() {
-      if (loginFactory.getUser().isManager) {
-        $scope.employees = userFactory.getUsers();
-        $scope.initPositionsSchedule();
-        $scope.initAvailSchedule();
-      }
-    });
+    //$scope.template = scheduleFactory.getTemplate();
+    //$scope.date = scheduleFactory.getHeader();
+    //$scope.isPublished = scheduleFactory.isPublished();
+    //if (loginFactory.getUser().isManager) {
+      //$scope.dayCount = scheduleFactory.getDayCount();
+      //$scope.hourCount = scheduleFactory.getHourCount();
+      //$scope.changesMade = scheduleFactory.changesMade();
+    //}
+    //$scope.weekList = scheduleFactory.getWeekList();
+    //$timeout(function() {
+      //if (loginFactory.getUser().isManager) {
+        //$scope.employees = userFactory.getUsers();
+        //$scope.initPositionsSchedule();
+        //$scope.initAvailSchedule();
+      //}
+      //$rootScope.$apply();
+    //});
   });
 
   $scope.selectWeek = function(index) {
@@ -431,8 +432,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   }
 
   var updateChangesMade = function(){
-    //$log.debug('update template main.js');
+    $log.debug('update changes made');
     $scope.template = scheduleFactory.getTemplate();
+    $scope.isPublished = scheduleFactory.isPublished();
+    $scope.date = scheduleFactory.getHeader();
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
       $scope.hourCount = scheduleFactory.getHourCount();
@@ -442,6 +445,16 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.isPublished = scheduleFactory.isPublished();
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.loadingWeek = false;
+
+    $timeout(function() {
+      if (loginFactory.getUser().isManager) {
+        $scope.employees = userFactory.getUsers();
+        $scope.initPositionsSchedule();
+        $scope.initAvailSchedule();
+      }
+      $rootScope.$apply();
+    });
+
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
   //schedule factory now in control of updateChangesMade()

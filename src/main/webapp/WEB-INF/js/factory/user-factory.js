@@ -165,6 +165,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               buildAvailability();
               buildPositions();
+              notifyObservers();
               deferred.resolve(success);
             });
           });

@@ -4,7 +4,7 @@
     <div class="row panel-body">
       <div class="col-sm-8 col-sm-offset-2">
         <div class="text-center">
-          <p class="lead" ng-hide="loggingIn"> 
+          <p class="lead"> 
             Sequoia Grove Employee Scheduling
           </p>
           <p class="lead">
@@ -20,10 +20,9 @@
       <div class="row panel-body text-center">
         <div class="col-sm-12">
           <div ng-show="errorMessage.length > 0"> 
-            <p> <strong>Sign in failed...</strong> </p>
-            <p style="color:red;">{{errorMessage}}</p>
-            <a href="https://accounts.google.com/logout" target="blank" ng-click="switchUser();">
-              Not {{}}?
+            <p> Sign in failed for <strong>{{attemptedLogin.email}}</strong> </p>
+            <p>{{errorMessage}}</p>
+            <a href="#/login" onclick="differentUser();">Not {{attemptedLogin.name}}?</a>
             </a>
           </div>
         </div>
