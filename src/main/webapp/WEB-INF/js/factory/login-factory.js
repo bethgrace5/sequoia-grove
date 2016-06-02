@@ -62,6 +62,10 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
       'is_manager':false,
       'id':'',
     };
+    // user hasn't set a photo with google
+    if (user.profile_photo == undefined) {
+      user.profile_photo = 'img/user-icon.png';
+    }
     deferred.resolve();
     return deferred.promise;
   }

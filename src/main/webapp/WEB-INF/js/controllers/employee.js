@@ -456,7 +456,7 @@ angular.module('sequoiaGroveApp')
     }
 
   var fireUpdate = function() {
-    $log.debug('fire update employee');
+    //$log.debug('fire update employee');
     $scope.initAvailSchedule();
     $scope.initPositionsSchedule();
   }

@@ -49,7 +49,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
             $timeout(function() {
               $rootScope.loggingIn = false;
               $rootScope.loggedIn = true;
-              $rootScope.$broadcast('loggedIn');
               $location.path(localStorageService.get('lastPath'));
             });
           });

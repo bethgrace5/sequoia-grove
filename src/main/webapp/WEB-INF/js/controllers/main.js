@@ -243,26 +243,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.changeTab('/home');
   }
 
-  $rootScope.$on('loggedIn', function(event, args) {
-    //$log.debug('caught logged in at main');
-    //$scope.template = scheduleFactory.getTemplate();
-    //$scope.date = scheduleFactory.getHeader();
-    //$scope.isPublished = scheduleFactory.isPublished();
-    //if (loginFactory.getUser().isManager) {
-      //$scope.dayCount = scheduleFactory.getDayCount();
-      //$scope.hourCount = scheduleFactory.getHourCount();
-      //$scope.changesMade = scheduleFactory.changesMade();
-    //}
-    //$scope.weekList = scheduleFactory.getWeekList();
-    //$timeout(function() {
-      //if (loginFactory.getUser().isManager) {
-        //$scope.employees = userFactory.getUsers();
-        //$scope.initPositionsSchedule();
-        //$scope.initAvailSchedule();
-      //}
-      //$rootScope.$apply();
-    //});
-  });
 
   $scope.selectWeek = function(index) {
     $scope.selectedWeek = index;
@@ -431,29 +411,36 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     });
   }
 
+ /*$scope.$on('requestchanged', function() {
+        $log.debug('hey, requestsNum has changed!', $scope.requestsNum);
+    });*/
+
+  $scope.publishSchedule = function() {
+    $scope.isPublished = scheduleFactory.publish();
+  }
+
   var updateChangesMade = function(){
-    $log.debug('update changes made');
+    //$log.debug('update changes made');
     $scope.template = scheduleFactory.getTemplate();
-    $scope.isPublished = scheduleFactory.isPublished();
-    $scope.date = scheduleFactory.getHeader();
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
       $scope.hourCount = scheduleFactory.getHourCount();
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
     }
-    $scope.isPublished = scheduleFactory.isPublished();
-    $scope.weekList = scheduleFactory.getWeekList();
-    $scope.loadingWeek = false;
-
     $timeout(function() {
+      $scope.date = scheduleFactory.getHeader();
+      $scope.isPublished = scheduleFactory.isPublished();
+      $scope.weekList = scheduleFactory.getWeekList();
+      $scope.loadingWeek = false;
+
       if (loginFactory.getUser().isManager) {
         $scope.employees = userFactory.getUsers();
         $scope.initPositionsSchedule();
         $scope.initAvailSchedule();
       }
       $rootScope.$apply();
-    });
+    },100);
 
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);

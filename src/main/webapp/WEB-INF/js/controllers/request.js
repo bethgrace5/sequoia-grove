@@ -22,9 +22,8 @@
 //| ?????
 //| Initialize_Testing_Extreme
 
-angular.module('sequoiaGroveApp').controller('RequestCtrl', function(
-    $scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService,
-    loginFactory ){
+angular.module('sequoiaGroveApp')
+.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService, loginFactory ){
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
@@ -213,8 +212,12 @@ angular.module('sequoiaGroveApp').controller('RequestCtrl', function(
       method: "GET"
     }).success(function (data, status, headers, config) {
       $scope.pendingRequests = data.requestStatus;
+      $timeout(function() {
+        $rootScope.requestsNum = $scope.pendingRequests.length;
+      })
     });
   }
+
 
   //----------------------------------
   //Manager_Change_Submit_Request
