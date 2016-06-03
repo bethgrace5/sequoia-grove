@@ -21,6 +21,7 @@ angular.module('sequoiaGroveApp')
         $mdDialog,
         scheduleFactory,
         userFactory,
+        loginFactory,
         localStorageService) {
 
 
@@ -58,6 +59,7 @@ angular.module('sequoiaGroveApp')
     'selectedName':'',
     'available':true, 
     'hasPosition':true,
+    'isCurrent':true,
     'selectedPosition':''
   };
 
@@ -115,12 +117,22 @@ angular.module('sequoiaGroveApp')
     });
   }
 
+  $scope.publishSchedule = function() {
+    var id = loginFactory.getUser().id;
+    scheduleFactory.publish(id).then(function(success) {
+      $timeout(function() {
+        $scope.isPublished = success;
+        $rootScope.$apply();
+      });
+    });
+  }
+
+
 /************** Pure Functions **************/
 
   $scope.items = [{'isSpacer':true, 'index':-1}];
 
   $scope.selectPosition = function(pid, title) {
-    $log.debug(pid, title);
     $scope.selectedPid = pid;
     $scope.selectedPosition = title;
   }
@@ -177,7 +189,8 @@ angular.module('sequoiaGroveApp')
       'selectedName':'',
       'available':true, 
       'hasPosition':true,
-      'selectedPosition':''
+      'selectedPosition':'',
+      'isCurrent':true
     };
   }
 
@@ -189,6 +202,7 @@ angular.module('sequoiaGroveApp')
       if ($scope.selectedId === 0) {
         $scope.errors.available = true;
         $scope.errors.hasPosition = true;
+        $scope.errors.isCurrent = true;
         $scope.selectedId = 0;
       }
       else {
@@ -196,12 +210,14 @@ angular.module('sequoiaGroveApp')
         $scope.errors.selectedPosition = t.position;
         $scope.errors.available = t[day].hasAvailability[$scope.selectedId];
         $scope.errors.hasPosition = t[day].hasPosition[$scope.selectedId];
+        $scope.errors.isCurrent = t[day].isCurrent[$scope.selectedId];
       }
     }
     else {
       // t is undefined, set to default
       $scope.errors.available = true;
       $scope.errors.hasPosition = true;
+      $scope.errors.isCurrent = true;
       $scope.selectedId = 0;
     }
   }
@@ -256,7 +272,7 @@ angular.module('sequoiaGroveApp')
   };
 
   // validation for schedule edit input
-  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday) {
+  $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday, current) {
     var style = 'form-control schedule-edit-input';
     if ($rootScope.readyToSchedule === false) {
       return style;
@@ -284,6 +300,9 @@ angular.module('sequoiaGroveApp')
     else if (hasPosition[id] == false) {
       style += ' schedule-edit-input-error';
     }
+    else if (current[id] === false) {
+      style += ' schedule-edit-input-error';
+    }
     if (holiday) {
       style += ' schedule-edit-input-holiday';
     }
@@ -295,7 +314,6 @@ angular.module('sequoiaGroveApp')
     scheduleFactory.saveSchedule().then(
       function(success) {
         $timeout(function() {
-          $rootScope.$broadcast('editEmployee');
           $scope.saving = false;
         });
       });
@@ -303,9 +321,6 @@ angular.module('sequoiaGroveApp')
 
   $scope.clearSchedule = function() {
     scheduleFactory.clear();
-    $timeout(function() {
-      $rootScope.$broadcast('editEmployee');
-    });
   }
 
   $scope.importWeek = function(index) {
@@ -314,7 +329,6 @@ angular.module('sequoiaGroveApp')
     $scope.importing = true;
     scheduleFactory.importWeek(week).then(
       function(success) {
-        $rootScope.$broadcast('editEmployee');
         $scope.importing = false;
       });
   }
@@ -330,13 +344,5 @@ angular.module('sequoiaGroveApp')
 
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
-  $rootScope.$on('editEmployee', function(event, args) {
-    userFactory.init().then(function(success) {
-      $scope.initAvailSchedule();
-      $scope.initPositionsSchedule();
-      $scope.saving = false;
-      $scope.importing = false;
-      $scope.loadingWeek = false;
-    });
-  });
+
 });

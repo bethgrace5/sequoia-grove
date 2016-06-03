@@ -1,10 +1,18 @@
 Sequoia Grove
 ==
-Databases project, which will become senior project required for bachelor's degree of computer science at California State University, Bakersfield (CSUB)
+Weekly Employee Scheduling Application
 
-Purpose
---
-* Assist and automate creation of weekly employee scheduling tailored to The Sequoia Sandwich Company, but versatile enough to be used for most retail and foodservice establishments.
+Sequoia Grove is a web application designed to simplify employee scheduling. 
+It was designed for businesses following a scheduling system where work schedules 
+with shifts are written and published weekly. The model for this product was 
+constructed by researching the current system in place by a  local Delicatessen, 
+[The Sequoia Sandwich Company](http://www.sequoiasandwich.com/v4/). 
+The application then expands on the model by being built generically enough 
+to accommodate any business operating on a similar basis.
+Project satisfies senior project requirement for bachelor's degree of computer 
+science at California State University, Bakersfield (CSUB)
+
+[More Detailed Project Description](documentation/feature-description.md)
 
 License
 --
@@ -12,7 +20,7 @@ License
 
 Contribution
 --
-No external contribution at this time for academic integrity.
+Contribution rules pending
 
 Collaborators
 --

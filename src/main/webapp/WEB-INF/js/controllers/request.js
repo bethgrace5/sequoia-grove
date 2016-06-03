@@ -22,14 +22,13 @@
 //| ?????
 //| Initialize_Testing_Extreme
 
-
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function ($scope, $log, $rootScope, $http, $mdDialog, $location, localStorageService) {
+.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService, loginFactory, requestFactory ){
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if ($scope.loggedIn == false) {
     $location.path('/login');
   }
 
@@ -51,10 +50,13 @@ angular.module('sequoiaGroveApp')
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
       $scope.requestDateEnd = $scope.requestDateStart;
     }
-  }
+  } 
 
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "submit";
+  if(loginFactory.getUser().isManager) {
+    $scope.activeTab = "pending";
+  }
 
   // function to set the class of the tab to active,
   // and
@@ -88,7 +90,7 @@ angular.module('sequoiaGroveApp')
   $scope.getCurrentEmployeeRequest = function() {
     return $http({
       url: '/sequoiagrove/request/get/current/employee/'+
-      $rootScope.loggedInUser.id,
+      loginFactory.getUser().id,
       method: "POST"
     }).success(function(data, status) {
       $scope.userRequests = data.request;
@@ -96,7 +98,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.submitRequest = function(){
-    var obj = { "eid": $rootScope.loggedInUser.id,
+    var obj = { "eid": loginFactory.getUser().id,
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
@@ -104,17 +106,21 @@ angular.module('sequoiaGroveApp')
       .then(function (success){
         return $scope.getCurrentEmployeeRequest()
       }).then(function(success) {
-        return $scope.getPendingRequests();
-      }).then(function(success) {
-        $scope.getAllRequests();
-      });
+        if (loginFactory.getUser().isManager) {
+          //$scope.getPendingRequests().
+          requestFactory.init().then(function(success) {
+            $scope.pendingRequests = success.data.requestStatus;
+            $scope.getAllRequests();
+          });
+        }
+    });
   }
 
   $scope.confirmSubmit = function(ev) {
-    if($scope.checkDatesCollide()){
-      $scope.datesCollidePopup(ev);
-      return;
-    }
+    //if($scope.checkDatesCollide()){
+      //$scope.datesCollidePopup(ev);
+      //return;
+    //}
     var message =
       'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
       ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
@@ -144,6 +150,7 @@ angular.module('sequoiaGroveApp')
     // Appending dialog to document.body to cover sidenav in docs app
     // Modal dialogs should fully cover application
     // to prevent interaction outside of dialog
+    /*
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -154,6 +161,7 @@ angular.module('sequoiaGroveApp')
         .ok('Got it!')
         .targetEvent(ev)
     );
+    */
   };
 
   //---------------
@@ -204,15 +212,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.getPendingRequests = function() {
-    return $http({
-      url: '/sequoiagrove/request/get/pending',
-      method: "GET"
-    }).success(function (data, status, headers, config) {
-      $scope.pendingRequests = data.requestStatus;
-    });
-  }
-
   //----------------------------------
   //Manager_Change_Submit_Request
   //----------------------------------
@@ -238,7 +237,8 @@ angular.module('sequoiaGroveApp')
     data: JSON.stringify(obj)
     })
     .success(function (data, status, headers, config) {
-      $scope.getPendingRequests().then(function(success) {
+      requestFactory.init().then(function(success) {
+        $scope.pendingRequests = success.requestStatus;
         return $scope.getAllRequests();
       })
     });
@@ -253,7 +253,10 @@ angular.module('sequoiaGroveApp')
       $scope.getCurrentEmployeeRequest().then(function(success) {
         return $scope.getAllRequests();
       }).then(function(success) {
-        return $scope.getPendingRequests();
+        requestFactory.init().then(function(success) {
+          $scope.pendingRequests = success.data.requestStatus;
+        });
+        //return $scope.getPendingRequests();
       });
     });
   }
@@ -301,12 +304,18 @@ angular.module('sequoiaGroveApp')
 
   $scope.init = function(){
     //$scope.changeRequest($rootScope.loggedInUser.id, $rootScope.loggedInUser.id , 1);
-    $scope.getAllRequests().then(function(success) {
+    if (loginFactory.getUser().isManager) {
+      $scope.getAllRequests().then(function(success) {
+        return $scope.getCurrentEmployeeRequest();
+      }).then(function(success) {
+        return requestFactory.init();
+      })
+    }
+    else {
       return $scope.getCurrentEmployeeRequest();
-    }).then(function(success) {
-      return $scope.getPendingRequests();
-    });
+    };
   }
 
   $scope.init();
+
 });

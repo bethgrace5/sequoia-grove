@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory, loginFactory) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -41,7 +41,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classification': 0,
+      'classification_id': 1,
       'notes': '',
       'firstname':'',
       'lastname':'',
@@ -99,6 +99,8 @@ angular.module('sequoiaGroveApp')
 
     $scope.selectClassification = function(index) {
       $scope.selectedClassification = index;
+      $scope.selectedEmployee.classificationId =
+        $scope.classifications[index].val;
     }
 
     $scope.selectEmployee = function(id) {
@@ -108,11 +110,13 @@ angular.module('sequoiaGroveApp')
         var curid = $scope.employees[i].id;
         if (curid==id) {
           $scope.selectedEmployee = $scope.employees[i];
-          _.map($scope.classifications,function(item, index){
-            if(parseInt(item.val) === parseInt($scope.selectedEmployee.classification)) {
+          $scope.selectedClassification = $scope.selectedEmployee.classificationId;
+          _.map($scope.classifications, function(item, index) {
+            if (item.val === $scope.selectedEmployee.classificationId) {
               $scope.selectedClassification = index;
             }
           });
+
           $scope.birthday = moment($scope.employees[i].birthDate, 'MM-DD-YYYY').toDate();
           break;
         }
@@ -124,7 +128,7 @@ angular.module('sequoiaGroveApp')
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification': $scope.classifications[$scope.selectedClassification].val,
+        'classification_id': 1,
         'notes': '',
         'firstname':'',
         'lastname':'',
@@ -168,19 +172,19 @@ angular.module('sequoiaGroveApp')
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
-          $rootScope.$broadcast('editEmployee');
+          userFactory.init();
         }).error(function(data, status) {
-          $log.debug(data, status);
+          //$log.debug(data, status);
         });
       }
     }
 
     $scope.addPermission = function() {
-      $log.debug('add permission ',$scope.newPermission.disp);
+      //$log.debug('add permission ',$scope.newPermission.disp);
     }
 
     $scope.removePermission = function(name) {
-      $log.debug('remove permission ', name);
+      //$log.debug('remove permission ', name);
     }
 
     $scope.getPositionTitle = function(pid) {
@@ -213,7 +217,7 @@ angular.module('sequoiaGroveApp')
           data: obj
         }).success(function(data, status, headers, config) {
             $scope.saving = false;
-            $rootScope.$broadcast('editEmployee');
+            userFactory.init();
             // update front end
             $scope.selectedEmployee.positions.push(pid);
         }).error(function(data, status) {
@@ -243,7 +247,7 @@ angular.module('sequoiaGroveApp')
             method: "POST"
         }).success(function(data, status) {
           $scope.saving = false;
-          $rootScope.$broadcast('editEmployee');
+            userFactory.init();
         });
     }
 
@@ -273,14 +277,22 @@ angular.module('sequoiaGroveApp')
         data: obj
       }).success(function(data, status) {
         $scope.saving = false;
-        $rootScope.$broadcast('editEmployee');
+          userFactory.init();
       }).error(function(data, status) {
         $log.debug('error removing position',pid,'from',eid);
       });
     }
 
+    // TODO function to reset the indication of saved
+
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
+
+      // TODO don't send the form if it hasn't been changed
+      // just directly jump to show that it was saved
+      // (you will need a variable to know it was saved)
+      // (!$dirty)
+
       if($rootScope.devMode) {
         $scope.saving = false;
         return;
@@ -315,11 +327,8 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee.lastname =
         (firstLetter.toUpperCase() + theRest.toLowerCase());
 
-      var cid = $scope.classifications[$scope.selectedClassification].val;
-      $scope.selectedEmployee.classificationId = cid;
-      $scope.selectedEmployee.classification = cid;
-
       //TODO if clock number is greater than allowed size, fix it or show error
+      //limit to 2 digits
 
       // validate the rest of the form
       if (form.$invalid) {
@@ -346,10 +355,12 @@ angular.module('sequoiaGroveApp')
       if (!$scope.selectedEmployee.notes) {
         $scope.selectedEmployee.notes = '';
       }
+
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
           // upate front end
           if (action === 'add') {
+          //TODO  (you will need a variable to know it was saved)
             $scope.selectedEmployee.isCurrent = true;
             $scope.selectedEmployee.id = data.id;
             $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
@@ -359,6 +370,8 @@ angular.module('sequoiaGroveApp')
           $scope.saving = false;
           form.$setSubmitted();
         }).error(function(data, status) {
+          // TODO show error saving indication, be able to reset it with
+          // the same reset for the saved indication
           $log.debug('error with action:', action, status,data);
         });
     }
@@ -367,7 +380,7 @@ angular.module('sequoiaGroveApp')
     $scope.deactivateEmployee = function(ev) {
       // a user shouldn't be able to unemploy themselves - it would
       // lock them out of the system.
-      if ($rootScope.loggedInUser.id === $scope.selectedEmployee.id) {
+      if (loginFactory.getUser().id === $scope.selectedEmployee.id) {
         $mdDialog.show(
             $mdDialog.alert()
             .clickOutsideToClose(true)
@@ -409,7 +422,7 @@ angular.module('sequoiaGroveApp')
             }
             return e;
           });
-          $rootScope.$broadcast('editEmployee');
+          userFactory.init();
         }).error(function(data, status) {
           $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
@@ -436,10 +449,18 @@ angular.module('sequoiaGroveApp')
           }
           return e;
         });
-        $rootScope.$broadcast('editEmployee');
+        userFactory.init();
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });
     }
+
+  var fireUpdate = function() {
+    //$log.debug('fire update employee');
+    $scope.initAvailSchedule();
+    $scope.initPositionsSchedule();
+    $scope.initIsCurrentSchedule();
+  }
+  userFactory.registerObserverCallback(fireUpdate);
 
 });

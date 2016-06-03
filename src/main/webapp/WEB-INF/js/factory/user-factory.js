@@ -5,9 +5,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
   var service = {};
   var observerCallbacks = [];
 
-  // Exposed to all users through service
-  var loggedInUser = {};
-
   // Exposed to users with 'manage schedule' privelage through service
   var users = [];
 
@@ -32,7 +29,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
       var temp = localStorageService.get('users');
         if (temp) {
           users = JSON.parse(temp);
-          $log.debug('Warning: devMode on. This is not current schedule data');
+          $log.debug('Warning: devMode on. This is not current user data');
           return $q(function(resolve, reject) {
             resolve();
           });
@@ -151,6 +148,13 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     return _.contains(positionMap[parseInt(uid)], parseInt(pid));
   }
 
+  var getSelf = function() {
+    var deferred = $q.defer();
+    $log.debug('would load data about this user, if they have permission to edit themself');
+    deferred.resolve();
+    return deferred.promise;
+  }
+
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
@@ -161,6 +165,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               buildAvailability();
               buildPositions();
+              notifyObservers();
               deferred.resolve(success);
             });
           });
@@ -175,14 +180,28 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     };
     // TODO include add availability, remove availabilty, add postion, remove position
     // update employee, deactivate employee, activate employee
+    service.removeManagePrivelage = function() {
+      service = removeManagePrivelage();
+    }
+
   }
 
-  // Exposed factory functionality
-  var service = {
-    'setLoggedInUser':    function(user) { loggedInUser = user; },
-    'getLoggedInUser':    function() { return loggedInUser; },
-    'setManagePrivelage': function() { setManagePrivelage(); }
+  var removeManagePrivelage = function() {
+    // Exposed factory functionality
+    return {
+      'init': function() {
+        return getSelf();
+      },
+      'setManagePrivelage': function() {
+        setManagePrivelage();
+      },
+      'removeManagePrivelage': function() {
+        // do nothing
+      }
+    }
   }
+
+  var service = removeManagePrivelage();
 
   // register observers
   service.registerObserverCallback = function(callback){

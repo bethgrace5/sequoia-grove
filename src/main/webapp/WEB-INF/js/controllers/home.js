@@ -15,6 +15,7 @@ angular.module('sequoiaGroveApp')
     $location,
     $rootScope,
     $translate,
+    loginFactory,
     localStorageService)
   {
 
@@ -41,7 +42,9 @@ angular.module('sequoiaGroveApp')
     $scope.highlight = !$scope.highlight;
   }
 
-  $scope.filterByType = function (loc, pos, uid, mon, tue, wed, thu, fri, sat, sun) {
+  // FIXME its broke
+  $scope.filterByType = function (loc, pos, t) {
+    var uid = loginFactory.getUser().id;
       if ($scope.type == 'all') {
           return true;
       }
@@ -49,8 +52,21 @@ angular.module('sequoiaGroveApp')
           return true;
       }
       else if ($scope.type=='mine') {
-        if (mon.eid == uid || tue.eid == uid || wed.eid == uid || thu.eid == uid ||
-              fri.eid == uid || sat.eid == uid || sun.eid == uid) {
+        if (t === undefined) {
+          return true;
+        }
+        if (t.mon === undefined ||
+            t.tue === undefined ||
+            t.wed === undefined ||
+            t.thu === undefined ||
+            t.fri === undefined ||
+            t.sat === undefined ||
+            t.sun === undefined) {
+          return true;
+        }
+
+        if (t.mon.eid === uid || t.tue.eid === uid || t.wed.eidt === uid || 
+          t.thu.eid === uid || t.fri.eid === uid || t.sat.eid === uid || t.sun.eid === uid) {
               return true;
           }
           else {
