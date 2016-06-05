@@ -12,6 +12,7 @@ to accommodate any business operating on a similar basis.
 Project satisfies senior project requirement for bachelor's degree of computer 
 science at California State University, Bakersfield (CSUB)
 
+![schedule edit view 2](documentation/views/screenshots/schedule2.png)
 [More Detailed Project Description](documentation/feature-description.md)
 
 License
