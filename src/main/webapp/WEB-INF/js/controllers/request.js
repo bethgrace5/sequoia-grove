@@ -89,7 +89,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.getCurrentEmployeeRequest = function() {
     return $http({
-      url: '/sequoiagrove/request/get/current/employee/'+
+      url: '/request/get/current/employee/'+
       loginFactory.getUser().id,
       method: "POST"
     }).success(function(data, status) {
@@ -102,7 +102,7 @@ angular.module('sequoiaGroveApp')
       "startDate":moment($scope.requestDateStart).format("MM-DD-YYYY"),
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
-    $http({ url: '/sequoiagrove/request/submit/', method: "POST", data: JSON.stringify(obj)})
+    $http({ url: '/request/submit/', method: "POST", data: JSON.stringify(obj)})
       .then(function (success){
         return $scope.getCurrentEmployeeRequest()
       }).then(function(success) {
@@ -205,7 +205,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.getAllRequests = function() {
     return $http({
-      url: '/sequoiagrove/request/get/checked',
+      url: '/request/get/checked',
       method: "GET"
     }).success(function (data, status, headers, config) {
       $scope.allRequests = data.requestStatus;
@@ -232,7 +232,7 @@ angular.module('sequoiaGroveApp')
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $http({
-      url: '/sequoiagrove/request/submit/',
+      url: '/request/submit/',
     method: "POST",
     data: JSON.stringify(obj)
     })
@@ -246,7 +246,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.changeRequest = function($requestID, $approverID, $is_approve) {
     $http({
-      url: '/sequoiagrove/request/update/' +
+      url: '/request/update/' +
       $requestID + '/' + $approverID + '/' + $is_approve,
     method: "POST"
     }).success(function(data, status) {
@@ -267,7 +267,7 @@ angular.module('sequoiaGroveApp')
       "endDate":moment($scope.requestDateEnd).format("MM-DD-YYYY")
     }
     $http({
-      url: '/sequoiagrove/request/update/dates',
+      url: '/request/update/dates',
     method: "POST",
     data: JSON.stringify(obj)
     });

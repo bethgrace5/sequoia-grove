@@ -236,7 +236,7 @@ public class Authentication {
         }
 
         String jwt =
-          Jwts.builder().setIssuer("localhost:8080/sequoiagrove/")
+          Jwts.builder().setIssuer("http://default-environment.6gp6rkd9qv.us-west-2.elasticbeanstalk.com/sequoiagrove")
           .claim("scope", scope)
           .setSubject(crypticSessionId)
           //.setExpiration(expirationDate)

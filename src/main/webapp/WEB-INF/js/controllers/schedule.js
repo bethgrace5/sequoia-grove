@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
 
     $http({
-      url: '/sequoiagrove/schedule/autogen/',
+      url: '/schedule/autogen/',
       method: "POST",
       data: $scope.autoGenOptions
     }).success( function(data, status, headers, config) {

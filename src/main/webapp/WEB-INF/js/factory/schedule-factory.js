@@ -81,7 +81,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var initRequests = function() {
     var deferred = $q.defer();
-    $http({ 'url': '/sequoiagrove/request/'+header.mon.val+'/'+header.sun.val, 'method': 'GET', }).then(
+    $http({ 'url': '/request/'+header.mon.val+'/'+header.sun.val, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
             requests = _.object(_.map(success.data.requests, function(item, index) {
@@ -194,7 +194,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var initHolidays = function() {
     var deferred = $q.defer();
-    $http({ url: '/sequoiagrove/holiday/get/between/'+
+    $http({ url: '/holiday/get/between/'+
       moment(header.mon.val, 'DD-MM-YYYY').format('MM-DD-YYYY') + '/' +
       moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
       .then(function(success) {
@@ -288,7 +288,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var initSchedule = function() {
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/sequoiagrove/schedule/template/' + monday; // if it's in dev mode, and we already have
+    var url = '/schedule/template/' + monday; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     if($rootScope.devMode) {
       var temp = localStorageService.get('template');
@@ -337,7 +337,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       return;
     }
     $http({
-      url: '/sequoiagrove/schedule/update/',
+      url: '/schedule/update/',
       method: "POST",
       data: updateShifts
     }).then(function (success) {
@@ -367,7 +367,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       return;
     }
     $http({
-      url: '/sequoiagrove/schedule/delete/',
+      url: '/schedule/delete/',
       method: "DELETE",
       data: deleteShifts
     }).then( function(success) {
@@ -413,7 +413,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     });
 
     $http({
-      url: '/sequoiagrove/schedule/shiftIndices',
+      url: '/schedule/shiftIndices',
       method: "POST",
       data: shiftIndices
     }).then(function(success) {
@@ -652,7 +652,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var deferred = $q.defer();
     var obj = {'date':header.mon.val, 'eid': userId};
     $http({
-      url: '/sequoiagrove/schedule/publish/',
+      url: '/schedule/publish/',
       method: "POST",
       data: obj
     }).then(function(success) {

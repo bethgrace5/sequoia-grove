@@ -164,7 +164,7 @@ angular.module('sequoiaGroveApp')
       if (avail.day!='' && avail.start!='' && avail.end!='') {
 
         $http({
-          url: '/sequoiagrove/avail/add',
+          url: '/avail/add',
           method: "POST",
           data: avail
         }).success(function(data, status) {
@@ -212,7 +212,7 @@ angular.module('sequoiaGroveApp')
       if ($scope.employeeHasPosition(obj.eid, pid) === false) {
         // send new position to back end
         $http({
-          url: '/sequoiagrove/position/add/',
+          url: '/position/add/',
           method: "POST",
           data: obj
         }).success(function(data, status, headers, config) {
@@ -242,7 +242,7 @@ angular.module('sequoiaGroveApp')
 
         // remove availability from database
         $http({
-            url: '/sequoiagrove/avail/remove/'+
+            url: '/avail/remove/'+
                 $scope.selectedEmployee.id + '/' + day + '/' + start,
             method: "POST"
         }).success(function(data, status) {
@@ -272,7 +272,7 @@ angular.module('sequoiaGroveApp')
       // remove position from the employee (back end)
       var obj = { 'pid':pid, 'eid':eid };
       $http({
-        url: '/sequoiagrove/position/remove/',
+        url: '/position/remove/',
         method: "POST",
         data: obj
       }).success(function(data, status) {
@@ -356,7 +356,7 @@ angular.module('sequoiaGroveApp')
         $scope.selectedEmployee.notes = '';
       }
 
-      $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
+      $http.post("/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
           // upate front end
           if (action === 'add') {
@@ -403,7 +403,7 @@ angular.module('sequoiaGroveApp')
       $mdDialog.show(confirm).then(function() {
         // ok
         $http({
-          url: '/sequoiagrove/employee/deactivate/',
+          url: '/employee/deactivate/',
           method: "POST",
           data: {'id': $scope.selectedEmployee.id}
         }).success(function(data, status) {
@@ -435,7 +435,7 @@ angular.module('sequoiaGroveApp')
     // Activate (re-employ) an employee
     $scope.activateEmployee = function() {
       $http({
-        url: '/sequoiagrove/employee/activate/',
+        url: '/employee/activate/',
         method: "POST",
         data: {'id': $scope.selectedEmployee.id}
       }).success(function(data, status) {

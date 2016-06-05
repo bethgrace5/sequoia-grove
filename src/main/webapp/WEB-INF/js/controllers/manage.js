@@ -139,7 +139,7 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
     // TODO to update this shift we also need the shift id
     
-    $http({ url: '/sequoiagrove/shift/update/',
+    $http({ url: '/shift/update/',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
@@ -162,7 +162,7 @@ angular.module('sequoiaGroveApp')
     }
     $scope.saving = true;
 
-    $http({url: '/sequoiagrove/shift/add/',
+    $http({url: '/shift/add/',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
@@ -186,7 +186,7 @@ angular.module('sequoiaGroveApp')
   $scope.deleteShift = function() {
     $scope.resetShiftErrorFlags();
     $scope.saving = true;
-    $http({ url: '/sequoiagrove/shift/delete/',
+    $http({ url: '/shift/delete/',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
@@ -218,7 +218,7 @@ angular.module('sequoiaGroveApp')
 
   // delete delivery
   $scope.deleteDelivery = function(id,index) {
-    $http({ url: '/sequoiagrove/delivery/delete/'+ id,
+    $http({ url: '/delivery/delete/'+ id,
       method: "DELETE"
     }). then (function (success) {
       // remove fromj list
@@ -230,7 +230,7 @@ angular.module('sequoiaGroveApp')
 
   // add delivery
   $scope.addDelivery = function() {
-    $http({ url: '/sequoiagrove/delivery/add',
+    $http({ url: '/delivery/add',
       method: "POST",
       data: $scope.newDelivery
     }).then (function (success) {
@@ -296,7 +296,7 @@ angular.module('sequoiaGroveApp')
       $scope.newHoliday.storeCloseVal = $scope.newHoliday.close.val;
     }
 
-    $http({ url: '/sequoiagrove/holiday/add',
+    $http({ url: '/holiday/add',
       method: "POST",
       data: $scope.newHoliday
     }).then(
@@ -319,7 +319,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.getAllHolidays = function() {
-    $http({ url: '/sequoiagrove/holiday',
+    $http({ url: '/holiday',
       method: "GET"
     }).then(
       // request was successful
@@ -333,7 +333,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.deleteHoliday = function(id){
-    $http({ url: '/sequoiagrove/holiday/remove/'+id,
+    $http({ url: '/holiday/remove/'+id,
       method: "POST"
     }).then(
       // request was successful
