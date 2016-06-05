@@ -13,7 +13,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
-  if (loginFactory.isLoggedIn() == false) {
+  if (loginFactory.isLoggedIn() === false) {
     $rootScope.lastPath = $location.path();
     if ($location.path() != '/login') {
       $location.path('/login');

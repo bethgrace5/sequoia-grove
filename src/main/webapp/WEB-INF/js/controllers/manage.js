@@ -14,7 +14,7 @@ angular.module('sequoiaGroveApp')
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/manage');
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
   // The name of the active tab, by default, it will be the submit section

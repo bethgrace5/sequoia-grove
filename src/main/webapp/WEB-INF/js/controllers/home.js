@@ -23,7 +23,7 @@ angular.module('sequoiaGroveApp')
   localStorageService.set('lastPath', '/home');
 
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
 

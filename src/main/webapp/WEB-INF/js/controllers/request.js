@@ -28,7 +28,7 @@ angular.module('sequoiaGroveApp')
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/request');
   // user is not logged in
-  if ($scope.loggedIn == false) {
+  if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
 
