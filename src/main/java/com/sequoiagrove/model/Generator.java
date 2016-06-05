@@ -44,7 +44,6 @@ public class Generator{
   List<DayShiftEmployee> dayShiftEmployeeList;
   List<User> employeeList;
   List<Shift> shifts;
-  //Request requests[];
   List<Request> requests;
 
   //-----------------------------------
@@ -88,8 +87,8 @@ public class Generator{
     setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd));
     fillGenerator();
     setEmployeeList(getEmployeeInformation());
-    setShifts(getShiftInformation(this.startDate.toString()));
-    setRequests(getRequestInformation(this.startDate.toString()));
+    setShifts(getShiftInformation(this.startDate.toStringMDY()));
+    setRequests(getRequestInformation(this.startDate.toStringDMY()));
   }
 
   //-----------------------------------
@@ -191,6 +190,33 @@ public class Generator{
           cur.getShift(),
           cur.getEmployee(),
           cur.getWorked() );
+    }
+  }
+
+  public void addEmployeesByPosition() {
+    HashMap<Integer, List<Integer>> empsByPos =
+      new HashMap<Integer, List<Integer>>();
+
+    for (User emp : employeeList) {
+      for (String posStr : emp.positions) {
+        int pos = Integer.parseInt(posStr);
+        if(!empsByPos.containsKey(pos)) {
+          empsByPos.put(pos, new ArrayList<Integer>());
+        }
+        empsByPos.get(pos).add(emp.id);
+      }
+    }
+
+    for(Integer posKey : empsByPos.keySet()) {
+      for (Shift curShift : shifts) {
+        if (curShift.pid == posKey) {
+          for (int day = 1; day <= 7; day++) {
+            for (Integer emp : empsByPos.get(posKey)) {
+              addEmployee(convertDay(day), curShift.sid, emp, 0);
+            }
+          }
+        }
+      }
     }
   }
 
@@ -329,13 +355,14 @@ public class Generator{
   public void trimByRestriction(String person1, String person2){
   }
 
-  public void trimByUnavaliablity(String person1, String date){
+  public void trimByUnavaliablity(String person1, String date) {
   }
+
   public void trimByRequest(){
     //TODO: Somehow get A Request List and compare to the employees and 
     //      in the week.
     List<Request> tmpRequestList 
-      = new ArrayList<Request>(getRequestInformation(this.startDate.toString()));
+      = new ArrayList<Request>(getRequestInformation(this.startDate.toStringDMY()));
 
     Integer shift = -1;
     for (Request temp : tmpRequestList) {
@@ -346,6 +373,7 @@ public class Generator{
       }
     }
   }
+
   public void removeEmployee(Integer day, Integer shift, Integer employee){
     generator.get(day).get(shift).remove(employee);
   }

@@ -18,20 +18,52 @@ public class DateCustom {
   }
 
   // ----- Helper Functions -----
-  public String toString() {
+  public String toStringYMD() {
+    return new String(
+      yearToString() + "-" +
+      monthToString() + "-" + 
+      dayToString()
+    );
+  }
+
+  public String toStringMDY() {
+    return new String(
+      monthToString() + "-" +
+      dayToString() + "-" + 
+      yearToString()
+    );
+  }
+
+  public String toStringDMY() {
+    return new String(
+      dayToString() + "-" +
+      monthToString() + "-" + 
+      yearToString()
+    );
+  }
+
+  public String yearToString() {
     String yrStr = new String(this.year+"");
-    String mnStr = new String(this.month+"");
-    String dyStr = new String(this.day+"");
     if (this.year == -1) {
       yrStr = "inv";
     }
+    return yrStr;
+  }
+
+  public String monthToString() {
+    String mnStr = new String(this.month+"");
     if (this.month == -1) {
       mnStr = "inv";
     }
+    return mnStr;
+  }
+
+  public String dayToString() {
+    String dyStr = new String(this.day+"");
     if (this.day == -1) {
       dyStr = "inv";
     }
-    return new String(yrStr + "-" + mnStr + "-" + dyStr);
+    return dyStr;
   }
 
   // ----- Getters & Setters -----

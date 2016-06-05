@@ -16,7 +16,9 @@ public class Shift {
         this.weekday = new Duration();
         this.weekend = new Duration(); 
     }
-    public Shift(int sid, int pid, String tname,
+
+    public Shift(
+      int sid, int pid, String tname,
       String startDate, String endDate,
       String weekdayStart, String weekdayEnd, 
       String weekendStart, String weekendEnd) {
@@ -44,7 +46,7 @@ public class Shift {
     public int getPid() {
         return pid;
     }
-    public void setPid(int sid) {
+    public void setPid(int pid) {
         this.pid = pid;
     }
 

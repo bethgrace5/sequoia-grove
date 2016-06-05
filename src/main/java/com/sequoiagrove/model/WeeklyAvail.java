@@ -80,6 +80,7 @@ public class WeeklyAvail {
     public void setSun(List<Duration> sun) {
         this.sun = sun;
     }
+
     public void add(String day, String start, String end) {
 
       if (day.equals("mon")) {
