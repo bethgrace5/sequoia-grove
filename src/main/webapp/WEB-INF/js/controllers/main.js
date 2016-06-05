@@ -526,16 +526,4 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   requestFactory.registerObserverCallback(requestChange);
 
-    // insert google signin button, so the script loads
-    // when there is a loading delay
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)){ return; }
-      js = d.createElement(s); js.id = id;
-      js.onload = function(){
-          // remote script has loaded
-      };
-      js.src = "//apis.google.com/js/platform.js";
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
 });
