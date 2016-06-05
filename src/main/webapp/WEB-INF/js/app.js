@@ -68,23 +68,11 @@ angular.module('sequoiaGroveApp', [
   /* Increase application performance when false, default is true */
   $compileProvider.debugInfoEnabled(true);
 
-}).run (function( $q, $rootScope, $injector, $location, $log, $http,
+}).run (function( $q, $rootScope, $injector, $location, $log, $http, $timeout,
     localStorageService ) {
 
   // Set Development Mode - loads app more quickly by reading schedule
   // template stored in localstorage instead of pulling a new one every time.
   $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
 
-  // insert google signin button, so the script loads
-  // when there is a loading delay
-  (function(d, s, id){
-    var js, fjs = d.getElementsByTagName(s)[0];
-    if (d.getElementById(id)){ return; }
-    js = d.createElement(s); js.id = id;
-    js.onload = function(){
-        // remote script has loaded
-    };
-    js.src = "//apis.google.com/js/platform.js";
-    fjs.parentNode.insertBefore(js, fjs);
-  }(document, 'script', 'facebook-jssdk'));
 });
