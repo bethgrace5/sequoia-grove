@@ -1,7 +1,6 @@
 package com.sequoiagrove.model;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.util.*;
 import com.sequoiagrove.model.Duration;
 
 public class WeeklyAvail {
@@ -81,6 +80,58 @@ public class WeeklyAvail {
         this.sun = sun;
     }
 
+    public List<Duration> getDayAvail(String day) {
+
+      if (day.equals("mon")) {
+        return this.mon;
+      }
+      if (day.equals("tue")) {
+        return this.tue;
+      }
+      if (day.equals("wed")) {
+        return this.wed;
+      }
+      if (day.equals("thu")) {
+        return this.thu;
+      }
+      if (day.equals("fri")) {
+        return this.fri;
+      }
+      if (day.equals("sat")) {
+        return this.sat;
+      }
+      if (day.equals("sun")) {
+        return this.sun;
+      }
+      throw new IllegalArgumentException("argument: "+day);
+    }
+
+    public List<Duration> getDayAvail(int day) {
+
+      if (day == 1) {
+        return this.mon;
+      }
+      if (day == 2) {
+        return this.tue;
+      }
+      if (day == 3) {
+        return this.wed;
+      }
+      if (day == 4) {
+        return this.thu;
+      }
+      if (day == 5) {
+        return this.fri;
+      }
+      if (day == 6) {
+        return this.sat;
+      }
+      if (day == 7) {
+        return this.sun;
+      }
+      throw new IllegalArgumentException("argument: "+day);
+    }
+
     public void add(String day, String start, String end) {
 
       if (day.equals("mon")) {
@@ -104,6 +155,6 @@ public class WeeklyAvail {
       if (day.equals("sun")) {
         this.sun.add(new Duration(start, end));
       }
-
+      throw new IllegalArgumentException("argument: "+day);
     }
 };

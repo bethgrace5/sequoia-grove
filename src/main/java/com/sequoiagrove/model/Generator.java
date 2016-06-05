@@ -338,7 +338,7 @@ public class Generator{
   public String convertDay(Integer value){
     if(value == 1) return "mon";
     if(value == 2) return "tue";
-    if(value == 3) return "wen";
+    if(value == 3) return "wed";
     if(value == 4) return "thu";
     if(value == 5) return "fri";
     if(value == 6) return "sat";
@@ -346,16 +346,39 @@ public class Generator{
     return "---";
   }
 
+  public int convertDayToNum(String value){
+    if(value == "mon") return 1;
+    if(value == "tue") return 2;
+    if(value == "wed") return 3;
+    if(value == "thu") return 4;
+    if(value == "fri") return 5;
+    if(value == "sat") return 6;
+    if(value == "sun") return 7;
+    return -1;
+  }
+
   //----------------------------------
   //  Triming
   //---------------------------------
+  public void trimBySimpleChecks() {
+    for (String dayKey : generator.keySet()) {
+      for (Integer shiftKey : generator.get(dayKey).keySet()) {
+        for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
+          if(!isAvailableForShift(dayKey, shiftKey, empKey)) {
+            removeEmployee(dayKey, shiftKey, empKey);
+          }
+        }
+      }
+    }
+  }
+
   public void trimByListRestriction(){
   }
 
   public void trimByRestriction(String person1, String person2){
   }
 
-  public void trimByUnavaliablity(String person1, String date) {
+  public void trimByUnavaliablity() {
   }
 
   public void trimByRequest(){
@@ -374,8 +397,49 @@ public class Generator{
     }
   }
 
-  public void removeEmployee(Integer day, Integer shift, Integer employee){
+  public void removeEmployee(String day, Integer shift, Integer employee){
     generator.get(day).get(shift).remove(employee);
+  }
+
+  public boolean isAvailableForShift(String day, int sid, int eid) {
+    List<Duration> avail = new ArrayList<Duration>();
+    Duration shiftTime = new Duration();
+
+    boolean found = false;
+    for (User emp : employeeList) {
+      if (emp.id == eid) {
+        avail = emp.avail.getDayAvail(day);
+        found = true;
+      }
+    }
+    if (!found) throw new IllegalArgumentException("eid: "+eid);
+
+    found = false;
+    for (Shift sft : shifts) {
+      if (sft.sid == sid) {
+        if (day == "sat" || day == "sun") {
+          shiftTime = sft.weekend;
+        }
+        else {
+          shiftTime = sft.weekday;
+        }
+        found = true;
+      }
+    }
+    if (!found) throw new IllegalArgumentException("sid: "+sid);
+
+    for (Duration cur : avail) {
+      if (shiftTime.isWithin(cur)) return true;
+    }
+    return false;
+  }
+
+  public boolean isOnVacation(String day, int eid) {
+    DateCustom currentDay = startDate.add(convertDayToNum(day) - 1);
+    // search requests off for eid and duration
+    // if duration includes currentDay, return true
+    // else return false
+    return false;
   }
 
   //----------------------------------

@@ -9,6 +9,7 @@ public class Duration{
     DateCustom endDate;
 
     // ----- Constructors -----
+    //
     public Duration(){
       this.startDate = new DateCustom();
       this.endDate = new DateCustom();
@@ -59,6 +60,7 @@ public class Duration{
     }
 
     // ----- Helper Functions -----
+    //
     public DateCustom parseDateString(String dateStr) {
       if (dateStr == null) {
         return new DateCustom();
@@ -95,26 +97,7 @@ public class Duration{
     }
 
     // ----- Comparison Functions -----
-    public boolean timeOverlapsWith(int rvStart, int rvEnd) {
-      return (this.startNum <= rvEnd && this.endNum >= rvStart);
-    }
-
-    public boolean dateOverlapsWith(DateCustom rvStart, DateCustom rvEnd) {
-      return (
-        this.startDate.lessThanEqual(rvEnd) &&
-        this.endDate.greaterThanEqual(rvStart) );
-    }
-
-    public boolean timeIsWithin(int rvStart, int rvEnd) {
-      return (this.startNum >= rvStart && this.endNum <= rvEnd);
-    }
-
-    public boolean dateIsWithin(DateCustom rvStart, DateCustom rvEnd) {
-      return (
-        this.startDate.greaterThanEqual(rvStart) &&
-        this.endDate.lessThanEqual(rvEnd) );
-    }
-
+    //
     public boolean overlapsWith(Duration rVal) {
       if(this.bothUsingNums(rVal)) {
         return timeOverlapsWith(rVal.startNum, rVal.endNum);
@@ -167,7 +150,28 @@ public class Duration{
         "parameter is not using same Duration type as this object");
     }
 
+    public boolean timeOverlapsWith(int rvStart, int rvEnd) {
+      return (this.startNum <= rvEnd && this.endNum >= rvStart);
+    }
+
+    public boolean dateOverlapsWith(DateCustom rvStart, DateCustom rvEnd) {
+      return (
+        this.startDate.lessThanEqual(rvEnd) &&
+        this.endDate.greaterThanEqual(rvStart) );
+    }
+
+    public boolean timeIsWithin(int rvStart, int rvEnd) {
+      return (this.startNum >= rvStart && this.endNum <= rvEnd);
+    }
+
+    public boolean dateIsWithin(DateCustom rvStart, DateCustom rvEnd) {
+      return (
+        this.startDate.greaterThanEqual(rvStart) &&
+        this.endDate.lessThanEqual(rvEnd) );
+    }
+
     // ----- Getters & Setters -----
+    //
     public void setStart(String start) {this.start = start;}
     public String getStart() {return start;}
 
