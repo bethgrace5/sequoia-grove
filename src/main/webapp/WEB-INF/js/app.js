@@ -84,9 +84,6 @@ angular.module('sequoiaGroveApp', [
       js = d.createElement(s); js.id = id;
       js.onload = function(){
         // remote script has loaded, add a signin listener
-        $timeout(function() {
-          gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
-        },100);
       };
       js.src = "//apis.google.com/js/platform.js";
       fjs.parentNode.insertBefore(js, fjs);
