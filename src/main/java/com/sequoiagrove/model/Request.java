@@ -5,34 +5,38 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class Request {
     int eid;
-    String startDate;
-    String endDate;
+    Duration timeOff;
 
-    public Request(){}
+    public Request(){
+        this.timeOff = new Duration();
+    }
+    public Request(int eid, Duration timeOff) {
+        this.eid = eid;
+        this.timeOff = timeOff;
+    }
     public Request(int eid, String startDate, String endDate) {
         this.eid = eid;
-        this.startDate = startDate;
-        this.endDate = endDate;
+        this.timeOff = new Duration(startDate, endDate);
     }
 
-    public void setEid(int id) {
-        this.eid = eid;
-    }
-    public int getEid() {
-        return eid;
-    }
+    // ----- Getters & Setters -----
+    public void setEid(int id) {this.eid = eid;}
+    public int getEid() {return eid;}
 
+    public void setTimeOff(Duration timeOff) {this.timeOff = timeOff;}
+    public Duration getTimeOff() {return this.timeOff;}
+
+    public String getStartDateString() {
+        return this.timeOff.startDate.toString();
+    }
     public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-    public String getStartDate() {
-      return this.startDate;
+        this.timeOff.setStartDate(startDate);
     }
 
-    public void setEndDate(String startDate) {
-        this.endDate = endDate;
+    public String getEndDateString() {
+        return this.timeOff.endDate.toString();
     }
-    public String getEndDate(){
-      return this.endDate;
+    public void setEndDate(String endDate) {
+        this.timeOff.setEndDate(endDate);
     }
 }

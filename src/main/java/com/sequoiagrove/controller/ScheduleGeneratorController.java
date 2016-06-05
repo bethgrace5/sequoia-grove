@@ -78,6 +78,7 @@ public class ScheduleGeneratorController {
   void listEmployeeOnSlot(String date, int pid){
     //Function to input data into a hashtable
   }
+
   void insert(String date){
 
   }
@@ -104,10 +105,7 @@ public class ScheduleGeneratorController {
       final String historyEnd = jobject.get("historyEnd").getAsString();
 
       Generator generator;
-      generator = new Generator();
-      generator.getPastInformation(historyStart, historyEnd);
-      generator.getEmployeeInformation(historyStart, historyEnd); // !!! WRONG DATES !!!
-      generator.getShiftInformation(mon);
+      generator = new Generator(mon, historyStart, historyEnd);
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)
@@ -115,7 +113,6 @@ public class ScheduleGeneratorController {
       // Trim hash maps by Requests Off and Availabilities
 
       // Construct schedule template using {mon} to get correct shifts
-      // !!!!! all employees are null/0, check if mon is passed correctly !!!!!
       List<ScheduleTemplate> schTempList = jdbcTemplate.query(
         "select * from sequ_get_schedule(?)",
         new Object[]{mon},

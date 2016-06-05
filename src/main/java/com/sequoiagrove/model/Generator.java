@@ -27,154 +27,236 @@ import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Shift;
+import com.sequoiagrove.model.ShiftRowMapper;
 
 public class Generator{
   //-------------------------
   //  Variables_Hold
   //-------------------------
   HashMap
-    <String, HashMap<Integer, HashMap<Integer, Integer> > > generator;
+    <String, HashMap <Integer, HashMap <Integer, Integer>>> generator;
   //[Day [ Shift [Employee, number of weeks scheduled] ] ]
   //
-  List<User> employeeList;
 
   String startDate;
   String endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
+  List<User> employeeList;
   List<Shift> shifts;
-  Request requests[];
+  //Request requests[];
+  List<Request> requests;
 
   //-----------------------------------
-  //  Building
+  //  Constructors
   //-----------------------------------
   public Generator(){
     generator = new HashMap
-      <String, HashMap<Integer, HashMap<Integer, Integer> > >();
+      <String, HashMap <Integer, HashMap <Integer, Integer>>>();
     startDate = "dog";
     endDate = "cat";
   }
 
-  public void addDay(String day){
+  public Generator(
+    HashMap
+      <String, HashMap <Integer, HashMap <Integer, Integer>>> generator,
+    String startDate,
+    String endDate,
+    List<DayShiftEmployee> dayShiftEmployeeList,
+    List<User> employeeList,
+    List<Shift> shifts,
+    //Request requests[]
+    List<Request> requests
+  ) {
+    this.generator = generator;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.dayShiftEmployeeList = dayShiftEmployeeList;
+    this.employeeList = employeeList;
+    this.shifts = shifts;
+    this.requests = requests;
+  }
+
+  public Generator(
+    final String mon, final String historyStart, final String historyEnd
+  ) {
+    generator = new HashMap
+      <String, HashMap <Integer, HashMap <Integer, Integer>>>();
+    setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd));
+    fillGenerator();
+    setEmployeeList(getEmployeeInformation());
+    setShifts(getShiftInformation(mon));
+    setRequests(getRequestInformation(mon));
+    startDate = mon;
+    //endDate = historyEnd; // ?? not sure if needed ??
+  }
+
+  //-----------------------------------
+  //  Getters & Setters
+  //-----------------------------------
+  public void setGenerator(HashMap
+    <String, HashMap <Integer, HashMap <Integer, Integer>>> generator)
+  {
+    this.generator = generator;
+  }
+  public HashMap getGenerator() {
+    return generator;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
+  }
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setDayShiftEmployeeList(List<DayShiftEmployee> dayShiftEmployeeList) {
+    this.dayShiftEmployeeList = dayShiftEmployeeList;
+  }
+  public List<DayShiftEmployee> getDayShiftEmployeeList() {
+    return dayShiftEmployeeList;
+  }
+
+  public void setEmployeeList(List<User> employeeList) {
+    this.employeeList = employeeList;
+  }
+  public List<User> getEmployeeList() {
+    return employeeList;
+  }
+
+  public void setShifts(List<Shift> shifts) {
+    this.shifts = shifts;
+  }
+  public List<Shift> getShifts() {
+    return shifts;
+  }
+
+  public void setRequests(List<Request> requests) {
+    this.requests = requests;
+  }
+  public List<Request> getRequests() {
+    return requests;
+  }
+
+  //-----------------------------------
+  //  Building HashMap
+  //-----------------------------------
+  public void addDay(String day) {
     if(generator.containsKey(day)) return;
     generator.put(day, new HashMap<Integer, HashMap<Integer, Integer>>());
   }
 
-  public void addShift(String day, Integer shift){
+  public void addShift(String day, Integer shift) {
     if(!generator.containsKey(day)) return;
     if(generator.get(day).containsKey(shift)) return;
     generator.get(day).put(shift, new HashMap<Integer, Integer>());
   }
 
-  public void addEmployee(String  day,
+  public void addEmployee(
+      String  day,
       Integer shift,
       Integer employee,
-      Integer amount){
-
+      Integer amount
+  ) {
     if(!generator.containsKey(day)) return;
     if(!generator.get(day).containsKey(shift)) return;
     if(generator.get(day).get(shift).containsKey(employee)) return;
     generator.get(day).get(shift).put(employee, amount);
   }
 
-  public void add(String  day,
+  public void add(
+      String  day,
       Integer shift,
       Integer employee,
-      Integer amount){
+      Integer amount
+  ) {
     //This Is Diffrent from addEmployee, as it calls all other 3
     //function to build while making sure keys exists for eachother
     addDay(day);
     addShift(day, shift);
     addEmployee(day, shift, employee,  amount);
+  }
 
+  public void fillGenerator() {
+    for (DayShiftEmployee cur : dayShiftEmployeeList) {
+      add(convertDay(cur.getDay()),
+          cur.getShift(),
+          cur.getEmployee(),
+          cur.getWorked() );
+    }
+    //printFormation();
   }
 
   //----------------------------------
   //  Database_Gathering
   //---------------------------------
-  public void getPastInformation(String startDate, String endDate){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      dayShiftEmployeeList = jdbcTemplate.query(
-        " select day, shift_id, user_id, count(*) AS worked" +
-        " from sequ_employee_shift_view " +
-        " where on_date >= '2016-03-21' AND on_date <= '2016-04-15' " +
-        " group by day, shift_id, user_id " +
-        " order by day, shift_id, user_id ",
-          new RowMapper<DayShiftEmployee>() {
-            public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
-              DayShiftEmployee es = new DayShiftEmployee(
-                rs.getInt("day"),
-                rs.getInt("shift_id"),
-                rs.getInt("user_id"),
-                rs.getInt("worked")
-              );
-            return es;
-          }
-        }, startDate, endDate);
-    for (int i = 0; i < dayShiftEmployeeList.size(); i++) {
-      add(convertDay(dayShiftEmployeeList.get(i).getDay()),
-          dayShiftEmployeeList.get(i).getShift(),
-          dayShiftEmployeeList.get(i).getEmployee(),
-          dayShiftEmployeeList.get(i).getWorked() );
-    }
-    printFormation();
+  public List<DayShiftEmployee> getPastInformation(String startDate, String endDate) {
+    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    List<DayShiftEmployee> temp = jdbcTemplate.query(
+      " select day, shift_id, user_id, count(*) AS worked" +
+      " from sequ_employee_shift_view" +
+      " where on_date >= to_date(?, 'dd-mm-yyyy')" +
+      " AND on_date <= to_date(?, 'dd-mm-yyyy')" +
+      " group by day, shift_id, user_id" +
+      " order by day, shift_id, user_id",
+      new Object[]{startDate, endDate},
+      new RowMapper<DayShiftEmployee>() {
+        public DayShiftEmployee mapRow(ResultSet rs, int rowNum) throws SQLException {
+          DayShiftEmployee es = new DayShiftEmployee(
+            rs.getInt("day"),
+            rs.getInt("shift_id"),
+            rs.getInt("user_id"),
+            rs.getInt("worked")
+          );
+          return es;
+        }
+      }
+    );
+    return temp;
   }
 
-  public List<User> getEmployeeInformation(String startDate, String endDate){
+  public List<User> getEmployeeInformation(){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       String queryStr = "select * from sequ_user_info_view";
-      List<User> empList = jdbcTemplate.query( queryStr, new UserRowMapper());
+      List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
       return empList;
   }
 
-
-  public void getRequest(String startDate, String endDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    List<RequestStatus> requestList = jdbcTemplate.query(
-        "select * from request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy' AND" +
-        "       end_date_time >= to_date(?, 'mm-dd-yyyy') ",
-        new RowMapper<RequestStatus>() {
-          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-            RequestStatus es = new RequestStatus(
-              rs.getInt("rid"),
-              rs.getInt("requested_by"),
-              rs.getInt("responded_by"),
-              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-              rs.getString("start_date_time"),
-              rs.getString("end_date_time"),
-              rs.getString("requester_first_name"),
-              rs.getString("requester_last_name"),
-              rs.getString("responder_first_name"),
-              rs.getString("responder_last_name")
-              );
-            return es;
-          }
-        }, startDate, endDate);
+  public List<Shift> getShiftInformation(String mon) {
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      String queryStr = "select * from sequ_get_current_shifts(?)";
+      List<Shift> shiftList = jdbcTemplate.query(
+        queryStr,
+        new Object[]{mon},
+        new ShiftRowMapper());
+      return shiftList;
   }
 
-    public List<RequestStatus> getRequestObject(String startDate, String endDate){
+  public List<Request> getRequestInformation(String startDate){
     JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-    List<RequestStatus> requestList = jdbcTemplate.query(
-        "select * from request_view " +
-        " where start_date_time <= to_date(?, 'mm-dd-yyyy' AND" +
-        "       end_date_time >= to_date(?, 'mm-dd-yyyy') ",
-        new RowMapper<RequestStatus>() {
-          public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-            RequestStatus es = new RequestStatus(
-              rs.getInt("rid"),
-              rs.getInt("requested_by"),
-              rs.getInt("responded_by"),
-              checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-              rs.getString("start_date_time"),
-              rs.getString("end_date_time"),
-              rs.getString("requester_first_name"),
-              rs.getString("requester_last_name"),
-              rs.getString("responder_first_name"),
-              rs.getString("responder_last_name")
-              );
-            return es;
-          }
-        }, startDate, endDate);
+    List<Request> requestList = jdbcTemplate.query(
+      "select * from sequ_request_view " +
+      " where start_date_time <= to_date(?, 'dd-mm-yyyy')+integer'7'" +
+      " AND end_date_time >= to_date(?, 'dd-mm-yyyy')" +
+      " AND is_approved = true",
+      new Object[]{startDate, startDate},
+      new RowMapper<Request>() {
+        public Request mapRow(ResultSet rs, int rowNum) throws SQLException {
+          Request es = new Request(
+            rs.getInt("requested_by"),
+            rs.getString("start_date_time"),
+            rs.getString("end_date_time")
+          );
+          return es;
+        }
+      }
+    );
     return requestList;
   }
 
@@ -226,11 +308,6 @@ public class Generator{
     return new ArrayList<String>(Arrays.asList(pos.split(",")));
   }
 
-  public void getShiftInformation(String mon) {
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-  }
-
   public String convertDay(Integer value){
     if(value == 1) return "mon";
     if(value == 2) return "tue";
@@ -256,6 +333,17 @@ public class Generator{
   public void trimByRequest(){
     //TODO: Somehow get A Request List and compare to the employees and 
     //      in the week.
+    List<Request> tmpRequestList 
+      = new ArrayList<Request>(getRequestInformation(startDate));
+
+    Integer shift = -1;
+    for (Request temp : tmpRequestList) {
+      //TODO: new Request Object that has days instead of dates
+      //shift = getShiftWithEmployee(temp.getEid, temp.getDay)
+      if(shift > 0){
+        //removeEmployee(temp.day, shift, temp.Eid);
+      }
+    }
   }
   public void removeEmployee(Integer day, Integer shift, Integer employee){
     generator.get(day).get(shift).remove(employee);
@@ -267,18 +355,33 @@ public class Generator{
   // use this as a temporary way place to add function
   //
   public boolean checkEmployeeIf(
-      String  day,
-      Integer shift, 
-      Integer employee1,
-      Integer employee2){
+    String  day,
+    Integer shift, 
+    Integer employee1,
+    Integer employee2)
+  {
     if(generator.get(day).get(shift).containsKey(employee1) &&
-        generator.get(day).get(shift).containsKey(employee2)){
-
-      return true;
-        }
+      generator.get(day).get(shift).containsKey(employee2))
+    { return true; }
     return false;
-      }
+  }
 
+  int getShiftWithEmployee(String name, String dayKey){
+      for (Integer shiftKey : generator.get(dayKey).keySet()) {
+        for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
+          if(generator.get(dayKey).get(shiftKey).containsKey(name)){
+            return shiftKey;
+          }
+        }
+      }
+    return -1;
+  }
+  void searchEmployee(String name, String dayKey){
+    //TODO: need to revise this
+    Integer shiftAt = getShiftWithEmployee(name, dayKey);
+    if(shiftAt < 0) return;
+    generator.get(dayKey).get(shiftAt).remove(name);
+  }
   //----------------------------------
   // Testing
   //----------------------------------
@@ -303,17 +406,112 @@ public class Generator{
   }
 
   public void printFormation(){
+    System.out.println("DAY");
+    System.out.println("   SHIFT: {EMP, AMT}, {EMP, AMT}, ...");
     for (String dayKey : generator.keySet()) {
       System.out.println(dayKey);
 
       for (Integer shiftKey : generator.get(dayKey).keySet()) {
-        System.out.println("   " + shiftKey);
+        System.out.printf("   %-5d: ", shiftKey);
 
         for (Integer empKey : generator.get(dayKey).get(shiftKey).keySet()){
-          System.out.println("      " + empKey + " " +
+          System.out.printf("{%-3d, %-3d}, ", empKey,
               generator.get(dayKey).get(shiftKey).get(empKey));
         }
+        System.out.printf("\n");
       }
+    }
+  }
+
+  public void printShiftList() {
+    System.out.println("SID PID TNAME");
+    System.out.println("  STARTDATE   ENDDATE     WDSTART WDEND  WESTART WEEND");
+    for (Shift cur : shifts) {
+      System.out.printf(
+        "\n%-3d %-3d %-30s\n  %-11s %-11s %-6d %-6d %-6d %-6d\n",
+        cur.getSid(),
+        cur.getPid(),
+        cur.getTname(),
+        cur.active.getStartDate(),
+        cur.active.getEndDate(),
+        cur.getWeekdayStart(),
+        cur.getWeekdayEnd(),
+        cur.getWeekendStart(),
+        cur.getWeekendEnd()
+      );
+    }
+  }
+
+  public void printDayShiftEmployeeList() {
+    System.out.println("DAY SHIFT EMP WORKED");
+    for (DayShiftEmployee cur : dayShiftEmployeeList) {
+      System.out.printf("%-3d %-5d %-3d %-6d\n",
+        cur.getDay(), cur.getShift(), cur.getEmployee(), cur.getWorked()
+      );
+    }
+  }
+
+  public void printRequestList() {
+    System.out.println("EID START_DATE END_DATE");
+    for (Request cur : requests) {
+      System.out.printf(
+        "%-3d %-10s %-10s\n",
+        cur.getEid(), cur.timeOff.getStartDate(), cur.timeOff.getEndDate()
+      );
+    }
+  }
+
+  public void printEmployeeList() {
+    System.out.println("EMP FIRST_NAME LAST_NAME IS_CURRENT");
+    System.out.println("  DAY{START-STOP,...} ...");
+    System.out.println("  PID,...");
+    for (User cur : employeeList) {
+      System.out.printf(
+        "\n%-3d %-10s %-10s %b\n  ",
+        cur.getId(), cur.getFirstname(), cur.getLastname(), cur.getIsCurrent()
+      );
+      WeeklyAvail avl = cur.getAvail();
+
+      System.out.printf("mon{");
+      for (Duration dur : avl.getMon()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("tue{");
+      for (Duration dur : avl.getTue()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("wed{");
+      for (Duration dur : avl.getWed()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("thu{");
+      for (Duration dur : avl.getThu()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("fri{");
+      for (Duration dur : avl.getFri()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("sat{");
+      for (Duration dur : avl.getSat()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}  ");
+      System.out.printf("sun{");
+      for (Duration dur : avl.getSun()) {
+        System.out.printf("%-4d-%-4d, ", dur.getStartNum(), dur.getEndNum());
+      }
+      System.out.printf("}\n");
+
+      for (String pos : cur.getPositions()) {
+        System.out.printf("  %s, ", pos);
+      }
+      System.out.printf("\n");
     }
   }
 
