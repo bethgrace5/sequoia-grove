@@ -235,11 +235,14 @@ angular.module('sequoiaGroveApp')
       url: '/sequoiagrove/request/submit/',
     method: "POST",
     data: JSON.stringify(obj)
-    })
-    .success(function (data, status, headers, config) {
+    }).success(function (data, status, headers, config) {
       requestFactory.init().then(function(success) {
-        $scope.pendingRequests = success.requestStatus;
-        return $scope.getAllRequests();
+        //$log.debug(success);
+        $timeout(function() {
+          requestFactory.init().then(function(success) {
+            //return $scope.getAllRequests()
+          })
+        },300)
       })
     });
   }

@@ -490,8 +490,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.hourCount = scheduleFactory.getHourCount();
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
-      $scope.pendingRequests = requestFactory.getPending();
-      $rootScope.requestsNum = requestFactory.getNumberPending();
     }
     $timeout(function() {
       $scope.date = scheduleFactory.getHeader();
@@ -500,13 +498,15 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.loadingWeek = false;
 
       if (loginFactory.getUser().isManager) {
+        $scope.pendingRequests = requestFactory.getPending();
+        $rootScope.requestsNum = requestFactory.getNumberPending();
         $scope.employees = userFactory.getUsers();
         $scope.initPositionsSchedule();
         $scope.initAvailSchedule();
         $scope.initIsCurrentSchedule();
       }
       $rootScope.$apply();
-    });
+    }, 200);
 
   };
   scheduleFactory.registerObserverCallback(updateChangesMade);
@@ -522,8 +522,24 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   var requestChange = function() {
     $scope.requestsNum = requestFactory.getNumberPending();
+    $scope.pendingRequests = requestFactory.getPending();
   };
 
   requestFactory.registerObserverCallback(requestChange);
+
+  // insert google signin button, so the script loads
+  // when there is a loading delay
+  $timeout(function() {
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)){ return; }
+      js = d.createElement(s); js.id = id;
+      js.onload = function(){
+        // remote script has loaded, add a signin listener
+      };
+      js.src = "//apis.google.com/js/platform.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'))
+  })
 
 });

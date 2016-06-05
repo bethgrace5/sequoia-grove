@@ -8,7 +8,7 @@
  */
 
 angular.module('sequoiaGroveApp')
-.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory, $timeout) {
+.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory, $timeout, loginFactory) {
   var ctrl = this;
 
   /****************** Check and Balances ****************************/

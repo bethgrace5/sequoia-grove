@@ -20,17 +20,10 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   $rootScope.loggingIn = false;
   $scope.initiate = false;
 
-  // wait until gapi is defined, then add a signin listener
-  function addListener() {
-    if (typeof(gapi) !== 'undefined') {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
-    }
-    else {
-      $timeout(function() {
-        addListener();
-      },100)
-    }
-  }
+  // wait until gapi is defined, then add a signin/out listener
+  $timeout(function() {
+    gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
+  }, 900);
 
   // user signs in
   function onSignIn(googleUser) {
@@ -166,5 +159,4 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       return requestFactory.init(); // get deliveries
     })
   }
-  addListener();
 });
