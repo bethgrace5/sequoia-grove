@@ -43,4 +43,106 @@ public class DateCustom {
 
   public void setDay(int day) {this.day = day;}
   public int getDay() {return day;}
+
+  // ----- Arithmetic Functions -----
+  public DateCustom add(DateCustom rVal) {
+    return new DateCustom(
+      this.year + rVal.year,
+      this.month + rVal.month,
+      this.day + rVal.day
+    );
+  }
+
+  public DateCustom subtract(DateCustom rVal) {
+    return new DateCustom(
+      this.year - rVal.year,
+      this.month - rVal.month,
+      this.day - rVal.day
+    );
+  }
+
+  // ----- Comparison Functions -----
+  public boolean lessThan(DateCustom rVal) {
+    if (this.year < rVal.year) return true;
+    if (this.year > rVal.year) return false;
+    if (this.month < rVal.month) return true;
+    if (this.month > rVal.month) return false;
+    if (this.day < rVal.day) return true;
+    return false;
+  }
+
+  public boolean greaterThan(DateCustom rVal) {
+    if (this.year > rVal.year) return true;
+    if (this.year < rVal.year) return false;
+    if (this.month > rVal.month) return true;
+    if (this.month < rVal.month) return false;
+    if (this.day > rVal.day) return true;
+    return false;
+  }
+
+  public boolean lessThanEqual(DateCustom rVal) {
+    if (
+      this.year == rVal.year &&
+      this.month == rVal.month &&
+      this.day == rVal.day
+    ) return true;
+    if (this.year < rVal.year) return true;
+    if (this.year > rVal.year) return false;
+    if (this.month < rVal.month) return true;
+    if (this.month > rVal.month) return false;
+    if (this.day < rVal.day) return true;
+    return false;
+  }
+
+  public boolean greaterThanEqual(DateCustom rVal) {
+    if (
+      this.year == rVal.year &&
+      this.month == rVal.month &&
+      this.day == rVal.day
+    ) return true;
+    if (this.year > rVal.year) return true;
+    if (this.year < rVal.year) return false;
+    if (this.month > rVal.month) return true;
+    if (this.month < rVal.month) return false;
+    if (this.day > rVal.day) return true;
+    return false;
+  }
+
+  public int compareYear(DateCustom rVal) {
+    if(this.year > rVal.year) return 1;
+    if(this.year < rVal.year) return -1;
+    return 0;
+  }
+
+  public int compareMonth(DateCustom rVal) {
+    if(this.month > rVal.month) return 1;
+    if(this.month < rVal.month) return -1;
+    return 0;
+  }
+
+  public int compareDay(DateCustom rVal) {
+    if(this.day > rVal.day) return 1;
+    if(this.day < rVal.day) return -1;
+    return 0;
+  }
+
+  public int compare(DateCustom rVal) {
+    if (this.year == rVal.year) {
+      if (this.month == rVal.month) {
+        if (this.day == rVal.day) return 0;
+        else {
+          if (this.day > rVal.day) return 1;
+          else return -1;
+        }
+      }
+      else {
+        if (this.month > rVal.month) return 1;
+        else return -1;
+      }
+    }
+    else {
+      if (this.year > rVal.year) return 1;
+      else return -1;
+    }
+  }
 };
