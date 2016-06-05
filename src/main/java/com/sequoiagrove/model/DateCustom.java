@@ -44,6 +44,33 @@ public class DateCustom {
   public void setDay(int day) {this.day = day;}
   public int getDay() {return day;}
 
+  public void setStringDMY(String dateStr) {
+      if (dateStr == null) return;
+      String delims = "[-]+";
+      String[] tokens = dateStr.split(delims);
+      this.year = Integer.parseInt(tokens[2]);
+      this.month = Integer.parseInt(tokens[1]);
+      this.day = Integer.parseInt(tokens[0]);
+  }
+
+  public void setStringMDY(String dateStr) {
+      if (dateStr == null) return;
+      String delims = "[-]+";
+      String[] tokens = dateStr.split(delims);
+      this.year = Integer.parseInt(tokens[2]);
+      this.month = Integer.parseInt(tokens[0]);
+      this.day = Integer.parseInt(tokens[1]);
+  }
+
+  public void setStringYMD(String dateStr) {
+      if (dateStr == null) return;
+      String delims = "[-]+";
+      String[] tokens = dateStr.split(delims);
+      this.year = Integer.parseInt(tokens[0]);
+      this.month = Integer.parseInt(tokens[1]);
+      this.day = Integer.parseInt(tokens[2]);
+  }
+
   // ----- Arithmetic Functions -----
   public DateCustom add(DateCustom rVal) {
     return new DateCustom(

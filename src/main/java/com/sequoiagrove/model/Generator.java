@@ -23,11 +23,12 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
 import com.sequoiagrove.controller.MainController;
-import com.sequoiagrove.model.User;
-import com.sequoiagrove.model.UserRowMapper;
+import com.sequoiagrove.model.DateCustom;
 import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Shift;
 import com.sequoiagrove.model.ShiftRowMapper;
+import com.sequoiagrove.model.User;
+import com.sequoiagrove.model.UserRowMapper;
 
 public class Generator{
   //-------------------------
@@ -38,8 +39,8 @@ public class Generator{
   //[Day [ Shift [Employee, number of weeks scheduled] ] ]
   //
 
-  String startDate;
-  String endDate;
+  DateCustom startDate;
+  DateCustom endDate;
   List<DayShiftEmployee> dayShiftEmployeeList;
   List<User> employeeList;
   List<Shift> shifts;
@@ -52,19 +53,18 @@ public class Generator{
   public Generator(){
     generator = new HashMap
       <String, HashMap <Integer, HashMap <Integer, Integer>>>();
-    startDate = "dog";
-    endDate = "cat";
+    this.startDate = new DateCustom();
+    this.endDate = new DateCustom();
   }
 
   public Generator(
     HashMap
       <String, HashMap <Integer, HashMap <Integer, Integer>>> generator,
-    String startDate,
-    String endDate,
+    DateCustom startDate,
+    DateCustom endDate,
     List<DayShiftEmployee> dayShiftEmployeeList,
     List<User> employeeList,
     List<Shift> shifts,
-    //Request requests[]
     List<Request> requests
   ) {
     this.generator = generator;
@@ -79,15 +79,17 @@ public class Generator{
   public Generator(
     final String mon, final String historyStart, final String historyEnd
   ) {
+    this.startDate = new DateCustom();
+    this.startDate.setStringDMY(mon);
+
     generator = new HashMap
       <String, HashMap <Integer, HashMap <Integer, Integer>>>();
+
     setDayShiftEmployeeList(getPastInformation(historyStart, historyEnd));
     fillGenerator();
     setEmployeeList(getEmployeeInformation());
-    setShifts(getShiftInformation(mon));
-    setRequests(getRequestInformation(mon));
-    startDate = mon;
-    //endDate = historyEnd; // ?? not sure if needed ??
+    setShifts(getShiftInformation(this.startDate.toString()));
+    setRequests(getRequestInformation(this.startDate.toString()));
   }
 
   //-----------------------------------
@@ -102,17 +104,17 @@ public class Generator{
     return generator;
   }
 
-  public void setStartDate(String startDate) {
+  public void setStartDate(DateCustom startDate) {
     this.startDate = startDate;
   }
-  public String getStartDate() {
+  public DateCustom getStartDate() {
     return startDate;
   }
 
-  public void setEndDate(String endDate) {
+  public void setEndDate(DateCustom endDate) {
     this.endDate = endDate;
   }
-  public String getEndDate() {
+  public DateCustom getEndDate() {
     return endDate;
   }
 
@@ -190,7 +192,6 @@ public class Generator{
           cur.getEmployee(),
           cur.getWorked() );
     }
-    //printFormation();
   }
 
   //----------------------------------
@@ -334,7 +335,7 @@ public class Generator{
     //TODO: Somehow get A Request List and compare to the employees and 
     //      in the week.
     List<Request> tmpRequestList 
-      = new ArrayList<Request>(getRequestInformation(startDate));
+      = new ArrayList<Request>(getRequestInformation(this.startDate.toString()));
 
     Integer shift = -1;
     for (Request temp : tmpRequestList) {
