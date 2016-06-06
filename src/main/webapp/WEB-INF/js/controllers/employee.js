@@ -112,6 +112,7 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.selectEmployee = function(id) {
+      $scope.resetEmployeeErrorFlags();
 
       var length = $scope.employees.length;
       for(var i = 0; i < length; i++) {

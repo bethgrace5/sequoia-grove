@@ -1,5 +1,6 @@
 
-<div class="row request-title">
+
+<div ng-show="requestsNum > 0" class="row request-title">
   <div class="col-sm-2">
     <p> Employee </p>
   </div>
@@ -14,8 +15,12 @@
   </div>
 </div>
 
+<div ng-hide="requestsNum > 0" class="text-center">
+  <hr/>
+  <p class="lead"> no pending requests </p>
+</div>
 
-<div  ng-repeat="request in pendingRequests">
+<div ng-repeat="request in pendingRequests">
   <br/>
   <div class="row">
     <div class="col-sm-2">
