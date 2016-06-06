@@ -428,6 +428,13 @@ public class Generator{
     }
     if (!found) throw new IllegalArgumentException("sid: "+sid);
 
+    /*System.out.printf("DAY: %s, SID: %d, EID: %d   ", day, sid, eid);
+    System.out.printf("AVAIL: ");
+    for (Duration cur : avail) {
+      System.out.printf("{%s}, ", cur.toString());
+    }
+    System.out.printf("   SHIFT_TIME: %s\n", shiftTime.toString());*/
+
     for (Duration cur : avail) {
       if (shiftTime.isWithin(cur)) return true;
     }

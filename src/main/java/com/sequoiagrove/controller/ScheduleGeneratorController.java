@@ -48,7 +48,7 @@ import org.springframework.transaction.TransactionStatus;
 public class ScheduleGeneratorController {
   //Schedule Page
   //  for each slot (day, pid) check a given amount of  weeks
-  //    for each employee who work that day. 
+  //    for each employee who work that day.
   //    i think it would look like this
   //    slot 1 [ eid, day, pid, amounts of time works on that slot]
   //           [ 001, mon, 1  , 3]
@@ -70,7 +70,7 @@ public class ScheduleGeneratorController {
   //           [ 001, tue, 1  , 1]
   //           [ 003, tue, 1  , 4]
   void generate(){
-    //Hashmap testing 
+    //Hashmap testing
     //      [key date [key pid [key eid, amount of times work] ] ]
 
   }
@@ -106,11 +106,10 @@ public class ScheduleGeneratorController {
 
       Generator generator;
       generator = new Generator(mon, historyStart, historyEnd);
-      generator.printShiftList();
-      generator.printEmployeeList();
       generator.addEmployeesByPosition();
+      generator.printEmployeeList();
+      generator.printFormation();
       generator.trimBySimpleChecks();
-      //generator.printFormation();
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)
@@ -149,7 +148,7 @@ public class ScheduleGeneratorController {
 
       Integer count = jdbcTemplate.queryForObject(
           "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
-      
+
       // Insert employees into shift slots using AI
 
       model.addAttribute("ispublished", (count!=null && count > 0));
@@ -203,4 +202,3 @@ public class ScheduleGeneratorController {
       generator.printFormation();
   }
 }
-

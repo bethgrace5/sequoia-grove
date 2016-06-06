@@ -61,6 +61,16 @@ public class Duration{
 
     // ----- Helper Functions -----
     //
+    public String toString() {
+      if (usingNums()) {
+        return new String(startNum+"-"+endNum);
+      }
+      else if (usingDates()) {
+        return new String(startDate.toStringMDY()+" - "+endDate.toStringMDY());
+      }
+      else return new String("invalid Duration");
+    }
+
     public DateCustom parseDateString(String dateStr) {
       if (dateStr == null) {
         return new DateCustom();
