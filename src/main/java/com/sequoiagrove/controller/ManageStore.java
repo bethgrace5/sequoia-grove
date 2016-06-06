@@ -105,13 +105,17 @@ public class ManageStore {
             pid = jobject.get("pid").getAsInt();
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
+                model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
                 model.addAttribute("invalidTime", true);
-                throw new IllegalArgumentException("Start time >= End Time");
+                return "jsonTemplate";
+                //throw new IllegalArgumentException("Start time >= End Time");
             }
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            throw new IllegalArgumentException("Integer field does not contain integer");
+            model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
+            return "jsonTemplate";
+            //throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         Object[] params = new Object[] { 
@@ -160,12 +164,16 @@ public class ManageStore {
             if (Integer.parseInt(weekdayStart) >= Integer.parseInt(weekdayEnd) ||
               Integer.parseInt(weekendStart) >= Integer.parseInt(weekendEnd)) {
                 model.addAttribute("invalidTime", true);
-                throw new IllegalArgumentException("Start time >= End Time");
+                model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
+                return "jsonTemplate";
+                //throw new IllegalArgumentException("Start time >= End Time");
             }
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            throw new IllegalArgumentException("Integer field does not contain integer");
+            model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
+            return "jsonTemplate";
+            //throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         Object[] params = new Object[] { 
@@ -211,7 +219,9 @@ public class ManageStore {
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
-            throw new IllegalArgumentException("Integer field does not contain integer");
+            model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
+            return "jsonTemplate";
+            //throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
         jdbcTemplate.update( "update sequ_shift set "+
