@@ -13,8 +13,8 @@ public class ShiftRowMapper implements RowMapper {
         temp.setSid(rs.getInt("sid"));
         temp.setPid(rs.getInt("pid"));
         temp.setTname(rs.getString("task_name"));
-        temp.setStartDate(rs.getString("start_date"));
-        temp.setEndDate(rs.getString("end_date"));
+        temp.active.setStartDate(rs.getString("start_date"));
+        temp.active.setEndDate(rs.getString("end_date"));
         temp.setWeekdayStart(rs.getString("weekday_start"));
         temp.setWeekdayEnd(rs.getString("weekday_end"));
         temp.setWeekendStart(rs.getString("weekend_start"));

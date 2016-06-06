@@ -469,6 +469,7 @@ public class Generator{
       }
     return -1;
   }
+
   void searchEmployee(String name, String dayKey){
     //TODO: need to revise this
     Integer shiftAt = getShiftWithEmployee(name, dayKey);
@@ -525,8 +526,8 @@ public class Generator{
         cur.getSid(),
         cur.getPid(),
         cur.getTname(),
-        cur.active.getStartDate(),
-        cur.active.getEndDate(),
+        cur.active.getStartDate().toStringMDY(),
+        cur.active.getEndDate().toStringMDY(),
         cur.getWeekdayStart(),
         cur.getWeekdayEnd(),
         cur.getWeekendStart(),

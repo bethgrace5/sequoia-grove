@@ -1,0 +1,77 @@
+SID PID TNAME
+  STARTDATE   ENDDATE     WDSTART WDEND  WESTART WEEND
+
+1   1   Opening Sup/Mgr
+  2015-5-1    inv-inv-inv 600    1400   600    1500
+
+16  5   Bakery
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+15  4   Kitchen Sup or Staff
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+2   1   Support Sup/Staff
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+19  8   Support Staff
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+18  7   Salads
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+17  6   Grill
+  2015-5-1    inv-inv-inv 700    1500   700    1500
+
+3   2   Front (tomatoes)
+  2015-5-1    inv-inv-inv 800    1500   800    1500
+
+4   2   Front (dressings)
+  2015-5-1    inv-inv-inv 800    1530   800    1530
+
+5   2   Front (register 1)
+  2015-5-1    inv-inv-inv 1100   1600   1100   1600
+
+6   2   Front
+  2015-5-1    inv-inv-inv 900    1400   900    1400
+
+7   10  Busser
+  2015-5-1    inv-inv-inv 1115   1515   1115   1515
+
+9   3   Meat
+  2015-5-1    inv-inv-inv 600    1430   700    1500
+
+8   3   Cheese
+  2015-5-1    inv-inv-inv 600    1430   700    1500
+
+10  1   Closing Supervisor
+  2015-5-1    inv-inv-inv 1200   2030   1200   2030
+
+11  3   Cold Prep
+  2015-5-1    inv-inv-inv 1300   2030   1300   2030
+
+12  2   Register 1
+  2015-5-1    inv-inv-inv 1530   2030   1530   2030
+
+14  2   Front/Busser
+  2015-5-1    inv-inv-inv 1600   2000   1600   2000
+
+13  2   Expedite
+  2015-5-1    inv-inv-inv 1630   2030   1630   2030
+
+20  4   Kitchen Sup or Staff
+  2015-5-1    inv-inv-inv 1630   2030   1630   2030
+
+23  8   Support Staff
+  2015-5-1    inv-inv-inv 1500   2030   1500   2030
+
+21  6   Grill
+  2015-5-1    inv-inv-inv 1500   2030   1500   2030
+
+25  9   Opening Janitor
+  2015-5-1    inv-inv-inv 730    1500   730    1500
+
+24  9   Closing Janitor
+  2015-5-1    inv-inv-inv 730    1500   730    1500
+
+22  7   Salads
+  2015-5-1    inv-inv-inv 730    1500   730    1500  

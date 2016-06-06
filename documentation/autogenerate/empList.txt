@@ -1,0 +1,218 @@
+EMP FIRST_NAME LAST_NAME IS_CURRENT
+  DAY{START-STOP,...} ...
+  PID,...
+
+1   John       Doe        true
+  mon{600 -2100, 900 -2100, }  tue{600 -2100, }  wed{600 -2100, 900 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  1,
+
+2   Jane       Akachi     true
+  mon{600 -2100, 900 -2100, }  tue{600 -2100, }  wed{600 -2100, 900 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  1,
+
+3   Bob        Ping       true
+  mon{600 -2100, 900 -2100, }  tue{600 -2100, }  wed{600 -2100, 900 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  1,
+
+4   Susan      Jordan     true
+  mon{600 -2100, 900 -2100, }  tue{600 -2100, }  wed{600 -2100, 900 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  1,
+
+5   Chris      Tumelo     true
+  mon{600 -2100, 900 -2100, }  tue{600 -2100, }  wed{600 -2100, 900 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  1,
+
+6   Kamala     Agrippa    true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  7,   8,   4,   6,   5,
+
+7   Lei        Lindsey    true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,   4,   8,   7,   6,
+
+8   Sal        Finley     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  3,
+
+9   Taonga     Noam       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  3,
+
+10  Aston      Francis    true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  3,
+
+11  Mavuto     Leigh      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  9,   3,
+
+12  Steph      Vivian     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  9,   3,
+
+13  Maria      Shiori     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+14  Deniz      Romilda    true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+15  Jules      Riley      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+16  Li         Yuki       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+17  Sammie     Maayan     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+18  Hadley     Khurshid   true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+19  Chike      Rayan      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+20  Udo        Hilary     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+21  Jin        Oivind     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  2,
+
+22  Borya      Yared      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  9,
+
+23  Lenny      Teo        true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  9,
+
+24  Zephyrus   Titu       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,
+
+25  Shyama     Lennox     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,
+
+26  Ulyses     Stiofan    true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,
+
+27  Paora      Drusus     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,
+
+28  Ade        Anar       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  6,   5,
+
+29  Egill      Aldin      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  6,
+
+30  Marcelli   Jerald     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  7,   6,   8,
+
+31  Kasey      Kastor     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  7,   6,   8,
+
+32  Gina       Foster     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  7,   5,   6,
+
+33  Aminta     Owain      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  6,   7,
+
+34  Devraj     Zaki       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  8,   7,
+
+35  Nikolas    Mudiwa     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  7,   8,
+
+36  Gerhard    Flurry     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  8,
+
+37  Vinzent    Ealaed     true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  5,   8,
+
+38  Earl       Hearl      true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  10,
+
+39  Ash        Sash       true
+  mon{600 -2100, }  tue{600 -2100, }  wed{600 -2100, }  thu{600 -2100, }  fri{600 -2100, }  sat{600 -2100, }  sun{600 -2100, }
+  10,
+
+40  Ayden      Vijlem     false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+41  Alpin      Edward     false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+42  Levi       Mattaus    false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+43  Volya      Kunibet    false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+44  Boran      Thijs      false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+45  Theodor    Meade      false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+46  Indra      Lugel      false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+47  Loic       Olav       false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+48  Roel       Yuki       false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+49  Camden     Ghassen    false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+50  Rob        Eemen      false
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+51  Beth       Armitage   true
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+52  Sunny      Sumal      true
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+53  Ted        Pascua     true
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}
+
+
+54  AJ         Silva      true
+  mon{}  tue{}  wed{}  thu{}  fri{}  sat{}  sun{}

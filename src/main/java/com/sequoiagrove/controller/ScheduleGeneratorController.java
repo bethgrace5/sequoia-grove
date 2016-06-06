@@ -106,8 +106,11 @@ public class ScheduleGeneratorController {
 
       Generator generator;
       generator = new Generator(mon, historyStart, historyEnd);
+      generator.printShiftList();
+      generator.printEmployeeList();
       generator.addEmployeesByPosition();
-      generator.printFormation();
+      generator.trimBySimpleChecks();
+      //generator.printFormation();
 
       // Add all employees with corresponding Position into hash map for each slot
       // (Already Done????)

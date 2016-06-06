@@ -103,18 +103,4 @@ public class Shift {
     public void setActive(Duration active) {
         this.active = active;
     }
-
-    public DateCustom getStartDate() {
-        return this.active.getStartDate();
-    }
-    public void setStartDate(String startDate) {
-        this.active.setStartDate(startDate);
-    }
-
-    public DateCustom getEndDate() {
-        return this.active.getEndDate();
-    }
-    public void setEndDate(String endDate) {
-        this.active.setEndDate(endDate);
-    }
 }
