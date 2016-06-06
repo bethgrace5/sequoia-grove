@@ -31,7 +31,8 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
 
   var setManagePrivelage = function() {
     service.init = function() {
-        return initPending();
+      notifyObservers();
+      return initPending();
     };
     service.getNumberPending = function() {
       return requestsNum;

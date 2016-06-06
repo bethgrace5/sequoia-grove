@@ -236,11 +236,12 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       requestFactory.init().then(function(success) {
         //$log.debug(success);
-        $timeout(function() {
-          requestFactory.init().then(function(success) {
-            //return $scope.getAllRequests()
-          })
-        },300)
+        requestFactory.init().then(function(success) {
+          $timeout(function() {
+            $scope.$apply();
+          },100)
+          //return $scope.getAllRequests()
+        })
       })
     });
   }
@@ -255,7 +256,9 @@ angular.module('sequoiaGroveApp')
         return $scope.getAllRequests();
       }).then(function(success) {
         requestFactory.init().then(function(success) {
-          $scope.pendingRequests = success.data.requestStatus;
+          $timeout(function() {
+            $scope.$apply();
+          },100)
         });
         //return $scope.getPendingRequests();
       });
