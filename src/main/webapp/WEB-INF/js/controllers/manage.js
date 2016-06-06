@@ -102,7 +102,7 @@ angular.module('sequoiaGroveApp')
 
   // verify that all information was supplied before sending shift
   $scope.verifyShift = function() {
-    // to add, at the very minumum, we need pid, taskName, 
+    // to add, at the very minumum, we need pid, taskName,
     // weekdayStart hours and weekdayEnd hours
     //$log.debug($scope.selectedShift);
     //$log.debug($scope.shiftForm.form);
@@ -293,12 +293,19 @@ angular.module('sequoiaGroveApp')
   //Holiday Major Functions
   //--------------------------
   $scope.addNewHoliday = function(){
+    if ($scope.newHoliday.open.val === undefined) {
+      $scope.newHoliday.storeOpenVal = '0000';
+      $scope.newHoliday.storeCloseVal = '0000';
+    }
+    else {
+      if ($scope.newHoliday.open.val) {
+        $scope.newHoliday.storeOpenVal  = $scope.newHoliday.open.val;
+        $scope.newHoliday.storeCloseVal = $scope.newHoliday.close.val;
+      }
+    }
+
     // change date into formatted string 'mm-dd-yyyy'
     $scope.newHoliday.date = moment($scope.holidayDate).format('MM-DD-YYYY');
-    if ($scope.newHoliday.open.val) {
-      $scope.newHoliday.storeOpenVal  = $scope.newHoliday.open.val;
-      $scope.newHoliday.storeCloseVal = $scope.newHoliday.close.val;
-    }
 
     $http({ url: '/holiday/add',
       method: "POST",
@@ -310,9 +317,9 @@ angular.module('sequoiaGroveApp')
           {'id':0,
             'title':'',
             'open':{},
-            'storeOpenVal':null,
+            'storeOpenVal':'0000',
             'close':{},
-            'storeCloseVal':null,
+            'storeCloseVal':'0000',
             'date':''};
         $scope.getAllHolidays();
       },
