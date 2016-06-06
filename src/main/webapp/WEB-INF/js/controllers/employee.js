@@ -297,7 +297,7 @@ angular.module('sequoiaGroveApp')
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
       // no changes were made to the form
-      if (form.$dirty === false ) {
+      if (form.$dirty === false && form.$valid) {
         form.$setSubmitted();
         $scope.employeeSaved = true;
         return false;
