@@ -1,4 +1,5 @@
 {
+  "HEADER_TAB_HELLO": "Hello",
   "HEADER_SIGNED_IN_AS": "Signed in as",
   "HEADER_TAB_HOME": "Home",
   "HEADER_TAB_REQUESTS": "Requests",
@@ -7,6 +8,7 @@
   "REQUEST_TAB_PENDING": "Pending",
   "REQUEST_TAB_HISTORY": "History",
   "REQUEST_TAB_MY_REQUESTS": "My Requests",
+  "HEADER_TAB_MANAGE": "Manage Store",
   "EMPLOYEE_TAB_INFO": "Info",
   "EMPLOYEE_TAB_AVAILIBILITY": "Availibility",
   "SCHEDULE_TAB_SCHEDULE": "Schedule",
@@ -20,5 +22,10 @@
   "SCHEDULE_VIEW_FRIDAY": "Friday",
   "SCHEDULE_VIEW_SATURDAY": "Saturday",
   "SCHEDULE_VIEW_SUNDAY": "Sunday",
+  "SCHEDULE_VIEW_HIGHLIGHTER": "highlighter",
+  "SCHEDULE_VIEW_OFF": "off",
+  "SCHEDULE_VIEW_PRINT": "print",
+  "SCHEDULE_VIEW_SHOW_DELIVERIES": "show deliveries",
+  "SCHEDULE_VIEW_HIDE_DELIVERIES": "hide deliveries",
   "FOOTER_TRANSLATE": "Translate"
 }

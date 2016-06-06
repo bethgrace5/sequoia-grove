@@ -147,10 +147,13 @@ angular.module('sequoiaGroveApp')
       if (success.status == 200) {
         $scope.cleanupShiftEdit();
       }
+      else {
+        $log.debug('hit faile in suxcces');
+      }
     }, function(failure) {
       $scope.saving = false;
       $scope.shiftSaveError = true;
-      $log.error(failure.status + " Error updating shift " + failure.data);
+      //$log.error(failure.status + " Error updating shift " + failure.data);
     });
   }
 
@@ -175,7 +178,8 @@ angular.module('sequoiaGroveApp')
       }
     }, function(failure) {
       $scope.shiftSaveError = true;
-      $log.error(failure.status + " Error adding shift " + failure.data);
+      $scope.saving = false;
+      //$log.error(failure.status + " Error adding shift " + failure.data);
     }).then(function(done) {
       // finally, reinitialize schedule to show updates immediately
       scheduleFactory.init();

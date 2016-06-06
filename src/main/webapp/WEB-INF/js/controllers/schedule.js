@@ -117,16 +117,6 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.publishSchedule = function() {
-    var id = loginFactory.getUser().id;
-    scheduleFactory.publish(id).then(function(success) {
-      $timeout(function() {
-        $scope.isPublished = success;
-        $rootScope.$apply();
-      });
-    });
-  }
-
 
 /************** Pure Functions **************/
 

@@ -37,11 +37,19 @@ angular.module('sequoiaGroveApp')
     ]
     $scope.selectedClassification = 0;
 
+    $scope.employeeSaved = false;
+    $scope.employeeSaveError = false;
+    // before updating, deleting, or adding a shift, reset error flags
+    $scope.resetEmployeeErrorFlags = function() {
+      $scope.employeeSaved = false;
+      $scope.employeeSaveError = false;
+    }
+
     $scope.activeTab = 'info';
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classification_id': 1,
+      'classificationId': 1,
       'notes': '',
       'firstname':'',
       'lastname':'',
@@ -128,7 +136,7 @@ angular.module('sequoiaGroveApp')
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification_id': 1,
+        'classificationId': 1,
         'notes': '',
         'firstname':'',
         'lastname':'',
@@ -287,6 +295,12 @@ angular.module('sequoiaGroveApp')
 
     // Update Existing employee, or add new
     $scope.updateEmployee = function(form) {
+      // no changes were made to the form
+      if (form.$dirty === false ) {
+        form.$setSubmitted();
+        $scope.employeeSaved = true;
+        return false;
+      }
 
       // TODO don't send the form if it hasn't been changed
       // just directly jump to show that it was saved
@@ -310,6 +324,13 @@ angular.module('sequoiaGroveApp')
           (form.minHours.$viewValue < 0)) {
         $scope.selectedEmployee.minHours = 0;
       };
+
+      if ('form',form.clockNumber.$viewValue === '') {
+        $scope.selectedEmployee.clockNumber = 0;
+      }
+      if ('form',form.phone.$viewValue === '') {
+        $scope.selectedEmployee.phone = '0'
+      }
 
       // transform firstname to uppercase first letter and lowercase for the rest
       var firstLetter = $scope.selectedEmployee.firstname.substring(0,1);
@@ -358,6 +379,9 @@ angular.module('sequoiaGroveApp')
 
       $http.post("/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
+          $scope.employeeSaved = true;
+          form.$setSubmitted();
+          form.$setPristine();
           // upate front end
           if (action === 'add') {
           //TODO  (you will need a variable to know it was saved)
@@ -370,6 +394,7 @@ angular.module('sequoiaGroveApp')
           $scope.saving = false;
           form.$setSubmitted();
         }).error(function(data, status) {
+          $scope.employeeSaveError = true;
           // TODO show error saving indication, be able to reset it with
           // the same reset for the saved indication
           $log.debug('error with action:', action, status,data);
