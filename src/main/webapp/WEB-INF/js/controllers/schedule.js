@@ -335,4 +335,18 @@ angular.module('sequoiaGroveApp')
   scheduleFactory.registerObserverCallback(updateChangesMade);
 
 
+  $scope.$on('$locationChangeStart', function (event, next, current) {
+    console.log(current);
+
+    if (current.match("/schedule")) {
+      var answer = confirm("Are you sure you want to leave this page?");
+      if (!answer) {
+        event.preventDefault();
+      }else{
+        $log.debug('else');
+        //clearInterval(myInterval);
+      }
+    }
+  });
+
 });

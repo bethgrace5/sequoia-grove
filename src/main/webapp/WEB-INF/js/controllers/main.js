@@ -547,6 +547,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       js.src = "//apis.google.com/js/platform.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'))
-  }, 100)
+  }, 500)
 
 });

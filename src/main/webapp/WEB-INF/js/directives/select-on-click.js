@@ -28,6 +28,10 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
       }); // end keydown function
 
       element.on('keyup', function (e) {
+        // an arrow key was pressed
+        if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+         return;
+        }
         // capitalize first letter of the name
         var firstLetter = this.value.charAt(0).toUpperCase();
         this.value = firstLetter + this.value.substring(1, this.value.length);
