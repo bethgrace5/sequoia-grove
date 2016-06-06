@@ -311,6 +311,13 @@ angular.module('sequoiaGroveApp')
         $scope.selectedEmployee.minHours = 0;
       };
 
+      if ('form',form.clockNumber.$viewValue === '') {
+        $scope.selectedEmployee.clockNumber = 0;
+      }
+      if ('form',form.phone.$viewValue === '') {
+        $scope.selectedEmployee.phone = '0'
+      }
+
       // transform firstname to uppercase first letter and lowercase for the rest
       var firstLetter = $scope.selectedEmployee.firstname.substring(0,1);
       var theRest = $scope.selectedEmployee.firstname.substring(1,

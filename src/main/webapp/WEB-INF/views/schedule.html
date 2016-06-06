@@ -38,7 +38,7 @@
           ng-class="employeeListHighlight(e.id)"
           ng-click="selectFromList(e.id)">
           <div style="width:70px; float:left;"> {{e.firstname}} </div>
-          <div style="float:left;">{{dayCount[e.id]}}d {{hourCount[e.id]}}h </div>
+          <div ng-show="dayCount[e.id] > 0" style="float:left;">{{dayCount[e.id]}}d {{hourCount[e.id]}}h </div>
         </span>
       </div>
     </div>
