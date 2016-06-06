@@ -41,7 +41,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classification_id': 1,
+      'classificationId': 1,
       'notes': '',
       'firstname':'',
       'lastname':'',
@@ -128,7 +128,7 @@ angular.module('sequoiaGroveApp')
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification_id': 1,
+        'classificationId': 1,
         'notes': '',
         'firstname':'',
         'lastname':'',
