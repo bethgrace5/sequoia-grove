@@ -16,7 +16,7 @@
       <!-- User Name, photo, and dropdown menu for signout options -->
       <span ng-show="loggedIn" class="pull-right" style="margin-top:5px;">
         <div style="cursor:pointer;" class="dropdown pull-right" dropdown is-open=true>
-          <p aria-haspopup="true" aria-expanded="true" data-toggle="dropdown" style="color:white; display:inline;">Hello, {{loggedInUser.name}}</p>
+          <p aria-haspopup="true" aria-expanded="true" data-toggle="dropdown" style="color:white; display:inline;">{{'HEADER_TAB_HELLO' | translate}}, {{loggedInUser.name}}</p>
           <span aria-haspopup="true" aria-expanded="true" data-toggle="dropdown" style="color:white" class="caret"></span>
           <!-- Google User Profile Photo -->
           <img style="width:30px; height:30px; border-radius:5px; display:inline;" id="signoutDropdown" aria-haspopup="true" aria-expanded="true" data-toggle="dropdown"
@@ -86,7 +86,7 @@
               ng-class="changeTab('/manage')">
               <a href="#/manage">
                 <span class="glyphicon glyphicon-paperclip"></span>
-                Manage Store
+                {{'HEADER_TAB_MANAGE' | translate}}
               </a>
             </li>
 

@@ -6,8 +6,8 @@
 
       <!-- Show Deliveries-->
       <button class="btn btn-default" ng-click="toggleDeliveries()">
-        <div ng-hide="revealDeliveries"> show deliveries </div>
-        <div ng-show="revealDeliveries"> hide deliveries </div>
+        <div ng-hide="revealDeliveries"> {{ 'SCHEDULE_VIEW_SHOW_DELIVERIES' | translate }} </div>
+        <div ng-show="revealDeliveries"> {{ 'SCHEDULE_VIEW_HIDE_DELIVERIES' | translate }} </div>
       </button>
       
 
@@ -16,13 +16,13 @@
         ng-hide="highlight"
         ng-disabled = "loading"
         ng-click="selectLoggedInUser()">
-        highlighter off
+        {{'SCHEDULE_VIEW_HIGHLIGHTER' | translate}} {{'SCHEDULE_VIEW_OFF' | translate}}
       </button>
       <button class="btn btn-info"
         ng-show="highlight"
         ng-disabled = "loading"
         ng-click="selectLoggedInUser()">
-        highlighter on
+        {{'SCHEDULE_VIEW_HIGHLIGHTER' | translate}} on
       </button>
 
       <!-- Filter by User, Location, or Position -->
@@ -59,7 +59,7 @@
       <button class="btn btn-primary"
         ng-disabled = "loading"
         onclick="window.print()">
-        Print
+        {{'SCHEDULE_VIEW_PRINT' | translate }}
         <span class="glyphicon glyphicon-print" aria-hidden="true"></span>
       </button>
     </form>

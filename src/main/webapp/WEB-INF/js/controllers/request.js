@@ -117,10 +117,10 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.confirmSubmit = function(ev) {
-    //if($scope.checkDatesCollide()){
-      //$scope.datesCollidePopup(ev);
-      //return;
-    //}
+    if($scope.checkDatesCollide()){
+      $scope.datesCollidePopup(ev);
+      return;
+    }
     var message =
       'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
       ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
@@ -150,7 +150,6 @@ angular.module('sequoiaGroveApp')
     // Appending dialog to document.body to cover sidenav in docs app
     // Modal dialogs should fully cover application
     // to prevent interaction outside of dialog
-    /*
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -161,7 +160,6 @@ angular.module('sequoiaGroveApp')
         .ok('Got it!')
         .targetEvent(ev)
     );
-    */
   };
 
   //---------------
@@ -238,11 +236,12 @@ angular.module('sequoiaGroveApp')
     }).success(function (data, status, headers, config) {
       requestFactory.init().then(function(success) {
         //$log.debug(success);
-        $timeout(function() {
-          requestFactory.init().then(function(success) {
-            //return $scope.getAllRequests()
-          })
-        },300)
+        requestFactory.init().then(function(success) {
+          $timeout(function() {
+            $scope.$apply();
+          },100)
+          //return $scope.getAllRequests()
+        })
       })
     });
   }
@@ -257,7 +256,9 @@ angular.module('sequoiaGroveApp')
         return $scope.getAllRequests();
       }).then(function(success) {
         requestFactory.init().then(function(success) {
-          $scope.pendingRequests = success.data.requestStatus;
+          $timeout(function() {
+            $scope.$apply();
+          },100)
         });
         //return $scope.getPendingRequests();
       });

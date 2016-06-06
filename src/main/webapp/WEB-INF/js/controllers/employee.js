@@ -41,7 +41,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classification_id': 1,
+      'classificationId': 1,
       'notes': '',
       'firstname':'',
       'lastname':'',
@@ -128,7 +128,7 @@ angular.module('sequoiaGroveApp')
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classification_id': 1,
+        'classificationId': 1,
         'notes': '',
         'firstname':'',
         'lastname':'',
@@ -310,6 +310,13 @@ angular.module('sequoiaGroveApp')
           (form.minHours.$viewValue < 0)) {
         $scope.selectedEmployee.minHours = 0;
       };
+
+      if ('form',form.clockNumber.$viewValue === '') {
+        $scope.selectedEmployee.clockNumber = 0;
+      }
+      if ('form',form.phone.$viewValue === '') {
+        $scope.selectedEmployee.phone = '0'
+      }
 
       // transform firstname to uppercase first letter and lowercase for the rest
       var firstLetter = $scope.selectedEmployee.firstname.substring(0,1);

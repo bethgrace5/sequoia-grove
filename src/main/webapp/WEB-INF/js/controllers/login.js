@@ -111,13 +111,18 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     loginFactory.switchUser(gapi).
       then(function(success) {
         $rootScope.lastPath = "";
+        $scope.initiate = false;
+        $scope.errorMessage = "";
+        $scope.attemptedLogin = {};
         window.open('https://accounts.google.com/logout', '_blank');
         $window.location.reload();
+        $scope.$apply();
       });
   }
 
   // when a failed login occurs, login as a different user
   function differentUser() {
+    $rootScope.lastPath = "";
     $scope.initiate = false;
     $scope.errorMessage = "";
     $scope.attemptedLogin = {};
