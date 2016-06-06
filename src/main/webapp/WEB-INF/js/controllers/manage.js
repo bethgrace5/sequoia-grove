@@ -8,13 +8,13 @@
  */
 
 angular.module('sequoiaGroveApp')
-.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory, $timeout) {
+.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory, $timeout, loginFactory) {
   var ctrl = this;
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/manage');
   // user is not logged in
-  if ($rootScope.loggedIn == false) {
+  if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
   // The name of the active tab, by default, it will be the submit section

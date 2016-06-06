@@ -20,7 +20,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   $rootScope.loggingIn = false;
   $scope.initiate = false;
 
-  // wait until gapi is defined, then add a signin listener
+  // wait until gapi is defined, then add a signin/out listener
   $timeout(function() {
     gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
   }, 900);
