@@ -117,10 +117,10 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.confirmSubmit = function(ev) {
-    //if($scope.checkDatesCollide()){
-      //$scope.datesCollidePopup(ev);
-      //return;
-    //}
+    if($scope.checkDatesCollide()){
+      $scope.datesCollidePopup(ev);
+      return;
+    }
     var message =
       'from '+  moment($scope.requestDateStart).format("MMMM Do, YYYY") +
       ' to ' +  moment($scope.requestDateEnd).format("MMMM Do, YYYY");
@@ -150,7 +150,6 @@ angular.module('sequoiaGroveApp')
     // Appending dialog to document.body to cover sidenav in docs app
     // Modal dialogs should fully cover application
     // to prevent interaction outside of dialog
-    /*
     $mdDialog.show(
       $mdDialog.alert()
         .parent(angular.element(document.querySelector('#popupContainer')))
@@ -161,7 +160,6 @@ angular.module('sequoiaGroveApp')
         .ok('Got it!')
         .targetEvent(ev)
     );
-    */
   };
 
   //---------------
