@@ -470,6 +470,17 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $scope.initPositionsSchedule();
         $scope.initIsCurrentSchedule();
         $scope.isPublished = scheduleFactory.isPublished();
+        $scope.$apply();
+      });
+    });
+  }
+
+  $scope.publishSchedule = function() {
+    var id = loginFactory.getUser().id;
+    scheduleFactory.publish(id).then(function(success) {
+      $timeout(function() {
+        $scope.isPublished = scheduleFactory.isPublished();
+        $scope.$apply();
       });
     });
   }
@@ -477,10 +488,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
  /*$scope.$on('requestchanged', function() {
         $log.debug('hey, requestsNum has changed!', $scope.requestsNum);
     });*/
-
-  $scope.publishSchedule = function() {
-    $scope.isPublished = scheduleFactory.publish();
-  }
 
   var updateChangesMade = function(){
     $scope.template = scheduleFactory.getTemplate();

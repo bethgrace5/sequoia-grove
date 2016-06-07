@@ -9,7 +9,7 @@
     </button>
     <!-- Save button shows for new employees -->
     <div ng-hide = "selectedEmployee.id === 0">
-      <button class = "btn btn-primary pull-right"
+      <button class = "btn btn-success pull-right"
           ng-click="updateEmployee(employeeform)">
         <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
         Save Info
@@ -18,6 +18,25 @@
     <p class="lead emp-header">Employee Info</p>
   </div>
   <div class="panel-body">
+
+    <!-- Saving Alerts -->
+    <button type="button"
+      class="container btn alert alert-success center-block hide-fade"
+      data-ng-click="resetEmployeeErrorFlags()" ng-show="employeeSaved && !employeeform.$dirty">
+      <span class="text-center">
+        <strong>Success</strong>
+        <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
+      </span>
+    </button>
+
+    <button type="button"
+      class="container btn alert alert-danger center-block hide-fade"
+      data-ng-click="resetEmployeeErrorFlags()" ng-show="employeeSaveError">
+      <span class="text-center">
+        <strong>Error Saving!</strong>
+      </span>
+    </button>
+
     <!-- Employee Info -->
     <div class="request-title">
       <form name="employeeform" class="form-horizontal css-form" novalidate>
