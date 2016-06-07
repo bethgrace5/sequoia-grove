@@ -1,15 +1,8 @@
 'use strict';
-/**
- * @ngdoc function
- * @name sequoiaGroveApp.controller:ManageCtrl
- * @description
- * # ManageControler
- * Controller for managing store holidays, shifts, deliveries, and restrictions
- */
 
-angular.module('sequoiaGroveApp')
-.controller('ManageCtrl', function ($scope, $log, $rootScope, $http, $location, localStorageService, scheduleFactory, $timeout, loginFactory) {
-  var ctrl = this;
+angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
+      $scope, $log, $rootScope, $http, $location, localStorageService,
+      scheduleFactory, $timeout, loginFactory) {
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/manage');
@@ -17,7 +10,7 @@ angular.module('sequoiaGroveApp')
   if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
-  // The name of the active tab, by default, it will be the submit section
+  // default tab is shift edit
   $scope.activeTab = "shift";
 
   // function to set the class of the selected tab to active
@@ -102,12 +95,7 @@ angular.module('sequoiaGroveApp')
 
   // verify that all information was supplied before sending shift
   $scope.verifyShift = function() {
-    // to add, at the very minumum, we need pid, taskName,
-    // weekdayStart hours and weekdayEnd hours
-    //$log.debug($scope.selectedShift);
-    //$log.debug($scope.shiftForm.form);
-
-    //TODO if weekend is not set, set it to weekday times
+    //TODO if weekend is not set have it not exist, same with weekdays
 
     // validate the rest of the form
     if ($scope.shiftForm.form.$invalid) {
@@ -137,8 +125,6 @@ angular.module('sequoiaGroveApp')
       return;
     }
     $scope.saving = true;
-    // TODO to update this shift we also need the shift id
-    
     $http({ url: '/shift/update/',
       method: "POST",
       data: $scope.selectedShift
@@ -147,13 +133,9 @@ angular.module('sequoiaGroveApp')
       if (success.status == 200) {
         $scope.cleanupShiftEdit();
       }
-      else {
-        $log.debug('hit faile in suxcces');
-      }
     }, function(failure) {
       $scope.saving = false;
       $scope.shiftSaveError = true;
-      //$log.error(failure.status + " Error updating shift " + failure.data);
     });
   }
 
@@ -164,7 +146,6 @@ angular.module('sequoiaGroveApp')
       return;
     }
     $scope.saving = true;
-
     $http({url: '/shift/add/',
       method: "POST",
       data: $scope.selectedShift
@@ -179,7 +160,6 @@ angular.module('sequoiaGroveApp')
     }, function(failure) {
       $scope.shiftSaveError = true;
       $scope.saving = false;
-      //$log.error(failure.status + " Error adding shift " + failure.data);
     }).then(function(done) {
       // finally, reinitialize schedule to show updates immediately
       scheduleFactory.init();
@@ -207,53 +187,36 @@ angular.module('sequoiaGroveApp')
   }
 
   /****************** Delivery Edit ************************************/
-  // variable declarations
-  $scope.newDelivery = {
-      id: 0,
-      name:"",
-      mon: false,
-      tue:false,
-      wed:false,
-      thu:false,
-      fri:false,
-      sat:false,
-      sun:false
-  };
+  $scope.newDelivery = { id: 0, name:"", mon: false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false };
 
-  // delete delivery
+  // remove delivery
   $scope.deleteDelivery = function(id,index) {
-    $http({ url: '/delivery/delete/'+ id,
-      method: "DELETE"
-    }). then (function (success) {
-      // remove fromj list
-      $scope.deliveries.splice(index,1);
-    }, function(failure) {
-      $log.error('Error deleting deliveries ', failure);
-    })
+    deliveryFactory.remove(id).then(
+      function(success) {
+        $scope.deliveries.splice(index,1);
+      },function(error) {
+        $log.error('Error deleting deliveries ', failure);
+    });
   }
 
   // add delivery
   $scope.addDelivery = function() {
-    $http({ url: '/delivery/add',
-      method: "POST",
-      data: $scope.newDelivery
-    }).then (function (success) {
+    deliveryFactory.add($scope.newDelivery).then(function(success) {
       $scope.newDelivery.id = success.data.id; // add to list
       $scope.deliveries.push($scope.newDelivery);
-      $scope.newDelivery = {
-        id: 0,
-        name:"",
-        mon: false,
-        tue:false,
-        wed:false,
-        thu:false,
-        fri:false,
-        sat:false,
-        sun:false
-      }
-    }, function(failure) {
-      $log.error('Error adding deliveries ', failure);
-    })
+      $scope.resetDelivery();
+    });
+  }
+
+  // update delivery
+  $scope.updateDelivery = function(index) {
+    deliveryFactory.update($scope.deliveries[index]).then(function(success) {
+      $log.debug(success);
+    });
+  }
+
+  $scope.resetDelivery = function() {
+    $scope.newDelivery = { id: 0, name:"", mon: false, tue:false, wed:false, thu:false, fri:false, sat:false, sun:false };
   }
 
 

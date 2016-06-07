@@ -1,12 +1,5 @@
 'use strict';
 
-/**
- * @ngdoc function
- * @name sequoiaGroveApp.controller:MainCtrl
- * @description
- * # MainCtrl
- * Controller of the sequoiaGroveApp
- */
 angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
     localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
