@@ -15,10 +15,12 @@ science at California State University, Bakersfield (CSUB)
 ![schedule edit view 2](documentation/views/screenshots/schedule2.png)
 [More Detailed Project Description](documentation/feature-description.md)
 
-
+Technical Design
+--
 ![technical design](documentation/views/screenshots/technical-design.png)
 
-
+Directory Structure
+--
 ![directory structure](documentation/views/screenshots/directory-structure.png)
 
 License
