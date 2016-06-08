@@ -18,6 +18,9 @@ science at California State University, Bakersfield (CSUB)
 
 ![technical design](documentation/views/screenshots/technical-design.png)
 
+
+![directory structure](documentation/views/screenshots/directory-structure.png)
+
 License
 --
 [AGPLV3](http://www.gnu.org/licenses/agpl-3.0.html)
