@@ -1,11 +1,8 @@
-
 package com.sequoiagrove.controller;
 
-import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -14,10 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -25,15 +19,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sequoiagrove.model.ScheduleTemplate;
-import com.sequoiagrove.model.Day;
-import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.RequestStatus;
-import com.sequoiagrove.model.Scheduled;
+import com.sequoiagrove.model.RequestRowMapper;
 import com.sequoiagrove.controller.MainController;
 /**
 RequestController:
@@ -52,6 +41,7 @@ public class RequestController{
       return Arrays.asList(csvPermissions.split(","));
     }
 
+  // employee submits a request for vacation
   @RequestMapping(value = "/request/submit")
     public String sumbitRequest(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
 
@@ -62,19 +52,13 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      /*Gson gson = new Gson();
-      Request req = gson.fromJson(data, Request.class);
-
-      int eid = req.getEid();
-      String start = req.getStartDateString();
-      String end = req.getEndDateString();*/
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
       int id = jdbcTemplate.queryForObject("select nextval('sequ_requests_sequence')",
             Integer.class);
       Object[] params = new Object[] {
-        id, 
+        id,
         jobject.get("eid").getAsInt(),
         null, false,
         jobject.get("startDate").getAsString(),
@@ -88,7 +72,6 @@ public class RequestController{
           "values(?, ?, ?, ?, "+
           "to_date(?, 'mm-dd-yyyy'), to_date(?, 'mm-dd-yyyy'))",
           params);
-      //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
 
       return "jsonTemplate";
     }
@@ -103,25 +86,10 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from sequ_request_view",
-          new RowMapper<RequestStatus>() {
-            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-              RequestStatus es = new RequestStatus(
-                rs.getInt("rid"),
-                rs.getInt("requested_by"),
-                rs.getInt("responded_by"),
-                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-                rs.getString("start_date_time"),
-                rs.getString("end_date_time"),
-                rs.getString("requester_first_name"),
-                rs.getString("requester_last_name"),
-                rs.getString("responder_first_name"),
-                rs.getString("responder_last_name")
-                );
-              return es;
-            }
-          });
+      String queryStr = "select * from sequ_request_view";
+      List<RequestStatus> requestList =
+            jdbcTemplate.query( queryStr, new RequestRowMapper());
+
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
     }
@@ -136,26 +104,11 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from sequ_request_view " +
-          "where responded_by IS NOT NULL ",
-          new RowMapper<RequestStatus>() {
-            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-              RequestStatus es = new RequestStatus(
-                rs.getInt("rid"),
-                rs.getInt("requested_by"),
-                rs.getInt("responded_by"),
-                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-                rs.getString("start_date_time"),
-                rs.getString("end_date_time"),
-                rs.getString("requester_first_name"),
-                rs.getString("requester_last_name"),
-                rs.getString("responder_first_name"),
-                rs.getString("responder_last_name")
-                );
-              return es;
-            }
-          });
+      String queryStr = "select * from sequ_request_view " +
+          "where responded_by IS NOT NULL ";
+      List<RequestStatus> requestList =
+            jdbcTemplate.query( queryStr, new RequestRowMapper());
+
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
     }
@@ -170,26 +123,11 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      List<RequestStatus> requestList = jdbcTemplate.query(
-          "select * from sequ_request_view "+
-          "where responded_by IS NULL",
-          new RowMapper<RequestStatus>() {
-            public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-              RequestStatus es = new RequestStatus(
-                rs.getInt("rid"),
-                rs.getInt("requested_by"),
-                rs.getInt("responded_by"),
-                checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-                rs.getString("start_date_time"),
-                rs.getString("end_date_time"),
-                rs.getString("requester_first_name"),
-                rs.getString("requester_last_name"),
-                rs.getString("responder_first_name"),
-                rs.getString("responder_last_name")
-                );
-              return es;
-            }
-          });
+      String queryStr = "select * from sequ_request_view "+
+          "where responded_by IS NULL and end_date_time >= current_date";
+      List<RequestStatus> requestList =
+            jdbcTemplate.query( queryStr, new RequestRowMapper());
+
       model.addAttribute("requestStatus", requestList);
       return "jsonTemplate";
     }
@@ -198,58 +136,42 @@ public class RequestController{
       public String getCurrentEmployeeRequestl(Model model, @ModelAttribute("scope") List<String> permissions,
           @PathVariable("eid") int eid) throws SQLException {
 
-            // the token did not have the required permissions, return 403 status
-            if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
-                model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-                return "jsonTemplate";
-            }
+          // the token did not have the required permissions, return 403 status
+          if (!(permissions.contains("submit-requests-off") || permissions.contains("admin"))) {
+              model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+              return "jsonTemplate";
+          }
 
-            JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-            List<RequestStatus> requestList = jdbcTemplate.query(
-              "select * from sequ_request_view " +
-              "where requested_by = " + eid,
-              new RowMapper<RequestStatus>() {
-                public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-                  RequestStatus es = new RequestStatus(
-                    rs.getInt("rid"),
-                    rs.getInt("requested_by"),
-                    rs.getInt("responded_by"),
-                    checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-                    rs.getString("start_date_time"),
-                    rs.getString("end_date_time"),
-                    rs.getString("requester_first_name"),
-                    rs.getString("requester_last_name"),
-                    rs.getString("responder_first_name"),
-                    rs.getString("responder_last_name")
-                    );
-                  return es;
-                }
-              });
-            model.addAttribute("request", requestList);
-            return "jsonTemplate";
+          JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+          String queryStr = "select * from sequ_request_view " +
+                  "where requested_by = ? and end_date_time >= current_date";
+          Object[] params = new Object[] { eid };
+
+          List<RequestStatus> requestList =
+                jdbcTemplate.query( queryStr, params, new RequestRowMapper());
+
+          model.addAttribute("request", requestList);
+          return "jsonTemplate";
       }
 
-    @RequestMapping(value = "/request/update/{requestID}/{approverID}/{is_approve}")
-      public String updateRequest(Model model, @ModelAttribute("scope") List<String> permissions,
-          @PathVariable("requestID") int requestID,
-          @PathVariable("approverID") int approverID,
-          @PathVariable("is_approve") int is_approve) throws SQLException{
+    // Manager responds to pending request. They approve or deny it.
+    @RequestMapping(value = "/request/respond")
+      public String updateRequest(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException{
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        //Make Sure request ID is there too...
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
         Object[] params = new Object[] {
-          new Boolean((is_approve == 1)? true:false),
-          approverID,
-          requestID
+          jobject.get("isApproved").getAsBoolean(),
+          jobject.get("approverId").getAsInt(),
+          jobject.get("requestId").getAsInt(),
         };
-
         jdbcTemplate.update("update sequ_requests_vacation " +
             " set is_approved = ?, responded_by = ? where id = ?", params);
 
@@ -268,42 +190,21 @@ public class RequestController{
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
-        Object[] params = new Object[] { 
+        Object[] params = new Object[] {
           jobject.get("eid").getAsInt(),
           jobject.get("startDate").getAsString(),
           jobject.get("endDate").getAsString(),
         };
 
-        // !!!!! Changed Request Class !!!!! (no longer works like this)
-        //Gson gson = new Gson();
-        //Request req = gson.fromJson(data, Request.class);
-
-        //int eid = req.getEid();
-        //String start = req.getStartDateString();
-        //String end = req.getEndDateString();
-        // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
         /*
-           jdbcTemplate.update("update requests_vacation " +
-           " set" +
-           " start_date_time = " + "to_timestamp(" + start + ", 'yyyy-mm-dd')" +
-           " where id = " + eid
-           );
-           */
-        //System.out.println("I changed " + eid);
-        //System.out.println("Start Date: " + start + "\nEnd Date: " + end);
-
+         jdbcTemplate.update("update requests_vacation " +
+         " set" +
+         " start_date_time = " + "to_timestamp(" + start + ", 'yyyy-mm-dd')" +
+         " where id = " + eid
+         );
+         */
         return "jsonTemplate";
       }
-
-    public String checkStatus(Integer responder, boolean approval){
-      // System.out.println(responder + " and request is " +  approval);
-      if (responder == null | responder == 0) return "Pending";
-      else{
-        if(approval == true) return "Approved";
-        else return "Denied";
-      }
-    }
 
     @RequestMapping(value = "/request/{start}/{end}")
       public String getRequestInterval(@PathVariable("start") String start, @PathVariable("end") String end, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
@@ -312,41 +213,22 @@ public class RequestController{
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-
         Object[] params = new Object[] { start, start, end, end };
-
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
         List<RequestStatus> requestList = new ArrayList<RequestStatus>();
-        //try {
-        requestList = jdbcTemplate.query(
-            "select * from sequ_request_view " +
+        String queryStr = "select * from sequ_request_view " +
             "where (start_date_time <= to_date(?, 'dd-mm-yyyy') and end_date_time >= to_date(?, 'dd-mm-yyyy') ) " +
             "or (end_date_time >= to_date(?, 'dd-mm-yyyy') and start_date_time <= to_date(?, 'dd-mm-yyyy')) " +
-            "and is_approved = true", params,
-            new RowMapper<RequestStatus>() {
-              public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
-                RequestStatus es = new RequestStatus(
-                  rs.getInt("rid"),
-                  rs.getInt("requested_by"),
-                  rs.getInt("responded_by"),
-                  checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),
-                  rs.getString("start_date_time"),
-                  rs.getString("end_date_time"),
-                  rs.getString("requester_first_name"),
-                  rs.getString("requester_last_name"),
-                  rs.getString("responder_first_name"),
-                  rs.getString("responder_last_name")
-                  );
-                return es;
-              }
-            });
-        //} catch (EmptyResultDataAccessException e) {
-        //
-        //};
+            "and is_approved = true";
+
+        try {
+          requestList =
+            jdbcTemplate.query( queryStr, params, new RequestRowMapper());
+        } catch (EmptyResultDataAccessException e) {
+          // there were no requests
+        };
         model.addAttribute("requests", requestList);
         return "jsonTemplate";
     }
-
 }
 

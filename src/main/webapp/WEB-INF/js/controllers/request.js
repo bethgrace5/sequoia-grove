@@ -50,7 +50,7 @@ angular.module('sequoiaGroveApp')
     if(moment($scope.requestDateStart).isAfter($scope.requestDateEnd)){
       $scope.requestDateEnd = $scope.requestDateStart;
     }
-  } 
+  }
 
   // The name of the active tab, by default, it will be the submit section
   $scope.activeTab = "submit";
@@ -246,22 +246,44 @@ angular.module('sequoiaGroveApp')
     });
   }
 
-  $scope.changeRequest = function($requestID, $approverID, $is_approve) {
-    $http({
-      url: '/sequoiagrove/request/update/' +
-      $requestID + '/' + $approverID + '/' + $is_approve,
-    method: "POST"
-    }).success(function(data, status) {
-      $scope.getCurrentEmployeeRequest().then(function(success) {
-        return $scope.getAllRequests();
-      }).then(function(success) {
-        requestFactory.init().then(function(success) {
-          $scope.pendingRequests = success.data.requestStatus;
-          $scope.getAllRequests();
+  $scope.changeRequest = function(request, isApproved) {
+    var approverId = loginFactory.getUser().id;
+    var requestId = request.requestID;
+    var title = (isApproved === true)? 'Approve Request for ': 'Deny Request for ';
+    title += request.employeeFirstName + '? ';
+    title += $scope.totalDays(request.startDate, request.endDate) + 'day(s)';
+    var message =
+      'from '+  moment(request.startDate).format("MMMM Do, YYYY") +
+      ' to ' +  moment(request.endDate).format("MMMM Do, YYYY");
+
+    // Appending dialog to document.body to cover sidenav in docs app
+    var confirm = $mdDialog.confirm()
+      .title(title)
+      .textContent(message)
+      .ariaLabel('Request Respond')
+      .ok('Submit')
+      .cancel('Cancel');
+
+    $mdDialog.show(confirm).then(function() {
+      $http({
+        url: '/sequoiagrove/request/respond',
+        method: "POST",
+        data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
+      }).success(function(data, status) {
+        $scope.getCurrentEmployeeRequest().then(function(success) {
+          return $scope.getAllRequests();
+        }).then(function(success) {
+          requestFactory.init().then(function(success) {
+            $scope.pendingRequests = success.data.requestStatus;
+            $scope.getAllRequests();
+          });
+          //return $scope.getPendingRequests();
         });
-        //return $scope.getPendingRequests();
       });
+    }, function() {
+      // do nothing
     });
+
   }
 
   $scope.changeRequestDates = function(){
