@@ -57,8 +57,8 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function submit(request, ev){
     var deferred = $q.defer();
     var obj = {'eid':request.eid,
-      'start': moment(request.start, 'MM-DD-YYYY').format('MM-DD-YYYY'),
-      'end': moment(request.end, 'MM-DD-YYYY').format('MM-DD-YYYY')
+      'start': moment(request.start).format('MM-DD-YYYY'),
+      'end': moment(request.end).format('MM-DD-YYYY')
     }
 
     checkDatesCollide(obj.start, obj.end, ev).then(
@@ -68,7 +68,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
             //deferred.resolve(success);
           }
           //else {
-            confirmSubmit(request, ev).then(function(success) {
+            confirmSubmit(obj, ev).then(function(success) {
               if(success === true) {
                 $http({ url: '/sequoiagrove/request/submit/',
                   method: 'POST',
@@ -93,6 +93,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   // makes sure user hasn't submitted overlapping requests
   function checkDatesCollide(start, end, ev){
     var deferred = $q.defer();
+    /*
     var i = 0;
     //var submitStart = moment(start);
     //var submitEnd = moment(end);
@@ -107,8 +108,11 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       .targetEvent(ev)
       .ok('Got it!'))
       .then(function(success) {
-        deferred.resolve(success);
+      */
+        deferred.resolve(true);
+        /*
     });
+    */
 
     /*
     for(i = 0; i < $scope.userRequests.length; i++){

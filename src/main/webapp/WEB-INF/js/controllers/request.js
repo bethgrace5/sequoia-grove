@@ -72,16 +72,16 @@ angular.module('sequoiaGroveApp')
 
   $scope.managerSubmitRequest = function(ev){
     var obj = { 'eid': $scope.selectedEmployee.id,
-      'start':moment($scope.requestDateStart).format('MM-DD-YYYY'),
-      'end':moment($scope.requestDateEnd).format('MM-DD-YYYY')
+      'start':$scope.requestDateStart,
+      'end':$scope.requestDateEnd
     }
     requestFactory.submit(obj, ev);
   }
 
   $scope.submitRequest = function(ev){
     var request = { 'eid': loginFactory.getUser().id,
-      'start': $scope.requestDateStart,
-      'end': $scope.requestDateEnd
+      'start':$scope.requestDateStart,
+      'end':$scope.requestDateEnd
     }
     requestFactory.submit(request, ev);
   }
