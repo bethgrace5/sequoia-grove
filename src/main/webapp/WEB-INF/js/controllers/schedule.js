@@ -310,6 +310,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.clearSchedule = function() {
+    $scope.selectedId = 0;
     scheduleFactory.clear();
   }
 

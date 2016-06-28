@@ -24,9 +24,9 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // UI 'Active' Tab Settings
   $scope.changeTab = function(tab) {
     if(tab == $location.path().substring(0,$location.path().length)) {
-      return "active";
+      return 'active';
     }
-    return "";
+    return '';
   }
 
   // Locale settings
@@ -70,11 +70,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   //$scope.isPublished = false;
   $scope.isPublished = false;
   $rootScope.showDeliveries = true;
-  $scope.printMessageDisclaimer = "Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.";
-  $scope.printMessageFullShift = "Shifts Longer than 6 hours have two 10min breaks with a 30min break in between";
-  $scope.printMessageHalfShift = "Shifts 4 hours or shorter have one 15min break";
-  $scope.currentYear = "";
-  $rootScope.loadingMsg = "Verifying user with Application...";
+  $scope.printMessageDisclaimer = 'Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.';
+  $scope.printMessageFullShift = 'Shifts Longer than 6 hours have two 10min breaks with a 30min break in between';
+  $scope.printMessageHalfShift = 'Shifts 4 hours or shorter have one 15min break';
+  $scope.currentYear = '';
+  $rootScope.loadingMsg = 'Verifying user with Application...';
   $scope.selectedPid = 0;
 
   // highlight name
@@ -114,7 +114,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.getPositions = function() {
     var deferred = $q.defer();
-    $http({ url: '/sequoiagrove/position', method: "GET" })
+    $http({ url: '/sequoiagrove/position', method: 'GET' })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
         deferred.resolve(success);
@@ -133,7 +133,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.deliveries = [];
     $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
       'sat':[], 'sun':[] }
-    $http({url: '/sequoiagrove/delivery', method: "GET" })
+    $http({url: '/sequoiagrove/delivery', method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;
@@ -170,64 +170,64 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 /************** Variable Initialization **************/
 
   // TODO function to find birthdays this week
-  //$scope.birthdays.push({name:"Amelia", date:"10/10"});
-  //$scope.birthdays.push({name:"Jem", date:"10/13"});
+  //$scope.birthdays.push({name:'Amelia', date:'10/10'});
+  //$scope.birthdays.push({name:'Jem', date:'10/13'});
 
   // TODO function to find holidays this week
-  //$scope.holidays.push({name:"Christmas", date:"12/25"});
-  //$scope.holidays.push({name:"New Years Day", date:"01/01"});
+  //$scope.holidays.push({name:'Christmas', date:'12/25'});
+  //$scope.holidays.push({name:'New Years Day', date:'01/01'});
 
   $scope.times = {
     // start times start at the earlist shift start and increment by half
     // hours until the end of the lastest starting shift
     // TODO have a smarter way to populate this list
     start:[
-      {disp:"5:00 AM",  val: '0500'},
-      {disp:"5:30 AM",  val: '0530'},
-      {disp:"6:00 AM",  val: '0600'},
-      {disp:"6:30 AM",  val: '0630'},
-      {disp:"7:00 AM",  val: '0700'},
-      {disp:"7:30 AM",  val: '0730'},
-      {disp:"8:00 AM",  val: '0800'},
-      {disp:"8:30 AM",  val: '0830'},
-      {disp:"9:00 AM",  val: '0900'},
-      {disp:"9:30 AM",  val: '0930'},
-      {disp:"10:00 AM", val: '1000'},
-      {disp:"10:30 AM", val: '1030'},
-      {disp:"11:00 AM", val: '1100'},
-      {disp:"11:30 AM", val: '1130'},
-      {disp:"12:00 PM", val: '1200'},
-      {disp:"12:30 PM", val: '1230'},
-      {disp:"1:00 PM",  val: '1300'},
-      {disp:"1:30 PM",  val: '1330'},
-      {disp:"2:00 PM",  val: '1400'},
-      {disp:"2:30 PM",  val: '1430'},
-      {disp:"3:00 PM",  val: '1500'},
-      {disp:"3:30 PM",  val: '1530'},
-      {disp:"4:00 PM",  val: '1600'},
-      {disp:"4:30 PM",  val: '1630'}
+      {disp:'5:00 AM',  val: '0500'},
+      {disp:'5:30 AM',  val: '0530'},
+      {disp:'6:00 AM',  val: '0600'},
+      {disp:'6:30 AM',  val: '0630'},
+      {disp:'7:00 AM',  val: '0700'},
+      {disp:'7:30 AM',  val: '0730'},
+      {disp:'8:00 AM',  val: '0800'},
+      {disp:'8:30 AM',  val: '0830'},
+      {disp:'9:00 AM',  val: '0900'},
+      {disp:'9:30 AM',  val: '0930'},
+      {disp:'10:00 AM', val: '1000'},
+      {disp:'10:30 AM', val: '1030'},
+      {disp:'11:00 AM', val: '1100'},
+      {disp:'11:30 AM', val: '1130'},
+      {disp:'12:00 PM', val: '1200'},
+      {disp:'12:30 PM', val: '1230'},
+      {disp:'1:00 PM',  val: '1300'},
+      {disp:'1:30 PM',  val: '1330'},
+      {disp:'2:00 PM',  val: '1400'},
+      {disp:'2:30 PM',  val: '1430'},
+      {disp:'3:00 PM',  val: '1500'},
+      {disp:'3:30 PM',  val: '1530'},
+      {disp:'4:00 PM',  val: '1600'},
+      {disp:'4:30 PM',  val: '1630'}
     ],
     // end times start at the earlist shift end and increment by half
     // hours until the end of the lastest ending shift
     // TODO have a smarter way to populate this list
     end:[
-      {disp:"1:00 PM", val: '1300'},
-      {disp:"1:30 PM", val: '1330'},
-      {disp:"2:00 PM", val: '1400'},
-      {disp:"2:30 PM", val: '1430'},
-      {disp:"3:00 PM", val: '1500'},
-      {disp:"3:30 PM", val: '1530'},
-      {disp:"4:00 PM", val: '1600'},
-      {disp:"4:30 PM", val: '1630'},
-      {disp:"5:00 PM", val: '1700'},
-      {disp:"5:30 PM", val: '1730'},
-      {disp:"6:00 PM", val: '1800'},
-      {disp:"6:30 PM", val: '1830'},
-      {disp:"7:00 PM", val: '1900'},
-      {disp:"7:30 PM", val: '1930'},
-      {disp:"8:00 PM", val: '2000'},
-      {disp:"8:30 PM", val: '2030'},
-      {disp:"9:00 PM", val: '2100'}
+      {disp:'1:00 PM', val: '1300'},
+      {disp:'1:30 PM', val: '1330'},
+      {disp:'2:00 PM', val: '1400'},
+      {disp:'2:30 PM', val: '1430'},
+      {disp:'3:00 PM', val: '1500'},
+      {disp:'3:30 PM', val: '1530'},
+      {disp:'4:00 PM', val: '1600'},
+      {disp:'4:30 PM', val: '1630'},
+      {disp:'5:00 PM', val: '1700'},
+      {disp:'5:30 PM', val: '1730'},
+      {disp:'6:00 PM', val: '1800'},
+      {disp:'6:30 PM', val: '1830'},
+      {disp:'7:00 PM', val: '1900'},
+      {disp:'7:30 PM', val: '1930'},
+      {disp:'8:00 PM', val: '2000'},
+      {disp:'8:30 PM', val: '2030'},
+      {disp:'9:00 PM', val: '2100'}
     ]
   };
 
@@ -489,6 +489,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $log.debug('hey, requestsNum has changed!', $scope.requestsNum);
     });*/
 
+  // Schedule Factory observers
   var updateChangesMade = function(){
     $scope.template = scheduleFactory.getTemplate();
     //$log.debug('update changes made');
@@ -516,22 +517,27 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     }, 200);
 
   };
-  scheduleFactory.registerObserverCallback(updateChangesMade);
-  //schedule factory now in control of updateChangesMade()
 
-  // fires when the user has logged in or out
+  // login factory observers
   var updateUser = function(){
     $scope.loggedInUser = loginFactory.getUser();
     $scope.loggedIn = loginFactory.isLoggedIn();
   };
 
-  loginFactory.registerObserverCallback(updateUser);
-
+  // request factory observers
   var requestChange = function() {
-    $scope.requestsNum = requestFactory.getNumberPending();
-    $scope.pendingRequests = requestFactory.getPending();
+    $timeout(function() {
+      $scope.requestsNum = requestFactory.getNumberPending();
+      $scope.pendingRequests = requestFactory.getPending();
+      $scope.allRequests = requestFactory.getAll();
+      $scope.userRequests = requestFactory.getUser();
+      $scope.$apply();
+    })
   };
 
+  // register observers
+  scheduleFactory.registerObserverCallback(updateChangesMade);
+  loginFactory.registerObserverCallback(updateUser);
   requestFactory.registerObserverCallback(requestChange);
 
   // insert google signin button, so the script loads
@@ -544,7 +550,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       js.onload = function(){
         // remote script has loaded, add a signin listener
       };
-      js.src = "//apis.google.com/js/platform.js";
+      js.src = '//apis.google.com/js/platform.js';
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'))
   })

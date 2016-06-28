@@ -53,7 +53,7 @@ public class RequestController{
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
-      JsonObject  jobject = jelement.getAsJsonObject();
+      JsonObject jobject = jelement.getAsJsonObject();
 
       int id = jdbcTemplate.queryForObject("select nextval('sequ_requests_sequence')",
             Integer.class);
@@ -61,8 +61,8 @@ public class RequestController{
         id,
         jobject.get("eid").getAsInt(),
         null, false,
-        jobject.get("startDate").getAsString(),
-        jobject.get("endDate").getAsString(),
+        jobject.get("start").getAsString(),
+        jobject.get("end").getAsString(),
       };
 
       jdbcTemplate.update(
@@ -86,7 +86,7 @@ public class RequestController{
       }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      String queryStr = "select * from sequ_request_view";
+      String queryStr = "select * from sequ_request_view order by start_date_time asc";
       List<RequestStatus> requestList =
             jdbcTemplate.query( queryStr, new RequestRowMapper());
 
@@ -124,7 +124,7 @@ public class RequestController{
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
       String queryStr = "select * from sequ_request_view "+
-          "where responded_by IS NULL and end_date_time >= current_date";
+          "where responded_by IS NULL and end_date_time >= current_date order by start_date_time asc";
       List<RequestStatus> requestList =
             jdbcTemplate.query( queryStr, new RequestRowMapper());
 
@@ -144,7 +144,8 @@ public class RequestController{
 
           JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
           String queryStr = "select * from sequ_request_view " +
-                  "where requested_by = ? and end_date_time >= current_date";
+                  "where requested_by = ? and end_date_time >= current_date " +
+                  "order by start_date_time asc";
           Object[] params = new Object[] { eid };
 
           List<RequestStatus> requestList =
