@@ -302,12 +302,6 @@ angular.module('sequoiaGroveApp')
         $scope.employeeSaved = true;
         return false;
       }
-
-      // TODO don't send the form if it hasn't been changed
-      // just directly jump to show that it was saved
-      // (you will need a variable to know it was saved)
-      // (!$dirty)
-
       if($rootScope.devMode) {
         $scope.saving = false;
         return;
@@ -325,7 +319,6 @@ angular.module('sequoiaGroveApp')
           (form.minHours.$viewValue < 0)) {
         $scope.selectedEmployee.minHours = 0;
       };
-
       if ('form',form.clockNumber.$viewValue === '') {
         $scope.selectedEmployee.clockNumber = 0;
       }
@@ -359,7 +352,6 @@ angular.module('sequoiaGroveApp')
         form.email.$setTouched();
         return;
       }
-
       // guard against double clicking
       if ($scope.saving) {
         return;
@@ -372,7 +364,6 @@ angular.module('sequoiaGroveApp')
         $scope.saving = false;
         action = "add";
       }
-
       // set null notes to empty string
       if (!$scope.selectedEmployee.notes) {
         $scope.selectedEmployee.notes = '';
@@ -380,12 +371,8 @@ angular.module('sequoiaGroveApp')
 
       $http.post("/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){
-          $scope.employeeSaved = true;
-          form.$setSubmitted();
-          form.$setPristine();
           // upate front end
           if (action === 'add') {
-          //TODO  (you will need a variable to know it was saved)
             $scope.selectedEmployee.isCurrent = true;
             $scope.selectedEmployee.id = data.id;
             $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
@@ -393,11 +380,11 @@ angular.module('sequoiaGroveApp')
           }
           $scope.selectEmployee($scope.selectedEmployee.id);
           $scope.saving = false;
+          $scope.employeeSaved = true;
+          form.$setPristine();
           form.$setSubmitted();
         }).error(function(data, status) {
           $scope.employeeSaveError = true;
-          // TODO show error saving indication, be able to reset it with
-          // the same reset for the saved indication
           $log.debug('error with action:', action, status,data);
         });
     }

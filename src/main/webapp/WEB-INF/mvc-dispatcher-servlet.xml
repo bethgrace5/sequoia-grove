@@ -143,7 +143,7 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/request/update/*/*/*" />
+      <mvc:mapping path="/request/respond" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>

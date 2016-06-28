@@ -161,7 +161,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     }).then(function(success) {
       return $scope.getDeliveries(); // get deliveries
     }).then(function(success) {
-      return requestFactory.init(); // get deliveries
+      return requestFactory.init(loginFactory.getUser().id); // get deliveries
     })
   }
 });

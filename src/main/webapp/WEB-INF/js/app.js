@@ -35,6 +35,11 @@ angular.module('sequoiaGroveApp', [
     controller: 'ManageCtrl',
     controllerAs: 'manage'
   }).otherwise({
+  }).when('/contact', {
+    templateUrl: 'views/contact.html',
+    controller: 'ContactCtrl',
+    controllerAs: 'contact'
+  }).otherwise({
     redirectTo: '/login'
   });
 
