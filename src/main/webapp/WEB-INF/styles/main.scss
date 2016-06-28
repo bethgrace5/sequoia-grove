@@ -154,8 +154,9 @@ a:focus {
 
 .schedule-edit-input {
   padding: 2px;
-  color: black;
+  color: transparent;
   cursor: default;
+  text-shadow: 1px 0px 0px #000;
   -webkit-transition: all 0.10s ease-in-out;
   -moz-transition: all 0.10s ease-in-out;
   -ms-transition: all 0.10s ease-in-out;
@@ -168,18 +169,18 @@ a:focus {
   border: 1px solid #4d79ff;
 }
 .schedule-edit-input::selection {
-  /*background: transparent; WebKit/Blink Browsers */
+  background: transparent; /*WebKit/Blink Browsers */
 }
 .schedule-edit-input-highlight:focus {
   box-shadow: 0 0 5px #00CCFF;
   border: 1px solid #00CCFF;
 }
 .schedule-edit-input-highlight::selection {
-  /*background: transparent; WebKit/Blink Browsers */
+  background: transparent; /*WebKit/Blink Browsers */
 }
 /* error on edit schedule input box */
 .schedule-edit-input-error{
-  color: #CC0000;
+  text-shadow: 1px 0px 0px #CC0000;
 }
 .schedule-edit-input-error:focus {
   box-shadow: 0 0 5px rgba(204, 0, 0, 1);
@@ -212,11 +213,11 @@ a:focus {
   border-radius: 5px;
 }
 .schedule-edit-input-error::selection {
-  /*background: transparent;  WebKit/Blink Browsers */
+  background: transparent;  /*WebKit/Blink Browsers */
 }
 /* warning on edit schedule input box */
 .schedule-edit-input-warn{
-  color: #CF8600;
+  text-shadow: 1px 0px 0px #CF8600;
 }
 .schedule-edit-input-warn:focus {
   box-shadow: 0 0 5px rgba(255, 204, 0, 1);
@@ -224,7 +225,7 @@ a:focus {
   background-color: #FFFFCC;
 }
 .schedule-edit-input-warn::selection {
-  /*background: transparent; WebKit/Blink Browsers */
+  background: transparent; /*WebKit/Blink Browsers */
 }
 .schedule-view-panel {
   min-height: 60%;

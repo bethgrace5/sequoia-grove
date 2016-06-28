@@ -337,6 +337,7 @@ angular.module('sequoiaGroveApp')
 
 
   $scope.$on('$locationChangeStart', function (event, next, current) {
+    /*
     console.log(current);
 
     if (current.match("/schedule")) {
@@ -348,6 +349,7 @@ angular.module('sequoiaGroveApp')
         //clearInterval(myInterval);
       }
     }
+    */
   });
 
 });
