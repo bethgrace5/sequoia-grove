@@ -48,6 +48,10 @@
 		-webkit-text-size-adjust: none;
 	}
 
+  .title {
+    color: #336699;
+  }
+
 /* Box Model */
 
 	*, *:before, *:after {
@@ -1706,12 +1710,14 @@
 		-ms-transition: opacity 0.25s ease-in-out;
 		transition: opacity 0.25s ease-in-out;
 		display: inline-block;
-		outline: 1px solid #00a5a5;
-		border: 1px solid #008080;
-    background: white;
+		border: none;
+    background: transparent;
+    border-radius: 7px;
 	}
 
 		.image img {
+      border-radius: 7px;
+      border: 2px solid #008080;
 			display: block;
 			width: 100%;
 		}
