@@ -1,0 +1,15 @@
+{
+  "name": "dropotron",
+  "homepage": "https://github.com/n33/jquery.dropotron",
+  "version": "1.4.3",
+  "_release": "1.4.3",
+  "_resolution": {
+    "type": "version",
+    "tag": "v1.4.3",
+    "commit": "965dd2907647b94ab559ac81093162c8e15cc5b2"
+  },
+  "_source": "https://github.com/n33/jquery.dropotron.git",
+  "_target": "^1.4.3",
+  "_originalSource": "dropotron",
+  "_direct": true
+}
