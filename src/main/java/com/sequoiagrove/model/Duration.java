@@ -3,6 +3,7 @@ package com.sequoiagrove.model;
 public class Duration{
     String start;
     String end;
+    int locationId;
     int startNum;
     int endNum;
     DateCustom startDate;
@@ -15,6 +16,22 @@ public class Duration{
     }
 
     public Duration(String start, String end) {
+      this.start = start;
+      this.end = end;
+      try {
+        this.startNum = Integer.parseInt(start);
+        this.endNum = Integer.parseInt(end);
+      }
+      catch(NumberFormatException e) {
+        this.startNum = -1;
+        this.endNum = -1;
+        startDate = parseDateString(start);
+        endDate = parseDateString(end);
+      }
+    }
+
+    public Duration(int locationId, String start, String end) {
+      this.locationId = locationId;
       this.start = start;
       this.end = end;
       try {
@@ -56,6 +73,21 @@ public class Duration{
       this.endDate = new DateCustom();
     }
 
+    public Duration(int locationId, String start) {
+      this.locationId = locationId;
+      this.start = start;
+      this.end = "";
+      try {
+        this.startNum = Integer.parseInt(start);
+      }
+      catch(NumberFormatException e) {
+        this.startNum = -1;
+        startDate = parseDateString(start);
+      }
+      this.endNum = -1;
+      this.endDate = new DateCustom();
+    }
+
     // ----- Helper Functions -----
     public DateCustom parseDateString(String dateStr) {
       if (dateStr == null) {
@@ -72,6 +104,14 @@ public class Duration{
     }
 
     // ----- Getters & Setters -----
+
+    public void setLocationId(int locationId) {
+      this.locationId = locationId;
+    }
+    public int getLocationId(int locationId) {
+      return locationId;
+    }
+
     public void setStart(String start) {
       this.start = start;
     }

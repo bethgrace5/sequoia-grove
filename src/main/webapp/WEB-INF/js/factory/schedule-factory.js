@@ -287,6 +287,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
   var initSchedule = function() {
+    console.log('locations ', locations, locations.length);
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/'+monday+'/'+locations; // if it's in dev mode, and we already have

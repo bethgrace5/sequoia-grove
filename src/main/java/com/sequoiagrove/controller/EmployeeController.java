@@ -89,15 +89,22 @@ public class EmployeeController
     public static List<Duration> parseHistory(String hist) {
       List<Duration> historyList = new ArrayList<Duration>();
 
-      String[] histories = hist.split(",");
-      for (String h : histories) {
-        String[] times = h.split(":");
-        if(times.length == 2) {
-          historyList.add(new Duration(times[0], times[1]));
+      String[] all = hist.split("|");
+      for (String a : all) {
+        String[] locations = a.split("@");
+        Integer locationId = Integer.parseInt(locations[0]);
+
+        String[] histories = locations[1].split(",");
+        for (String h : histories) {
+          String[] times = h.split(":");
+          if(times.length == 2) {
+            historyList.add(new Duration(locationId, times[0], times[1]));
+          }
+          else {
+            historyList.add(new Duration(locationId, times[0]));
+          }
         }
-        else {
-          historyList.add(new Duration(times[0]));
-        }
+
       }
       return historyList;
     }

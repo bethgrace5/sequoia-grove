@@ -67,4 +67,6 @@
   <include relativeToChangelogFile="true" file="changelogs/036-business-location.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/037-user-info-view-locations.xml"/>
 
+  <include relativeToChangelogFile="true" file="changelogs/038-update-views-with-location.xml"/>
+
 </databaseChangeLog>
