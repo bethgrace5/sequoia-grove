@@ -7,6 +7,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Exposed to all users through service
   var schedule = [];
+  var locations = [];
   var isPublished = false;
   var header = {
     mon:{val:'', disp:'', holiday:{}},
@@ -288,7 +289,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var initSchedule = function() {
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/sequoiagrove/schedule/template/' + monday; // if it's in dev mode, and we already have
+    var url = '/sequoiagrove/schedule/template/'+monday+'/'+locations; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     if($rootScope.devMode) {
       var temp = localStorageService.get('template');
@@ -301,11 +302,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           });
         }
       }
-    $http({ 'url': url, 'method': 'GET', }).then(
-        function(success) {
+    $http({
+      "url": url,
+      "method": "GET",
+    }).then(function (success) {
           if (success.status === 200) {
             isPublished = success.data.isPublished;
             schedule = success.data.template;
+            console.log(schedule);
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
               localStorageService.set('template', JSON.stringify(success.data.template));
@@ -669,11 +673,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
-    service.init = function() {
+    service.init = function(loc) {
       var deferred = $q.defer();
+      locations = loc;
       initMonday();
       initHeader();
-      initSchedule().then(
+      initSchedule(loc).then(
           function(success) {
             countDays();
             countHours();
@@ -757,8 +762,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // Exposed factory functionality
     return {
       // Initialize monday, set schedule header, get schedule template
-      'init':function() {
+      'init':function(loc) {
         var deferred = $q.defer();
+        locations = loc;
         initMonday();
         initHeader();
         initSchedule().then(function(success) {

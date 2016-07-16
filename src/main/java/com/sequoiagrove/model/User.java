@@ -5,6 +5,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User {
     int id;
@@ -24,6 +25,7 @@ public class User {
     List<Duration> history = new ArrayList<Duration>();
     List<String> positions = new ArrayList<String>();
     List<String> permissions = new ArrayList<String>();
+    List<String> locations = new ArrayList<String>();
     WeeklyAvail avail = new WeeklyAvail();
     
     public User(){}
@@ -63,7 +65,6 @@ public class User {
         this.classificationTitle = classificationTitle;
         this.notes = notes;
     }
-
 
     public int getId() {
         return id;
@@ -167,6 +168,22 @@ public class User {
     }
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public List<String> getLocations() {
+        return locations;
+    }
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
+    }
+    // change Position string to list of java objects
+    public void setLocations(String loc) {
+      if (loc == null) {
+        this.locations = new ArrayList<String>();
+      }
+      else {
+       this.locations = new ArrayList<String>(Arrays.asList(loc.split(",")));
+      }
     }
 
     public WeeklyAvail getAvail() {

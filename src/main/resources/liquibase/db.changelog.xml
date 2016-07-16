@@ -64,4 +64,7 @@
   <include relativeToChangelogFile="true" file="changelogs/026-get-current-shifts.xml"/>
   <include relativeToChangelogFile="true" file="changelogs/025-employee-shift-with-days-view.xml"/>
 
+  <include relativeToChangelogFile="true" file="changelogs/036-business-location.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/037-user-info-view-locations.xml"/>
+
 </databaseChangeLog>

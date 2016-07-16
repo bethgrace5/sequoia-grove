@@ -137,7 +137,9 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   window.differentUser = differentUser;
   // When user has logged in, this will load required data based
   // on user access level, and then redirect to home.
-  $scope.initializeData = function(isManager) {
+  $scope.initializeData = function(user) {
+    var isManager = user.isManager;
+    var locations = user.locations;
     // pull data from localstorage, if it's availabile
     if($rootScope.devMode) {
       if (localStorageService.get('template')){
@@ -153,7 +155,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       userFactory.setManagePrivelage(); //needs permission manage-employees
       requestFactory.setManagePrivelage(); //needs permission manage-employees
     }
-    return scheduleFactory.init()
+    return scheduleFactory.init(locations)
    .then(function(success) { // initialize schedule factory
       return userFactory.init();
     }).then(function(success) {

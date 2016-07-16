@@ -459,6 +459,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   // advance or go back weeks in time
   $scope.changeWeek = function(operation) {
+    $scope.isPublished = false;
     $scope.selectWeek(0);
     if ($scope.loadingWeek) {
       return;
