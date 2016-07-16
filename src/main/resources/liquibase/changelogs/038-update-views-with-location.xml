@@ -344,6 +344,10 @@
         --order by wd_st, area, we_st
     </createView>
 
+    <sqlFile encoding="UTF-8" path="functions/update_with_location.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+
+    <sqlFile encoding="UTF-8" path="mock-data/location.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+
   </changeSet>
 
 </databaseChangeLog>
