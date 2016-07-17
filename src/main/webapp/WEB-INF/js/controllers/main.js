@@ -11,6 +11,9 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
     localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
 
+  $rootScope.locations = [];
+  $rootScope.selectedLocation = 0;
+
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
   if (loginFactory.isLoggedIn() === false) {
@@ -130,10 +133,24 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // get all existing deliveries
   $scope.getDeliveries = function() {
     var deferred = $q.defer();
+    if($rootScope.locations.length <= 0) {
+      deferred.resolve();
+      return;
+    }
     $scope.deliveries = [];
-    $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
-      'sat':[], 'sun':[] }
-    $http({url: '/sequoiagrove/delivery', method: 'GET' })
+    $scope.viewDeliveries = [];
+
+    // initialize empty locations container and view style container
+    // for each location
+    $rootScope.locations.forEach (
+      function(val, index, arr) {
+        $scope.deliveries[val] = [];
+        $scope.viewDeliveries[val] =
+          {'mon':[],'tue':[],'wed':[],'thu':[],'fri':[],'sat':[],'sun':[]};
+      }
+    )
+
+    $http({url: '/sequoiagrove/delivery/'+$rootScope.locations, method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;

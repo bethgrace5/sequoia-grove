@@ -2,28 +2,28 @@
 <p/ class="lead"> Manage Deliveries </p>
 <div class="row">
     <div class="col-sm-2" >
-        <p>Company</p> 
+        <p>Company</p>
     </div>
     <div class="col-sm-1" >
-        <p>Monday</p> 
+        <p>Monday</p>
     </div>
     <div class="col-sm-1">
-        <p>Tuesday</p> 
+        <p>Tuesday</p>
     </div>
     <div class="col-sm-1">
-        <p>Wednesday</p> 
+        <p>Wednesday</p>
     </div>
     <div class="col-sm-1">
-        <p>Thursday</p> 
+        <p>Thursday</p>
     </div>
     <div class="col-sm-1">
-        <p>Friday</p> 
+        <p>Friday</p>
     </div>
     <div class="col-sm-1">
-        <p>Saturday</p> 
+        <p>Saturday</p>
     </div>
     <div class="col-sm-1">
-        <p>Sunday</p> 
+        <p>Sunday</p>
     </div>
 
 </div>
@@ -35,7 +35,7 @@
         <hr/>
     </div>
     <div class="col-sm-1">
-        <input type="checkbox" 
+        <input type="checkbox"
         ng-model = "newDelivery.mon"/>
     </div>
     <div class="col-sm-1">
@@ -70,32 +70,32 @@
 </div>
 <div class="row">
     <div class="col-sm-2" >
-        <p>Company</p> 
+        <p>Company</p>
     </div>
     <div class="col-sm-1" >
-        <p>Monday</p> 
+        <p>Monday</p>
     </div>
     <div class="col-sm-1">
-        <p>Tuesday</p> 
+        <p>Tuesday</p>
     </div>
     <div class="col-sm-1">
-        <p>Wednesday</p> 
+        <p>Wednesday</p>
     </div>
     <div class="col-sm-1">
-        <p>Thursday</p> 
+        <p>Thursday</p>
     </div>
     <div class="col-sm-1">
-        <p>Friday</p> 
+        <p>Friday</p>
     </div>
     <div class="col-sm-1">
-        <p>Saturday</p> 
+        <p>Saturday</p>
     </div>
     <div class="col-sm-1">
         <p>Sunday</p>
     </div>
 </div>
 <hr/>
-<div ng-repeat="d in deliveries">
+<div ng-repeat="d in deliveries[selectedLocation]">
     <div class="row">
         <div class="col-sm-2">
             <h5>{{d.name}}</h5>
