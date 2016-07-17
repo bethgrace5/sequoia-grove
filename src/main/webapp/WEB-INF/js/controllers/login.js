@@ -165,7 +165,51 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     }).then(function(success) {
       return $scope.getDeliveries(); // get deliveries
     }).then(function(success) {
+      $rootScope.deliveries = success.deliveries;
+      $rootScope.viewDeliveries = success.viewDeliveries;
       return requestFactory.init(loginFactory.getUser().id); // get deliveries
     })
+  }
+
+  // get all existing deliveries
+  $scope.getDeliveries = function() {
+    var deliveries = [];
+    var viewDeliveries = [];
+    var deferred = $q.defer();
+    if($rootScope.locations.length <= 0) {
+      deferred.resolve([],[]);
+      return;
+    }
+    // initialize empty locations container and view style container
+    // for each location
+    $rootScope.locations.forEach (
+      function(val, index, arr) {
+        deliveries[val] = [];
+        viewDeliveries[val] =
+          {'mon':[],'tue':[],'wed':[],'thu':[],'fri':[],'sat':[],'sun':[]};
+      }
+    )
+    // request deliveries and make the view list for each location
+    $http({url: '/sequoiagrove/delivery/'+$rootScope.locations, method: 'GET' })
+      .then(function(success) {
+        if (success.status == 200) {
+          deliveries = success.data.delivery;
+          $rootScope.locations.forEach (
+            function(val, index, arr) {
+              _.map(deliveries[val],function(item){
+                  if(item.mon) { viewDeliveries[val].mon.push(item.name); }
+                  if(item.tue) { viewDeliveries[val].tue.push(item.name); }
+                  if(item.wed) { viewDeliveries[val].wed.push(item.name); }
+                  if(item.thu) { viewDeliveries[val].thu.push(item.name); }
+                  if(item.fri) { viewDeliveries[val].fri.push(item.name); }
+                  if(item.sat) { viewDeliveries[val].sat.push(item.name); }
+                  if(item.sun) { viewDeliveries[val].sun.push(item.name); }
+                });
+              }
+            )
+        }
+        deferred.resolve({'deliveries':deliveries, 'viewDeliveries':viewDeliveries});
+      });
+    return deferred.promise;
   }
 });

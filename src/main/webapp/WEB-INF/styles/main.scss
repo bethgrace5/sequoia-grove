@@ -265,9 +265,14 @@ a:focus {
     06. Schedule_Header
 *********************************************/
 .weekday-title div{
-  font-size: 1.1em;
+  font-size: 1.2em;
   color: #336699;
   padding-left: 30px;
+}
+
+.delivery-title div{
+  color: #737373;
+  padding-left: 15px;
 }
 
 .schedule-times {

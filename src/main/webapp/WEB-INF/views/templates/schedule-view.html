@@ -1,111 +1,66 @@
-
 <div class="hidden-xs">
-
-  <!-- List deliveries for each day -->
-  <div class="row" ng-show="revealDeliveries">
-    <div class="col-sm-1 col-sm-offset-3 ">
-      <div ng-repeat="item in viewDeliveries.mon"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.tue"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.wed"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.thu"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.fri"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 col-sm-offset-1">
-      <div ng-repeat="item in viewDeliveries.sat"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.sun"> {{item}} </div>
-    </div>
-  </div>
 
   <!-- shifts -->
   <div ng-repeat="t in template[selectedLocation]">
-    <div class="row schedule-view-row"
-      ng-show="filterByType(t.location, t.position, t)">
+    <div class="row schedule-view-row" ng-show="filterByType(t.location, t.position, t)">
 
       <div ng-hide="t.isSpacer">
         <!-- shift title -->
         <div class="col-sm-2 col-sm-offset-0" >
             {{t.tname}}
         </div>
- 
+
         <!-- weekday times -->
         <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-          <!--<div ng-show="t.wd_st != 0">-->
+          <!-- TODO hide the times when this shift has no weekday times -->
           {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
-          <!--</div>-->
         </div>
 
-        <!-- Monday -->
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.mon.eid==loggedInUser.id) && highlight]">
-            {{t.mon.name}}
+            {{t.mon.name}} <!-- Monday -->
           </div>
         </div>
-
-        <!-- Tuesday -->
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.tue.eid==loggedInUser.id) && highlight]">
-            {{t.tue.name}}
+            {{t.tue.name}} <!-- Tuesday -->
           </div>
         </div>
-
-        <!-- Wednesday -->
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.wed.eid==loggedInUser.id) && highlight]">
-            {{t.wed.name}}
+            {{t.wed.name}} <!-- Wednesday -->
           </div>
         </div>
-
-        <!-- Thursday -->
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.thu.eid==loggedInUser.id) && highlight]">
-            {{t.thu.name}}
+            {{t.thu.name}} <!-- Thursday -->
           </div>
         </div>
-
-        <!-- Friday -->
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.fri.eid==loggedInUser.id) && highlight]">
-            {{t.fri.name}}
+            {{t.fri.name}} <!-- Friday -->
           </div>
         </div>
 
         <!-- weekend times -->
         <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-          <!--<div ng-show="t.we_st != 0">-->
+          <!-- TODO hide the times when this shift has no weekend times -->
           {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
-          <!--</div>-->
         </div>
 
-        <!-- Saturday -->
         <div class="col-sm-1 col-sm-offset-0 ">
           <div ng-class="{true:'highlighted', false:''}[(t.sat.eid==loggedInUser.id) && highlight]">
-            {{t.sat.name}}
+            {{t.sat.name}} <!-- Saturday -->
           </div>
         </div>
-
-        <!-- Sunday -->
         <div class="col-sm-1 col-sm-offset-0 ">
           <div ng-class="{true:'highlighted', false:''}[(t.sun.eid==loggedInUser.id) && highlight]">
-            {{t.sun.name}}
+            {{t.sun.name}} <!-- Sunday -->
           </div>
         </div>
+      </div><!-- end of div hide if spacer -->
 
-    </div>
+    </div><!-- end div schedule row using filter-->
+  </div><!-- end repeat schedule template -->
 
-    </div>
-  </div>
-
-</div>
-
-
-
+</div><!-- end div hidden xs -->

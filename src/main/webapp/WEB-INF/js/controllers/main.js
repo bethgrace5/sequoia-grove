@@ -47,6 +47,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     localStorageService.set('devMode', $rootScope.devMode);
   }
 
+  $scope.toggleDeliveries = function() {
+    $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
+  }
+
   $scope.loadingWeek = false;
   $scope.selectedWeek = 0;
   $scope.weekLabel = '';
@@ -62,9 +66,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $scope.extendEnd = 2;
 
   // setup containers
-  $scope.deliveries = [];
-  $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
-      'sat':[], 'sun':[] }
+  $rootScope.deliveries = [];
+  $rootScope.viewDeliveries = [];
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
@@ -120,64 +123,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $http({ url: '/sequoiagrove/position', method: 'GET' })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
-        deferred.resolve(success);
-      });
-    return deferred.promise;
-  }
-
-/************** HTTP Request Functions **************/
-  $scope.toggleDeliveries = function() {
-    $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
-  }
-
-  // get all existing deliveries
-  $scope.getDeliveries = function() {
-    var deferred = $q.defer();
-    if($rootScope.locations.length <= 0) {
-      deferred.resolve();
-      return;
-    }
-    $scope.deliveries = [];
-    $scope.viewDeliveries = [];
-
-    // initialize empty locations container and view style container
-    // for each location
-    $rootScope.locations.forEach (
-      function(val, index, arr) {
-        $scope.deliveries[val] = [];
-        $scope.viewDeliveries[val] =
-          {'mon':[],'tue':[],'wed':[],'thu':[],'fri':[],'sat':[],'sun':[]};
-      }
-    )
-
-    $http({url: '/sequoiagrove/delivery/'+$rootScope.locations, method: 'GET' })
-      .then(function(success) {
-        if (success.status == 200) {
-          $scope.deliveries = success.data.delivery;
-          _.map($scope.deliveries,function(item){
-            if(item.mon) {
-              $scope.viewDeliveries.mon.push(item.name);
-            }
-            if(item.tue) {
-              $scope.viewDeliveries.tue.push(item.name);
-            }
-            if(item.wed) {
-              $scope.viewDeliveries.wed.push(item.name);
-            }
-            if(item.thu) {
-              $scope.viewDeliveries.thu.push(item.name);
-            }
-            if(item.fri) {
-              $scope.viewDeliveries.fri.push(item.name);
-            }
-            if(item.sat) {
-              $scope.viewDeliveries.sat.push(item.name);
-            }
-            if(item.sun) {
-              $scope.viewDeliveries.sun.push(item.name);
-            }
-          });
-        }
         deferred.resolve(success);
       });
     return deferred.promise;
