@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,8 +51,9 @@ public class EmployeeController
     }
 
     // Get All Employees with the availability, positions, and employment history
-    @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions) {
+    @RequestMapping(value = "/employees/{locations}")
+    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions,
+        @PathVariable("locations") String locations) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // the token did not have the required permissions, return 403 status
@@ -59,9 +62,20 @@ public class EmployeeController
             return "jsonTemplate";
         }
 
-        String queryStr = "select * from sequ_user_info_view order by last_name";
-        List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
-        model.addAttribute("employees", empList);
+        // change location string to list of java integers
+        ArrayList<Integer> loc = new ArrayList<Integer>();
+        for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
+            loc.add(Integer.parseInt(item));
+        }
+
+        Map<Integer, List<User>> employees = new HashMap<Integer, List<User>>();
+
+        for(Integer l : loc) {
+          String queryStr = "select * from sequ_user_info_view where location_id = ? order by last_name";
+          List<User> empList = jdbcTemplate.query( queryStr, new Object[]{l}, new SuperUserRowMapper());
+          employees.put(l, empList);
+        }
+        model.addAttribute("employees", employees);
         return "jsonTemplate";
     }
 

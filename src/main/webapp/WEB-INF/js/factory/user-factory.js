@@ -19,10 +19,10 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     });
   };
 
-  var initUsers = function() {
+  var initUsers = function(locations) {
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Getting user data...";
-    var url = '/sequoiagrove/employees';
+    var url = '/sequoiagrove/employees/'+locations;
     // if it's in dev mode, and we already have
     // a template in localstorage, return.
     if($rootScope.devMode) {
@@ -54,7 +54,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
 
   var buildAvailability = function() {
     // create map with key as eid and value as each object
-    availMap = _.indexBy(users, function(item, index) {
+    availMap = _.indexBy(users[$rootScope.selectedLocation], function(item, index) {
       return item.id;
     });
 
@@ -117,7 +117,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
 
   var buildPositions = function() {
     // create map with key as eid and value as each object
-    positionMap = _.indexBy(users, function(item, index) {
+    positionMap = _.indexBy(users[$rootScope.selectedLocation], function(item, index) {
       return item.id;
     });
 
@@ -158,9 +158,9 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
-    service.init = function() {
+    service.init = function(locations) {
       var deferred = $q.defer();
-      initUsers().then(
+      initUsers(locations).then(
           function(success) {
             $timeout(function() {
               buildAvailability();

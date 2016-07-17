@@ -40,13 +40,13 @@ public class DeliveryController {
         @PathVariable("locations") String locations,
         @ModelAttribute("scope") List<String> permissions) {
 
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
       // change location string to list of java integers
       ArrayList<Integer> loc = new ArrayList<Integer>();
       for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
           loc.add(Integer.parseInt(item));
       }
-
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
       Map<Integer, List<Delivery>> deliveries = new HashMap<Integer, List<Delivery>>();
 

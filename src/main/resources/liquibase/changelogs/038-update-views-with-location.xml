@@ -207,7 +207,7 @@
     <createView replaceIfExists="true"
       schemaName="public"
       viewName="sequ_user_info_view">
-      select e.id, first_name, last_name, email, loc, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
+      select distinct e.id, first_name, last_name, email, loc, location_id, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
       phone_number, clock_number, pid as positions, history, min_hrs_week, c.title as classification_title, c.id as classification_id,
       concat_ws(' ',
       concat('mon,', mon::text),
@@ -248,6 +248,12 @@
       where date_unemployed is null
       group by user_id) as hist
       on hist.user_id = e.id
+      right outer join
+      (
+      select location_id, user_id as uid
+      from sequ_employment_history
+      ) as no
+      on no.uid = e.id
     </createView>
 
     <createView replaceIfExists="true"

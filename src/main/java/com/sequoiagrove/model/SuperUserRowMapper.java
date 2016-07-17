@@ -24,7 +24,7 @@ public class SuperUserRowMapper implements RowMapper {
             EmployeeController.parseHistory(rs.getString("history")),
             EmployeeController.parsePositions(rs.getString("positions")),
             EmployeeController.parseAvailability(rs.getString("avail")),
-            (rs.getInt("is_current") == 1)? true: false,
+            (rs.getInt("is_current") >= 1)? true: false,
             EmployeeController.parsePermissions(rs.getString("permissions")),
             rs.getInt("classification_id"),
             rs.getString("classification_title"),
