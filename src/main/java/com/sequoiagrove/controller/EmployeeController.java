@@ -89,9 +89,10 @@ public class EmployeeController
     public static List<Duration> parseHistory(String hist) {
       List<Duration> historyList = new ArrayList<Duration>();
 
-      String[] all = hist.split("|");
+      String[] all = hist.split("\\|");
       for (String a : all) {
-        String[] locations = a.split("@");
+        String[] locations = a.split("\\!");
+
         Integer locationId = Integer.parseInt(locations[0]);
 
         String[] histories = locations[1].split(",");

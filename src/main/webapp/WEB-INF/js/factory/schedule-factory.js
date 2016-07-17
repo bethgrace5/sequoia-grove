@@ -287,7 +287,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
   var initSchedule = function() {
-    console.log('locations ', locations, locations.length);
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/'+monday+'/'+locations; // if it's in dev mode, and we already have
@@ -310,7 +309,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           if (success.status === 200) {
             isPublished = success.data.isPublished;
             schedule = success.data.template;
-            console.log(schedule);
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
               localStorageService.set('template', JSON.stringify(success.data.template));
@@ -388,16 +386,19 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // so we can check any modifications against it
   var storeOriginalTemplate = function() {
     originalTemplate = []; // clear originalTemplate
-    _.map(schedule, function(t, index, list) {
-      if (!t.isSpacer) {
-        originalTemplate.push({'eid':t.mon.eid, 'sid':t.sid, 'date':header.mon.val});
-        originalTemplate.push({'eid':t.tue.eid, 'sid':t.sid, 'date':header.tue.val});
-        originalTemplate.push({'eid':t.wed.eid, 'sid':t.sid, 'date':header.wed.val});
-        originalTemplate.push({'eid':t.thu.eid, 'sid':t.sid, 'date':header.thu.val});
-        originalTemplate.push({'eid':t.fri.eid, 'sid':t.sid, 'date':header.fri.val});
-        originalTemplate.push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
-        originalTemplate.push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
-      }
+    _.mapObject(schedule, function(val, key) {
+      originalTemplate[key] = [];
+      _.map(val, function(t, index, list) {
+        if (!t.isSpacer) {
+          originalTemplate[key].push({'eid':t.mon.eid, 'sid':t.sid, 'date':header.mon.val});
+          originalTemplate[key].push({'eid':t.tue.eid, 'sid':t.sid, 'date':header.tue.val});
+          originalTemplate[key].push({'eid':t.wed.eid, 'sid':t.sid, 'date':header.wed.val});
+          originalTemplate[key].push({'eid':t.thu.eid, 'sid':t.sid, 'date':header.thu.val});
+          originalTemplate[key].push({'eid':t.fri.eid, 'sid':t.sid, 'date':header.fri.val});
+          originalTemplate[key].push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
+          originalTemplate[key].push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
+        }
+      });
     });
   }
 
@@ -442,6 +443,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // if they are scheduled twice on a day, it counts as one.
   var countDays = function() {
     var shifts = [[],[],[],[],[],[],[]];
+    /*
     _.map(schedule, function(item) { // collect employee names for each day
       if(item.isSpacer) {
         return;
@@ -458,12 +460,14 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     dayCount = _.countBy((_.flatten(shifts)), function(id){
       return id;
     });
+    */
   }
 
   // iterate the template to count hours for each employee
   // FIXME, logic to count it incorrect, needs to iterate each day
   var countHours = function() {
     var count = [];
+    /*
     _.map(schedule, function(item) {
       if(item.isSpacer) {
         return;
@@ -495,6 +499,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }, 0)
       hourCount[index] = hours;
     });
+    */
   }
 
   // a shift was typed in blank, add it to delete list

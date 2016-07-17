@@ -29,7 +29,7 @@ public class SuperUserRowMapper implements RowMapper {
             rs.getInt("classification_id"),
             rs.getString("classification_title"),
             rs.getString("notes"));
-        user.setLocations(rs.getString("locations"));
+        user.setLocations(rs.getString("loc"));
 
         return user;
     }

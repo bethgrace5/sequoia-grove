@@ -70,8 +70,8 @@ public class ScheduleController {
 
       for(Integer l : loc) {
           List<ScheduleTemplate> schTempList = jdbcTemplate.query(
-            "select * from sequ_get_schedule(?)",
-            new Object[]{mon},
+            "select * from sequ_get_schedule(?) where location_id = ?",
+            new Object[]{mon, l},
             new RowMapper<ScheduleTemplate>() {
               public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 

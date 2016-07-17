@@ -45,18 +45,18 @@
 
     <!-- history by locations worked at
          in the form of 
-         "<location_id>@<start_date><end_date>:<start_date>|<location_id>@<start_date>"
-         "1@12-24-2008:12-01-2009,12-24-2009"
-         "1@12-24-2009"
-         "1@12-24-1989|2@07-15-2016"
+         "<location_id>!<start_date><end_date>:<start_date>|<location_id>!<start_date>"
+         "1!12-24-2008:12-01-2009,12-24-2009"
+         "1!12-24-2009"
+         "1!12-24-1989|2!07-15-2016"
          vertical pipe separates history at different locations,
-         each location history starts with the location_id and then '@', 
+         each location history starts with the location_id and then '!', 
          and then repeating start_date:end_date, start_date:end_date (as exists)
          -->
     <createView replaceIfExists="true"
       schemaName="public"
       viewName="sequ_user_history_view">
-      select id, STRING_AGG(concat_ws('@', location_id::text, history::text), '|' order by location_id) as history from
+      select id, STRING_AGG(concat_ws('!', location_id::text, history::text), '|' order by location_id) as history from
       (
       select id, history, location_id
       from sequ_user u
@@ -207,23 +207,47 @@
     <createView replaceIfExists="true"
       schemaName="public"
       viewName="sequ_user_info_view">
-      select e.id, first_name, last_name, email, birth_date, max_hrs_week,
-        phone_number, clock_number, pid as positions, history, locations, min_hrs_week, classification_id,
-        concat_ws(' ',
-          concat('mon,', mon::text),
-          concat('tue,', tue::text),
-          concat('wed,', wed::text),
-          concat('thu,', thu::text),
-          concat('fri,', fri::text),
-          concat('sat,', sat::text),
-          concat('sun,', sun::text)) as avail
+      select e.id, first_name, last_name, email, loc, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
+      phone_number, clock_number, pid as positions, history, min_hrs_week, c.title as classification_title, c.id as classification_id,
+      concat_ws(' ',
+      concat('mon,', mon::text),
+      concat('tue,', tue::text),
+      concat('wed,', wed::text),
+      concat('thu,', thu::text),
+      concat('fri,', fri::text),
+      concat('sat,', sat::text),
+      concat('sun,', sun::text)) as avail,
+      (select count(*) from sequ_employment_history
+      where user_id = e.id
+      and date_unemployed is null
+      ) as is_current
       from sequ_user e
       inner join sequ_user_history_view h
       on e.id = h.id
-      inner join sequ_user_position_view p
+      full outer join sequ_user_position_view p
       on e.id = p.id
-      inner join sequ_user_avail_view a
+      full outer join sequ_user_avail_view a
       on e.id = a.id
+      inner join sequ_classification c
+      on e.classification_id = c.id
+      full outer join
+      (select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions
+      from (
+      select * from
+      sequ_user_permission a
+      full outer join
+      sequ_permission b
+      on a.permission_id = b.id
+      ) p
+      group by user_id) as perm
+      on e.id = perm.user_id
+      full outer join
+      (select user_id, STRING_AGG(concat_ws(',', location_id), ',' ORDER BY user_id)
+      AS loc
+      from sequ_employment_history
+      where date_unemployed is null
+      group by user_id) as hist
+      on hist.user_id = e.id
     </createView>
 
     <createView replaceIfExists="true"
