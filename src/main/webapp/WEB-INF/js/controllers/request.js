@@ -122,6 +122,7 @@ angular.module('sequoiaGroveApp')
         }).then(function(success) {
           requestFactory.init().then(function(success) {
             $scope.pendingRequests = success.data.requestStatus;
+            console.log($scope.pendingRequests);
             $scope.getAllRequests();
           });
           //return $scope.getPendingRequests();

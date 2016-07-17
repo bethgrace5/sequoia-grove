@@ -26,7 +26,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
           loggedIn = false;
         }
         else {
-          console.log(success.data);
+          //console.log(success.data);
           // TODO get more explicit permissions for UI control
           user.isManager = parseInt(success.data.user.classificationId) !== 1;
           user.id = success.data.user.id;

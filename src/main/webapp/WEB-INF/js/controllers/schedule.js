@@ -226,7 +226,7 @@ angular.module('sequoiaGroveApp')
   // find the matching employee by name
   $scope.getEmployeeByname = function(name) {
     var employee = {'id':0};
-    _.map($scope.employees, function(e) {
+    _.map($scope.employees[$rootScope.selectedLocation], function(e) {
       if(_.isMatch(e, {'firstname':name})) {
         employee = e;
       }
