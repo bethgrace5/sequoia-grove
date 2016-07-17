@@ -8,7 +8,7 @@
           <div data-as-sortable-item-handle ng-hide="hideSpacers" >
             <button type="button" style="cursor:inherit" class="btn btn-info position-button"
               ng-click="toggleHideSpacers();">
-              <!--ng-click="template.unshift({'isSpacer':true})"-->
+              <!--ng-click="template[selectedLocation].unshift({'isSpacer':true})"-->
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
               spacer on
             </button>
@@ -17,7 +17,7 @@
           <div ng-show="hideSpacers" >
             <button type="button" style="cursor:inherit" class="btn btn-default position-button"
               ng-click="toggleHideSpacers();">
-              <!--ng-click="template.unshift({'isSpacer':true})"-->
+              <!--ng-click="template[selectedLocation].unshift({'isSpacer':true})"-->
               <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
               spacer off
             </button>
@@ -84,8 +84,8 @@
 <!-- scrollable view -->
 <div class="data-view">
   <!-- shifts -->
-  <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
-  <li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
+  <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template[selectedLocation]">
+  <li data-ng-repeat="t in template[selectedLocation]" data-as-sortable-item ng-show="filterSchedule(t.pid)">
     <div class="row">
       <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
@@ -99,7 +99,7 @@
                 <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
                 Spacer
               </button>
-              <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template.splice($index, 1)"></span>
+              <span style="margin-left:15px; cursor:pointer;" class="glyphicon glyphicon-remove" aria-hidden="true" ng-click="template[selectedLocation].splice($index, 1)"></span>
             </div>
           </div>
         </div>

@@ -47,7 +47,7 @@
   </tr>
 
 <!-- shifts -->
-  <tr ng-repeat="t in template"
+  <tr ng-repeat="t in template[selectedLocation]"
     ng-show="filterByType(t.location, t.position, t)">
 
     <!-- shift title -->
