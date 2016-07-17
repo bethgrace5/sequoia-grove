@@ -8,7 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
@@ -39,26 +41,41 @@ public class HolidaysController {
       return Arrays.asList(csvPermissions.split(","));
     }
 
-  @RequestMapping(value = "/holiday")
-    public String getAllHolidays(Model model){
+  @RequestMapping(value = "/holiday/{locations}")
+    public String getAllHolidays(Model model,
+        @PathVariable("locations") String locations){
+
+      // change location string to list of java integers
+      ArrayList<Integer> loc = new ArrayList<Integer>();
+      for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
+          loc.add(Integer.parseInt(item));
+      }
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      List<Holiday> holidayList = jdbcTemplate.query(
-          "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day from sequ_holiday",
-          new RowMapper<Holiday>() {
-            public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
-              Holiday es = new Holiday(
-                rs.getInt("id"),
-                rs.getInt("day"),
-                rs.getString("title"),
-                rs.getString("hdate"),
-                rs.getString("store_open"),
-                rs.getString("store_close")
-              );
-              return es;
-            }
-          });
-      model.addAttribute("holidays", holidayList);
+
+      Map<Integer, List<Holiday>> holidays = new HashMap<Integer, List<Holiday>>();
+
+      for(Integer l : loc) {
+        List<Holiday> holidayList = jdbcTemplate.query(
+            "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day from sequ_holiday where location_id = ?",
+            new Object[]{l},
+            new RowMapper<Holiday>() {
+              public Holiday mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Holiday es = new Holiday(
+                  rs.getInt("id"),
+                  rs.getInt("day"),
+                  rs.getString("title"),
+                  rs.getString("hdate"),
+                  rs.getString("store_open"),
+                  rs.getString("store_close")
+                );
+                return es;
+              }
+            });
+          holidays.put(l, holidayList);
+      }
+
+      model.addAttribute("holidays", holidays);
       return "jsonTemplate";
     }
 

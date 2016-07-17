@@ -330,7 +330,7 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.getAllHolidays = function() {
-    $http({ url: '/sequoiagrove/holiday',
+    $http({ url: '/sequoiagrove/holiday/'+$rootScope.locations,
       method: "GET"
     }).then(
       // request was successful
