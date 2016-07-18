@@ -25,12 +25,12 @@
 
 <!-- Repeating List of Shifts-->
 <div class="list-group shift-list-wrapper">
-  <div ng-repeat="s in template[selectedLocation] | filter : shiftSearch">
+  <div ng-repeat="s in template | filter : shiftSearch">
     <div ng-hide="s.isSpacer">
       <button ng-click="selectShift(s)"
         class="list-group-item btn btn-default btn-block"
         ng-class="{'active': selectedShift.sid===s.sid}">
-        <div class="pull-left" ng-model="template[selectedLocation]">
+        <div class="pull-left" ng-model="template">
           {{s.tname}} ({{s.weekdayStart}}-{{s.weekdayEnd}})
         </div>
       </div>

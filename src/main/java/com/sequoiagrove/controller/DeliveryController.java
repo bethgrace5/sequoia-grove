@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sequoiagrove.model.Delivery;
 import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.EmployeeController;
 
 @Controller
 public class DeliveryController {
@@ -41,14 +42,8 @@ public class DeliveryController {
         @ModelAttribute("scope") List<String> permissions) {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-      // change location string to list of java integers
-      ArrayList<Integer> loc = new ArrayList<Integer>();
-      for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
-          loc.add(Integer.parseInt(item));
-      }
-
       Map<Integer, List<Delivery>> deliveries = new HashMap<Integer, List<Delivery>>();
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
 
       for(Integer l : loc) {
         List<Delivery> deliveryList = jdbcTemplate.query(

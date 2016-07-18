@@ -128,18 +128,18 @@
   language plpgsql;
 
   drop function sequ_publish(integer, varchar);
-  create or replace function sequ_publish(eid integer, d varchar)
+  create or replace function sequ_publish(eid integer, d varchar, loc integer)
   returns void as
   $BODY$
   BEGIN
-    if exists (SELECT 1 FROM sequ_published_schedule WHERE date_published=to_date(d, 'dd-mm-yyyy'))
+    if exists (SELECT 1 FROM sequ_published_schedule WHERE date_published=to_date(d, 'dd-mm-yyyy') and location_id = loc)
       then
       update sequ_published_schedule
       set published_by = eid, date_published = (select current_timestamp)
-      where start_date = to_date(d, 'dd-mm-yyyy');
+      where start_date = to_date(d, 'dd-mm-yyyy') and location_id = loc;
     else
-      insert into sequ_published_schedule(published_by, start_date, date_published)
-      values(eid, to_date(d, 'dd-mm-yyyy'), (select current_timestamp));
+      insert into sequ_published_schedule(published_by, start_date, date_published, location_id)
+      values(eid, to_date(d, 'dd-mm-yyyy'), (select current_timestamp), loc);
     end if;
   END
   $BODY$

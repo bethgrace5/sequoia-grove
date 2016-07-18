@@ -325,7 +325,7 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate();
+    $scope.template = scheduleFactory.getTemplate($rootScope.selectedLocation);
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();

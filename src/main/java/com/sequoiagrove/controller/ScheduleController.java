@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sequoiagrove.controller.MainController;
 import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.model.Day;
+import com.sequoiagrove.model.PublishedSchedule;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Scheduled;
 
@@ -58,15 +59,11 @@ public class ScheduleController {
         @PathVariable("locations") String locations,
         @ModelAttribute("scope") List<String> permissions) {
 
-      // change location string to list of java integers
-      ArrayList<Integer> loc = new ArrayList<Integer>();
-      for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
-          loc.add(Integer.parseInt(item));
-      }
-
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
+      // change location string to list of java integers
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
       Map<Integer, List<ScheduleTemplate>> schedules = new HashMap<Integer, List<ScheduleTemplate>>();
+      Map<Integer, List<PublishedSchedule>> published = new HashMap<Integer, List<PublishedSchedule>>();
 
       for(Integer l : loc) {
           List<ScheduleTemplate> schTempList = jdbcTemplate.query(
@@ -100,10 +97,26 @@ public class ScheduleController {
           schedules.put(l, schTempList);
       }
 
-      Integer count = jdbcTemplate.queryForObject(
-          "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
+      for(Integer l : loc) {
+          List<PublishedSchedule> tmpList = jdbcTemplate.query(
+            "SELECT * FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
+            new Object[]{mon, l},
+            new RowMapper<PublishedSchedule>() {
+              public PublishedSchedule mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-      model.addAttribute("isPublished", (count!=null && count > 0));
+                PublishedSchedule tmp = new PublishedSchedule(
+                    rs.getInt("published_by"),
+                    rs.getInt("location_id"),
+                    rs.getString("start_date"),
+                    rs.getString("date_published")
+                );
+                return tmp;
+              }
+            });
+          published.put(l, tmpList);
+      }
+
+      model.addAttribute("isPublished", published);
       model.addAttribute("template", schedules);
       return "jsonTemplate";
   }
@@ -214,35 +227,23 @@ public class ScheduleController {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         final int eid = jobject.get("eid").getAsInt();
+        final int locationId = jobject.get("locationId").getAsInt();
         final String date = jobject.get("date").getAsString();
 
         // update database publish(eid, datestring)
         //try {
-        jdbcTemplate.execute("select sequ_publish(?, ?)" ,
+        jdbcTemplate.execute("select sequ_publish(?, ?, ?)" ,
           new PreparedStatementCallback<Boolean>(){
               @Override
               public Boolean doInPreparedStatement(PreparedStatement ps)
               throws SQLException, DataAccessException {
                 ps.setInt(1, eid);
                 ps.setString(2, date);
+                ps.setInt(3, locationId);
                 return ps.execute();
               }
           });
 
-        return "jsonTemplate";
-    }
-
-  // Check with database if is published or not
-    @RequestMapping(value = "/schedule/ispublished/{date}")
-    public String checkifPublished( @PathVariable("date") String mon, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
-        Integer count = jdbcTemplate.queryForObject(
-                "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
-
-        boolean isPublished =  (count != null && count > 0);
-
-        model.addAttribute("result", isPublished);
         return "jsonTemplate";
     }
 }

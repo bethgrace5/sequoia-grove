@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.model.Holiday;
 
 @Controller
@@ -45,14 +46,9 @@ public class HolidaysController {
     public String getAllHolidays(Model model,
         @PathVariable("locations") String locations){
 
-      // change location string to list of java integers
-      ArrayList<Integer> loc = new ArrayList<Integer>();
-      for (String item : new ArrayList<String>(Arrays.asList(locations.split(",")))){
-          loc.add(Integer.parseInt(item));
-      }
-
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
+      // change location string to list of java integers
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
       Map<Integer, List<Holiday>> holidays = new HashMap<Integer, List<Holiday>>();
 
       for(Integer l : loc) {

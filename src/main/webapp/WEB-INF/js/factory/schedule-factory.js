@@ -8,7 +8,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Exposed to all users through service
   var schedule = [];
   var locations = [];
-  var isPublished = false;
+  var publishedList = [];
   var header = {
     mon:{val:'', disp:'', holiday:{}},
     tue:{val:'', disp:'', holiday:{}},
@@ -291,6 +291,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     $rootScope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/'+monday+'/'+locations; // if it's in dev mode, and we already have
     // a template in localstorage, return.
+    /*
     if($rootScope.devMode) {
       var temp = localStorageService.get('template');
         if (temp) {
@@ -302,12 +303,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           });
         }
       }
+      */
     $http({
       "url": url,
       "method": "GET",
     }).then(function (success) {
           if (success.status === 200) {
-            isPublished = success.data.isPublished;
+            publishedList = success.data.isPublished;
             schedule = success.data.template;
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
@@ -658,15 +660,17 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // Publish the schedule
-  var publishSchedule = function(userId) {
+  var publishSchedule = function(userId, locationId) {
     var deferred = $q.defer();
-    var obj = {'date':header.mon.val, 'eid': userId};
+    var obj = {'date':header.mon.val, 'eid': userId, 'locationId':locationId};
     $http({
       url: '/sequoiagrove/schedule/publish/',
       method: "POST",
       data: obj
     }).then(function(success) {
-      isPublished = true;
+      // insert dummy array so length > 1, which is
+      // required to determine published status.
+      publishedList[locationId] = ['published'];
       notifyObservers();
       deferred.resolve(true);
     },function (failure) {
@@ -730,7 +734,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
     service.clear          = function() { clearSchedule(); notifyObservers(); };
-    service.publish        = function(userId) { return publishSchedule(userId); };
+    service.publish        = function(userId, locationId) { return publishSchedule(userId, locationId); };
     service.importWeek     = function(mon) { return importWeek(mon); };
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
@@ -802,8 +806,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return deferred.promise;
       },
       'getHeader':   function() { return header; },
-      'getTemplate': function() { return schedule; },
-      'isPublished': function() { return isPublished; },
+      'getTemplate': function(locationId) { return schedule[locationId]; },
+      'isPublished': function(locationId) { return publishedList[locationId].length > 0; },
       'extendEnd': function(extend) {
         extendEnd = extend;
         addHolidays();

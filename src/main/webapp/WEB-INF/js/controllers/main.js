@@ -73,7 +73,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // used to check that updating a shift is making a chage or not
   //$scope.birthdays = [];
   //$scope.holidays = [];
-  //$scope.isPublished = false;
   $scope.isPublished = false;
   $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = 'Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.';
@@ -432,7 +431,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $scope.initAvailSchedule();
         $scope.initPositionsSchedule();
         $scope.initIsCurrentSchedule();
-        $scope.isPublished = scheduleFactory.isPublished();
+        $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
         $scope.$apply();
       });
     });
@@ -440,9 +439,9 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.publishSchedule = function() {
     var id = loginFactory.getUser().id;
-    scheduleFactory.publish(id).then(function(success) {
+    scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
       $timeout(function() {
-        $scope.isPublished = scheduleFactory.isPublished();
+        $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
         $scope.$apply();
       });
     });
@@ -454,7 +453,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   // Schedule Factory observers
   var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate();
+    $scope.template = scheduleFactory.getTemplate($rootScope.selectedLocation);
     //$log.debug('update changes made');
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
@@ -464,7 +463,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     }
     $timeout(function() {
       $scope.date = scheduleFactory.getHeader();
-      $scope.isPublished = scheduleFactory.isPublished();
+      $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
       $scope.weekList = scheduleFactory.getWeekList();
       $scope.loadingWeek = false;
 
