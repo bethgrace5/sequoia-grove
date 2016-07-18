@@ -8,6 +8,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Exposed to all users through service
   var schedule = [];
   var locations = [];
+  var locationId = [];
   var publishedList = [];
   var header = {
     mon:{val:'', disp:'', holiday:{}},
@@ -173,23 +174,28 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var insertSpacers = function() {
     $timeout(function() {
-    var i = 0;
-    var spaceCount = 0;
-    // index is the old index saved from the database
-    var temp =  _.map(schedule, function(item, index) {
-        if(index != (item.index - spaceCount)) {
-          if(item.index == 0) { //new schedules all have 0 index
-            return item;
-          }
-          spaceCount++;
-          return [{'isSpacer':true, 'index':-1}, item];
-        }
-        else {
-          return item;
-        }
-      });
-    schedule = _.flatten(temp, true);
-    notifyObservers();
+
+      angular.forEach (schedule, function(val) {
+        //console.log(sch);
+        var i = 0;
+        var spaceCount = 0;
+        // index is the old index saved from the database
+        var temp =  _.map(val, function(item, index) {
+            if(index != (item.index - spaceCount)) {
+              if(item.index == 0) { //new schedules all have 0 index
+                return item;
+              }
+              spaceCount++;
+              return [{'isSpacer':true, 'index':-1}, item];
+            }
+            else {
+              return item;
+            }
+          });
+        val = _.flatten(temp, true);
+      })
+      notifyObservers();
+
     }, 1000);
   }
 
@@ -287,6 +293,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Get The Schedule for the week currently being viewed - expects a moment object for week
   var initSchedule = function() {
+    // initialize update and delete shift lists for each location
+    angular.forEach(locations, function(val, key) {
+      updateShifts[val] = [];
+      deleteShifts[val] = [];
+    })
+
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
     var url = '/sequoiagrove/schedule/template/'+monday+'/'+locations; // if it's in dev mode, and we already have
@@ -326,29 +338,30 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Save Schedule
   var saveSchedule = function() {
+    console.log('saveSchedule in schedule-factory.js, locationId: ', locationId);
     var deferred = $q.defer();
-    if(updateShifts.length <= 0) {
+    if(updateShifts[locationId].length <= 0) {
       deferred.resolve();
       return deferred.promise
     }
 
     // remove any blank names from update list
-    updateShifts = _.filter(updateShifts, function(shift) {
+    updateShifts[locationId] = _.filter(updateShifts[locationId], function(shift) {
       return (shift.eid !== 0);
     });
     // don't actually save if in dev mode
-    if($rootScope.devMode) {
-      updateShifts = [];
-      return;
-    }
+    //if($rootScope.devMode) {
+      //updateShifts[locationId] = [];
+      //return;
+    //}
     $http({
       url: '/sequoiagrove/schedule/update/',
       method: "POST",
-      data: updateShifts
+      data: updateShifts[locationId]
     }).then(function (success) {
       if (success.status == 200) {
         // clear update shifts list
-        updateShifts = [];
+        updateShifts[locationId] = [];
         deferred.resolve(success);
       }
     });
@@ -361,52 +374,54 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // Delete these shift schedulings
   var deleteSchedule = function() {
+    console.log('deleteSchedule in schedule-factory.js, locationId: ', locationId);
     var deferred = $q.defer();
-    if(deleteShifts.length <= 0) {
+    if(deleteShifts[locationId].length <= 0) {
       deferred.resolve();
       return deferred.promise
     }
     // don't actually delete if in dev mode
     if($rootScope.devMode) {
-      deleteShifts = [];
+      deleteShifts[locationId] = [];
       return;
     }
     $http({
       url: '/sequoiagrove/schedule/delete/',
       method: "DELETE",
-      data: deleteShifts
+      data: deleteShifts[locationId]
     }).then( function(success) {
       if (success.status == 200) {
-        deleteShifts = []; // clear delete shifts list
+        deleteShifts[locationId] = []; // clear delete shifts list
         deferred.resolve(success);
       }
     });
     return deferred.promise;
   }
 
-  // keep an original copy of the schedule in template format,
-  // so we can check any modifications against it
+  // for each location, save what we pulled from the database in the format
+  // for checking the schedule for comparisons when editing the schedule
   var storeOriginalTemplate = function() {
-    originalTemplate = []; // clear originalTemplate
-    _.mapObject(schedule, function(val, key) {
-      originalTemplate[key] = [];
-      _.map(val, function(t, index, list) {
-        if (!t.isSpacer) {
-          originalTemplate[key].push({'eid':t.mon.eid, 'sid':t.sid, 'date':header.mon.val});
-          originalTemplate[key].push({'eid':t.tue.eid, 'sid':t.sid, 'date':header.tue.val});
-          originalTemplate[key].push({'eid':t.wed.eid, 'sid':t.sid, 'date':header.wed.val});
-          originalTemplate[key].push({'eid':t.thu.eid, 'sid':t.sid, 'date':header.thu.val});
-          originalTemplate[key].push({'eid':t.fri.eid, 'sid':t.sid, 'date':header.fri.val});
-          originalTemplate[key].push({'eid':t.sat.eid, 'sid':t.sid, 'date':header.sat.val});
-          originalTemplate[key].push({'eid':t.sun.eid, 'sid':t.sid, 'date':header.sun.val});
+    console.log('storeOriginalTemplate in schedule-factory.js, locationId: ', locationId);
+    angular.forEach(schedule, function(schList, lid) {
+      originalTemplate[lid] = []; // clear originalTemplate
+      _.map(schList, function(val, key) {
+        if (!val.isSpacer) {
+          originalTemplate[lid].push({'eid':val.mon.eid, 'sid':val.sid, 'date':header.mon.val});
+          originalTemplate[lid].push({'eid':val.tue.eid, 'sid':val.sid, 'date':header.tue.val});
+          originalTemplate[lid].push({'eid':val.wed.eid, 'sid':val.sid, 'date':header.wed.val});
+          originalTemplate[lid].push({'eid':val.thu.eid, 'sid':val.sid, 'date':header.thu.val});
+          originalTemplate[lid].push({'eid':val.fri.eid, 'sid':val.sid, 'date':header.fri.val});
+          originalTemplate[lid].push({'eid':val.sat.eid, 'sid':val.sid, 'date':header.sat.val});
+          originalTemplate[lid].push({'eid':val.sun.eid, 'sid':val.sid, 'date':header.sun.val});
         }
       });
     });
   }
 
+
   var saveShifts = function() {
     var deferred = $q.defer();
-    shiftIndices = _.map(schedule, function(item, index) {
+    shiftIndices[locationId] = _.map(schedule[locationId], function(item, index) {
       if (item.isSpacer == true) {
         return {'sid':0, 'eid':0};
       }
@@ -416,16 +431,16 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
     });
 
-    shiftIndices = _.filter(shiftIndices, function(item, index) {
+    shiftIndices[locationId] = _.filter(shiftIndices[locationId], function(item, index) {
       return item.sid != 0;
     });
 
     $http({
       url: '/sequoiagrove/schedule/shiftIndices',
       method: "POST",
-      data: shiftIndices
+      data: shiftIndices[locationId]
     }).then(function(success) {
-      shiftIndices = [];
+      shiftIndices[locationId] = [];
       movedShifts = false;
       notifyObservers();
       deferred.resolve(true);
@@ -506,11 +521,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // a shift was typed in blank, add it to delete list
   var addToDeleteList = function(obj) {
+    console.log('addToDeleteList in schedule-factory.js, locationId: ', locationId);
     var isAlreadyBlank = false;
     var isInDeleteList = false;
     obj.sid = parseInt(obj.sid);
     // check if this entry was already blank
-    _.map(originalTemplate, function(shift, index) {
+    _.map(originalTemplate[locationId], function(shift, index) {
       if (shift.eid === 0) {
         if ( _.isEqual(obj, _.omit(shift, 'eid'))) {
           isAlreadyBlank = true;
@@ -520,19 +536,20 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     if (isAlreadyBlank) { // shift is already blank
       return;
     }
-    _.map(deleteShifts, function(shift, index, list) {
+    _.map(deleteShifts[locationId], function(shift, index, list) {
       if( _.isEqual(shift, obj)) {
         isInDeleteList = true;
       }
     });
     if (isInDeleteList === false) { // add to delete list
-      deleteShifts.push({'sid':obj.sid, 'date':obj.date});
+      deleteShifts[locationId].push({'sid':obj.sid, 'date':obj.date});
     }
     notifyObservers();
   }
 
   // put change made into update shifts
   var trackScheduleChange = function(eid, sid, date) {
+    console.log('trackScheduleChange in schedule-factory.js, locationId: ', locationId);
     sid = parseInt(sid);
     var paramObj = {'eid':eid, 'sid':sid, 'date':date};
     var inOriginal = false;
@@ -540,54 +557,54 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var originalIndex = -1;
     var updateIndex = -1;
     // check for it in the update list
-    _.map(updateShifts, function(shift, index, list) {
+    _.map(updateShifts[locationId], function(shift, index, list) {
       if (_.isMatch(shift, { 'sid':sid, 'date':date})) {
         inUpdate = true;
         updateIndex = index;
       }
     });
     // check for it in the original list
-    _.map(originalTemplate, function(shift, index, list) {
+    _.map(originalTemplate[locationId], function(shift, index, list) {
       if( _.isEqual(shift, paramObj)) {
         inOriginal = true;
         originalIndex = index;
       }
     });
     // check for it in the delete list
-    _.map(deleteShifts, function(shift, index, list) {
+    _.map(deleteShifts[locationId], function(shift, index, list) {
       if(_.isMatch(shift, {'sid':sid, 'date':date})) {
         // remove this from delete shifts, because if this function
         // was called, it means this shift was assigned a name
-        deleteShifts.splice(index, 1);
+        deleteShifts[locationId].splice(index, 1);
       }
     });
 
     // decide what to do with the info gathered above
     if (inOriginal && inUpdate) {
       // item needs to be removed from update
-      updateShifts.splice(updateIndex, 1);
+      updateShifts[locationId].splice(updateIndex, 1);
     }
     else if (inOriginal && !inUpdate) {
       // do nothing
     }
     else if (!inOriginal && inUpdate) {
       // update the update list
-      updateShifts.splice(updateIndex, 1);
-      updateShifts.push(paramObj);
+      updateShifts[locationId].splice(updateIndex, 1);
+      updateShifts[locationId].push(paramObj);
     }
     else if (!inOriginal && !inUpdate) {
       // add item to update list
-      updateShifts.push(paramObj);
+      updateShifts[locationId].push(paramObj);
     }
     notifyObservers();
   }
 
   // adds all shifts to delete list, so they are deleted when save is clicked
   var clearSchedule = function() {
-    var oldDeleteShifts = deleteShifts;
+    var oldDeleteShifts = deleteShifts[locationId];
     var countChanges = 0;
-    updateShifts = [];
-    deleteShifts = [];
+    updateShifts[locationId] = [];
+    deleteShifts[locationId] = [];
     // add all shifts to delete list if they weren't already blank
     schedule = _.map(schedule, function(t, index, list) {
       if(t.isSpacer == true) {
@@ -595,31 +612,31 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       else {
         if (t.mon.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.mon.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.mon.val});
           countChanges++;
         }
         if (t.tue.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.tue.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.tue.val});
           countChanges++;
         }
         if (t.wed.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.wed.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.wed.val});
           countChanges++;
         }
         if (t.thu.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.thu.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.thu.val});
           countChanges++;
         }
         if (t.fri.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.fri.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.fri.val});
           countChanges++;
         }
         if (t.sat.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.sat.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.sat.val});
           countChanges++;
         }
         if (t.sun.eid !== 0) {
-          deleteShifts.push({'sid':t.sid, 'date':header.sun.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':header.sun.val});
           countChanges++;
         }
         // update template so view reflects changes
@@ -645,14 +662,15 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // rewrite current schedule with last week's data
   var importWeek = function(mondayOfWeek) {
+    console.log('importWeek in schedule-factory.js, locationId: ', locationId);
     var deferred = $q.defer();
-    deleteShifts = [];
-    updateShifts = [];
+    deleteShifts[locationId] = [];
+    updateShifts[locationId] = [];
     // set monday back in time
     monday = mondayOfWeek;
     initSchedule().then(function(data) {
       // add all shifts to update shifts, so they can be saved for this week
-      angular.copy(originalTemplate, updateShifts);
+      angular.copy(originalTemplate[locationId], updateShifts[locationId]);
       notifyObservers();
       deferred.resolve(data);
     });
@@ -660,7 +678,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // Publish the schedule
-  var publishSchedule = function(userId, locationId) {
+  var publishSchedule = function(userId) {
     var deferred = $q.defer();
     var obj = {'date':header.mon.val, 'eid': userId, 'locationId':locationId};
     $http({
@@ -683,12 +701,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
-    service.init = function(loc) {
+    service.init = function(locationList, selectedLocation) {
+      locations = locationList;
+      locationId = selectedLocation
       var deferred = $q.defer();
-      locations = loc;
       initMonday();
       initHeader();
-      initSchedule(loc).then(
+      initSchedule().then(
           function(success) {
             countDays();
             countHours();
@@ -734,13 +753,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.deleteItem     = function(obj) { addToDeleteList(obj); };
     service.changeItem     = function(eid, sid, date) { trackScheduleChange(eid, sid, date); };
     service.clear          = function() { clearSchedule(); notifyObservers(); };
-    service.publish        = function(userId, locationId) { return publishSchedule(userId, locationId); };
+    service.publish        = function(userId) { return publishSchedule(userId); };
     service.importWeek     = function(mon) { return importWeek(mon); };
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
     service.getRequests   = function() { return requests; };
     service.changesMade    = function() {
-      return ((updateShifts.length + deleteShifts.length) > 0) || movedShifts;
+      return ((updateShifts[locationId].length + deleteShifts[locationId].length) > 0) || movedShifts;
     };
     service.setMovedShifts   = function() { movedShifts = true; notifyObservers() };
     service.saveSchedule = function() {
@@ -806,8 +825,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return deferred.promise;
       },
       'getHeader':   function() { return header; },
-      'getTemplate': function(locationId) { return schedule[locationId]; },
-      'isPublished': function(locationId) { return publishedList[locationId].length > 0; },
+      'getTemplate': function() { return schedule[locationId]; },
+      'isPublished': function() { return publishedList[locationId].length > 0; },
       'extendEnd': function(extend) {
         extendEnd = extend;
         addHolidays();

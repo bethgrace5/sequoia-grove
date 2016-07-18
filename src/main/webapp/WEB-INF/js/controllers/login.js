@@ -153,11 +153,11 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     }
     // TODO refine better scope than is or is not manager
     if (isManager) {
-      scheduleFactory.setManagePrivelage(); // needs permission manage-schedule
+      scheduleFactory.setManagePrivelage($rootScope.selectedLocation); // needs permission manage-schedule
       userFactory.setManagePrivelage(); //needs permission manage-employees
       requestFactory.setManagePrivelage(); //needs permission manage-employees
     }
-    return scheduleFactory.init(locations)
+    return scheduleFactory.init(locations, $rootScope.selectedLocation)
    .then(function(success) { // initialize schedule factory
       return userFactory.init(locations);
     }).then(function(success) {

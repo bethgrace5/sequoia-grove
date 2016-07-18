@@ -301,7 +301,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.saveSchedule = function() {
     $scope.saving = true;
-    scheduleFactory.saveSchedule().then(
+    scheduleFactory.saveSchedule($rootScope.selectedLocation).then(
       function(success) {
         $timeout(function() {
           $scope.saving = false;
@@ -311,14 +311,14 @@ angular.module('sequoiaGroveApp')
 
   $scope.clearSchedule = function() {
     $scope.selectedId = 0;
-    scheduleFactory.clear();
+    scheduleFactory.clear($rootScope.selectedLocation);
   }
 
   $scope.importWeek = function(index) {
     $scope.selectWeek(index);
     var week = $scope.weekList[index].val;
     $scope.importing = true;
-    scheduleFactory.importWeek(week).then(
+    scheduleFactory.importWeek(week, locationId).then(
       function(success) {
         $scope.importing = false;
       });
