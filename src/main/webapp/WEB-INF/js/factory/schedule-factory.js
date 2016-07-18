@@ -175,12 +175,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var insertSpacers = function() {
     $timeout(function() {
 
-      angular.forEach (schedule, function(val) {
-        //console.log(sch);
+      angular.forEach (locations, function(val, key) {
         var i = 0;
         var spaceCount = 0;
         // index is the old index saved from the database
-        var temp =  _.map(val, function(item, index) {
+        var temp =  _.map(schedule[val], function(item, index) {
             if(index != (item.index - spaceCount)) {
               if(item.index == 0) { //new schedules all have 0 index
                 return item;
@@ -192,7 +191,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
               return item;
             }
           });
-        val = _.flatten(temp, true);
+        schedule[val] = _.flatten(temp, true);
       })
       notifyObservers();
 
