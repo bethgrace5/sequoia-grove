@@ -605,7 +605,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     updateShifts[locationId] = [];
     deleteShifts[locationId] = [];
     // add all shifts to delete list if they weren't already blank
-    schedule = _.map(schedule, function(t, index, list) {
+    schedule[locationId] = _.map(schedule[locationId], function(t, index, list) {
       if(t.isSpacer == true) {
         return {'isSpacer':true, 'index':-1};
       }
