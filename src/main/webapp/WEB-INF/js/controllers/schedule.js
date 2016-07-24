@@ -318,7 +318,7 @@ angular.module('sequoiaGroveApp')
     $scope.selectWeek(index);
     var week = $scope.weekList[index].val;
     $scope.importing = true;
-    scheduleFactory.importWeek(week, locationId).then(
+    scheduleFactory.importWeek(week).then(
       function(success) {
         $scope.importing = false;
       });
