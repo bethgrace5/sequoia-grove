@@ -790,9 +790,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // Exposed factory functionality
     return {
       // Initialize monday, set schedule header, get schedule template
-      'init':function(loc) {
+      'init':function(locationList, selectedLocation) {
         var deferred = $q.defer();
-        locations = loc;
+        locations = locationList;
+        locationId = selectedLocation
         initMonday();
         initHeader();
         initSchedule().then(function(success) {

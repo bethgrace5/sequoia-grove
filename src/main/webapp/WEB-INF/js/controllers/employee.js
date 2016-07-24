@@ -368,6 +368,9 @@ angular.module('sequoiaGroveApp')
       if (!$scope.selectedEmployee.notes) {
         $scope.selectedEmployee.notes = '';
       }
+      // FIXME, for now, the employee's location is the currently selected one.
+      // it should have a way to choose one or more locations for this store.
+      $scope.selectedEmployee.locationId = $rootScope.selectedLocation;
 
       $http.post("/sequoiagrove/employee/"+action, $scope.selectedEmployee)
         .success(function(data, status){

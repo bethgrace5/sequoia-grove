@@ -239,7 +239,7 @@ public class EmployeeController
             "values((select nextval('sequ_user_sequence')), ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ?) returning currval('sequ_user_sequence')", params, Integer.class);
 
         // activate the employee
-        jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null)", id);
+        jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null, ?)", id, jobject.get("locationId").getAsInt());
 
         // give default permissions
         int classid = jobject.get("classificationId").getAsInt();
