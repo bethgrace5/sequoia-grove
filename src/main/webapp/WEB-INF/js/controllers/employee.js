@@ -181,7 +181,7 @@ angular.module('sequoiaGroveApp')
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
-          userFactory.init();
+          userFactory.init($rootScope.locations, $rootScope.selectedLocation);
         }).error(function(data, status) {
           //$log.debug(data, status);
         });
@@ -226,7 +226,7 @@ angular.module('sequoiaGroveApp')
           data: obj
         }).success(function(data, status, headers, config) {
             $scope.saving = false;
-            userFactory.init();
+            userFactory.init($rootScope.locations, $rootScope.selectedLocation);
             // update front end
             $scope.selectedEmployee.positions.push(pid);
         }).error(function(data, status) {
@@ -256,7 +256,7 @@ angular.module('sequoiaGroveApp')
             method: "POST"
         }).success(function(data, status) {
           $scope.saving = false;
-            userFactory.init();
+            userFactory.init($rootScope.locations, $rootScope.selectedLocation);
         });
     }
 
@@ -286,7 +286,7 @@ angular.module('sequoiaGroveApp')
         data: obj
       }).success(function(data, status) {
         $scope.saving = false;
-          userFactory.init();
+          userFactory.init($rootScope.locations, $rootScope.selectedLocation);
       }).error(function(data, status) {
         $log.debug('error removing position',pid,'from',eid);
       });
@@ -435,7 +435,7 @@ angular.module('sequoiaGroveApp')
             }
             return e;
           });
-          userFactory.init();
+          userFactory.init($rootScope.locations, $rootScope.selectedLocation);
         }).error(function(data, status) {
           $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
         });
@@ -462,7 +462,7 @@ angular.module('sequoiaGroveApp')
           }
           return e;
         });
-        userFactory.init();
+        userFactory.init($rootScope.locations, $rootScope.selectedLocation);
       }).error(function(data, status) {
         $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
       });

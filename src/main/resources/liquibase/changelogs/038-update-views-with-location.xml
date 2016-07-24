@@ -76,12 +76,12 @@
     <createView replaceIfExists="true"
       schemaName="public"
       viewName="sequ_sch_hist_view">
-        select * from (
-            select index, sid, eid, fname, day, loc.location_id/*, to_char(to_date(day,'dd/mm/yyyy'), 'DAY') as weekday*/
+        select distinct * from (
+            select index, sid, eid, fname, day /*, to_char(to_date(day,'dd/mm/yyyy'), 'DAY') as weekday*/
             from
                 (
-                    select *
-                    from sequ_sch_template_view
+                  select *
+                  from sequ_sch_template_view
                 ) schtmp
                 natural join
                 (
@@ -95,7 +95,7 @@
                 ) emp
                 left outer join
                 (
-                    select user_id, location_id
+                    select user_id
                     from sequ_employment_history h
                 ) loc
                 on loc.user_id = emp.eid

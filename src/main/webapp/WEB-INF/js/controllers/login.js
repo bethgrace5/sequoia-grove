@@ -159,7 +159,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     }
     return scheduleFactory.init(locations, $rootScope.selectedLocation)
    .then(function(success) { // initialize schedule factory
-      return userFactory.init(locations);
+      return userFactory.init(locations, $rootScope.selectedLocation);
     }).then(function(success) {
       return $scope.getPositions()
     }).then(function(success) {

@@ -28,7 +28,7 @@
       <!-- Employee List -->
       <div class="list-group emp-list-wrapper">
         <!-- repeating list of employees -->
-        <div ng-show="seeEmployees" ng-repeat="employee in employees[selectedLocation] | filter: empSearch">
+        <div ng-show="seeEmployees" ng-repeat="employee in employees | filter: empSearch">
           <button ng-click="targetEmployee(employee)"
             class="list-group-item btn btn-default btn-block"
             ng-class="{'active': selectedEmployee.id == employee.id}">

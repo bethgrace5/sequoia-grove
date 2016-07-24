@@ -34,7 +34,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
 
         // the name is blank - add it to delete list
         if(this.value.length === 0) {
-          scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date}, $rootScope.selectedLocation);
+          scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date});
           element.context.classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = 0;
           $scope.selectEid(0);
@@ -70,7 +70,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           }
 
           // 4. update change lists
-          scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date, $rootScope.selectedLocation);
+          scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied
           element.context.classList.add('schedule-edit-input-warn');

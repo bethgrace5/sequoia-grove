@@ -226,7 +226,7 @@ angular.module('sequoiaGroveApp')
   // find the matching employee by name
   $scope.getEmployeeByname = function(name) {
     var employee = {'id':0};
-    _.map($scope.employees[$rootScope.selectedLocation], function(e) {
+    _.map($scope.employees, function(e) {
       if(_.isMatch(e, {'firstname':name})) {
         employee = e;
       }
@@ -301,7 +301,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.saveSchedule = function() {
     $scope.saving = true;
-    scheduleFactory.saveSchedule($rootScope.selectedLocation).then(
+    scheduleFactory.saveSchedule($rootScope).then(
       function(success) {
         $timeout(function() {
           $scope.saving = false;
@@ -311,7 +311,7 @@ angular.module('sequoiaGroveApp')
 
   $scope.clearSchedule = function() {
     $scope.selectedId = 0;
-    scheduleFactory.clear($rootScope.selectedLocation);
+    scheduleFactory.clear($rootScope);
   }
 
   $scope.importWeek = function(index) {
@@ -325,7 +325,7 @@ angular.module('sequoiaGroveApp')
   }
 
   var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate($rootScope.selectedLocation);
+    $scope.template = scheduleFactory.getTemplate($rootScope);
     $scope.weekList = scheduleFactory.getWeekList();
     $scope.dayCount = scheduleFactory.getDayCount();
     $scope.hourCount = scheduleFactory.getHourCount();
