@@ -383,6 +383,16 @@
 
     <sqlFile encoding="UTF-8" path="mock-data/location.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
 
+    <dropPrimaryKey catalogName="cat"
+      constraintName="pk_employment_history"
+      schemaName="public"
+      tableName="sequ_employment_history"/>
+    <addPrimaryKey
+      columnNames="user_id, date_employed, location_id"
+      constraintName="pk_employment_history_with_location"
+      schemaName="public"
+      tableName="sequ_employment_history"/>
+
   </changeSet>
 
 </databaseChangeLog>
