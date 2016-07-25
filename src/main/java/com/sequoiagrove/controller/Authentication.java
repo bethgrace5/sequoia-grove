@@ -73,7 +73,7 @@ public class Authentication {
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
+        User user = new User(0, 0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
         //User user;
         String email = "";
 
@@ -123,41 +123,10 @@ public class Authentication {
         }
 
         // query to get user info, by using email as a paramater
-        String sql = " select perm.user_id as id, first_name, last_name, locations, " +
-          " email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, " +
-          " permissions, class.id as classification_id, class.title as classification_title " +
-          " from  " +
-          " (   " +
-          " select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
-          " from (  " +
-          " select * from  " +
-          " sequ_user_permission a   " +
-          " full outer join  " +
-          " sequ_permission b  " +
-          " on a.permission_id = b.id  " +
-          " ) p   " +
-          " group by user_id  " +
-          " ) as perm   " +
-          " right outer join   " +
-          " (   " +
-          " select * from sequ_user   " +
-          " where email = ? " +
-          " ) as sess " +
-          " left outer join  " +
-          " (" +
-          " select user_id, STRING_AGG(concat_ws(',', location_id), ',' ORDER BY user_id)" +
-          " AS locations" +
-          " from sequ_employment_history" +
-          " where date_unemployed is null" +
-          " group by user_id" +
-          " ) as hist " +
-          " on hist.user_id = sess.id" +
-          " on perm.user_id = sess.id  " +
-          " left outer join  " +
-          " (  " +
-          " select title, id from sequ_classification  " +
-          " ) as class  " +
-          " on sess.classification_id = class.id";
+        String sql = "select distinct id, business_id, first_name, last_name, email, " +
+          "loc, birth_date, max_hrs_week, permissions, notes, phone_number, clock_number, "+
+          "positions, history, min_hrs_week, classification_title, classification_id, avail, "+
+          "is_current from sequ_user_info_view where email = ?";
           try {
             // execute query to find user by email
             user = (User)jdbcTemplate.queryForObject( sql, new Object[] { email }, new UserRowMapper());

@@ -13,6 +13,7 @@ public class SuperUserRowMapper implements RowMapper {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User(
             rs.getInt("id"),
+            rs.getInt("business_id"),
             rs.getInt("max_hrs_week"),
             rs.getInt("min_hrs_week"),
             rs.getInt("clock_number"),

@@ -31,6 +31,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
           user.isManager = parseInt(success.data.user.classificationId) !== 1;
           user.id = success.data.user.id;
           user.locations = success.data.user.locations;
+          user.business = success.data.user.businessId;
           deferred.resolve(user);
         }
       }

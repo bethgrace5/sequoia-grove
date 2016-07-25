@@ -77,7 +77,3 @@ insert into employee values(default, 'Rob',     'Eemen',  'email50@gmail.com', f
 
 /* real test users */
 insert into employee values(default, 'Beth',  'Armitage','bethgrace5@gmail.com', true, to_date('12/04/1999', 'mm/dd/yyyy'), 40, 0, '1234567890', 51 );
-insert into employee values(default, 'Sunny', 'Sumal','sunnysumal@gmail.com', true,    to_date('12/04/1999', 'mm/dd/yyyy'), 40, 0, '1234567890', 52 );
-insert into employee values(default, 'Ted',   'Pascua','tedlpascua@gmail.com', true,   to_date('12/04/1999', 'mm/dd/yyyy'), 40, 0, '1234567890', 53 );
-insert into employee values(default, 'AJ',    'Silva','therealajsilva@gmail.com', true,to_date('12/04/1999', 'mm/dd/yyyy'), 40, 0, '1234567890', 54 );
-

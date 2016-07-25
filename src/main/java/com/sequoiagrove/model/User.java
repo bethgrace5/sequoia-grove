@@ -9,6 +9,7 @@ import java.util.Arrays;
 
 public class User {
     int id;
+    int businessId;
     int clockNumber;
     int maxHours;
     int minHours;
@@ -30,8 +31,9 @@ public class User {
     
     public User(){}
     //User RowMapper
-    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
+    public User(int id, int businesId, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
         this.id = id;
+        this.businessId = businessId;
         this.clockNumber = clockNumber;
         this.maxHours = maxHours;
         this.minHours = minHours;
@@ -46,8 +48,9 @@ public class User {
     }
 
     //SuperUserRowmapper - uses this constructor
-    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
+    public User( int id, int business_id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
         this.id = id;
+        this.businessId = businessId;
         this.maxHours= maxHours;
         this.minHours= minHours;
         this.clockNumber = clockNumber;
@@ -71,6 +74,13 @@ public class User {
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getBusinessId() {
+        return businessId;
+    }
+    public void setBusinessId(int businessId) {
+        this.businessId = businessId;
     }
 
     public boolean getIsCurrent() {

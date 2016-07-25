@@ -142,6 +142,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     var locations = user.locations;
     $rootScope.locations = user.locations;
     $rootScope.selectedLocation = user.locations[0];
+    $rootScope.business = user.business;
     // pull data from localstorage, if it's availabile
     if($rootScope.devMode) {
       if (localStorageService.get('template')){

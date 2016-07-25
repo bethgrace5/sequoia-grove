@@ -13,6 +13,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $rootScope.locations = [];
   $rootScope.selectedLocation = 0;
+  $rootScope.business = 0;
 
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
@@ -119,8 +120,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.getPositions = function() {
     var deferred = $q.defer();
-    //$http({ url: '/sequoiagrove/position/'+$rootScope.locations, method: 'GET' })
-    $http({ url: '/sequoiagrove/position/1', method: 'GET' })
+    $http({ url: '/sequoiagrove/position/'+$rootScope.business, method: 'GET' })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
         deferred.resolve(success);

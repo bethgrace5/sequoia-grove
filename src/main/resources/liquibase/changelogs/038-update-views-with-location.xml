@@ -44,13 +44,13 @@
     </createView>
 
     <!-- history by locations worked at
-         in the form of 
+         in the form of
          "<location_id>!<start_date><end_date>:<start_date>|<location_id>!<start_date>"
          "1!12-24-2008:12-01-2009,12-24-2009"
          "1!12-24-2009"
          "1!12-24-1989|2!07-15-2016"
          vertical pipe separates history at different locations,
-         each location history starts with the location_id and then '!', 
+         each location history starts with the location_id and then '!',
          and then repeating start_date:end_date, start_date:end_date (as exists)
          -->
     <createView replaceIfExists="true"
@@ -118,7 +118,7 @@
         where p.date_removed is null
         group by user_id
         ) pos
-        on e.id = pos.eid 
+        on e.id = pos.eid
         right outer join
         (
         select user_id as eid, STRING_AGG(location_id || '', ',' ORDER BY user_id)
@@ -207,7 +207,7 @@
     <createView replaceIfExists="true"
       schemaName="public"
       viewName="sequ_user_info_view">
-      select distinct e.id, first_name, last_name, email, loc, location_id, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
+      select distinct e.id, business_id, first_name, last_name, email, loc, location_id, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
       phone_number, clock_number, pid as positions, history, min_hrs_week, c.title as classification_title, c.id as classification_id,
       concat_ws(' ',
       concat('mon,', mon::text),
@@ -254,6 +254,11 @@
       from sequ_employment_history
       ) as no
       on no.uid = e.id
+      right outer join
+      (
+      select * from sequ_location
+      ) bus
+      on no.location_id = bus.id;
     </createView>
 
     <createView replaceIfExists="true"
@@ -290,19 +295,19 @@
       schemaName="public"
       viewName="sequ_sch_view">
         select index, m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, area, position,
-            mon,     tue,     wed,     thu,     fri,     sat,     sun, 
+            mon,     tue,     wed,     thu,     fri,     sat,     sun,
             mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
         from (
             -- Monday
             /*  monday gathers the shift information for the week, while subsequent days
              *  only gather the names for the employees scheduled based on the shift
              */
-            select s.index, s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.area, 
+            select s.index, s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.area,
                 s.position, h.fname as mon, h.eid as mon_eid
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('23-11-2015', 'dd-mm-yyyy')
         ) mm
         full outer join
@@ -312,7 +317,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('24-11-2015', 'dd-mm-yyyy')
         ) tt
         on m_sid = t_sid
@@ -323,7 +328,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('25-11-2015', 'dd-mm-yyyy')
         ) ww
         on m_sid = w_sid
@@ -334,7 +339,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('26-11-2015', 'dd-mm-yyyy')
         ) th
         on m_sid = th_sid
@@ -345,7 +350,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('27-11-2015', 'dd-mm-yyyy')
         ) ff
         on m_sid = f_sid
@@ -356,7 +361,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('28-11-2015', 'dd-mm-yyyy')
         ) sa
         on m_sid = sa_sid
@@ -367,7 +372,7 @@
             from sequ_sch_template_view s
             left outer join
             sequ_sch_hist_view h
-            on s.sid=h.sid 
+            on s.sid=h.sid
             --and h.day = to_date('29-11-2015', 'dd-mm-yyyy')
         ) su
         on m_sid = su_sid
