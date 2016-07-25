@@ -67,47 +67,13 @@ insert into sequ_user_permission(user_id, permission_id) values(48, 2);
 insert into sequ_user_permission(user_id, permission_id) values(49, 2);
 insert into sequ_user_permission(user_id, permission_id) values(50, 2);
 insert into sequ_user_permission(user_id, permission_id) values(51, 2);
-insert into sequ_user_permission(user_id, permission_id) values(52, 2);
-insert into sequ_user_permission(user_id, permission_id) values(53, 2);
-insert into sequ_user_permission(user_id, permission_id) values(54, 2);
 
 insert into sequ_user_permission(user_id, permission_id) values(51, 1);
-insert into sequ_user_permission(user_id, permission_id) values(52, 1);
-insert into sequ_user_permission(user_id, permission_id) values(53, 1);
-insert into sequ_user_permission(user_id, permission_id) values(54, 1);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 3);
-insert into sequ_user_permission(user_id, permission_id) values(52, 3);
-insert into sequ_user_permission(user_id, permission_id) values(53, 3);
-insert into sequ_user_permission(user_id, permission_id) values(54, 3);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 4);
-insert into sequ_user_permission(user_id, permission_id) values(52, 4);
-insert into sequ_user_permission(user_id, permission_id) values(53, 4);
-insert into sequ_user_permission(user_id, permission_id) values(54, 4);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 5);
-insert into sequ_user_permission(user_id, permission_id) values(52, 5);
-insert into sequ_user_permission(user_id, permission_id) values(53, 5);
-insert into sequ_user_permission(user_id, permission_id) values(54, 5);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 6);
-insert into sequ_user_permission(user_id, permission_id) values(52, 6);
-insert into sequ_user_permission(user_id, permission_id) values(53, 6);
-insert into sequ_user_permission(user_id, permission_id) values(54, 6);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 7);
-insert into sequ_user_permission(user_id, permission_id) values(52, 7);
-insert into sequ_user_permission(user_id, permission_id) values(53, 7);
-insert into sequ_user_permission(user_id, permission_id) values(54, 7);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 8);
-insert into sequ_user_permission(user_id, permission_id) values(52, 8);
-insert into sequ_user_permission(user_id, permission_id) values(53, 8);
-insert into sequ_user_permission(user_id, permission_id) values(54, 8);
-
 insert into sequ_user_permission(user_id, permission_id) values(51, 9);
-insert into sequ_user_permission(user_id, permission_id) values(52, 9);
-insert into sequ_user_permission(user_id, permission_id) values(53, 9);
-insert into sequ_user_permission(user_id, permission_id) values(54, 9);
 
