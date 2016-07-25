@@ -326,11 +326,13 @@ angular.module('sequoiaGroveApp')
 
   var updateChangesMade = function(){
     $scope.template = scheduleFactory.getTemplate($rootScope);
-    $scope.weekList = scheduleFactory.getWeekList();
-    $scope.dayCount = scheduleFactory.getDayCount();
-    $scope.hourCount = scheduleFactory.getHourCount();
-    $scope.changesMade = scheduleFactory.changesMade();
-    $scope.requests = scheduleFactory.getRequests();
+    if (loginFactory.getUser().isManager) {
+      $scope.weekList = scheduleFactory.getWeekList();
+      $scope.dayCount = scheduleFactory.getDayCount();
+      $scope.hourCount = scheduleFactory.getHourCount();
+      $scope.changesMade = scheduleFactory.changesMade();
+      $scope.requests = scheduleFactory.getRequests();
+    }
   }
 
   scheduleFactory.registerObserverCallback(updateChangesMade);
