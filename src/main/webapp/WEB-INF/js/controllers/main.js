@@ -119,7 +119,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.getPositions = function() {
     var deferred = $q.defer();
-    $http({ url: '/sequoiagrove/position', method: 'GET' })
+    //$http({ url: '/sequoiagrove/position/'+$rootScope.locations, method: 'GET' })
+    $http({ url: '/sequoiagrove/position/1', method: 'GET' })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
         deferred.resolve(success);
