@@ -439,13 +439,15 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   }
 
   $scope.publishSchedule = function() {
-    var id = loginFactory.getUser().id;
-    scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
-      $timeout(function() {
-        $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
-        $scope.$apply();
+    if(loginFactory.getUser().isManager) {
+      var id = loginFactory.getUser().id;
+      scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
+        $timeout(function() {
+          $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
+          $scope.$apply();
+        });
       });
-    });
+    }
   }
 
  /*$scope.$on('requestchanged', function() {
