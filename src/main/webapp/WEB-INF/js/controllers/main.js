@@ -490,9 +490,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // request factory observers
   var requestChange = function() {
     $timeout(function() {
-      $scope.requestsNum = requestFactory.getNumberPending();
-      $scope.pendingRequests = requestFactory.getPending();
-      $scope.allRequests = requestFactory.getAll();
+      if (loginFactory.getUser().isManager) {
+        $scope.requestsNum = requestFactory.getNumberPending();
+        $scope.pendingRequests = requestFactory.getPending();
+        $scope.allRequests = requestFactory.getAll();
+      }
       $scope.userRequests = requestFactory.getUser();
       $scope.$apply();
     })

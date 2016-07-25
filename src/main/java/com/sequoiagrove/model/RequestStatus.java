@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 public class RequestStatus {
   int requestID;
+  int locationId;
   int employeeID;
   int approverID;
   String status;
@@ -17,12 +18,13 @@ public class RequestStatus {
 
   public RequestStatus(){}
 
-  public RequestStatus(int requestID, int employeeID, int approverID,
+  public RequestStatus(int requestID, int locationId, int employeeID, int approverID,
       String status, String startDate, String endDate,
       String employeeFirstName, String employeeLastName,
       String approverFirstName, String approverLastName) {
 
     this.requestID = requestID;
+    this.locationId = locationId;
     this.employeeID = employeeID;
     this.approverID = approverID;
     this.status = status;
@@ -39,6 +41,13 @@ public class RequestStatus {
   }
   public int getRequestID(){
     return requestID;
+  }
+
+  public void setLocationId(int locationId){
+    this.locationId = locationId;
+  }
+  public int getLocationId(){
+    return locationId;
   }
 
   public void setEmployeeID(int employeeID) {

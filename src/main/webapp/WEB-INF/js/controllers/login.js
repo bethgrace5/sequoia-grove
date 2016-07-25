@@ -168,8 +168,11 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
     }).then(function(success) {
       $rootScope.deliveries = success.deliveries;
       $rootScope.viewDeliveries = success.viewDeliveries;
-      return requestFactory.init(loginFactory.getUser().id); // get deliveries
-    })
+      return requestFactory.init(loginFactory.getUser().id,
+        $rootScope.locations, $rootScope.selectedLocation); 
+    }).then(function(success) {
+      $rootScope.userRequests = success;
+    });
   }
 
   // get all existing deliveries
