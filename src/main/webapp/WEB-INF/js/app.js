@@ -39,6 +39,10 @@ angular.module('sequoiaGroveApp', [
     templateUrl: 'views/contact.html',
     controller: 'ContactCtrl',
     controllerAs: 'contact'
+  }).when('/signup', {
+    templateUrl: 'views/signup.html',
+    controller: 'SignupCtrl',
+    controllerAs: 'signup'
   }).otherwise({
     redirectTo: '/login'
   });

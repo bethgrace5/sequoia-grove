@@ -1,0 +1,76 @@
+<div class="panel panel-default" id="signup-panel">
+
+  <form name="signupForm" novalidate>
+
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+          <h2> Signup for an account </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+          <label for="business-name">Business Name</label>
+          <input ng-model="info.business" type="text" class="form-control" id="business-name" placeholder="title">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+          <label for="signup-email"><span class="fa fa-google"></span>oogle account</label>
+          <input ng-model="info.email" type="text" class="form-control" id="signup-email" placeholder="gmail">
+          <p class="pull-right"><a href="https://accounts.google.com/SignUp" target="_blank">Need a google account?</a></p>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+          <label for="account-holder-first-name">Account Holder</label>
+          <input ng-model="info.firstname" type="text" class="form-control" id="account-holder-first-name" placeholder="your first name">
+          <input ng-model="info.lastname" type="text" class="form-control" id="account-holder-last-name" placeholder="your last name">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Step 3 Location address -->
+    <div class="panel-body">
+
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-5 col-xs-9">
+          <label for="locationTitle">Locations</label>
+          <input ng-model="locationTitle" type="text" class="form-control" id="locationTitle" placeholder="name">
+        </div>
+        <div class="form-group col-sm-offset-0 col-sm-1 col-xs-3">
+          <label for="" style="color:transparent;">.</label>
+          <button class="btn btn-success form-control" ng-click="addLocation()">
+            <span class="glyphicon glyphicon-plus"></span>
+          </button>
+        </div>
+      </div>
+
+      <div ng-repeat="loc in info.locations track by $index">
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-4 col-xs-12">
+            <p style="margin-left: 20px; font-size: 1.4em;"> {{loc}} 
+              <button class="btn btn-link" ng-click="removeLocation($index)">
+                (remove)
+              </button>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="row" style="margin-top:50px;">
+        <div class="form-group col-sm-offset-4 col-sm-2 col-xs-12">
+          <button class="btn btn-primary form-control" ng-click="addAccount()">
+            Signup
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+  <form>
+</div>
