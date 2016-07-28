@@ -13,6 +13,7 @@ public class SuperUserRowMapper implements RowMapper {
     public User mapRow(ResultSet rs, int rowNum) throws SQLException {
         User user = new User(
             rs.getInt("id"),
+            rs.getInt("business_id"),
             rs.getInt("max_hrs_week"),
             rs.getInt("min_hrs_week"),
             rs.getInt("clock_number"),
@@ -24,11 +25,12 @@ public class SuperUserRowMapper implements RowMapper {
             EmployeeController.parseHistory(rs.getString("history")),
             EmployeeController.parsePositions(rs.getString("positions")),
             EmployeeController.parseAvailability(rs.getString("avail")),
-            (rs.getInt("is_current") == 1)? true: false,
+            (rs.getInt("is_current") >= 1)? true: false,
             EmployeeController.parsePermissions(rs.getString("permissions")),
             rs.getInt("classification_id"),
             rs.getString("classification_title"),
             rs.getString("notes"));
+        user.setLocations(rs.getString("loc"));
 
         return user;
     }

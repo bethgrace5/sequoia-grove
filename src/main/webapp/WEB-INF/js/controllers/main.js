@@ -4,6 +4,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
     localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
 
+  $rootScope.locations = [];
+  $rootScope.selectedLocation = 0;
+  $rootScope.business = 0;
+
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
   if (loginFactory.isLoggedIn() === false) {
@@ -37,6 +41,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     localStorageService.set('devMode', $rootScope.devMode);
   }
 
+  $scope.toggleDeliveries = function() {
+    $rootScope.revealDeliveries = !$rootScope.revealDeliveries;
+  }
+
   $scope.loadingWeek = false;
   $scope.selectedWeek = 0;
   $scope.weekLabel = '';
@@ -52,15 +60,13 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $scope.extendEnd = 2;
 
   // setup containers
-  $scope.deliveries = [];
-  $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
-      'sat':[], 'sun':[] }
+  $rootScope.deliveries = [];
+  $rootScope.viewDeliveries = [];
 
   // container of  a simplification of the scheudle template shifts
   // used to check that updating a shift is making a chage or not
   //$scope.birthdays = [];
   //$scope.holidays = [];
-  //$scope.isPublished = false;
   $scope.isPublished = false;
   $rootScope.showDeliveries = true;
   $scope.printMessageDisclaimer = 'Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.';
@@ -158,7 +164,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       });
     return deferred.promise;
   }
-
 
 /************** Variable Initialization **************/
 
@@ -452,6 +457,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   // advance or go back weeks in time
   $scope.changeWeek = function(operation) {
+    $scope.isPublished = false;
     $scope.selectWeek(0);
     if ($scope.loadingWeek) {
       return;
@@ -462,20 +468,22 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
         $scope.initAvailSchedule();
         $scope.initPositionsSchedule();
         $scope.initIsCurrentSchedule();
-        $scope.isPublished = scheduleFactory.isPublished();
+        $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
         $scope.$apply();
       });
     });
   }
 
   $scope.publishSchedule = function() {
-    var id = loginFactory.getUser().id;
-    scheduleFactory.publish(id).then(function(success) {
-      $timeout(function() {
-        $scope.isPublished = scheduleFactory.isPublished();
-        $scope.$apply();
+    if(loginFactory.getUser().isManager) {
+      var id = loginFactory.getUser().id;
+      scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
+        $timeout(function() {
+          $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
+          $scope.$apply();
+        });
       });
-    });
+    }
   }
 
  /*$scope.$on('requestchanged', function() {
@@ -484,7 +492,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   // Schedule Factory observers
   var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate();
+    $scope.template = scheduleFactory.getTemplate($rootScope.selectedLocation);
     //$log.debug('update changes made');
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
@@ -494,7 +502,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     }
     $timeout(function() {
       $scope.date = scheduleFactory.getHeader();
-      $scope.isPublished = scheduleFactory.isPublished();
+      $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
       $scope.weekList = scheduleFactory.getWeekList();
       $scope.loadingWeek = false;
 
@@ -520,9 +528,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   // request factory observers
   var requestChange = function() {
     $timeout(function() {
-      $scope.requestsNum = requestFactory.getNumberPending();
-      $scope.pendingRequests = requestFactory.getPending();
-      $scope.allRequests = requestFactory.getAll();
+      if (loginFactory.getUser().isManager) {
+        $scope.requestsNum = requestFactory.getNumberPending();
+        $scope.pendingRequests = requestFactory.getPending();
+        $scope.allRequests = requestFactory.getAll();
+      }
       $scope.userRequests = requestFactory.getUser();
       $scope.$apply();
     })

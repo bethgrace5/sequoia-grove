@@ -12,6 +12,7 @@ public class RequestRowMapper implements RowMapper {
     public RequestStatus  mapRow(ResultSet rs, int rowNum) throws SQLException {
       RequestStatus es = new RequestStatus(
         rs.getInt("rid"),
+        rs.getInt("location_id"),
         rs.getInt("requested_by"),
         rs.getInt("responded_by"),
         checkStatus(rs.getInt("responded_by"), rs.getBoolean("is_approved")),

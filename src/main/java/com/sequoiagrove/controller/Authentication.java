@@ -73,7 +73,7 @@ public class Authentication {
         JsonElement jelement = new JsonParser().parse(postLoad);
         JsonObject  jobject = jelement.getAsJsonObject();
 
-        User user = new User(0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
+        User user = new User(0, 0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
         //User user;
         String email = "";
 
@@ -112,7 +112,7 @@ public class Authentication {
                 "If your company has an account, ask an administrator to verify your email");
             return "jsonTemplate";
           };
-        } 
+        }
         else {
           // google id token invalid
           System.out.println("Invalid Google ID token.");
@@ -123,37 +123,18 @@ public class Authentication {
         }
 
         // query to get user info, by using email as a paramater
-        String sql = "select perm.user_id as id, first_name, last_name, email, birth_date, max_hrs_week, min_hrs_week, phone_number, clock_number, permissions, class.id as classification_id, title as classification_title " +
-          "from (  " +
-              "select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions " +
-              "from ( " +
-                "select * from " +
-                "sequ_user_permission a  " +
-                "full outer join " +
-                "sequ_permission b " +
-                "on a.permission_id = b.id " +
-                ") p  " +
-              "group by user_id " +
-              ") as perm  " +
-          "right outer join  " +
-          "(  " +
-           "select * from sequ_user  " +
-           "where email = ?" +
-          ") as sess  " +
-          "on perm.user_id = sess.id  " +
-          "left outer join  " +
-          "(  " +
-           "select title, id from sequ_classification  " +
-          ") as class  " +
-          "on sess.classification_id = class.id ";
+        String sql = "select distinct id, business_id, first_name, last_name, email, " +
+          "loc, birth_date, max_hrs_week, permissions, notes, phone_number, clock_number, "+
+          "positions, history, min_hrs_week, classification_title, classification_id, avail, "+
+          "is_current from sequ_user_info_view where email = ?";
           try {
             // execute query to find user by email
             user = (User)jdbcTemplate.queryForObject( sql, new Object[] { email }, new UserRowMapper());
           } catch (EmptyResultDataAccessException e) {
-              // user does not exist in the database
+              // user does not exist in the database, they possibly need an account.
               System.out.println("user does not exist in database");
               model.addAttribute("loginFailed", true);
-              model.addAttribute("reason", "Invalid email");
+              model.addAttribute("reason", "Needs Account");
               model.addAttribute("message", "If your company has an account, ask an administrator to verify your email");
               model.addAttribute("email", email);
               model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
@@ -186,7 +167,7 @@ public class Authentication {
                   String[] param = new String[permissions.size()];
                   //fill in empty array with our array list as an array
                   param = permissions.toArray(param);
-                  model.addAttribute("auth_token", getToken(user.getId(), 
+                  model.addAttribute("auth_token", getToken(user.getId(),
                       StringUtils.arrayToDelimitedString(param, ",")));
               }
               else {

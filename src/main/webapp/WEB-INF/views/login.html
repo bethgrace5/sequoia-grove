@@ -1,10 +1,10 @@
 
 <div class="container">
-  <div class="panel panel-default hidden-print" style="height: 200px;">
+  <div class="panel panel-default hidden-print" style="height: 300px;">
     <div class="row panel-body">
       <div class="col-sm-8 col-sm-offset-2">
         <div class="text-center">
-          <p class="lead"> 
+          <p class="lead">
             Sequoia Grove Employee Scheduling
           </p>
           <p class="lead">
@@ -19,21 +19,26 @@
       <!-- Error Messages -->
       <div class="row panel-body text-center">
         <div class="col-sm-12">
-          <div ng-show="errorMessage.length > 0"> 
+          <div ng-show="errorMessage.length > 0">
             <p> Sign in failed for <strong>{{attemptedLogin.email}}</strong> </p>
             <p>{{errorMessage}}</p>
             <a href="#/login" onclick="differentUser();">Not {{attemptedLogin.name}}?</a>
-            </a>
+            <hr/>
           </div>
+          <button ng-show="attemptedLogin.google_id" ng-click="visitSignup()" class="btn btn-primary btn-lg" ng-disabled="loggingIn">
+            Need an account?
+          </button>
         </div>
       </div>
 
     </div>
   </div>
-  <a class="lead pull-right" style="cursor:pointer;"
+  <!--
+  <a href="#/signup" class="lead pull-right" style="cursor:pointer;"
     ng-disabled="loggingIn">
     Need an account?
   </a>
+  -->
   <div class="form-group">
     <label for="dev-mode">Dev Mode</label>
     <input id="dev-mode" type="checkbox"

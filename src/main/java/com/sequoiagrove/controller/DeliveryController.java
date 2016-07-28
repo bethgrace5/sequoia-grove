@@ -6,8 +6,11 @@ import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.servlet.http.HttpServletResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -20,6 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sequoiagrove.model.Delivery;
 import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.EmployeeController;
 
 @Controller
 public class DeliveryController {
@@ -32,29 +36,37 @@ public class DeliveryController {
     }
 
   // get list of all deliveries
-  @RequestMapping(value = "/delivery")
-    public String getDelivery(Model model, @ModelAttribute("scope") List<String> permissions) {
+  @RequestMapping(value = "/delivery/{locations}")
+    public String getDelivery(Model model,
+        @PathVariable("locations") String locations,
+        @ModelAttribute("scope") List<String> permissions) {
 
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      Map<Integer, List<Delivery>> deliveries = new HashMap<Integer, List<Delivery>>();
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
 
-      List<Delivery> deliveryList = jdbcTemplate.query(
-          "select * from sequ_delivery",
-          new RowMapper<Delivery>() {
-            public Delivery mapRow(ResultSet rs, int rowNum) throws SQLException {
-              Delivery del = new Delivery(
-                rs.getString("name"),
-                rs.getBoolean("mon"),
-                rs.getBoolean("tue"),
-                rs.getBoolean("wed"),
-                rs.getBoolean("thu"),
-                rs.getBoolean("fri"),
-                rs.getBoolean("sat"),
-                rs.getBoolean("sun"),
-                rs.getInt("id"));
-              return del;
-            }
-          });
-      model.addAttribute("delivery", deliveryList);
+      for(Integer l : loc) {
+        List<Delivery> deliveryList = jdbcTemplate.query(
+            "select * from sequ_delivery where location_id = ?",
+            new Object[]{l},
+            new RowMapper<Delivery>() {
+              public Delivery mapRow(ResultSet rs, int rowNum) throws SQLException {
+                Delivery del = new Delivery(
+                  rs.getString("name"),
+                  rs.getBoolean("mon"),
+                  rs.getBoolean("tue"),
+                  rs.getBoolean("wed"),
+                  rs.getBoolean("thu"),
+                  rs.getBoolean("fri"),
+                  rs.getBoolean("sat"),
+                  rs.getBoolean("sun"),
+                  rs.getInt("id"));
+                return del;
+              }
+            });
+          deliveries.put(l, deliveryList);
+      }
+      model.addAttribute("delivery", deliveries);
       return "jsonTemplate";
     }
 

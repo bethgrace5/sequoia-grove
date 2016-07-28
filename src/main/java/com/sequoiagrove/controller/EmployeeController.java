@@ -7,7 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -49,8 +51,9 @@ public class EmployeeController
     }
 
     // Get All Employees with the availability, positions, and employment history
-    @RequestMapping(value = "/employees")
-    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions) {
+    @RequestMapping(value = "/employees/{locations}")
+    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions,
+        @PathVariable("locations") String locations) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
         // the token did not have the required permissions, return 403 status
@@ -59,11 +62,27 @@ public class EmployeeController
             return "jsonTemplate";
         }
 
-        String queryStr = "select * from sequ_user_info_view order by last_name";
-        List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
-        model.addAttribute("employees", empList);
+        Map<Integer, List<User>> employees = new HashMap<Integer, List<User>>();
+        ArrayList<Integer> loc = stringToIntArray(locations);
+
+        for(Integer l : loc) {
+          String queryStr = "select * from sequ_user_info_view where location_id = ? order by last_name";
+          List<User> empList = jdbcTemplate.query( queryStr, new Object[]{l}, new SuperUserRowMapper());
+          employees.put(l, empList);
+        }
+        model.addAttribute("employees", employees);
         return "jsonTemplate";
     }
+
+    // change location string to list of java integers
+    public static ArrayList<Integer> stringToIntArray(String str) {
+        ArrayList<Integer> loc = new ArrayList<Integer>();
+        for (String item : new ArrayList<String>(Arrays.asList(str.split(",")))){
+            loc.add(Integer.parseInt(item));
+        }
+        return loc;
+    }
+
 
     // change availability string to java object
     public static WeeklyAvail parseAvailability(String avail) {
@@ -89,15 +108,23 @@ public class EmployeeController
     public static List<Duration> parseHistory(String hist) {
       List<Duration> historyList = new ArrayList<Duration>();
 
-      String[] histories = hist.split(",");
-      for (String h : histories) {
-        String[] times = h.split(":");
-        if(times.length == 2) {
-          historyList.add(new Duration(times[0], times[1]));
+      String[] all = hist.split("\\|");
+      for (String a : all) {
+        String[] locations = a.split("\\!");
+
+        Integer locationId = Integer.parseInt(locations[0]);
+
+        String[] histories = locations[1].split(",");
+        for (String h : histories) {
+          String[] times = h.split(":");
+          if(times.length == 2) {
+            historyList.add(new Duration(locationId, times[0], times[1]));
+          }
+          else {
+            historyList.add(new Duration(locationId, times[0]));
+          }
         }
-        else {
-          historyList.add(new Duration(times[0]));
-        }
+
       }
       return historyList;
     }
@@ -212,7 +239,7 @@ public class EmployeeController
             "values((select nextval('sequ_user_sequence')), ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ?) returning currval('sequ_user_sequence')", params, Integer.class);
 
         // activate the employee
-        jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null)", id);
+        jdbcTemplate.update("insert into sequ_employment_history values( ?, current_date, null, ?)", id, jobject.get("locationId").getAsInt());
 
         // give default permissions
         int classid = jobject.get("classificationId").getAsInt();

@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="36" author="Bethany Armitage" context="prod or dev or test">
+
+    <!-- Create ID sequence - just using serial type not working to auto create
+         sequence in liquibase -->
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="sequ_business_id_seq"
+      startValue="1"/>
+    <createSequence
+      cycle="true"
+      incrementBy="1"
+      maxValue="1000"
+      minValue="1"
+      schemaName="public"
+      sequenceName="sequ_location_id_seq"
+      startValue="1"/>
+
+    <!-- Business Table -->
+    <createTable schemaName="public" tableName="sequ_business" remarks="business data">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="title" type="varchar(255)">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="signup_date" type="date">
+        <constraints unique="false" nullable="false" />
+      </column>
+    </createTable>
+
+    <!-- Location Table -->
+    <createTable schemaName="public" tableName="sequ_location" remarks="location data">
+      <column name="id" type="serial">
+        <constraints primaryKey="true" nullable="false" />
+      </column>
+      <column name="business_id" type="integer">
+        <constraints unique="false" nullable="false"  />
+      </column>
+      <column name="signup_date" type="date">
+        <constraints unique="false" nullable="false" />
+      </column>
+    </createTable>
+
+    <!-- alter sequence start values -->
+    <sqlFile encoding="UTF-8" path="sequences/business_location_sequence.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
+
+    <addColumn schemaName="public" tableName="sequ_employment_history">
+      <column name="location_id" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_published_schedule">
+      <column name="location_id" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_shift">
+      <column name="location_id" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_holiday">
+      <column name="location_id" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_delivery">
+      <column name="location_id" type="integer"/>
+    </addColumn>
+
+    <addForeignKeyConstraint baseColumnNames="location_id"
+      baseTableName="sequ_employment_history"
+      constraintName="fk_location_id_employment_history"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_location" />
+
+    <addForeignKeyConstraint baseColumnNames="location_id"
+      baseTableName="sequ_published_schedule"
+      constraintName="fk_location_id_published_schedule"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_location" />
+
+    <addForeignKeyConstraint baseColumnNames="location_id"
+      baseTableName="sequ_shift"
+      constraintName="fk_location_id_shift"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_location" />
+
+    <addForeignKeyConstraint baseColumnNames="location_id"
+      baseTableName="sequ_holiday"
+      constraintName="fk_location_id_holiday"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_location" />
+
+    <addForeignKeyConstraint baseColumnNames="location_id"
+      baseTableName="sequ_delivery"
+      constraintName="fk_location_id_delivery"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_location" />
+
+    <addForeignKeyConstraint baseColumnNames="business_id"
+      baseTableName="sequ_location"
+      constraintName="fk_business_id_location"
+      deferrable="false"
+      initiallyDeferred="false"
+      onDelete="CASCADE"
+      onUpdate="RESTRICT"
+      referencedColumnNames="id"
+      referencedTableName="sequ_business" />
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="addr_number" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="addr_street" type="varchar(255)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="addr_city" type="varchar(255)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="addr_state" type="varchar(2)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="addr_zip" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_business">
+      <column name="phone" type="varchar(26)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="addr_number" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="addr_street" type="varchar(255)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="addr_city" type="varchar(255)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="addr_state" type="varchar(2)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="addr_zip" type="integer"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="phone" type="varchar(26)"/>
+    </addColumn>
+
+    <addColumn schemaName="public" tableName="sequ_location">
+      <column name="name" type="varchar(255)"/>
+    </addColumn>
+
+
+  </changeSet>
+
+</databaseChangeLog>

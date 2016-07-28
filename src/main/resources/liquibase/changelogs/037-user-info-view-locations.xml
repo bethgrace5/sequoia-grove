@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="37" author="Bethany Armitage" context="prod or dev or test">
+
+    <createView viewName="sequ_user_info_view" replaceIfExists="true" schemaName="public">
+      select e.id, first_name, last_name, email, locations, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
+      phone_number, clock_number, pid as positions, history, min_hrs_week, c.title as classification_title, c.id as classification_id,
+      concat_ws(' ',
+      concat('mon,', mon::text),
+      concat('tue,', tue::text),
+      concat('wed,', wed::text),
+      concat('thu,', thu::text),
+      concat('fri,', fri::text),
+      concat('sat,', sat::text),
+      concat('sun,', sun::text)) as avail,
+      (select count(*) from sequ_employment_history
+      where user_id = e.id
+      and date_unemployed is null
+      ) as is_current
+      from sequ_user e
+      inner join sequ_user_history_view h
+      on e.id = h.id
+      full outer join sequ_user_position_view p
+      on e.id = p.id
+      full outer join sequ_user_avail_view a
+      on e.id = a.id
+      inner join sequ_classification c
+      on e.classification_id = c.id
+      full outer join
+      (select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions
+      from (
+      select * from
+      sequ_user_permission a
+      full outer join
+      sequ_permission b
+      on a.permission_id = b.id
+      ) p
+      group by user_id) as perm
+      on e.id = perm.user_id
+      full outer join
+      (select user_id, STRING_AGG(concat_ws(',', location_id), ',' ORDER BY user_id)
+      AS locations
+      from sequ_employment_history
+      where date_unemployed is null
+      group by user_id) as hist
+      on hist.user_id = e.id
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>

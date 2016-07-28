@@ -6,7 +6,9 @@ import com.google.gson.JsonObject;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.RequestRowMapper;
+import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.controller.MainController;
 /**
 RequestController:
@@ -94,8 +97,10 @@ public class RequestController{
       return "jsonTemplate";
     }
 
-  @RequestMapping(value = "/request/get/checked")
-    public String getCheckedRequest(Model model, @ModelAttribute("scope") List<String> permissions){
+  @RequestMapping(value = "/request/get/checked/{locations}")
+    public String getCheckedRequest(Model model,
+        @PathVariable("locations") String locations,
+        @ModelAttribute("scope") List<String> permissions){
 
       // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
@@ -103,18 +108,40 @@ public class RequestController{
           return "jsonTemplate";
       }
 
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
+      Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      String queryStr = "select * from sequ_request_view " +
-          "where responded_by IS NOT NULL ";
-      List<RequestStatus> requestList =
-            jdbcTemplate.query( queryStr, new RequestRowMapper());
 
-      model.addAttribute("requestStatus", requestList);
+      String queryStr = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
+           "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
+             "from sequ_request_view rv " +
+             "left outer join " +
+             "( " +
+              "select * from " +
+              "sequ_employment_history where date_unemployed is null " +
+              ") eh " +
+             "on rv.requested_by = eh.user_id " +
+             "left outer join " +
+             "sequ_location loc " +
+             "on loc.id = eh.location_id " +
+             "where responded_by IS not NULL and location_id = ? " +
+             "order by start_date_time asc ";
+
+
+      for(Integer l : loc) {
+        List<RequestStatus> requestList = jdbcTemplate.query(
+            queryStr, new Object[]{l}, new RequestRowMapper());
+        requests.put(l, requestList);
+      }
+
+      model.addAttribute("requestStatus", requests);
       return "jsonTemplate";
     }
 
-  @RequestMapping(value = "/request/get/pending")
-    public String getPendingRequest(Model model, @ModelAttribute("scope") List<String> permissions){
+  @RequestMapping(value = "/request/get/pending/{locations}")
+    public String getPendingRequest(Model model,
+        @PathVariable("locations") String locations,
+        @ModelAttribute("scope") List<String> permissions){
 
       // the token did not have the required permissions, return 403 status
       if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
@@ -122,18 +149,38 @@ public class RequestController{
           return "jsonTemplate";
       }
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-      String queryStr = "select * from sequ_request_view "+
-          "where responded_by IS NULL and end_date_time >= current_date order by start_date_time asc";
-      List<RequestStatus> requestList =
-            jdbcTemplate.query( queryStr, new RequestRowMapper());
+      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
+      Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
 
-      model.addAttribute("requestStatus", requestList);
+      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      String queryStr = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
+         "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
+           "from sequ_request_view rv " +
+           "left outer join  " +
+           "( " +
+            "select * from  " +
+            "sequ_employment_history where date_unemployed is null " +
+            ") eh " +
+           "on rv.requested_by = eh.user_id " +
+           "left outer join  " +
+           "sequ_location loc " +
+           "on loc.id = eh.location_id " +
+           "where responded_by IS NULL and end_date_time >= current_date and location_id = ? " +
+           "order by start_date_time asc ";
+
+      for(Integer l : loc) {
+        List<RequestStatus> requestList = jdbcTemplate.query(
+            queryStr, new Object[]{l}, new RequestRowMapper());
+          requests.put(l, requestList);
+      }
+
+      model.addAttribute("requestStatus", requests);
       return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/request/get/current/employee/{eid}")
+    @RequestMapping(value = "/request/get/current/employee/{eid}/{locations}")
       public String getCurrentEmployeeRequestl(Model model, @ModelAttribute("scope") List<String> permissions,
+          @PathVariable("locations") String locations,
           @PathVariable("eid") int eid) throws SQLException {
 
           // the token did not have the required permissions, return 403 status
@@ -142,16 +189,31 @@ public class RequestController{
               return "jsonTemplate";
           }
 
+          ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
+          Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
           JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
           String queryStr = "select * from sequ_request_view " +
-                  "where requested_by = ? and end_date_time >= current_date " +
-                  "order by start_date_time asc";
-          Object[] params = new Object[] { eid };
+            "left outer join " +
+            "( " +
+             "select * from " +
+             "sequ_employment_history where date_unemployed is null " +
+             ") eh " +
+            "on requested_by = eh.user_id " +
+            "left outer join " +
+            "sequ_location loc " +
+            "on loc.id = eh.location_id " +
+            "where requested_by = ? and end_date_time >= current_date " +
+            "and location_id = ? " +
+            "order by start_date_time asc";
 
-          List<RequestStatus> requestList =
-                jdbcTemplate.query( queryStr, params, new RequestRowMapper());
+          for(Integer l : loc) {
+            List<RequestStatus> requestList = jdbcTemplate.query(
+                queryStr, new Object[]{eid, l}, new RequestRowMapper());
+              requests.put(l, requestList);
+          }
 
-          model.addAttribute("request", requestList);
+          model.addAttribute("request", requests);
           return "jsonTemplate";
       }
 

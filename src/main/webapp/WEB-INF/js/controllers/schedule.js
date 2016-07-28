@@ -57,7 +57,7 @@ angular.module('sequoiaGroveApp')
   }
   $scope.errors = {
     'selectedName':'',
-    'available':true, 
+    'available':true,
     'hasPosition':true,
     'isCurrent':true,
     'selectedPosition':''
@@ -177,7 +177,7 @@ angular.module('sequoiaGroveApp')
     // clear errors
     $scope.errors = {
       'selectedName':'',
-      'available':true, 
+      'available':true,
       'hasPosition':true,
       'selectedPosition':'',
       'isCurrent':true
@@ -300,37 +300,45 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.saveSchedule = function() {
-    $scope.saving = true;
-    scheduleFactory.saveSchedule().then(
-      function(success) {
-        $timeout(function() {
-          $scope.saving = false;
+    if(loginFactory.getUser().isManager) {
+      $scope.saving = true;
+      scheduleFactory.saveSchedule($rootScope).then(
+        function(success) {
+          $timeout(function() {
+            $scope.saving = false;
+          });
         });
-      });
+    }
   }
 
   $scope.clearSchedule = function() {
-    $scope.selectedId = 0;
-    scheduleFactory.clear();
+    if(loginFactory.getUser().isManager) {
+      $scope.selectedId = 0;
+      scheduleFactory.clear($rootScope);
+    }
   }
 
   $scope.importWeek = function(index) {
-    $scope.selectWeek(index);
-    var week = $scope.weekList[index].val;
-    $scope.importing = true;
-    scheduleFactory.importWeek(week).then(
-      function(success) {
-        $scope.importing = false;
-      });
+    if(loginFactory.getUser().isManager) {
+      $scope.selectWeek(index);
+      var week = $scope.weekList[index].val;
+      $scope.importing = true;
+      scheduleFactory.importWeek(week).then(
+        function(success) {
+          $scope.importing = false;
+        });
+    }
   }
 
   var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate();
-    $scope.weekList = scheduleFactory.getWeekList();
-    $scope.dayCount = scheduleFactory.getDayCount();
-    $scope.hourCount = scheduleFactory.getHourCount();
-    $scope.changesMade = scheduleFactory.changesMade();
-    $scope.requests = scheduleFactory.getRequests();
+    $scope.template = scheduleFactory.getTemplate($rootScope);
+    if (loginFactory.getUser().isManager) {
+      $scope.weekList = scheduleFactory.getWeekList();
+      $scope.dayCount = scheduleFactory.getDayCount();
+      $scope.hourCount = scheduleFactory.getHourCount();
+      $scope.changesMade = scheduleFactory.changesMade();
+      $scope.requests = scheduleFactory.getRequests();
+    }
   }
 
   scheduleFactory.registerObserverCallback(updateChangesMade);

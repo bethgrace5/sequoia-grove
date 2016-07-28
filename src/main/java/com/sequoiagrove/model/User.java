@@ -5,9 +5,11 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class User {
     int id;
+    int businessId;
     int clockNumber;
     int maxHours;
     int minHours;
@@ -24,12 +26,14 @@ public class User {
     List<Duration> history = new ArrayList<Duration>();
     List<String> positions = new ArrayList<String>();
     List<String> permissions = new ArrayList<String>();
+    List<String> locations = new ArrayList<String>();
     WeeklyAvail avail = new WeeklyAvail();
     
     public User(){}
     //User RowMapper
-    public User(int id, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
+    public User(int id, int businesId, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
         this.id = id;
+        this.businessId = businessId;
         this.clockNumber = clockNumber;
         this.maxHours = maxHours;
         this.minHours = minHours;
@@ -44,8 +48,9 @@ public class User {
     }
 
     //SuperUserRowmapper - uses this constructor
-    public User( int id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
+    public User( int id, int business_id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
         this.id = id;
+        this.businessId = businessId;
         this.maxHours= maxHours;
         this.minHours= minHours;
         this.clockNumber = clockNumber;
@@ -64,12 +69,18 @@ public class User {
         this.notes = notes;
     }
 
-
     public int getId() {
         return id;
     }
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getBusinessId() {
+        return businessId;
+    }
+    public void setBusinessId(int businessId) {
+        this.businessId = businessId;
     }
 
     public boolean getIsCurrent() {
@@ -167,6 +178,22 @@ public class User {
     }
     public void setPermissions(List<String> permissions) {
         this.permissions = permissions;
+    }
+
+    public List<String> getLocations() {
+        return locations;
+    }
+    public void setLocations(List<String> locations) {
+        this.locations = locations;
+    }
+    // change Position string to list of java objects
+    public void setLocations(String loc) {
+      if (loc == null) {
+        this.locations = new ArrayList<String>();
+      }
+      else {
+       this.locations = new ArrayList<String>(Arrays.asList(loc.split(",")));
+      }
     }
 
     public WeeklyAvail getAvail() {

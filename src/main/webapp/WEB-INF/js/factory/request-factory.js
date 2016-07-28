@@ -4,7 +4,9 @@
 angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, localStorageService, $q, $http, $rootScope, $timeout, $mdDialog) {
   var service = {};
   var observerCallbacks = [];
-  var requestsNum = 0;
+  var requestsNum = [];
+  var locations = [];
+  var locationId = 0;
 
   var pending = [];
   var user = [];
@@ -18,14 +20,17 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   };
 
   function initPending() {
+    angular.forEach(locations, function(val, key) {
+      requestsNum = [];
+    })
     var deferred = $q.defer();
     $http({
-      url: '/request/get/pending',
+      url: '/request/get/pending/'+locations,
       method: "GET"
     }).then(function(success) {
       pending = success.data.requestStatus;
       requestsNum = pending.length;
-      deferred.resolve(success);
+      deferred.resolve(success[locationId]);
     });
     return deferred.promise;
   }
@@ -33,7 +38,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initUser(id) {
     var deferred = $q.defer();
     $http({
-      url: '/request/get/current/employee/'+ id,
+      url: '/request/get/current/employee/'+ id + '/' + locations,
       method: 'POST'
     }).then(function(success) {
       user = success.data.request;
@@ -45,11 +50,11 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initAll() {
     var deferred = $q.defer();
     return $http({
-      url: '/request/get/checked',
+      url: '/request/get/checked' + locations,
       method: 'GET'
     }).then(function (success) {
       all = success.data.requestStatus
-      deferred.resolve(success);
+      deferred.resolve(success[locationId]);
     });
     return deferred.promise;
   }
@@ -215,25 +220,27 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
 
 
   var setManagePrivelage = function() {
-    service.init = function(id) {
+    service.init = function(id, locList, loc) {
+      locations = locList;
+      locationId = loc;
       var deferred = $q.defer();
       initPending().then(function(success) {
         return initUser(id);
       }).then(function(success) {
         return initAll();
       }).then(function(success) {
+        deferred.resolve(user[locationId]);
         notifyObservers();
-        deferred.resolve(success);
       });
     };
     service.getNumberPending = function() {
       return requestsNum;
     };
     service.getPending = function() {
-      return pending;
+      return pending[locationId];
     };
     service.getUser = function() {
-      return user;
+      return user[locationId];
     };
     service.submit = function(request, ev) {
       //TODO make submit specific to manager/non-manager roles
@@ -249,7 +256,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       });
     };
     service.getAll = function() {
-      return all;
+      return all[locationId];
     };
     service.removeManagePrivelage = function() {
       service = removeManagePrivelage();
@@ -262,7 +269,14 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   var removeManagePrivelage = function() {
   // Exposed factory functionality
     return {
-      'init': function() {
+      'init': function(id, locList, loc) {
+        var deferred = $q.defer();
+        locations = locList;
+        locationId = loc;
+        initUser(id).then(function(success) {
+          deferred.resolve(user[locationId]);
+        });
+        return deferred.promise;
       },
       'getNumberPending': function() {
         return 0;
@@ -272,6 +286,9 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       },
       'submit': function(request, ev) {
         return submit(request, ev);
+      },
+      'getUser': function() {
+        return user[locationId];
       },
       'setManagePrivelage': function() {
         setManagePrivelage();

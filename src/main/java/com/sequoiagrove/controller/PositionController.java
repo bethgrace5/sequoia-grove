@@ -36,21 +36,42 @@ public class PositionController {
     }
 
     // Get Basic position info (id, title and area)
-    @RequestMapping(value = "/position")
-    public String getPositions(Model model, @ModelAttribute("scope") List<String> permissions){
+    @RequestMapping(value = "/position/{businessId}")
+    public String getPositions(Model model,
+        @ModelAttribute("scope") List<String> permissions,
+        @PathVariable("businessId") String businessId){
+
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+
         List<Position> posList = jdbcTemplate.query(
-            "select id, title, area from sequ_position order by area, title",
-            new RowMapper<Position>() {
-                public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
-                    Position pos = new Position(
-                        rs.getInt("id"),
-                        rs.getString("title"),
-                        rs.getString("area"));
-                    return pos;
-                }
+            "select distinct pid as id, title, business_id, area from " +
+            "( " +
+             "select id as sid, position_id, task_name, location_id from sequ_shift sh where end_date is null " +
+             ") shift " +
+            "full outer join " +
+            "( " +
+             "select id as pid, title, area from sequ_position " +
+             ") pos " +
+            "on pos.pid = shift.position_id " +
+            "full outer join " +
+            "( " +
+             "select * from sequ_location " +
+             ") loc " +
+            "on loc.id = shift.location_id " +
+            "where business_id = ? " +
+            "order by area, title ",
+          new Object[]{Integer.parseInt(businessId)},
+          new RowMapper<Position>() {
+              public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
+                  Position pos = new Position(
+                      rs.getInt("id"),
+                      rs.getString("title"),
+                      rs.getString("area"));
+                  return pos;
+              }
         });
+
         model.addAttribute("positions", posList);
         return "jsonTemplate";
     }

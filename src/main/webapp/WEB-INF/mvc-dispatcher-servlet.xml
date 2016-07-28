@@ -66,7 +66,11 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/position*" />
+      <mvc:mapping path="/employees/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/position/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -75,6 +79,10 @@
     </mvc:interceptor>
     <mvc:interceptor>
       <mvc:mapping path="/schedule/template/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/template/*/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -91,6 +99,10 @@
     </mvc:interceptor>
     <mvc:interceptor>
       <mvc:mapping path="/delivery/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/delivery/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -111,6 +123,10 @@
     </mvc:interceptor>
     <mvc:interceptor>
       <mvc:mapping path="/holiday/add" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/holiday/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -147,15 +163,15 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/request/get/current/employee/*" />
+      <mvc:mapping path="/request/get/current/employee/*/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/request/get/pending" />
+      <mvc:mapping path="/request/get/pending/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/request/get/checked" />
+      <mvc:mapping path="/request/get/checked/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
@@ -196,6 +212,10 @@
     </mvc:interceptor>
     <mvc:interceptor>
       <mvc:mapping path="/schedule/publish/*" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
+      <mvc:mapping path="/schedule/publish" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
