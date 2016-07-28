@@ -12,23 +12,24 @@
       <div class="row">
         <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
           <label for="business-name">Business Name</label>
-          <input ng-model="info.business" type="text" class="form-control" id="business-name" placeholder="title">
+          <input ng-model="info.business" type="text" class="form-control" id="business-name" placeholder="">
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
           <label for="signup-email"><span class="fa fa-google"></span>oogle account</label>
-          <input ng-model="info.email" type="text" class="form-control" id="signup-email" placeholder="gmail">
-          <p class="pull-right"><a href="https://accounts.google.com/SignUp" target="_blank">Need a google account?</a></p>
+          <input ng-show="info.email.length > 0" ng-disabled="true" ng-model="info.email" type="text" class="form-control" id="signup-email" placeholder="">
+          <p class="pull-right"><a onclick="differentUser();" href="#/login">Signup with different google account?</a></p>
+
         </div>
       </div>
 
       <div class="row">
         <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
           <label for="account-holder-first-name">Account Holder</label>
-          <input ng-model="info.firstname" type="text" class="form-control" id="account-holder-first-name" placeholder="your first name">
-          <input ng-model="info.lastname" type="text" class="form-control" id="account-holder-last-name" placeholder="your last name">
+          <input ng-model="info.firstname" type="text" class="form-control" id="account-holder-first-name" placeholder="">
+          <input ng-model="info.lastname" type="text" class="form-control" id="account-holder-last-name" placeholder="">
         </div>
       </div>
 
@@ -40,7 +41,10 @@
       <div class="row">
         <div class="form-group col-sm-offset-2 col-sm-5 col-xs-9">
           <label for="locationTitle">Locations</label>
-          <input ng-model="locationTitle" type="text" class="form-control" id="locationTitle" placeholder="name">
+          <input ng-model="locationTitle" type="text" class="form-control" id="locationTitle" placeholder="">
+          <p ng-show="info.locations.length <= 0">
+            Add at least one location, you can edit them later.
+          </p>
         </div>
         <div class="form-group col-sm-offset-0 col-sm-1 col-xs-3">
           <label for="" style="color:transparent;">.</label>
@@ -53,7 +57,7 @@
       <div ng-repeat="loc in info.locations track by $index">
         <div class="row">
           <div class="form-group col-sm-offset-2 col-sm-4 col-xs-12">
-            <p style="margin-left: 20px; font-size: 1.4em;"> {{loc}} 
+            <p style="margin-left: 20px; font-size: 1.4em;"> {{loc}}
               <button class="btn btn-link" ng-click="removeLocation($index)">
                 (remove)
               </button>
@@ -63,14 +67,22 @@
       </div>
 
       <div class="row" style="margin-top:50px;">
-        <div class="form-group col-sm-offset-4 col-sm-2 col-xs-12">
-          <button class="btn btn-primary form-control" ng-click="addAccount()">
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+          <button class="btn btn-default form-control" ng-click="cancelSignup()">
+            Cancel
+          </button>
+        </div>
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+          <button ng-disabled="info.locations.length <= 0" class="btn btn-primary form-control" ng-click="addAccount()">
             Signup
+            <span class="glyphicon glyphicon-chevron-right"></span>
           </button>
         </div>
       </div>
 
     </div>
+
+
 
   <form>
 </div>

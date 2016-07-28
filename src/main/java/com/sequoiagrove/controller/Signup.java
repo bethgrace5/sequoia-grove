@@ -1,9 +1,17 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.JsonParser;
-import com.google.gson.JsonElement;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.gson.Gson;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,11 +24,13 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
+import javax.servlet.ServletException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
+import com.google.api.client.json.gson.GsonFactory;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,10 +45,49 @@ import com.sequoiagrove.model.WeeklyAvail;
 public class Signup {
 
     @RequestMapping(value = "/signup", method=RequestMethod.POST)
-    public String addEmployee(Model model, @RequestBody String data) throws SQLException {
+    public String addEmployee(Model model, @RequestBody String data) throws ServletException, IOException, SQLException, GeneralSecurityException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
+
+        String email = "";
+
+        HttpTransport transport = new NetHttpTransport();
+        JsonFactory jsonFactory = new GsonFactory();
+
+        GoogleIdTokenVerifier verifier = new GoogleIdTokenVerifier.Builder(transport, jsonFactory)
+            .setAudience(Arrays.asList("723411836118-u5vf0ilcf12gaskc5o7grtrbi5d9nss1.apps.googleusercontent.com"))
+            .setIssuer("accounts.google.com")
+            .build();
+        String idTokenString = jobject.get("idtoken").getAsString();
+        GoogleIdToken idToken = verifier.verify(idTokenString);
+
+        if (idToken != null) {
+          Payload payload = idToken.getPayload();
+
+          // Print user identifier
+          String userId = payload.getSubject();
+
+          // Get profile information from payload
+          email = payload.getEmail();
+          boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+          /*
+          String name = (String) payload.get("name");
+          String pictureUrl = (String) payload.get("picture");
+          String locale = (String) payload.get("locale");
+          String familyName = (String) payload.get("family_name");
+          String givenName = (String) payload.get("given_name");
+          */
+
+          // check if email verified from payload
+          if (emailVerified == false) {
+            System.out.println("email was not verified");
+            model.addAttribute("loginFailed", true);
+            model.addAttribute("message", "Invalid email. " + email +
+                "If your company has an account, ask an administrator to verify your email");
+            return "jsonTemplate";
+          };
+        }
 
         // get id just used to add employee
 
@@ -48,14 +97,14 @@ public class Signup {
             jobject.get("email").getAsString()
         };
 
+
         Object[] businessParams = new Object[] {
             jobject.get("business").getAsString()
         };
 
-        JsonElement locationElement = jobject.get("locations").getAsJsonArray();
-
-        Gson googleJson = new Gson();
-        ArrayList locations = googleJson.fromJson(locationElement, ArrayList.class);
+        //Gson googleJson = new Gson();
+        ArrayList<String> locations = new Gson().fromJson(
+            jobject.get("locations").getAsJsonArray(), ArrayList.class);
 
 
         //int businessId = jdbcTemplate.update("insert into sequ_business(id, title, signup_date) " +

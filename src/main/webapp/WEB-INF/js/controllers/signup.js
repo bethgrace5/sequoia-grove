@@ -15,6 +15,10 @@ angular.module('sequoiaGroveApp')
 
   $scope.info = { 'business': '', 'email': '', 'firstname': '', 'lastname': '', 'locations':[] };
 
+  $scope.info.email = $rootScope.attemptedLogin.email;
+  $scope.info.firstname = $rootScope.attemptedLogin.firstname;
+  $scope.info.lastname = $rootScope.attemptedLogin.lastname;
+
   $scope.addLocation = function() {
     $scope.info.locations.push($scope.locationTitle);
     $scope.locationTitle = '';
@@ -23,7 +27,12 @@ angular.module('sequoiaGroveApp')
     $scope.info.locations.splice(index, 1);
   }
 
+  $scope.cancelSignup = function() {
+    $location.path( "/login" );
+  }
+
   $scope.addAccount = function() {
+    console.log('add account');
     console.log($scope.info);
     var deferred = $q.defer();
     $http({

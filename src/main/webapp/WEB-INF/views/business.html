@@ -1,0 +1,154 @@
+
+<div class="panel panel-default" id="signup-panel">
+
+  <form name="signupForm" novalidate>
+
+
+    <!-- Step 2 Business address -->
+    <div class="panel-body">
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+          <h2> Business Address </h2>
+        </div>
+      </div>
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+          <label for="street-number">Street Number</label>
+          <input ng-model="info.streetNumber" type="text" class="form-control" id="street-number" placeholder="1234">
+        </div>
+        <div class="form-group col-sm-offset-0 col-sm-4 col-xs-12">
+          <label for="streetName">Street Name</label>
+          <input ng-model="info.streetName" type="text" class="form-control" id="streetName" placeholder="Example St.">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-4 col-xs-12">
+          <label for="city">City</label>
+          <input ng-model="info.city" type="text" class="form-control" id="city" placeholder="Mountain View">
+        </div>
+        <div class="form-group col-sm-offset-0 col-sm-2 col-xs-12">
+          <label for="state">State</label>
+          <input ng-model="info.state" type="text" class="form-control" id="state" placeholder="CA">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+          <label for="zip">Zip Code</label>
+          <input ng-model="info.zip" type="text" class="form-control" id="zip" placeholder="12345">
+        </div>
+        <div class="form-group col-sm-offset-0 col-sm-4 col-xs-12">
+          <label for="phone">Phone</label>
+          <input ng-model="info.phone" type="text" class="form-control" id="phone" placeholder="(123)-555-7654">
+        </div>
+      </div>
+
+      <div class="row" style="margin-top: 50px">
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-6">
+          <button class="btn btn-primary form-control"
+            ng-click="step = 1">
+            Back
+            <span class="glyphicon glyphicon-chevron-left"></span>
+          </button>
+        </div>
+        <div class="form-group col-sm-offset-2 col-sm-2 col-xs-6">
+          <button class="btn btn-primary form-control"
+            ng-click="step = 3">
+            Next
+            <span class="glyphicon glyphicon-chevron-right"></span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Step 3 Location address -->
+    <div class="panel-body">
+      <div ng-repeat="loc in locations track by $index">
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+            <h2> Location {{$index+1}} Address 
+            <button ng-show="$index === 0" class="btn btn-default"
+              ng-click="sameAddress()">
+              same as business
+            </button>
+            <button ng-show="$index > 0" class="btn btn-danger"
+              ng-click="removeLocation($index)">
+              remove
+            </button>
+            </h2>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-6 col-xs-12">
+            <label for="location-name">Name</label>
+            <input ng-model="loc.name" type="text" class="form-control" id="location-name" placeholder="Downtown">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+            <label for="location-streetNumber">Street Number</label>
+            <input ng-model="loc.streetNumber" type="text" class="form-control" id="location-street-number" placeholder="1234">
+          </div>
+          <div class="form-group col-sm-offset-0 col-sm-4 col-xs-12">
+            <label for="location-street-name">Street Name</label>
+            <input ng-model="loc.streetName" type="text" class="form-control" id="location-street-name" placeholder="Example St.">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-4 col-xs-12">
+            <label for="location-city">City</label>
+            <input ng-model="loc.city" type="text" class="form-control" id="location-city" placeholder="Mountain View">
+          </div>
+          <div class="form-group col-sm-offset-0 col-sm-2 col-xs-12">
+            <label for="location-state">State</label>
+            <input ng-model="loc.state" type="text" class="form-control" id="location-state" placeholder="CA">
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="form-group col-sm-offset-2 col-sm-2 col-xs-12">
+            <label for="location-zip">Zip Code</label>
+            <input ng-model="loc.zip" type="text" class="form-control" id="location-zip" placeholder="12345">
+          </div>
+          <div class="form-group col-sm-offset-0 col-sm-4 col-xs-12">
+            <label for="location-phone">Phone</label>
+            <input ng-model="loc.phone" type="text" class="form-control" id="location-phone" placeholder="(123)-555-7654">
+          </div>
+        </div>
+        <hr/>
+        </div>
+
+        <div class="row" style="margin-top: 50px">
+          <div class="form-group col-sm-offset-3 col-sm-4 col-xs-6">
+            <button class="btn btn-success form-control"
+              ng-click="addLocation()">
+              Add location
+              <span class="glyphicon glyphicon-plus"></span>
+            </button>
+          </div>
+        </div>
+
+        <div class="row" style="margin-top: 50px">
+          <div class="form-group col-sm-offset-2 col-sm-2 col-xs-6">
+            <button class="btn btn-primary form-control"
+              ng-click="step = 2">
+              Back
+              <span class="glyphicon glyphicon-chevron-left"></span>
+            </button>
+          </div>
+          <div class="form-group col-sm-offset-2 col-sm-2 col-xs-6">
+            <button class="btn btn-primary form-control"
+              ng-click="step = 4">
+              Next
+              <span class="glyphicon glyphicon-chevron-right"></span>
+            </button>
+          </div>
+        </div>
+    </div>
+
+  <form>
+</div>

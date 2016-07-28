@@ -131,10 +131,10 @@ public class Authentication {
             // execute query to find user by email
             user = (User)jdbcTemplate.queryForObject( sql, new Object[] { email }, new UserRowMapper());
           } catch (EmptyResultDataAccessException e) {
-              // user does not exist in the database
+              // user does not exist in the database, they possibly need an account.
               System.out.println("user does not exist in database");
               model.addAttribute("loginFailed", true);
-              model.addAttribute("reason", "Invalid email");
+              model.addAttribute("reason", "Needs Account");
               model.addAttribute("message", "If your company has an account, ask an administrator to verify your email");
               model.addAttribute("email", email);
               model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);

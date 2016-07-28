@@ -7,10 +7,10 @@
  * # LoginCtrl
  * Controller of the sequoiaGroveApp
  */
-angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
+angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
   $window, $http, $location, $log, $rootScope, $scope, $timeout, scheduleFactory,
   userFactory, loginFactory, requestFactory, localStorageService, $q ){
-  $scope.attemptedLogin = {};
+
 
   // User tried to go back to the login page when they were alredy logged in.
   // redirect back to home
@@ -23,13 +23,58 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   // wait until gapi is defined, then add a signin/out listener
   $timeout(function() {
     gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
+    $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
   }, 900);
+
+  $scope.visitSignup = function() {
+    $location.path('/signup');
+  }
+
+  function onSignUp (googleUser) {
+    $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+    //var googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+
+    console.log(googleUser);
+    console.log('signedIn', $rootScope.googleSignedIn);
+    console.log(gapi);
+
+    /*
+    loginFactory.signUp(googleUser, gapi).
+      then(function(success) {
+        // initialize data
+          var profile = googleUser.getBasicProfile();
+          $scope.attemptedLogin = {
+            'google_id':profile.getId(),
+            'email': profile.getEmail(),
+            'name': profile.getName(),
+            'firstname': profile.getGivenName(),
+            'lastname': profile.getFamilyName(),
+            'profile_photo':profile.getImageUrl()
+          };
+          console.log($scope.attemptedLogin);
+      });
+      */
+    console.log($scope.info);
+    //var deferred = $q.defer();
+    /*
+    $http({
+      url: '/sequoiagrove/signup',
+      data: $scope.info,
+      method: 'POST' })
+      .then(function(success) {
+        console.log(success);
+        deferred.resolve(success);
+      });
+    */
+    //return deferred.promise;
+  }
 
   // user signs in
   function onSignIn(googleUser) {
+    console.log('caught sign in event');
     $rootScope.loggingIn = true;
-    var signedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-    if (!signedIn && !$scope.initiate) {
+    $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+    if (!$rootScope.googleSignedIn && !$scope.initiate) {
       $rootScope.loggingIn = false;
       $rootScope.loggedIn = false;
       return;
@@ -54,12 +99,13 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
           });
       },function(failure) {
         $scope.initiate = false;
-        gapi.auth2.getAuthInstance().signOut();
+        //gapi.auth2.getAuthInstance().signOut();
         if (failure) {
+          console.log(failure);
           //gapi.auth2.getAuthInstance().disconnect();
           //$rootScope.failedLogin = true;
           var profile = googleUser.getBasicProfile();
-          $scope.attemptedLogin = {
+          $rootScope.attemptedLogin = {
             'google_id':profile.getId(),
             'email': profile.getEmail(),
             'name': profile.getName(),
@@ -67,12 +113,47 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
             'lastname': profile.getFamilyName(),
             'profile_photo':profile.getImageUrl()
           };
+          console.log($rootScope.attemptedLogin);
+
+          if(failure.reason === 'Needs Account') {
+            needsAccount();
+            $scope.errorMessage = failure.message;
+          }
+          else {
+            $scope.errorMessage = failure.message;
+          }
         }
-        $scope.errorMessage = failure.message;
         $rootScope.loggingIn = false;
         $rootScope.loggedIn = false;
       });
   }
+
+
+  function needsAccount() {
+    // Confirm to unemploy
+    var confirm = $mdDialog.confirm()
+      .ariaLabel('account not setup yet')
+      //.targetEvent(ev)
+      .title('User account not setup')
+      .textContent('Does your business have an account?')
+      .ok('I can\'t login.')
+      .cancel('My company needs an account.');
+
+    return $mdDialog.show(confirm).then(
+      function() {
+        $scope.errorMessage = 'If your company has an account, '+
+           'ask an administrator to verify your email';
+        console.log('Check with your account admin');
+      },
+      function() {
+        $scope.errorMessage = '';
+        console.log('Ok, we\'ll sign you up!');
+        $location.path('/signup');
+        // cancel
+        return;
+      });
+  }
+
 
   // catch user initiated signin or signout
   function listenSignin(signingIn) {
@@ -113,7 +194,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
         $rootScope.lastPath = "";
         $scope.initiate = false;
         $scope.errorMessage = "";
-        $scope.attemptedLogin = {};
+        $rootScope.attemptedLogin = {};
         window.open('https://accounts.google.com/logout', '_blank');
         $window.location.reload();
         $scope.$apply();
@@ -122,10 +203,11 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
 
   // when a failed login occurs, login as a different user
   function differentUser() {
+    $rootScope.googleSignedIn = false;
     $rootScope.lastPath = "";
     $scope.initiate = false;
     $scope.errorMessage = "";
-    $scope.attemptedLogin = {};
+    $rootScope.attemptedLogin = {};
     window.open('https://accounts.google.com/logout', '_blank');
     $scope.$apply();
   };
@@ -169,7 +251,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
       $rootScope.deliveries = success.deliveries;
       $rootScope.viewDeliveries = success.viewDeliveries;
       return requestFactory.init(loginFactory.getUser().id,
-        $rootScope.locations, $rootScope.selectedLocation); 
+        $rootScope.locations, $rootScope.selectedLocation);
     }).then(function(success) {
       $rootScope.userRequests = success;
     });

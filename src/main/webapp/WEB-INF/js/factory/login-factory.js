@@ -15,6 +15,22 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
     });
   };
 
+  function appSignUp(gapi) {
+    var deferred = $q.defer();
+    $http.post("/sequoiagrove/signup", {'email':user.email, 'idtoken':user.token}).
+      then(function(success){
+        console.log(success.data);
+        // TODO get more explicit permissions for UI control
+        //user.isManager = parseInt(success.data.user.classificationId) !== 1;
+        //user.id = success.data.user.id;
+        //user.locations = success.data.user.locations;
+        //user.business = success.data.user.businessId;
+        //deferred.resolve(user);
+      }
+    );
+    return deferred.promise;
+  }
+
   // User initialized login
   function appSignIn(gapi) {
     var deferred = $q.defer();
@@ -109,6 +125,29 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
               deferred.resolve(success);
             }, function(failure) {
               deferred.reject(failure);
+            });
+        });
+    }
+    else {
+      deferred.reject(false);
+    }
+    return deferred.promise;
+  };
+
+  service.signUp = function(googleUser, gapi) {
+    var deferred = $q.defer();
+    // if the user successfully signed in with google
+    if(gapi.auth2.getAuthInstance().isSignedIn.get()) {
+      googleSignIn(googleUser, gapi).
+        then(function() {
+          appSignIn(gapi).
+            then(function(success) {
+              console.log(success);
+              //loggedIn = true;
+              //notifyObservers();
+              deferred.resolve(success);
+            }, function(failure) {
+              //deferred.reject(failure);
             });
         });
     }
