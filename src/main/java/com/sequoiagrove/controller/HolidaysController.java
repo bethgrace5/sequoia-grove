@@ -152,10 +152,10 @@ public class HolidaysController {
           @PathVariable("dateEnd") String dateEnd ) throws SQLException{
 
         // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
+        //if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
+            //model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            //return "jsonTemplate";
+        //}
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         Object[] params = new Object[] { dateStart, dateEnd };
         List<Holiday> holidayList = jdbcTemplate.query(

@@ -43,6 +43,9 @@ angular.module('sequoiaGroveApp')
   if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
   }
+  if (!loginFactory.getUser().isManager) {
+    $location.path('/home');
+  }
 
   $scope.aList = {};
   $scope.pList = {};
