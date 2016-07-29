@@ -486,7 +486,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   // iterate the template to count hours for each employee
-  // FIXME, logic to count it incorrect, needs to iterate each day
   var countHours = function() {
     var count = [];
     _.map(schedule[locationId], function(item) {
@@ -506,7 +505,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
       count.push({'eid':item.sat.eid, 'duration':wEnd});
       count.push({'eid':item.sun.eid, 'duration':wEnd});
+
+      // tack the duration on to the schedule for viewing
+      item = _.extend(item, {'weekdayDuration': wDay});
+      item = _.extend(item, {'weekendDuration': wEnd});
     });
+
     // get hour count for each employee, format is: [ {'eid':'count'}, ... ]
     hourCount = _.groupBy(count, function(item){
       return item.eid;
@@ -516,6 +520,23 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         return memo + item.duration;
       }, 0)
       hourCount[index] = hours;
+    });
+  }
+
+  // alternative function to count hours, used for non-manager
+  // employees who do not have all the extra info
+  var calculateShiftHours = function() {
+    schedule[locationId] = _.map(schedule[locationId], function(item) {
+      if(item.isSpacer) {
+        return;
+      }
+      var duration = 0;
+
+      var wDay = getShiftDuration(item.weekdayStart, item.weekdayEnd);
+      var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
+
+      // tack the duration on to the schedule for viewing
+      return _.extend(item, {'weekdayDuration': wDay, 'weekendDuration': wEnd})
     });
   }
 
@@ -799,6 +820,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         initMonday();
         initHeader();
         initSchedule().then(function(success) {
+          calculateShiftHours();
           deferred.resolve(success);
         });
         return deferred.promise;
