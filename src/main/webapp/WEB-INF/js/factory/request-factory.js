@@ -50,7 +50,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initAll() {
     var deferred = $q.defer();
     return $http({
-      url: '/request/get/checked' + locations,
+      url: '/request/get/checked/' + locations,
       method: 'GET'
     }).then(function (success) {
       all = success.data.requestStatus
