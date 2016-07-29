@@ -307,18 +307,25 @@ angular.module('sequoiaGroveApp')
         return;
       }
       // validate max hours per week
-      if ((form.maxHours.$viewValue == '') ||
+      /*if ((form.maxHours.$viewValue == '') ||
           (form.maxHours.$viewValue < 0) ||
           (form.maxHours.$viewValue > 40)) {
         $scope.selectedEmployee.maxHours = 40;
       };
+      */
+
+      // TODO temporary fix, so as not to lead on
+      $scope.selectedEmployee.maxHours = 0;
+      $scope.selectedEmployee.minHours = 0;
 
       // validate min hours per week
+      /*
       if ((form.minHours.$viewValue == '') ||
           (form.minHours.$viewValue > form.minHours.$viewValue) ||
           (form.minHours.$viewValue < 0)) {
         $scope.selectedEmployee.minHours = 0;
       };
+      */
       if ('form',form.clockNumber.$viewValue === '') {
         $scope.selectedEmployee.clockNumber = 0;
       }

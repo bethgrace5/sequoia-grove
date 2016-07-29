@@ -9,6 +9,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var schedule = [];
   var locations = [];
   var locationId = [];
+  var business = 0;
   var publishedList = [];
   var header = {
     mon:{val:'', disp:'', holiday:{}},
@@ -82,11 +83,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   }
 
   var initRequests = function() {
+    requests = {};
     var deferred = $q.defer();
-    $http({ 'url': '/request/'+header.mon.val+'/'+header.sun.val, 'method': 'GET', }).then(
+    $http({ 'url': '/request/'+header.mon.val+'/'+header.sun.val+'/'+business, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
-            requests = _.object(_.map(success.data.requests, function(item, index) {
+            _.map(success.data.requests, function(item, index) {
               var start = moment(item.startDate, 'YYYY-MM-DD');
               var end = moment(item.endDate, 'YYYY-MM-DD');
 
@@ -102,6 +104,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
               var duration = end.diff(start, 'days')
               var weekdays = {'mon':false, 'tue':false, 'wed':false, 'thu':false, 'fri':false, 'sat':false, 'sun':false}
+
+              // the employee had another request in the list that was set, don't override it.
+              if (requests[item.employeeID] !== undefined) {
+                weekdays = requests[item.employeeID];
+              }
 
               // get start
               if(start.format('dddd') === 'Monday') {
@@ -146,8 +153,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
               else if(start.format('dddd') === 'Sunday') {
                 weekdays.sun = true;
               }
+              requests[item.employeeID] = weekdays;
               return [item.employeeID, weekdays]
-            }));
+            });
             deferred.resolve();
           }
         });
@@ -459,8 +467,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // if they are scheduled twice on a day, it counts as one.
   var countDays = function() {
     var shifts = [[],[],[],[],[],[],[]];
-    /*
-    _.map(schedule, function(item) { // collect employee names for each day
+    _.map(schedule[locationId], function(item) { // collect employee names for each day
       if(item.isSpacer) {
         return;
       }
@@ -476,35 +483,34 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     dayCount = _.countBy((_.flatten(shifts)), function(id){
       return id;
     });
-    */
   }
 
   // iterate the template to count hours for each employee
-  // FIXME, logic to count it incorrect, needs to iterate each day
   var countHours = function() {
     var count = [];
-    /*
-    _.map(schedule, function(item) {
+    _.map(schedule[locationId], function(item) {
       if(item.isSpacer) {
         return;
       }
       var duration = 0;
-      if (item.day !== 'sat' && item.day !== 'sun') { // get weeday duration
-        duration = getShiftDuration(item.weekdayStart, item.weekdayEnd);
-        item = _.extend(item, {'weekdayDuration':duration});
-      }
-      else { //get weekend duration
-        duration = getShiftDuration(item.weekendStart, item.weekendEnd);
-        item = _.extend(item, {'weekendDuration':duration});
-      }
-      count.push({'eid':item.mon.eid, 'duration':duration});
-      count.push({'eid':item.tue.eid, 'duration':duration});
-      count.push({'eid':item.wed.eid, 'duration':duration});
-      count.push({'eid':item.thu.eid, 'duration':duration});
-      count.push({'eid':item.fri.eid, 'duration':duration});
-      count.push({'eid':item.sat.eid, 'duration':duration});
-      count.push({'eid':item.sun.eid, 'duration':duration});
+
+      var wDay = getShiftDuration(item.weekdayStart, item.weekdayEnd);
+      var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
+
+      count.push({'eid':item.mon.eid, 'duration':wDay});
+      count.push({'eid':item.tue.eid, 'duration':wDay});
+      count.push({'eid':item.wed.eid, 'duration':wDay});
+      count.push({'eid':item.thu.eid, 'duration':wDay});
+      count.push({'eid':item.fri.eid, 'duration':wDay});
+
+      count.push({'eid':item.sat.eid, 'duration':wEnd});
+      count.push({'eid':item.sun.eid, 'duration':wEnd});
+
+      // tack the duration on to the schedule for viewing
+      item = _.extend(item, {'weekdayDuration': wDay});
+      item = _.extend(item, {'weekendDuration': wEnd});
     });
+
     // get hour count for each employee, format is: [ {'eid':'count'}, ... ]
     hourCount = _.groupBy(count, function(item){
       return item.eid;
@@ -515,7 +521,23 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }, 0)
       hourCount[index] = hours;
     });
-    */
+  }
+
+  // alternative function to count hours, used for non-manager
+  // employees who do not have all the extra info
+  var calculateShiftHours = function() {
+    schedule[locationId] = _.map(schedule[locationId], function(item) {
+      if(item.isSpacer) {
+        return;
+      }
+      var duration = 0;
+
+      var wDay = getShiftDuration(item.weekdayStart, item.weekdayEnd);
+      var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
+
+      // tack the duration on to the schedule for viewing
+      return _.extend(item, {'weekdayDuration': wDay, 'weekendDuration': wEnd})
+    });
   }
 
   // a shift was typed in blank, add it to delete list
@@ -700,9 +722,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
     //TODO set a boolean saying that this user has manage schedule privelage
-    service.init = function(locationList, selectedLocation) {
+    service.init = function(locationList, selectedLocation, bid) {
       locations = locationList;
       locationId = selectedLocation
+      business = bid;
       var deferred = $q.defer();
       initMonday();
       initHeader();
@@ -797,6 +820,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         initMonday();
         initHeader();
         initSchedule().then(function(success) {
+          calculateShiftHours();
           deferred.resolve(success);
         });
         return deferred.promise;

@@ -1,7 +1,7 @@
 <!-- Submit New Request -->
 <div class="row">
   <div class="col-sm-12">
-    <p class="lead">Submit New Request </p>
+    <p class="lead"> {{'REQUEST_SUBMIT_NEW_REQUEST'  | translate}} </p>
   </div>
 </div>
 
@@ -9,7 +9,7 @@
   <!-- Start Date Picker -->
   <div class="col-sm-2" ng-show="seeTargetEmployee">
     <md-datepicker ng-model="$parent.requestDateStart"
-    md-placeholder="Starting Date" md-min-date="$parent.minDateStart"
+    md-placeholder="{{'REQUEST_STARTING_DATE' | translate}}" md-min-date="$parent.minDateStart"
     ng-change="updateEnd()">
     </md-datepicker>
   </div>
@@ -17,7 +17,7 @@
   <!-- End Date Picker -->
   <div class="col-sm-2" ng-show="seeTargetEmployee">
     <md-datepicker ng-model="$parent.requestDateEnd"
-    md-placeholder="Ending Date" md-min-date="$parent.requestDateStart">
+    md-placeholder="{{'REQUEST_ENDING_DATE' | translate}}" md-min-date="$parent.requestDateStart">
     </md-datepicker>
   </div>
 
@@ -26,7 +26,7 @@
     <button class="btn btn-primary"
       ng-click="submitRequest($event)">
       <span class="glyphicon glyphicon-send"  aria-hidden="true"></span>
-      Submit
+      {{'SUBMIT' | translate}}
     </button>
   </div>
 </div>
@@ -35,7 +35,7 @@
 
 <!-- User Has No Requests -->
 <div ng-show="userRequests.length<=0">
-  <p style="margin-left:20px"> You have not submitted any requests yet.</p>
+  <p style="margin-left:20px"> {{'REQUEST_NONE_EXIST_YET' | translate}} </p>
 </div>
 
 <!-- List of Logged In User's Requests -->

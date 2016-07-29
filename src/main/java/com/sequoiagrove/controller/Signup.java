@@ -50,6 +50,7 @@ public class Signup {
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
+        /*
         String email = "";
 
         HttpTransport transport = new NetHttpTransport();
@@ -71,6 +72,8 @@ public class Signup {
           // Get profile information from payload
           email = payload.getEmail();
           boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+          */
+
           /*
           String name = (String) payload.get("name");
           String pictureUrl = (String) payload.get("picture");
@@ -79,6 +82,7 @@ public class Signup {
           String givenName = (String) payload.get("given_name");
           */
 
+          /*
           // check if email verified from payload
           if (emailVerified == false) {
             System.out.println("email was not verified");
@@ -88,9 +92,11 @@ public class Signup {
             return "jsonTemplate";
           };
         }
+        */
 
         // get id just used to add employee
 
+        /*
         Object[] params = new Object[] {
             jobject.get("firstname").getAsString(),
             jobject.get("lastname").getAsString(),
@@ -110,6 +116,7 @@ public class Signup {
         //int businessId = jdbcTemplate.update("insert into sequ_business(id, title, signup_date) " +
             //"values( (select nextval('sequ_business_id_seq')), ?, current_date) returning currval('sequ_business_id_seq')", businessParams);
 
+            */
 
         /*
         // add account holder

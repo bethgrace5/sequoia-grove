@@ -124,7 +124,7 @@ public class RequestController{
              "left outer join " +
              "sequ_location loc " +
              "on loc.id = eh.location_id " +
-             "where responded_by IS not NULL and location_id = ? " +
+             "where location_id = ? " +
              "order by start_date_time asc ";
 
 
@@ -269,28 +269,32 @@ public class RequestController{
         return "jsonTemplate";
       }
 
-    @RequestMapping(value = "/request/{start}/{end}")
-      public String getRequestInterval(@PathVariable("start") String start, @PathVariable("end") String end, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+    @RequestMapping(value = "/request/{start}/{end}/{business}")
+      public String getRequestInterval(
+              @PathVariable("business") int business,
+              @PathVariable("start") String start,
+              @PathVariable("end") String end,
+              @ModelAttribute("scope") List<String> permissions,
+              Model model) throws SQLException {
+
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        Object[] params = new Object[] { start, start, end, end };
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        List<RequestStatus> requestList = new ArrayList<RequestStatus>();
-        String queryStr = "select * from sequ_request_view " +
-            "where (start_date_time <= to_date(?, 'dd-mm-yyyy') and end_date_time >= to_date(?, 'dd-mm-yyyy') ) " +
-            "or (end_date_time >= to_date(?, 'dd-mm-yyyy') and start_date_time <= to_date(?, 'dd-mm-yyyy')) " +
-            "and is_approved = true";
 
+        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        List<RequestStatus> requests = new ArrayList<RequestStatus>();
+
+        String queryStr = "select * from ( select * from sequ_request_view left outer join ( select user_id, location_id from sequ_employment_history where date_unemployed is null) eh on requested_by = eh.user_id left outer join sequ_location loc on loc.id = eh.location_id) as requests_with_locations where ((start_date_time <= to_date(?, 'dd-mm-yyyy') and end_date_time >= to_date(?, 'dd-mm-yyyy') ) or (end_date_time >= to_date(?, 'dd-mm-yyyy') and start_date_time <= to_date(?, 'dd-mm-yyyy'))) and is_approved = true and business_id = ?";
         try {
-          requestList =
-            jdbcTemplate.query( queryStr, params, new RequestRowMapper());
+          requests = jdbcTemplate.query( queryStr,
+              new Object[] { end, start, start, end, business},
+              new RequestRowMapper());
         } catch (EmptyResultDataAccessException e) {
           // there were no requests
         };
-        model.addAttribute("requests", requestList);
+        model.addAttribute("requests", requests);
         return "jsonTemplate";
     }
 }

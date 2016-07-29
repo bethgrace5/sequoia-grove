@@ -36,10 +36,10 @@
           {{type}} <span class="caret"></span>
         </button>
         <ul class="dropdown-menu" rol="menu" arial-labelledby="dropDownMenu1">
-          <li role="menuitem"><a ng-click="changeType('all')">All</a></li>
-          <li role="menuitem"><a ng-click="changeType('mine')">Mine</a></li>
+          <li role="menuitem"><a ng-click="changeType('all')"> {{'SCHEDULE_VIEW_ALL' | translate }} </a></li>
+          <li role="menuitem"><a ng-click="changeType('mine')">{{'SCHEDULE_VIEW_MINE' | translate }}</a></li>
           <li role="separator" class="divider"></li>
-          <li class="dropdown-header">Positions</li>
+          <li class="dropdown-header">{{'SCHEDULE_VIEW_POSITIONS' | translate }}</li>
           <li ng-repeat = "pos in positions" value ="{{pos.title}}"><a ng-click="changeType(pos.title)">{{pos.title}}</a> </li>
         </ul>
       </div>

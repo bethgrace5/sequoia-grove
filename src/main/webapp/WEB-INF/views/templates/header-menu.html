@@ -23,15 +23,19 @@
           src="{{loggedInUser.profile_photo}}"></img>
           <!-- Filter by User, Location, or Position -->
           <ul class="dropdown-menu" role="menu" arial-labelledby="signoutDropdown">
-            <li role="menuitem"><a onclick="signOut();">Sign out</a></li>
-            <li role="menuitem"><a href="#" onclick="switchUser();">Not {{loggedInUser.firstname}}?</a></li>
+            <li role="menuitem"><a onclick="signOut();"> {{'HEADER_SIGN_OUT'  | translate}} </a></li>
+            <li role="menuitem"><a href="#" onclick="switchUser();">
+              {{'UPSIDE_DOWN_QUESTION_MARK'  | translate}}
+              {{'HEADER_NOT'  | translate}}
+              {{loggedInUser.firstname}}?
+            </a></li>
           </ul>
         </div>
       </span>
 
       <span ng-hide="loggedIn" class="pull-right" style="margin-top:5px;">
         <!-- Google Sign in button -->
-        <div class="g-signin2" 
+        <div class="g-signin2"
           data-accesstype="offline"
           data-onsuccess="onSignIn">
           <!--data-redirecturi="http://localhost:8080/sequoiagrove"-->
@@ -81,6 +85,7 @@
                 {{'HEADER_TAB_SCHEDULING' | translate}}
               </a>
             </li>
+            <!--
             <li role="presentation"
               ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/manage')">
@@ -89,6 +94,7 @@
                 {{'HEADER_TAB_MANAGE' | translate}}
               </a>
             </li>
+            -->
 
         </ul>
       </div>

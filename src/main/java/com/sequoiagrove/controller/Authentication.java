@@ -108,8 +108,7 @@ public class Authentication {
           if (emailVerified == false) {
             System.out.println("email was not verified");
             model.addAttribute("loginFailed", true);
-            model.addAttribute("message", "Invalid email. " + email +
-                "If your company has an account, ask an administrator to verify your email");
+            model.addAttribute("message", "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL");
             return "jsonTemplate";
           };
         }
@@ -117,7 +116,7 @@ public class Authentication {
           // google id token invalid
           System.out.println("Invalid Google ID token.");
           model.addAttribute("loginFailed", true);
-          model.addAttribute("message", "Invalid Id token.");
+          model.addAttribute("message", "INVALID_ID_TOKEN");
           model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
           return "jsonTemplate";
         }
@@ -135,14 +134,14 @@ public class Authentication {
               System.out.println("user does not exist in database");
               model.addAttribute("loginFailed", true);
               model.addAttribute("reason", "Needs Account");
-              model.addAttribute("message", "If your company has an account, ask an administrator to verify your email");
+              model.addAttribute("message", "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL");
               model.addAttribute("email", email);
               model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
               return "jsonTemplate";
           } catch (NullPointerException e) {
               // email was blank
               model.addAttribute("loginFailed", true);
-              model.addAttribute("message", "Blank email please supply an email to continue.");
+              model.addAttribute("message", "LOGIN_BLANK_EMAIL");
               model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
               return "jsonTemplate";
           }
@@ -173,8 +172,7 @@ public class Authentication {
               else {
                   // employee is not current
                   model.addAttribute("loginFailed", true);
-                  model.addAttribute("message",
-                      "If you are a current employee, ask an administrator to verify your email.");
+                  model.addAttribute("message", "LOGIN_NOT_CURRENT");
                   model.addAttribute("email", email);
                   model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
               }
