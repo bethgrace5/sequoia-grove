@@ -131,6 +131,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
 
   function needsAccount() {
     // Confirm to unemploy
+    /*
     var confirm = $mdDialog.confirm()
       .ariaLabel('account not setup yet')
       //.targetEvent(ev)
@@ -152,6 +153,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
         // cancel
         return;
       });
+      */
   }
 
 
@@ -240,7 +242,8 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       userFactory.setManagePrivelage(); //needs permission manage-employees
       requestFactory.setManagePrivelage(); //needs permission manage-employees
     }
-    return scheduleFactory.init(locations, $rootScope.selectedLocation)
+    return scheduleFactory.init(locations, $rootScope.selectedLocation, 
+        loginFactory.getUser().business)
    .then(function(success) { // initialize schedule factory
       return userFactory.init(locations, $rootScope.selectedLocation);
     }).then(function(success) {

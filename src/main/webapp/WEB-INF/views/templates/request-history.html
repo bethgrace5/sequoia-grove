@@ -33,7 +33,7 @@
       <p> {{totalDays(request.startDate, request.endDate)}} </p>
     </div>
     <div class="col-sm-2">
-      <p> {{request.status}} by {{request.approverFirstName}} {{request.approverLastName}}</p>
+      <p><strong>{{request.status}}</strong> <span ng-show="request.approverFirstName.length>0">by</span> {{request.approverFirstName}} {{request.approverLastName}}</p>
     </div>
   </div>
 </div>

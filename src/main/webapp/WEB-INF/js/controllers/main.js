@@ -472,11 +472,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
       if (loginFactory.getUser().isManager) {
         $scope.pendingRequests = requestFactory.getPending();
-        $rootScope.requestsNum = requestFactory.getNumberPending();
         $scope.employees = userFactory.getUsers();
         $scope.initPositionsSchedule();
         $scope.initAvailSchedule();
         $scope.initIsCurrentSchedule();
+        $rootScope.requestsNum = requestFactory.getNumberPending();
       }
       $rootScope.$apply();
     }, 200);

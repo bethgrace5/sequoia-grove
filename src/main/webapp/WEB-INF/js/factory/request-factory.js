@@ -4,7 +4,6 @@
 angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, localStorageService, $q, $http, $rootScope, $timeout, $mdDialog) {
   var service = {};
   var observerCallbacks = [];
-  var requestsNum = [];
   var locations = [];
   var locationId = 0;
 
@@ -20,16 +19,12 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   };
 
   function initPending() {
-    angular.forEach(locations, function(val, key) {
-      requestsNum = [];
-    })
     var deferred = $q.defer();
     $http({
       url: '/sequoiagrove/request/get/pending/'+locations,
       method: 'GET'
     }).then(function(success) {
       pending = success.data.requestStatus;
-      requestsNum = pending.length;
       deferred.resolve(success[locationId]);
     });
     return deferred.promise;
@@ -234,7 +229,10 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       });
     };
     service.getNumberPending = function() {
-      return requestsNum;
+      if(pending[locationId]) {
+        return pending[locationId].length;
+      }
+        return 0;
     };
     service.getPending = function() {
       return pending[locationId];
@@ -285,7 +283,14 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
         return [];
       },
       'submit': function(request, ev) {
-        return submit(request, ev);
+        var deferred = $q.defer();
+        submit(request, ev).then(function(success) {
+          return initUser(request.eid)
+        }).then(function(success) {
+          deferred.resolve(user[locationId]);
+          notifyObservers();
+        });
+        return deferred.promise;
       },
       'getUser': function() {
         return user[locationId];

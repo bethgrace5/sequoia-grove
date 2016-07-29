@@ -195,7 +195,7 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
-      <mvc:mapping path="/request/*/*" />
+      <mvc:mapping path="/request/*/*/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
