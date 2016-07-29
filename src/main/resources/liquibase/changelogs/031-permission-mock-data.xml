@@ -9,7 +9,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="31" author="Bethany Armitage" context="prod or dev or test">
+  <changeSet id="31" author="Bethany Armitage" context="v1.0.3-BETA">
 
     <!-- remove 's' from table name -->
     <renameTable newTableName="sequ_user_permission"

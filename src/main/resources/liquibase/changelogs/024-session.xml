@@ -9,7 +9,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="24" author="Amador Silva" context="prod or dev or test">
+  <changeSet id="24" author="Amador Silva" context="v1.0.3-BETA">
 
     <!-- Availability Table -->
     <createTable schemaName="public" tableName="session" remarks="session table">

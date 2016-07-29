@@ -9,7 +9,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="35" author="Bethany Armitage" context="prod or dev or test">
+  <changeSet id="35" author="Bethany Armitage" context="v1.0.3-BETA">
 
     <createView viewName="sequ_user_info_view" replaceIfExists="true" schemaName="public">
       select e.id, first_name, last_name, email, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,

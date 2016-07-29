@@ -9,7 +9,7 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="28" author="Bethany Armitage" context="prod or dev or test">
+  <changeSet id="28" author="Bethany Armitage" context="v1.0.3-BETA">
 
     <!-- Sequences -->
     <sql>ALTER SEQUENCE delivery_id_seq RENAME TO sequ_delivery_sequence</sql>
