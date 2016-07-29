@@ -50,6 +50,8 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
           user.business = success.data.user.businessId;
           deferred.resolve(user);
         }
+      }, function(failure) {
+          deferred.reject(user);
       }
     );
     return deferred.promise;

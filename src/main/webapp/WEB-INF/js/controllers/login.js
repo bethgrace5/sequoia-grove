@@ -99,9 +99,11 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
           });
       },function(failure) {
         $scope.initiate = false;
-        //gapi.auth2.getAuthInstance().signOut();
+        gapi.auth2.getAuthInstance().signOut();
+        $rootScope.loggingIn = false;
+        $rootScope.loggedIn = false;
         if (failure) {
-          console.log(failure);
+          console.log('failure', failure);
           //gapi.auth2.getAuthInstance().disconnect();
           //$rootScope.failedLogin = true;
           var profile = googleUser.getBasicProfile();
@@ -113,7 +115,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
             'lastname': profile.getFamilyName(),
             'profile_photo':profile.getImageUrl()
           };
-          console.log($rootScope.attemptedLogin);
 
           if(failure.reason === 'Needs Account') {
             needsAccount();
@@ -123,8 +124,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
             $scope.errorMessage = failure.message;
           }
         }
-        $rootScope.loggingIn = false;
-        $rootScope.loggedIn = false;
       });
   }
 
@@ -242,7 +241,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       userFactory.setManagePrivelage(); //needs permission manage-employees
       requestFactory.setManagePrivelage(); //needs permission manage-employees
     }
-    return scheduleFactory.init(locations, $rootScope.selectedLocation, 
+    return scheduleFactory.init(locations, $rootScope.selectedLocation,
         loginFactory.getUser().business)
    .then(function(success) { // initialize schedule factory
       return userFactory.init(locations, $rootScope.selectedLocation);
