@@ -58,7 +58,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
     //var deferred = $q.defer();
     /*
     $http({
-      url: '/sequoiagrove/signup',
+      url: '/signup',
       data: $scope.info,
       method: 'POST' })
       .then(function(success) {
@@ -276,7 +276,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       }
     )
     // request deliveries and make the view list for each location
-    $http({url: '/sequoiagrove/delivery/'+$rootScope.locations, method: 'GET' })
+    $http({url: '/delivery/'+$rootScope.locations, method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           deliveries = success.data.delivery;
