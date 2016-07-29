@@ -84,4 +84,5 @@ angular.module('sequoiaGroveApp', [
   // template stored in localstorage instead of pulling a new one every time.
   $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
 
+  $rootScope.appFailure = false;
 });

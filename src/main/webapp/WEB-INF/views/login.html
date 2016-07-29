@@ -1,5 +1,16 @@
 
-<div class="container">
+<!-- something went wrong - database connection, authentication login not found... -->
+<div class="container text-center" ng-show="appFailure">
+  <div class="panel panel-default hidden-print" style="height: 300px;">
+    <div class="row panel-body">
+      <p class="lead">
+        Something went wrong on our end
+      </p>
+    </div>
+  </div>
+</div>
+
+<div class="container" ng-hide="appFailure">
   <div class="panel panel-default hidden-print" style="height: 300px;">
     <div class="row panel-body">
       <div class="col-sm-8 col-sm-offset-2">
