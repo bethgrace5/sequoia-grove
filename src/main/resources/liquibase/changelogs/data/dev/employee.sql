@@ -75,5 +75,6 @@ insert into employee values(default, 'Roel',    'Yuki',   'email48@gmail.com', f
 insert into employee values(default, 'Camden',  'Ghassen','email49@gmail.com', false, to_date('12/04/1980', 'mm/dd/yyyy'), 40, 0, '1234567890', 49 );
 insert into employee values(default, 'Rob',     'Eemen',  'email50@gmail.com', false, to_date('12/04/1980', 'mm/dd/yyyy'), 40, 0, '1234567890', 50 );
 
-/* real test users */
+/* real test users 
 insert into employee values(default, 'Beth',  'Armitage','bethgrace5@gmail.com', true, to_date('12/04/1999', 'mm/dd/yyyy'), 40, 0, '1234567890', 51 );
+*/

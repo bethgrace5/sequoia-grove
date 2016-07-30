@@ -44,9 +44,6 @@ insert into EMPLOYMENT_HISTORY values( 37, to_date('12/24/1989', 'mm/dd/yyyy'), 
 insert into EMPLOYMENT_HISTORY values( 38, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 insert into EMPLOYMENT_HISTORY values( 39, to_date('12/24/1989', 'mm/dd/yyyy'), null);
 
-insert into EMPLOYMENT_HISTORY values( 51, to_date('12/24/1989', 'mm/dd/yyyy'), null);
-
-
 /* Past Employees (or history of current Employees) */
 insert into EMPLOYMENT_HISTORY values( 40, to_date('12/24/1989', 'mm/dd/yyyy'), to_date('12/24/1999', 'mm/dd/yyyy'));
 insert into EMPLOYMENT_HISTORY values( 41, to_date('12/24/1989', 'mm/dd/yyyy'), to_date('12/24/1999', 'mm/dd/yyyy'));

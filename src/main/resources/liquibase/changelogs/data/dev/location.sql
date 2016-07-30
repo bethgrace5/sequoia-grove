@@ -28,8 +28,8 @@ insert into sequ_employment_history(user_id, date_employed, date_unemployed, loc
  values(3, (select current_date), null, (currval('sequ_location_id_seq')));
 insert into sequ_employment_history(user_id, date_employed, date_unemployed, location_id)
  values(4, (select current_date), null, (currval('sequ_location_id_seq')));
-insert into sequ_employment_history(user_id, date_employed, date_unemployed, location_id)
- values(51, (select current_date), null, (currval('sequ_location_id_seq')));
+--insert into sequ_employment_history(user_id, date_employed, date_unemployed, location_id)
+ --values(51, (select current_date), null, (currval('sequ_location_id_seq')));
 
 
 insert into sequ_shift values(default, 1, '2Opening Sup/Mgr',      to_date('05/01/2015', 'mm/dd/yyyy'), null, 1, 2, null, currval('sequ_location_id_seq'));

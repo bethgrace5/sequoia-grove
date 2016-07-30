@@ -18,6 +18,9 @@
     <sql> drop view sequ_sch_hist_view cascade</sql>
     <sql> drop view sequ_sch_template_view cascade</sql>
 
+    <!-- drop column password -->
+    <dropColumn  columnName="password" schemaName="public" tableName="sequ_user"/>
+
     <!-- Update Views -->
     <createView replaceIfExists="true"
       schemaName="public"
@@ -381,7 +384,7 @@
 
     <sqlFile encoding="UTF-8" path="functions/update_with_location.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
 
-    <sqlFile encoding="UTF-8" path="mock-data/location.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/location.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
 
     <dropPrimaryKey catalogName="cat"
       constraintName="pk_employment_history"

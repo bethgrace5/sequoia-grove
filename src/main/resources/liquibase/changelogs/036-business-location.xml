@@ -41,7 +41,16 @@
       <column name="signup_date" type="date">
         <constraints unique="false" nullable="false" />
       </column>
+      <column name="active_until" type="date">
+        <constraints unique="false" nullable="true" />
+      </column>
     </createTable>
+
+    <addDefaultValue schemaName="public"
+      tableName="sequ_business"
+      columnDataType="date"
+      columnName="active_until"
+      defaultValue="null" />
 
     <!-- Location Table -->
     <createTable schemaName="public" tableName="sequ_location" remarks="location data">

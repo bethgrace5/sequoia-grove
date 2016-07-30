@@ -30,7 +30,7 @@
     <renameTable schemaName="public" newTableName="sequ_delivery"           oldTableName="delivery" />
 
     <!-- Insert mock classification data -->
-    <sqlFile encoding="UTF-8" path="mock-data/classification.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/default/classification.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
 
   </changeSet>

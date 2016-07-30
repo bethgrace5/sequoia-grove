@@ -18,31 +18,29 @@
     <rollback/>
 
     <!-- Insert all mock data -->
-    <sqlFile encoding="UTF-8" path="mock-data/hours.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/default/hours.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/employee.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/employee.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/availability.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/availability.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/cannot-work-with.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/cannot-work-with.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/employment-history.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/employment-history.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/shift.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/has-position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/has-position.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/is-scheduled-for.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/is-scheduled-for.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/requests-vacation.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/requests-vacation.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/published-schedule.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/published-schedule.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/holiday.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/holiday.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
-    <rollback/>
-    <sqlFile encoding="UTF-8" path="mock-data/delivery.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <sqlFile encoding="UTF-8" path="data/dev/delivery.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
     <rollback/>
 
 

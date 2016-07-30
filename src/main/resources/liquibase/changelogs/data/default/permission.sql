@@ -66,14 +66,3 @@ insert into sequ_user_permission(user_id, permission_id) values(47, 2);
 insert into sequ_user_permission(user_id, permission_id) values(48, 2);
 insert into sequ_user_permission(user_id, permission_id) values(49, 2);
 insert into sequ_user_permission(user_id, permission_id) values(50, 2);
-insert into sequ_user_permission(user_id, permission_id) values(51, 2);
-
-insert into sequ_user_permission(user_id, permission_id) values(51, 1);
-insert into sequ_user_permission(user_id, permission_id) values(51, 3);
-insert into sequ_user_permission(user_id, permission_id) values(51, 4);
-insert into sequ_user_permission(user_id, permission_id) values(51, 5);
-insert into sequ_user_permission(user_id, permission_id) values(51, 6);
-insert into sequ_user_permission(user_id, permission_id) values(51, 7);
-insert into sequ_user_permission(user_id, permission_id) values(51, 8);
-insert into sequ_user_permission(user_id, permission_id) values(51, 9);
-

@@ -1,6 +1,7 @@
 /dist
 /target
 /src/main/webapp/static/bower_components
+/src/main/resources/liquibase/changelogs/mock-data/businesses/
 */bower_components
 */node_modules
 node_modules/*

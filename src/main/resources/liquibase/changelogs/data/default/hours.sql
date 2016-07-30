@@ -1,0 +1,14 @@
+insert into HOURS(id, start_hour, end_hour) values(default, '0600', '1400'); -- 1
+insert into HOURS(id, start_hour, end_hour) values(default, '0700', '1500'); -- 2
+insert into HOURS(id, start_hour, end_hour) values(default, '0800', '1500'); -- 3
+insert into HOURS(id, start_hour, end_hour) values(default, '0800', '1530'); -- 4
+insert into HOURS(id, start_hour, end_hour) values(default, '1100', '1600'); -- 5
+insert into HOURS(id, start_hour, end_hour) values(default, '0900', '1400'); -- 6
+insert into HOURS(id, start_hour, end_hour) values(default, '1115', '1515'); -- 7
+insert into HOURS(id, start_hour, end_hour) values(default, '0600', '1430'); -- 8
+insert into HOURS(id, start_hour, end_hour) values(default, '1200', '2030'); -- 9
+insert into HOURS(id, start_hour, end_hour) values(default, '1300', '2030'); -- 10
+insert into HOURS(id, start_hour, end_hour) values(default, '1500', '2030'); -- 11
+insert into HOURS(id, start_hour, end_hour) values(default, '0730', '1500'); -- 12
+insert into HOURS(id, start_hour, end_hour) values(default, '1530', '2030'); -- 13
+insert into HOURS(id, start_hour, end_hour) values(default, '1430', '2030'); -- 14

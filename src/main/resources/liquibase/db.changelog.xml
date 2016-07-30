@@ -69,4 +69,7 @@
 
   <include relativeToChangelogFile="true" file="changelogs/038-update-views-with-location.xml"/>
 
+  <!-- setup -->
+  <include relativeToChangelogFile="true" file="changelogs/039-sequoia-business-01.xml"/>
+
 </databaseChangeLog>

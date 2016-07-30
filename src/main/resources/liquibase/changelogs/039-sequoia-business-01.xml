@@ -9,15 +9,11 @@
   http://www.liquibase.org/xml/ns/dbchangelog
   http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-  <changeSet id="31" author="Bethany Armitage" context="v1.0.3-BETA">
+  <changeSet id="39" author="Bethany Armitage" context="business-sequoia">
 
-    <!-- remove 's' from table name -->
-    <renameTable newTableName="sequ_user_permission"
-      oldTableName="sequ_user_permissions"
-      schemaName="public"/>
-
-    <!-- Insert mock data for permission and user permissions -->
-    <sqlFile encoding="UTF-8" path="data/default/permission.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <!-- setup store -->
+    <sqlFile encoding="UTF-8" path="data/businesses/sequoia-01.sql" relativeToChangelogFile="true" splitStatements="true" stripComments="true"/>
+    <rollback/>
 
   </changeSet>
 
