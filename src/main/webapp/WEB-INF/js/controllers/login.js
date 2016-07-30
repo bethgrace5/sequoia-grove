@@ -263,6 +263,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
   }
 
   // get all existing deliveries
+   /*
   $scope.getDeliveries = function() {
     var deliveries = [];
     var viewDeliveries = [];
@@ -303,4 +304,5 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       });
     return deferred.promise;
   }
+  */
 });

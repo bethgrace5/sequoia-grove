@@ -51,25 +51,25 @@
   <!-- List deliveries for each day -->
   <div class="row delivery-title" ng-show="revealDeliveries">
     <div class="col-sm-1 col-sm-offset-3 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].mon"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.mon"> {{item}} </div>
     </div>
     <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].tue"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.tue"> {{item}} </div>
     </div>
     <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].wed"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.wed"> {{item}} </div>
     </div>
     <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].thu"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.thu"> {{item}} </div>
     </div>
     <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].fri"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.fri"> {{item}} </div>
     </div>
     <div class="col-sm-1 col-sm-offset-1">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].sat"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.sat"> {{item}} </div>
     </div>
     <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries[selectedLocation].sun"> {{item}} </div>
+      <div ng-repeat="item in viewDeliveries.sun"> {{item}} </div>
     </div>
   </div>
 </div><!-- end hidden xs-->

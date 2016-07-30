@@ -140,10 +140,11 @@ public class DeliveryController {
       boolean fri = jobject.get("fri").getAsBoolean();
       boolean sat = jobject.get("sat").getAsBoolean();
       boolean sun = jobject.get("sun").getAsBoolean();
+      int location = jobject.get("locationId").getAsInt();
 
       // update/add to database
-      Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id};
-      jdbcTemplate.update("insert into sequ_delivery(name,mon,tue,wed,thu,fri,sat,sun,id) values(?,?,?,?,?,?,?,?,?)",
+      Object[] obj = new Object[] {name, mon, tue, wed, thu, fri, sat, sun, id, location};
+      jdbcTemplate.update("insert into sequ_delivery(name,mon,tue,wed,thu,fri,sat,sun,id,location_id) values(?,?,?,?,?,?,?,?,?,?)",
           obj);
 
       model.addAttribute("id", id);

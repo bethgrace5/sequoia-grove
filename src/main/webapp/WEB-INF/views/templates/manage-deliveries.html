@@ -1,137 +1,107 @@
 
 <p/ class="lead"> Manage Deliveries </p>
 <div class="row">
-    <div class="col-sm-2" >
-        <p>Company</p>
-    </div>
-    <div class="col-sm-1" >
-        <p>Monday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Tuesday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Wednesday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Thursday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Friday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Saturday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Sunday</p>
-    </div>
+  <div class="col-sm-2" > <p>Company</p> </div>
+  <div class="col-sm-1" > <p>Monday</p> </div>
+  <div class="col-sm-1"> <p>Tuesday</p> </div>
+  <div class="col-sm-1"> <p>Wednesday</p> </div>
+  <div class="col-sm-1"> <p>Thursday</p> </div>
+  <div class="col-sm-1"> <p>Friday</p> </div>
+  <div class="col-sm-1"> <p>Saturday</p> </div>
+  <div class="col-sm-1"> <p>Sunday</p> </div>
 
 </div>
-    <hr/>
 <div class="row">
-    <div class="col-sm-2">
-        <input type="text" class="form-control"
-            ng-model = "newDelivery.name"/>
-        <hr/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.mon"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.tue"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.wed"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.thu"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.fri"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.sat"/>
-    </div>
-    <div class="col-sm-1">
-        <input type="checkbox"
-        ng-model = "newDelivery.sun"/>
-    </div>
-    <div class="col-sm-1">
-    <button class="btn btn-default" ng-click = "addDelivery()" >
-        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+  <div class="col-sm-2">
+    <input type="text" class="form-control" ng-model = "newDelivery.name"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.mon"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.tue"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.wed"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.thu"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.fri"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.sat"/>
+  </div>
+  <div class="col-sm-1">
+    <input type="checkbox" ng-model = "newDelivery.sun"/>
+  </div>
+  <div class="col-sm-1">
+    <button class="btn btn-success" ng-click = "addDelivery()" >
+      <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
     </button>
-    </div>
+  </div>
 </div>
-<div class="row">
-    <div class="col-sm-2" >
-        <p>Company</p>
-    </div>
-    <div class="col-sm-1" >
-        <p>Monday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Tuesday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Wednesday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Thursday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Friday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Saturday</p>
-    </div>
-    <div class="col-sm-1">
-        <p>Sunday</p>
-    </div>
-</div>
-<hr/>
 <div ng-repeat="d in deliveries[selectedLocation]">
-    <div class="row">
-        <div class="col-sm-2">
-            <h5>{{d.name}}</h5>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].mon"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].tue"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].wed"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].thu"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].fri"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].sat"/>
-        </div>
-        <div class="col-sm-1">
-            <input type="checkbox"
-            ng-model = "deliveries[$index].sun"/>
-        </div>
-    <button class="btn btn-default" ng-click = "deleteDelivery(d.id,$index)" >
-        <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
-    </button>
+  <div class="row">
+    <div class="col-sm-2">
+      <h5>{{d.name}}</h5>
     </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.mon" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.mon" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.mon"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.tue" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.tue" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.tue"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.wed" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.wed" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.wed"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.thu" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.thu" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.thu"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.fri" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.fri" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.fri"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.sat" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.sat" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.sat"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <span style="color:#6600ff" ng-show="d.sun" class= "glyphicon glyphicon-check"></span>
+      <span style="color:#b3b3cc" ng-hide="d.sun" class= "glyphicon glyphicon-unchecked"></span>
+      <!--
+      <input type="checkbox" ng-model = "d.sun"/>
+      -->
+    </div>
+    <div class="col-sm-1">
+      <button class="btn btn-danger" ng-click = "deleteDelivery(d.id,$index)" >
+        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+      </button>
+    </div>
+  </div>
 
 </div>
 

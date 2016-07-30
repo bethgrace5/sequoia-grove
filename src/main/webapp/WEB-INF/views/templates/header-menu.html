@@ -79,22 +79,20 @@
             </li>
             <li role="presentation"
               ng-show="loggedIn && loggedInUser.isManager"
-              ng-class="changeTab('/schedule')">
-              <a href="#/schedule">
-                <span class="glyphicon glyphicon-calendar"></span>
-                {{'HEADER_TAB_SCHEDULING' | translate}}
-              </a>
-            </li>
-            <!--
-            <li role="presentation"
-              ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/manage')">
               <a href="#/manage">
                 <span class="glyphicon glyphicon-paperclip"></span>
                 {{'HEADER_TAB_MANAGE' | translate}}
               </a>
             </li>
-            -->
+            <li role="presentation"
+              ng-show="loggedIn && loggedInUser.isManager"
+              ng-class="changeTab('/schedule')">
+              <a href="#/schedule">
+                <span class="glyphicon glyphicon-calendar"></span>
+                {{'HEADER_TAB_SCHEDULING' | translate}}
+              </a>
+            </li>
 
         </ul>
       </div>

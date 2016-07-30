@@ -5,7 +5,7 @@
     <div class="pull-left">
 
       <!-- Show Deliveries-->
-      <button class="btn btn-default" ng-click="toggleDeliveries()">
+      <button class="btn btn-default" ng-click="toggleDeliveries()" ng-show="deliveries[selectedLocation].length>0">
         <div ng-hide="revealDeliveries"> {{ 'SCHEDULE_VIEW_SHOW_DELIVERIES' | translate }} </div>
         <div ng-show="revealDeliveries"> {{ 'SCHEDULE_VIEW_HIDE_DELIVERIES' | translate }} </div>
       </button>

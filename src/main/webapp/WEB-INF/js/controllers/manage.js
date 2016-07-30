@@ -2,7 +2,7 @@
 
 angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
       $scope, $log, $rootScope, $http, $location, localStorageService,
-      scheduleFactory, $timeout, loginFactory) {
+      deliveryFactory, scheduleFactory, $timeout, loginFactory) {
 
   /****************** Check and Balances ****************************/
   localStorageService.set('lastPath', '/manage');
@@ -193,7 +193,8 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   $scope.deleteDelivery = function(id,index) {
     deliveryFactory.remove(id).then(
       function(success) {
-        $scope.deliveries.splice(index,1);
+        $scope.deliveries[$rootScope.selectedLocation].splice(index,1);
+        $scope.getDeliveries();
       },function(error) {
         $log.error('Error deleting deliveries ', failure);
     });
@@ -201,9 +202,11 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
 
   // add delivery
   $scope.addDelivery = function() {
+    $scope.newDelivery.locationId = $rootScope.selectedLocation;
     deliveryFactory.add($scope.newDelivery).then(function(success) {
       $scope.newDelivery.id = success.data.id; // add to list
-      $scope.deliveries.push($scope.newDelivery);
+      $scope.deliveries[$rootScope.selectedLocation].push($scope.newDelivery);
+      $scope.getDeliveries();
       $scope.resetDelivery();
     });
   }
@@ -211,6 +214,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   // update delivery
   $scope.updateDelivery = function(index) {
     deliveryFactory.update($scope.deliveries[index]).then(function(success) {
+      $scope.getDeliveries();
       $log.debug(success);
     });
   }
@@ -293,7 +297,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   }
 
   $scope.getAllHolidays = function() {
-    $http({ url: '/sequoiagrove/holiday',
+    $http({ url: '/sequoiagrove/holiday/'+$rootScope.locations,
       method: "GET"
     }).then(
       // request was successful
@@ -321,7 +325,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   }
 
   $scope.init = function(){
-    $scope.getAllHolidays();
+    //$scope.getAllHolidays();
   }
 
   $scope.init();

@@ -18,6 +18,7 @@ angular.module('sequoiaGroveApp').factory('deliveryFactory', function ( $log, lo
   };
 
   function add(del) {
+    console.log(del);
     var deferred = $q.defer();
     $http({ url: '/sequoiagrove/delivery/add',
       method: "POST",
@@ -52,9 +53,9 @@ angular.module('sequoiaGroveApp').factory('deliveryFactory', function ( $log, lo
   }
 
   var service = {
-    'remove': function(id) { remove(id) },
-    'update': function(del) { update(del) },
-    'add': function(id) { add(del) }
+    'remove': function(id) { return remove(id) },
+    'update': function(del) { return update(del) },
+    'add': function(del) { return add(del) }
   }
 
   return service

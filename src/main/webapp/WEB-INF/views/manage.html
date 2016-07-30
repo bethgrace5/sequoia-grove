@@ -3,9 +3,11 @@
 
   <!-- Navigation Tabs -->
   <ul class="nav nav-tabs" ng-show="loggedInUser.isManager">
+    <!--
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('holiday')]">
       <a ng-click="activeTab='holiday'" href="">Holidays</a>
     </li>
+    -->
 
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('shift')]">
       <a ng-click="activeTab='shift'"href="">Shifts</a>
@@ -15,9 +17,11 @@
       <a ng-click="activeTab='delivery'"href="">Deliveries</a>
       </li>
 
+    <!--
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('restriction')]">
       <a ng-click="activeTab='restriction'"href="">Restrictions</a>
     </li>
+    -->
   </ul>
 
   <!-- Tab Content -->

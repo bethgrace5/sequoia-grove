@@ -132,11 +132,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.deliveries = [];
     $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
       'sat':[], 'sun':[] }
-    $http({url: '/sequoiagrove/delivery', method: 'GET' })
+    $http({url: '/sequoiagrove/delivery/'+$rootScope.selectedLocation, method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;
-          _.map($scope.deliveries,function(item){
+          _.map($scope.deliveries[$rootScope.selectedLocation],function(item){
             if(item.mon) {
               $scope.viewDeliveries.mon.push(item.name);
             }
