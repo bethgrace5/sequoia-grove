@@ -102,7 +102,9 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
         gapi.auth2.getAuthInstance().signOut();
         $rootScope.loggingIn = false;
         $rootScope.loggedIn = false;
-        $rootScope.appFailure = true;
+        if (!failure.reason) {
+          $rootScope.appFailure = true;
+        }
         if (failure) {
           console.log('failure', failure);
           //gapi.auth2.getAuthInstance().disconnect();
