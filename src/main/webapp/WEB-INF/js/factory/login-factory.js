@@ -34,7 +34,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   // User initialized login
   function appSignIn(gapi) {
     var deferred = $q.defer();
-    $http.post("/auth/login/", {'email':user.email, 'idtoken':user.token}).
+    $http.post("/sequoiagrove/auth/login/", {'email':user.email, 'idtoken':user.token}).
       then(function(success){
         if (success.data.loginFailed) {
           deferred.reject(success.data);
@@ -61,7 +61,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   function destructData() {
     var deferred = $q.defer();
     // remove session
-    $http({ url: '/auth/logout', method: "POST" }).then( function(success) {
+    $http({ url: '/sequoiagrove/auth/logout', method: "POST" }).then( function(success) {
       deferred.resolve(success);
     });
     return deferred.promise;

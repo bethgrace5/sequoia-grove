@@ -8,16 +8,8 @@
  * Controller for viewing the schedule
  */
 angular.module('sequoiaGroveApp')
-  .controller('HomeCtrl', function (
-    $http,
-    $log,
-    $scope,
-    $location,
-    $rootScope,
-    $translate,
-    loginFactory,
-    localStorageService)
-  {
+  .controller('HomeCtrl', function ( $log, $scope, $location, $rootScope,
+    $translate, loginFactory, localStorageService) {
 
 /************** Login Redirect, Containers and UI settings **************/
   localStorageService.set('lastPath', '/home');
@@ -65,7 +57,7 @@ angular.module('sequoiaGroveApp')
           return true;
         }
 
-        if (t.mon.eid === uid || t.tue.eid === uid || t.wed.eidt === uid || 
+        if (t.mon.eid === uid || t.tue.eid === uid || t.wed.eidt === uid ||
           t.thu.eid === uid || t.fri.eid === uid || t.sat.eid === uid || t.sun.eid === uid) {
               return true;
           }

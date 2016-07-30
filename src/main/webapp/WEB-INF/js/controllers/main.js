@@ -113,7 +113,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.getPositions = function() {
     var deferred = $q.defer();
-    $http({ url: '/position/'+$rootScope.business, method: "GET" })
+    $http({ url: '/sequoiagrove/position/'+$rootScope.business, method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
         deferred.resolve(success);
@@ -132,7 +132,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.deliveries = [];
     $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
       'sat':[], 'sun':[] }
-    $http({url: '/delivery', method: 'GET' })
+    $http({url: '/sequoiagrove/delivery', method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;

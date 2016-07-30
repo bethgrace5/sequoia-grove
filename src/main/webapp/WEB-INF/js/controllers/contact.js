@@ -1,8 +1,7 @@
 'use strict';
 
 angular.module('sequoiaGroveApp').controller('ContactCtrl', function (
-      $scope, $log, $rootScope, $http, $location, localStorageService,
-      scheduleFactory, $timeout, loginFactory) {
+      $scope, $log, loginFactory) {
 
   localStorageService.set('lastPath', '/contact');
   $scope.reasons = ['Suggestion', 'Question', 'Problem', 'Other'];
