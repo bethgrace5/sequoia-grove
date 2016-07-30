@@ -21,7 +21,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initPending() {
     var deferred = $q.defer();
     $http({
-      url: '/sequoiagrove/request/get/pending/'+locations,
+      url: '/request/get/pending/'+locations,
       method: "GET"
     }).then(function(success) {
       pending = success.data.requestStatus;
@@ -33,7 +33,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initUser(id) {
     var deferred = $q.defer();
     $http({
-      url: '/sequoiagrove/request/get/current/employee/'+ id + '/' + locations,
+      url: '/request/get/current/employee/'+ id + '/' + locations,
       method: 'POST'
     }).then(function(success) {
       user = success.data.request;
@@ -45,7 +45,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initAll() {
     var deferred = $q.defer();
     return $http({
-      url: '/sequoiagrove/request/get/checked/' + locations,
+      url: '/request/get/checked/' + locations,
       method: 'GET'
     }).then(function (success) {
       all = success.data.requestStatus
@@ -70,7 +70,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
           //else {
             confirmSubmit(obj, ev).then(function(success) {
               if(success === true) {
-                $http({ url: '/sequoiagrove/request/submit/',
+                $http({ url: '/request/submit/',
                   method: 'POST',
                   data: obj
                 }).then(function (success){
@@ -189,7 +189,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
     $mdDialog.show(confirmDialog).then(function(success) {
       // request response confirmed
       if (success) {
-        $http({ url: '/sequoiagrove/request/respond',
+        $http({ url: '/request/respond',
           method: 'POST',
           data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
         }).then(function(success) {

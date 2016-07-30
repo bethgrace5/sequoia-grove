@@ -100,7 +100,7 @@ angular.module('sequoiaGroveApp')
       ).subtract(1, 'days').format('DD-MM-YYYY');
 
     $http({
-      url: '/sequoiagrove/schedule/autogen/',
+      url: '/schedule/autogen/',
       method: "POST",
       data: $scope.autoGenOptions
     }).success( function(data, status, headers, config) {
