@@ -5,6 +5,10 @@
 </div>
 <!-- Print Version -->
 <div class="container-fluid visible-print-block schedule-view-options">
+  <!-- Schedule -->
+  <div ng-hide="isPublished">
+    This week's schedule isn't ready to be viewed yet
+  </div>
   <div ng-show="isPublished">
     <ng-include src="'views/templates/schedule-view-print.html'"></ng-include>
   </div>
@@ -16,10 +20,6 @@
     <!-- Header: Week Nav, title, dates -->
     <ng-include src="'views/templates/schedule-header.html'"></ng-include>
     <br/>
-    <!-- Schedule -->
-    <div ng-hide="isPublished">
-      This week's schedule isn't ready to be viewed yet
-    </div>
     <div ng-show="isPublished">
       <ng-include src="'views/templates/schedule-view.html'" ></ng-include>
     </div>

@@ -724,34 +724,55 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var i = 0;
       var spaceCount = 0;
       // index is the old index saved from the database
-      var mon =  _.map(schedule[val],
+      var mon =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.mon.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
-        });
-      var tue =  _.map(schedule[val],
+        }));
+      var tue =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.tue.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
-        });
-      var wed =  _.map(schedule[val],
+        }));
+      var wed =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.wed.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
-        });
-      var thu =  _.map(schedule[val],
+        }));
+      var thu =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.thu.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
-        });
-      var fri =  _.map(schedule[val],
+        }));
+      var fri =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.fri.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
-        });
-      var sat =  _.map(schedule[val],
+        }));
+      var sat =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.sat.eid, 'tname':item.tname, 'weekendStart':item.weekendStart, 'weekendEnd':item.weekendEnd};
-        });
-      var sun =  _.map(schedule[val],
+        }));
+      var sun =  _.compact(_.map(schedule[val],
         function(item, index) {
+          if(item.isSpacer) {
+            return false;
+          }
           return {'position':item.position, 'eid':item.sun.eid, 'tname':item.tname, 'weekendStart':item.weekendStart, 'weekendEnd':item.weekendEnd};
-        });
+        }));
 
       mobileList = {'mon':mon,'tue':tue,'wed':wed,'thu':thu,'fri':fri,'sat':sat,'sun':sun}
 
