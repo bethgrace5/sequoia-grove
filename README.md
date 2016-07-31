@@ -50,6 +50,9 @@ Patch Notes
 --
 ## v1.0.0.1-BETA
 Initial beta release, add mobile friendly schedule view
+## v1.0.0.2-BETA
+fix where spacers in schedule threw error in mobile list calculation
+
 
 License
 --
