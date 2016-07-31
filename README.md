@@ -48,8 +48,8 @@ Mac OSX - I suggest [Homebrew](http://brew.sh/), Linux - use your package manage
 
 Patch Notes
 --
-**v1.0.0.2** fix where spacers in schedule threw error in mobile list calculation
-**v1.0.0.1** BETA Initial beta release, add mobile friendly schedule view
+* **v1.0.0.2-BETA** fix where spacers in schedule threw error in mobile list calculation
+* **v1.0.0.1-BETA** Initial beta release, add mobile friendly schedule view
 
 License
 --
