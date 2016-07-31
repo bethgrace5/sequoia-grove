@@ -1,4 +1,57 @@
-<div class="hidden-xs">
+<div class="hidden-md hidden-lg hidden-xl">
+
+  <div class="mobile-box">
+    <p class="mobile-title-first">Monday {{date.mon.disp}}</p>
+    <div ng-repeat="t in mobileList.mon" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Tuesday {{date.tue.disp}}</p>
+    <div ng-repeat="t in mobileList.tue" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Wednesday {{date.wed.disp}}</p>
+    <div ng-repeat="t in mobileList.wed" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Thursday {{date.thu.disp}}</p>
+    <div ng-repeat="t in mobileList.thu" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Friday {{date.fri.disp}}</p>
+    <div ng-repeat="t in mobileList.fri" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Saturday {{date.sat.disp}}</p>
+    <div ng-repeat="t in mobileList.sat" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekendStart,true)}}-{{formatTime(t.weekendEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
+    <p class="mobile-title">Sunday {{date.sun.disp}}</p>
+    <div ng-repeat="t in mobileList.sun" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekendStart,true)}}-{{formatTime(t.weekendEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+</div>
+
+<div class="hidden-sm hidden-xs">
 
   <!-- shifts -->
   <div ng-repeat="t in template">

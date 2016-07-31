@@ -50,6 +50,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $scope.weekLabel = '';
   $scope.weekList = [];
   $scope.template = {};
+  $scope.mobileList = {'mon':[],'tue':[],'wed':[],'thu':[],'fri':[],'sat':[],'sun':[]}
   $scope.highlight = false;
   $rootScope.revealDeliveries = false;
   // flag when set will disable all buttons, to avoid overlapping requests
@@ -505,6 +506,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
       $scope.weekList = scheduleFactory.getWeekList();
       $scope.loadingWeek = false;
+      $scope.mobileList = scheduleFactory.getMobileList();
 
       if (loginFactory.getUser().isManager) {
         $scope.pendingRequests = requestFactory.getPending();

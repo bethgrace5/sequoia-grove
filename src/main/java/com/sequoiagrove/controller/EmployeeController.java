@@ -149,10 +149,10 @@ public class EmployeeController
     public String updateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
         // the token did not have the required permissions, return 403 status
         try {
-        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
+          if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
+              model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+              return "jsonTemplate";
+          }
         }
         catch (NullPointerException e) {
           System.out.println("No permissions found (interceptor didn't fire)");

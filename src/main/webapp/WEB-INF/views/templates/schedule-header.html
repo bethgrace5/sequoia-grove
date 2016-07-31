@@ -1,3 +1,34 @@
+<div class="row visible-xs">
+  <!-- week navgation arrows and location title -->
+  <div class="col-xs-2">
+    <button type="button" class="btn btn-default week-nav-button pull-left"
+      aria-label="Left Align"
+      ng-disabled = "loadingWeek"
+      ng-click="changeWeek('subtract')">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+    </button>
+  </div>
+  <div class="col-xs-8">
+    <p class="lead text-center">
+    <strong>Sequoia Rosedale</strong>
+      <br/>
+      {{'SCHEDULE_VIEW_WEEK_OF' | translate}} {{date.mon.disp}}
+    </p>
+  </div>
+  <div class="col-xs-2">
+    <button type="button" class="btn btn-default week-nav-button pull-left"
+      aria-label="Left Align"
+      ng-disabled = "loadingWeek"
+      ng-click="changeWeek('add')">
+      <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+    </button>
+  </div>
+    <span ng-show="loadingWeek" class="pull-left spinner-fade">
+      <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
+    </span>
+  </div>
+</div><!-- end visible xs-->
+
 <div class="row hidden-xs">
   <!-- week navgation arrows and location title -->
   <div class="col-sm-12 pull-right">

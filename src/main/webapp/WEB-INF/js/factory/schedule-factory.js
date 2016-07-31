@@ -11,6 +11,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var locationId = [];
   var business = 0;
   var publishedList = [];
+  var mobileList = {};
   var header = {
     mon:{val:'', disp:'', holiday:{}},
     tue:{val:'', disp:'', holiday:{}},
@@ -718,6 +719,45 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     return deferred.promise;
   }
 
+  var buildMobileList = function() {
+    angular.forEach (locations, function(val, key) {
+      var i = 0;
+      var spaceCount = 0;
+      // index is the old index saved from the database
+      var mon =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.mon.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
+        });
+      var tue =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.tue.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
+        });
+      var wed =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.wed.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
+        });
+      var thu =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.thu.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
+        });
+      var fri =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.fri.eid, 'tname':item.tname, 'weekdayStart':item.weekdayStart, 'weekdayEnd':item.weekdayEnd};
+        });
+      var sat =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.sat.eid, 'tname':item.tname, 'weekendStart':item.weekendStart, 'weekendEnd':item.weekendEnd};
+        });
+      var sun =  _.map(schedule[val],
+        function(item, index) {
+          return {'position':item.position, 'eid':item.sun.eid, 'tname':item.tname, 'weekendStart':item.weekendStart, 'weekendEnd':item.weekendEnd};
+        });
+
+      mobileList = {'mon':mon,'tue':tue,'wed':wed,'thu':thu,'fri':fri,'sat':sat,'sun':sun}
+
+    })
+  }
+
 
   // if User has manage schedule privelages, extend functionality
   var setManagePrivelage = function() {
@@ -733,6 +773,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           function(success) {
             countDays();
             countHours();
+            buildMobileList();
             return initHolidays();
           }).then(function(success) {
             return initRequests();
@@ -760,6 +801,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           countDays(); // NOTE Added for those with manage schedule privelage
           countHours(); // NOTE Added for those with manage schedule privelage
           buildWeekList();
+          buildMobileList();
           return initHolidays();
         },function(failure) {
           deferred.reject(failure);
@@ -780,6 +822,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.getDayCount    = function() { return dayCount; };
     service.getHourCount   = function() { return hourCount; };
     service.getRequests   = function() { return requests; };
+    service.getMobileList   = function() { return mobileList; };
     service.changesMade    = function() {
       return ((updateShifts[locationId].length + deleteShifts[locationId].length) > 0) || movedShifts;
     };
@@ -799,6 +842,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         countDays();
         countHours();
         buildWeekList();
+        buildMobileList();
         notifyObservers();
         deferred.resolve(success);
       });
@@ -821,6 +865,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         initHeader();
         initSchedule().then(function(success) {
           calculateShiftHours();
+          buildMobileList();
           deferred.resolve(success);
         });
         return deferred.promise;
@@ -843,6 +888,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             countDays(); // NOTE Added for those with manage schedule privelage
             countHours(); // NOTE Added for those with manage schedule privelage
             buildWeekList();
+            buildMobileList();
             notifyObservers();
             deferred.resolve(success);
         });
@@ -866,7 +912,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       'removeManagePrivelage': function() {
         $log.debug('remove manage service');
         // do nothing
-      }
+      },
+      'getMobileList':function() {return mobileList}
     }
   }
 
