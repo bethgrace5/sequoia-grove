@@ -46,12 +46,10 @@ Mac OSX - I suggest [Homebrew](http://brew.sh/), Linux - use your package manage
 * `mvn jetty:run`
 * navigate to [localhost:8080/sequoiagrove/](localhost:8080/sequoiagrove/)
 
-Current and Past Collaborators
+Patch Notes
 --
-* [Beth](https://github.com/bethgrace5)
-* [Sunny](https://github.com/jsumal)
-* [Ted](https://github.com/tpascua11)
-* [AJ](https://github.com/amadorjoaosilva)
+## v1.0.0.1-BETA
+Initial beta release, add mobile friendly schedule view
 
 License
 --
