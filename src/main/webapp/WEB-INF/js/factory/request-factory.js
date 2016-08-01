@@ -21,7 +21,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initPending() {
     var deferred = $q.defer();
     $http({
-      url: '/request/get/pending/'+locations,
+      url: $rootScope.urlPrefix + '/request/get/pending/'+locations,
       method: "GET"
     }).then(function(success) {
       pending = success.data.requestStatus;
@@ -33,7 +33,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initUser(id) {
     var deferred = $q.defer();
     $http({
-      url: '/request/get/current/employee/'+ id + '/' + locations,
+      url: $rootScope.urlPrefix + '/request/get/current/employee/'+ id + '/' + locations,
       method: 'POST'
     }).then(function(success) {
       user = success.data.request;
@@ -45,7 +45,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initAll() {
     var deferred = $q.defer();
     return $http({
-      url: '/request/get/checked/' + locations,
+      url: $rootScope.urlPrefix + '/request/get/checked/' + locations,
       method: 'GET'
     }).then(function (success) {
       all = success.data.requestStatus
@@ -70,7 +70,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
           //else {
             confirmSubmit(obj, ev).then(function(success) {
               if(success === true) {
-                $http({ url: '/request/submit/',
+                $http({ url: $rootScope.urlPrefix + '/request/submit/',
                   method: 'POST',
                   data: obj
                 }).then(function (success){
@@ -189,7 +189,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
     $mdDialog.show(confirmDialog).then(function(success) {
       // request response confirmed
       if (success) {
-        $http({ url: '/request/respond',
+        $http({ url: $rootScope.urlPrefix + '/request/respond',
           method: 'POST',
           data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
         }).then(function(success) {

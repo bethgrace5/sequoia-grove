@@ -120,22 +120,13 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
 
   // Update selected shift
   $scope.updateShift = function() {
-    $scope.resetShiftErrorFlags();
-    if($scope.verifyShift() === false) {
-      return;
-    }
-    $scope.saving = true;
-    $http({ url: '/shift/update/',
-      method: "POST",
-      data: $scope.selectedShift
-    }).then(function(success) {
-      $scope.saving = false;
-      if (success.status == 200) {
-        $scope.cleanupShiftEdit();
-      }
-    }, function(failure) {
-      $scope.saving = false;
-      $scope.shiftSaveError = true;
+    // FIXME new shift getting end date set for some reason.
+    var tmp = $scope.selectedShift;
+    $scope.addShift().then(function(success) {
+      console.log($scope.selectedShift);
+      console.log(tmp);
+      $scope.selectedShift = tmp;
+      $scope.deleteShift();
     });
   }
 
@@ -145,24 +136,27 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     if($scope.verifyShift() === false) {
       return;
     }
+    // set start date as this monday
+    $scope.selectedShift.startDate =  $rootScope.currentMonday;
+    $scope.selectedShift.locationId =  $rootScope.selectedLocation;
     $scope.saving = true;
-    $http({url: '/shift/add/',
+    return $http({
+      url: $rootScope.urlPrefix + '/shift/add',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
       $scope.saving = false;
       if (success.status == 200) {
-        $scope.selectedShift.sid = success.data.sid; // collect new shift id
-        $scope.template.push(
-          angular.copy($scope.selectedShift)); // add shift to the template
+        //$scope.template.push(angular.copy($scope.selectedShift)); // add shift to the template
         $scope.cleanupShiftEdit();
+        $scope.selectedShift.sid = success.data.sid; // collect new shift id
       }
     }, function(failure) {
       $scope.shiftSaveError = true;
       $scope.saving = false;
     }).then(function(done) {
       // finally, reinitialize schedule to show updates immediately
-      scheduleFactory.init();
+      return scheduleFactory.init($rootScope.locations, $rootScope.selectedLocation, $rootScope.business);
     });
   }
 
@@ -170,19 +164,24 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   $scope.deleteShift = function() {
     $scope.resetShiftErrorFlags();
     $scope.saving = true;
-    $http({ url: '/shift/delete/',
+    // set end date as last sunday
+    $scope.selectedShift.endDate = $rootScope.lastSunday;
+    return $http({
+      url: $rootScope.urlPrefix + '/shift/delete/',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
       $scope.saving = false;
       if (success.status == 200) {
-        $scope.template = _.without($scope.template, _.findWhere($scope.template, {sid: $scope.selectedShift.sid}));
+        //$scope.template = _.without($scope.template, _.findWhere($scope.template, {sid: $scope.selectedShift.sid}));
         $scope.cleanupShiftEdit();
       }
     }, function(failure) {
       $scope.saving = false;
       $scope.shiftSaveError = true;
       $log.error(failure.status + " Error deleting shift " + failure.data);
+    }).then(function(done) {
+      return scheduleFactory.init($rootScope.locations, $rootScope.selectedLocation, $rootScope.business);
     });
   }
 
@@ -274,7 +273,8 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     // change date into formatted string 'mm-dd-yyyy'
     $scope.newHoliday.date = moment($scope.holidayDate).format('MM-DD-YYYY');
 
-    $http({ url: '/holiday/add',
+    $http({
+      url: $rootScope.urlPrefix + '/holiday/add',
       method: "POST",
       data: $scope.newHoliday
     }).then(
@@ -297,7 +297,8 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   }
 
   $scope.getAllHolidays = function() {
-    $http({ url: '/holiday/'+$rootScope.locations,
+    $http({
+      url: $rootScope.urlPrefix + '/holiday/'+$rootScope.locations,
       method: "GET"
     }).then(
       // request was successful
@@ -311,7 +312,8 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   }
 
   $scope.deleteHoliday = function(id){
-    $http({ url: '/holiday/remove/'+id,
+    $http({
+      url: $rootScope.urlPrefix + '/holiday/remove/'+id,
       method: "POST"
     }).then(
       // request was successful

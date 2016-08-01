@@ -100,6 +100,7 @@ public class ScheduleController {
       for(Integer l : loc) {
           List<PublishedSchedule> tmpList = jdbcTemplate.query(
             "SELECT * FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
+
             new Object[]{mon, l},
             new RowMapper<PublishedSchedule>() {
               public PublishedSchedule mapRow(ResultSet rs, int rowNum) throws SQLException {

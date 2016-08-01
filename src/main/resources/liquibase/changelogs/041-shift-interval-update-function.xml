@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="41" author="Bethany Armitage" context="v1.0.0.4-BETA" >
+
+    <comment>
+      Update get schedule function to get only shifts that are current
+      for the week being retrieved
+    </comment>
+
+    <sqlFile encoding="UTF-8" path="functions/update_get_schedule_with_shift_range.sql" relativeToChangelogFile="true" splitStatements="false" stripComments="true"/>
+
+  </changeSet>
+
+</databaseChangeLog>

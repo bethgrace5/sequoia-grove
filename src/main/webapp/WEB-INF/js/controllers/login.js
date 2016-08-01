@@ -20,12 +20,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
   $rootScope.loggingIn = false;
   $scope.initiate = false;
 
-  // wait until gapi is defined, then add a signin/out listener
-  $timeout(function() {
-    gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
-    $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-  }, 900);
-
   $scope.visitSignup = function() {
     $location.path('/signup');
   }
@@ -58,7 +52,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
     //var deferred = $q.defer();
     /*
     $http({
-      url: '/signup',
+      url: $rootScope.urlPrefix + '/signup',
       data: $scope.info,
       method: 'POST' })
       .then(function(success) {
@@ -259,6 +253,10 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
         $rootScope.locations, $rootScope.selectedLocation);
     }).then(function(success) {
       $rootScope.userRequests = success;
+      // save which week it actually is right now, so when shifts
+      // are edited, we can use it so it won't affect the past or future.
+      $rootScope.currentMonday = scheduleFactory.getHeader().mon.val;
+      $rootScope.lastSunday = moment( scheduleFactory.getHeader().mon.val, 'DD-MM-YYYY').subtract(1, 'days').format('DD-MM-YYYY');
     });
   }
 
@@ -305,4 +303,25 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
     return deferred.promise;
   }
   */
+  // insert google signin button, so the script loads
+  // when there is a loading delay
+
+  $timeout(function() {
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)){ return; }
+      js = d.createElement(s); js.id = id;
+      js.onload = function(){
+        // remote script has loaded, add a signin listener
+      };
+      js.src = '//apis.google.com/js/platform.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'))
+  }, 400).then(function() {
+    $timeout(function() {
+      gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
+      $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
+    },500)
+  });
+
 });

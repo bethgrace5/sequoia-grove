@@ -67,7 +67,7 @@ public class ManageStore {
               obj, Integer.class);
 
         } catch (EmptyResultDataAccessException e) {
-          id = jdbcTemplate.queryForObject(" insert into sequ_hours (id, start_hour, end_hour) " + 
+          id = jdbcTemplate.queryForObject(" insert into sequ_hours (id, start_hour, end_hour) " +
               " values( (select nextval('sequ_hours_sequence')), ?, ?) returning currval('sequ_hours_sequence')", obj, Integer.class );
 
           //id = jdbcTemplate.queryForObject( "select currval('sequ_hours_sequence')", obj, Integer.class);
@@ -77,7 +77,7 @@ public class ManageStore {
 
 /* ----- HTTP Mapped Functions ----- */
 
-  // Add new shift
+    // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
     public String addShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException, NotFoundException {
 
@@ -87,15 +87,16 @@ public class ManageStore {
             return "jsonTemplate";
         }
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
         int pid;
+        int locationId = jobject.get("locationId").getAsInt();
         String tname = jobject.get("tname").getAsString();
         String weekdayStart = jobject.get("weekdayStart").getAsString();
         String weekdayEnd = jobject.get("weekdayEnd").getAsString(); String weekendStart = jobject.get("weekendStart").getAsString();
         String weekendEnd = jobject.get("weekendEnd").getAsString();
+        String startDate = jobject.get("startDate").getAsString();
 
         if (!validateStrings(tname, weekdayStart, weekdayEnd, weekendStart, weekendEnd)) {
             model.addAttribute("invalidField", true);
@@ -108,24 +109,25 @@ public class ManageStore {
                 model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
                 model.addAttribute("invalidTime", true);
                 return "jsonTemplate";
-                //throw new IllegalArgumentException("Start time >= End Time");
             }
         }
         catch (NumberFormatException e) {
             model.addAttribute("invalidInteger", true);
             model.addAttribute("status", HttpServletResponse.SC_BAD_REQUEST);
             return "jsonTemplate";
-            //throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        Object[] params = new Object[] { 
-            pid, 
-            tname, 
-            addHours(weekdayStart, weekdayEnd), 
-            addHours(weekendStart, weekendEnd) };
+        Object[] params = new Object[] {
+            pid,
+            tname,
+            startDate,
+            addHours(weekdayStart, weekdayEnd),
+            addHours(weekendStart, weekendEnd),
+            locationId
+        };
 
-        int id = jdbcTemplate.queryForObject( "insert into sequ_shift(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id, index) " +
-            "values((select nextval('sequ_shift_sequence')), ?, ?, current_date, null, ?, ?, 99) returning currval('sequ_shift_sequence')", params, Integer.class);
+        int id = jdbcTemplate.queryForObject( "insert into sequ_shift(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id, index, location_id) " +
+            "values((select nextval('sequ_shift_sequence')), ?, ?, to_date(?, 'dd-mm-yyyy'), null, ?, ?, 99, ?) returning currval('sequ_shift_sequence')", params, Integer.class);
 
         model.addAttribute("sid", id);
 
@@ -176,10 +178,10 @@ public class ManageStore {
             //throw new IllegalArgumentException("Integer field does not contain integer");
         }
 
-        Object[] params = new Object[] { 
-            pid, 
-            tname, 
-            addHours(weekdayStart, weekdayEnd), 
+        Object[] params = new Object[] {
+            pid,
+            tname,
+            addHours(weekdayStart, weekdayEnd),
             addHours(weekendStart, weekendEnd),
             sid };
 
@@ -196,7 +198,9 @@ public class ManageStore {
 
   // Delete currently selected shift
     @RequestMapping(value = "/shift/delete", method = RequestMethod.POST)
-    public String deleteShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
+    public String deleteShift(@RequestBody String data,
+        @ModelAttribute("scope") List<String> permissions,
+        Model model) throws SQLException {
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
@@ -207,6 +211,7 @@ public class ManageStore {
 
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
+        String endDate = jobject.get("endDate").getAsString();
         int sid;
 
         //model.addAttribute("error", false);
@@ -225,9 +230,9 @@ public class ManageStore {
         }
 
         jdbcTemplate.update( "update sequ_shift set "+
-          "end_date = current_date "+
+          "end_date = to_date(?, 'dd-mm-yyyy') "+
           "where id = ?",
-        sid);
+        endDate, sid);
 
         return "jsonTemplate";
     }

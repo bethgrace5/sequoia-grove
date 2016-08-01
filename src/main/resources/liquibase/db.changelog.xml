@@ -72,4 +72,7 @@
   <!-- setup -->
   <include relativeToChangelogFile="true" file="changelogs/039-sequoia-business-01.xml"/>
 
+  <include relativeToChangelogFile="true" file="changelogs/040-shift-interval-update-views.xml"/>
+  <include relativeToChangelogFile="true" file="changelogs/041-shift-interval-update-function.xml"/>
+
 </databaseChangeLog>

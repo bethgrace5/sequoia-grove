@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog
+  xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+  xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog-ext
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+  http://www.liquibase.org/xml/ns/dbchangelog
+  http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+  <changeSet id="40" author="Bethany Armitage" context="v1.0.0.4-BETA" >
+    <comment>
+      Updates schedule template to include attributes for shift start and
+      end dates, only schedule template is updated
+    </comment>
+
+    <sql> drop view sequ_user_avail_view cascade</sql>
+    <sql> drop view sequ_user_history_view cascade</sql>
+    <sql> drop view sequ_user_position_view cascade</sql>
+    <sql> drop view sequ_request_view cascade</sql>
+    <sql> drop view sequ_sch_hist_view cascade</sql>
+    <sql> drop view sequ_sch_template_view cascade</sql>
+
+    <!-- Update schedule template -->
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_sch_template_view">
+      select index, pid, sid, tname, weekend_start_hour as we_st, weekend_end_hour as we_ed, weekday_start_hour as wd_st, weekday_end_hour as wd_ed, area, position, location_id, start_date, end_date
+      from (
+      select index, s.weekday_id as wd_id, s.weekend_id as we_id, s.id as sid, s.position_id as pid, s.task_name as tname, area, p.title as position, location_id, start_date, end_date
+      from sequ_shift s
+      inner join sequ_position p
+      on p.id=s.position_id
+      ) schedule
+      left outer join
+      (
+      select h.id as wehid, h.start_hour as weekend_start_hour, h.end_hour as weekend_end_hour
+      from sequ_hours h
+      ) weekendHours
+      on wehid = wd_id
+      left outer join
+      (
+      select h.id as wdhid, h.start_hour as weekday_start_hour, h.end_hour as weekday_end_hour
+      from sequ_hours h
+      ) weekdayHours
+      on wdhid = we_id
+    </createView>
+
+    <!-- the rest of the views remain the same-->
+
+    <!-- history by locations worked at
+         in the form of
+         "<location_id>!<start_date><end_date>:<start_date>|<location_id>!<start_date>"
+         "1!12-24-2008:12-01-2009,12-24-2009"
+         "1!12-24-2009"
+         "1!12-24-1989|2!07-15-2016"
+         vertical pipe separates history at different locations,
+         each location history starts with the location_id and then '!',
+         and then repeating start_date:end_date, start_date:end_date (as exists)
+         -->
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_user_history_view">
+      select id, STRING_AGG(concat_ws('!', location_id::text, history::text), '|' order by location_id) as history from
+      (
+      select id, history, location_id
+      from sequ_user u
+      full outer join
+      (
+        select user_id as eid, location_id, STRING_AGG(
+          concat_ws(':',to_char(date_employed, 'mm-dd-yyyy')::text, to_char(date_unemployed, 'mm-dd-yyyy')::text), ','
+              order by user_id, date_employed) AS history
+        from sequ_employment_history h
+        group by user_id, location_id
+      ) pos
+      on u.id = pos.eid
+      ) asdf
+      group by id
+    </createView>
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_sch_hist_view">
+        select distinct * from (
+            select index, sid, eid, fname, day /*, to_char(to_date(day,'dd/mm/yyyy'), 'DAY') as weekday*/
+            from
+                (
+                  select *
+                  from sequ_sch_template_view
+                ) schtmp
+                natural join
+                (
+                    select i.user_id as eid, i.shift_id as sid, i.on_date as day
+                    from sequ_is_scheduled_for i
+                ) scheduled
+                natural join
+                (
+                    select e.id as eid, e.first_name as fname
+                    from sequ_user e
+                ) emp
+                left outer join
+                (
+                    select user_id
+                    from sequ_employment_history h
+                ) loc
+                on loc.user_id = emp.eid
+            ) sch_hist_view
+            order by day
+    </createView>
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_user_position_view">
+        select id, pid, locations
+        from sequ_user e
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(position_id || '', ',' ORDER BY user_id)
+        AS pid
+        from sequ_has_position p
+        where p.date_removed is null
+        group by user_id
+        ) pos
+        on e.id = pos.eid
+        right outer join
+        (
+        select user_id as eid, STRING_AGG(location_id || '', ',' ORDER BY user_id)
+        AS locations
+        from sequ_employment_history h
+        where h.date_unemployed is null
+        group by user_id
+        ) hist
+        on e.id = hist.eid
+    </createView>
+
+    <!-- Availability is transparent across all locations,
+         if a user has an availability for Monday, it is automatically for
+         all locations they are currently employed at -->
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_user_avail_view">
+ select id, mon, tue, wed, thu, fri, sat, sun
+        from sequ_user e
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS mon
+        from sequ_availability
+        where day = 'mon'
+        group by user_id
+        ) m
+        on e.id = m.eid
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS tue
+        from sequ_availability
+        where day = 'tue'
+        group by user_id
+        ) t
+        on e.id = t.eid
+        full outer join
+            (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS wed
+        from sequ_availability
+        where day = 'wed'
+        group by user_id
+        ) w
+        on e.id = w.eid
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS thu
+        from sequ_availability
+        where day = 'thu'
+        group by user_id
+        ) th
+        on e.id = th.eid
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS fri
+        from sequ_availability
+        where day = 'fri'
+        group by user_id
+                ) f
+        on e.id = f.eid
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS sat
+        from sequ_availability
+        where day = 'sat'
+        group by user_id
+        ) sa
+        on e.id = sa.eid
+        full outer join
+        (
+        select user_id as eid, STRING_AGG(concat_ws(':', startt::text, endt::text), ',' ORDER BY user_id)
+        AS sun
+        from sequ_availability
+        where day = 'sun'
+        group by user_id
+        ) su
+        on e.id = su.eid
+    </createView>
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_user_info_view">
+      select distinct e.id, business_id, first_name, last_name, email, loc, location_id, to_char(birth_date, 'MM-DD-YYYY') as birth_date, max_hrs_week, permissions, notes,
+      phone_number, clock_number, pid as positions, history, min_hrs_week, c.title as classification_title, c.id as classification_id,
+      concat_ws(' ',
+      concat('mon,', mon::text),
+      concat('tue,', tue::text),
+      concat('wed,', wed::text),
+      concat('thu,', thu::text),
+      concat('fri,', fri::text),
+      concat('sat,', sat::text),
+      concat('sun,', sun::text)) as avail,
+      (select count(*) from sequ_employment_history
+      where user_id = e.id
+      and date_unemployed is null
+      ) as is_current
+      from sequ_user e
+      inner join sequ_user_history_view h
+      on e.id = h.id
+      full outer join sequ_user_position_view p
+      on e.id = p.id
+      full outer join sequ_user_avail_view a
+      on e.id = a.id
+      inner join sequ_classification c
+      on e.classification_id = c.id
+      full outer join
+      (select user_id, STRING_AGG(title || '', ',' ORDER BY user_id) AS permissions
+      from (
+      select * from
+      sequ_user_permission a
+      full outer join
+      sequ_permission b
+      on a.permission_id = b.id
+      ) p
+      group by user_id) as perm
+      on e.id = perm.user_id
+      full outer join
+      (select user_id, STRING_AGG(concat_ws(',', location_id), ',' ORDER BY user_id)
+      AS loc
+      from sequ_employment_history
+      where date_unemployed is null
+      group by user_id) as hist
+      on hist.user_id = e.id
+      right outer join
+      (
+      select location_id, user_id as uid
+      from sequ_employment_history
+      ) as no
+      on no.uid = e.id
+      right outer join
+      (
+      select * from sequ_location
+      ) bus
+      on no.location_id = bus.id;
+    </createView>
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_request_view">
+        select
+        vac.id as rid,
+        vac.responded_by,
+        vac.requested_by,
+        vac.is_approved,
+        vac.start_date_time,
+        vac.end_date_time,
+        requester.first_name as requester_first_name,
+        requester.last_name as requester_last_name,
+        responder.first_name as responder_first_name,
+        responder.last_name as responder_last_name
+        from sequ_requests_vacation vac
+        left join
+        (
+            select *
+            from sequ_user
+        )requester
+        on vac.requested_by = requester.id
+        left join
+        (
+            select *
+            from sequ_user
+        )responder
+        on vac.responded_by = responder.id
+    </createView>
+
+
+    <createView replaceIfExists="true"
+      schemaName="public"
+      viewName="sequ_sch_view">
+        select index, m_sid as sid, tname, we_st, we_ed, wd_st, wd_ed, area, position,
+            mon,     tue,     wed,     thu,     fri,     sat,     sun,
+            mon_eid, tue_eid, wed_eid, thu_eid, fri_eid, sat_eid, sun_eid
+        from (
+            select s.index, s.sid as m_sid, s.tname, s.we_st, s.we_ed, s.wd_st, s.wd_ed, s.area,
+                s.position, h.fname as mon, h.eid as mon_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) mm
+        full outer join
+        (
+            select s.sid as t_sid, h.fname as tue, h.eid as tue_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) tt
+        on m_sid = t_sid
+        full outer join
+        (
+            select s.sid as w_sid, h.fname as wed, h.eid as wed_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) ww
+        on m_sid = w_sid
+        full outer join
+        (
+            select s.sid as th_sid, h.fname as thu, h.eid as thu_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) th
+        on m_sid = th_sid
+        full outer join
+        (
+            select s.sid as f_sid, h.fname as fri, h.eid as fri_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) ff
+        on m_sid = f_sid
+        full outer join
+        (
+            select s.sid as sa_sid, h.fname as sat, h.eid as sat_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) sa
+        on m_sid = sa_sid
+        full outer join
+        (
+            select s.sid as su_sid, h.fname as sun, h.eid as sun_eid
+            from sequ_sch_template_view s
+            left outer join
+            sequ_sch_hist_view h
+            on s.sid=h.sid
+        ) su
+        on m_sid = su_sid
+    </createView>
+
+  </changeSet>
+
+</databaseChangeLog>
