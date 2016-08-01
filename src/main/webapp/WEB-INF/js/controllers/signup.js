@@ -36,7 +36,7 @@ angular.module('sequoiaGroveApp')
     console.log($scope.info);
     var deferred = $q.defer();
     $http({
-      url: '/sequoiagrove/signup',
+      url: '/signup',
       data: $scope.info,
       method: 'POST' })
       .then(function(success) {

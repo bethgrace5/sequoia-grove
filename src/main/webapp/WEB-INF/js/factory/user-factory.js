@@ -30,7 +30,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     })
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Getting user data...";
-    var url = '/sequoiagrove/employees/'+locations;
+    var url = '/employees/'+locations;
     // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*if($rootScope.devMode) {
