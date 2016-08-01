@@ -314,7 +314,7 @@ angular.module('sequoiaGroveApp')
     }
   }
 
-  $scope.clearSchedule = function() {
+  $scope.clearSchedule = function(ev) {
       var confirm = $mdDialog.confirm()
         .title('Clear?')
         .textContent('This will clear any current data this week, and cannot be undone.')
@@ -334,7 +334,7 @@ angular.module('sequoiaGroveApp')
       });
   }
 
-  $scope.importWeek = function(index) {
+  $scope.importWeek = function(index, ev) {
       var confirm = $mdDialog.confirm()
         .title('Import?')
         .textContent('This will overwrite any current data this week, and cannot be undone.')

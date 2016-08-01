@@ -23,7 +23,7 @@
         </button>
         <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
           <li ng-repeat = "w in weekList" value ="{{w.name}}">
-            <a ng-click="importWeek($index)">{{w.name}}</a>
+            <a ng-click="importWeek($index, $event)">{{w.name}}</a>
           </li>
         </ul>
       </div>
@@ -35,7 +35,7 @@
 
     <form class="pull-right">
       <!-- Download and Print Options -->
-      <button ng-click="clearSchedule()" 
+      <button ng-click="clearSchedule($event)" 
         ng-disabled = "saving || importing || loading"
         class="btn btn-default btn-warning">
         Clear
