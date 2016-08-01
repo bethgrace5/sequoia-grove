@@ -315,22 +315,48 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.clearSchedule = function() {
-    if(loginFactory.getUser().isManager) {
-      $scope.selectedId = 0;
-      scheduleFactory.clear($rootScope);
-    }
+      var confirm = $mdDialog.confirm()
+        .title('Clear?')
+        .textContent('This will clear any current data this week, and cannot be undone.')
+        .ariaLabel('publish schedule')
+        .targetEvent(ev)
+        .ok('Clear')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        // OK to clear
+        if(loginFactory.getUser().isManager) {
+          $scope.selectedId = 0;
+          scheduleFactory.clear($rootScope);
+        }
+      }, function() {
+        // cancel publish
+        return;
+      });
   }
 
   $scope.importWeek = function(index) {
-    if(loginFactory.getUser().isManager) {
-      $scope.selectWeek(index);
-      var week = $scope.weekList[index].val;
-      $scope.importing = true;
-      scheduleFactory.importWeek(week).then(
-        function(success) {
-          $scope.importing = false;
-        });
-    }
+      var confirm = $mdDialog.confirm()
+        .title('Import?')
+        .textContent('This will overwrite any current data this week, and cannot be undone.')
+        .ariaLabel('publish schedule')
+        .targetEvent(ev)
+        .ok('Import')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        // OK to import
+        if(loginFactory.getUser().isManager) {
+          $scope.selectWeek(index);
+          var week = $scope.weekList[index].val;
+          $scope.importing = true;
+          scheduleFactory.importWeek(week).then(
+            function(success) {
+              $scope.importing = false;
+            });
+        }
+      }, function() {
+        // cancel publish
+        return;
+      });
   }
 
   var updateChangesMade = function(){

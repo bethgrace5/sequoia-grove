@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sequoiaGroveApp').controller('MainCtrl', function (
-    $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
+    $mdDialog, $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
     localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
 
   $rootScope.locations = [];
@@ -475,16 +475,30 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     });
   }
 
-  $scope.publishSchedule = function() {
-    if(loginFactory.getUser().isManager) {
-      var id = loginFactory.getUser().id;
-      scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
-        $timeout(function() {
-          $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
-          $scope.$apply();
-        });
+  $scope.publishSchedule = function(ev) {
+      // Confirm to unemploy
+      var confirm = $mdDialog.confirm()
+        .title('Publish Schedule?')
+        .textContent('This cannot be undone.')
+        .ariaLabel('publish schedule')
+        .targetEvent(ev)
+        .ok('Publish')
+        .cancel('Cancel');
+      $mdDialog.show(confirm).then(function() {
+        // OK to publish
+        if(loginFactory.getUser().isManager) {
+          var id = loginFactory.getUser().id;
+          scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
+            $timeout(function() {
+              $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
+              $scope.$apply();
+            });
+          });
+        }
+      }, function() {
+        // cancel publish
+        return;
       });
-    }
   }
 
  /*$scope.$on('requestchanged', function() {

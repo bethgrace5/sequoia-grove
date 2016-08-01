@@ -65,7 +65,7 @@
       </button>
 
       <button class = "btn btn-default"
-        ng-click = "publishSchedule()"
+        ng-click = "publishSchedule($event)"
         ng-hide = "isPublished"
         ng-disabled = "saving || updateShifts.length>0 || deleteShifts.length>0 || importing || loading">
         Publish
