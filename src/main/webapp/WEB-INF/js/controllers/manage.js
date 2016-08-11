@@ -11,7 +11,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     $location.path('/login');
   }
   // default tab is shift edit
-  $scope.activeTab = "shift";
+  $scope.activeTab = "delivery";
 
   // function to set the class of the selected tab to active
   $scope.isActive = function(tabName) {

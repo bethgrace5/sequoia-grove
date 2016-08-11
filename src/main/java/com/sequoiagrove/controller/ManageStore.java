@@ -82,7 +82,8 @@ public class ManageStore {
     public String addShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException, NotFoundException {
 
         // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        //if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        if (true) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
@@ -139,7 +140,8 @@ public class ManageStore {
     public String updateShift(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
 
         // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        //if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        if (true) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
@@ -203,7 +205,8 @@ public class ManageStore {
         Model model) throws SQLException {
 
         // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        //if (!(permissions.contains("manage-store") || permissions.contains("admin"))) {
+        if (true) {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }

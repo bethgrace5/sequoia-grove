@@ -15,7 +15,7 @@
 
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('delivery')]">
       <a ng-click="activeTab='delivery'"href="">Deliveries</a>
-      </li>
+    </li>
 
     <!--
     <li role="presentation" ng-class="{true:'active', false:''}[isActive('restriction')]">
@@ -40,7 +40,14 @@
     <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('shift')]">
       <div class="panel panel-default hidden-print request-panel">
         <div class="panel-body">
-          <ng-include src="'views/templates/manage-shifts.html'"></ng-include>
+          <!--<ng-include src="'views/templates/manage-shifts.html'"></ng-include>-->
+          <p style="font-size: 1.3em; color:#008080; margin-left: 50px; margin-right:50px;">
+          Management of shifts has been disabled until it becomes more stable. <br/>
+          Email Beth to edit shifts.
+          </p>
+          <p style="font-size: 1.5em; color:#00cccc; margin-left: 50px; margin-right:50px;">
+          bethgrace5@gmail.com
+          </p>
         </div>
       </div>
     </div>

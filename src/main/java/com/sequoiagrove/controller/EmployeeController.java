@@ -52,7 +52,9 @@ public class EmployeeController
 
     // Get All Employees with the availability, positions, and employment history
     @RequestMapping(value = "/employees/{locations}")
-    public String getAllEmployee(Model model, @ModelAttribute("scope") List<String> permissions,
+    public String getAllEmployee(
+        Model model,
+        @ModelAttribute("scope") List<String> permissions,
         @PathVariable("locations") String locations) {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
 
@@ -66,7 +68,7 @@ public class EmployeeController
         ArrayList<Integer> loc = stringToIntArray(locations);
 
         for(Integer l : loc) {
-          String queryStr = "select * from sequ_user_info_view where location_id = ? order by last_name";
+          String queryStr = "select * from sequ_user_info_view where location_id = ? order by first_name";
           List<User> empList = jdbcTemplate.query( queryStr, new Object[]{l}, new SuperUserRowMapper());
           employees.put(l, empList);
         }
