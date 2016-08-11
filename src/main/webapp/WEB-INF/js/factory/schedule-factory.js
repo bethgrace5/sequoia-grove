@@ -736,6 +736,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     }
   }
 
+  /*
   // rewrite current schedule with last week's data
   var importWeek = function(mondayOfWeek) {
     var currentSchedule = schedule;
@@ -758,8 +759,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           return item
         }
       });
-      schedule[locationId] = _.without(schedule[locationId], undefined);
-      console.log(schedule[locationId]);
+      //schedule[locationId] = _.without(schedule[locationId], undefined);
+      //console.log(schedule[locationId]);
 
 
       // add all shifts to update shifts, so they can be saved for this week
@@ -772,6 +773,26 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     });
     return deferred.promise;
   }
+  */
+
+
+  // rewrite current schedule with last week's data
+  var importWeek = function(mondayOfWeek) {
+    console.log('importWeek in schedule-factory.js, locationId: ', locationId);
+    var deferred = $q.defer();
+    deleteShifts[locationId] = [];
+    updateShifts[locationId] = [];
+    // set monday back in time
+    monday = mondayOfWeek;
+    initSchedule().then(function(data) {
+      // add all shifts to update shifts, so they can be saved for this week
+      angular.copy(originalTemplate[locationId], updateShifts[locationId]);
+      notifyObservers();
+      deferred.resolve(data);
+    });
+    return deferred.promise;
+  }
+
 
   // Publish the schedule
   var publishSchedule = function(userId) {
