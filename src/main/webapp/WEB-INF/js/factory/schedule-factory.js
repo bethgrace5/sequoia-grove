@@ -426,6 +426,60 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     });
   }
 
+  // for each location, save what we pulled from the database in the format
+  // for checking the schedule for comparisons when editing the schedule
+  var storeUpdateShifts = function() {
+    console.log('storeUpdateShifts in schedule-factory.js, locationId: ', locationId);
+    angular.forEach(schedule, function(schList, lid) {
+      updateShifts[lid] = []; // clear originalTemplate
+      _.map(schList, function(val, key) {
+        if (!val.isSpacer) {
+          if(val.mon) {
+            updateShifts[lid].push({'eid':val.mon.eid, 'sid':val.sid, 'date':header.mon.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.mon.val});
+          }
+          if(val.tue) {
+            updateShifts[lid].push({'eid':val.tue.eid, 'sid':val.sid, 'date':header.tue.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.tue.val});
+          }
+          if(val.wed) {
+            updateShifts[lid].push({'eid':val.wed.eid, 'sid':val.sid, 'date':header.wed.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.wed.val});
+          }
+          if(val.thu) {
+            updateShifts[lid].push({'eid':val.thu.eid, 'sid':val.sid, 'date':header.thu.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.thu.val});
+          }
+          if(val.fri) {
+            updateShifts[lid].push({'eid':val.fri.eid, 'sid':val.sid, 'date':header.fri.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.fri.val});
+          }
+          if(val.sat) {
+            updateShifts[lid].push({'eid':val.sat.eid, 'sid':val.sid, 'date':header.sat.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.sat.val});
+          }
+          if(val.sun) {
+            updateShifts[lid].push({'eid':val.sun.eid, 'sid':val.sid, 'date':header.sun.val});
+          }
+          else {
+            updateShifts[lid].push({'eid':0, 'sid':val.sid, 'date':header.sun.val});
+          }
+        }
+      });
+    });
+  }
 
   var saveShifts = function() {
     var deferred = $q.defer();
@@ -684,6 +738,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   // rewrite current schedule with last week's data
   var importWeek = function(mondayOfWeek) {
+    var currentSchedule = schedule;
     console.log('importWeek in schedule-factory.js, locationId: ', locationId);
     var deferred = $q.defer();
     deleteShifts[locationId] = [];
@@ -691,8 +746,27 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     // set monday back in time
     monday = mondayOfWeek;
     initSchedule().then(function(data) {
+      var newData = (_.indexBy(schedule[locationId], 'sid'));
+      schedule = [];
+      console.log(locationId);
+
+      schedule[locationId] = _.map(currentSchedule[locationId], function(item, index) {
+        if(newData[item.sid]) {
+          return newData[item.sid];
+        }
+        else {
+          return item
+        }
+      });
+      schedule[locationId] = _.without(schedule[locationId], undefined);
+      console.log(schedule[locationId]);
+
+
       // add all shifts to update shifts, so they can be saved for this week
-      angular.copy(originalTemplate[locationId], updateShifts[locationId]);
+      // FIXME - for each shift on the schedule,
+
+      //angular.copy(originalTemplate[locationId], updateShifts[locationId]);
+      //storeUpdateShifts();
       notifyObservers();
       deferred.resolve(data);
     });
