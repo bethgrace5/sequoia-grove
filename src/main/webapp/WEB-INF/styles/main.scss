@@ -200,6 +200,10 @@ a:focus {
 .schedule-edit-input-avail{
   background-color: #e6ffb3;
 }
+/* availability and has position for selected */
+.schedule-edit-input-hide{
+  display:none;
+}
 .schedule-edit-task-names{
   font-size: 1em;
   margin:0;
