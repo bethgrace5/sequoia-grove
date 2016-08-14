@@ -261,7 +261,9 @@ angular.module('sequoiaGroveApp')
         style += ' schedule-edit-input-avail';
       }
       else {
-        style += ' schedule-edit-input-hide';
+        if($scope.selectedPid === 0) {
+          style += ' schedule-edit-input-hide';
+        }
       }
     }
     return style;
