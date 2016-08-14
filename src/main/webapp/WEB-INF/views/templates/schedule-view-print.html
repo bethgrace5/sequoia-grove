@@ -57,13 +57,13 @@
 
     <td class="print-row print-border">
       <div ng-hide="t.isSpacer">
-        <span ng-show="t.weekdayDuration >= 7"
+        <span ng-show="t.weekdayDuration > 6"
           class="glyphicon glyphicon-star">
         </span>
-        <span ng-show="t.weekdayDuration < 7 && t.weekdayDuration >= 4"
+        <span ng-show="t.weekdayDuration <= 6 && t.weekdayDuration > 4"
           class="glyphicon glyphicon-star-empty">
         </span>
-        <span ng-show="t.weekdayDuration < 4"
+        <span ng-show="t.weekdayDuration <= 4"
           class="glyphicon glyphicon-minus">
         </span>
         {{:: t.weekdayDuration}} hrs
@@ -106,13 +106,13 @@
 
     <td ng-hide="t.isSpacer" class="print-row print-border">
       <div ng-hide="t.isSpacer">
-        <span ng-show="t.weekendDuration >= 7"
+        <span ng-show="t.weekendDuration > 6"
           class="glyphicon glyphicon-star">
         </span>
-        <span ng-show="t.weekendDuration< 7 && t.weekendDuration>= 4"
+        <span ng-show="t.weekendDuration <= 6 && t.weekendDuration > 4"
           class="glyphicon glyphicon-star-empty">
         </span>
-        <span ng-show="t.weekendDuration < 4"
+        <span ng-show="t.weekendDuration <= 4"
           class="glyphicon glyphicon-minus">
         </span>
         {{t.weekendDuration}} hrs
@@ -141,9 +141,9 @@
 </table>
 
 <p></p>
-<p><span class="glyphicon glyphicon-asterisk"></span> {{printMessageDisclaimer}}</p>
 <p><span class="glyphicon glyphicon-star"></span> {{printMessageFullShift}}</p>
-<p><span class="glyphicon glyphicon-star-empty"></span> {{printMessageHalfShift}}</p>
+<p><span class="glyphicon glyphicon-star-empty"></span> {{printMessageDisclaimer}}</p>
+<p><span class="glyphicon glyphicon-minus"></span> {{printMessageHalfShift}}</p>
 
 <table class="table">
   <tr>

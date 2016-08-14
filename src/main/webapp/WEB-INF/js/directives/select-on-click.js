@@ -39,45 +39,47 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         // the name is blank - add it to delete list
         if(this.value.length === 0) {
           scheduleFactory.deleteItem({'sid': attrs.sid, 'date':attrs.date});
-          element.context.classList.remove('schedule-edit-input-warn');
+          element[0].classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = 0;
           $scope.selectEid(0);
           $scope.$apply();
           return;
         }
         var employee = $scope.getEmployeeByname(this.value);;
+        console.log(employee.id);
         // found employee!
         if (employee.id !== 0) {
           // remove warning class and update template with new id
-          element.context.classList.remove('schedule-edit-input-warn');
+          element[0].classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = employee.id;
 
           // 1. check that they are current
           if (employee.isCurrent) {
-            element.context.classList.add('schedule-edit-highlight');
+            element[0].classList.add('schedule-edit-highlight');
           } else { //employee is not current
-            element.context.classList.add('schedule-edit-input-error');
+            element[0].classList.add('schedule-edit-input-error');
           }
 
           // 2. Check availability
           if ($scope.template[attrs.idx][attrs.day].hasAvailability[employee.id]) {
-            element.context.classList.add('schedule-edit-highlight');
+            element[0].classList.add('schedule-edit-highlight');
           } else { // the employee is not available
-            element.context.classList.add('schedule-edit-input-error');
+            element[0].classList.add('schedule-edit-input-error');
           }
 
           // 3. check that they have the position
           if ($scope.template[attrs.idx][attrs.day].hasPosition[employee.id]) {
-            element.context.classList.add('schedule-edit-highlight');
+            element[0].classList.add('schedule-edit-highlight');
           } else {
-            element.context.classList.add('schedule-edit-input-error');
+            element[0].classList.add('schedule-edit-input-error');
           }
 
           // 4. update change lists
           scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
         }
         else { // No Employee was found by the name supplied
-          element.context.classList.add('schedule-edit-input-warn');
+          //console.log(element[0].classList);
+          element[0].classList.add('schedule-edit-input-warn');
         }
 
         $scope.selectEid($scope.template[attrs.idx], attrs.day);

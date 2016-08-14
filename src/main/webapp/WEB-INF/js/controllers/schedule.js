@@ -260,6 +260,9 @@ angular.module('sequoiaGroveApp')
       if ($scope.aList[id] && $scope.pList[id]) {
         style += ' schedule-edit-input-avail';
       }
+      else {
+        style += ' schedule-edit-input-hide';
+      }
     }
     return style;
   };

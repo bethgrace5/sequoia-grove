@@ -72,9 +72,9 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   //$scope.holidays = [];
   $scope.isPublished = false;
   $rootScope.showDeliveries = true;
-  $scope.printMessageDisclaimer = 'Employees working more than 4 hours but less than 6 have the option of taking a 30 minute break.';
-  $scope.printMessageFullShift = 'Shifts Longer than 6 hours have two 10min breaks with a 30min break in between';
-  $scope.printMessageHalfShift = 'Shifts 4 hours or shorter have one 15min break';
+  $scope.printMessageDisclaimer = 'Employees working more than 4 hours but less than 6 have a 15 minute break.';
+  $scope.printMessageFullShift = 'Employees working longer than 6 hours have a 10 minute break, a 30 minute break, and then another 10 minute break';
+  $scope.printMessageHalfShift = 'Employees working 4 hours or less have no break';
   $scope.currentYear = '';
   $rootScope.loadingMsg = 'Verifying user with Application...';
   $scope.selectedPid = 0;
