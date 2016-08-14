@@ -15,9 +15,11 @@ angular.module('sequoiaGroveApp')
 
   $scope.info = { 'business': '', 'email': '', 'firstname': '', 'lastname': '', 'locations':[] };
 
-  $scope.info.email = $rootScope.attemptedLogin.email;
-  $scope.info.firstname = $rootScope.attemptedLogin.firstname;
-  $scope.info.lastname = $rootScope.attemptedLogin.lastname;
+  if($rootScope.attemptedLogin) {
+    $scope.info.email = $rootScope.attemptedLogin.email;
+    $scope.info.firstname = $rootScope.attemptedLogin.firstname;
+    $scope.info.lastname = $rootScope.attemptedLogin.lastname;
+  }
 
   $scope.addLocation = function() {
     $scope.info.locations.push($scope.locationTitle);
