@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -24,9 +25,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.sequoiagrove.model.Delivery;
 import com.sequoiagrove.controller.MainController;
 import com.sequoiagrove.controller.EmployeeController;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class DeliveryController {
+  /*
 
   // extract scope from request
   @ModelAttribute("scope")
@@ -150,5 +155,6 @@ public class DeliveryController {
       model.addAttribute("id", id);
       return "jsonTemplate";
     }
+  */
 }
 

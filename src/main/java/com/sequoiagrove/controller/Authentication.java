@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import javax.servlet.http.HttpServletResponse;
@@ -48,8 +49,12 @@ import java.util.Date;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.controller.MainController;
 import org.springframework.util.StringUtils;
-@Controller
+*/
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class Authentication {
+  /*
     private static SecureRandom random = new SecureRandom();
     private static Key key = MacProvider.generateKey();
 
@@ -96,13 +101,12 @@ public class Authentication {
           // Get profile information from payload
           email = payload.getEmail();
           boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
-          /*
-          String name = (String) payload.get("name");
-          String pictureUrl = (String) payload.get("picture");
-          String locale = (String) payload.get("locale");
-          String familyName = (String) payload.get("family_name");
-          String givenName = (String) payload.get("given_name");
-          */
+          //String name = (String) payload.get("name");
+          //String pictureUrl = (String) payload.get("picture");
+          //String locale = (String) payload.get("locale");
+          //String familyName = (String) payload.get("family_name");
+          //String givenName = (String) payload.get("given_name");
+          //
 
           // check if email verified from payload
           if (emailVerified == false) {
@@ -282,5 +286,6 @@ public class Authentication {
     public static String nextSessionId() {
         return new BigInteger(130, random).toString(32);
     }
+    */
 
 }

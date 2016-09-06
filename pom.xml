@@ -4,60 +4,57 @@
   <groupId>sequoiagrove</groupId>
   <artifactId>sequoiagrove</artifactId>
   <packaging>war</packaging>
-  <version>v1.0.0.5-BETA</version>
+  <version>v2.0.0.0-BETA</version>
   <name>Sequoia Grove Maven Webapp</name>
-  <url>http://maven.apache.org</url>
+
+  <parent>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <version>1.4.0.RELEASE</version>
+  </parent>
+
   <dependencies>
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>3.8.1</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
       <scope>test</scope>
     </dependency>
-
+    <dependency>
+      <groupId>com.jayway.jsonpath</groupId>
+      <artifactId>json-path</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <!-- sendgrid and java http client -->
+    <dependency>
+      <groupId>com.sendgrid</groupId>
+      <artifactId>sendgrid-java</artifactId>
+      <version>3.0.9</version>
+    </dependency>
+    <dependency>
+      <groupId>com.sendgrid</groupId>
+      <artifactId>java-http-client</artifactId>
+      <version>2.3.4</version>
+    </dependency>
+    <!-- hot swapping -->
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <!-- twilio -->
+    <dependency>
+      <groupId>com.twilio.sdk</groupId>
+      <artifactId>twilio</artifactId>
+      <version>7.0.0-rc-22</version>
+    </dependency>
     <dependency>
       <groupId>org.postgresql</groupId>
       <artifactId>postgresql</artifactId>
       <version>9.4.1208.jre6</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-      <version>2.4.1</version>
-    </dependency>
-
-    <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>servlet-api</artifactId>
-      <version>2.5</version>
-      <scope>provided</scope>
-    </dependency>
-
-    <dependency>
-      <groupId>com.oracle</groupId>
-      <artifactId>ojdbc6</artifactId>
-      <version>12.1.0.1</version>
-    </dependency>
-
-
-    <!--SPRING dependencies-->
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-core</artifactId>
-      <version>3.2.5.RELEASE</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-web</artifactId>
-      <version>3.2.5.RELEASE</version>
-    </dependency>
-
-    <dependency>
-      <groupId>org.springframework</groupId>
-      <artifactId>spring-webmvc</artifactId>
-      <version>3.2.5.RELEASE</version>
     </dependency>
 
     <dependency>
@@ -66,27 +63,24 @@
       <version>3.2.1.RELEASE</version>
     </dependency>
 
-    <!--JSTL dependencies-->
     <dependency>
-      <groupId>javax.servlet</groupId>
-      <artifactId>jstl</artifactId>
-      <version>1.1.2</version>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-rest</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-data-jpa</artifactId>
     </dependency>
 
+    <!-- https://mvnrepository.com/artifact/javax.persistence/persistence-api -->
     <dependency>
-      <groupId>javax.servlet.jsp</groupId>
-      <artifactId>jsp-api</artifactId>
-      <version>2.0</version>
-      <scope>provided</scope>
+      <groupId>javax.persistence</groupId>
+      <artifactId>persistence-api</artifactId>
+      <version>1.0</version>
     </dependency>
 
-    <dependency>
-      <groupId>taglibs</groupId>
-      <artifactId>standard</artifactId>
-      <version>1.1.2</version>
-    </dependency>
 
-    <!--GSON-->
+    <!--GSON
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -99,46 +93,28 @@
       <version>1.20.0</version>
     </dependency>
 
-    <!-- Google API-->
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
       <version>1.22.0</version>
     </dependency>
 
-    <!-- Goole HTTP client
     <dependency>
       <groupId>com.google.http-client</groupId>
       <artifactId>google-http-client</artifactId>
       <version>1.22.0</version>
     </dependency> -->
 
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>bootstrap</artifactId>
-      <version>3.2.0</version>
-      <exclusions>
-        <exclusion>
-          <groupId>org.webjars</groupId>
-          <artifactId>jquery</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
 
-    <dependency>
-      <groupId>org.webjars</groupId>
-      <artifactId>jquery</artifactId>
-      <version>2.1.1</version>
-    </dependency>
-
-    <!-- BasicDataSource -->
+    <!-- BasicDataSource
     <dependency>
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>
       <version>1.2.2</version>
     </dependency>
+    -->
 
-    <!-- Http libraries -->
+    <!-- Http libraries
     <dependency>
       <groupId>org.apache.httpcomponents</groupId>
       <artifactId>httpcore</artifactId>
@@ -156,67 +132,147 @@
       <artifactId>slf4j-log4j12</artifactId>
       <version>1.7.13</version>
     </dependency>
+    -->
 
-    <!-- Liquibase Database Versioning -->
+    <!-- Liquibase Database Versioning
     <dependency>
       <groupId>org.liquibase</groupId>
       <artifactId>liquibase-core</artifactId>
       <version>3.4.2</version>
     </dependency>
+    -->
 
-    <!-- used for NotFoundException to throw-->
+    <!-- used for NotFoundException to throw
     <dependency>
       <groupId>javax.ws.rs</groupId>
       <artifactId>javax.ws.rs-api</artifactId>
       <version>2.0</version>
     </dependency>
+    -->
 
-    <!-- JSON web token for Java -->
+    <!-- JSON web token for Java
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
       <version>0.6.0</version>
     </dependency>
-
+    -->
   </dependencies>
+
+  <properties>
+    <java.version>1.8</java.version>
+  </properties>
+
   <build>
     <finalName>sequoiagrove</finalName>
 
     <plugins>
       <plugin>
-        <groupId>org.mortbay.jetty</groupId>
-        <artifactId>maven-jetty-plugin</artifactId>
-        <version>6.1.10</version>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <scanIntervalSeconds>2</scanIntervalSeconds>
+          <fork>true</fork>
         </configuration>
       </plugin>
-
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
         <executions>
           <execution>
-            <id>unpack</id>
-            <phase>compile</phase>
+            <id>unpack-commons-scss</id>
+            <phase>generate-sources</phase>
             <goals>
-              <goal>unpack</goal>
+              <goal>unpack-dependencies</goal>
             </goals>
             <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>org.webjars</groupId>
-                  <artifactId>bootstrap</artifactId>
-                  <overWrite>false</overWrite>
-                  <outputDirectory>${project.build.directory}/classes</outputDirectory>
-                  <excludes>**/maven/**, **/*.MF</excludes>
-                </artifactItem>
-              </artifactItems>
+              <includeArtifactIds>artifactIdWhichIWantToUnpack</includeArtifactIds> <!-- I wonder if there is a better way to specify this, including the groupId to avoid any naming conflict -->
+              <classifier>sources</classifier>
+              <includes>**/_*.scss</includes> <!-- I only need the "imported" files, not the root one, as I will use a different one in the including module -->
+              <outputDirectory>${project.build.directory}/sources-sass</outputDirectory><!-- A separate work  directory, to keep things clean and make investigating issues easier -->
             </configuration>
           </execution>
         </executions>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <version>3.0.1</version>
+        <executions>
+          <execution>
+            <id>copy-sass</id>
+            <phase>generate-sources</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <resources>
+                <resource>
+                  <directory>public/styles</directory>
+                  <includes>
+                    <include>**/*.scss</include>
+                  </includes>
+                </resource>
+              </resources>
+              <outputDirectory>${project.build.directory}/sources-sass</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>nl.geodienstencentrum.maven</groupId>
+        <artifactId>sass-maven-plugin</artifactId>
+        <version>2.20</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>update-stylesheets</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <resources>
+            <resource>
+              <source>
+                <directory>${project.build.directory}/sources-sass</directory>
+                <includes>
+                  <include>**/*.scss</include>
+                </includes>
+              </source>
+              <destination>public/styles/sass_compiled</destination>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+      <!--
+      <plugin>
+        <groupId>nl.geodienstencentrum.maven</groupId>
+        <artifactId>sass-maven-plugin</artifactId>
+        <version>2.20</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>watch</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <resources>
+            <resource>
+              <source>
+                <directory>public/styles/</directory>
+              </source>
+              <destination>public/styles/sass_compiled</destination>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+      -->
 
+
+      <!--
       <plugin>
         <groupId>org.liquibase</groupId>
         <artifactId>liquibase-maven-plugin</artifactId>
@@ -241,7 +297,20 @@
           </dependency>
         </dependencies>
       </plugin>
+      -->
     </plugins>
-
   </build>
+
+  <repositories>
+    <repository>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/libs-release</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>spring-releases</id>
+      <url>https://repo.spring.io/libs-release</url>
+    </pluginRepository>
+  </pluginRepositories>
 </project>

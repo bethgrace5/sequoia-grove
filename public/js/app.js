@@ -84,7 +84,23 @@ angular.module('sequoiaGroveApp', [
   // template stored in localstorage instead of pulling a new one every time.
   $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
 
-  $rootScope.appFailure = false;
-  $rootScope.urlPrefix = '/sequoiagrove';
-  //$rootScope.urlPrefix = '';
+  $timeout(function() {
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)){ return; }
+      js = d.createElement(s); js.id = id;
+      js.onload = function(){
+        // remote script has loaded, add a signin listener
+      };
+      js.src = '//apis.google.com/js/platform.js';
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'))
+  }, 400).then(function() {
+    $timeout(function() {
+      gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
+      if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
+        console.log(true);
+      }
+    },500)
+  });
 });

@@ -1,13 +1,25 @@
 
 package com.sequoiagrove.model;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
+//import com.google.gson.Gson;
+//import com.google.gson.GsonBuilder;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 public class User {
+
+  public long id;
+  public String name;
+  public String alias;
+
+  public User(long id, String name) {
+    this.id = id;
+    this.name = name;
+  }
+
+
+/*
     int id;
     int businessId;
     int clockNumber;
@@ -216,4 +228,5 @@ public class User {
     public void setNotes(String notes) {
         this.notes = notes;
     }
+    */
 }

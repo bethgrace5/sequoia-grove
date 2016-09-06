@@ -1,10 +1,6 @@
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
     display: none !important;
   }
-$icon-font-path: "../bower_components/bootstrap-sass-official/assets/fonts/bootstrap/";
-// bower:scss
-@import "bootstrap-sass-official/assets/stylesheets/_bootstrap.scss";
-// endbower
 
 /********************************************
   Table of Contents
@@ -535,7 +531,7 @@ a:focus {
   //background-color: #FA787E;
 }
 
-.css-form input.ng-valid.ng-touched {.
+.css-form input.ng-valid.ng-touched {
   //-webkit-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
   //-moz-box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);
   //box-shadow: inset 10px 10px 13px -2px rgba(0,0,0,0.75);

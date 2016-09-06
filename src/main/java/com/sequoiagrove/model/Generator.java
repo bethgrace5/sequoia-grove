@@ -13,6 +13,7 @@
 //-------------------
 //
 package com.sequoiagrove.model;
+/*
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -28,11 +29,13 @@ import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Shift;
 import com.sequoiagrove.model.ShiftRowMapper;
+*/
 
 public class Generator{
   //-------------------------
   //  Variables_Hold
   //-------------------------
+  /*
   HashMap
     <String, HashMap <Integer, HashMap <Integer, Integer>>> generator;
   //[Day [ Shift [Employee, number of weeks scheduled] ] ]
@@ -514,5 +517,6 @@ public class Generator{
       System.out.printf("\n");
     }
   }
+  */
 
 }

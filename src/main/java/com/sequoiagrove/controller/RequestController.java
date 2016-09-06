@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,6 +28,7 @@ import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.RequestRowMapper;
 import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.controller.MainController;
+*/
 /**
 RequestController:
 Puts Starting Date, End Date, and Employee ID from the front end to the datebase
@@ -34,9 +36,12 @@ It will also retrieve information from the backend :
 */
 
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class RequestController{
 
+  /*
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -266,6 +271,7 @@ public class RequestController{
          " where id = " + eid
          );
          */
+        /*
         return "jsonTemplate";
       }
 
@@ -297,5 +303,6 @@ public class RequestController{
         model.addAttribute("requests", requests);
         return "jsonTemplate";
     }
+    */
 }
 

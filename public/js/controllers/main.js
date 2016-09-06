@@ -8,6 +8,13 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $rootScope.selectedLocation = 0;
   $rootScope.business = 0;
 
+  $scope.test = function() {
+    $http.get('resource/').then(function(response) {
+      console.log(response);
+    })
+    console.log('test');
+  }
+
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
   if (loginFactory.isLoggedIn() === false) {
@@ -117,7 +124,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $scope.getPositions = function() {
     var deferred = $q.defer();
     $http({
-      url: $rootScope.urlPrefix + '/position/'+$rootScope.business,
+      url: 'position/'+$rootScope.business,
       method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
@@ -138,7 +145,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
       'sat':[], 'sun':[] }
     $http({
-      url: $rootScope.urlPrefix + '/delivery/'+$rootScope.selectedLocation,
+      url: 'delivery/'+$rootScope.selectedLocation,
       method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
@@ -564,6 +571,5 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   scheduleFactory.registerObserverCallback(updateChangesMade);
   loginFactory.registerObserverCallback(updateUser);
   requestFactory.registerObserverCallback(requestChange);
-
 
 });

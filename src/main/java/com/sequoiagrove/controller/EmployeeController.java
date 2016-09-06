@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -30,10 +31,14 @@ import com.sequoiagrove.model.SuperUserRowMapper;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
 import com.sequoiagrove.controller.EmployeeController;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class EmployeeController
 {
+  /*
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -246,17 +251,17 @@ public class EmployeeController
         // give default permissions
         int classid = jobject.get("classificationId").getAsInt();
 
-        /* User permissions
-         * 1: admin
-         * 2: submit-reuquests-off
-         * 3: manage-employees
-         * 4: manage-requests
-         * 5: manage-schedule
-         * 6: get-other-store-info
-         * 7: manage-store
-         * 8: edit-user-permissions
-         * 9: admin
-         */
+        // User permissions
+         // 1: admin
+         // 2: submit-reuquests-off
+         // 3: manage-employees
+         // 4: manage-requests
+         // 5: manage-schedule
+         // 6: get-other-store-info
+         // 7: manage-store
+         // 8: edit-user-permissions
+         // 9: admin
+         //
         int [] employeePermissions = {2};
         int [] managerPermissions = {2, 3, 4, 5, 7,};
         int [] accountHolderPermissions = {2, 3, 4, 5, 6, 7, 8, 9};
@@ -374,5 +379,6 @@ public class EmployeeController
       }
         return "jsonTemplate";
     }
+    */
 
 }

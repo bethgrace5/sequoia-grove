@@ -1,21 +1,24 @@
 package com.sequoiagrove.controller;
 
+/*
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.sequoiagrove.controller.Authentication;
 import com.sequoiagrove.controller.MainController;
+*/
+import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
+import org.springframework.stereotype.Component;
 
 @Component
 public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
 
+  /*
     // Pre Handler for before request
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -62,4 +65,5 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
         modelAndView.getModelMap().put("auth_token", token);
     }
 
+    */
 }

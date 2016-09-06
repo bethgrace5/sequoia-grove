@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -32,10 +33,14 @@ import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.PublishedSchedule;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Scheduled;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class ScheduleController {
 
+  /*
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -51,7 +56,6 @@ public class ScheduleController {
         return permissions;
     }
 
-/* ----- HTTP Mapped Functions -----*/
   // Get current schedule template (current shifts) dd-mm-yyyy
   @RequestMapping(value = "/schedule/template/{mon}/{locations}")
     public String getScheduleTemplate( Model model,
@@ -247,5 +251,6 @@ public class ScheduleController {
 
         return "jsonTemplate";
     }
+    */
 }
 

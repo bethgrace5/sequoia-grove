@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.sql.Date;
 import java.util.List;
 import java.util.ArrayList;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class AvailabilityController {
+  /*
     // extract scope from request
     @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -89,5 +94,6 @@ public class AvailabilityController {
 
         return "jsonTemplate";
     }
+    */
 }
 

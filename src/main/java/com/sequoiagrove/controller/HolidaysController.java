@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -31,10 +32,14 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sequoiagrove.controller.MainController;
 import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.model.Holiday;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class HolidaysController {
 
+  /*
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -122,15 +127,14 @@ public class HolidaysController {
         String newDate = hol.getDate();
         String newType = hol.getType();
 
-        /*
-        jdbcTemplate.update(
-           " update holiday " +
-           " set " +
-           " type = " + newType + ", " +
-           " date = " + newDate + " "  +
-           " where name = " + name
-        );
-        */
+        //jdbcTemplate.update(
+           //" update holiday " +
+           //" set " +
+           //" type = " + newType + ", " +
+           //" date = " + newDate + " "  +
+           //" where name = " + name
+        //);
+
         return "jsonTemplate";
       }
 
@@ -179,4 +183,5 @@ public class HolidaysController {
         model.addAttribute("holidays", holidayList);
         return "jsonTemplate";
       }
+    */
 }

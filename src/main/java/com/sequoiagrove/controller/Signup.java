@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import java.io.IOException;
@@ -40,15 +41,20 @@ import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.SuperUserRowMapper;
 import com.sequoiagrove.model.Duration;
 import com.sequoiagrove.model.WeeklyAvail;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class Signup {
 
+  /*
     @RequestMapping(value = "/signup", method=RequestMethod.POST)
     public String addEmployee(Model model, @RequestBody String data) throws ServletException, IOException, SQLException, GeneralSecurityException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
+        */
 
         /*
         String email = "";
@@ -160,8 +166,8 @@ public class Signup {
         }
         */
         // return the new id
-        model.addAttribute("id", 0);
-        return "jsonTemplate";
-    }
+        //model.addAttribute("id", 0);
+        //return "jsonTemplate";
+    //}
 
 }

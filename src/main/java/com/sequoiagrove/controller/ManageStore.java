@@ -1,4 +1,6 @@
 package com.sequoiagrove.controller;
+
+/*
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -32,10 +34,15 @@ import com.sequoiagrove.controller.MainController;
 
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.Holiday;
+*/
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class ManageStore {
 
+  /*
+   *
   // extract scope from request
   @ModelAttribute("scope")
     public List<String> getPermissions(HttpServletRequest request) {
@@ -43,7 +50,6 @@ public class ManageStore {
       return Arrays.asList(csvPermissions.split(","));
     }
 
-/* ----- Pure Functions ----- */
    public boolean validateStrings(String... args) {
         for (String arg : args) {
             if (arg.isEmpty() || arg == null) {
@@ -53,7 +59,6 @@ public class ManageStore {
         return true;
     }
 
-/* ----- Helper JDBC Functions ----- */
     public int addHours(String startHr, String endHr) {
 
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -75,7 +80,6 @@ public class ManageStore {
         return id;
     }
 
-/* ----- HTTP Mapped Functions ----- */
 
     // Add new shift
     @RequestMapping(value = "/shift/add", method = RequestMethod.POST)
@@ -239,5 +243,6 @@ public class ManageStore {
 
         return "jsonTemplate";
     }
+   */
 }
 

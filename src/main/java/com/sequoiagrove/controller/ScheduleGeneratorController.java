@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+/*
 import com.google.gson.*;
 import java.sql.SQLException;
 import java.sql.Date;
@@ -42,13 +43,16 @@ import com.sequoiagrove.model.Request;
 import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.MainController;
 import org.springframework.transaction.TransactionStatus;
+*/
 
 
-@Controller
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
 public class ScheduleGeneratorController {
   //Schedule Page
   //  for each slot (day, pid) check a given amount of  weeks
-  //    for each employee who work that day. 
+  //    for each employee who work that day.
   //    i think it would look like this
   //    slot 1 [ eid, day, pid, amounts of time works on that slot]
   //           [ 001, mon, 1  , 3]
@@ -70,7 +74,7 @@ public class ScheduleGeneratorController {
   //           [ 001, tue, 1  , 1]
   //           [ 003, tue, 1  , 4]
   void generate(){
-    //Hashmap testing 
+    //Hashmap testing
     //      [key date [key pid [key eid, amount of times work] ] ]
 
   }
@@ -93,6 +97,7 @@ public class ScheduleGeneratorController {
     */
   }
   //[mon]
+  /*
   @RequestMapping(value = "/schedule/autogen/")
   public String buildGenerator(@RequestBody String data, Model model){
       JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
@@ -144,7 +149,7 @@ public class ScheduleGeneratorController {
 
       Integer count = jdbcTemplate.queryForObject(
           "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy')",Integer.class, mon);
-      
+
       // Insert employees into shift slots using AI
 
       model.addAttribute("ispublished", (count!=null && count > 0));
@@ -197,5 +202,6 @@ public class ScheduleGeneratorController {
       }
       generator.printFormation();
   }
+  */
 }
 

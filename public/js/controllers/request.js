@@ -111,7 +111,7 @@ angular.module('sequoiaGroveApp')
 
     $mdDialog.show(confirm).then(function() {
       $http({
-        url: $rootScope.urlPrefix + '/request/respond',
+        url: 'request/respond',
         method: 'POST',
         data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
       }).success(function(data, status) {
@@ -138,7 +138,7 @@ angular.module('sequoiaGroveApp')
       'endDate':moment($scope.requestDateEnd).format('MM-DD-YYYY')
     }
     $http({
-      url: $rootScope.urlPrefix + '/request/update/dates',
+      url: 'request/update/dates',
     method: "POST",
     data: JSON.stringify(obj)
     });

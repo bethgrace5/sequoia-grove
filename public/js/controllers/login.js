@@ -52,7 +52,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
     //var deferred = $q.defer();
     /*
     $http({
-      url: $rootScope.urlPrefix + '/signup',
+      url: 'signup',
       data: $scope.info,
       method: 'POST' })
       .then(function(success) {
@@ -66,6 +66,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
   // user signs in
   function onSignIn(googleUser) {
     console.log('caught sign in event');
+    /*
     $rootScope.loggingIn = true;
     $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
     if (!$rootScope.googleSignedIn && !$scope.initiate) {
@@ -122,6 +123,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
           }
         }
       });
+      */
   }
 
 
@@ -305,23 +307,4 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
   */
   // insert google signin button, so the script loads
   // when there is a loading delay
-
-  $timeout(function() {
-    (function(d, s, id){
-      var js, fjs = d.getElementsByTagName(s)[0];
-      if (d.getElementById(id)){ return; }
-      js = d.createElement(s); js.id = id;
-      js.onload = function(){
-        // remote script has loaded, add a signin listener
-      };
-      js.src = '//apis.google.com/js/platform.js';
-      fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'))
-  }, 400).then(function() {
-    $timeout(function() {
-      gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
-      $rootScope.googleSignedIn = gapi.auth2.getAuthInstance().isSignedIn.get();
-    },500)
-  });
-
 });

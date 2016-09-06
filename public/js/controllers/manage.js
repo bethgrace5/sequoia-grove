@@ -141,7 +141,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     $scope.selectedShift.locationId =  $rootScope.selectedLocation;
     $scope.saving = true;
     return $http({
-      url: $rootScope.urlPrefix + '/shift/add',
+      url: 'shift/add',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
@@ -167,7 +167,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     // set end date as last sunday
     $scope.selectedShift.endDate = $rootScope.lastSunday;
     return $http({
-      url: $rootScope.urlPrefix + '/shift/delete/',
+      url: 'shift/delete/',
       method: "POST",
       data: $scope.selectedShift
     }).then(function(success) {
@@ -274,7 +274,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     $scope.newHoliday.date = moment($scope.holidayDate).format('MM-DD-YYYY');
 
     $http({
-      url: $rootScope.urlPrefix + '/holiday/add',
+      url: 'holiday/add',
       method: "POST",
       data: $scope.newHoliday
     }).then(
@@ -298,7 +298,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
 
   $scope.getAllHolidays = function() {
     $http({
-      url: $rootScope.urlPrefix + '/holiday/'+$rootScope.locations,
+      url: 'holiday/'+$rootScope.locations,
       method: "GET"
     }).then(
       // request was successful
@@ -313,7 +313,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
 
   $scope.deleteHoliday = function(id){
     $http({
-      url: $rootScope.urlPrefix + '/holiday/remove/'+id,
+      url: 'holiday/remove/'+id,
       method: "POST"
     }).then(
       // request was successful
