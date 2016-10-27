@@ -2,7 +2,7 @@
 /target
 /src/main/resources/liquibase/changelogs/data/businesses/
 bower_components/
-/private
+/src/main/resources/private
 .gitignore
 *.jar
 *.sass-cache

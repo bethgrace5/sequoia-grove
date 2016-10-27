@@ -27,6 +27,13 @@ import org.springframework.web.bind.annotation.RequestMethod;
 @RestController
 public class MainController {
 
+  /*
+  @RequestMapping("/")
+    public String index() {
+      return "index.html";
+    }
+    */
+
   @RequestMapping("/resource")
     public Map<String,Object> home() {
       Map<String,Object> model = new HashMap<String,Object>();

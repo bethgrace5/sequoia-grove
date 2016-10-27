@@ -270,32 +270,6 @@
       </plugin>
       -->
 
-
-      <!-- liquibase plugin -->
-      <plugin>
-        <groupId>org.liquibase</groupId>
-        <artifactId>liquibase-maven-plugin</artifactId>
-        <version>3.0.5</version>
-        <configuration>
-          <propertyFile>private/liquibase.properties</propertyFile>
-          <changeLogFile>src/main/resources/liquibase/db.changelog.xml</changeLogFile>
-        </configuration>
-        <executions>
-          <execution>
-            <phase>process-resources</phase>
-            <goals>
-              <goal>update</goal>
-            </goals>
-          </execution>
-        </executions>
-        <dependencies>
-          <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>9.4.1208.jre6</version>
-          </dependency>
-        </dependencies>
-      </plugin>
     </plugins>
   </build>
 
