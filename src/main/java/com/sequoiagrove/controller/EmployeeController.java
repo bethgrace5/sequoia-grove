@@ -60,7 +60,7 @@ public class EmployeeController
         Model model,
         @ModelAttribute("scope") List<String> permissions,
         @PathVariable("locations") String locations) {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // the token did not have the required permissions, return 403 status
         if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
@@ -115,7 +115,7 @@ public class EmployeeController
           jobject.get("id").getAsInt()
       };
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       jdbcTemplate.update( "update sequ_user set first_name = ?, "+
           "last_name    = ?, "+
           "birth_date   = to_date(?, 'mm-dd-yyyy'), "+
@@ -141,7 +141,7 @@ public class EmployeeController
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -235,7 +235,7 @@ public class EmployeeController
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
       int id = jobject.get("id").getAsInt();
@@ -277,7 +277,7 @@ public class EmployeeController
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
       int id = jobject.get("id").getAsInt();

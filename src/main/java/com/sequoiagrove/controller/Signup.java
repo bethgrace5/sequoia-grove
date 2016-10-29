@@ -51,7 +51,7 @@ public class Signup {
   /*
     @RequestMapping(value = "/signup", method=RequestMethod.POST)
     public String addEmployee(Model model, @RequestBody String data) throws ServletException, IOException, SQLException, GeneralSecurityException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         */

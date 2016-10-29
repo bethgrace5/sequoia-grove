@@ -8,7 +8,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Exposed to all users through service
   var schedule = [];
   var locations = [];
-  var locationId = [];
+  var locationId = 0;
   var business = 0;
   var publishedList = [];
   var mobileList = {};
@@ -309,7 +309,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/schedule/template/'+monday +'/'+ locations; // if it's in dev mode, and we already have
+    var url = '/schedule/template/'+monday+'/'+business +'/'+ locationId; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*
     if($rootScope.devMode) {
@@ -859,7 +859,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     //TODO set a boolean saying that this user has manage schedule privelage
     service.init = function(locationList, selectedLocation, bid) {
       locations = locationList;
-      locationId = selectedLocation
+      locationId = selectedLocation;
       business = bid;
       var deferred = $q.defer();
       initMonday();
@@ -955,7 +955,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       'init':function(locationList, selectedLocation) {
         var deferred = $q.defer();
         locations = locationList;
-        locationId = selectedLocation
+        locationId = selectedLocation;
         initMonday();
         initHeader();
         initSchedule().then(function(success) {

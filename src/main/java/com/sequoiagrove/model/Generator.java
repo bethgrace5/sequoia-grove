@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 import com.sequoiagrove.model.User;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.model.Request;
@@ -200,7 +200,7 @@ public class Generator{
   //  Database_Gathering
   //---------------------------------
   public List<DayShiftEmployee> getPastInformation(String startDate, String endDate) {
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
     List<DayShiftEmployee> temp = jdbcTemplate.query(
       " select day, shift_id, user_id, count(*) AS worked" +
       " from sequ_employee_shift_view" +
@@ -225,14 +225,14 @@ public class Generator{
   }
 
   public List<User> getEmployeeInformation(){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       String queryStr = "select * from sequ_user_info_view";
       List<User> empList = jdbcTemplate.query( queryStr, new SuperUserRowMapper());
       return empList;
   }
 
   public List<Shift> getShiftInformation(String mon) {
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       String queryStr = "select * from sequ_get_current_shifts(?)";
       List<Shift> shiftList = jdbcTemplate.query(
         queryStr,
@@ -242,7 +242,7 @@ public class Generator{
   }
 
   public List<Request> getRequestInformation(String startDate){
-    JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
     List<Request> requestList = jdbcTemplate.query(
       "select * from sequ_request_view " +
       " where start_date_time <= to_date(?, 'dd-mm-yyyy')+integer'7'" +

@@ -47,7 +47,7 @@ public class PositionController {
         @PathVariable("businessId") String businessId){
 
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         List<Position> posList = jdbcTemplate.query(
             "select distinct pid as id, title, business_id, area from " +
@@ -90,7 +90,7 @@ public class PositionController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         // Parse the body to position object
         Gson gson = new Gson();
         JsonElement jelement = new JsonParser().parse(data);
@@ -123,7 +123,7 @@ public class PositionController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // Parse the body to position object
         Gson gson = new Gson();

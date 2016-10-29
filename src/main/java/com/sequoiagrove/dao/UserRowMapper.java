@@ -36,15 +36,6 @@ public class UserRowMapper implements RowMapper {
     return user;
   }
 
-  // change location string to list of java integers
-  public static ArrayList<Integer> stringToIntArray(String str) {
-    ArrayList<Integer> loc = new ArrayList<Integer>();
-    for (String item : new ArrayList<String>(Arrays.asList(str.split(",")))){
-      loc.add(Integer.parseInt(item));
-    }
-    return loc;
-  }
-
 
   // change availability string to java object
   public static WeeklyAvail parseAvailability(String avail) {

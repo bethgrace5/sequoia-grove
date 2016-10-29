@@ -41,7 +41,7 @@ import com.sequoiagrove.model.DayShiftEmployee;
 import com.sequoiagrove.model.Request;
 
 import com.sequoiagrove.model.Scheduled;
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 import org.springframework.transaction.TransactionStatus;
 */
 
@@ -100,7 +100,7 @@ public class ScheduleGeneratorController {
   /*
   @RequestMapping(value = "/schedule/autogen/")
   public String buildGenerator(@RequestBody String data, Model model){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
       // parse params
       JsonElement jelement = new JsonParser().parse(data);
@@ -170,7 +170,7 @@ public class ScheduleGeneratorController {
   }
 
   void generatorBuildList(Generator generator, String data){
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       // parse params
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();

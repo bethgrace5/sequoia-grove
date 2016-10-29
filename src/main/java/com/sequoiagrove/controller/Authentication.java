@@ -58,7 +58,6 @@ class Authentication {
     private static Key key = MacProvider.generateKey();
 
   @Autowired
-    private static JdbcTemplate jdbcTemplate;
     private UserRepository users;
 
 
@@ -69,6 +68,7 @@ class Authentication {
 
     @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
     protected String logout(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         jdbcTemplate.update("delete from sequ_session where user_id=?", id);
         model.addAttribute("status",200);
         return "jsonTemplate";
@@ -192,6 +192,7 @@ class Authentication {
 
     // Create initial token upon authorization
     protected static String getToken(int userId, String scope) {
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         //byte[] key = getSignatureKey();
         // We need a signing key, so we'll create one just for this example. Usually
         // the key would be read from your application configuration instead.

@@ -43,7 +43,7 @@ public class AvailabilityController {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -88,7 +88,7 @@ public class AvailabilityController {
             return "jsonTemplate";
         }
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       jdbcTemplate.update("delete from sequ_availability " +
         "where user_id = ? and day = ? and startt = ?", eid, day, startt);
 

@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.model.Holiday;
 */
@@ -51,7 +51,7 @@ public class HolidaysController {
     public String getAllHolidays(Model model,
         @PathVariable("locations") String locations){
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       // change location string to list of java integers
       ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
       Map<Integer, List<Holiday>> holidays = new HashMap<Integer, List<Holiday>>();
@@ -89,7 +89,7 @@ public class HolidaysController {
           return "jsonTemplate";
       }
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -117,7 +117,7 @@ public class HolidaysController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         /*
         Gson gson = new Gson();
 
@@ -145,7 +145,7 @@ public class HolidaysController {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         jdbcTemplate.update( "delete from sequ_holiday where id = ?", id);
         return "jsonTemplate";
       }
@@ -160,7 +160,7 @@ public class HolidaysController {
             //model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             //return "jsonTemplate";
         //}
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         Object[] params = new Object[] { dateStart, dateEnd };
         List<Holiday> holidayList = jdbcTemplate.query(
           "select id, hdate, title, store_open, store_close, to_char(hdate, 'D') as day " +

@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sequoiagrove.model.Delivery;
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 import com.sequoiagrove.controller.EmployeeController;
 */
 
@@ -46,7 +46,7 @@ public class DeliveryController {
         @PathVariable("locations") String locations,
         @ModelAttribute("scope") List<String> permissions) {
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       Map<Integer, List<Delivery>> deliveries = new HashMap<Integer, List<Delivery>>();
       ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
 
@@ -84,7 +84,7 @@ public class DeliveryController {
         model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
         return "jsonTemplate";
       }
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
       // update database
       jdbcTemplate.update("delete from sequ_delivery where id = ?", Integer.parseInt(id));
@@ -100,7 +100,7 @@ public class DeliveryController {
         model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
         return "jsonTemplate";
       }
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
       // parse params
       JsonElement jelement = new JsonParser().parse(data);
@@ -131,7 +131,7 @@ public class DeliveryController {
         model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
         return "jsonTemplate";
       }
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       int id = jdbcTemplate.queryForObject("select nextval('sequ_delivery_sequence')",
           Integer.class);
       // parse params

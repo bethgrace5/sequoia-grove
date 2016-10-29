@@ -27,7 +27,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.RequestRowMapper;
 import com.sequoiagrove.controller.EmployeeController;
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 */
 /**
 RequestController:
@@ -59,7 +59,7 @@ public class RequestController{
           return "jsonTemplate";
       }
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       JsonElement jelement = new JsonParser().parse(data);
       JsonObject jobject = jelement.getAsJsonObject();
 
@@ -93,7 +93,7 @@ public class RequestController{
           return "jsonTemplate";
       }
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       String queryStr = "select * from sequ_request_view order by start_date_time asc";
       List<RequestStatus> requestList =
             jdbcTemplate.query( queryStr, new RequestRowMapper());
@@ -115,7 +115,7 @@ public class RequestController{
 
       ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
       Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
       String queryStr = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
            "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
@@ -157,7 +157,7 @@ public class RequestController{
       ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
       Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       String queryStr = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
          "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
            "from sequ_request_view rv " +
@@ -196,7 +196,7 @@ public class RequestController{
 
           ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
           Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
-          JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+          JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
           String queryStr = "select * from sequ_request_view " +
             "left outer join " +
@@ -232,7 +232,7 @@ public class RequestController{
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         Object[] params = new Object[] {
@@ -255,7 +255,7 @@ public class RequestController{
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
         Object[] params = new Object[] {
@@ -289,7 +289,7 @@ public class RequestController{
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         List<RequestStatus> requests = new ArrayList<RequestStatus>();
 
         String queryStr = "select * from ( select * from sequ_request_view left outer join ( select user_id, location_id from sequ_employment_history where date_unemployed is null) eh on requested_by = eh.user_id left outer join sequ_location loc on loc.id = eh.location_id) as requests_with_locations where ((start_date_time <= to_date(?, 'dd-mm-yyyy') and end_date_time >= to_date(?, 'dd-mm-yyyy') ) or (end_date_time >= to_date(?, 'dd-mm-yyyy') and start_date_time <= to_date(?, 'dd-mm-yyyy'))) and is_approved = true and business_id = ?";

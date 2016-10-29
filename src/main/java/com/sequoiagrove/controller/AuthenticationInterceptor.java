@@ -10,7 +10,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.sequoiagrove.controller.Authentication;
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 */
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 import org.springframework.stereotype.Component;
@@ -21,7 +21,7 @@ public class AuthenticationInterceptor extends HandlerInterceptorAdapter {
   /*
     // Pre Handler for before request
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         int id = 0;
         String URI = request.getRequestURI();
         Map<String, String> verificationResponse = Authentication.verifyToken(request.getHeader("Authorization"), URI);

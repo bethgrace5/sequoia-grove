@@ -30,7 +30,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.Scheduled;
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 
 import com.sequoiagrove.model.RequestStatus;
 import com.sequoiagrove.model.Holiday;
@@ -61,7 +61,7 @@ public class ManageStore {
 
     public int addHours(String startHr, String endHr) {
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         int id = 0;
         Object[] obj = new Object[] { startHr, endHr };
@@ -91,7 +91,7 @@ public class ManageStore {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
 
@@ -149,7 +149,7 @@ public class ManageStore {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();
@@ -214,7 +214,7 @@ public class ManageStore {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         JsonElement jelement = new JsonParser().parse(data);
         JsonObject  jobject = jelement.getAsJsonObject();

@@ -1,6 +1,5 @@
 package com.sequoiagrove.controller;
 
-/*
 import com.google.gson.Gson;
 import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
@@ -27,18 +26,19 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.sequoiagrove.controller.MainController;
+import com.sequoiagrove.controller.Application;
 import com.sequoiagrove.controller.EmployeeController;
 import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.PublishedSchedule;
 import com.sequoiagrove.model.ScheduleTemplate;
 import com.sequoiagrove.model.Scheduled;
-*/
 
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class ScheduleController {
+
+    static HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>>();
 
   /*
   // extract scope from request
@@ -55,24 +55,33 @@ public class ScheduleController {
         };
         return permissions;
     }
+    */
 
   // Get current schedule template (current shifts) dd-mm-yyyy
-  @RequestMapping(value = "/schedule/template/{mon}/{locations}")
-    public String getScheduleTemplate( Model model,
+  @RequestMapping(value = "/schedule/template/{mon}/{business}/{location}")
+    public Map<String, Object> getScheduleTemplate(
         @PathVariable("mon") String mon,
-        @PathVariable("locations") String locations,
-        @ModelAttribute("scope") List<String> permissions) {
+        @PathVariable("business") int business,
+        @PathVariable("location") int location,
+        @ModelAttribute("scope") ArrayList<String> permissions) {
+      Map<String, Object> model = new HashMap<String, Object>();
 
-      JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+      boolean gotSchedule = false;
+
+      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       // change location string to list of java integers
-      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
-      Map<Integer, List<ScheduleTemplate>> schedules = new HashMap<Integer, List<ScheduleTemplate>>();
-      Map<Integer, List<PublishedSchedule>> published = new HashMap<Integer, List<PublishedSchedule>>();
 
-      for(Integer l : loc) {
-          List<ScheduleTemplate> schTempList = jdbcTemplate.query(
+      if(master.containsKey(business)) {
+        if(master.get(business).containsKey(location)) {
+          gotSchedule = true;
+        }
+      }
+
+      //for(Integer l : loc) {
+      if (!gotSchedule) {
+          ArrayList<ScheduleTemplate> newScheduleBuild = (ArrayList) jdbcTemplate.query(
             "select * from sequ_get_schedule(?) where location_id = ?",
-            new Object[]{mon, l},
+            new Object[]{mon, location},
             new RowMapper<ScheduleTemplate>() {
               public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -98,33 +107,45 @@ public class ScheduleController {
                 return schTmp;
               }
             });
-          schedules.put(l, schTempList);
+          if (master.containsKey(business)) {
+            master.get(business).put(location, newScheduleBuild);
+          }
+          else {
+            HashMap<Integer, ArrayList<ScheduleTemplate>> h = new HashMap<Integer, ArrayList<ScheduleTemplate>>();
+            h.put(location, newScheduleBuild);
+            master.put(business, h);
+          }
       }
 
-      for(Integer l : loc) {
-          List<PublishedSchedule> tmpList = jdbcTemplate.query(
-            "SELECT * FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
+      //}
+      boolean published = false;
 
-            new Object[]{mon, l},
-            new RowMapper<PublishedSchedule>() {
-              public PublishedSchedule mapRow(ResultSet rs, int rowNum) throws SQLException {
+      int count = jdbcTemplate.queryForObject(
+            "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
+            new Object[]{mon, location}, Integer.class);
 
-                PublishedSchedule tmp = new PublishedSchedule(
-                    rs.getInt("published_by"),
-                    rs.getInt("location_id"),
-                    rs.getString("start_date"),
-                    rs.getString("date_published")
-                );
-                return tmp;
-              }
-            });
-          published.put(l, tmpList);
+      published = (count>0)? true: false;
+
+      if(published) {
+        model.put("template", master.get(business).get(location));
       }
+      else {
+        model.put("template", "");
+      }
+      model.put("published", published);
 
-      model.addAttribute("isPublished", published);
-      model.addAttribute("template", schedules);
-      return "jsonTemplate";
+      return model;
   }
+  // change location string to list of java integers
+  public static ArrayList<Integer> stringToIntArray(String str) {
+    ArrayList<Integer> loc = new ArrayList<Integer>();
+    for (String item : new ArrayList<String>(Arrays.asList(str.split(",")))){
+      loc.add(Integer.parseInt(item));
+    }
+    return loc;
+  }
+
+  /*
 
   // Get current schedule template (current shifts) dd-mm-yyyy
   @RequestMapping(value = "/schedule/shiftIndices")
@@ -134,7 +155,7 @@ public class ScheduleController {
             model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
             return "jsonTemplate";
         }
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
         // reuse Scheduled class where sid = shift id and eid = index
@@ -166,7 +187,7 @@ public class ScheduleController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
         Gson gson = new Gson();
@@ -197,7 +218,7 @@ public class ScheduleController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // Parse the list of params to array of Strings
         Gson gson = new Gson();
@@ -226,7 +247,7 @@ public class ScheduleController {
             return "jsonTemplate";
         }
 
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
+        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
 
         // parse params
         JsonElement jelement = new JsonParser().parse(data);
