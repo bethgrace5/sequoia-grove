@@ -307,9 +307,11 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       deleteShifts[val] = [];
     })
 
+    var mm = moment(monday, 'DD-MM-YYYY').format('MM-DD-YYYY');
+    console.log(mm);
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/schedule/template/'+monday+'/'+business +'/'+ locationId; // if it's in dev mode, and we already have
+    var url = '/schedule/template/'+mm+'/'+business +'/'+ locationId; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*
     if($rootScope.devMode) {
@@ -329,8 +331,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       "method": "GET",
     }).then(function (success) {
           if (success.status === 200) {
-            publishedList = success.data.isPublished;
-            schedule = success.data.template;
+            publishedList[locationId] = success.data.published;
+            schedule[locationId] = success.data.template;
+            console.log(success);
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
               localStorageService.set('template', JSON.stringify(success.data.template));
@@ -869,10 +872,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             countDays();
             countHours();
             buildMobileList();
-            return initHolidays();
-          }).then(function(success) {
-            return initRequests();
-          }).then(function(success) {
+            //return initHolidays();
+          //}).then(function(success) {
+            //return initRequests();
+          //}).then(function(success) {
             notifyObservers();
             deferred.resolve(success);
           });
@@ -991,7 +994,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       },
       'getHeader':   function() { return header; },
       'getTemplate': function() { return schedule[locationId]; },
-      'isPublished': function() { return publishedList[locationId].length > 0; },
+      'isPublished': function() { return publishedList[locationId]},
       'extendEnd': function(extend) {
         extendEnd = extend;
         addHolidays();

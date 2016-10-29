@@ -1,3 +1,4 @@
+/log
 /dist
 /target
 /src/main/resources/liquibase/changelogs/data/businesses/

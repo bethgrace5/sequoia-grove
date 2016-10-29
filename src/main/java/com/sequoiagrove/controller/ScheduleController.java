@@ -77,9 +77,18 @@ public class ScheduleController {
         }
       }
 
+      boolean published = false;
+      int count = jdbcTemplate.queryForObject(
+            "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'mm-dd-yyyy') and location_id = ?",
+            new Object[]{mon, location}, Integer.class);
+      published = (count>0)? true: false;
+
+
+      ArrayList<ScheduleTemplate> newScheduleBuild = new ArrayList<ScheduleTemplate>();
       //for(Integer l : loc) {
-      if (!gotSchedule) {
-          ArrayList<ScheduleTemplate> newScheduleBuild = (ArrayList) jdbcTemplate.query(
+      if (!gotSchedule && published) {
+        System.out.println("getting new schedule build");
+          newScheduleBuild = (ArrayList) jdbcTemplate.query(
             "select * from sequ_get_schedule(?) where location_id = ?",
             new Object[]{mon, location},
             new RowMapper<ScheduleTemplate>() {
@@ -115,22 +124,15 @@ public class ScheduleController {
             h.put(location, newScheduleBuild);
             master.put(business, h);
           }
+
       }
 
       //}
-      boolean published = false;
-
-      int count = jdbcTemplate.queryForObject(
-            "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
-            new Object[]{mon, location}, Integer.class);
-
-      published = (count>0)? true: false;
-
       if(published) {
         model.put("template", master.get(business).get(location));
       }
       else {
-        model.put("template", "");
+        model.put("template", new ArrayList<ScheduleTemplate>());
       }
       model.put("published", published);
 
