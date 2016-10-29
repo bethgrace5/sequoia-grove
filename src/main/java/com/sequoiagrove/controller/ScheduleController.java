@@ -38,7 +38,9 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ScheduleController {
 
-    static HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>>();
+    //static HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>>();
+                //location id      monday             list schedule rows
+    static HashMap<Integer, HashMap<String, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<String, ArrayList<ScheduleTemplate>>>();
 
   /*
   // extract scope from request
@@ -58,10 +60,9 @@ public class ScheduleController {
     */
 
   // Get current schedule template (current shifts) dd-mm-yyyy
-  @RequestMapping(value = "/schedule/template/{mon}/{business}/{location}")
+  @RequestMapping(value = "/schedule/template/{mon}/{location}")
     public Map<String, Object> getScheduleTemplate(
         @PathVariable("mon") String mon,
-        @PathVariable("business") int business,
         @PathVariable("location") int location,
         @ModelAttribute("scope") ArrayList<String> permissions) {
       Map<String, Object> model = new HashMap<String, Object>();
@@ -71,8 +72,8 @@ public class ScheduleController {
       JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
       // change location string to list of java integers
 
-      if(master.containsKey(business)) {
-        if(master.get(business).containsKey(location)) {
+      if(master.containsKey(location)) {
+        if(master.get(location).containsKey(mon)) {
           gotSchedule = true;
         }
       }
@@ -116,20 +117,19 @@ public class ScheduleController {
                 return schTmp;
               }
             });
-          if (master.containsKey(business)) {
-            master.get(business).put(location, newScheduleBuild);
+          if (master.containsKey(location)) {
+            master.get(location).put(mon, newScheduleBuild);
           }
           else {
-            HashMap<Integer, ArrayList<ScheduleTemplate>> h = new HashMap<Integer, ArrayList<ScheduleTemplate>>();
-            h.put(location, newScheduleBuild);
-            master.put(business, h);
+            HashMap<String, ArrayList<ScheduleTemplate>> h = new HashMap<String, ArrayList<ScheduleTemplate>>();
+            h.put(mon, newScheduleBuild);
+            master.put(location, h);
           }
-
       }
 
       //}
       if(published) {
-        model.put("template", master.get(business).get(location));
+        model.put("template", master.get(location).get(mon));
       }
       else {
         model.put("template", new ArrayList<ScheduleTemplate>());

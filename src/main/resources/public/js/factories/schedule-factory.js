@@ -311,7 +311,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     console.log(mm);
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/schedule/template/'+mm+'/'+business +'/'+ locationId; // if it's in dev mode, and we already have
+    var url = '/schedule/template/'+mm+'/'+ locationId; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*
     if($rootScope.devMode) {

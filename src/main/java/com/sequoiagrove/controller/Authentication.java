@@ -48,7 +48,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
-import com.sequoiagrove.model.UserRowMapper;
 import org.springframework.util.StringUtils;
 
 

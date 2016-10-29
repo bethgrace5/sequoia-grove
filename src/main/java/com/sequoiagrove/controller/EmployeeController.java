@@ -1,11 +1,20 @@
 package com.sequoiagrove.controller;
 
-/*
-import com.google.gson.JsonParser;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.sequoiagrove.controller.Authentication;
+import com.sequoiagrove.model.Duration;
+import com.sequoiagrove.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import com.sequoiagrove.model.WeeklyAvail;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -20,23 +29,40 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.sequoiagrove.controller.Authentication;
-import com.sequoiagrove.model.User;
-import com.sequoiagrove.model.SuperUserRowMapper;
-import com.sequoiagrove.model.Duration;
-import com.sequoiagrove.model.WeeklyAvail;
-*/
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class EmployeeController
 {
+  @Autowired
+    private UserRepository users;
+
+  // Get All Employees with the availability, positions, and employment history
+  @RequestMapping(value = "/employees/{locations}") public Map<String, Object> getAllEmployee(
+      @ModelAttribute("scope") ArrayList<String> permissions,
+      @PathVariable("locations") String locations) {
+    Map<String,Object> model = new HashMap<String,Object>();
+    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
+
+    System.out.println(locations);
+
+    // the token did not have the required permissions, return 403 status
+    //if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
+      //model.put("status", HttpServletResponse.SC_FORBIDDEN);
+      //return model;
+    //}
+
+    String[] tmp = locations.split(",");
+    int[] loc = new int[tmp.length];
+
+    for(int i=0; i<tmp.length; i++) {
+      loc[i] = Integer.parseInt(tmp[i]);
+    }
+
+    model.put("employees", users.getUsersByLocation(loc));
+
+    return model;
+  }
   /*
   // extract scope from request
   @ModelAttribute("scope")
@@ -54,31 +80,6 @@ public class EmployeeController
         return permissions;
     }
 
-    // Get All Employees with the availability, positions, and employment history
-    @RequestMapping(value = "/employees/{locations}")
-    public String getAllEmployee(
-        Model model,
-        @ModelAttribute("scope") List<String> permissions,
-        @PathVariable("locations") String locations) {
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
-        // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
-
-        Map<Integer, List<User>> employees = new HashMap<Integer, List<User>>();
-        ArrayList<Integer> loc = stringToIntArray(locations);
-
-        for(Integer l : loc) {
-          String queryStr = "select * from sequ_user_info_view where location_id = ? order by first_name";
-          List<User> empList = jdbcTemplate.query( queryStr, new Object[]{l}, new SuperUserRowMapper());
-          employees.put(l, empList);
-        }
-        model.addAttribute("employees", employees);
-        return "jsonTemplate";
-    }
     */
 
     /*
