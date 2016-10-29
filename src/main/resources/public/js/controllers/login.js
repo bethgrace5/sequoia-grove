@@ -75,55 +75,56 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       return;
     }
     $scope.initiate = true;
-    loginFactory.signIn(googleUser, gapi).
-      then(function(success) {
-        // initialize data
-        $scope.initializeData(success).then(
-          function(s) {
-            $scope.loading = false;
-            $log.debug('loading complete');
-            //$location.path('/login');
-            if (localStorageService.get('lastPath') === null) {
-              localStorageService.set('lastPath', '/home');
-            };
-            $timeout(function() {
-              $rootScope.loggingIn = false;
-              $rootScope.loggedIn = true;
-              $location.path(localStorageService.get('lastPath'));
+    */
+    loginFactory.signIn(googleUser, gapi).then(
+        function(success) {
+          // initialize data
+          $scope.initializeData(success).then(
+            function(s) {
+              $scope.loading = false;
+              $log.debug('loading complete');
+              //$location.path('/login');
+              if (localStorageService.get('lastPath') === null) {
+                localStorageService.set('lastPath', '/home');
+              };
+              $timeout(function() {
+                $rootScope.loggingIn = false;
+                $rootScope.loggedIn = true;
+                $location.path(localStorageService.get('lastPath'));
+              });
             });
-          });
-      },function(failure) {
-        $scope.initiate = false;
-        gapi.auth2.getAuthInstance().signOut();
-        $rootScope.loggingIn = false;
-        $rootScope.loggedIn = false;
-        if (!failure.reason) {
-          $rootScope.appFailure = true;
-        }
-        if (failure) {
-          console.log('failure', failure);
-          //gapi.auth2.getAuthInstance().disconnect();
-          //$rootScope.failedLogin = true;
-          var profile = googleUser.getBasicProfile();
-          $rootScope.attemptedLogin = {
-            'google_id':profile.getId(),
-            'email': profile.getEmail(),
-            'name': profile.getName(),
-            'firstname': profile.getGivenName(),
-            'lastname': profile.getFamilyName(),
-            'profile_photo':profile.getImageUrl()
-          };
+        },
+        function(failure) {
+          $scope.initiate = false;
+          gapi.auth2.getAuthInstance().signOut();
+          $rootScope.loggingIn = false;
+          $rootScope.loggedIn = false;
+          if (!failure.reason) {
+            $rootScope.appFailure = true;
+          }
+          if (failure) {
+            console.log('failure', failure);
+            //gapi.auth2.getAuthInstance().disconnect();
+            //$rootScope.failedLogin = true;
+            var profile = googleUser.getBasicProfile();
+            $rootScope.attemptedLogin = {
+              'google_id':profile.getId(),
+              'email': profile.getEmail(),
+              'name': profile.getName(),
+              'firstname': profile.getGivenName(),
+              'lastname': profile.getFamilyName(),
+              'profile_photo':profile.getImageUrl()
+            };
 
-          if(failure.reason === 'Needs Account') {
-            needsAccount();
-            $scope.errorMessage = failure.message;
+            if(failure.reason === 'Needs Account') {
+              needsAccount();
+              $scope.errorMessage = failure.message;
+            }
+            else {
+              $scope.errorMessage = failure.message;
+            }
           }
-          else {
-            $scope.errorMessage = failure.message;
-          }
-        }
-      });
-      */
+        });
   }
 
 

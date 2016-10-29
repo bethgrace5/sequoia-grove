@@ -54,7 +54,7 @@
       tableName="requests_vacation"
       columnDataType="boolean"
       columnName="is_approved"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addForeignKeyConstraint baseColumnNames="requested_by"
       baseTableName="requests_vacation"

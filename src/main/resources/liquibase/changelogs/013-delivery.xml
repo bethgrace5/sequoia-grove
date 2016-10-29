@@ -63,43 +63,43 @@
       tableName="delivery"
       columnDataType="boolean"
       columnName="mon"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="tue"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="wed"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="thu"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="fri"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="sat"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
     <addDefaultValue schemaName="public"
       tableName="delivery"
       columnDataType="boolean"
       columnName="sun"
-      defaultValue="false" />
+      defaultValueBoolean="false" />
 
   </changeSet>
 

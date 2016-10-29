@@ -118,17 +118,19 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
     var deferred = $q.defer();
     // if the user successfully signed in with google
     if(gapi.auth2.getAuthInstance().isSignedIn.get()) {
-      googleSignIn(googleUser, gapi).
-        then(function() {
-          appSignIn(gapi).
-            then(function(success) {
-              loggedIn = true;
-              notifyObservers();
-              deferred.resolve(success);
-            }, function(failure) {
-              deferred.reject(failure);
-            });
-        });
+      $log.debug("gapi.auth2 is signed in");
+      googleSignIn(googleUser, gapi).then(
+          function() {
+            appSignIn(gapi).then(
+              function(success) {
+                loggedIn = true;
+                notifyObservers();
+                deferred.resolve(success);
+              },
+              function(failure) {
+                deferred.reject(failure);
+              });
+          });
     }
     else {
       deferred.reject(false);

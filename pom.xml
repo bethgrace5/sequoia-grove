@@ -80,7 +80,7 @@
     </dependency>
 
 
-    <!--GSON
+    <!--GSON-->
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
@@ -92,19 +92,17 @@
       <artifactId>google-http-client-gson</artifactId>
       <version>1.20.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.google.http-client</groupId>
+      <artifactId>google-http-client</artifactId>
+      <version>1.22.0</version>
+    </dependency>
 
     <dependency>
       <groupId>com.google.api-client</groupId>
       <artifactId>google-api-client</artifactId>
       <version>1.22.0</version>
     </dependency>
-
-    <dependency>
-      <groupId>com.google.http-client</groupId>
-      <artifactId>google-http-client</artifactId>
-      <version>1.22.0</version>
-    </dependency> -->
-
 
     <!-- BasicDataSource
     <dependency>
@@ -149,13 +147,12 @@
     </dependency>
     -->
 
-    <!-- JSON web token for Java
+    <!-- JSON web token for Java -->
     <dependency>
       <groupId>io.jsonwebtoken</groupId>
       <artifactId>jjwt</artifactId>
       <version>0.6.0</version>
     </dependency>
-    -->
   </dependencies>
 
   <properties>

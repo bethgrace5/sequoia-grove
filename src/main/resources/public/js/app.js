@@ -83,6 +83,7 @@ angular.module('sequoiaGroveApp', [
   // Set Development Mode - loads app more quickly by reading schedule
   // template stored in localstorage instead of pulling a new one every time.
   $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
+  $rootScope.urlPrefix = "";
 
   $timeout(function() {
     (function(d, s, id){
@@ -99,7 +100,7 @@ angular.module('sequoiaGroveApp', [
     $timeout(function() {
       gapi.auth2.getAuthInstance().isSignedIn.listen(listenSignin)
       if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
-        console.log(true);
+        console.log('signed in true');
       }
     },500)
   });

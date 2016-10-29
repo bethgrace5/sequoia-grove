@@ -1,37 +1,37 @@
 package com.sequoiagrove.controller;
 
-/*
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import javax.servlet.http.HttpServletResponse;
-import java.security.GeneralSecurityException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.IncorrectClaimException;
 import io.jsonwebtoken.Jws;
+import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.MissingClaimException;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.SignatureException;
-import io.jsonwebtoken.MissingClaimException;
-import io.jsonwebtoken.IncorrectClaimException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.impl.crypto.MacProvider;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.SecureRandom;
 import java.sql.SQLException;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.security.SecureRandom;
-import java.math.BigInteger;
+import javax.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -40,48 +40,43 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.sequoiagrove.model.User;
+import com.sequoiagrove.controller.UserRepository;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import com.sequoiagrove.model.UserRowMapper;
-import com.sequoiagrove.controller.MainController;
 import org.springframework.util.StringUtils;
-*/
-import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
-public class Authentication {
-  /*
+class Authentication {
     private static SecureRandom random = new SecureRandom();
     private static Key key = MacProvider.generateKey();
 
+  @Autowired
+    private static JdbcTemplate jdbcTemplate;
+    private UserRepository users;
+
+
     @ModelAttribute("userID")
-    public Integer getId(HttpServletRequest request) {
+    Integer getId(HttpServletRequest request) {
       return (Integer) request.getAttribute("userID");
     }
 
     @RequestMapping(value = "/auth/logout", method = RequestMethod.POST)
     protected String logout(Model model, @ModelAttribute("userID") int id) throws ServletException, IOException, SQLException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         jdbcTemplate.update("delete from sequ_session where user_id=?", id);
         model.addAttribute("status",200);
         return "jsonTemplate";
     }
 
-    // Verify token received
-    @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
-    protected String login(Model model, @RequestBody String postLoad) throws ServletException, IOException, SQLException, GeneralSecurityException {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        JsonElement jelement = new JsonParser().parse(postLoad);
-        JsonObject  jobject = jelement.getAsJsonObject();
 
-        User user = new User(0, 0, 0, 0, 0, "", "", "", "", "", new ArrayList<String>(), 0, "");
-        //User user;
-        String email = "";
-
+    String googleAuth(String idToken) throws GeneralSecurityException, IOException {
+      String email = "invalidtoken";
         HttpTransport transport = new NetHttpTransport();
         JsonFactory jsonFactory = new GsonFactory();
 
@@ -89,105 +84,114 @@ public class Authentication {
             .setAudience(Arrays.asList("723411836118-u5vf0ilcf12gaskc5o7grtrbi5d9nss1.apps.googleusercontent.com"))
             .setIssuer("accounts.google.com")
             .build();
-        String idTokenString = jobject.get("idtoken").getAsString();
-        GoogleIdToken idToken = verifier.verify(idTokenString);
 
-        if (idToken != null) {
-          Payload payload = idToken.getPayload();
+        GoogleIdToken verifiedToken = verifier.verify(idToken);
 
-          // Print user identifier
+        if (verifiedToken != null) {
+          Payload payload = verifiedToken.getPayload();
           String userId = payload.getSubject();
-
-          // Get profile information from payload
-          email = payload.getEmail();
-          boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
           //String name = (String) payload.get("name");
           //String pictureUrl = (String) payload.get("picture");
           //String locale = (String) payload.get("locale");
           //String familyName = (String) payload.get("family_name");
           //String givenName = (String) payload.get("given_name");
-          //
-
-          // check if email verified from payload
-          if (emailVerified == false) {
-            System.out.println("email was not verified");
-            model.addAttribute("loginFailed", true);
-            model.addAttribute("message", "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL");
-            return "jsonTemplate";
-          };
-        }
-        else {
-          // google id token invalid
-          System.out.println("Invalid Google ID token.");
-          model.addAttribute("loginFailed", true);
-          model.addAttribute("message", "INVALID_ID_TOKEN");
-          model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-          return "jsonTemplate";
-        }
-
-        // query to get user info, by using email as a paramater
-        String sql = "select distinct id, business_id, first_name, last_name, email, " +
-          "loc, birth_date, max_hrs_week, permissions, notes, phone_number, clock_number, "+
-          "positions, history, min_hrs_week, classification_title, classification_id, avail, "+
-          "is_current from sequ_user_info_view where email = ?";
-          try {
-            // execute query to find user by email
-            user = (User)jdbcTemplate.queryForObject( sql, new Object[] { email }, new UserRowMapper());
-          } catch (EmptyResultDataAccessException e) {
-              // user does not exist in the database, they possibly need an account.
-              System.out.println("user does not exist in database");
-              model.addAttribute("loginFailed", true);
-              model.addAttribute("reason", "Needs Account");
-              model.addAttribute("message", "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL");
-              model.addAttribute("email", email);
-              model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-              return "jsonTemplate";
-          } catch (NullPointerException e) {
-              // email was blank
-              model.addAttribute("loginFailed", true);
-              model.addAttribute("message", "LOGIN_BLANK_EMAIL");
-              model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-              return "jsonTemplate";
+          boolean emailVerified = Boolean.valueOf(payload.getEmailVerified());
+          if (emailVerified) {
+            email = payload.getEmail();
           }
-
-          // found the user in the database
-          if(user != null) {
-              Object[] params = new Object[] { user.getId() };
-
-              // make sure this is a current employee
-              int count = jdbcTemplate.queryForObject(
-                  "select count(*) from sequ_employment_history " +
-                  " where user_id = ? and date_unemployed is null",
-                  params, Integer.class);
-
-              // Success! This employee is currently employed
-              if (count > 0) {
-                  System.out.println(user.getFullname() + " has sucessfully signed in");
-                  model.addAttribute("user", user);
-                  //get ArrayList of permissions from user object
-                  List<String> permissions = user.getPermissions();
-                  //Construct an empty Array of size of that array List
-                  String[] param = new String[permissions.size()];
-                  //fill in empty array with our array list as an array
-                  param = permissions.toArray(param);
-                  model.addAttribute("auth_token", getToken(user.getId(),
-                      StringUtils.arrayToDelimitedString(param, ",")));
-              }
-              else {
-                  // employee is not current
-                  model.addAttribute("loginFailed", true);
-                  model.addAttribute("message", "LOGIN_NOT_CURRENT");
-                  model.addAttribute("email", email);
-                  model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-              }
-
+          else {
+            email = "unverified";
           }
-        return "jsonTemplate";
+        }
+        return email;
+    }
+
+    @RequestMapping(value = "/auth/login/", method = RequestMethod.POST)
+      protected Map<String,Object> login(@RequestBody String postLoad)
+      throws ServletException, IOException, SQLException, GeneralSecurityException {
+      Map<String,Object> model = new HashMap<String,Object>();
+
+      JsonElement jelement = new JsonParser().parse(postLoad);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      String email = "none";
+      String message = "OK";
+      String reason = "";
+      String token = "";
+      int status = HttpServletResponse.SC_OK;
+      boolean loginFailed = false;
+
+      try {
+        email = googleAuth(jobject.get("idtoken").getAsString());
+      }
+      catch (GeneralSecurityException e) {
+        status = HttpServletResponse.SC_UNAUTHORIZED;
+        System.out.println(e);
+        loginFailed = true;
+      }
+      catch (IOException e) {
+        status = HttpServletResponse.SC_ACCEPTED;
+        System.out.println(e);
+        loginFailed = true;
+      }
+      if (email == "unverified") {
+        loginFailed = true;
+        message = "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL";
+        status = HttpServletResponse.SC_UNAUTHORIZED;
+      }
+      if (email == "invalidtoken") {
+        loginFailed = true;
+        message = "INVALID_ID_TOKEN";
+        status = HttpServletResponse.SC_UNAUTHORIZED;
+      }
+
+      User user = new User();
+      try {
+        // find user by email
+        user = users.getUser(email);
+      } catch (EmptyResultDataAccessException e) {
+        System.out.println(e);
+        reason = "Needs Account";
+        message = "LOGIN_ASK_ADMIN_TO_VERIFY_EMAIL";
+        loginFailed = true;
+        status = HttpServletResponse.SC_FORBIDDEN;
+      } catch (NullPointerException e) {
+        // email was blank
+        System.out.println("CAUGHT NULL POINTER EXCEPTION " + e);
+        loginFailed = true;
+        message = "LOGIN_BLANK_EMAIL";
+        status = HttpServletResponse.SC_FORBIDDEN;
+      }
+
+      // employee is not current
+      if(!user.getIsCurrent()) {
+        loginFailed = true;
+        message = "LOGIN_NOT_CURRENT";
+        status = HttpServletResponse.SC_FORBIDDEN;
+      }
+
+      if (loginFailed == false) {
+        Object[] params = new Object[] { user.getId() };
+        System.out.println(user.getFullname() + " has sucessfully signed in");
+        List<String> permissions = user.getPermissions();
+        String[] param = new String[permissions.size()];
+        //fill in empty array with our array list as an array
+        param = permissions.toArray(param);
+        //token = getToken(user.getId(), StringUtils.arrayToDelimitedString(param, ","));
+      }
+
+      model.put("user", user);
+      //model.put("auth_token", token);
+      model.put("email", email);
+      model.put("loginFailed", loginFailed);
+      model.put("message", message);
+      model.put("status", status);
+      model.put("reason", reason);
+      return model;
+
     }
 
     // Create initial token upon authorization
     protected static String getToken(int userId, String scope) {
-        JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
         //byte[] key = getSignatureKey();
         // We need a signing key, so we'll create one just for this example. Usually
         // the key would be read from your application configuration instead.
@@ -229,7 +233,7 @@ public class Authentication {
         return jwt;
     }
 
-    public static Map<String, String> verifyToken(String jwt, String URI) {
+    static Map<String, String> verifyToken(String jwt, String URI) {
       Map<String, String> token = new HashMap<String, String>();
       String subject = "HACKER";
         try {
@@ -283,9 +287,8 @@ public class Authentication {
        return(token);
     }
 
-    public static String nextSessionId() {
+    static String nextSessionId() {
         return new BigInteger(130, random).toString(32);
     }
-    */
 
 }

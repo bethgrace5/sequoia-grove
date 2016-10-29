@@ -26,17 +26,17 @@ public class UserController {
       return "OK";
     }
 
-  @RequestMapping("")
-    public User getUser(@RequestParam("id") long id) {
-      log.info("Get user");
-      return users.getUser(id);
-    }
+  //@RequestMapping("")
+    //public User getUser(@RequestParam("id") long id) {
+      //log.info("Get user");
+      //return users.getUser(id);
+    //}
 
-  @RequestMapping("users")
-    public List<User> getUsers(@RequestParam("ids") long[] ids) {
-      log.info("Get users");
-      return users.getUsers(ids);
-    }
+  //@RequestMapping("users")
+    //public List<User> getUsers(@RequestParam("ids") long[] ids) {
+      //log.info("Get users");
+      //return users.getUsers(ids);
+    //}
 }
 
 

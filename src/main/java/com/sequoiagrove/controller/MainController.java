@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /*
+*/
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,10 +23,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-*/
 
 @RestController
 public class MainController {
+   private static JdbcTemplate jdbcTemplate;
 
   /*
   @RequestMapping("/")
@@ -52,15 +53,9 @@ public class MainController {
         return "static/index.html";
     }
 
-    @Autowired
-    public void setDataSource(DataSource dataSource) {
-        this.dataSource = dataSource;
-        this.jdbcTemplate = new JdbcTemplate(dataSource);
-        System.out.println("setting jdbc template");
-    }
 
+    */
     public static JdbcTemplate getJdbcTemplate() {
         return jdbcTemplate;
     }
-    */
 }
