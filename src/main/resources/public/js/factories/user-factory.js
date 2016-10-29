@@ -49,7 +49,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
           if (success.status === 200) {
             $timeout(function() {
               // anything you want can go here and will safely be run on the next digest.
-              users = success.data.employees;
+              users[locationId] = success.data.employees;
               console.log(users);
               // Keep a copy of schedule retrieved to compare against changes later
               if ($rootScope.devMode) {
@@ -66,6 +66,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     angular.forEach (locations, function(loc, key) {
       // create map with key as eid and value as each object
       availMap[loc] = _.indexBy(users[loc], function(item, index) {
+        console.log(item.id);
         return item.id;
       });
 
