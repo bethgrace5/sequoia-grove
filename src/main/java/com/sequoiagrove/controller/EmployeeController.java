@@ -54,13 +54,11 @@ public class EmployeeController
 
     String[] tmp = locations.split(",");
     int[] loc = new int[tmp.length];
-
     for(int i=0; i<tmp.length; i++) {
       loc[i] = Integer.parseInt(tmp[i]);
     }
 
     model.put("employees", users.getUsersByLocation(loc));
-
     return model;
   }
   /*

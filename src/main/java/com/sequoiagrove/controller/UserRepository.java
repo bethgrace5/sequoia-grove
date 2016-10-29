@@ -1,15 +1,16 @@
 package com.sequoiagrove.controller;
 
+import java.util.AbstractMap;
+import java.util.ArrayList;
+import java.sql.Types;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import java.util.List;
-import java.util.Arrays;
-import java.util.ArrayList;
 import org.springframework.jdbc.core.JdbcTemplate;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.AbstractMap;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
@@ -48,17 +49,31 @@ public class UserRepository {
   // get users for multiple locations
   public HashMap<Integer, User> getUsersByLocation(int[] ids) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
+
+    String qs = "";
+    Object[] args = new Object[ids.length];
+    int[] types = new int[ids.length];
+
+    // add integers to Object[] and parallel INTEGER type
+    // and a question mark for each parameter
+    for(int i=0; i<ids.length; i++) {
+      types[i] = Types.INTEGER;
+      args[i] = ids[i];
+      qs += "?,";
+    }
+
     String sql = "SELECT distinct avail, is_current, birth_date, business_id, classification_id, classification_title, "+
       "clock_number, email, first_name, history, id, last_name, loc, max_hrs_week, min_hrs_week, "+
       "notes, permissions, phone_number, positions "+
-      "FROM sequ_user_info_view WHERE location_id IN (?) order by first_name";
+      "FROM sequ_user_info_view WHERE location_id IN ("+qs.substring(0, qs.length()-1)+") order by first_name";
 
+    List<User> users = jdbc.query(sql, args, types, superUserMapper);
     HashMap<Integer, User> map = new HashMap<Integer, User>();
-    List<User> users = jdbc.query(sql, new Object[]{ids[0]}, superUserMapper);
+
+    // change list to hashmap
     for( User u : users) {
       map.put(u.getId(), u);
     }
-    System.out.println("map size " + map.size());
     return map;
   }
 
