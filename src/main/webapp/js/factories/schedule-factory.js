@@ -86,6 +86,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var initRequests = function() {
     requests = {};
     var deferred = $q.defer();
+    /*
     $http({ 'url': $rootScope.urlPrefix + '/request/'+header.mon.val+'/'+header.sun.val+'/'+business, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
@@ -160,6 +161,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
             deferred.resolve();
           }
         });
+    */
+            deferred.resolve();
 
     return deferred.promise;
   };
@@ -209,6 +212,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var initHolidays = function() {
     var deferred = $q.defer();
+    /*
     $http({ url: $rootScope.urlPrefix + '/holiday/get/between/'+
       moment(header.mon.val, 'MM-DD-YYYY').format('MM-DD-YYYY') + '/' +
       moment(header.sun.val, 'MM-DD-YYYY').format('MM-DD-YYYY'), method: "GET" })
@@ -246,6 +250,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
           deferred.resolve(success);
         }
       });
+      */
+      deferred.resolve();
     return deferred.promise;
   }
 
@@ -329,10 +335,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       "method": "GET",
     }).then(function (success) {
           if (success.status === 200) {
-            console.log(success);
             publishedList[locationId] = success.data.schedule.published;
             schedule[locationId] = success.data.schedule.rows;
-            console.log(success);
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
               localStorageService.set('template', JSON.stringify(success.data.template));

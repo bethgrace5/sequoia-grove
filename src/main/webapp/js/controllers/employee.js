@@ -111,25 +111,11 @@ angular.module('sequoiaGroveApp')
         $scope.classifications[index].val;
     }
 
-    $scope.selectEmployee = function(id) {
+    $scope.selectEmployee = function(value) {
       $scope.resetEmployeeErrorFlags();
-
-      var length = $scope.employees.length;
-      for(var i = 0; i < length; i++) {
-        var curid = $scope.employees[i].id;
-        if (curid==id) {
-          $scope.selectedEmployee = $scope.employees[i];
-          $scope.selectedClassification = $scope.selectedEmployee.classificationId;
-          _.map($scope.classifications, function(item, index) {
-            if (item.val === $scope.selectedEmployee.classificationId) {
-              $scope.selectedClassification = index;
-            }
-          });
-
-          $scope.birthday = moment($scope.employees[i].birthDate, 'MM-DD-YYYY').toDate();
-          break;
-        }
-      }
+      $scope.selectedClassification = value.classificationId;
+      $scope.birthday = moment(value.birthDate, 'MM-DD-YYYY').toDate();
+      $scope.selectedEmployee = value;
     }
 
     // reset selected employee
