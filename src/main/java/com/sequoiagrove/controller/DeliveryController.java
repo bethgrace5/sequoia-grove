@@ -1,80 +1,35 @@
 package com.sequoiagrove.controller;
 
-/*
-import com.google.gson.JsonParser;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import javax.servlet.http.HttpServletResponse;
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.sequoiagrove.controller.DeliveryRepository;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.sequoiagrove.model.Delivery;
-import com.sequoiagrove.controller.Application;
-import com.sequoiagrove.controller.EmployeeController;
-*/
-
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class DeliveryController {
-  /*
+  @Autowired
+    private DeliveryRepository repository;
 
   // extract scope from request
-  @ModelAttribute("scope")
-    public List<String> getPermissions(HttpServletRequest request) {
-      String csvPermissions = (String) request.getAttribute("scope");
-      return Arrays.asList(csvPermissions.split(","));
-    }
+  //@ModelAttribute("scope")
+    //public List<String> getPermissions(HttpServletRequest request) {
+      //String csvPermissions = (String) request.getAttribute("scope");
+      //return Arrays.asList(csvPermissions.split(","));
+    //}
 
   // get list of all deliveries
   @RequestMapping(value = "/delivery/{locations}")
-    public String getDelivery(Model model,
-        @PathVariable("locations") String locations,
-        @ModelAttribute("scope") List<String> permissions) {
-
-      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-      Map<Integer, List<Delivery>> deliveries = new HashMap<Integer, List<Delivery>>();
-      ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
-
-      for(Integer l : loc) {
-        List<Delivery> deliveryList = jdbcTemplate.query(
-            "select * from sequ_delivery where location_id = ?",
-            new Object[]{l},
-            new RowMapper<Delivery>() {
-              public Delivery mapRow(ResultSet rs, int rowNum) throws SQLException {
-                Delivery del = new Delivery(
-                  rs.getString("name"),
-                  rs.getBoolean("mon"),
-                  rs.getBoolean("tue"),
-                  rs.getBoolean("wed"),
-                  rs.getBoolean("thu"),
-                  rs.getBoolean("fri"),
-                  rs.getBoolean("sat"),
-                  rs.getBoolean("sun"),
-                  rs.getInt("id"));
-                return del;
-              }
-            });
-          deliveries.put(l, deliveryList);
-      }
-      model.addAttribute("delivery", deliveries);
-      return "jsonTemplate";
+    public Map<String, Object> getDelivery( @PathVariable("locations") Object[] locations
+        /*, @ModelAttribute("scope") List<String> permissions*/) {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("delivery", repository.getDeliveriesByLocation(locations));
+      return model;
     }
 
+  /*
   //delete a delivery
   @RequestMapping(value = "/delivery/delete/{id}")
     public String updateSchedule(@PathVariable ("id") String id, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
