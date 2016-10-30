@@ -19,13 +19,19 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   };
 
   function initPending() {
+    console.log("initPending");
     var deferred = $q.defer();
     $http({
-      url: $rootScope.urlPrefix + '/request/get/pending/'+locations,
+      url: $rootScope.urlPrefix + '/request/pending/'+locations,
       method: "GET"
     }).then(function(success) {
+      console.log(success);
       pending = success.data.requestStatus;
       deferred.resolve(success[locationId]);
+    },
+    function(failure) {
+      console.log(failure);
+      deferred.reject(success);
     });
     return deferred.promise;
   }
