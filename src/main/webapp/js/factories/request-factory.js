@@ -39,7 +39,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initUser(id) {
     var deferred = $q.defer();
     $http({
-      url: $rootScope.urlPrefix + '/request/get/current/employee/'+ id + '/' + locations,
+      url: $rootScope.urlPrefix + '/request/employee/'+ id + '/' + locations,
       method: 'POST'
     }).then(function(success) {
       user = success.data.request;

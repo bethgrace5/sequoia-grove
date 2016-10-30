@@ -52,8 +52,45 @@ public class RequestRepository {
          "left outer join  " +
          "sequ_location loc " +
          "on loc.id = eh.location_id " +
-         "where responded_by IS NULL and end_date_time >= current_date and location_id = ? " +
+         "where responded_by IS NULL and end_date_time >= current_date and location_id in("+ qs +")" +
          "order by start_date_time asc ";
+    List<RequestStatus> requests = jdbc.query(sql, args, types, requestMapper);
+    HashMap<Integer, RequestStatus> map = new HashMap<Integer, RequestStatus>();
+
+    // change list to hashmap
+    for( RequestStatus r : requests) {
+      map.put(r.getRequestID(), r);
+    }
+    return map;
+  }
+
+  public HashMap<Integer, RequestStatus> getRequestsByEmployee(Object[] args) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+
+    String qs = "";
+    int[] types = new int[args.length];
+
+    // add integers to Object[] and parallel INTEGER type
+    // and a question mark for each parameter
+    for(int i=0; i<args.length-1; i++) {
+      types[i] = Types.INTEGER;
+      qs += "?,";
+    }
+    qs = qs.substring(0, qs.length()-1);
+      String sql = "select * from sequ_request_view " +
+        "left outer join " +
+        "( " +
+        "select * from " +
+        "sequ_employment_history where date_unemployed is null " +
+        ") eh " +
+        "on requested_by = eh.user_id " +
+        "left outer join " +
+        "sequ_location loc " +
+        "on loc.id = eh.location_id " +
+        "where requested_by = ? and end_date_time >= current_date " +
+        "and location_id in( "+qs+ ")" +
+        "order by start_date_time asc";
+
     List<RequestStatus> requests = jdbc.query(sql, args, types, requestMapper);
     HashMap<Integer, RequestStatus> map = new HashMap<Integer, RequestStatus>();
 
