@@ -7,29 +7,42 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.sequoiagrove.model.Position;
 */
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import org.springframework.beans.factory.annotation.Autowired;
 
 
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class PositionController {
+  @Autowired
+    private PositionRepository positions;
+
+    // Get Basic position info (id, title and area)
+    @RequestMapping(value = "/position/{locations}")
+    public Map<String, Object> getPositions( @ModelAttribute("scope") ArrayList<String> permissions,
+        @PathVariable("locations") Object[] locations){
+      Map<String,Object> model = new HashMap<String,Object>();
+      model.put("positions", positions.getPositionsByLocation(locations));
+      return model;
+    }
 
     /*
     private HashMap<Integer, ArrayList<Integer>> posKeyMap = new HashMap<Integer, ArrayList<Integer>>();
@@ -40,46 +53,6 @@ public class PositionController {
       return Arrays.asList(csvPermissions.split(","));
     }
 
-    // Get Basic position info (id, title and area)
-    @RequestMapping(value = "/position/{businessId}")
-    public String getPositions(Model model,
-        @ModelAttribute("scope") List<String> permissions,
-        @PathVariable("businessId") String businessId){
-
-
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
-        List<Position> posList = jdbcTemplate.query(
-            "select distinct pid as id, title, business_id, area from " +
-            "( " +
-             "select id as sid, position_id, task_name, location_id from sequ_shift sh where end_date is null " +
-             ") shift " +
-            "full outer join " +
-            "( " +
-             "select id as pid, title, area from sequ_position " +
-             ") pos " +
-            "on pos.pid = shift.position_id " +
-            "full outer join " +
-            "( " +
-             "select * from sequ_location " +
-             ") loc " +
-            "on loc.id = shift.location_id " +
-            "where business_id = ? " +
-            "order by area, title ",
-          new Object[]{Integer.parseInt(businessId)},
-          new RowMapper<Position>() {
-              public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
-                  Position pos = new Position(
-                      rs.getInt("id"),
-                      rs.getString("title"),
-                      rs.getString("area"));
-                  return pos;
-              }
-        });
-
-        model.addAttribute("positions", posList);
-        return "jsonTemplate";
-    }
 
     // Add a current position for an employee
     @RequestMapping(value = "/position/add/")

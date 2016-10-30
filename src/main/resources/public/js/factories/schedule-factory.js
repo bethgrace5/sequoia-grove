@@ -55,31 +55,31 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       while(dayName != 'Monday') {
         daysAgo++;
         dayName = moment().subtract(daysAgo, 'days').format('dddd');
-        monday = moment().subtract(daysAgo, 'days').format('DD-MM-YYYY');
+        monday = moment().subtract(daysAgo, 'days').format('MM-DD-YYYY');
       }
     }
     else {
-      monday = moment().format('DD-MM-YYYY'); // Today is Monday
+      monday = moment().format('MM-DD-YYYY'); // Today is Monday
     }
   }
 
   // Set Schedule Header Dates, and Date String Values
   var initHeader = function() {
     header.mon.val = monday; // Use Monday to setup the week
-    header.mon.disp = moment(monday, 'DD-MM-YYYY').format('MMM-D');
-    header.tue.val  = moment(monday, 'DD-MM-YYYY').add(1, 'days').format('DD-MM-YYYY');
-    header.tue.disp = moment(monday, 'DD-MM-YYYY').add(1, 'days').format('MMM-D');
-    header.wed.val  = moment(monday, 'DD-MM-YYYY').add(2, 'days').format('DD-MM-YYYY');
-    header.wed.disp = moment(monday, 'DD-MM-YYYY').add(2, 'days').format('MMM-D');
-    header.thu.val  = moment(monday, 'DD-MM-YYYY').add(3, 'days').format('DD-MM-YYYY');
-    header.thu.disp = moment(monday, 'DD-MM-YYYY').add(3, 'days').format('MMM-D');
-    header.fri.val  = moment(monday, 'DD-MM-YYYY').add(4, 'days').format('DD-MM-YYYY');
-    header.fri.disp = moment(monday, 'DD-MM-YYYY').add(4, 'days').format('MMM-D');
-    header.sat.val  = moment(monday, 'DD-MM-YYYY').add(5, 'days').format('DD-MM-YYYY');
-    header.sat.disp = moment(monday, 'DD-MM-YYYY').add(5, 'days').format('MMM-D');
-    header.sun.val  = moment(monday, 'DD-MM-YYYY').add(6, 'days').format('DD-MM-YYYY');
-    header.sun.disp = moment(monday, 'DD-MM-YYYY').add(6, 'days').format('MMM-D');
-    year = moment(monday, 'DD-MM-YYYY').format('YYYY');
+    header.mon.disp = moment(monday, 'MM-DD-YYYY').format('MMM-D');
+    header.tue.val  = moment(monday, 'MM-DD-YYYY').add(1, 'days').format('MM-DD-YYYY');
+    header.tue.disp = moment(monday, 'MM-DD-YYYY').add(1, 'days').format('MMM-D');
+    header.wed.val  = moment(monday, 'MM-DD-YYYY').add(2, 'days').format('MM-DD-YYYY');
+    header.wed.disp = moment(monday, 'MM-DD-YYYY').add(2, 'days').format('MMM-D');
+    header.thu.val  = moment(monday, 'MM-DD-YYYY').add(3, 'days').format('MM-DD-YYYY');
+    header.thu.disp = moment(monday, 'MM-DD-YYYY').add(3, 'days').format('MMM-D');
+    header.fri.val  = moment(monday, 'MM-DD-YYYY').add(4, 'days').format('MM-DD-YYYY');
+    header.fri.disp = moment(monday, 'MM-DD-YYYY').add(4, 'days').format('MMM-D');
+    header.sat.val  = moment(monday, 'MM-DD-YYYY').add(5, 'days').format('MM-DD-YYYY');
+    header.sat.disp = moment(monday, 'MM-DD-YYYY').add(5, 'days').format('MMM-D');
+    header.sun.val  = moment(monday, 'MM-DD-YYYY').add(6, 'days').format('MM-DD-YYYY');
+    header.sun.disp = moment(monday, 'MM-DD-YYYY').add(6, 'days').format('MMM-D');
+    year = moment(monday, 'MM-DD-YYYY').format('YYYY');
     buildWeekList();
   }
 
@@ -94,13 +94,13 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
               var end = moment(item.endDate, 'YYYY-MM-DD');
 
               // if start is before monday, make it equal to monday
-              if (start.isBefore(moment(header.mon.val, 'DD-MM-YYYY'))) {
-                start = moment(header.mon.val, 'DD-MM-YYYY');
+              if (start.isBefore(moment(header.mon.val, 'MM-DD-YYYY'))) {
+                start = moment(header.mon.val, 'MM-DD-YYYY');
               }
 
               // if end is after sunday, make it equal to sunday
-              if (end.isAfter(moment(header.sun.val, 'DD-MM-YYYY'))) {
-                end = moment(header.sun.val, 'DD-MM-YYYY');
+              if (end.isAfter(moment(header.sun.val, 'MM-DD-YYYY'))) {
+                end = moment(header.sun.val, 'MM-DD-YYYY');
               }
 
               var duration = end.diff(start, 'days')
@@ -166,18 +166,18 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var buildWeekList = function() {
     var weeks = [
-      moment(monday, 'DD-MM-YYYY').subtract(7,  'days').format('DD-MM-YYYY'),
-      moment(monday, 'DD-MM-YYYY').subtract(14, 'days').format('DD-MM-YYYY'),
-      moment(monday, 'DD-MM-YYYY').subtract(21, 'days').format('DD-MM-YYYY'),
-      moment(monday, 'DD-MM-YYYY').subtract(28, 'days').format('DD-MM-YYYY'),
-      moment(monday, 'DD-MM-YYYY').subtract(35, 'days').format('DD-MM-YYYY')
+      moment(monday, 'MM-DD-YYYY').subtract(7,  'days').format('MM-DD-YYYY'),
+      moment(monday, 'MM-DD-YYYY').subtract(14, 'days').format('MM-DD-YYYY'),
+      moment(monday, 'MM-DD-YYYY').subtract(21, 'days').format('MM-DD-YYYY'),
+      moment(monday, 'MM-DD-YYYY').subtract(28, 'days').format('MM-DD-YYYY'),
+      moment(monday, 'MM-DD-YYYY').subtract(35, 'days').format('MM-DD-YYYY')
     ]
     weekList = [
-      {'name':moment(weeks[0], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[0]},
-      {'name':moment(weeks[1], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[1]},
-      {'name':moment(weeks[2], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[2]},
-      {'name':moment(weeks[3], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[3]},
-      {'name':moment(weeks[4], 'DD-MM-YYYY').format('MMMM Do'), 'val':weeks[4]}
+      {'name':moment(weeks[0], 'MM-DD-YYYY').format('MMMM Do'), 'val':weeks[0]},
+      {'name':moment(weeks[1], 'MM-DD-YYYY').format('MMMM Do'), 'val':weeks[1]},
+      {'name':moment(weeks[2], 'MM-DD-YYYY').format('MMMM Do'), 'val':weeks[2]},
+      {'name':moment(weeks[3], 'MM-DD-YYYY').format('MMMM Do'), 'val':weeks[3]},
+      {'name':moment(weeks[4], 'MM-DD-YYYY').format('MMMM Do'), 'val':weeks[4]}
     ]
   }
 
@@ -210,8 +210,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var initHolidays = function() {
     var deferred = $q.defer();
     $http({ url: $rootScope.urlPrefix + '/holiday/get/between/'+
-      moment(header.mon.val, 'DD-MM-YYYY').format('MM-DD-YYYY') + '/' +
-      moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
+      moment(header.mon.val, 'MM-DD-YYYY').format('MM-DD-YYYY') + '/' +
+      moment(header.sun.val, 'MM-DD-YYYY').format('MM-DD-YYYY'), method: "GET" })
       .then(function(success) {
         holidays = success.data.holidays;
         if (holidays.length <= 0) {
@@ -307,11 +307,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       deleteShifts[val] = [];
     })
 
-    var mm = moment(monday, 'DD-MM-YYYY').format('MM-DD-YYYY');
-    console.log(mm);
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/schedule/template/'+mm+'/'+ locationId; // if it's in dev mode, and we already have
+    var url = '/schedule/'+monday+'/'+ locationId; // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*
     if($rootScope.devMode) {
@@ -331,8 +329,9 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       "method": "GET",
     }).then(function (success) {
           if (success.status === 200) {
-            publishedList[locationId] = success.data.published;
-            schedule[locationId] = success.data.template;
+            console.log(success);
+            publishedList[locationId] = success.data.schedule.published;
+            schedule[locationId] = success.data.schedule.rows;
             console.log(success);
             // Keep a copy of schedule retrieved to compare against changes later
             if ($rootScope.devMode) {
@@ -885,10 +884,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     service.changeWeek = function(operation) {
       var deferred = $q.defer();
       if (operation == 'add') {
-        monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
+        monday = moment(header.mon.val, 'MM-DD-YYYY').add(7, 'days').format('MM-DD-YYYY');
       }
       else if (operation == 'subtract'){
-        monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+        monday = moment(header.mon.val, 'MM-DD-YYYY').subtract(7, 'days').format('MM-DD-YYYY');
       }
       else {
         monday = operation;
@@ -972,10 +971,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       'changeWeek':function(operation) {
         var deferred = $q.defer();
         if (operation == 'add') {
-          monday = moment(header.mon.val, 'DD-MM-YYYY').add(7, 'days').format('DD-MM-YYYY');
+          monday = moment(header.mon.val, 'MM-DD-YYYY').add(7, 'days').format('MM-DD-YYYY');
         }
         else if (operation == 'subtract'){
-          monday = moment(header.mon.val, 'DD-MM-YYYY').subtract(7, 'days').format('DD-MM-YYYY');
+          monday = moment(header.mon.val, 'MM-DD-YYYY').subtract(7, 'days').format('MM-DD-YYYY');
         }
         else {
           monday = operation;

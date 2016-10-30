@@ -37,46 +37,32 @@ public class EmployeeController
   @Autowired
     private UserRepository users;
 
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getPermissions(HttpServletRequest request) {
+      String scope = "";
+        try {
+          scope = request.getAttribute("scope").toString();
+        } catch( NullPointerException e) {
+        };
+      return new ArrayList<String>(Arrays.asList(scope.split(",")));
+    }
+
   // Get All Employees with the availability, positions, and employment history
   @RequestMapping(value = "/employees/{locations}") public Map<String, Object> getAllEmployee(
       @ModelAttribute("scope") ArrayList<String> permissions,
-      @PathVariable("locations") String locations) {
+      @PathVariable("locations") Object[] locations) {
     Map<String,Object> model = new HashMap<String,Object>();
-    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
-    System.out.println(locations);
 
     // the token did not have the required permissions, return 403 status
     //if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
       //model.put("status", HttpServletResponse.SC_FORBIDDEN);
       //return model;
     //}
-
-    String[] tmp = locations.split(",");
-    int[] loc = new int[tmp.length];
-    for(int i=0; i<tmp.length; i++) {
-      loc[i] = Integer.parseInt(tmp[i]);
-    }
-
-    model.put("employees", users.getUsersByLocation(loc));
+    model.put("employees", users.getUsersByLocation(locations));
     return model;
   }
   /*
-  // extract scope from request
-  @ModelAttribute("scope")
-    public List<String> getPermissions(HttpServletRequest request) {
-        //return Arrays.asList(csvPermissions.split(","));
-        List<String> permissions = new ArrayList<String>();
-        try {
-        permissions =  EmployeeController.parsePermissions(
-            request.getAttribute("scope").toString());
-
-        } catch( NullPointerException e) {
-          System.out.println("caught null pointer exception get permissions employee controller");
-          return null;
-        };
-        return permissions;
-    }
 
     */
 

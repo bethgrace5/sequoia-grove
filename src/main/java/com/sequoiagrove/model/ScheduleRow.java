@@ -11,7 +11,7 @@ import com.sequoiagrove.model.Day;
 //
 // This is a representation of a row in the schedule
 
-public class ScheduleTemplate {
+public class ScheduleRow {
   /* Class Variables */
     int index;
     int sid;
@@ -33,9 +33,9 @@ public class ScheduleTemplate {
     Day sun;
 
   /* Empty Constructor */
-    public ScheduleTemplate(){}
+    public ScheduleRow(){}
   /* Constructor */
-    public ScheduleTemplate(
+    public ScheduleRow(
         int index,
         int sid,
         int pid,

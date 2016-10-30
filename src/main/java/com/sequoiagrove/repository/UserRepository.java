@@ -47,18 +47,16 @@ public class UserRepository {
   //}
 
   // get users for multiple locations
-  public HashMap<Integer, User> getUsersByLocation(int[] ids) {
+  public HashMap<Integer, User> getUsersByLocation(Object[] args) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
 
     String qs = "";
-    Object[] args = new Object[ids.length];
-    int[] types = new int[ids.length];
+    int[] types = new int[args.length];
 
     // add integers to Object[] and parallel INTEGER type
     // and a question mark for each parameter
-    for(int i=0; i<ids.length; i++) {
+    for(int i=0; i<args.length; i++) {
       types[i] = Types.INTEGER;
-      args[i] = ids[i];
       qs += "?,";
     }
 

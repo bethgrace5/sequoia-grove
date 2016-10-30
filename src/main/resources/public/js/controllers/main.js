@@ -124,7 +124,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $scope.getPositions = function() {
     var deferred = $q.defer();
     $http({
-      url: 'position/'+$rootScope.business,
+      url: 'position/'+$rootScope.locations,
       method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;

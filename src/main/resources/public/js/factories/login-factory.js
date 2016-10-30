@@ -19,7 +19,6 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
     var deferred = $q.defer();
     $http.post($rootScope.urlPrefix + '/signup', {'email':user.email, 'idtoken':user.token}).
       then(function(success){
-        console.log(success.data);
         // TODO get more explicit permissions for UI control
         //user.isManager = parseInt(success.data.user.classificationId) !== 1;
         //user.id = success.data.user.id;
@@ -146,7 +145,6 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
         then(function() {
           appSignIn(gapi).
             then(function(success) {
-              console.log(success);
               //loggedIn = true;
               //notifyObservers();
               deferred.resolve(success);

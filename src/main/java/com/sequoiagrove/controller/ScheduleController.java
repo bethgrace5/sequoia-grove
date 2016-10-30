@@ -1,154 +1,71 @@
 package com.sequoiagrove.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import org.springframework.dao.DataAccessException;
-import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.PreparedStatementCallback;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import com.sequoiagrove.controller.Application;
-import com.sequoiagrove.controller.EmployeeController;
-import com.sequoiagrove.model.Day;
-import com.sequoiagrove.model.PublishedSchedule;
-import com.sequoiagrove.model.ScheduleTemplate;
-import com.sequoiagrove.model.Scheduled;
-
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sequoiagrove.model.Schedule;
+import com.sequoiagrove.controller.ScheduleRepository;
 
 @RestController
 public class ScheduleController {
+  @Autowired
+    private ScheduleRepository repository;
 
-    //static HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<Integer, ArrayList<ScheduleTemplate>>>();
-                //location id      monday             list schedule rows
-    static HashMap<Integer, HashMap<String, ArrayList<ScheduleTemplate>>> master = new HashMap<Integer, HashMap<String, ArrayList<ScheduleTemplate>>>();
+  //TODO make sure list only contains a fixed number of the most recent schedules
+  // location id -> monday string -> schedule
+  static HashMap<Integer, HashMap<String, Schedule>> master = new HashMap<Integer, HashMap<String, Schedule>>();
 
-  /*
-  // extract scope from request
-  @ModelAttribute("scope")
-    public List<String> getPermissions(HttpServletRequest request) {
-        List<String> permissions = new ArrayList<String>();
-        try {
-        permissions =  EmployeeController.parsePermissions(
-            request.getAttribute("scope").toString());
-
-        } catch( NullPointerException e) {
-          System.out.println("caught null pointer exception get permissions schedule controller");
-          return null;
-        };
-        return permissions;
-    }
-    */
-
-  // Get current schedule template (current shifts) dd-mm-yyyy
-  @RequestMapping(value = "/schedule/template/{mon}/{location}")
+  @RequestMapping(value = "/schedule/{mon}/{location}")
     public Map<String, Object> getScheduleTemplate(
         @PathVariable("mon") String mon,
-        @PathVariable("location") int location,
-        @ModelAttribute("scope") ArrayList<String> permissions) {
+        @PathVariable("location") int location) {
       Map<String, Object> model = new HashMap<String, Object>();
+      Object[] args = new Object[]{mon, location};
 
-      boolean gotSchedule = false;
+      Schedule schedule = new Schedule();
+      schedule.setLocationId(location);
+      schedule.setStartDate(mon);
+      schedule.setPublished(repository.isPublished(args));
 
-      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-      // change location string to list of java integers
-
-      if(master.containsKey(location)) {
-        if(master.get(location).containsKey(mon)) {
-          gotSchedule = true;
+      if(schedule.getPublished()) {
+        boolean gotSchedule = false;
+        if(master.containsKey(location)) {
+          if(master.get(location).containsKey(mon)) {
+            gotSchedule = true;
+          }
         }
-      }
+        // the schedule is published and already in memory
+        if (gotSchedule) {
+          schedule = master.get(location).get(mon);
+        }
+        // the schedule is published, but not available in memory, build it.
+        else {
+          schedule.setRows(repository.getSchedule(args));
 
-      boolean published = false;
-      int count = jdbcTemplate.queryForObject(
-            "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'mm-dd-yyyy') and location_id = ?",
-            new Object[]{mon, location}, Integer.class);
-      published = (count>0)? true: false;
-
-
-      ArrayList<ScheduleTemplate> newScheduleBuild = new ArrayList<ScheduleTemplate>();
-      //for(Integer l : loc) {
-      if (!gotSchedule && published) {
-        System.out.println("getting new schedule build");
-          newScheduleBuild = (ArrayList) jdbcTemplate.query(
-            "select * from sequ_get_schedule(?) where location_id = ?",
-            new Object[]{mon, location},
-            new RowMapper<ScheduleTemplate>() {
-              public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
-
-                ScheduleTemplate schTmp = new ScheduleTemplate(
-                    rs.getInt("index"),
-                    rs.getInt("sid"),
-                    rs.getInt("pid"),
-                    rs.getString("location"),
-                    rs.getString("tname"),
-                    rs.getString("pos"),
-                    rs.getString("wd_st"),// weekday start
-                    rs.getString("wd_ed"),// weekday end
-                    rs.getString("we_st"),// weekend start
-                    rs.getString("we_ed"),// weekend end
-                    new Day("mon", rs.getString("mon"), rs.getInt("mon_eid")),
-                    new Day("tue", rs.getString("tue"), rs.getInt("tue_eid")),
-                    new Day("wed", rs.getString("wed"), rs.getInt("wed_eid")),
-                    new Day("thu", rs.getString("thu"), rs.getInt("thu_eid")),
-                    new Day("fri", rs.getString("fri"), rs.getInt("fri_eid")),
-                    new Day("sat", rs.getString("sat"), rs.getInt("sat_eid")),
-                    new Day("sun", rs.getString("sun"), rs.getInt("sun_eid")) );
-
-                return schTmp;
-              }
-            });
+          // add it to the master list
           if (master.containsKey(location)) {
-            master.get(location).put(mon, newScheduleBuild);
+            master.get(location).put(mon, schedule);
           }
           else {
-            HashMap<String, ArrayList<ScheduleTemplate>> h = new HashMap<String, ArrayList<ScheduleTemplate>>();
-            h.put(mon, newScheduleBuild);
-            master.put(location, h);
+            HashMap<String, Schedule> map = new HashMap<String, Schedule>();
+            map.put(mon, schedule);
+            master.put(location, map);
           }
+        }
       }
-
-      //}
-      if(published) {
-        model.put("template", master.get(location).get(mon));
-      }
-      else {
-        model.put("template", new ArrayList<ScheduleTemplate>());
-      }
-      model.put("published", published);
-
+      model.put("schedule", schedule);
       return model;
-  }
-  // change location string to list of java integers
-  public static ArrayList<Integer> stringToIntArray(String str) {
-    ArrayList<Integer> loc = new ArrayList<Integer>();
-    for (String item : new ArrayList<String>(Arrays.asList(str.split(",")))){
-      loc.add(Integer.parseInt(item));
-    }
-    return loc;
   }
 
   /*
-
   // Get current schedule template (current shifts) dd-mm-yyyy
   @RequestMapping(value = "/schedule/shiftIndices")
     public String saveShifts(Model model,  @RequestBody String data, @ModelAttribute("scope") List<String> permissions) {
