@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
@@ -166,9 +167,13 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <configuration>
-          <fork>true</fork>
-        </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>springloaded</artifactId>
+            <version>1.2.0.RELEASE</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -204,7 +209,7 @@
             <configuration>
               <resources>
                 <resource>
-                  <directory>public/styles</directory>
+                  <directory>src/main/webapp/styles</directory>
                   <includes>
                     <include>**/*.scss</include>
                   </includes>
@@ -213,8 +218,50 @@
               <outputDirectory>${project.build.directory}/sources-sass</outputDirectory>
             </configuration>
           </execution>
+          <execution>
+            <id>copy-resources</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/classes/static</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/webapp</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
         </executions>
       </plugin>
+      <!-- Sass compiler -->
+      <plugin>
+        <groupId>org.jasig.maven</groupId>
+        <artifactId>sass-maven-plugin</artifactId>
+        <version>1.1.1</version>
+        <executions>
+          <execution>
+            <phase>prepare-package</phase>
+            <goals>
+              <goal>update-stylesheets</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <resources>
+            <resource>
+              <!-- Set source and destination dirs -->
+              <source>
+                <directory>${project.basedir}/src/main/webapp/styles/sass</directory>
+              </source>
+              <destination>${project.basedir}/src/main/webapp/styles/sass_compiled</destination>
+            </resource>
+          </resources>
+        </configuration>
+      </plugin>
+      <!--
       <plugin>
         <groupId>nl.geodienstencentrum.maven</groupId>
         <artifactId>sass-maven-plugin</artifactId>
@@ -236,11 +283,12 @@
                   <include>**/*.scss</include>
                 </includes>
               </source>
-              <destination>public/styles/sass_compiled</destination>
+              <destination>src/main/webapp/styles/sass_compiled</destination>
             </resource>
           </resources>
         </configuration>
       </plugin>
+      -->
       <!--
       <plugin>
         <groupId>nl.geodienstencentrum.maven</groupId>
@@ -258,9 +306,9 @@
           <resources>
             <resource>
               <source>
-                <directory>public/styles/</directory>
+                <directory>src/main/resources/public/styles/</directory>
               </source>
-              <destination>public/styles/sass_compiled</destination>
+              <destination>src/main/resources/public/styles/sass_compiled</destination>
             </resource>
           </resources>
         </configuration>

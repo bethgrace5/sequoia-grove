@@ -102,6 +102,9 @@ angular.module('sequoiaGroveApp', [
       if (gapi.auth2.getAuthInstance().isSignedIn.get()) {
         console.log('signed in true');
       }
+      else {
+        console.log('signed in false');
+      }
     },500)
   });
 });
