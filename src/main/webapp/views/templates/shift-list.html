@@ -25,7 +25,7 @@
 
 <!-- Repeating List of Shifts-->
 <div class="list-group shift-list-wrapper">
-  <div ng-repeat="s in template | filter : shiftSearch">
+  <div ng-repeat="s in template">
     <div ng-hide="s.isSpacer">
       <button ng-click="selectShift(s)"
         class="list-group-item btn btn-default btn-block"

@@ -19,7 +19,6 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   };
 
   function initPending() {
-    console.log("initPending");
     var deferred = $q.defer();
     $http({
       url: $rootScope.urlPrefix + '/request/pending/'+locations,

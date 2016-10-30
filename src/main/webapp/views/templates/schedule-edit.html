@@ -57,7 +57,7 @@
           <span ng-hide="errors.available">
             is
             <span style="color:#b30086"> not available</span><span ng-hide="errors.hasPosition || errors.isCurrent">,</span>
-            <span ng-hide="errors.hasPosition && errors.isCurrent"> 
+            <span ng-hide="errors.hasPosition && errors.isCurrent">
               <span ng-show="errors.hasPosition || errors.isCurrent"> and </span>
             </span>
           </span>
@@ -85,16 +85,16 @@
 <div class="data-view">
   <!-- shifts -->
   <ul id="board" data-as-sortable="boardDragControlListeners" data-ng-model="template">
-  <li data-ng-repeat="t in template" data-as-sortable-item ng-show="filterSchedule(t.pid)">
+  <li data-ng-repeat="(key,value) in template" data-as-sortable-item ng-show="filterSchedule(value.pid)">
     <div class="row">
       <!-- ng-show="filterByType(t.location, t.position, user.firstname, t.mon, t.tue, t.wed, t.thu, t.fri, t.sat, t.sun)" -->
 
       <!-- Spacer -->
       <div data-as-sortable-item-handle>
         <div class="col-sm-2 schedule-edit-task-names">
-          <span ng-click="selectPosition(t.pid, t.position)">{{t.tname}}</span>
+          <span ng-click="selectPosition(value.pid, value.position)">{{value.tname}}</span>
           <div ng-hide="hideSpacers">
-            <div ng-show="t.isSpacer">
+            <div ng-show="value.isSpacer">
               <button type="button" style="cursor:inherit;" class="btn btn-info position-button" >
                 <span class="glyphicon glyphicon-move" aria-hidden="true"> </span>
                 Spacer
@@ -106,142 +106,142 @@
 
     <!-- weekday times -->
         <div class="col-sm-1 schedule-times">
-          <div ng-hide="t.isSpacer">
-            {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
+          <div ng-hide="value.isSpacer">
+            {{formatTime(value.weekdayStart, false)}} - {{formatTime(value.weekdayEnd, false)}}
           </div>
         </div>
       </div>
 
-      <div ng-hide="t.isSpacer">
+      <div ng-hide="value.isSpacer">
         <!-- Monday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.mon.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.mon.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.mon.val}}
           day="mon"
-          shiftStart={{t.weekdayStart}}
-          shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'mon', t.mon.hasAvailability, t.mon.hasPosition)"
+          shiftStart={{value.weekdayStart}}
+          shiftEnd={{value.weekdayEnd}}
+          ng-click="selectEid(value, 'mon', value.mon.hasAvailability, value.mon.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.mon.eid, t.sid, t.mon.hasAvailability, t.mon.hasPosition, t.mon.holiday, t.mon.isCurrent)"
-          ng-model="t.mon.name">
+          ng-class="inputStatus(value.mon.eid, value.sid, value.mon.hasAvailability, value.mon.hasPosition, value.mon.holiday, value.mon.isCurrent)"
+          ng-model="value.mon.name">
         </div>
 
         <!-- Tuesday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.tue.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.tue.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.tue.val}}
           day="tue"
-          shiftStart={{t.weekdayStart}}
-          shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'tue', t.tue.hasAvailability, t.tue.hasPosition)"
+          shiftStart={{value.weekdayStart}}
+          shiftEnd={{value.weekdayEnd}}
+          ng-click="selectEid(value, 'tue', value.tue.hasAvailability, value.tue.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.tue.eid, t.sid, t.tue.hasAvailability, t.tue.hasPosition, t.tue.holiday, t.tue.isCurrent)"
-          ng-model="t.tue.name">
+          ng-class="inputStatus(value.tue.eid, value.sid, value.tue.hasAvailability, value.tue.hasPosition, value.tue.holiday, value.tue.isCurrent)"
+          ng-model="value.tue.name">
         </div>
 
         <!-- Wednesday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.wed.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.wed.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.wed.val}}
           day="wed"
-          shiftStart={{t.weekdayStart}}
-          shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'wed', t.wed.hasAvailability, t.wed.hasPosition)"
+          shiftStart={{value.weekdayStart}}
+          shiftEnd={{value.weekdayEnd}}
+          ng-click="selectEid(value, 'wed', value.wed.hasAvailability, value.wed.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.wed.eid, t.sid, t.wed.hasAvailability, t.wed.hasPosition, t.wed.holiday, t.wed.isCurrent)"
-          ng-model="t.wed.name">
+          ng-class="inputStatus(value.wed.eid, value.sid, value.wed.hasAvailability, value.wed.hasPosition, value.wed.holiday, value.wed.isCurrent)"
+          ng-model="value.wed.name">
         </div>
 
         <!-- Thursday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.thu.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.thu.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.thu.val}}
           day="thu"
-          shiftStart={{t.weekdayStart}}
-          shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'thu', t.thu.hasAvailability, t.thu.hasPosition)"
+          shiftStart={{value.weekdayStart}}
+          shiftEnd={{value.weekdayEnd}}
+          ng-click="selectEid(value, 'thu', value.thu.hasAvailability, value.thu.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.thu.eid, t.sid, t.thu.hasAvailability, t.thu.hasPosition, t.thu.holiday, t.thu.isCurrent)"
-          ng-model="t.thu.name">
+          ng-class="inputStatus(value.thu.eid, value.sid, value.thu.hasAvailability, value.thu.hasPosition, value.thu.holiday, value.thu.isCurrent)"
+          ng-model="value.thu.name">
         </div>
 
         <!-- Friday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.fri.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.fri.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.fri.val}}
           day="fri"
-          shiftStart={{t.weekdayStart}}
-          shiftEnd={{t.weekdayEnd}}
-          ng-click="selectEid(t, 'fri', t.fri.hasAvailability, t.fri.hasPosition)"
+          shiftStart={{value.weekdayStart}}
+          shiftEnd={{value.weekdayEnd}}
+          ng-click="selectEid(value, 'fri', value.fri.hasAvailability, value.fri.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.fri.eid, t.sid, t.fri.hasAvailability, t.fri.hasPosition, t.fri.holiday, t.fri.isCurrent)"
-          ng-model="t.fri.name">
+          ng-class="inputStatus(value.fri.eid, value.sid, value.fri.hasAvailability, value.fri.hasPosition, value.fri.holiday, value.fri.isCurrent)"
+          ng-model="value.fri.name">
         </div>
 
     <!-- weekend times -->
         <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-          {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
+          {{formatTime(value.weekendStart, false)}} - {{formatTime(value.weekendEnd, false)}}
         </div>
 
         <!-- Saturday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.sat.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.sat.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.sat.val}}
           day="sat"
-          shiftStart={{t.weekendStart}}
-          shiftEnd={{t.weekendEnd}}
-          ng-click="selectEid(t, 'sat', t.sat.hasAvailability, t.sat.hasPosition)"
+          shiftStart={{value.weekendStart}}
+          shiftEnd={{value.weekendEnd}}
+          ng-click="selectEid(value, 'sat', value.sat.hasAvailability, value.sat.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sat.eid, t.sid, t.sat.hasAvailability, t.sat.hasPosition, t.sat.holiday, t.sat.isCurrent)"
-          ng-model="t.sat.name">
+          ng-class="inputStatus(value.sat.eid, value.sid, value.sat.hasAvailability, value.sat.hasPosition, value.sat.holiday, value.sat.isCurrent)"
+          ng-model="value.sat.name">
         </div>
 
         <!-- Sunday -->
         <div class="col-sm-1 col-sm-offset-0  schedule-edit">
           <input select-on-click
-          eid={{t.sun.eid}}
-          pid={{t.pid}}
-          sid={{t.sid}}
+          eid={{value.sun.eid}}
+          pid={{value.pid}}
+          sid={{value.sid}}
           idx={{$index}}
           date={{date.sun.val}}
           day="sun"
-          shiftStart={{t.weekendStart}}
-          shiftEnd={{t.weekendEnd}}
-          ng-click="selectEid(t, 'sun', t.sat.hasAvailability, t.sat.hasPosition)"
+          shiftStart={{value.weekendStart}}
+          shiftEnd={{value.weekendEnd}}
+          ng-click="selectEid(value, 'sun', value.sat.hasAvailability, value.sat.hasPosition)"
           type="text"
           ng-disabled="saving"
-          ng-class="inputStatus(t.sun.eid, t.sid, t.sun.hasAvailability, t.sun.hasPosition, t.sun.holiday, t.sun.isCurrent)"
-          ng-model="t.sun.name">
+          ng-class="inputStatus(value.sun.eid, value.sid, value.sun.hasAvailability, value.sun.hasPosition, value.sun.holiday, value.sun.isCurrent)"
+          ng-model="value.sun.name">
         </div>
       </div>
 
