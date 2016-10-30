@@ -26,7 +26,7 @@ public class RequestController {
     //}
 
     Map<String, Object> model = new HashMap<String, Object>();
-    model.put("requestStatus", repository.getRequestsByLocation(locations));
+    model.put("requestStatus", repository.getRequestsByLocationPending(locations));
     return model;
   }
 
@@ -41,8 +41,23 @@ public class RequestController {
       for(int i=1; i<args.length; i++) {
         args[i] = locations[i-1];
       }
-      model.put("requestStatus", repository.getRequestsByLocation(args));
+      model.put("requestStatus", repository.getRequestsByEmployee(args));
       return model;
+  }
+
+  @RequestMapping(value = "/request/{locations}")
+  public Map<String, Object> getCheckedRequest(/*@ModelAttribute("scope") List<String> permissions,*/
+      @PathVariable("locations") Object[] locations){
+
+    // the token did not have the required permissions, return 403 status
+    //if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
+      //model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+      //return "jsonTemplate";
+    //}
+
+    Map<String, Object> model = new HashMap<String, Object>();
+    model.put("requestStatus", repository.getRequestsByLocation(locations));
+    return model;
   }
 
 
@@ -107,46 +122,6 @@ model.addAttribute("requestStatus", requestList);
 return "jsonTemplate";
   }
 
-  @RequestMapping(value = "/request/get/checked/{locations}")
-  public String getCheckedRequest(Model model,
-  @PathVariable("locations") String locations,
-  @ModelAttribute("scope") List<String> permissions){
-
-// the token did not have the required permissions, return 403 status
-if (!(permissions.contains("manage-requests") || permissions.contains("admin"))) {
-model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-return "jsonTemplate";
-}
-
-ArrayList<Integer> loc = EmployeeController.stringToIntArray(locations);
-Map<Integer, List<RequestStatus>> requests = new HashMap<Integer, List<RequestStatus>>();
-JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
-String queryStr = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
-"requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
-"from sequ_request_view rv " +
-"left outer join " +
-"( " +
-"select * from " +
-"sequ_employment_history where date_unemployed is null " +
-") eh " +
-"on rv.requested_by = eh.user_id " +
-"left outer join " +
-"sequ_location loc " +
-"on loc.id = eh.location_id " +
-"where location_id = ? " +
-"order by start_date_time asc ";
-
-
-for(Integer l : loc) {
-  List<RequestStatus> requestList = jdbcTemplate.query(
-      queryStr, new Object[]{l}, new RequestRowMapper());
-  requests.put(l, requestList);
-}
-
-model.addAttribute("requestStatus", requests);
-return "jsonTemplate";
-  }
 
 
 // Manager responds to pending request. They approve or deny it.

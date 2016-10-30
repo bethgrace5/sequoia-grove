@@ -51,7 +51,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
   function initAll() {
     var deferred = $q.defer();
     return $http({
-      url: $rootScope.urlPrefix + '/request/get/checked/' + locations,
+      url: $rootScope.urlPrefix + '/request/' + locations,
       method: 'GET'
     }).then(function (success) {
       all = success.data.requestStatus
@@ -230,7 +230,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       }).then(function(success) {
         return initAll();
       }).then(function(success) {
-        deferred.resolve(user[locationId]);
+        deferred.resolve(success);
         notifyObservers();
       });
     };
@@ -244,7 +244,7 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
       return pending[locationId];
     };
     service.getUser = function() {
-      return user[locationId];
+      return user;
     };
     service.submit = function(request, ev) {
       //TODO make submit specific to manager/non-manager roles

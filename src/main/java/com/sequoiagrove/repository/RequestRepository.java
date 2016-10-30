@@ -41,6 +41,44 @@ public class RequestRepository {
     }
     qs = qs.substring(0, qs.length()-1);
     String sql = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
+      "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
+      "from sequ_request_view rv " +
+      "left outer join " +
+      "( " +
+      "select * from " +
+      "sequ_employment_history where date_unemployed is null " +
+      ") eh " +
+      "on rv.requested_by = eh.user_id " +
+      "left outer join " +
+      "sequ_location loc " +
+      "on loc.id = eh.location_id " +
+      "where location_id IN ("+ qs +")" +
+      "order by start_date_time asc ";
+    List<RequestStatus> requests = jdbc.query(sql, args, types, requestMapper);
+    HashMap<Integer, RequestStatus> map = new HashMap<Integer, RequestStatus>();
+
+    // change list to hashmap
+    for( RequestStatus r : requests) {
+      map.put(r.getRequestID(), r);
+    }
+    return map;
+  }
+
+  // get users for multiple locations
+  public HashMap<Integer, RequestStatus> getRequestsByLocationPending(Object[] args) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+
+    String qs = "";
+    int[] types = new int[args.length];
+
+    // add integers to Object[] and parallel INTEGER type
+    // and a question mark for each parameter
+    for(int i=0; i<args.length; i++) {
+      types[i] = Types.INTEGER;
+      qs += "?,";
+    }
+    qs = qs.substring(0, qs.length()-1);
+    String sql = "select distinct rid, location_id, requested_by, business_id, is_approved, start_date_time, end_date_time, " +
        "requester_first_name, requester_last_name, responded_by, responder_first_name, responder_last_name " +
          "from sequ_request_view rv " +
          "left outer join  " +
@@ -72,11 +110,11 @@ public class RequestRepository {
 
     // add integers to Object[] and parallel INTEGER type
     // and a question mark for each parameter
-    for(int i=0; i<args.length-1; i++) {
+    for(int i=0; i<args.length; i++) {
       types[i] = Types.INTEGER;
       qs += "?,";
     }
-    qs = qs.substring(0, qs.length()-1);
+    qs = qs.substring(0, qs.length()-3);
       String sql = "select * from sequ_request_view " +
         "left outer join " +
         "( " +
