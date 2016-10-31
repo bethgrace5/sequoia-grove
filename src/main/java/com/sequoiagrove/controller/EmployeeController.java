@@ -62,9 +62,6 @@ public class EmployeeController
     model.put("employees", users.getUsersByLocation(locations));
     return model;
   }
-  /*
-
-    */
 
     /*
 
