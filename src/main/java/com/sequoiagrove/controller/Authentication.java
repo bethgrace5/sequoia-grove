@@ -42,8 +42,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.sequoiagrove.model.User;
-import com.sequoiagrove.controller.UserRepository;
+import com.sequoiagrove.model.Employee;
+import com.sequoiagrove.controller.EmployeeRepository;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +57,7 @@ class Authentication {
     private static Key key = MacProvider.generateKey();
 
   @Autowired
-    private UserRepository users;
+    private EmployeeRepository repository;
 
 
     @ModelAttribute("userID")
@@ -143,10 +143,10 @@ class Authentication {
         status = HttpServletResponse.SC_UNAUTHORIZED;
       }
 
-      User user = new User();
+      Employee user = new Employee();
       try {
         // find user by email
-        user = users.getUser(email);
+        user = repository.getEmployee(email);
       } catch (EmptyResultDataAccessException e) {
         System.out.println(e);
         reason = "Needs Account";

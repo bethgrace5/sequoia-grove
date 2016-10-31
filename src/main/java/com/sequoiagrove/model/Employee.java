@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class User {
+public class Employee {
   int id;
   int businessId;
   int clockNumber;
@@ -27,12 +27,12 @@ public class User {
   List<String> locations = new ArrayList<String>();
   WeeklyAvail avail = new WeeklyAvail();
 
-  public User(){}
-  public User(int id){
+  public Employee(){}
+  public Employee(int id){
     this.id = id;
   }
-  // User RowMapper
-  public User(int id, int businesId, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
+  // Employee RowMapper
+  public Employee(int id, int businesId, int clockNumber, int maxHours, int minHours, String birthDate, String fullname, String firstname, String lastname, String email, List<String> permissions, int classificationId, String classificationTitle) {
     this.id = id;
     this.businessId = businessId;
     this.clockNumber = clockNumber;
@@ -48,8 +48,8 @@ public class User {
     this.classificationTitle = classificationTitle;
   }
 
-  // SuperUserRowmapper - uses this constructor
-  public User( int id, int business_id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
+  // SuperEmployeeRowMapper - uses this constructor
+  public Employee( int id, int business_id, int maxHours, int minHours, int clockNumber, String firstname, String lastname, String phone, String email, String birthDate, List<Duration> history, List<String> positions, WeeklyAvail avail, boolean isCurrent, List<String> permissions, int classificationId, String classificationTitle, String notes) {
     this.id = id;
     this.businessId = businessId;
     this.maxHours= maxHours;
