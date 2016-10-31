@@ -9,11 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class Application {
     public DataSource dataSource;
-    public static jdbc jdbcTemplate;
+    public static JdbcTemplate jdbc;
 
     @Autowired
     public void setJdbcTemplate(JdbcTemplate jdbc) {
       this.jdbc = jdbc;
+    }
+
+    public static JdbcTemplate getJdbcTemplate() {
+      return jdbc;
     }
 
     @Autowired

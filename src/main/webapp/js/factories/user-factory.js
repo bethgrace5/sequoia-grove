@@ -50,10 +50,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               // anything you want can go here and will safely be run on the next digest.
               users[locationId] = success.data.employees;
-              // Keep a copy of schedule retrieved to compare against changes later
-              if ($rootScope.devMode) {
-                localStorageService.set('users', JSON.stringify(success.data.users));
-              }
               deferred.resolve();
             });
           }

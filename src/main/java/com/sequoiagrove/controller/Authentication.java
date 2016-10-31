@@ -88,7 +88,7 @@ class Authentication {
 
         if (verifiedToken != null) {
           Payload payload = verifiedToken.getPayload();
-          String userId = payload.getSubject();
+          String id = payload.getSubject();
           //String name = (String) payload.get("name");
           //String pictureUrl = (String) payload.get("picture");
           //String locale = (String) payload.get("locale");
@@ -143,10 +143,10 @@ class Authentication {
         status = HttpServletResponse.SC_UNAUTHORIZED;
       }
 
-      Employee user = new Employee();
+      Employee employee = new Employee();
       try {
-        // find user by email
-        user = repository.getEmployee(email);
+        // find employee by email
+        employee = repository.getEmployee(email);
       } catch (EmptyResultDataAccessException e) {
         System.out.println(e);
         reason = "Needs Account";
@@ -162,23 +162,23 @@ class Authentication {
       }
 
       // employee is not current
-      if(!user.getIsCurrent()) {
+      if(!employee.getIsCurrent()) {
         loginFailed = true;
         message = "LOGIN_NOT_CURRENT";
         status = HttpServletResponse.SC_FORBIDDEN;
       }
 
       if (loginFailed == false) {
-        Object[] params = new Object[] { user.getId() };
-        System.out.println(user.getFullname() + " has sucessfully signed in");
-        List<String> permissions = user.getPermissions();
+        Object[] params = new Object[] { employee.getId() };
+        System.out.println(employee.getFullname() + " has sucessfully signed in");
+        List<String> permissions = employee.getPermissions();
         String[] param = new String[permissions.size()];
         //fill in empty array with our array list as an array
         param = permissions.toArray(param);
-        //token = getToken(user.getId(), StringUtils.arrayToDelimitedString(param, ","));
+        //token = getToken(employee.getId(), StringUtils.arrayToDelimitedString(param, ","));
       }
 
-      model.put("user", user);
+      model.put("user", employee);
       //model.put("auth_token", token);
       model.put("email", email);
       model.put("loginFailed", loginFailed);
@@ -190,7 +190,7 @@ class Authentication {
     }
 
     // Create initial token upon authorization
-    protected static String getToken(int userId, String scope) {
+    protected static String getToken(int id, String scope) {
       JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
         //byte[] key = getSignatureKey();
         // We need a signing key, so we'll create one just for this example. Usually
@@ -201,7 +201,7 @@ class Authentication {
         try { // find session for this user
           count = jdbcTemplate.queryForObject(
               "select count(*) from sequ_session where user_id = ?",
-              new Object[] { userId, }, Integer.class);
+              new Object[] { id, }, Integer.class);
         } catch(EmptyResultDataAccessException e) {
           // no results found, count is zero
           //model.addAttribute("status", HttpServletResponse.SC_UNAUTHORIZED);
@@ -212,14 +212,14 @@ class Authentication {
           jdbcTemplate.update(
               "update sequ_session set expiration_date = (select current_timestamp + interval '18 hours'), " +
               "token = ? where user_id = ? ",
-              new Object [] { crypticSessionId, userId });
+              new Object [] { crypticSessionId, id });
         }
         // insert new session
         else {
           jdbcTemplate.update(
               "insert into sequ_session (expiration_date, token, user_id ) " +
               "values((select current_timestamp + interval '18 hours'), ?, ?)",
-              new Object [] { crypticSessionId, userId });
+              new Object [] { crypticSessionId, id });
         }
 
         String jwt =
