@@ -1,0 +1,79 @@
+<div class="container-fluid">
+
+  <!-- Navigation Tabs -->
+  <ul class="nav nav-tabs" >
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('info')]">
+    <a ng-click="changeTab('info')" href="">Info</a>
+    </li>
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('avail')]">
+    <a ng-click="changeTab('avail')"href="">Availability</a>
+    </li>
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('pos')]">
+    <a ng-click="changeTab('pos')"href="">Positions</a>
+    </li>
+    <li role="presentation" ng-class="{true:'active', false:''}[isActive('hist')]">
+    <a ng-click="changeTab('hist')"href="">History</a>
+    </li>
+  </ul>
+
+  <!-- Tab Content -->
+  <div class="tab-content">
+
+    <!-- Basic Info -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('info')]">
+      <div class="panel panel-default request-panel">
+        <div class="panel-body">
+
+          <div class="pull-right">
+            <!-- Add button shows for new employees -->
+            <button class = "btn btn-default pull-right" ng-show="selectedEmployee.id === 0" ng-click="updateEmployee(employeeform)">
+              <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+            </button>
+            <!-- Cancel button shows for editing existing employees -->
+            <button style="margin-left: 20px;" class = "btn btn-default pull-right" ng-show="selectedEmployee.id != 0">
+              <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+            </button>
+            <!-- Save button shows for editing existing employees -->
+            <button class = "btn btn-default pull-right" ng-click="updateEmployee(employeeform)" ng-show="selectedEmployee.id != 0">
+              <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save Changes
+            </button>
+          </div>
+
+          <h2> <span style="border: 1px solid #999999; background-color: #00b3b3; color: white; border-radius: 100%; width: 50px; height: 50px; text-align: center; padding: 5px;" class="glyphicon glyphicon-user"></span> {{selectedEmployee.firstname}} {{selectedEmployee.lastname}}</h2>
+          <ng-include src="'views/templates/employee-info.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <!-- Availability -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('avail')]">
+      <div class="panel panel-default request-panel">
+        <div class="panel-body">
+          <h2><span style="border: 1px solid #999999; background-color: #00b3b3; color: white; border-radius: 100%; width: 50px; height: 50px; text-align: center; padding: 5px;" class="glyphicon glyphicon-calendar"></span> Availability</h2>
+          <ng-include src="'views/templates/employee-availibility.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <!-- Positions -->
+    <div ng-class="{true:'tab-pane active', false:'tab-pane'}[isActive('pos')]">
+      <div class="panel panel-default request-panel">
+        <div class="panel-body">
+          <h2><span style="border: 1px solid #999999; background-color: #00b3b3; color: white; border-radius: 100%; width: 50px; height: 50px; text-align: center; padding: 5px;" class="glyphicon glyphicon-wrench"></span> Positions</h2>
+          <ng-include src="'views/templates/employee-positions.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+    <!-- History -->
+    <div ng-class="{true:'tab-pane active',false:'tab-pane'}[isActive('hist')]">
+      <div class="panel panel-default request-panel">
+        <div class="panel-body">
+          <ng-include src="'views/templates/employee-history.html'"></ng-include>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- end Tab Content -->
+
+</div><!-- end container fluid -->

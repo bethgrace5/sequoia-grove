@@ -91,6 +91,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 /************** Pure Functions **************/
 
   $scope.formatTime = function(t, ampm) {
+    console.log(t);
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
     if (ampm) {

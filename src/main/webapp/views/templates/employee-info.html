@@ -1,133 +1,95 @@
-<div class="panel panel-default">
-  <div class="panel-heading">
-    <!-- Add button shows for new employees -->
-    <button class = "btn btn-info pull-right"
-        ng-show="selectedEmployee.id === 0"
-        ng-click="updateEmployee(employeeform)">
-      <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span>
-      Add
-    </button>
-    <!-- Save button shows for new employees -->
-    <div ng-hide = "selectedEmployee.id === 0">
-      <button class = "btn btn-success pull-right"
-          ng-click="updateEmployee(employeeform)">
-        <span class="glyphicon glyphicon-send" aria-hidden="true"></span>
-        Save Info
-      </button>
-    </div>
-    <p class="lead emp-header">Employee Info</p>
-  </div>
-  <div class="panel-body">
 
-    <!-- Saving Alerts -->
-    <button type="button"
-      class="container btn alert alert-success center-block hide-fade"
-      data-ng-click="resetEmployeeErrorFlags()" ng-show="employeeSaved && !employeeform.$dirty">
-      <span class="text-center">
-        <strong>Success</strong>
-        <span class="glyphicon glyphicon glyphicon-saved" aria-hidden="true"></span>
-      </span>
-    </button>
+<!-- EDIT -->
+<div>
+  <form name="employeeform" novalidate>
+    <div class="row">
 
-    <button type="button"
-      class="container btn alert alert-danger center-block hide-fade"
-      data-ng-click="resetEmployeeErrorFlags()" ng-show="employeeSaveError">
-      <span class="text-center">
-        <strong>Error Saving!</strong>
-      </span>
-    </button>
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="firstname">First Name</label>
+        <input name="firstname" type="text" id="firstname" class="form-control" required=""
+        ng-model="selectedEmployee.firstname"
+        placeholder="First" />
+      </div>
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="firstname">Last Name</label>
+        <input name="lastname" type="text" id="lastname" class="form-control" required=""
+        ng-model="selectedEmployee.lastname"
+        placeholder="Last" />
+      </div>
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="birthdateTemplate"> Birthdate </label>
+        <md-datepicker class="form-control" style="margin:0; padding: 0; border: none; outline:none; box-shadow: none;" id="birthdateTemplate" ng-model="$parent.birthday"> </md-datepicker>
+      </div>
 
-    <!-- Employee Info -->
-    <div class="request-title">
-      <form name="employeeform" class="form-horizontal css-form" novalidate>
-        <div class="form-group">
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="email">Email</label>
+        <input name="email" type="email" id="email" class="form-control" required=""
+        ng-model="selectedEmployee.email"
+        placeholder="email" />
+      </div>
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="phone">Phone</label>
+        <input name="phone" type="phone" id="phone" class="form-control"
+        ng-model="selectedEmployee.phone"
+        placeholder="#" />
+      </div>
 
-          <label for="firstname" class="col-sm-2 control-label">Name</label>
-          <div class="col-sm-4">
-            <input name="firstname" type="text" id="firstname" class="form-control" required=""
-            ng-model="selectedEmployee.firstname"
-            placeholder="First" />
-            <input name="lastname" type="text" id="lastname" class="form-control" required=""
-            ng-model="selectedEmployee.lastname"
-            placeholder="Last" />
+      <div class="form-group col-xs-12 col-md-4">
+        <label for="clockNumber">Clock-in number</label>
+        <input name="clockNumber" type="number" id="clockNumber" class="form-control"
+        ng-model="selectedEmployee.clockNumber"
+        placeholder="#" />
+      </div>
+
+      <!--
+      <label for="max">Hours</label>
+      -->
+      <!--
+      <div class="col-md-2">
+        <input name="minHours" type="number" id="min" class="form-control"
+        ng-model="selectedEmployee.minHours"
+        placeholder="Minimum" />
+      </div>
+      -->
+      <!--
+      <div class="col-md-2">
+        <input name="maxHours" type="number" id="maxHours" class="form-control"
+        ng-model="selectedEmployee.maxHours"
+        placeholder="Maximum" />
+      </div>
+      -->
+
+
+      <!--
+      <label for="classification" class="col-md-2 control-label"> Classification </label>
+      -->
+      <!--
+      <div class="col-md-4">
+        <div class="pull-left">
+          <div class="dropdown pull-left" dropdown is-open=true>
+            <button type="button" id="selectClassification" data-toggle="dropdown"
+              aria-haspopup="true" aria-expanded="true"
+              ng-disabled = "loggedInUser.id === selectedEmployee.id"
+              class="btn btn-default">
+              {{classifications[selectedClassification].disp}} <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu" role="menu"
+              ng-model="selectedClassification" arial-labelledby="selectClassification">
+              <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
+            </ul>
           </div>
+        </div>
+      </div>
+      -->
 
-          <label for="clockNumber" class="col-sm-2 control-label">Number</label>
-          <div class="col-sm-4">
-            <input name="clockNumber" type="number" id="clockNumber" class="form-control"
-              ng-model="selectedEmployee.clockNumber"
-             placeholder="#" />
-          </div>
+      <div class="form-group col-xs-12">
+        <label for="notes-pane"> Notes </label>
+        <textarea id="notes-pane" class="form-control" rows="3" maxlength="1024"
+          ng-model="selectedEmployee.notes">
+        </textarea>
+      </div>
 
-          <label for="phone" class="col-sm-2 control-label">Phone</label>
-          <div class="col-sm-4">
-            <input name="phone" type="phone" id="phone" class="form-control"
-            ng-model="selectedEmployee.phone"
-            placeholder="#" />
-          </div>
+    </div> <!-- end row -->
+  </form>
+</div><!-- end edit -->
 
-          <label for="email" class="col-sm-2 control-label">Email</label>
-          <div class="col-sm-4">
-            <input name="email" type="email" id="email" class="form-control" required=""
-            ng-model="selectedEmployee.email"
-            placeholder="email" />
-          </div>
-
-          <!--
-          <label for="max" class="col-sm-2 control-label">Hours</label>
-          -->
-          <div class="col-sm-2">
-            <!--
-            <input name="minHours" type="number" id="min" class="form-control"
-              ng-model="selectedEmployee.minHours"
-              placeholder="Minimum" />
-              -->
-          </div>
-          <div class="col-sm-2">
-             <!--
-            <input name="maxHours" type="number" id="maxHours" class="form-control"
-              ng-model="selectedEmployee.maxHours"
-              placeholder="Maximum" />
-              -->
-          </div>
-
-          <div class="col-sm-4">
-          <label for="birthdateTemplate" class="col-sm-2 control-label" required=""> Birthdate</label>
-              <md-datepicker id="birthdateTemplate" ng-model="$parent.birthday"> </md-datepicker>
-          </div>
-
-           <!--
-          <label for="classification" class="col-sm-2 control-label"> Classification </label>
-          -->
-          <div class="col-sm-4">
-            <div class="pull-left">
-          <!--
-              <div class="dropdown pull-left" dropdown is-open=true>
-                <button type="button" id="selectClassification" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="true"
-                  ng-disabled = "loggedInUser.id === selectedEmployee.id"
-                  class="btn btn-default">
-                  {{classifications[selectedClassification].disp}} <span class="caret"></span>
-                </button>
-                <ul class="dropdown-menu" role="menu"
-                  ng-model="selectedClassification" arial-labelledby="selectClassification">
-                  <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
-                </ul>
-              </div>
-            -->
-            </div>
-          </div>
-
-          <div class="col-sm-12">
-            <label for="notes-pane" class="col-sm-2 control-label"> Notes </label>
-          </div>
-          <div class="col-sm-8 col-sm-offset-2">
-            <textarea id="notes-pane" class="form-control" rows="3" maxlength="1024"
-              ng-model="selectedEmployee.notes">
-            </textarea>
-          </div>
-
-      </form>
-    </div>
-  </div>
-</div>

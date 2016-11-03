@@ -43,7 +43,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sequoiagrove.model.Employee;
+import com.sequoiagrove.model.Session;
 import com.sequoiagrove.controller.EmployeeRepository;
+import com.sequoiagrove.controller.SessionRepository;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -57,7 +59,8 @@ class Authentication {
     private static Key key = MacProvider.generateKey();
 
   @Autowired
-    private EmployeeRepository repository;
+    private EmployeeRepository employees = new EmployeeRepository();
+    private SessionRepository sessions = new SessionRepository();
 
 
     @ModelAttribute("userID")
@@ -119,6 +122,10 @@ class Authentication {
       int status = HttpServletResponse.SC_OK;
       boolean loginFailed = false;
 
+      //TODO - if the user has a session, and their token matches the given token,
+      //they can skip the authentication process.
+      //System.out.println("hasSession: " + sessions.getSession(employee.getId()));
+
       try {
         email = googleAuth(jobject.get("idtoken").getAsString());
       }
@@ -146,7 +153,7 @@ class Authentication {
       Employee employee = new Employee();
       try {
         // find employee by email
-        employee = repository.getEmployee(email);
+        employee = employees.getEmployee(email);
       } catch (EmptyResultDataAccessException e) {
         System.out.println(e);
         reason = "Needs Account";
@@ -160,7 +167,6 @@ class Authentication {
         message = "LOGIN_BLANK_EMAIL";
         status = HttpServletResponse.SC_FORBIDDEN;
       }
-
       // employee is not current
       if(!employee.getIsCurrent()) {
         loginFailed = true;
@@ -189,6 +195,7 @@ class Authentication {
 
     }
 
+    // TODO move this logic to session repository
     // Create initial token upon authorization
     protected static String getToken(int id, String scope) {
       JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
@@ -233,6 +240,7 @@ class Authentication {
         return jwt;
     }
 
+    // TODO move this logic to session repository
     static Map<String, String> verifyToken(String jwt, String URI) {
       Map<String, String> token = new HashMap<String, String>();
       String subject = "HACKER";

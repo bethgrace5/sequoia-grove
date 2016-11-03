@@ -30,61 +30,7 @@
     </div>
 
     <div class="col-sm-9">
-      <ng-include src="'views/templates/employee-info.html'"></ng-include>
-    </div>
-
-    <div class="col-sm-9">
-      <!-- Availability -->
-      <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
-        <div class="panel-heading">
-          <p class="lead emp-header">Availability</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/employee-availibility.html'"></ng-include>
-        </div>
-      </div>
-
-      <!-- Positions -->
-      <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
-        <div class="panel-heading">
-          <p class="lead emp-header">Positions</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/employee-positions.html'"></ng-include>
-        </div>
-      </div>
-
-      <!-- Permissions
-      <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
-        <div class="panel-heading">
-          <p class="lead emp-header">Permissions</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/employee-permissions.html'"></ng-include>
-        </div>
-      </div> -->
-
-      <!-- Employment History  -->
-      <div class="panel panel-default" ng-show="selectedEmployee.id != 0">
-        <div class="panel-heading">
-          <!-- Unemploy this current employee -->
-          <button type = "button"
-            ng-show="selectedEmployee.isCurrent === true"
-            ng-click="deactivateEmployee($event)"
-            class = "btn btn-default pull-right">Unemploy {{selectedEmployee.firstname}}
-          </button>
-          <!-- Employ this past employee -->
-          <button type = "button"
-            ng-show="selectedEmployee.isCurrent === false"
-            ng-click="activateEmployee()"
-            class = "btn btn-primary pull-right">Employ {{selectedEmployee.firstname}}
-          </button>
-          <p class="lead emp-header">Employment History</p>
-        </div>
-        <div class="panel-body">
-          <ng-include src="'views/templates/employee-history.html'"></ng-include>
-        </div>
-      </div>
+      <ng-include src="'views/templates/new-employee-info.html'"></ng-include>
     </div>
 
   </div>

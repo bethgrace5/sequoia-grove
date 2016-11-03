@@ -1,26 +1,26 @@
-<div class="request-title">
-  <div class="row">
-    <div class="col-sm-4">
-    <label for="position-select">Add Position</label>
+
+<div class="row">
+  <div class="col-sm-4">
     <select id="position-select"
       class="form-control"
       ng-options="p.title for p in positions"
       ng-model="$parent.newPos"
       ng-change="$parent.addPosition()">
-        <option value=""> Select </option>
-      </select>
-    </div>
+      <option value=""> Select </option>
+    </select>
   </div>
-  <hr/>
-  <div class="row" ng-repeat="p in selectedEmployee.positions">
-    <div class="col-sm-3 col-sm-offset-1">
-      <p>{{getPositionTitle(p)}}</p>
-    </div>
-    <div class="col-sm-1">
-      <!-- remove position -->
-      <button type="button" class="btn btn-danger" ng-click="removePosition(p)">
-        <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
-      </button>
-    </div>
+</div>
+
+<hr/>
+
+<div class="row" ng-repeat="p in selectedEmployee.positions" style="margin-top: 10px;">
+  <div class="col-xs-3">
+    <span>{{getPositionTitle(p)}}</span>
+  </div>
+  <div class="col-xs-9">
+    <!-- remove position -->
+    <button type="button" class="btn btn-default" ng-click="removePosition(p)">
+      <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+    </button>
   </div>
 </div>

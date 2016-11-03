@@ -11,6 +11,19 @@ angular.module('sequoiaGroveApp')
   .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory, loginFactory) {
 
 /************** Login Redirect, Containers and UI settings **************/
+  // default tab is shift edit
+  $scope.activeTab = "info";
+  // function to set the class of the selected tab to active
+  $scope.isActive = function(tabName) {
+    if(tabName === $scope.activeTab) {
+        return true;
+    }
+    return false;
+  }
+  $scope.changeTab = function(t) {
+    $scope.activeTab = t;
+  }
+
 
     localStorageService.set('lastPath', '/employee');
 
@@ -36,6 +49,7 @@ angular.module('sequoiaGroveApp')
       {'disp':'edit-user-permissions', 'val':8}
     ]
     $scope.selectedClassification = 0;
+    $scope.editing = false;
 
     $scope.employeeSaved = false;
     $scope.employeeSaveError = false;
@@ -44,6 +58,9 @@ angular.module('sequoiaGroveApp')
       $scope.employeeSaved = false;
       $scope.employeeSaveError = false;
     }
+    $scope.setEdit = function(e) {
+      $scope.editing = e;
+    }
 
     $scope.activeTab = 'info';
     $scope.current;
@@ -51,8 +68,8 @@ angular.module('sequoiaGroveApp')
       'id':0,
       'classificationId': 1,
       'notes': '',
-      'firstname':'',
-      'lastname':'',
+      'firstname':'New',
+      'lastname':'Employee',
       'birthDate':'',
       'clockNumber':0,
       'email':'',
@@ -120,13 +137,14 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
+      $scope.editing = false;
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
         'classificationId': 1,
         'notes': '',
-        'firstname':'',
-        'lastname':'',
+        'firstname':'New',
+        'lastname':'Employee',
         'birthDate':'',
         'clockNumber':0,
         'email':'',
@@ -377,6 +395,7 @@ angular.module('sequoiaGroveApp')
           $scope.selectEmployee($scope.selectedEmployee.id);
           $scope.saving = false;
           $scope.employeeSaved = true;
+          $scope.editing = false;
           form.$setPristine();
           form.$setSubmitted();
         }).error(function(data, status) {

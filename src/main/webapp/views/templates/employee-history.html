@@ -1,9 +1,17 @@
-<div class="request-title">
-  <div class="row" ng-repeat="h in selectedEmployee.history">
-    <div class="col-sm-11 col-sm-offset-1">
-      <span>{{formatEmploymentHistory(h.start)}}</span>
-      <span>-</span>
-      <span>{{formatEmploymentHistory(h.end)}}</span>
-    </div>
-  </div>
+
+<div class="pull-right">
+  <!-- Unemploy this current employee -->
+  <button type = "button" ng-show="selectedEmployee.isCurrent === true" ng-click="deactivateEmployee($event)"
+    class = "btn btn-default">Unemploy {{selectedEmployee.firstname}}
+  </button>
+  <!-- Employ this past employee -->
+  <button type = "button" ng-show="selectedEmployee.isCurrent === false" ng-click="activateEmployee()"
+    class = "btn btn-primary" >Employ {{selectedEmployee.firstname}}
+  </button>
+</div>
+<h2><span style="border: 1px solid #999999; background-color: #00b3b3; color: white; border-radius: 100%; width: 50px; height: 50px; text-align: center; padding: 5px;" class="glyphicon glyphicon-time"></span> Employment History </h2>
+<div ng-repeat="h in selectedEmployee.history">
+  <span>{{formatEmploymentHistory(h.start)}}</span>
+  <span>-</span>
+  <span>{{formatEmploymentHistory(h.end)}}</span>
 </div>
