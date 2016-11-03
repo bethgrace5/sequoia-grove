@@ -274,15 +274,6 @@ angular.module('sequoiaGroveApp')
       $scope.saving = true;
       var eid = $scope.selectedEmployee.id;
 
-      // remove the position from the employee (front end)
-      $scope.employees = _.map($scope.employees, function(e) {
-        if (parseInt(e.id) === parseInt(eid)) {
-          e.positions = _.reject(e.positions, function(id) {
-            return parseInt(id) === parseInt(pid);
-          });
-        }
-        return e;
-      });
 
       // remove position from the employee (back end)
       var obj = { 'pid':pid, 'eid':eid };
@@ -290,12 +281,23 @@ angular.module('sequoiaGroveApp')
         url:  'position/remove/',
         method: "POST",
         data: obj
-      }).success(function(data, status) {
-        $scope.saving = false;
+      }).then(
+        function(success) {
+          $scope.saving = false;
+          // remove the position from the employee (front end)
+          $scope.employees = _.map($scope.employees, function(e) {
+            if (parseInt(e.id) === parseInt(eid)) {
+              e.positions = _.reject(e.positions, function(id) {
+                return parseInt(id) === parseInt(pid);
+              });
+            }
+            return e;
+          });
           userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-      }).error(function(data, status) {
-        $log.debug('error removing position',pid,'from',eid);
-      });
+        },
+        function(failure) {
+          $log.debug('error removing position',pid,'from',eid);
+        });
     }
 
     // TODO function to reset the indication of saved

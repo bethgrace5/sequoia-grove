@@ -1,14 +1,13 @@
 package com.sequoiagrove.controller;
 
-import java.util.AbstractMap;
-import java.util.ArrayList;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.sql.Types;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -16,15 +15,12 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import com.sequoiagrove.model.Position;
 import com.sequoiagrove.controller.Application;
 
 @Repository
 public class PositionRepository {
-  protected final Logger log = LoggerFactory.getLogger(getClass());
+  //protected final Logger log = LoggerFactory.getLogger(getClass());
 
   // get users for multiple locations
   public HashMap<Integer, Position> getPositionsByLocation(Object[] args) {
@@ -67,8 +63,7 @@ public class PositionRepository {
 
   // add position to employee
   public boolean add(int pid, int eid) {
-    // Add a current position for an employee
-    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
     String sqlCount =
       "select count(*) from sequ_has_position where user_id = ? "+
       "and position_id = ? and date_removed is null";
@@ -78,12 +73,33 @@ public class PositionRepository {
       "values(?, ?, current_date, null, false, false)";
 
     // see if this is already a current position that the employee has
-    int count = jdbcTemplate.queryForObject(sqlCount, new Object[]{eid, pid}, Integer.class);
+    int count = jdbc.queryForObject(sqlCount, new Object[]{eid, pid}, Integer.class);
 
     // add the position
     if (count <= 0) {
-      jdbcTemplate.update(sql, eid, pid);
+      jdbc.update(sql, eid, pid);
       return true;
+    }
+    return false;
+  }
+
+  public boolean remove(int pid, int eid) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sqlCount =
+      "select count(*) from sequ_has_position where user_id = ? "+
+      "and position_id = ? and date_removed is null";
+    String sql =
+      "update sequ_has_position " +
+      "set date_removed = current_date " +
+      "where user_id = ? and position_id = ? and date_removed is null";
+
+    // see if this employee currently has this position
+    int count = jdbc.queryForObject(sqlCount , new Object[]{eid, pid}, Integer.class);
+
+    // remove the position
+    if (count > 0) {
+       jdbc.update(sql, eid, pid);
+       return true;
     }
     return false;
   }
