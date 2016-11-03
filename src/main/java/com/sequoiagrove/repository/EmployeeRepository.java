@@ -29,25 +29,21 @@ public class EmployeeRepository {
   protected final Logger log = LoggerFactory.getLogger(getClass());
 
   public static Employee getEmployee(String email) {
-   JdbcTemplate jdbc = Application.getJdbcTemplate();
-
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
     String sql = "select distinct id, business_id, first_name, last_name, email, " +
       "loc, birth_date, max_hrs_week, permissions, notes, phone_number, clock_number, "+
       "positions, history, min_hrs_week, classification_title, classification_id, avail, "+
       "is_current from sequ_user_info_view where email = ?";
-
     return jdbc.query(sql, new Object[]{email}, employeeMapper).get(0);
   }
 
   // get employees by location
-  public HashMap<Integer, Employee> getEmployeessByLocation(Object[] locations) {
+  public HashMap<Integer, Employee> getEmployeesByLocation(Object[] locations) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
-
     String qs = "";
     int[] types = new int[locations.length];
 
-    // add integers to Object[] and parallel INTEGER type
-    // and a question mark for each parameter
+    // add integers to Object[] and parallel INTEGER type, a question mark for each parameter
     for(int i=0; i<locations.length; i++) {
       types[i] = Types.INTEGER;
       qs += "?,";
@@ -66,6 +62,25 @@ public class EmployeeRepository {
       map.put(u.getId(), u);
     }
     return map;
+  }
+
+  public boolean update(Object[] args) {
+    String sql = "update sequ_user set first_name = ?, "+
+      "last_name    = ?, "+
+      "birth_date   = to_date(?, 'mm-dd-yyyy'), "+
+      "max_hrs_week = ?, "+
+      "min_hrs_week = ?, "+
+      "phone_number = ?, "+
+      "clock_number = ?, "+
+      "email = ?, "+
+      "classification_id = ?,  "+
+      "notes  = ?  "+
+      "where id = ?";
+
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    jdbc.update(sql, args);
+
+    return true;
   }
 
   private static final RowMapper<Employee> employeeMapper = new RowMapper<Employee>() {
@@ -129,16 +144,12 @@ public class EmployeeRepository {
 
   // change availability string to java object
   public static WeeklyAvail parseAvailability(String avail) {
-
     WeeklyAvail entireAvail = new WeeklyAvail();
-
     // split string into array with one string per day
     String[] weekdays = avail.split("\\s+");
-
     // for each day, add it to the weekly availability
     for (String d : weekdays) {
       String[] day = d.split(",");
-
       for(int i=1; i<day.length; i++) {
         String[] times = day[i].split(":");
         entireAvail.add(day[0], times[0], times[1]);
@@ -150,13 +161,10 @@ public class EmployeeRepository {
   // change History string to list of java objects
   public static List<Duration> parseHistory(String hist) {
     List<Duration> historyList = new ArrayList<Duration>();
-
     String[] all = hist.split("\\|");
     for (String a : all) {
       String[] locations = a.split("\\!");
-
       Integer locationId = Integer.parseInt(locations[0]);
-
       String[] histories = locations[1].split(",");
       for (String h : histories) {
         String[] times = h.split(":");
@@ -167,7 +175,6 @@ public class EmployeeRepository {
           historyList.add(new Duration(locationId, times[0]));
         }
       }
-
     }
     return historyList;
   }

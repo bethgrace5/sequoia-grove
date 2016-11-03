@@ -1,95 +1,123 @@
 
+<!-- saving ERROR -->
+<button type="button"
+  class="container btn alert alert-danger center-block hide-fade"
+  data-ng-click="resetEmployeeErrorFlags()" ng-show="employeeSaveError">
+  <span class="text-center">
+    <strong>Error Saving!</strong>
+  </span>
+</button>
+
+<div class="pull-right">
+  <!-- Add button shows for new employees -->
+  <button class = "btn btn-default pull-right" ng-show="selectedEmployee.id === 0" ng-click="updateEmployee(employeeform)">
+    <span class="glyphicon glyphicon glyphicon-plus" aria-hidden="true"></span> Add
+  </button>
+  <!-- Cancel button shows for editing existing employees -->
+  <button style="margin-left: 20px;" class = "btn btn-default pull-right" ng-show="selectedEmployee.id != 0">
+    <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> Cancel
+  </button>
+  <!-- Save button shows for editing existing employees -->
+  <div class="pull-right" ng-hide="selectedEmployee.id == 0">
+    <button class = "btn btn-default pull-right" ng-click="updateEmployee(employeeform)" ng-hide="selectedEmployee.id != 0 && !employeeform.$dirty">
+      <span class="glyphicon glyphicon-save" aria-hidden="true"></span> Save Changes
+    </button>
+    <button class = "btn btn-success pull-right" ng-click="updateEmployee(employeeform)" ng-show="selectedEmployee.id != 0 && !employeeform.$dirty">
+      <span class="glyphicon glyphicon-saved" aria-hidden="true"></span> Saved
+    </button>
+  </div>
+</div>
+
+<h2> <span style="border: 1px solid #999999; background-color: #00b3b3; color: white; border-radius: 100%; width: 50px; height: 50px; text-align: center; padding: 5px;" class="glyphicon glyphicon-user"></span> {{selectedEmployee.firstname}} {{selectedEmployee.lastname}}</h2>
 <!-- EDIT -->
-<div>
-  <form name="employeeform" novalidate>
-    <div class="row">
+<form name="employeeform" novalidate>
+  <div class="row">
 
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="firstname">First Name</label>
-        <input name="firstname" type="text" id="firstname" class="form-control" required=""
-        ng-model="selectedEmployee.firstname"
-        placeholder="First" />
-      </div>
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="firstname">Last Name</label>
-        <input name="lastname" type="text" id="lastname" class="form-control" required=""
-        ng-model="selectedEmployee.lastname"
-        placeholder="Last" />
-      </div>
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="birthdateTemplate"> Birthdate </label>
-        <md-datepicker class="form-control" style="margin:0; padding: 0; border: none; outline:none; box-shadow: none;" id="birthdateTemplate" ng-model="$parent.birthday"> </md-datepicker>
-      </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="firstname">First Name</label>
+      <input name="firstname" type="text" id="firstname" class="form-control" required=""
+      ng-model="selectedEmployee.firstname"
+      placeholder="First" />
+    </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="firstname">Last Name</label>
+      <input name="lastname" type="text" id="lastname" class="form-control" required=""
+      ng-model="selectedEmployee.lastname"
+      placeholder="Last" />
+    </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="birthdateTemplate"> Birthdate </label>
+      <md-datepicker class="form-control" style="margin:0; padding: 0; border: none; outline:none; box-shadow: none;" id="birthdateTemplate" ng-model="$parent.$parent.birthday"> </md-datepicker>
+    </div>
 
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="email">Email</label>
-        <input name="email" type="email" id="email" class="form-control" required=""
-        ng-model="selectedEmployee.email"
-        placeholder="email" />
-      </div>
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="phone">Phone</label>
-        <input name="phone" type="phone" id="phone" class="form-control"
-        ng-model="selectedEmployee.phone"
-        placeholder="#" />
-      </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="email">Email</label>
+      <input name="email" type="email" id="email" class="form-control" required=""
+      ng-model="selectedEmployee.email"
+      placeholder="email" />
+    </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="phone">Phone</label>
+      <input name="phone" type="phone" id="phone" class="form-control"
+      ng-model="selectedEmployee.phone"
+      placeholder="#" />
+    </div>
 
-      <div class="form-group col-xs-12 col-md-4">
-        <label for="clockNumber">Clock-in number</label>
-        <input name="clockNumber" type="number" id="clockNumber" class="form-control"
-        ng-model="selectedEmployee.clockNumber"
-        placeholder="#" />
-      </div>
+    <div class="form-group col-xs-12 col-md-4">
+      <label for="clockNumber">Clock-in number</label>
+      <input name="clockNumber" type="number" id="clockNumber" class="form-control"
+      ng-model="selectedEmployee.clockNumber"
+      placeholder="#" />
+    </div>
 
-      <!--
-      <label for="max">Hours</label>
-      -->
-      <!--
-      <div class="col-md-2">
-        <input name="minHours" type="number" id="min" class="form-control"
-        ng-model="selectedEmployee.minHours"
-        placeholder="Minimum" />
-      </div>
-      -->
-      <!--
-      <div class="col-md-2">
-        <input name="maxHours" type="number" id="maxHours" class="form-control"
-        ng-model="selectedEmployee.maxHours"
-        placeholder="Maximum" />
-      </div>
-      -->
+    <!--
+    <label for="max">Hours</label>
+    -->
+    <!--
+    <div class="col-md-2">
+      <input name="minHours" type="number" id="min" class="form-control"
+      ng-model="selectedEmployee.minHours"
+      placeholder="Minimum" />
+    </div>
+    -->
+    <!--
+    <div class="col-md-2">
+      <input name="maxHours" type="number" id="maxHours" class="form-control"
+      ng-model="selectedEmployee.maxHours"
+      placeholder="Maximum" />
+    </div>
+    -->
 
 
-      <!--
-      <label for="classification" class="col-md-2 control-label"> Classification </label>
-      -->
-      <!--
-      <div class="col-md-4">
-        <div class="pull-left">
-          <div class="dropdown pull-left" dropdown is-open=true>
-            <button type="button" id="selectClassification" data-toggle="dropdown"
-              aria-haspopup="true" aria-expanded="true"
-              ng-disabled = "loggedInUser.id === selectedEmployee.id"
-              class="btn btn-default">
-              {{classifications[selectedClassification].disp}} <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu" role="menu"
-              ng-model="selectedClassification" arial-labelledby="selectClassification">
-              <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
-            </ul>
-          </div>
+    <!--
+    <label for="classification" class="col-md-2 control-label"> Classification </label>
+    -->
+    <!--
+    <div class="col-md-4">
+      <div class="pull-left">
+        <div class="dropdown pull-left" dropdown is-open=true>
+          <button type="button" id="selectClassification" data-toggle="dropdown"
+            aria-haspopup="true" aria-expanded="true"
+            ng-disabled = "loggedInUser.id === selectedEmployee.id"
+            class="btn btn-default">
+            {{classifications[selectedClassification].disp}} <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" role="menu"
+            ng-model="selectedClassification" arial-labelledby="selectClassification">
+            <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
+          </ul>
         </div>
       </div>
-      -->
+    </div>
+    -->
 
-      <div class="form-group col-xs-12">
-        <label for="notes-pane"> Notes </label>
-        <textarea id="notes-pane" class="form-control" rows="3" maxlength="1024"
-          ng-model="selectedEmployee.notes">
-        </textarea>
-      </div>
+    <div class="form-group col-xs-12">
+      <label for="notes-pane"> Notes </label>
+      <textarea id="notes-pane" class="form-control" rows="3" maxlength="1024"
+        ng-model="selectedEmployee.notes">
+      </textarea>
+    </div>
 
-    </div> <!-- end row -->
-  </form>
-</div><!-- end edit -->
+  </div> <!-- end row -->
+</form>
 

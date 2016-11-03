@@ -387,24 +387,24 @@ angular.module('sequoiaGroveApp')
       // it should have a way to choose one or more locations for this store.
       $scope.selectedEmployee.locationId = $rootScope.selectedLocation;
 
-      $http.post( 'employee/'+action, $scope.selectedEmployee)
-        .success(function(data, status){
-          // upate front end
-          if (action === 'add') {
-            $scope.selectedEmployee.isCurrent = true;
-            $scope.selectedEmployee.id = data.id;
-            $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
-            $scope.employees.push($scope.selectedEmployee);
-          }
-          $scope.selectEmployee($scope.selectedEmployee.id);
-          $scope.saving = false;
-          $scope.employeeSaved = true;
-          $scope.editing = false;
-          form.$setPristine();
-          form.$setSubmitted();
-        }).error(function(data, status) {
-          $scope.employeeSaveError = true;
-          $log.debug('error with action:', action, status,data);
+      $http.post( 'employee/'+action, $scope.selectedEmployee).then(
+          function(success) {
+            // upate front end
+            if (action === 'add') {
+              $scope.selectedEmployee.isCurrent = true;
+              $scope.selectedEmployee.id = success.data.id;
+              $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
+              $scope.employees.push($scope.selectedEmployee);
+            }
+            $scope.selectEmployee($scope.employees[success.data.id]);
+            $scope.saving = false;
+            $scope.employeeSaved = true;
+            form.$setPristine();
+            form.$setSubmitted();
+          },
+          function(failure) {
+            $scope.employeeSaveError = true;
+            $log.debug('error with action:', action, failure);
         });
     }
 
