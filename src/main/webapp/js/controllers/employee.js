@@ -464,7 +464,7 @@ angular.module('sequoiaGroveApp')
       $http({
         url: 'employee/activate/',
         method: "POST",
-        data: {'id': $scope.selectedEmployee.id}
+        data: {'id': $scope.selectedEmployee.id, 'locationId':$rootScope.selectedLocation}
       }).success(function(data, status) {
 
         // update UI with change

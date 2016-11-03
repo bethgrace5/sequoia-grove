@@ -116,6 +116,39 @@ public class EmployeeRepository {
     return true;
   }
 
+  public boolean activate(int id, int locationId) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+
+    String sqlCount = "select count(*) from sequ_employment_history " +
+      "where user_id = ? and location_id = ? and date_unemployed is null";
+
+    String sqlSpecial = "select count(*) from sequ_employment_history " +
+      "where user_id = ? and location_id = ? and date_unemployed = current_date";
+
+    String sqlUpdate = " update sequ_employment_history set date_unemployed = null " +
+      "where user_id = ? and location_id = ?";
+
+    String sqlInsert = "insert into sequ_employment_history(user_id, location_id, date_employed, date_unemployed) " +
+      "values( ?, ?, current_date, null) ";
+
+      // see if this employee current
+      int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId}, Integer.class);
+
+      // this was NOT a current employee, add a new employment history
+      if (count <= 0){
+        count = jdbc.queryForObject(sqlSpecial, new Object[]{id, locationId}, Integer.class);
+        // in the case they were unemployed today, and then reemployed, update
+        if(count >0) {
+          jdbc.update(sqlUpdate, new Object[]{id, locationId});
+        }
+        // standard procedure, insert new employment history row
+        else {
+          jdbc.update(sqlInsert, new Object[]{id, locationId});
+        }
+      }
+      return true;
+    }
+
   private static final RowMapper<Employee> employeeMapper = new RowMapper<Employee>() {
     public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
       Employee e = new Employee();

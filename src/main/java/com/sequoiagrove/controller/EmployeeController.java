@@ -63,6 +63,19 @@ public class EmployeeController {
       return model;
     }
 
+  // Activate (re-employ) an employee
+  @RequestMapping(value = "/employee/activate", method=RequestMethod.POST)
+    public Map<String, Object> activateEmployee(@RequestBody String data) {
+      Map<String,Object> model = new HashMap<String,Object>();
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      int id = jobject.get("id").getAsInt();
+      int locationId = jobject.get("locationId").getAsInt();
+
+      model.put("activated", repository.activate(id, locationId));
+      return model;
+    }
+
   /*
 
   @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
@@ -158,49 +171,6 @@ public class EmployeeController {
       return "jsonTemplate";
     }
 
-  // Deactivate (un-employ) an employee
-
-  // Activate (re-employ) an employee
-  @RequestMapping(value = "/employee/activate", method=RequestMethod.POST)
-    public String activateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
-      // the token did not have the required permissions, return 403 status
-      if (!permissions.contains("manage-employees")) {
-        model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-        return "jsonTemplate";
-      }
-      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-      JsonElement jelement = new JsonParser().parse(data);
-      JsonObject  jobject = jelement.getAsJsonObject();
-      int id = jobject.get("id").getAsInt();
-
-      Object[] params = new Object[] { id };
-
-      // we are assuming the employee id exists. Might need to add a query to double check
-      // "select count(*) from employee where id = ?"
-
-      // see if this employee current
-      int count = jdbcTemplate.queryForObject("select count(*) from sequ_employment_history " +
-          " where user_id = ? and date_unemployed is null", params, Integer.class);
-
-      // this was NOT a current employee, add a new employment history
-      if (count <= 0){
-
-        // in the case they were unemployed today, and then reemployed, update instead of insert new.
-        count = jdbcTemplate.queryForObject("select count(*) from sequ_employment_history " +
-            " where user_id = ? and date_unemployed = current_date", params, Integer.class);
-
-        if(count >0) {
-          // in the case they were unemployed today, and then reemployed, update instead of insert new.
-          jdbcTemplate.update(" update sequ_employment_history set date_unemployed = null " +
-              "where user_id = ?", id);
-        }
-        else {
-          jdbcTemplate.update(" insert into sequ_employment_history " +
-              "values( ?, current_date, null) ", id);
-        }
-      }
-      return "jsonTemplate";
-    }
 
   */
 }
