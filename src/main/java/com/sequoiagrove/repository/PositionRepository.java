@@ -65,6 +65,29 @@ public class PositionRepository {
     return map;
   }
 
+  // add position to employee
+  public boolean add(int pid, int eid) {
+    // Add a current position for an employee
+    JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
+    String sqlCount =
+      "select count(*) from sequ_has_position where user_id = ? "+
+      "and position_id = ? and date_removed is null";
+    String sql =
+      "insert into sequ_has_position(" +
+      "user_id, position_id,date_acquired, date_removed, is_primary, is_training) " +
+      "values(?, ?, current_date, null, false, false)";
+
+    // see if this is already a current position that the employee has
+    int count = jdbcTemplate.queryForObject(sqlCount, new Object[]{eid, pid}, Integer.class);
+
+    // add the position
+    if (count <= 0) {
+      jdbcTemplate.update(sql, eid, pid);
+      return true;
+    }
+    return false;
+  }
+
   private static final RowMapper<Position> positionMapper = new RowMapper<Position>() {
     public Position mapRow(ResultSet rs, int rowNum) throws SQLException {
       Position p = new Position();

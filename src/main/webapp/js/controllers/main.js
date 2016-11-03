@@ -8,13 +8,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
   $rootScope.selectedLocation = 0;
   $rootScope.business = 0;
 
-  $scope.test = function() {
-    $http.get('resource/').then(function(response) {
-      console.log(response);
-    })
-    console.log('test');
-  }
-
 /************** Login Redirect, Containers and UI settings **************/
   // user is not logged in
   if (loginFactory.isLoggedIn() === false) {
@@ -91,7 +84,6 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 /************** Pure Functions **************/
 
   $scope.formatTime = function(t, ampm) {
-    console.log(t);
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
     if (ampm) {

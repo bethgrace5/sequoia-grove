@@ -21,7 +21,12 @@ angular.module('sequoiaGroveApp')
     return false;
   }
   $scope.changeTab = function(t) {
-    $scope.activeTab = t;
+    if ($scope.selectedEmployee.id == 0) {
+      $scope.activeTab = 'info';
+    }
+    else {
+      $scope.activeTab = t;
+    }
   }
 
 
@@ -137,6 +142,7 @@ angular.module('sequoiaGroveApp')
 
     // reset selected employee
     $scope.clearEmployee = function() {
+      $scope.activeTab = 'info';
       $scope.editing = false;
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
@@ -201,13 +207,7 @@ angular.module('sequoiaGroveApp')
     }
 
     $scope.getPositionTitle = function(pid) {
-      var title = "";
-      _.map($scope.positions, function(p) {
-      if (p.id === parseInt(pid)) {
-          title = p.title;
-        }
-      });
-      return title;
+      return $scope.positions[pid].title;
     }
 
     // add a new position for an employee
@@ -240,6 +240,8 @@ angular.module('sequoiaGroveApp')
       else {
         $scope.saving = false;
       }
+      /*
+      */
     }
 
     // remove an availability for an employee

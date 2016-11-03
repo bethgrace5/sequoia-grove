@@ -1,7 +1,7 @@
 
 <!-- Schedule View Options: filter, show deliveries, highlight, download, print -->
 <div class="container-fluid hidden-print schedule-view-options">
-  <ng-include src="'views/templates/schedule-view-options.html'"></ng-include>
+  <ng-include src="'views/templates/schedule/options.html'"></ng-include>
 </div>
 <!-- Print Version -->
 <div class="container-fluid visible-print-block schedule-view-options">
@@ -10,7 +10,7 @@
     This week's schedule isn't ready to be viewed yet
   </div>
   <div ng-show="isPublished">
-    <ng-include src="'views/templates/schedule-view-print.html'"></ng-include>
+    <ng-include src="'views/templates/home/print.html'"></ng-include>
   </div>
 </div>
 
@@ -21,7 +21,7 @@
     <ng-include src="'views/templates/schedule-header.html'"></ng-include>
     <br/>
     <div ng-show="isPublished">
-      <ng-include src="'views/templates/schedule-view.html'" ></ng-include>
+      <ng-include src="'views/templates/schedule/schedule.html'" ></ng-include>
     </div>
     <div class="panel panel-default schedule-message-panel"  ng-hide="isPublished">
       <div class="panel-body">

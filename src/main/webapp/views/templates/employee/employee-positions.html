@@ -3,9 +3,9 @@
   <div class="col-sm-4">
     <select id="position-select"
       class="form-control"
-      ng-options="p.title for p in positions"
-      ng-model="$parent.newPos"
-      ng-change="$parent.addPosition()">
+      ng-options="p.title for p in positions track by p.id"
+      ng-model="$parent.$parent.newPos"
+      ng-change="$parent.$parent.addPosition()">
       <option value=""> Select </option>
     </select>
   </div>
