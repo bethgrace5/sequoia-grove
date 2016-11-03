@@ -52,6 +52,17 @@ public class EmployeeController {
       return model;
     }
 
+  @RequestMapping(value = "/employee/deactivate", method=RequestMethod.POST)
+    public Map<String, Object> deactivateEmployee(@RequestBody String data) {
+      Map<String,Object> model = new HashMap<String,Object>();
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      int id = jobject.get("id").getAsInt();
+      int locationId = jobject.get("locationId").getAsInt();
+      model.put("deactivated", repository.deactivate(id, locationId));
+      return model;
+    }
+
   /*
 
   @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
@@ -148,46 +159,6 @@ public class EmployeeController {
     }
 
   // Deactivate (un-employ) an employee
-  @RequestMapping(value = "/employee/deactivate", method=RequestMethod.POST)
-    public String deactivateEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
-      // the token did not have the required permissions, return 403 status
-      if (!permissions.contains("manage-employees")) {
-        model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-        return "jsonTemplate";
-      }
-      JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-      JsonElement jelement = new JsonParser().parse(data);
-      JsonObject  jobject = jelement.getAsJsonObject();
-      int id = jobject.get("id").getAsInt();
-
-      Object[] params = new Object[] { id };
-      Object[] params2 = new Object[] { id, id };
-
-
-      // if the user tries to unemploy an employee they just re-employed today, delete the row instead
-      int count = jdbcTemplate.queryForObject(
-          "select count(*) from sequ_employment_history where user_id = ? and date_employed=current_date and date_unemployed is null and " +
-          "(select count(*) from sequ_employment_history where user_id = ?) > 1", params2, Integer.class);
-
-      // special case where user tries to unemploy employee they just reemployed today - deletes row instead
-      if(count > 0) {
-        jdbcTemplate.update(
-            "delete from sequ_employment_history where user_id = ? and date_employed=current_date", params);
-      }
-      // standard procedure, make sure is current then set date unemployed
-      else {
-        // make sure this employee is current
-        count = jdbcTemplate.queryForObject("select count(*) from sequ_employment_history " +
-            " where user_id = ? and date_unemployed is null", params, Integer.class);
-        // this was a current employee, set date unemployed to today
-        if (count > 0){
-          jdbcTemplate.update(" update sequ_employment_history " +
-              "set date_unemployed = current_date " +
-              "where user_id = ? and date_unemployed is null", id);
-        }
-      }
-      return "jsonTemplate";
-    }
 
   // Activate (re-employ) an employee
   @RequestMapping(value = "/employee/activate", method=RequestMethod.POST)

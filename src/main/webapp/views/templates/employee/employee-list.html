@@ -26,7 +26,7 @@
 <!-- Repeating List of Employees-->
 <div class="list-group emp-list-wrapper">
   <div ng-repeat="(key,value) in employees">
-    <div ng-show="filterByType(value.isCurrent)">
+    <div ng-show="filterByType(true)">
       <button ng-click="selectEmployee(value)"
         class="list-group-item btn btn-default btn-block"
         ng-class="{'active': selectedEmployee.id===value.id}">

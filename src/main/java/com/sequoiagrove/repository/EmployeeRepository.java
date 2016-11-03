@@ -83,6 +83,39 @@ public class EmployeeRepository {
     return true;
   }
 
+  public boolean deactivate(int id, int locationId) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sqlCount =
+      "select count(*) from sequ_employment_history where user_id = ? " +
+      "and date_employed=current_date and date_unemployed is null and" +
+      "(select count(*) from sequ_employment_history where user_id = ? and location_id = ?) > 1 ";
+
+    String sqlSpecial = "delete from sequ_employment_history where user_id = ? and location_id = ? " +
+      "and date_employed=current_date";
+
+    String sqlCurrentCount = "select count(*) from sequ_employment_history " +
+      " where user_id = ? and location_id = ? and date_unemployed is null";
+
+    String sqlUpdate = " update sequ_employment_history " +
+      "set date_unemployed = current_date " +
+      "where user_id = ? and location_id = ? and date_unemployed is null";
+
+      // special case where user tries to unemploy employee they just reemployed today - deletes row instead
+      int count = jdbc.queryForObject(sqlCount, new Object[]{id, id, locationId}, Integer.class);
+      if(count > 0) {
+        jdbc.update( sqlSpecial, new Object[]{id, locationId});
+      }
+      // standard procedure, make sure is current then set date unemployed
+      else {
+        count = jdbc.queryForObject(sqlCurrentCount, new Object[]{id, locationId}, Integer.class);
+        if (count > 0){
+          jdbc.update(sqlUpdate, new Object[]{id, locationId});
+        }
+      }
+
+    return true;
+  }
+
   private static final RowMapper<Employee> employeeMapper = new RowMapper<Employee>() {
     public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
       Employee e = new Employee();

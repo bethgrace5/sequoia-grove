@@ -414,18 +414,17 @@ angular.module('sequoiaGroveApp')
       // lock them out of the system.
       if (loginFactory.getUser().id === $scope.selectedEmployee.id) {
         $mdDialog.show(
-            $mdDialog.alert()
-            .clickOutsideToClose(true)
-            .title('Unemploy ' + $scope.selectedEmployee.firstname)
-            .textContent('You cannot unemploy yourself!')
-            .ariaLabel('cannot unemploy yourself')
-            .ok('Got it!')
-            .targetEvent(ev)
-            );
-        return
+          $mdDialog.alert()
+          .clickOutsideToClose(true)
+          .title('Unemploy ' + $scope.selectedEmployee.firstname)
+          .textContent('You cannot unemploy yourself!')
+          .ariaLabel('cannot unemploy yourself')
+          .ok('Got it!')
+          .targetEvent(ev));
+        return;
       }
 
-      // Confirm to unemploy
+      // Confirm to deactivate
       var confirm = $mdDialog.confirm()
         .title('Unemploy ' + $scope.selectedEmployee.firstname + '?')
         .ariaLabel('Unemploy')
@@ -437,29 +436,25 @@ angular.module('sequoiaGroveApp')
         $http({
           url: 'employee/deactivate/',
           method: "POST",
-          data: {'id': $scope.selectedEmployee.id}
-        }).success(function(data, status) {
-          // update UI with change
-          // FIXME if the user employs and then unemploys the same day,
-          // it won't reflect the UI chnage shown
-          $scope.employees = _.map($scope.employees, function(e) {
-            if(e.id === $scope.selectedEmployee.id) {
-              e.isCurrent = false;
-              e.history = _.map(e.history, function(h) {
-                if(h.end === '') {
-                  h.end = moment().format('MM-DD-YYYY');
-                }
-                return h;
+          data: {'id': $scope.selectedEmployee.id, 'locationId':$rootScope.selectedLocation}}).then(
+            function(success) {
+              // update UI with change
+              $scope.selectedEmployee.isCurrent = false;
+              var hist = _.map($scope.employees[$scope.selectedEmployee.id].history, function(h) {
+                  if(h.end == "") {
+                    h.end = moment().format('MM-DD-YYYY');
+                  };
+                  return h;
               });
-            }
-            return e;
+              $scope.selectedEmployee.history = hist;
+              $scope.employees[$scope.selectedEmployee.id].history = hist;
+              userFactory.init($rootScope.locations, $rootScope.selectedLocation);
+            },
+            function(failure) {
+              $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, failure);
           });
-          userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-        }).error(function(data, status) {
-          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
-        });
+      // cancel deactivation
       }, function() {
-        // cancel
         return;
       });
     }
