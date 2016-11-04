@@ -46,7 +46,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           return;
         }
         var employee = $scope.getEmployeeByname(this.value);;
-        console.log(employee.id);
+        //console.log(employee.id);
         // found employee!
         if (employee.id !== 0) {
           // remove warning class and update template with new id

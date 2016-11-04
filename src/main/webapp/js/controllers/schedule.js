@@ -1,44 +1,10 @@
 'use strict';
-
-/**
- * @ngdoc function
- * @name sequoiaGroveApp.controller:ScheduleCtrl
- * @description
- * # ScheduleCtrl
- * Controller for editing the schedule.
- */
 angular.module('sequoiaGroveApp')
-  .controller('ScheduleCtrl', function (
-        $filter,
-        $window,
-        $location,
-        $http,
-        $log,
-        $rootScope,
-        $scope,
-        $timeout,
-        $translate,
-        $mdDialog,
-        scheduleFactory,
-        userFactory,
-        loginFactory,
-        localStorageService) {
+.controller('ScheduleCtrl', function ($filter, $window, $location, $http,
+      $log, $rootScope, $scope, $timeout, $translate, $mdDialog, scheduleFactory,
+      userFactory, loginFactory, localStorageService) {
 
-
-/************** Login Redirect, Containers and UI settings **************/
   localStorageService.set('lastPath', '/schedule');
-  $scope.saving = false;
-
-  $scope.getIndex = function(has, gets) {
-    if(has) {
-      return has;
-    }
-    else {
-      return gets;
-    }
-
-  }
-
   // user is not logged in
   if (loginFactory.isLoggedIn() === false) {
     $location.path('/login');
@@ -46,145 +12,56 @@ angular.module('sequoiaGroveApp')
   if (!loginFactory.getUser().isManager) {
     $location.path('/home');
   }
-
-  $scope.aList = {};
-  $scope.pList = {};
+  $scope.saving = false;
+  $scope.aList = {}; // availability list
+  $scope.pList = {}; // position list
   $scope.selectedPid = 0;
   $scope.selectedPosition = 'All';
   $scope.activeTab = 'schedule';
   $scope.selectedId = 0;
   $scope.empEditSearch = '';
   $scope.hideSpacers = true;
+  $scope.items = [{'isSpacer':true, 'index':-1}];
+  $scope.errors = { 'selectedName':'', 'available':true, 'hasPosition':true,
+    'isCurrent':true, 'selectedPosition':'' };
+
   $scope.toggleHideSpacers = function() {
     $scope.hideSpacers = !$scope.hideSpacers;
   }
-  $scope.errors = {
-    'selectedName':'',
-    'available':true,
-    'hasPosition':true,
-    'isCurrent':true,
-    'selectedPosition':''
-  };
-
-  $scope.autoGenOptions = {
-    "mon": "",
-    "historyStart": "",
-    "historyEnd": "",
-    "weeksInHistory": 6,
-    "emptyShiftThreshold": 0.1
-  };
-  // Auto-Fill schedule based on history
-  $scope.autoGenerate = function() {
-
-    if ($scope.saving) {
-      return;
-    }
-
-    // don't actually auto-gen if in dev mode
-    if($rootScope.devMode) {
-      $scope.saving = false;
-      return;
-    }
-
-    $scope.saving = true;
-
-    var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
-    $scope.autoGenOptions.mon = $scope.date.mon.val;
-    $scope.autoGenOptions.historyStart =
-      moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
-      ).subtract(daysHist, 'days').format('DD-MM-YYYY');
-    $scope.autoGenOptions.historyEnd =
-      moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
-      ).subtract(1, 'days').format('DD-MM-YYYY');
-
-    $http({
-      url: 'schedule/autogen/',
-      method: "POST",
-      data: $scope.autoGenOptions
-    }).success( function(data, status, headers, config) {
-      if (status == 200) {
-        //$scope.updateShifts = [];
-        //$scope.deleteShifts = [];
-        // insert new shifts into schedule
-        $scope.saving = false;
-      }
-      else {
-        $log.error(status + " No Error: Could no auto-generate schedule " + data);
-        $scope.saving = false;
-      }
-    }).error( function(data, status, headers, config) {
-      $log.error(status + " Error while auto-generating schedule " + data);
-      $scope.saving = false;
-    });
-  }
-
-
-/************** Pure Functions **************/
-
-  $scope.items = [{'isSpacer':true, 'index':-1}];
-
-  $scope.selectPosition = function(pid, title) {
-    $scope.selectedPid = pid;
-    $scope.selectedPosition = title;
-  }
-
-
-  $scope.boardDragControlListeners = {
-      'accept': function(sourceItemHandleScope, destSortableScope){
-        //$log.debug(sourceItemHandleScope);
-        //$log.debug(destSortableScope);
-          return true; //override to determine drag is allowed or not. default is true.
-        },
-      'itemMoved': function(event){
-        scheduleFactory.setMovedShifts();
-        //$log.debug(event);
-        },
-      'orderChanged': function(event){
-        scheduleFactory.setMovedShifts();
-        //$log.debug(event);
-        },
-      'removeItem': function(index) {
-        return false;
-      }
-      //'containment': '#board',//optional param.
-      //'clone': false,//optional param for clone feature.
-      //'allowDuplicates': false //optional param allows duplicates to be dropped.
-    };
-  $scope.gapDragControlListeners = {
-      'accept': function(sourceItemHandleScope, destSortableScope){
-          return true; //override to determine drag is allowed or not. default is true.
-        },
-      'itemMoved': function(event){
-        scheduleFactory.setMovedShifts();
-        //$log.debug(event);
-        },
-      'orderChanged': function(event){
-        scheduleFactory.setMovedShifts();
-        //$log.debug(event);
-        },
-      //'containment': '#board',//optional param.
-      'clone': true,//optional param for clone feature.
-      //'allowDuplicates': false //optional param allows duplicates to be dropped.
-    };
-
   // Call browser to print schedule on paper
   $scope.print = function() {
     $window.print();
   }
-
+  $scope.selectPosition = function(pid, title) {
+    $scope.selectedPid = pid;
+    $scope.selectedPosition = title;
+  }
   // set selected id when clicking employee list in schedule
   $scope.selectFromList = function(eid) {
     $scope.selectedId = eid;
     // clear errors
-    $scope.errors = {
-      'selectedName':'',
-      'available':true,
-      'hasPosition':true,
-      'selectedPosition':'',
-      'isCurrent':true
-    };
+    $scope.errors = { 'selectedName':'', 'available':true, 'hasPosition':true,
+      'selectedPosition':'', 'isCurrent':true };
+  }
+  // Filter schedule by selected position
+  $scope.filterSchedule = function(pid) {
+    if($scope.selectedPid == 0) {
+      return true;
+    }
+    if(pid == $scope.selectedPid) {
+      return true;
+    }
+    return false;
+  }
+  // find the matching employee by name
+  $scope.getEmployeeByname = function(name) {
+    var employee = {'id':0};
+    _.map($scope.employees, function(e) {
+      if(_.isMatch(e, {'firstname':name})) {
+        employee = e;
+      }
+    });
+    return employee;
   }
 
   $scope.selectEid = function(t, day, al, pl) {
@@ -213,28 +90,6 @@ angular.module('sequoiaGroveApp')
       $scope.errors.isCurrent = true;
       $scope.selectedId = 0;
     }
-  }
-
-  // Filter schedule by selected position
-  $scope.filterSchedule = function(pid) {
-    if($scope.selectedPid == 0) {
-      return true;
-    }
-    if(pid == $scope.selectedPid) {
-      return true;
-    }
-    return false;
-  }
-
-  // find the matching employee by name
-  $scope.getEmployeeByname = function(name) {
-    var employee = {'id':0};
-    _.map($scope.employees, function(e) {
-      if(_.isMatch(e, {'firstname':name})) {
-        employee = e;
-      }
-    });
-    return employee;
   }
 
   // get if employee is available
@@ -364,34 +219,45 @@ angular.module('sequoiaGroveApp')
       });
   }
 
-  var updateChangesMade = function(){
-    $scope.template = scheduleFactory.getTemplate($rootScope);
-    if (loginFactory.getUser().isManager) {
-      $scope.weekList = scheduleFactory.getWeekList();
-      $scope.dayCount = scheduleFactory.getDayCount();
-      $scope.hourCount = scheduleFactory.getHourCount();
-      $scope.changesMade = scheduleFactory.changesMade();
-      $scope.requests = scheduleFactory.getRequests();
-    }
-  }
+  // observer callback for schedule factory
+  scheduleFactory.registerObserverCallback(
+      function(){
+        $scope.template = scheduleFactory.getTemplate($rootScope);
+        if (loginFactory.getUser().isManager) {
+          $scope.weekList = scheduleFactory.getWeekList();
+          $scope.dayCount = scheduleFactory.getDayCount();
+          $scope.hourCount = scheduleFactory.getHourCount();
+          $scope.changesMade = scheduleFactory.changesMade();
+          $scope.requests = scheduleFactory.getRequests();
+        }
+      });
 
-  scheduleFactory.registerObserverCallback(updateChangesMade);
-
-
-  $scope.$on('$locationChangeStart', function (event, next, current) {
-    /*
-    console.log(current);
-
-    if (current.match("/schedule")) {
-      var answer = confirm("Are you sure you want to leave this page?");
-      if (!answer) {
-        event.preventDefault();
-      }else{
-        $log.debug('else');
-        //clearInterval(myInterval);
+  // ng-sortable drag and drop - shifts
+  $scope.boardDragControlListeners = {
+      'accept': function(sourceItemHandleScope, destSortableScope){
+          return true; //override to determine drag is allowed or not. default is true.
+        },
+      'itemMoved': function(event){
+        scheduleFactory.setMovedShifts();
+        },
+      'orderChanged': function(event){
+        scheduleFactory.setMovedShifts();
+        },
+      'removeItem': function(index) {
+        return false;
       }
-    }
-    */
-  });
-
+    };
+  // ng-sortable drag and drop - spacers
+  $scope.gapDragControlListeners = {
+      'accept': function(sourceItemHandleScope, destSortableScope){
+          return true; //override to determine drag is allowed or not. default is true.
+        },
+      'itemMoved': function(event){
+        scheduleFactory.setMovedShifts();
+        },
+      'orderChanged': function(event){
+        scheduleFactory.setMovedShifts();
+        },
+      'clone': true,//optional param for clone feature.
+    };
 });
