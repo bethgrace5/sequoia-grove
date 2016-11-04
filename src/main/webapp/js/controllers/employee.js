@@ -29,7 +29,6 @@ angular.module('sequoiaGroveApp')
     }
   }
 
-
     localStorageService.set('lastPath', '/employee');
 
     // user is not logged in
@@ -101,14 +100,19 @@ angular.module('sequoiaGroveApp')
 
     // filter employee list by all, current, or past employees
     $scope.filterByType = function(isCurrent) {
-      if ($scope.typeFilter === 'all') {
+      if (isCurrent != undefined) {
+        if ($scope.typeFilter === 'all') {
+          return true;
+        }
+        else if ($scope.typeFilter === 'current') {
+          return isCurrent;
+        }
+        else if ($scope.typeFilter === 'past') {
+          return !isCurrent;
+        }
+      }
+      else {
         return true;
-      }
-      else if ($scope.typeFilter === 'current') {
-        return isCurrent;
-      }
-      else if ($scope.typeFilter === 'past') {
-        return !isCurrent;
       }
     }
 
@@ -285,14 +289,9 @@ angular.module('sequoiaGroveApp')
         function(success) {
           $scope.saving = false;
           // remove the position from the employee (front end)
-          $scope.employees = _.map($scope.employees, function(e) {
-            if (parseInt(e.id) === parseInt(eid)) {
-              e.positions = _.reject(e.positions, function(id) {
+          $scope.employees[eid].positions = _.reject($scope.employees[eid].positions, function(id) {
                 return parseInt(id) === parseInt(pid);
               });
-            }
-            return e;
-          });
           userFactory.init($rootScope.locations, $rootScope.selectedLocation);
         },
         function(failure) {
