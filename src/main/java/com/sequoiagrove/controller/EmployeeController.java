@@ -4,7 +4,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -13,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.sequoiagrove.model.Employee;
 
 @RestController
 public class EmployeeController {
@@ -23,7 +27,17 @@ public class EmployeeController {
   @RequestMapping(value = "/employees/{locations}")
     public Map<String, Object> getAllEmployee(@PathVariable("locations") Object[] locations) {
       Map<String,Object> model = new HashMap<String,Object>();
-      model.put("employees", repository.getEmployeesByLocation(locations));
+      List<Employee> employees = repository.getEmployeesByLocation(locations);
+
+      HashMap<Integer, Employee> map = new HashMap<Integer, Employee>();
+
+      // change list to hashmap
+      for( Employee e : employees) {
+        map.put(e.getId(), e);
+      }
+
+      model.put("list", employees);
+      model.put("employees", map);
       return model;
     }
 
@@ -77,7 +91,6 @@ public class EmployeeController {
     }
 
   /*
-
   @RequestMapping(value = "/employee/add", method=RequestMethod.POST)
     public String addEmployee(Model model, @ModelAttribute("scope") List<String> permissions, @RequestBody String data) throws SQLException {
       // the token did not have the required permissions, return 403 status
@@ -170,7 +183,5 @@ public class EmployeeController {
       model.addAttribute("id", id);
       return "jsonTemplate";
     }
-
-
   */
 }

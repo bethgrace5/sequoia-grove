@@ -522,6 +522,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       $scope.requests = scheduleFactory.getRequests();
     }
     $timeout(function() {
+      $scope.list = userFactory.getList();
       $scope.date = scheduleFactory.getHeader();
       $scope.isPublished = scheduleFactory.isPublished($rootScope.selectedLocation);
       $scope.weekList = scheduleFactory.getWeekList();
@@ -543,6 +544,8 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   // login factory observers
   var updateUser = function(){
+    $scope.employees = userFactory.getUsers();
+    $scope.list = userFactory.getList();
     $scope.loggedInUser = loginFactory.getUser();
     $scope.loggedIn = loginFactory.isLoggedIn();
   };

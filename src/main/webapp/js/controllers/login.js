@@ -226,15 +226,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
     $rootScope.locations = user.locations;
     $rootScope.selectedLocation = user.locations[0];
     $rootScope.business = user.business;
-    // pull data from localstorage, if it's availabile
-    if($rootScope.devMode) {
-      if (localStorageService.get('template')){
-        $scope.template = JSON.parse(localStorageService.get('template'));
-      }
-      if(localStorageService.get('employees')) {
-        $rootScope.employees = JSON.parse(localStorageService.get('employees'));
-      }
-    }
     // TODO refine better scope than is or is not manager
     if (isManager) {
       scheduleFactory.setManagePrivelage($rootScope.selectedLocation); // needs permission manage-schedule

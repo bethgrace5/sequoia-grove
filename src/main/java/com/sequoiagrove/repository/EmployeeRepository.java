@@ -36,7 +36,7 @@ public class EmployeeRepository {
   }
 
   // get employees by location
-  public HashMap<Integer, Employee> getEmployeesByLocation(Object[] locations) {
+  public List<Employee> getEmployeesByLocation(Object[] locations) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
     String qs = "";
     int[] types = new int[locations.length];
@@ -52,14 +52,7 @@ public class EmployeeRepository {
       "notes, permissions, phone_number, positions "+
       "FROM sequ_user_info_view WHERE location_id IN ("+qs.substring(0, qs.length()-1)+") order by first_name";
 
-    List<Employee> employees = jdbc.query(sql, locations, types, superEmployeeMapper);
-    HashMap<Integer, Employee> map = new HashMap<Integer, Employee>();
-
-    // change list to hashmap
-    for( Employee e : employees) {
-      map.put(e.getId(), e);
-    }
-    return map;
+    return jdbc.query(sql, locations, types, superEmployeeMapper);
   }
 
   public boolean update(Object[] args) {

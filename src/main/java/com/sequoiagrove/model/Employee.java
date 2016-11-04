@@ -218,5 +218,4 @@ public class Employee {
     this.notes = notes;
   }
 
-
 }

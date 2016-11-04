@@ -9,6 +9,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
 
   // Exposed to users with 'manage schedule' privelage through service
   var users = [];
+  var list = [];
 
   // internal variables
   var availMap = {};
@@ -50,6 +51,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               // anything you want can go here and will safely be run on the next digest.
               users[locationId] = success.data.employees;
+              list = success.data.list;
               deferred.resolve();
             });
           }
@@ -190,7 +192,10 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     // update employee, deactivate employee, activate employee
     service.removeManagePrivelage = function() {
       service = removeManagePrivelage();
-    }
+    };
+    service.getList = function() {
+      return list;
+    };
 
   }
 
@@ -205,7 +210,14 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
       },
       'removeManagePrivelage': function() {
         // do nothing
+      },
+      'getUsers': function() {
+        return users[locationId];
+      },
+      'getList': function() {
+        return list;
       }
+
     }
   }
 

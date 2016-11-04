@@ -1,12 +1,12 @@
 
-<!-- Search Bar
+<!-- Search Bar -->
 <div class="form-group">
   <div class="input-group">
     <div class="btn btn-default input-group-addon">
       <span class="glyphicon glyphicon-search"></span>
     </div>
     <input type="text" class="form-control" id="em-search" ng-model="empSearch" placeholder="Search...">
-    -- Clear Search --
+    <!-- Clear Search -->
     <div class="btn btn-default input-group-addon"
       ng-click="empSearch=''"
       ng-hide="empSearch == '' || empSearch == undefined">
@@ -14,26 +14,24 @@
     </div>
   </div>
 </div>
--->
 
-<!-- Clear Form For New Employee
+<!-- Clear Form For New Employee -->
 <button ng-click="clearEmployee()"
   class="btn btn-success btn-block">
   <div class="pull-left">
     <i class="glyphicon glyphicon-plus"></i> Add New
   </div>
 </button>
--->
 
 <!-- Repeating List of Employees-->
 <div class="list-group emp-list-wrapper">
-  <div ng-repeat="(key,value) in employees">
-    <div ng-show="filterByType(value.isCurrrent)">
-      <button ng-click="selectEmployee(value)"
+  <div ng-repeat="employee in list | filter: empSearch">
+    <div ng-show="filterByType(employee)">
+      <button ng-click="selectEmployee(employee)"
         class="list-group-item btn btn-default btn-block"
-        ng-class="{'active': selectedEmployee.id===value.id}">
+        ng-class="{'active': selectedEmployee.id===employee.id}">
         <div class="pull-left">
-          {{::value.firstname}} {{::value.lastname}}
+          {{::employee.firstname}} {{::employee.lastname}}
         </div>
       </button>
     </div>

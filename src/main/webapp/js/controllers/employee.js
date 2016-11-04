@@ -99,20 +99,15 @@ angular.module('sequoiaGroveApp')
     }
 
     // filter employee list by all, current, or past employees
-    $scope.filterByType = function(isCurrent) {
-      if (isCurrent != undefined) {
-        if ($scope.typeFilter === 'all') {
-          return true;
-        }
-        else if ($scope.typeFilter === 'current') {
-          return isCurrent;
-        }
-        else if ($scope.typeFilter === 'past') {
-          return !isCurrent;
-        }
-      }
-      else {
+    $scope.filterByType = function(e) {
+      if ($scope.typeFilter === 'all') {
         return true;
+      }
+      else if ($scope.typeFilter === 'current') {
+        return e.isCurrent;
+      }
+      else if ($scope.typeFilter === 'past') {
+        return !e.isCurrent;
       }
     }
 
