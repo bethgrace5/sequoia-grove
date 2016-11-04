@@ -1,5 +1,8 @@
 package com.sequoiagrove.controller;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import java.util.HashMap;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
@@ -64,6 +67,20 @@ public class ScheduleController {
       model.put("schedule", schedule);
       return model;
   }
+
+    @RequestMapping(value = "/schedule/publish")
+    public Map<String, Object> publishSchedule(@RequestBody String data) {
+      Map<String, Object> model = new HashMap<String, Object>();
+
+      JsonElement jelement = new JsonParser().parse(data);
+      JsonObject  jobject = jelement.getAsJsonObject();
+      int eid = jobject.get("eid").getAsInt();
+      int locationId = jobject.get("locationId").getAsInt();
+      String date = jobject.get("date").getAsString();
+
+      model.put("published", repository.publish(eid, locationId, date));
+      return model;
+    }
 
   /*
   // Get current schedule template (current shifts) dd-mm-yyyy
@@ -157,40 +174,6 @@ public class ScheduleController {
         return "jsonTemplate";
     }
 
-    @RequestMapping(value = "/schedule/publish")
-    public String publishSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
-
-        // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
-
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
-        // parse params
-        JsonElement jelement = new JsonParser().parse(data);
-        JsonObject  jobject = jelement.getAsJsonObject();
-        final int eid = jobject.get("eid").getAsInt();
-        final int locationId = jobject.get("locationId").getAsInt();
-        final String date = jobject.get("date").getAsString();
-
-        // update database publish(eid, datestring)
-        //try {
-        jdbcTemplate.execute("select sequ_publish(?, ?, ?)" ,
-          new PreparedStatementCallback<Boolean>(){
-              @Override
-              public Boolean doInPreparedStatement(PreparedStatement ps)
-              throws SQLException, DataAccessException {
-                ps.setInt(1, eid);
-                ps.setString(2, date);
-                ps.setInt(3, locationId);
-                return ps.execute();
-              }
-          });
-
-        return "jsonTemplate";
-    }
     */
 }
 

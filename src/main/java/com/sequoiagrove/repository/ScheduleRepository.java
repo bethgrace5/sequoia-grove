@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Types;
@@ -12,7 +13,9 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
@@ -39,6 +42,24 @@ public class ScheduleRepository {
     String sql = "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'mm-dd-yyyy') and location_id = ?";
     int count = jdbc.queryForObject(sql, args, Integer.class);
     return (count>0)? true: false;
+  }
+
+  public boolean publish(int eid, int locationId, String date) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sql = "select sequ_publish(?, ?, ?)";
+    // update database publish(eid, datestring)
+    jdbc.execute(sql,
+        new PreparedStatementCallback<Boolean>(){
+          @Override
+      public Boolean doInPreparedStatement(PreparedStatement ps) throws SQLException, DataAccessException {
+        ps.setInt(1, eid);
+        ps.setString(2, date);
+        ps.setInt(3, locationId);
+        return ps.execute();
+      }
+      });
+
+    return true;
   }
 
   private static final RowMapper<ScheduleRow> scheduleRowMapper = new RowMapper<ScheduleRow>() {

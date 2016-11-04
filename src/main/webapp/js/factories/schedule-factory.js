@@ -782,7 +782,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   // Publish the schedule
   var publishSchedule = function(userId) {
     var deferred = $q.defer();
-    var obj = {'date':header.mon.val, 'eid': userId, 'locationId':locationId};
+    var obj = {'date':moment(header.mon.val, 'MM-DD-YYYY').format('DD-MM-YYYY'), 'eid': userId, 'locationId':locationId};
     $http({
       url: $rootScope.urlPrefix + '/schedule/publish/',
       method: "POST",
