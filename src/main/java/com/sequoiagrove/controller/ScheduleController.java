@@ -1,5 +1,6 @@
 package com.sequoiagrove.controller;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.sequoiagrove.model.Schedule;
+import com.sequoiagrove.model.Scheduled;
 import com.sequoiagrove.controller.ScheduleRepository;
 
 @RestController
@@ -82,36 +84,19 @@ public class ScheduleController {
       return model;
     }
 
-  /*
-  // Get current schedule template (current shifts) dd-mm-yyyy
-  @RequestMapping(value = "/schedule/shiftIndices")
-    public String saveShifts(Model model,  @RequestBody String data, @ModelAttribute("scope") List<String> permissions) {
-        // the token did not have the required permissions, return 403 status
-        if (!permissions.contains("manage-schedule")) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
+    // Save order of shifts
+    @RequestMapping(value = "/schedule/shiftIndices")
+      public Map<String, Object> saveShifts( @RequestBody String data) {
+        Map<String, Object> model = new HashMap<String, Object>();
 
-        // Parse the list of params to array of Strings
-        // reuse Scheduled class where sid = shift id and eid = index
         Gson gson = new Gson();
         Scheduled [] shiftChanges = gson.fromJson(data, Scheduled[].class);
 
-          for (Scheduled item : shiftChanges) {
-            try {
-              jdbcTemplate.update("update sequ_shift set index = ? where id = ?",
-                  item.getEid(), item.getSid());
-            }
-            catch(DataIntegrityViolationException e) {
-              System.out.println(e);
-              // do nothing
-            }
-          }
-        return "jsonTemplate";
-  }
+        model.put("updated", repository.updateShifts(shiftChanges));
+        return model;
+      }
 
-
+  /*
 
   // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")

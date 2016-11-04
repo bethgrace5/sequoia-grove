@@ -35,7 +35,7 @@
 
     <form class="pull-right">
       <!-- Download and Print Options -->
-      <button ng-click="clearSchedule($event)" 
+      <button ng-click="clearSchedule($event)"
         ng-disabled = "saving || importing || loading"
         class="btn btn-default btn-warning">
         Clear
@@ -71,7 +71,7 @@
         Publish
         <span class="glyphicon glyphicon glyphicon-pushpin" aria-hidden="true"></span>
       </button>
-      
+
       <button class = "btn btn-primary"
         ng-show = "isPublished"
         ng-disabled = "saving || loading || importing">

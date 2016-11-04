@@ -932,6 +932,10 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var deferred = $q.defer();
       // Save Shift Indices
       saveShifts().then(function(success) {
+        deferred.resolve();
+      });
+        /*
+        .then(function(success) {
         // Save Updated cells
         return saveSchedule();
       }).then(function(success) {
@@ -947,6 +951,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         notifyObservers();
         deferred.resolve(success);
       });
+      */
+
       return deferred.promise;
     };
     service.removeManagePrivelage = function() {

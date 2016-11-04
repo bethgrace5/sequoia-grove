@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCallback;
 import org.springframework.jdbc.core.RowMapper;
@@ -21,9 +22,10 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
-import com.sequoiagrove.model.Day;
 import com.sequoiagrove.controller.Application;
+import com.sequoiagrove.model.Day;
 import com.sequoiagrove.model.ScheduleRow;
+import com.sequoiagrove.model.Scheduled;
 
 @Repository
 public class ScheduleRepository {
@@ -59,6 +61,24 @@ public class ScheduleRepository {
       }
       });
 
+    return true;
+  }
+
+  public boolean updateShifts(Scheduled[] scheduleChanges) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sql = "update sequ_shift set index = ? where id = ?";
+    final List<Scheduled> changes = Arrays.asList(scheduleChanges);
+
+    int[] updateCounts = jdbc.batchUpdate(sql,
+        new BatchPreparedStatementSetter() {
+          public void setValues(PreparedStatement ps, int i) throws SQLException {
+            ps.setInt(1, changes.get(i).getEid());
+            ps.setInt(2, changes.get(i).getSid());
+          }
+          public int getBatchSize() {
+            return changes.size();
+          }
+        });
     return true;
   }
 
