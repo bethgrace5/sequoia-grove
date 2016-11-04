@@ -388,9 +388,9 @@ angular.module('sequoiaGroveApp')
               $scope.selectedEmployee.isCurrent = true;
               $scope.selectedEmployee.id = success.data.id;
               $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
-              $scope.employees.push($scope.selectedEmployee);
+              $scope.list.unshift($scope.selectedEmployee);
             }
-            $scope.selectEmployee($scope.employees[success.data.id]);
+            $scope.selectEmployee($scope.selectedEmployee);
             $scope.saving = false;
             $scope.employeeSaved = true;
             form.$setPristine();

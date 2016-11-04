@@ -1,8 +1,11 @@
 package com.sequoiagrove.controller;
 
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Types;
 import java.util.AbstractMap;
 import java.util.ArrayList;
-import java.sql.Types;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
@@ -10,12 +13,10 @@ import java.util.Map;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
-
-import java.sql.ResultSet;
-import java.sql.SQLException;
 
 import com.sequoiagrove.model.Employee;
 import com.sequoiagrove.model.Duration;
@@ -91,18 +92,18 @@ public class EmployeeRepository {
       "set date_unemployed = current_date " +
       "where user_id = ? and location_id = ? and date_unemployed is null";
 
-      // special case where user tries to unemploy employee they just reemployed today - deletes row instead
-      int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId, id, locationId}, Integer.class);
-      if(count > 0) {
-        jdbc.update( sqlSpecial, new Object[]{id, locationId});
+    // special case where user tries to unemploy employee they just reemployed today - deletes row instead
+    int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId, id, locationId}, Integer.class);
+    if(count > 0) {
+      jdbc.update( sqlSpecial, new Object[]{id, locationId});
+    }
+    // standard procedure, make sure is current then set date unemployed
+    else {
+      count = jdbc.queryForObject(sqlCurrentCount, new Object[]{id, locationId}, Integer.class);
+      if (count > 0){
+        jdbc.update(sqlUpdate, new Object[]{id, locationId});
       }
-      // standard procedure, make sure is current then set date unemployed
-      else {
-        count = jdbc.queryForObject(sqlCurrentCount, new Object[]{id, locationId}, Integer.class);
-        if (count > 0){
-          jdbc.update(sqlUpdate, new Object[]{id, locationId});
-        }
-      }
+    }
 
     return true;
   }
@@ -122,23 +123,77 @@ public class EmployeeRepository {
     String sqlInsert = "insert into sequ_employment_history(user_id, location_id, date_employed, date_unemployed) " +
       "values( ?, ?, current_date, null) ";
 
-      // see if this employee current
-      int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId}, Integer.class);
+    // see if this employee current
+    int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId}, Integer.class);
 
-      // this was NOT a current employee, add a new employment history
-      if (count <= 0){
-        count = jdbc.queryForObject(sqlSpecial, new Object[]{id, locationId}, Integer.class);
-        // in the case they were unemployed today, and then reemployed, update
-        if(count >0) {
-          jdbc.update(sqlUpdate, new Object[]{id, locationId});
-        }
-        // standard procedure, insert new employment history row
-        else {
-          jdbc.update(sqlInsert, new Object[]{id, locationId});
-        }
+    // this was NOT a current employee, add a new employment history
+    if (count <= 0){
+      count = jdbc.queryForObject(sqlSpecial, new Object[]{id, locationId}, Integer.class);
+      // in the case they were unemployed today, and then reemployed, update
+      if(count >0) {
+        jdbc.update(sqlUpdate, new Object[]{id, locationId});
       }
-      return true;
+      // standard procedure, insert new employment history row
+      else {
+        jdbc.update(sqlInsert, new Object[]{id, locationId});
+      }
     }
+    return true;
+  }
+
+  public int add(Object[] params, int locationId, int classId) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sqlAdd = "insert into sequ_user (id, first_name,  last_name, birth_date, " +
+      "max_hrs_week, min_hrs_week, phone_number, clock_number, email, classification_id, notes)  " +
+      "values((select nextval('sequ_user_sequence')), ?, ?, to_date(?, 'mm-dd-yyyy'), ?, ?, ?, ?, ?, ?, ?) " +
+      "returning currval('sequ_user_sequence')";
+    String sqlActivate = "insert into sequ_employment_history values( ?, current_date, null, ?)";
+
+    // add the employee
+    int id = jdbc.queryForObject(sqlAdd, params, Integer.class);
+
+    // activate the employee
+    jdbc.update(sqlActivate, id, locationId);
+
+    // add permissions
+    if (classId == 1) { // employee
+      givePermissions(Arrays.asList(2), id);
+    }
+    if (classId == 2) { // manager
+      givePermissions(Arrays.asList(2, 3, 4, 5, 7), id);
+    }
+    if (classId == 3) { // account holder
+      givePermissions(Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9), id);
+    }
+    return id;
+  }
+
+  // permissions
+  // 1:admin  2:submit-reuquests-off 3:manage-employees 4:manage-requests 5:manage-schedule
+  // 6:get-other-store-info 7:manage-store 8:edit-user-permissions 9:admin
+  // no way to add a user as an admin, that must be done manually
+  // update sequ_user set classification_id = 4 where id = ?
+  public int[] givePermissions(final List<Integer> permissions, int id) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sql =
+      "INSERT INTO sequ_user_permission (user_id, permission_id) SELECT ?, ? " +
+      "WHERE NOT EXISTS ( " +
+      "SELECT * FROM sequ_user_permission WHERE user_id = ? and permission_id = ? " +
+      ");";
+    int[] updateCounts = jdbc.batchUpdate(sql,
+        new BatchPreparedStatementSetter() {
+          public void setValues(PreparedStatement ps, int i) throws SQLException {
+            ps.setInt(1, id);
+            ps.setInt(2, permissions.get(i));
+            ps.setInt(3, id);
+            ps.setInt(4, permissions.get(i));
+          }
+          public int getBatchSize() {
+            return permissions.size();
+          }
+        });
+    return updateCounts;
+  }
 
   private static final RowMapper<Employee> employeeMapper = new RowMapper<Employee>() {
     public Employee mapRow(ResultSet rs, int rowNum) throws SQLException {
