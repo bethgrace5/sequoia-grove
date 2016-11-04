@@ -108,7 +108,7 @@ public class Duration{
     public void setLocationId(int locationId) {
       this.locationId = locationId;
     }
-    public int getLocationId(int locationId) {
+    public int getLocationId() {
       return locationId;
     }
 

@@ -58,8 +58,8 @@ public class EmployeeRepository {
     HashMap<Integer, Employee> map = new HashMap<Integer, Employee>();
 
     // change list to hashmap
-    for( Employee u : employees) {
-      map.put(u.getId(), u);
+    for( Employee e : employees) {
+      map.put(e.getId(), e);
     }
     return map;
   }
@@ -86,7 +86,7 @@ public class EmployeeRepository {
   public boolean deactivate(int id, int locationId) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
     String sqlCount =
-      "select count(*) from sequ_employment_history where user_id = ? " +
+      "select count(*) from sequ_employment_history where user_id = ? and location_id = ?" +
       "and date_employed=current_date and date_unemployed is null and" +
       "(select count(*) from sequ_employment_history where user_id = ? and location_id = ?) > 1 ";
 
@@ -101,7 +101,7 @@ public class EmployeeRepository {
       "where user_id = ? and location_id = ? and date_unemployed is null";
 
       // special case where user tries to unemploy employee they just reemployed today - deletes row instead
-      int count = jdbc.queryForObject(sqlCount, new Object[]{id, id, locationId}, Integer.class);
+      int count = jdbc.queryForObject(sqlCount, new Object[]{id, locationId, id, locationId}, Integer.class);
       if(count > 0) {
         jdbc.update( sqlSpecial, new Object[]{id, locationId});
       }
@@ -126,7 +126,7 @@ public class EmployeeRepository {
       "where user_id = ? and location_id = ? and date_unemployed = current_date";
 
     String sqlUpdate = " update sequ_employment_history set date_unemployed = null " +
-      "where user_id = ? and location_id = ?";
+      "where user_id = ? and location_id = ? and date_unemployed = current_date";
 
     String sqlInsert = "insert into sequ_employment_history(user_id, location_id, date_employed, date_unemployed) " +
       "values( ?, ?, current_date, null) ";
@@ -225,6 +225,7 @@ public class EmployeeRepository {
   }
 
   // change History string to list of java objects
+  // "1!12-24-2008|2!10-27-2016"
   public static List<Duration> parseHistory(String hist) {
     List<Duration> historyList = new ArrayList<Duration>();
     String[] all = hist.split("\\|");

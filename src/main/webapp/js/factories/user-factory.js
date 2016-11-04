@@ -30,7 +30,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
     })
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Getting user data...";
-    var url = '/employees/'+locations;
+    var url = '/employees/'+$rootScope.selectedLocation;
     // if it's in dev mode, and we already have
     // a template in localstorage, return.
     /*if($rootScope.devMode) {
@@ -50,6 +50,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               // anything you want can go here and will safely be run on the next digest.
               users[locationId] = success.data.employees;
+              console.log(success.data.employees);
               deferred.resolve();
             });
           }

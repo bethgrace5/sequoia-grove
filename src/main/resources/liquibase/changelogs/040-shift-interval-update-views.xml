@@ -222,6 +222,7 @@
       concat('sun,', sun::text)) as avail,
       (select count(*) from sequ_employment_history
       where user_id = e.id
+      and location_id = no.location_id
       and date_unemployed is null
       ) as is_current
       from sequ_user e
