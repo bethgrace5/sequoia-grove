@@ -40,8 +40,8 @@ angular.module('sequoiaGroveApp')
     $scope.classifications = [
       {'disp':'Employee', 'val':1},
       {'disp':'Manager',  'val':2},
-      {'disp':'Account Holder', 'val':3},
-      {'disp':'Admin', 'val':4}
+      //{'disp':'Account Holder', 'val':3},
+      //{'disp':'Admin', 'val':4}
     ]
     $scope.permissions = [
       {'disp':'submit-requests-off', 'val':2},
@@ -70,7 +70,7 @@ angular.module('sequoiaGroveApp')
     $scope.current;
     $scope.selectedEmployee = {
       'id':0,
-      'classificationId': 1,
+      'classificationId': $scope.classifications[0].val,
       'notes': '',
       'firstname':'New',
       'lastname':'Employee',
@@ -128,25 +128,25 @@ angular.module('sequoiaGroveApp')
 
     $scope.selectClassification = function(index) {
       $scope.selectedClassification = index;
-      $scope.selectedEmployee.classificationId =
-        $scope.classifications[index].val;
+      $scope.selectedEmployee.classificationId = $scope.classifications[index].val;
     }
 
     $scope.selectEmployee = function(value) {
       $scope.resetEmployeeErrorFlags();
-      $scope.selectedClassification = value.classificationId;
+      $scope.selectedClassification = value.classificationId-1;
       $scope.birthday = moment(value.birthDate, 'MM-DD-YYYY').toDate();
       $scope.selectedEmployee = value;
     }
 
     // reset selected employee
     $scope.clearEmployee = function() {
+      $scope.selectClassification(0);
       $scope.activeTab = 'info';
       $scope.editing = false;
       $scope.birthday = new Date();
       $scope.selectedEmployee = {
         'id':0,
-        'classificationId': 1,
+        'classificationId': $scope.classifications[0].val,
         'notes': '',
         'firstname':'New',
         'lastname':'Employee',
