@@ -129,7 +129,9 @@ angular.module('sequoiaGroveApp')
     $scope.selectClassification = function(index, form) {
       $scope.selectedEmployee.classificationId = $scope.classifications[index].val;
       $scope.selectedClassification = index;
-      form.$setDirty();
+      if(form) {
+        form.$setDirty();
+      }
     }
 
     $scope.selectEmployee = function(value) {

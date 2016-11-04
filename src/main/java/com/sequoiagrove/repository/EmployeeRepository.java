@@ -69,6 +69,8 @@ public class EmployeeRepository {
       "notes  = ?  "+
       "where id = ?";
 
+    //                id, classification_id
+    updatePermissions((int)args[10], (int)args[8]);
     JdbcTemplate jdbc = Application.getJdbcTemplate();
     jdbc.update(sql, args);
 
@@ -154,17 +156,8 @@ public class EmployeeRepository {
 
     // activate the employee
     jdbc.update(sqlActivate, id, locationId);
+    updatePermissions(id, classId);
 
-    // add permissions
-    if (classId == 1) { // employee
-      givePermissions(Arrays.asList(2), id);
-    }
-    if (classId == 2) { // manager
-      givePermissions(Arrays.asList(2, 3, 4, 5, 7), id);
-    }
-    if (classId == 3) { // account holder
-      givePermissions(Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9), id);
-    }
     return id;
   }
 
@@ -173,13 +166,34 @@ public class EmployeeRepository {
   // 6:get-other-store-info 7:manage-store 8:edit-user-permissions 9:admin
   // no way to add a user as an admin, that must be done manually
   // update sequ_user set classification_id = 4 where id = ?
-  public int[] givePermissions(final List<Integer> permissions, int id) {
+  public int[] updatePermissions(int id, int classId) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sqlDelete = "delete from sequ_user_permission where user_id = ?";
     String sql =
       "INSERT INTO sequ_user_permission (user_id, permission_id) SELECT ?, ? " +
       "WHERE NOT EXISTS ( " +
       "SELECT * FROM sequ_user_permission WHERE user_id = ? and permission_id = ? " +
       ");";
+
+    List<Integer> list = new ArrayList<Integer>();
+
+    // add permissions
+    if (classId == 1) { // employee
+      list = (Arrays.asList(2));
+    }
+    if (classId == 2) { // manager
+      list = (Arrays.asList(2, 3, 4, 5, 7));
+    }
+    if (classId == 3) { // account holder
+      list = (Arrays.asList(2, 3, 4, 5, 6, 7, 8, 9));
+    }
+
+    final List<Integer> permissions = list;
+
+    // delete any existing permissions
+    jdbc.update(sqlDelete, id);
+
+    // add new permissions
     int[] updateCounts = jdbc.batchUpdate(sql,
         new BatchPreparedStatementSetter() {
           public void setValues(PreparedStatement ps, int i) throws SQLException {
