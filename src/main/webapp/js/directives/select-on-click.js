@@ -74,8 +74,9 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
             element[0].classList.add('schedule-edit-input-error');
           }
 
+          console.log(attrs.date);
           // 4. update change lists
-          scheduleFactory.changeItem(employee.id, attrs.sid, attrs.date);
+          scheduleFactory.changeItem(employee.id, attrs.sid, moment(attrs.date, 'MM-DD-YYYY').format('DD-MM-YYYY'));
         }
         else { // No Employee was found by the name supplied
           //console.log(element[0].classList);

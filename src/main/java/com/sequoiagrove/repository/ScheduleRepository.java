@@ -41,7 +41,7 @@ public class ScheduleRepository {
   // determine if schedule is published by sending starting monday and location id
   public boolean isPublished(Object[] args) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
-    String sql = "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'mm-dd-yyyy') and location_id = ?";
+    String sql = "SELECT count(*) FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?";
     int count = jdbc.queryForObject(sql, args, Integer.class);
     return (count>0)? true: false;
   }
@@ -74,6 +74,43 @@ public class ScheduleRepository {
           public void setValues(PreparedStatement ps, int i) throws SQLException {
             ps.setInt(1, changes.get(i).getEid());
             ps.setInt(2, changes.get(i).getSid());
+          }
+          public int getBatchSize() {
+            return changes.size();
+          }
+        });
+    return true;
+  }
+
+  public boolean updateSchedule(Scheduled[] scheduleChanges) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sql = "select sequ_schedule(?, ?, ?)";
+    final List<Scheduled> changes = Arrays.asList(scheduleChanges);
+
+    int[] updateCounts = jdbc.batchUpdate(sql,
+        new BatchPreparedStatementSetter() {
+          public void setValues(PreparedStatement ps, int i) throws SQLException {
+            ps.setInt(1, changes.get(i).getEid());
+            ps.setInt(2, changes.get(i).getSid());
+            ps.setString(3, changes.get(i).getDate());
+          }
+          public int getBatchSize() {
+            return changes.size();
+          }
+        });
+    return true;
+  }
+
+  public boolean deleteSchedule(Scheduled[] scheduleChanges) {
+    JdbcTemplate jdbc = Application.getJdbcTemplate();
+    String sql = "select sequ_delete_schedule(?, ?)";
+    final List<Scheduled> changes = Arrays.asList(scheduleChanges);
+
+    int[] updateCounts = jdbc.batchUpdate(sql,
+        new BatchPreparedStatementSetter() {
+          public void setValues(PreparedStatement ps, int i) throws SQLException {
+            ps.setInt(1, changes.get(i).getSid());
+            ps.setString(2, changes.get(i).getDate());
           }
           public int getBatchSize() {
             return changes.size();

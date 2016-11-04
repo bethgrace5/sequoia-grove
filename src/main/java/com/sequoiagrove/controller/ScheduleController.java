@@ -100,69 +100,38 @@ public class ScheduleController {
         return model;
       }
 
-  /*
-
-  // Update current schedule template (current shifts) dd/mm/yyyy
+    // Update current schedule template (current shifts) dd/mm/yyyy
     @RequestMapping(value = "/schedule/update")
-    public String updateSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws Exception {
-
-        // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
-
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
+      public Map<String, Object> updateSchedule(@RequestBody String data) {
+        Map<String, Object> model = new HashMap<String, Object>();
         // Parse the list of params to array of Strings
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-          // update database schedule(eid, sid, mon)
-          for (Scheduled change : scheduleChanges) {
-            try {
-                jdbcTemplate.update("select sequ_schedule(?, ?, ?)",
-                    change.getEid(),
-                    change.getSid(),
-                    change.getDate());
-            }
-            catch(DataIntegrityViolationException e) {
-              // do nothing
-            }
-          }
-        return "jsonTemplate";
-    }
+        // for now, wipe out all cached schedules - later send parameters
+        // just to remove the updated schedule.
+        master = new HashMap<Integer, HashMap<String, Schedule>>();
 
-  // Delete scheduled day dd/mm/yyyy
+        model.put("updated", repository.updateSchedule(scheduleChanges));
+        return model;
+      }
+
+    // Delete scheduled day dd/mm/yyyy
     @RequestMapping(value = "/schedule/delete")
-    public String deleteSchedule(@RequestBody String data, @ModelAttribute("scope") List<String> permissions,  Model model) throws SQLException {
-
-        // the token did not have the required permissions, return 403 status
-        if (!(permissions.contains("manage-schedule") || permissions.contains("admin"))) {
-            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
-            return "jsonTemplate";
-        }
-
-        JdbcTemplate jdbcTemplate = Application.getJdbcTemplate();
-
+      public Map<String, Object> deleteSchedule(@RequestBody String data) {
+        Map<String, Object> model = new HashMap<String, Object>();
         // Parse the list of params to array of Strings
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-          // update database
-          for (Scheduled change : scheduleChanges) {
-            try {
-              jdbcTemplate.update("select sequ_delete_schedule(?, ?)",
-                  change.getSid(),
-                  change.getDate());
-            }
-            catch(Exception e) {
-              // do nothing
-            }
-          }
-        return "jsonTemplate";
-    }
 
-    */
+        // for now, wipe out all cached schedules - later send parameters
+        // just to remove the updated schedule.
+        master = new HashMap<Integer, HashMap<String, Schedule>>();
+
+        model.put("updated", repository.deleteSchedule(scheduleChanges));
+        return model;
+      }
+
 }
 

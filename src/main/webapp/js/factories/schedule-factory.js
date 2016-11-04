@@ -315,21 +315,8 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
     var deferred = $q.defer();
     $rootScope.loadingMsg = "Obtaining current schedule data...";
-    var url = '/schedule/'+monday+'/'+ locationId; // if it's in dev mode, and we already have
+    var url = '/schedule/'+(moment(monday, 'MM-DD-YYYY').format('DD-MM-YYYY'))+'/'+ locationId; // if it's in dev mode, and we already have
     // a template in localstorage, return.
-    /*
-    if($rootScope.devMode) {
-      var temp = localStorageService.get('template');
-        if (temp) {
-          schedule = JSON.parse(temp);
-          $log.debug('Warning: devMode on. This is not current schedule data');
-          isPublished = true;
-          return $q(function(resolve, reject) {
-            resolve();
-          });
-        }
-      }
-      */
     $http({
       "url": $rootScope.urlPrefix + url,
       "method": "GET",
@@ -624,7 +611,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
     });
     if (isInDeleteList === false) { // add to delete list
-      deleteShifts[locationId].push({'sid':obj.sid, 'date':obj.date});
+      deleteShifts[locationId].push({'sid':obj.sid, 'date':moment(obj.date, 'MM-DD-YYYY').format('DD-MM-YYYY')});
     }
     notifyObservers();
   }
@@ -694,31 +681,31 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       else {
         if (t.mon.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.mon.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.mon.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.tue.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.tue.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.tue.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.wed.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.wed.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.wed.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.thu.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.thu.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.thu.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.fri.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.fri.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.fri.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.sat.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.sat.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.sat.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         if (t.sun.eid !== 0) {
-          deleteShifts[locationId].push({'sid':t.sid, 'date':header.sun.val});
+          deleteShifts[locationId].push({'sid':t.sid, 'date':moment(header.sun.val,'MM-DD-YYYY').format('DD-MM-YYYY')});
           countChanges++;
         }
         // update template so view reflects changes
@@ -932,10 +919,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var deferred = $q.defer();
       // Save Shift Indices
       saveShifts().then(function(success) {
-        deferred.resolve();
-      });
-        /*
-        .then(function(success) {
         // Save Updated cells
         return saveSchedule();
       }).then(function(success) {
@@ -951,7 +934,6 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
         notifyObservers();
         deferred.resolve(success);
       });
-      */
 
       return deferred.promise;
     };
