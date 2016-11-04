@@ -46,7 +46,10 @@
       <strong ng-show="key == 'sun'"> Sunday    </strong>
     </div>
     <div class="col-sm-9 col-xs-12">
-      <div ng-repeat = "t in value" class="pull-left" style="margin-bottom: 10px;">
+      <div style="color: #8c8c8c; margin-bottom: 8px;" ng-show="value.length <= 0">
+        none
+      </div>
+      <div ng-repeat = "t in value" class="pull-left">
         <span> {{formatTime(t.start, true)}} - {{formatTime(t.end, true)}} </span>
         <!-- remove availability -->
         <button type="button" class="btn btn-default" ng-click="removeAvailability(key, $index)">

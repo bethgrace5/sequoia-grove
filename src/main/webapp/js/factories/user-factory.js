@@ -50,7 +50,6 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
             $timeout(function() {
               // anything you want can go here and will safely be run on the next digest.
               users[locationId] = success.data.employees;
-              console.log(success.data.employees);
               deferred.resolve();
             });
           }
