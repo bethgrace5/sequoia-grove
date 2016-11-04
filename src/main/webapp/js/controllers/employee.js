@@ -40,7 +40,7 @@ angular.module('sequoiaGroveApp')
     $scope.classifications = [
       {'disp':'Employee', 'val':1},
       {'disp':'Manager',  'val':2},
-      //{'disp':'Account Holder', 'val':3},
+      {'disp':'Account Holder', 'val':3},
       //{'disp':'Admin', 'val':4}
     ]
     $scope.permissions = [
@@ -126,9 +126,10 @@ angular.module('sequoiaGroveApp')
       $scope.newAvail.end = end;
     }
 
-    $scope.selectClassification = function(index) {
-      $scope.selectedClassification = index;
+    $scope.selectClassification = function(index, form) {
       $scope.selectedEmployee.classificationId = $scope.classifications[index].val;
+      $scope.selectedClassification = index;
+      form.$setDirty();
     }
 
     $scope.selectEmployee = function(value) {

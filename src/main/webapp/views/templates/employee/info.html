@@ -81,8 +81,11 @@
             {{classifications[selectedClassification].disp}} <span class="caret"></span>
           </button>
           <ul class="dropdown-menu" role="menu"
-            ng-model="selectedEmployee.classificationId" arial-labelledby="selectClassification">
-            <li ng-repeat = "c in classifications" value ="{{c.val}}"><a ng-click="selectClassification($index)">{{c.disp}}</a> </li>
+            ng-model="selectedEmployee.classificationId"
+            arial-labelledby="selectClassification">
+            <li ng-repeat = "c in classifications" name="classification" value ="{{c.val}}">
+              <a ng-click="selectClassification($index, employeeform)">{{c.disp}}</a>
+            </li>
           </ul>
         </div>
       </div>
