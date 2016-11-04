@@ -34,7 +34,7 @@ public class ScheduleRepository {
   // get schedule rows by sending starting monday and location id
   public ArrayList<ScheduleRow> getSchedule(Object[] args) {
     JdbcTemplate jdbc = Application.getJdbcTemplate();
-    String sql = "select * from sequ_get_schedule(?) where location_id = ?";
+    String sql = "select * from sequ_get_schedule(?) where location_id = ? order by index";
     return (ArrayList<ScheduleRow>) jdbc.query(sql, args, scheduleRowMapper);
   }
 

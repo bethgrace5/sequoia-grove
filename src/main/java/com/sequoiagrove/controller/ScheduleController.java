@@ -92,6 +92,10 @@ public class ScheduleController {
         Gson gson = new Gson();
         Scheduled [] shiftChanges = gson.fromJson(data, Scheduled[].class);
 
+        // for now, wipe out all cached schedules - later send parameters
+        // just to remove the updated schedule.
+        master = new HashMap<Integer, HashMap<String, Schedule>>();
+
         model.put("updated", repository.updateShifts(shiftChanges));
         return model;
       }
