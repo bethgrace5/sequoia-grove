@@ -81,14 +81,8 @@ a:focus {
 *********************************************/
 .data-view {
   min-height: 300px;
-  /*max-height: 30%;*/
-  overflow-y: scroll;
-  overflow-x: hidden;
-  padding-left:10px;
-  margin-left:10px;
+  padding: 0;
   width: 100%;
-  margin-top:0;
-  margin-bottom: 3px;
 }
 .position-button-bar {
   margin: 0 auto;
@@ -100,11 +94,6 @@ a:focus {
 }
 .position-button-active {
   background-color: yellow;
-}
-.schedule-console {
-  margin-right: 20px;
-  margin-left: 20px;
-  margin-bottom: 3px;
 }
 
 /********************************************
@@ -153,10 +142,6 @@ a:focus {
   color: transparent;
   cursor: default;
   text-shadow: 1px 0px 0px #000;
-  -webkit-transition: all 0.10s ease-in-out;
-  -moz-transition: all 0.10s ease-in-out;
-  -ms-transition: all 0.10s ease-in-out;
-  -o-transition: all 0.10s ease-in-out;
   outline: none;
   border: 1px solid #DDD;
 }
@@ -164,15 +149,9 @@ a:focus {
   box-shadow: 0 0 5px #4d79ff;
   border: 1px solid #4d79ff;
 }
-.schedule-edit-input::selection {
-  background: transparent; /*WebKit/Blink Browsers */
-}
 .schedule-edit-input-highlight:focus {
   box-shadow: 0 0 5px #00CCFF;
   border: 1px solid #00CCFF;
-}
-.schedule-edit-input-highlight::selection {
-  background: transparent; /*WebKit/Blink Browsers */
 }
 /* error on edit schedule input box */
 .schedule-edit-input-error{
@@ -212,9 +191,6 @@ a:focus {
   padding: 0;
   border-radius: 5px;
 }
-.schedule-edit-input-error::selection {
-  background: transparent;  /*WebKit/Blink Browsers */
-}
 /* warning on edit schedule input box */
 .schedule-edit-input-warn{
   text-shadow: 1px 0px 0px #CF8600;
@@ -224,34 +200,31 @@ a:focus {
   border: 1px solid rgba(255, 204, 0, 0.7);
   background-color: #FFFFCC;
 }
-.schedule-edit-input-warn::selection {
-  background: transparent; /*WebKit/Blink Browsers */
-}
 .schedule-view-panel {
   min-height: 60%;
 }
-.schedule-edit-panel {
+div .panel.panel-default.schedule-edit-panel .panel-body {
   /*background-color: #edf6f7;*/
+  padding-left: 0;
+  padding-right: 0;
   min-height: 70%;
-  width: 90%;
   min-width:1090px;
-  margin-right: 13%;
 }
 .schedule-edit-panel-header div{
   min-width: 9%;
 }
-.schedule-edit-header-spacing {
-  height: 15px;
+div .panel.panel-default.employee-schedule-edit-panel.pull-right.clear-both .panel-body {
+  padding-top: 0;
+  padding-bottom: 0;
 }
 .employee-schedule-edit-panel {
+  -webkit-box-shadow: 0 1px 1px rgba(0,0,0,0);
+  box-shadow: 0 1px 1px rgba(0,0,0,0);
   border: none;
-  padding: 0;
   margin-top: 75px;
-  position:fixed;
   right: 0;
-  max-height: 60%;
-  overflow-y: scroll;
-  width: 13%;
+  overflow-y:scroll;
+  width: 140px;
 }
 .employee-schedule-edit-search {
   border: none;

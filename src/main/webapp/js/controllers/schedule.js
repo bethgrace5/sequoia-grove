@@ -53,21 +53,42 @@ angular.module('sequoiaGroveApp')
     }
     return false;
   }
-  // find the matching employee by name
-  $scope.getEmployeeByname = function(name) {
-    var employee = {'id':0};
-    _.map($scope.employees, function(e) {
-      if(_.isMatch(e, {'firstname':name})) {
-        employee = e;
+
+  // binary search to get employee by name
+  $scope.getEmployeeByName = function(searchElement) {
+
+    var minIndex = 0;
+    var maxIndex = $scope.list.length - 1;
+    var currentIndex;
+    var currentElement;
+
+    while (minIndex <= maxIndex) {
+      currentIndex = (minIndex + maxIndex) / 2 | 0;
+      currentElement = $scope.list[currentIndex];
+      var check = searchElement.localeCompare(currentElement.firstname.substring(0, searchElement.length));
+
+      if (check == 0) {
+        return $scope.list[currentIndex];;
       }
-    });
-    return employee;
+      if (check < 1) {
+        maxIndex = currentIndex - 1;
+      }
+      else if (check >= 1) {
+        minIndex = currentIndex + 1;
+      }
+      else {
+        return currentIndex;
+      }
+    }
+    return -1;
   }
 
   $scope.selectEid = function(t, day, al, pl) {
     $scope.aList = al;
     $scope.pList = pl;
+
     if (t[day]) {
+    //var obj = ($scope.employees[t[day].eid]);
       $scope.selectedId = t[day].eid;
       if ($scope.selectedId === 0) {
         $scope.errors.available = true;
@@ -76,7 +97,7 @@ angular.module('sequoiaGroveApp')
         $scope.selectedId = 0;
       }
       else {
-        $scope.errors.selectedName = t[day].name;
+        $scope.errors.selectedName = $scope.employees[t[day].eid].firstname;
         $scope.errors.selectedPosition = t.position;
         $scope.errors.available = t[day].hasAvailability[$scope.selectedId];
         $scope.errors.hasPosition = t[day].hasPosition[$scope.selectedId];
@@ -94,6 +115,7 @@ angular.module('sequoiaGroveApp')
 
   // get if employee is available
   $scope.employeeIsAvailable = function(attrs, employee) {
+    console.log(employee);
     return userFactory.isAvailable(
         employee.id, attrs.day, attrs.shiftstart, attrs.shiftend);
   }
@@ -127,24 +149,29 @@ angular.module('sequoiaGroveApp')
   // validation for schedule edit input
   $scope.inputStatus = function(id, shiftId, available, hasPosition, holiday, current) {
     var style = 'form-control schedule-edit-input';
-    if ($rootScope.readyToSchedule === false) {
+    if(id == 0) {
+      if ($scope.selectedId == 0) {
+        style += ' schedule-edit-highlight';
+      }
       return style;
     }
+
     if (available === undefined) {
       if (id == $scope.selectedId) {
         style += ' schedule-edit-highlight';
       }
       return style;
     }
+
     // Highlight all occurences of the employee that was clicked
     if (id == $scope.selectedId) {
       style += ' schedule-edit-highlight';
     }
     else {
       if (available[$scope.selectedId] && hasPosition[$scope.selectedId]) {
-        if( !holiday) {
+        //if( !holiday) {
           style += ' schedule-edit-input-avail';
-        }
+        //}
       }
     }
     if (available[id] === false) {
@@ -156,9 +183,9 @@ angular.module('sequoiaGroveApp')
     else if (current[id] === false) {
       style += ' schedule-edit-input-error';
     }
-    if (holiday) {
-      style += ' schedule-edit-input-holiday';
-    }
+    //if (holiday) {
+      //style += ' schedule-edit-input-holiday';
+    //}
     return style;
   }
 
@@ -187,31 +214,6 @@ angular.module('sequoiaGroveApp')
         if(loginFactory.getUser().isManager) {
           $scope.selectedId = 0;
           scheduleFactory.clear($rootScope);
-        }
-      }, function() {
-        // cancel publish
-        return;
-      });
-  }
-
-  $scope.importWeek = function(index, ev) {
-      var confirm = $mdDialog.confirm()
-        .title('Import?')
-        .textContent('This will overwrite any current data this week, and cannot be undone.')
-        .ariaLabel('publish schedule')
-        .targetEvent(ev)
-        .ok('Import')
-        .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
-        // OK to import
-        if(loginFactory.getUser().isManager) {
-          $scope.selectWeek(index);
-          var week = $scope.weekList[index].val;
-          $scope.importing = true;
-          scheduleFactory.importWeek(week).then(
-            function(success) {
-              $scope.importing = false;
-            });
         }
       }, function() {
         // cancel publish

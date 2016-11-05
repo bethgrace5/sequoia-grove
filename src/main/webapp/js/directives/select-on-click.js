@@ -18,9 +18,14 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
         if(e.keyCode == 13) { // Enter Pressed
           this.blur(); // deselect the item
         }
+        if(e.keyCode == 9) { // tab Pressed
+          //$scope.selectEid = function(t, day, al, pl) {
+        }
         if(e.keyCode == 8) { // Backspace Pressed
-          //this.value = this.value.substring(0, this.value.length); // clear input
-          this.setSelectionRange(this.value.length-1, this.value.length) // back space operate as usual
+          //this.value = ""; // clear input
+          this.value = this.value.substring(0, this.value.length); // clear input
+          //this.setSelectionRange(this.value.length-1, this.value.length) // back space operate as usual
+          return;
         }
         if(e.keyCode == 27) { // Esc Pressed
           this.blur();
@@ -29,7 +34,7 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
 
       element.on('keyup', function (e) {
         // an arrow key was pressed
-        if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40) {
+        if (e.keyCode == 37 || e.keyCode == 38 || e.keyCode == 39 || e.keyCode == 40 || e.keyCode == 8) {
          return;
         }
         // capitalize first letter of the name
@@ -45,10 +50,16 @@ angular.module('sequoiaGroveApp').directive('selectOnClick', ['$window', '$timeo
           $scope.$apply();
           return;
         }
-        var employee = $scope.getEmployeeByname(this.value);;
-        //console.log(employee.id);
+        var employee = $scope.getEmployeeByName(this.value);
+        // auto complete the name
+        if (employee != -1) {
+          var lenval = this.value.length;
+          this.value = employee.firstname;
+          // set selection range to change name when continuing typing
+          this.setSelectionRange(lenval, this.value.length)
+        //}
         // found employee!
-        if (employee.id !== 0) {
+        //if (employee.id !== 0) {
           // remove warning class and update template with new id
           element[0].classList.remove('schedule-edit-input-warn');
           $scope.template[attrs.idx][attrs.day].eid = employee.id;
