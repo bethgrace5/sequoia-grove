@@ -85,6 +85,6 @@ angular.module('sequoiaGroveApp', [
   $rootScope.devMode = JSON.parse(localStorageService.get('devMode'));
 
   $rootScope.appFailure = false;
-  //$rootScope.urlPrefix = '/sequoiagrove';
-  $rootScope.urlPrefix = '';
+  $rootScope.urlPrefix = '/sequoiagrove';
+  //$rootScope.urlPrefix = '';
 });
