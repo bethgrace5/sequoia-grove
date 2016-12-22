@@ -2,6 +2,7 @@
 
 angular.module('sequoiaGroveApp', [
     'LocalStorageModule', 'ngCookies', 'ngResource', 'ngRoute', 'ngAnimate',
+    'ngMaterial',
     'ngSanitize', 'pascalprecht.translate', 'underscore',
     'as.sortable'])
 .config(function ($routeProvider, $translateProvider, localStorageServiceProvider,
