@@ -45,14 +45,14 @@
       <!-- navigation menu -->
       <div class="collapse navbar-collapse" id="js-navbar-collapse">
         <ul class="nav navbar-nav">
-            <li role="presentation"><a class="navbar-brand" href="#/home">Sequoia Grove</a></li>
+            <li role="presentation"><a class="navbar-brand" href="#!/home">Sequoia Grove</a></li>
             <li class="divider-vertical"></li>
 
             <!-- all user options -->
             <li ng-show="loggedIn" role="presentation"
               ng-disabled="loading"
               ng-class="changeTab('/home')">
-              <a href="#/home">
+              <a href="#!/home">
                 <span class="glyphicon glyphicon-home"></span>
                 {{'HEADER_TAB_HOME' | translate}}
               </a>
@@ -60,7 +60,7 @@
             <li ng-show="loggedIn" role="presentation"
               ng-disabled="loading"
               ng-class="changeTab('/request')">
-              <a href="#/request">
+              <a ng-href="#!/request">
                 <span class="badge"></span>
                 {{ 'HEADER_TAB_REQUESTS' | translate}}
                 <span class="badge badge-primary"  ng-hide = "requestsNum <= 0">{{requestsNum}}</span>
@@ -72,7 +72,7 @@
             <li role="presentation"
               ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/employee')">
-              <a href="#/employee">
+              <a href="#!/employee">
                 <span class="glyphicon glyphicon-user"></span>
                 {{'HEADER_TAB_EMPLOYEES' | translate}}
               </a>
@@ -80,7 +80,7 @@
             <li role="presentation"
               ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/manage')">
-              <a href="#/manage">
+              <a href="#!/manage">
                 <span class="glyphicon glyphicon-paperclip"></span>
                 {{'HEADER_TAB_MANAGE' | translate}}
               </a>
@@ -88,7 +88,7 @@
             <li role="presentation"
               ng-show="loggedIn && loggedInUser.isManager"
               ng-class="changeTab('/schedule')">
-              <a href="#/schedule">
+              <a href="#!/schedule">
                 <span class="glyphicon glyphicon-calendar"></span>
                 {{'HEADER_TAB_SCHEDULING' | translate}}
               </a>

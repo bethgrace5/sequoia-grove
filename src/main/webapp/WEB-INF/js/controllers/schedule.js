@@ -18,7 +18,6 @@ angular.module('sequoiaGroveApp')
         $scope,
         $timeout,
         $translate,
-        $mdDialog,
         scheduleFactory,
         userFactory,
         loginFactory,
@@ -73,53 +72,6 @@ angular.module('sequoiaGroveApp')
     "weeksInHistory": 6,
     "emptyShiftThreshold": 0.1
   };
-  // Auto-Fill schedule based on history
-  $scope.autoGenerate = function() {
-
-    if ($scope.saving) {
-      return;
-    }
-
-    // don't actually auto-gen if in dev mode
-    if($rootScope.devMode) {
-      $scope.saving = false;
-      return;
-    }
-
-    $scope.saving = true;
-
-    var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
-    $scope.autoGenOptions.mon = $scope.date.mon.val;
-    $scope.autoGenOptions.historyStart =
-      moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
-      ).subtract(daysHist, 'days').format('DD-MM-YYYY');
-    $scope.autoGenOptions.historyEnd =
-      moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
-      ).subtract(1, 'days').format('DD-MM-YYYY');
-
-    $http({
-      url: $rootScope.urlPrefix + '/schedule/autogen/',
-      method: "POST",
-      data: $scope.autoGenOptions
-    }).success( function(data, status, headers, config) {
-      if (status == 200) {
-        //$scope.updateShifts = [];
-        //$scope.deleteShifts = [];
-        // insert new shifts into schedule
-        $scope.saving = false;
-      }
-      else {
-        $log.error(status + " No Error: Could no auto-generate schedule " + data);
-        $scope.saving = false;
-      }
-    }).error( function(data, status, headers, config) {
-      $log.error(status + " Error while auto-generating schedule " + data);
-      $scope.saving = false;
-    });
-  }
-
 
 /************** Pure Functions **************/
 
@@ -318,34 +270,19 @@ angular.module('sequoiaGroveApp')
   }
 
   $scope.clearSchedule = function(ev) {
-      var confirm = $mdDialog.confirm()
-        .title('Clear?')
-        .textContent('This will clear any current data this week, and cannot be undone.')
-        .ariaLabel('publish schedule')
-        .targetEvent(ev)
-        .ok('Clear')
-        .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
+      var result = window.confirm('This will clear any current data this week, and cannot be undone.');
+      if (result) {
         // OK to clear
         if(loginFactory.getUser().isManager) {
           $scope.selectedId = 0;
           scheduleFactory.clear($rootScope);
         }
-      }, function() {
-        // cancel publish
-        return;
-      });
+      }
   }
 
   $scope.importWeek = function(index, ev) {
-      var confirm = $mdDialog.confirm()
-        .title('Import?')
-        .textContent('This will overwrite any current data this week, and cannot be undone.')
-        .ariaLabel('publish schedule')
-        .targetEvent(ev)
-        .ok('Import')
-        .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
+      var result = window.confirm('This will overwrite any current data this week, and cannot be undone.');
+      if (result) {
         // OK to import
         if(loginFactory.getUser().isManager) {
           $scope.selectWeek(index);
@@ -356,10 +293,7 @@ angular.module('sequoiaGroveApp')
               $scope.importing = false;
             });
         }
-      }, function() {
-        // cancel publish
-        return;
-      });
+      }
   }
 
   var updateChangesMade = function(){

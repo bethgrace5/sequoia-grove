@@ -1,7 +1,7 @@
 'use strict';
 
 // Factory to inject authorization token with each request sent
-angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, localStorageService, $q, $http, $rootScope, $timeout, $mdDialog) {
+angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, localStorageService, $q, $http, $rootScope, $timeout) {
   var service = {};
   var observerCallbacks = [];
   var locations = [];
@@ -149,19 +149,14 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
     }
 
     // Appending dialog to document.body to cover sidenav in docs app
-    var confirmPopup = $mdDialog.confirm()
-      .title('Submit Request?')
-      .textContent(message)
-      .ariaLabel('Request Submit')
-      .targetEvent(ev)
-      .ok('OK')
-      .cancel('Cancel');
-
-    $mdDialog.show(confirmPopup).then(function() {
+    var result = window.confirm('Submit Request: ' + message);
+    if (result) {
       deferred.resolve(true);
-    }, function() {
+    }
+    else {
       deferred.resolve(false);
-    });
+    }
+
 
     return deferred.promise;
   };
@@ -179,37 +174,27 @@ angular.module('sequoiaGroveApp').factory('requestFactory', function ( $log, loc
         ' to ' +  moment(request.endDate).format('MMMM Do,');
     }
 
-    var confirmDialog = $mdDialog.confirm()
-      .title(title)
-      .textContent(message)
-      .ariaLabel('Request Respond')
-      .ok((isApproved === true)? 'Approve':'Deny')
-      .cancel('Cancel');
-
-    $mdDialog.show(confirmDialog).then(function(success) {
-      // request response confirmed
-      if (success) {
-        $http({ url: $rootScope.urlPrefix + '/request/respond',
-          method: 'POST',
-          data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
+    var result = window.confirm(title + ' ' +  message);
+    if (result) {
+      $http({ url: $rootScope.urlPrefix + '/request/respond',
+        method: 'POST',
+        data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
+      }).then(function(success) {
+        initPending().then(function(success) {
+          return initUser(approverId);
         }).then(function(success) {
-          initPending().then(function(success) {
-            return initUser(approverId);
-          }).then(function(success) {
-            return initAll();
-          }).then(function(success) {
-            notifyObservers();
-            deferred.resolve(success);
-          }).then(function(success) {
-            deferred.resolve(success);
-          });
+          return initAll();
+        }).then(function(success) {
+          notifyObservers();
+          deferred.resolve(success);
+        }).then(function(success) {
+          deferred.resolve(success);
         });
-      }
-      // request response cancelled
-      else {
-        deferred.resolve(success);
-      }
-    });
+      });
+    }
+    else {
+      deferred.resolve(success);
+    }
     return deferred.promise;
   }
 

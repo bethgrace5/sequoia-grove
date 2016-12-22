@@ -3,36 +3,6 @@
 
   <div class="col-sm-12">
 
-    <div class="pull-left">
-
-      <!--
-      <button class="btn btn-info pull-left"
-        ng-click="autoGenerate()"
-        ng-disabled="saving || importing || loading">
-        Auto-Generate
-        <span class="glyphicon glyphicon glyphicon-star" aria-hidden="true"></span>
-      </button>
-      -->
-
-      <div class="dropdown pull-left" dropdown is-open=true>
-        <button type="button" id="selectWeek" data-toggle="dropdown"
-          aria-haspopup="true" aria-expanded="true"
-          class="btn btn-default pull-left"
-          ng-disabled = "loading || saving || importing">
-          Import {{weekList[selectedWeek].name}} <span class="caret"> </span>
-        </button>
-        <ul class="dropdown-menu" rol="menu" arial-labelledby="selectWeek">
-          <li ng-repeat = "w in weekList" value ="{{w.name}}">
-            <a ng-click="importWeek($index, $event)">{{w.name}}</a>
-          </li>
-        </ul>
-      </div>
-      <!-- importing spinner -->
-      <div ng-show="importing" class="pull-left spinner-fade">
-        <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
-      </div>
-    </div>
-
     <form class="pull-right">
       <!-- Download and Print Options -->
       <button ng-click="clearSchedule($event)" 

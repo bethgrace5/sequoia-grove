@@ -7,7 +7,7 @@
  * # LoginCtrl
  * Controller of the sequoiaGroveApp
  */
-angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
+angular.module('sequoiaGroveApp').controller('LoginCtrl', function(
   $window, $http, $location, $log, $rootScope, $scope, $timeout, scheduleFactory,
   userFactory, loginFactory, requestFactory, localStorageService, $q ){
 
@@ -126,30 +126,6 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
 
 
   function needsAccount() {
-    // Confirm to unemploy
-    /*
-    var confirm = $mdDialog.confirm()
-      .ariaLabel('account not setup yet')
-      //.targetEvent(ev)
-      .title('User account not setup')
-      .textContent('Does your business have an account?')
-      .ok('I can\'t login.')
-      .cancel('My company needs an account.');
-
-    return $mdDialog.show(confirm).then(
-      function() {
-        $scope.errorMessage = 'If your company has an account, '+
-           'ask an administrator to verify your email';
-        console.log('Check with your account admin');
-      },
-      function() {
-        $scope.errorMessage = '';
-        console.log('Ok, we\'ll sign you up!');
-        $location.path('/signup');
-        // cancel
-        return;
-      });
-      */
   }
 
 

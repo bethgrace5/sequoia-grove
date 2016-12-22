@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sequoiaGroveApp')
-.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $mdDialog, $timeout, $location, localStorageService, loginFactory, requestFactory ){
+.controller('RequestCtrl', function( $scope, $log, $rootScope, $http, $timeout, $location, localStorageService, loginFactory, requestFactory ){
 
   localStorageService.set('lastPath', '/request');
   // user is not logged in
@@ -96,25 +96,19 @@ angular.module('sequoiaGroveApp')
     var requestId = request.requestID;
     var title = (isApproved === true)? 'Approve Request for ': 'Deny Request for ';
     title += request.employeeFirstName + '? ';
-    title += $scope.totalDays(request.startDate, request.endDate) + 'day(s)';
+    title += $scope.totalDays(request.startDate, request.endDate) + 'day(s) ';
     var message =
-      'from '+  moment(request.startDate).format('MMMM Do, YYYY') +
+      ' from '+  moment(request.startDate).format('MMMM Do, YYYY') +
       ' to ' +  moment(request.endDate).format('MMMM Do, YYYY');
 
     // Appending dialog to document.body to cover sidenav in docs app
-    var confirm = $mdDialog.confirm()
-      .title(title)
-      .textContent(message)
-      .ariaLabel('Request Respond')
-      .ok((isApproved === true)? 'Approve':'Deny')
-      .cancel('Cancel');
-
-    $mdDialog.show(confirm).then(function() {
+    var result = window.confirm(title + message);
+    if (result) {
       $http({
         url: $rootScope.urlPrefix + '/request/respond',
         method: 'POST',
         data: {'requestId':requestId, 'approverId':approverId, 'isApproved':isApproved}
-      }).success(function(data, status) {
+      }).then(function(success) {
         $scope.getCurrentEmployeeRequest().then(function(success) {
           return $scope.getAllRequests();
         }).then(function(success) {
@@ -125,10 +119,10 @@ angular.module('sequoiaGroveApp')
           });
           //return $scope.getPendingRequests();
         });
+      }, function(error) {
       });
-    }, function() {
-      // do nothing
-    });
+
+    }
 
   }
 

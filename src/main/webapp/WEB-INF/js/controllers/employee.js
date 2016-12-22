@@ -8,7 +8,7 @@
  * Controller for managing employees.
  */
 angular.module('sequoiaGroveApp')
-  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, $mdDialog, localStorageService, userFactory, loginFactory) {
+  .controller('EmployeeCtrl', function ($http, $log, $scope, $rootScope, $location, localStorageService, userFactory, loginFactory) {
 
 /************** Login Redirect, Containers and UI settings **************/
 
@@ -176,14 +176,15 @@ angular.module('sequoiaGroveApp')
           url: $rootScope.urlPrefix + '/avail/add',
           method: "POST",
           data: avail
-        }).success(function(data, status) {
+        }).then(function(success) {
           // update front end
           $scope.selectedEmployee.avail[$scope.newAvail.day].push(
             {'start':avail.start, 'end':avail.end});
           $scope.saving = false;
           userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-        }).error(function(data, status) {
-          //$log.debug(data, status);
+
+        },function(error) {
+          $log.debug(data, status);
         });
       }
     }
@@ -224,14 +225,15 @@ angular.module('sequoiaGroveApp')
           url: $rootScope.urlPrefix + '/position/add/',
           method: "POST",
           data: obj
-        }).success(function(data, status, headers, config) {
+        }).then(function(success) {
             $scope.saving = false;
             userFactory.init($rootScope.locations, $rootScope.selectedLocation);
             // update front end
             $scope.selectedEmployee.positions.push(pid);
-        }).error(function(data, status) {
-          $log.debug(status, 'failed to add position(', pid, ') for employee(', obj.eid, ')');
+        }, function(error) {
+          $log.debug(error.status, 'failed to add position(', pid, ') for employee(', obj.eid, ')');
         });
+
       }
       else {
         $scope.saving = false;
@@ -254,9 +256,10 @@ angular.module('sequoiaGroveApp')
             url: $rootScope.urlPrefix + '/avail/remove/'+
                 $scope.selectedEmployee.id + '/' + day + '/' + start,
             method: "POST"
-        }).success(function(data, status) {
+        }).then(function(success) {
           $scope.saving = false;
             userFactory.init($rootScope.locations, $rootScope.selectedLocation);
+        }, function(error) {
         });
     }
 
@@ -284,10 +287,10 @@ angular.module('sequoiaGroveApp')
         url:  $rootScope.urlPrefix + '/position/remove/',
         method: "POST",
         data: obj
-      }).success(function(data, status) {
+      }).then(function(success) {
         $scope.saving = false;
           userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-      }).error(function(data, status) {
+      }, function(error) {
         $log.debug('error removing position',pid,'from',eid);
       });
     }
@@ -380,11 +383,11 @@ angular.module('sequoiaGroveApp')
       $scope.selectedEmployee.locationId = $rootScope.selectedLocation;
 
       $http.post( $rootScope.urlPrefix + '/employee/'+action, $scope.selectedEmployee)
-        .success(function(data, status){
+        .then(function(success) {
           // upate front end
           if (action === 'add') {
             $scope.selectedEmployee.isCurrent = true;
-            $scope.selectedEmployee.id = data.id;
+            $scope.selectedEmployee.id = success.data.id;
             $scope.selectedEmployee.history = [{'start': moment().format('MM-DD-YYYY'), 'end':''}];
             $scope.employees.push($scope.selectedEmployee);
           }
@@ -393,9 +396,9 @@ angular.module('sequoiaGroveApp')
           $scope.employeeSaved = true;
           form.$setPristine();
           form.$setSubmitted();
-        }).error(function(data, status) {
+        }, function(error) {
           $scope.employeeSaveError = true;
-          $log.debug('error with action:', action, status,data);
+          $log.debug('error with action:', error.action, status,error.data);
         });
     }
 
@@ -404,32 +407,19 @@ angular.module('sequoiaGroveApp')
       // a user shouldn't be able to unemploy themselves - it would
       // lock them out of the system.
       if (loginFactory.getUser().id === $scope.selectedEmployee.id) {
-        $mdDialog.show(
-            $mdDialog.alert()
-            .clickOutsideToClose(true)
-            .title('Unemploy ' + $scope.selectedEmployee.firstname)
-            .textContent('You cannot unemploy yourself!')
-            .ariaLabel('cannot unemploy yourself')
-            .ok('Got it!')
-            .targetEvent(ev)
-            );
+        window.alert('You cannot unemploy yourself');
         return
       }
 
       // Confirm to unemploy
-      var confirm = $mdDialog.confirm()
-        .title('Unemploy ' + $scope.selectedEmployee.firstname + '?')
-        .ariaLabel('Unemploy')
-        .targetEvent(ev)
-        .ok('Unemploy')
-        .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
+      var result = window.confirm('Unemploy ' + $scope.selectedEmployee.firstname + '?');
+      if (result) {
         // ok
         $http({
           url: $rootScope.urlPrefix + '/employee/deactivate/',
           method: "POST",
           data: {'id': $scope.selectedEmployee.id}
-        }).success(function(data, status) {
+        }).then(function(success) {
           // update UI with change
           // FIXME if the user employs and then unemploys the same day,
           // it won't reflect the UI chnage shown
@@ -446,13 +436,13 @@ angular.module('sequoiaGroveApp')
             return e;
           });
           userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-        }).error(function(data, status) {
-          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, status);
+        }, function(error) {
+          $log.debug("error deactivating employee: ", $scope.selectedEmployee.id, error.status);
         });
-      }, function() {
-        // cancel
-        return;
-      });
+      }
+      else {
+      }
+
     }
 
     // Activate (re-employ) an employee
@@ -461,7 +451,7 @@ angular.module('sequoiaGroveApp')
         url: $rootScope.urlPrefix + '/employee/activate/',
         method: "POST",
         data: {'id': $scope.selectedEmployee.id}
-      }).success(function(data, status) {
+      }).then(function(success) {
 
         // update UI with change
         $scope.employees = _.map($scope.employees, function(e) {
@@ -473,9 +463,10 @@ angular.module('sequoiaGroveApp')
           return e;
         });
         userFactory.init($rootScope.locations, $rootScope.selectedLocation);
-      }).error(function(data, status) {
-        $log.debug("error activating employee: ", $scope.selectedEmployee.id, status);
+      }, function(error) {
+        $log.debug("error activating employee: ", $scope.selectedEmployee.id, error.status);
       });
+
     }
 
   var fireUpdate = function() {

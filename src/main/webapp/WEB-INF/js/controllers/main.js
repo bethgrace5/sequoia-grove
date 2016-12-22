@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('sequoiaGroveApp').controller('MainCtrl', function (
-    $mdDialog, $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
+    $http, $location, $log, $rootScope, $route, $scope, $timeout, $translate,
     localStorageService, scheduleFactory, userFactory, loginFactory, $q, requestFactory ){
 
   $rootScope.locations = [];
@@ -84,10 +84,16 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 /************** Pure Functions **************/
 
   $scope.formatTime = function(t, ampm) {
+    if(t === undefined) {
+      return;
+    }
     // we can use moment to parse times to display correctly on the front end
     //$log.debug(moment({hour:16, minute:10}).format('h:mm a'));
     if (ampm) {
       return moment(t, 'HHmm').format('h:mm a');
+    }
+    if (t.substring(2, 4) === '00') {
+      return moment(t, 'HHmm').format('h');
     }
     return moment(t, 'HHmm').format('h:mm');
   }
@@ -483,15 +489,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.publishSchedule = function(ev) {
       // Confirm to unemploy
-      var confirm = $mdDialog.confirm()
-        .title('Publish Schedule?')
-        .textContent('This cannot be undone.')
-        .ariaLabel('publish schedule')
-        .targetEvent(ev)
-        .ok('Publish')
-        .cancel('Cancel');
-      $mdDialog.show(confirm).then(function() {
-        // OK to publish
+      var result = window.confirm('Publish Schedule? This cannot be undone.');
+
+      // OK to publish
+      if (result) {
         if(loginFactory.getUser().isManager) {
           var id = loginFactory.getUser().id;
           scheduleFactory.publish(id, $rootScope.selectedLocation).then(function(success) {
@@ -501,10 +502,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
             });
           });
         }
-      }, function() {
-        // cancel publish
-        return;
-      });
+      }
   }
 
  /*$scope.$on('requestchanged', function() {
