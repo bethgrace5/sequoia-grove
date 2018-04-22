@@ -44,7 +44,7 @@ angular.module('sequoiaGroveApp').factory('userFactory', function ( $log, localS
         }
       }
       */
-    $http({ 'url': url, 'method': 'GET', }).then(
+    $http({ 'url': $rootScope.urlPrefix + url, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
             $timeout(function() {

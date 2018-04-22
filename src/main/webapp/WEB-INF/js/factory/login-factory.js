@@ -17,7 +17,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
 
   function appSignUp(gapi) {
     var deferred = $q.defer();
-    $http.post("/signup", {'email':user.email, 'idtoken':user.token}).
+    $http.post($rootScope.urlPrefix + "/signup", {'email':user.email, 'idtoken':user.token}).
       then(function(success){
         console.log(success.data);
         // TODO get more explicit permissions for UI control
@@ -34,7 +34,8 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   // User initialized login
   function appSignIn(gapi) {
     var deferred = $q.defer();
-    $http.post("/auth/login/", {'email':user.email, 'idtoken':user.token}).
+    console.log(gapi);
+    $http.post($rootScope.urlPrefix + "/auth/login/", {'email':user.email, 'idtoken':user.token}).
       then(function(success){
         if (success.data.loginFailed) {
           deferred.reject(success.data);
@@ -61,7 +62,7 @@ angular.module('sequoiaGroveApp').factory('loginFactory', function ( $log, local
   function destructData() {
     var deferred = $q.defer();
     // remove session
-    $http({ url: '/auth/logout', method: "POST" }).then( function(success) {
+    $http({ url: $rootScope.urlPrefix + '/auth/logout', method: "POST" }).then( function(success) {
       deferred.resolve(success);
     });
     return deferred.promise;

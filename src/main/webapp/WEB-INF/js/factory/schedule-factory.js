@@ -86,7 +86,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
   var initRequests = function() {
     requests = {};
     var deferred = $q.defer();
-    $http({ 'url': '/request/'+header.mon.val+'/'+header.sun.val+'/'+business, 'method': 'GET', }).then(
+    $http({ 'url': $rootScope.urlPrefix + '/request/'+header.mon.val+'/'+header.sun.val+'/'+business, 'method': 'GET', }).then(
         function(success) {
           if (success.status === 200) {
             _.map(success.data.requests, function(item, index) {
@@ -209,7 +209,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
 
   var initHolidays = function() {
     var deferred = $q.defer();
-    $http({ url: '/holiday/get/between/'+
+    $http({ url: $rootScope.urlPrefix + '/holiday/get/between/'+
       moment(header.mon.val, 'DD-MM-YYYY').format('MM-DD-YYYY') + '/' +
       moment(header.sun.val, 'DD-MM-YYYY').format('MM-DD-YYYY'), method: "GET" })
       .then(function(success) {
@@ -325,7 +325,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       }
       */
     $http({
-      "url": url,
+      "url": $rootScope.urlPrefix + url,
       "method": "GET",
     }).then(function (success) {
           if (success.status === 200) {
@@ -363,7 +363,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       //return;
     //}
     $http({
-      url: '/schedule/update/',
+      url: $rootScope.urlPrefix + '/schedule/update/',
       method: "POST",
       data: updateShifts[locationId]
     }).then(function (success) {
@@ -394,7 +394,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       return;
     }
     $http({
-      url: '/schedule/delete/',
+      url: $rootScope.urlPrefix + '/schedule/delete/',
       method: "DELETE",
       data: deleteShifts[locationId]
     }).then( function(success) {
@@ -444,7 +444,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     });
 
     $http({
-      url: '/schedule/shiftIndices',
+      url: $rootScope.urlPrefix + '/schedule/shiftIndices',
       method: "POST",
       data: shiftIndices[locationId]
     }).then(function(success) {
@@ -704,7 +704,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
     var deferred = $q.defer();
     var obj = {'date':header.mon.val, 'eid': userId, 'locationId':locationId};
     $http({
-      url: '/schedule/publish/',
+      url: $rootScope.urlPrefix + '/schedule/publish/',
       method: "POST",
       data: obj
     }).then(function(success) {

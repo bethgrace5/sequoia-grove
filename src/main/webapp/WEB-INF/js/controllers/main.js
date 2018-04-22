@@ -32,7 +32,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $translate.use(langKey);
     $scope.lang = langKey;
     localStorageService.set('SequoiaGrove.lang', langKey);
-    $scope.$broadcast('translate');
+    $rootScope.$broadcast('translate', langKey);
   };
 
   // toggle dev mode
@@ -114,7 +114,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
 
   $scope.getPositions = function() {
     var deferred = $q.defer();
-    $http({ url: '/position/'+$rootScope.business, method: "GET" })
+    $http({ url: $rootScope.urlPrefix + '/position/'+$rootScope.business, method: "GET" })
       .then(function(success) {
         $rootScope.positions = success.data.positions;
         deferred.resolve(success);
@@ -133,7 +133,7 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     $scope.deliveries = [];
     $scope.viewDeliveries = { 'mon':[], 'tue':[], 'wed':[], 'thu':[], 'fri':[],
       'sat':[], 'sun':[] }
-    $http({url: '/delivery/'+$rootScope.selectedLocation, method: 'GET' })
+    $http({url: $rootScope.urlPrefix + '/delivery/'+$rootScope.selectedLocation, method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           $scope.deliveries = success.data.delivery;

@@ -282,7 +282,7 @@ angular.module('sequoiaGroveApp').controller('LoginCtrl', function( $mdDialog,
       }
     )
     // request deliveries and make the view list for each location
-    $http({url: '/delivery/'+$rootScope.locations, method: 'GET' })
+    $http({url: $rootScope.urlPrefix + '/delivery/'+$rootScope.locations, method: 'GET' })
       .then(function(success) {
         if (success.status == 200) {
           deliveries = success.data.delivery;
