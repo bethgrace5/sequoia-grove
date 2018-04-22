@@ -496,7 +496,7 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var duration = 0;
 
       var wDay = getShiftDuration(item.weekdayStart, item.weekdayEnd);
-      var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
+      //var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
 
       count.push({'eid':item.mon.eid, 'duration':wDay});
       count.push({'eid':item.tue.eid, 'duration':wDay});
@@ -504,12 +504,12 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       count.push({'eid':item.thu.eid, 'duration':wDay});
       count.push({'eid':item.fri.eid, 'duration':wDay});
 
-      count.push({'eid':item.sat.eid, 'duration':wEnd});
-      count.push({'eid':item.sun.eid, 'duration':wEnd});
+      count.push({'eid':item.sat.eid, 'duration':wDay});
+      count.push({'eid':item.sun.eid, 'duration':wDay});
 
       // tack the duration on to the schedule for viewing
       item = _.extend(item, {'weekdayDuration': wDay});
-      item = _.extend(item, {'weekendDuration': wEnd});
+      //item = _.extend(item, {'weekendDuration': wDay});
     });
 
     // get hour count for each employee, format is: [ {'eid':'count'}, ... ]
@@ -534,11 +534,15 @@ angular.module('sequoiaGroveApp').factory('scheduleFactory', function ( $log, lo
       var duration = 0;
 
       var wDay = getShiftDuration(item.weekdayStart, item.weekdayEnd);
-      var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
+      //var wEnd = getShiftDuration(item.weekendStart, item.weekendEnd);
 
       // tack the duration on to the schedule for viewing
-      return _.extend(item, {'weekdayDuration': wDay, 'weekendDuration': wEnd})
-    });
+      return _.extend(item, 
+          {
+            'weekdayDuration': wDay
+            //'weekendDuration': wDay
+          })
+      });
   }
 
   // a shift was typed in blank, add it to delete list
