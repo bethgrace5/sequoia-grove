@@ -12,7 +12,7 @@
     <p class="lead text-center">
     <strong>Sequoia Rosedale</strong>
       <br/>
-      {{'SCHEDULE_VIEW_WEEK_OF' | translate}} {{date.mon.disp}}
+      {{'SCHEDULE_VIEW_WEEK_OF' | translate}} {{date.sun.disp}}
     </p>
   </div>
   <div class="col-xs-2">
@@ -41,7 +41,7 @@
     </button>
     <p class="lead pull-left">
       {{'SCHEDULE_VIEW_WEEK_OF' | translate}}
-      {{date.mon.disp}}
+      {{date.sun.disp}}
     </p>
     <button type="button" class="btn btn-default week-nav-button pull-left"
       aria-label="Left Align"
@@ -59,48 +59,48 @@
 <div class="hidden-xs">
   <!-- Weekday Dates -->
   <div class="row weekday-title">
-    <div class="col-sm-1 col-sm-offset-3"> {{date.mon.disp}} </div>
+    <div class="col-sm-1 col-sm-offset-3"> {{date.sun.disp}} </div>
+    <div class="col-sm-1"> {{date.mon.disp}} </div>
     <div class="col-sm-1"> {{date.tue.disp}} </div>
     <div class="col-sm-1"> {{date.wed.disp}} </div>
     <div class="col-sm-1"> {{date.thu.disp}} </div>
     <div class="col-sm-1"> {{date.fri.disp}} </div>
-    <div class="col-sm-1 col-sm-offset-1"> {{date.sat.disp}} </div>
-    <div class="col-sm-1"> {{date.sun.disp}} </div>
+    <div class="col-sm-1"> {{date.sat.disp}} </div>
   </div>
 
   <!-- Weekday Names -->
   <div class="row weekday-title">
-    <div class="col-sm-1 col-sm-offset-3"> {{'SCHEDULE_VIEW_MONDAY'   | translate}} </div>
+    <div class="col-sm-1 col-sm-offset-3">  {{'SCHEDULE_VIEW_SUNDAY'   | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_MONDAY'   | translate}} </div>
     <div class="col-sm-1">  {{'SCHEDULE_VIEW_TUESDAY'  | translate}} </div>
     <div class="col-sm-1">  {{'SCHEDULE_VIEW_WEDNESDAY'| translate}} </div>
     <div class="col-sm-1">  {{'SCHEDULE_VIEW_THURSDAY' | translate}} </div>
     <div class="col-sm-1">  {{'SCHEDULE_VIEW_FRIDAY'   | translate}} </div>
-    <div class="col-sm-1 col-sm-offset-1"> {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
-    <div class="col-sm-1">  {{'SCHEDULE_VIEW_SUNDAY'   | translate}} </div>
+    <div class="col-sm-1">  {{'SCHEDULE_VIEW_SATURDAY' | translate}} </div>
   </div>
 
   <!-- List deliveries for each day -->
-  <div class="row delivery-title" ng-show="revealDeliveries">
+  <div class="row delivery-title" style="border: 2px solid red" ng-show="revealDeliveries">
     <div class="col-sm-1 col-sm-offset-3 ">
+      <div ng-repeat="item in viewDeliveries.sun"> {{item}} </div>
+    </div>
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.mon"> {{item}} </div>
     </div>
-    <div class="col-sm-1 ">
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.tue"> {{item}} </div>
     </div>
-    <div class="col-sm-1 ">
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.wed"> {{item}} </div>
     </div>
-    <div class="col-sm-1 ">
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.thu"> {{item}} </div>
     </div>
-    <div class="col-sm-1 ">
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.fri"> {{item}} </div>
     </div>
-    <div class="col-sm-1 col-sm-offset-1">
+    <div class="col-sm-1">
       <div ng-repeat="item in viewDeliveries.sat"> {{item}} </div>
-    </div>
-    <div class="col-sm-1 ">
-      <div ng-repeat="item in viewDeliveries.sun"> {{item}} </div>
     </div>
   </div>
 </div><!-- end hidden xs-->

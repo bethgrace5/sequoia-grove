@@ -1,6 +1,13 @@
 <div class="hidden-md hidden-lg hidden-xl">
 
   <div class="mobile-box">
+    <p class="mobile-title">Sunday {{date.sun.disp}}</p>
+    <div ng-repeat="t in mobileList.sun" ng-show="t.eid == loggedInUser.id">
+      <span class="mobile-time">{{formatTime(t.weekendStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
+    </div>
+  </div>
+
+  <div class="mobile-box">
     <p class="mobile-title-first">Monday {{date.mon.disp}}</p>
     <div ng-repeat="t in mobileList.mon" ng-show="t.eid == loggedInUser.id">
       <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
@@ -38,14 +45,7 @@
   <div class="mobile-box">
     <p class="mobile-title">Saturday {{date.sat.disp}}</p>
     <div ng-repeat="t in mobileList.sat" ng-show="t.eid == loggedInUser.id">
-      <span class="mobile-time">{{formatTime(t.weekendStart,true)}}-{{formatTime(t.weekendEnd,true)}}</span> {{t.tname}}
-    </div>
-  </div>
-
-  <div class="mobile-box">
-    <p class="mobile-title">Sunday {{date.sun.disp}}</p>
-    <div ng-repeat="t in mobileList.sun" ng-show="t.eid == loggedInUser.id">
-      <span class="mobile-time">{{formatTime(t.weekendStart,true)}}-{{formatTime(t.weekendEnd,true)}}</span> {{t.tname}}
+      <span class="mobile-time">{{formatTime(t.weekdayStart,true)}}-{{formatTime(t.weekdayEnd,true)}}</span> {{t.tname}}
     </div>
   </div>
 
@@ -69,6 +69,11 @@
           {{formatTime(t.weekdayStart, false)}} - {{formatTime(t.weekdayEnd, false)}}
         </div>
 
+        <div class="col-sm-1 col-sm-offset-0 ">
+          <div ng-class="{true:'highlighted', false:''}[(t.sun.eid==loggedInUser.id) && highlight]">
+            {{t.sun.name}} <!-- Sunday -->
+          </div>
+        </div>
         <div class="col-sm-1 col-sm-offset-0">
           <div ng-class="{true:'highlighted', false:''}[(t.mon.eid==loggedInUser.id) && highlight]">
             {{t.mon.name}} <!-- Monday -->
@@ -95,20 +100,9 @@
           </div>
         </div>
 
-        <!-- weekend times -->
-        <div class="col-sm-1 col-sm-offset-0 schedule-times" >
-          <!-- TODO hide the times when this shift has no weekend times -->
-          {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
-        </div>
-
         <div class="col-sm-1 col-sm-offset-0 ">
           <div ng-class="{true:'highlighted', false:''}[(t.sat.eid==loggedInUser.id) && highlight]">
             {{t.sat.name}} <!-- Saturday -->
-          </div>
-        </div>
-        <div class="col-sm-1 col-sm-offset-0 ">
-          <div ng-class="{true:'highlighted', false:''}[(t.sun.eid==loggedInUser.id) && highlight]">
-            {{t.sun.name}} <!-- Sunday -->
           </div>
         </div>
       </div><!-- end of div hide if spacer -->

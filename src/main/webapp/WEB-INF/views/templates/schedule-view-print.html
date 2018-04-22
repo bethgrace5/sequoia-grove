@@ -6,29 +6,25 @@
     <th class="print-row"> </th>
     <th class="print-row"> </th>
     <th class="print-row"> </th>
+    <th class="print-row"> {{'SCHEDULE_VIEW_SUNDAY'    | translate}} </td>
     <th class="print-row"> {{'SCHEDULE_VIEW_MONDAY'    | translate}} </td>
     <th class="print-row"> {{'SCHEDULE_VIEW_TUESDAY'   | translate}} </td>
     <th class="print-row"> {{'SCHEDULE_VIEW_WEDNESDAY' | translate}} </td>
     <th class="print-row"> {{'SCHEDULE_VIEW_THURSDAY'  | translate}} </td>
     <th class="print-row"> {{'SCHEDULE_VIEW_FRIDAY'    | translate}} </td>
-    <th class="print-row"> </th>
-    <th class="print-row"> </th>
     <th class="print-row"> {{'SCHEDULE_VIEW_SATURDAY'  | translate}} </td>
-    <th class="print-row"> {{'SCHEDULE_VIEW_SUNDAY'    | translate}} </td>
   </tr>
   <tr>
     <th class="print-row"> Task </th>
     <th class="print-row"> Duration </th>
     <th class="print-row"> </th>
+    <th class="print-row"> {{date.sun.disp}} </td>
     <th class="print-row"> {{date.mon.disp}} </td>
     <th class="print-row"> {{date.tue.disp}} </td>
     <th class="print-row"> {{date.wed.disp}} </td>
     <th class="print-row"> {{date.thu.disp}} </td>
     <th class="print-row"> {{date.fri.disp}} </td>
-    <th class="print-row"> Duration </th>
-    <th class="print-row"> </th>
     <th class="print-row"> {{date.sat.disp}} </td>
-    <th class="print-row"> {{date.sun.disp}} </td>
   </tr>
 
   <tr>
@@ -79,6 +75,11 @@
     </td>
     <!--</div>-->
 
+    <!-- Sunday -->
+    <td ng-class="{true:'highlighted print-row  print-border', false:'print-row  print-border'}[(t.sun.eid==loggedInUser.id) && highlight]">
+      {{t.sun.name}}
+    </td>
+
     <!-- Monday -->
     <td ng-class="{true:'highlighted print-row  print-border', false:'print-row  print-border'}[(t.mon.eid==loggedInUser.id) && highlight]">
       {{t.mon.name}}
@@ -104,6 +105,7 @@
       {{t.fri.name}}
     </td>
 
+    <!--
     <td ng-hide="t.isSpacer" class="print-row print-border">
       <div ng-hide="t.isSpacer">
         <span ng-show="t.weekendDuration >= 7"
@@ -118,23 +120,22 @@
         {{t.weekendDuration}} hrs
       </div>
     </td>
+    -->
+
     <!-- weekend times -->
       <!--<div ng-show="t.we_st != 0">-->
+      <!--
     <td class="print-row  print-border">
       <div ng-hide="t.isSpacer">
         {{formatTime(t.weekendStart, false)}} - {{formatTime(t.weekendEnd, false)}}
       </div>
     </td>
+      -->
       <!--</div>-->
 
     <!-- Saturday -->
     <td ng-class="{true:'highlighted print-row  print-border', false:'print-row  print-border'}[(t.sat.eid==loggedInUser.id) && highlight]">
       {{t.sat.name}}
-    </td>
-
-    <!-- Sunday -->
-    <td ng-class="{true:'highlighted print-row  print-border', false:'print-row  print-border'}[(t.sun.eid==loggedInUser.id) && highlight]">
-      {{t.sun.name}}
     </td>
 
     </tr>
