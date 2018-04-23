@@ -46,13 +46,13 @@ public class ScheduleTemplate {
         String weekdayEnd,
         String weekendStart,
         String weekendEnd,
+        Day sun,
         Day mon,
         Day tue,
         Day wed,
         Day thu,
         Day fri,
-        Day sat,
-        Day sun) {
+        Day sat) {
             this.index = index;
             this.sid = sid;
             this.pid = pid;

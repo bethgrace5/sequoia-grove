@@ -53,9 +53,9 @@ public class ScheduleController {
 
 /* ----- HTTP Mapped Functions -----*/
   // Get current schedule template (current shifts) dd-mm-yyyy
-  @RequestMapping(value = "/schedule/template/{mon}/{locations}")
+  @RequestMapping(value = "/schedule/template/{sun}/{locations}")
     public String getScheduleTemplate( Model model,
-        @PathVariable("mon") String mon,
+        @PathVariable("sun") String sun,
         @PathVariable("locations") String locations,
         @ModelAttribute("scope") List<String> permissions) {
 
@@ -68,7 +68,7 @@ public class ScheduleController {
       for(Integer l : loc) {
           List<ScheduleTemplate> schTempList = jdbcTemplate.query(
             "select * from sequ_get_schedule(?) where location_id = ?",
-            new Object[]{mon, l},
+            new Object[]{sun, l},
             new RowMapper<ScheduleTemplate>() {
               public ScheduleTemplate mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -89,7 +89,7 @@ public class ScheduleController {
                     new Day("thu", rs.getString("thu"), rs.getInt("thu_eid")),
                     new Day("fri", rs.getString("fri"), rs.getInt("fri_eid")),
                     new Day("sat", rs.getString("sat"), rs.getInt("sat_eid")),
-                    new Day("sun", rs.getString("sun"), rs.getInt("sun_eid")) );
+                    new Day("sun", rs.getString("sun"), rs.getInt("sun_eid")));
 
                 return schTmp;
               }
@@ -100,7 +100,7 @@ public class ScheduleController {
       for(Integer l : loc) {
           List<PublishedSchedule> tmpList = jdbcTemplate.query(
             "SELECT * FROM sequ_published_schedule WHERE start_date = to_date(?,'dd-mm-yyyy') and location_id = ?",
-            new Object[]{mon, l},
+            new Object[]{sun, l},
             new RowMapper<PublishedSchedule>() {
               public PublishedSchedule mapRow(ResultSet rs, int rowNum) throws SQLException {
 
@@ -167,7 +167,7 @@ public class ScheduleController {
         Gson gson = new Gson();
         Scheduled [] scheduleChanges = gson.fromJson(data, Scheduled[].class);
 
-          // update database schedule(eid, sid, mon)
+          // update database schedule(eid, sid, sun)
           for (Scheduled change : scheduleChanges) {
             try {
                 jdbcTemplate.update("select sequ_schedule(?, ?, ?)",

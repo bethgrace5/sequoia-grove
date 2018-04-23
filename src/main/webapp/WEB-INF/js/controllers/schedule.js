@@ -36,7 +36,6 @@ angular.module('sequoiaGroveApp')
     else {
       return gets;
     }
-
   }
 
   // user is not logged in
@@ -67,7 +66,7 @@ angular.module('sequoiaGroveApp')
   };
 
   $scope.autoGenOptions = {
-    "mon": "",
+    "sun": "",
     "historyStart": "",
     "historyEnd": "",
     "weeksInHistory": 6,
@@ -89,14 +88,14 @@ angular.module('sequoiaGroveApp')
     $scope.saving = true;
 
     var daysHist = $scope.autoGenOptions.weeksInHistory * 7;
-    $scope.autoGenOptions.mon = $scope.date.mon.val;
+    $scope.autoGenOptions.sun = $scope.date.sun.val;
     $scope.autoGenOptions.historyStart =
       moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
+        $scope.date.sun.val, 'DD-MM-YYYY'
       ).subtract(daysHist, 'days').format('DD-MM-YYYY');
     $scope.autoGenOptions.historyEnd =
       moment(
-        $scope.date.mon.val, 'DD-MM-YYYY'
+        $scope.date.sun.val, 'DD-MM-YYYY'
       ).subtract(1, 'days').format('DD-MM-YYYY');
 
     $http({

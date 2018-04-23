@@ -28,7 +28,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   $scope.shiftSaved = false;
   $scope.shiftSaveError = false;
   $scope.selectedShift = {
-    "location": "",
+    "location": $rootScope.selectedLocation,
     "pid": -1,
     "position": "",
     "sid": -1,
@@ -61,7 +61,7 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
   // after updating, deleting, or adding a shift, cleanup shift edit
   $scope.cleanupShiftEdit = function(clear) {
     $scope.selectedShift = {
-      "location": "",
+      "location": $rootScope.selectedLocation,
       "pid": -1,
       "position": "",
       "sid": -1,
@@ -71,15 +71,16 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
       "weekendStart": "",
       "weekendEnd": ""
     }
+    console.log($scope.shiftForm);
     //reset form validation
     $scope.shiftForm.form.$setSubmitted();
     $scope.shiftForm.form.$setPristine();
-    $scope.shiftForm.form.tname.$setUntouched();
-    $scope.shiftForm.form.position.$setUntouched();
-    $scope.shiftForm.form.shiftWeekdayStart.$setUntouched();
-    $scope.shiftForm.form.shiftWeekdayEnd.$setUntouched();
-    $scope.shiftForm.form.shiftWeekendStart.$setUntouched();
-    $scope.shiftForm.form.shiftWeekendEnd.$setUntouched();
+    //$scope.shiftForm.form.tname.$setUntouched();
+    //$scope.shiftForm.form.position.$setUntouched();
+    //$scope.shiftForm.form.shiftWeekdayStart.$setUntouched();
+    //$scope.shiftForm.form.shiftWeekdayEnd.$setUntouched();
+    //$scope.shiftForm.form.shiftWeekendStart.$setUntouched();
+    //$scope.shiftForm.form.shiftWeekendEnd.$setUntouched();
 
     // just cleared the form, didn't save or update
     if (clear === false) {
@@ -124,6 +125,9 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
     if($scope.verifyShift() === false) {
       return;
     }
+
+    $scope.selectedShift.location = $rootScope.selectedLocation;
+
     $scope.saving = true;
     $http({ url: $rootScope.urlPrefix + '/shift/update/',
       method: "POST",
@@ -162,7 +166,8 @@ angular.module('sequoiaGroveApp').controller('ManageCtrl', function (
       $scope.saving = false;
     }).then(function(done) {
       // finally, reinitialize schedule to show updates immediately
-      scheduleFactory.init();
+      console.log($rootScope.selectedLocation);
+      scheduleFactory.init($rootScope.locations, $rootScope.selectedLocation, $rootScope.business);
     });
   }
 
