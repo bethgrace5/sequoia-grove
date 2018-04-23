@@ -225,6 +225,6 @@ var translationsES = {
 
   $rootScope.appFailure = false;
 
-  $rootScope.urlPrefix = '/sequoiagrove';
-  //$rootScope.urlPrefix = '';
+  //$rootScope.urlPrefix = '/sequoiagrove';
+  $rootScope.urlPrefix = '';
 });
