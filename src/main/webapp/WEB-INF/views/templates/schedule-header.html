@@ -10,7 +10,8 @@
   </div>
   <div class="col-xs-8">
     <p class="lead text-center">
-    <strong>Sequoia Rosedale</strong>
+    <strong ng-if="locations[0] == '2'">Fuegos</strong>
+    <strong ng-if="locations[0] == '4'">Sequoia Rosedale</strong>
       <br/>
       {{'SCHEDULE_VIEW_WEEK_OF' | translate}} {{date.sun.disp}}
     </p>
@@ -53,7 +54,8 @@
       <i class="fa fa-2x fa-spinner fa-spin fa-pulse" ></i>
     </span>
   </div>
-  <p class="lead text-center">Sequoia Rosedale - {{'SCHEDULE_VIEW_WEEKLY_STAFF_SCHEDULE' | translate}}</p>
+  <p ng-if="locations[0] == '2'" class="lead text-center">Fuegos - {{'SCHEDULE_VIEW_WEEKLY_STAFF_SCHEDULE' | translate}}</p>
+  <p ng-if="locations[0] == '4'" class="lead text-center">Sequoia Rosedale - {{'SCHEDULE_VIEW_WEEKLY_STAFF_SCHEDULE' | translate}}</p>
 </div><!-- end hidden xs-->
 
 <div class="hidden-xs">

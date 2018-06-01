@@ -19,6 +19,7 @@ var translationsEN = {
   "LOGIN_NEED_AN_ACCOUNT": "Need an account?",
   "SIGNUP_COMING_SOON": "Business account signup coming soon",
   "SIGNUP_LEARN_MORE": "Interested in learning more?",
+  "HEADER_TAB_BILLING": "Billing",
   "HEADER_TAB_HELLO": "Hello",
   "HEADER_SIGNED_IN_AS": "Signed in as",
   "HEADER_SIGN_OUT": "Sign out",
@@ -85,6 +86,7 @@ var translationsES = {
   "LOGIN_NEED_AN_ACCOUNT": "necesito una cuenta?",
   "SIGNUP_COMING_SOON": "Negocio de registro de cuenta en breve",
   "SIGNUP_LEARN_MORE": "Intersted en aprender mas ?",
+  "HEADER_TAB_BILLING": "Facturación",
   "HEADER_TAB_HELLO": "Hola",
   "HEADER_SIGNED_IN_AS": "Acceso como",
   "HEADER_SIGN_OUT": "Desconectar",
@@ -177,7 +179,12 @@ var translationsES = {
     templateUrl: 'views/signup.html',
     controller: 'SignupCtrl',
     controllerAs: 'signup'
-  }).otherwise({
+  }).when('/billing', {
+    templateUrl: 'views/billing.html',
+    controller: 'BillingCtrl',
+    controllerAs: 'billing'
+  })
+  .otherwise({
     redirectTo: '/login'
   });
 

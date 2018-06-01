@@ -48,6 +48,17 @@ import java.util.Date;
 import com.sequoiagrove.model.UserRowMapper;
 import com.sequoiagrove.controller.MainController;
 import org.springframework.util.StringUtils;
+
+import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceCollection;
+import com.stripe.Stripe;
+import com.stripe.exception.CardException;
+import com.stripe.exception.RateLimitException;
+import com.stripe.exception.InvalidRequestException;
+import com.stripe.exception.AuthenticationException;
+import com.stripe.exception.APIConnectionException;
+import com.stripe.exception.StripeException;
+
 @Controller
 public class Authentication {
     private static SecureRandom random = new SecureRandom();

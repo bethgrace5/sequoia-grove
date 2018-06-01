@@ -45,7 +45,7 @@
       <!-- navigation menu -->
       <div class="collapse navbar-collapse" id="js-navbar-collapse">
         <ul class="nav navbar-nav">
-            <li role="presentation"><a class="navbar-brand" href="#/home">Sequoia Grove</a></li>
+          <li role="presentation"><a class="navbar-brand" href="#/home">Sequoia Grove</a></li>
             <li class="divider-vertical"></li>
 
             <!-- all user options -->
@@ -91,6 +91,14 @@
               <a href="#/schedule">
                 <span class="glyphicon glyphicon-calendar"></span>
                 {{'HEADER_TAB_SCHEDULING' | translate}}
+              </a>
+            </li>
+            <li role="presentation"
+              ng-show="loggedIn && loggedInUser.isManager"
+              ng-class="changeTab('/billing')">
+              <a href="#/billing">
+                <span class="glyphicon glyphicon-th-list"></span>
+                {{'HEADER_TAB_BILLING' | translate}}
               </a>
             </li>
 

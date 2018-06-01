@@ -1,0 +1,27 @@
+<div class="container-fluid">
+  <h1>Billing</h1>
+  <div ng-repeat="details in billingDetails.data" class="row">
+    <div class="col-sm-12">
+      <strong>Details:</strong> <span>{{details.description}}</span> <br/>
+      <strong>Balance:</strong> <span>{{details.ending_balance}}</span> <br/>
+      <strong>Paid:</strong> <span>{{details.paid}}</span> <br/>
+      <strong>Start:</strong> <span>{{details.period_start}}</span> <br/>
+      <strong>End:</strong> <span>{{details.period_end}}</span> <br/>
+      <strong>Subtotal:</strong> <span>{{details.subtotal}}</span> <br/>
+      <strong>Total:</strong> <span>{{details.total}}</span> <br/>
+
+      <h2> Lines </h2>
+      <div ng-repeat="line in details.lines.data">
+        <strong>Line:</strong> <span>{{line.description}}</span><br/>
+        <strong>Line:</strong> <span>{{line.amount}}</span><br/>
+        <strong>Line:</strong> <span>{{line.period.start}}</span><br/>
+        <strong>Line:</strong> <span>{{line.period.end}}</span><br/>
+        <strong>Line:</strong> <span>{{line.plan.object}}</span><br/>
+        <strong>Line:</strong> <span>{{line.plan.amount}}</span><br/>
+        <strong>Line:</strong> <span>{{line.plan.interval}}</span><br/>
+        <strong>Line:</strong> <span>{{line.plan.nickname}}</span><br/>
+        <strong>Line:</strong> <span>{{line.plan.trial_period_days}}</span><br/>
+      </div>
+    </div>
+  </div>
+</div>
