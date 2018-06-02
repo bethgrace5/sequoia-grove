@@ -24,6 +24,21 @@ angular.module('sequoiaGroveApp')
         });
     }
 
+    $scope.convertDate = function(unixSeconds) {
+        return moment.unix(unixSeconds).format('MMM Do, YYYY');
+    }
+
+    $scope.convertDollars = function(str) {
+      var total = str + '';
+
+      var first = total.substring(0, total.length - 2);
+      var second = total.substring(total.length - 2, total.length);
+      return first + "." + second;
+
+      //console.log(str);
+      //return (str + "").substring(0,(str + "").substring(0, (str + "")) + "." + (str + "").substring(2, 4);
+    }
+
     $scope.getBillingDetails();
 
 });
