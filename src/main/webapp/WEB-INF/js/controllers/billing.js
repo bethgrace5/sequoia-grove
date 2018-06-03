@@ -29,7 +29,6 @@ angular.module('sequoiaGroveApp')
 
     $scope.getDaysLeft = function(unixSeconds) {
       if (unixSeconds != null) {
-        console.log(unixSeconds);
         var endDate = moment.unix(unixSeconds);
         var today = moment();
         return endDate.diff(today, 'days') 
@@ -54,9 +53,6 @@ angular.module('sequoiaGroveApp')
       var first = total.substring(0, total.length - 2);
       var second = total.substring(total.length - 2, total.length);
       return first + "." + second;
-
-      //console.log(str);
-      //return (str + "").substring(0,(str + "").substring(0, (str + "")) + "." + (str + "").substring(2, 4);
     }
 
     $scope.getBillingDetails();
