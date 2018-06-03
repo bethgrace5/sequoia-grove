@@ -19,7 +19,6 @@ angular.module('sequoiaGroveApp')
         }).then(function(data, status) {
           var start = data.data.billingDetails.indexOf('{');
           var end = data.data.billingDetails.length;
-          console.log(start, end);
           $scope.billingDetails = JSON.parse(data.data.billingDetails.substring(start, end));
         });
     }
@@ -30,6 +29,11 @@ angular.module('sequoiaGroveApp')
 
     $scope.convertDollars = function(str) {
       var total = str + '';
+
+      var i=0;
+      for (i; total.length < 4; i++) {
+        total = '0' + total;
+      }
 
       var first = total.substring(0, total.length - 2);
       var second = total.substring(total.length - 2, total.length);

@@ -74,7 +74,7 @@ public class BillingController {
           Stripe.apiKey = "";
 
           HashMap<String, Object> invoiceParams = new HashMap<String, Object>();
-          invoiceParams.put("limit", "3");
+          invoiceParams.put("limit", "10");
           invoiceParams.put("customer", customerId);
 
           InvoiceCollection result = Invoice.list(invoiceParams);

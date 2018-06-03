@@ -1,23 +1,33 @@
 <div class="container-fluid">
   <div ng-repeat="details in billingDetails.data">
-    <h3>Invoice</h3>
-    <h6>{{convertDate(details.period_start)}}</h6>
-    <p>{{details.description}}</p>
-    <div class = "row">
-      <div class="col-sm-5">
-        <div ng-repeat="line in details.lines.data">
-          <strong></strong> <span>{{line.description}} Amount: ${{convertDollars(line.amount)}}</span>
-          <!--<strong ng-show="line.plan.nickname != ''">Level:</strong> <span>{{line.plan.nickname}}</span><br/>-->
-          <strong ng-show="line.plan.trial_period_days > 0">Trial Period Days:</strong> <span>{{line.plan.trial_period_days}}</span><br/>
+    <div>
+      <div ng-show="!details.forgiven">
+        <h3 ng-show="!details.paid">Invoice - ${{convertDollars(details.total)}} <span class="text-primary">due on {{convertDate(details.due_date)}}</span></h3>
+        <h3 ng-show="details.paid">Invoice - <span class="text-success">Paid</span></h3>
+      </div>
+      <div ng-show="details.forgiven">
+        <h3>Invoice - <span class="text-success">Forgiven</span></h3>
+      </div>
+      <p>{{details.description}}</p>
+      <div class = "row">
+        <div class="col-sm-7">
+          <div ng-repeat="line in details.lines.data">
+            <strong></strong> Item <span>{{line.description}} Amount: ${{convertDollars(line.amount)}}</span>
+            <!--<strong ng-show="line.plan.nickname != ''">Level:</strong> <span>{{line.plan.nickname}}</span><br/>-->
+            <strong ng-show="line.plan.trial_period_days > 0">Trial Period Days:</strong> <span>{{line.plan.trial_period_days}}</span><br/>
+          </div>
+        </div>
+        <div class="col-sm-5">
+          <strong>Invoice Summary</strong><br/>
+          <!--<strong>Balance:</strong> <span>${{details.ending_balance}}</span><br/>-->
+          <strong>Subtotal:</strong> <span>${{convertDollars(details.subtotal)}}</span><br/>
+          <div ng-show="!details.forgiven">
+          <strong>Paid:</strong> <span>{{details.paid}}</span><br/>
+          <strong>Total Due:</strong> <span>${{convertDollars(details.total)}} on <strong>{{convertDate(details.due_date)}}</strong> </span>
+          </div>
         </div>
       </div>
-      <div class="col-sm-3">
-        <strong>Invoice Summary</strong>
-        <strong>Balance:</strong> <span>${{details.ending_balance}}</span><br/>
-        <strong>Subtotal:</strong> <span>${{convertDollars(details.subtotal)}}</span><br/>
-        <strong>Paid:</strong> <span>{{details.paid}}</span><br/>
-        <strong>Total Due:</strong> <span>${{convertDollars(details.total)}} on <strong>{{convertDate(details.due_date)}}</strong> </span>
-      </div>
+      <hr/>
     </div>
   </div>
 </div>
