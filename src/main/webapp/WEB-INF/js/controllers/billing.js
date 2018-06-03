@@ -27,8 +27,24 @@ angular.module('sequoiaGroveApp')
         return moment.unix(unixSeconds).format('MMM Do, YYYY');
     }
 
+    $scope.getDaysLeft = function(unixSeconds) {
+      if (unixSeconds != null) {
+        console.log(unixSeconds);
+        var endDate = moment.unix(unixSeconds);
+        var today = moment();
+        return endDate.diff(today, 'days') 
+      }
+      else {
+        return "";
+      }
+    }
+
     $scope.convertDollars = function(str) {
       var total = str + '';
+
+      if (total == "0") {
+        return "0"
+      }
 
       var i=0;
       for (i; total.length < 4; i++) {

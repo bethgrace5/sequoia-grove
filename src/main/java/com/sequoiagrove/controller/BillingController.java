@@ -66,7 +66,7 @@ public class BillingController {
         String customerId = "";
 
         //if (location == "4") {
-          customerId = "";
+          //customerId = "";
         //}
 
         try {

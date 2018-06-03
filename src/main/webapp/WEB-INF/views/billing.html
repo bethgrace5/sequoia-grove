@@ -1,8 +1,8 @@
 <div class="container-fluid">
-  <div ng-repeat="details in billingDetails.data">
+  <div style="border: 2px solid #e0ebeb; margin: 20px; padding:10px; border-radius:5px; background-color: #f0f5f5;"  ng-repeat="details in billingDetails.data">
     <div>
       <div ng-show="!details.forgiven">
-        <h3 ng-show="!details.paid">Invoice - ${{convertDollars(details.total)}} <span class="text-primary">due on {{convertDate(details.due_date)}}</span></h3>
+        <h3 ng-show="!details.paid">Invoice - ${{convertDollars(details.total)}} <span class="text-primary">Due {{convertDate(details.due_date)}}</span></h3>
         <h3 ng-show="details.paid">Invoice - <span class="text-success">Paid</span></h3>
       </div>
       <div ng-show="details.forgiven">
@@ -11,23 +11,43 @@
       <p>{{details.description}}</p>
       <div class = "row">
         <div class="col-sm-7">
+          <ul>
           <div ng-repeat="line in details.lines.data">
+            <li>
             <strong></strong> Item <span>{{line.description}} Amount: ${{convertDollars(line.amount)}}</span>
+            </li>
             <!--<strong ng-show="line.plan.nickname != ''">Level:</strong> <span>{{line.plan.nickname}}</span><br/>-->
-            <strong ng-show="line.plan.trial_period_days > 0">Trial Period Days:</strong> <span>{{line.plan.trial_period_days}}</span><br/>
+            <div ng-show="line.plan.trial_period_days > 0">
+              <strong>Trial Began:</strong> <span>{{convertDate(line.period.start)}}</span><br/>
+              <strong>Trial Ends:</strong> <span>{{convertDate(line.period.end)}}</span><br/>
+              <strong class="text-info">Trial Days Remaining: {{getDaysLeft(line.period.end)}}</strong><br/>
+            </div>
           </div>
+          </ul>
         </div>
         <div class="col-sm-5">
           <strong>Invoice Summary</strong><br/>
           <!--<strong>Balance:</strong> <span>${{details.ending_balance}}</span><br/>-->
           <strong>Subtotal:</strong> <span>${{convertDollars(details.subtotal)}}</span><br/>
+
           <div ng-show="!details.forgiven">
-          <strong>Paid:</strong> <span>{{details.paid}}</span><br/>
-          <strong>Total Due:</strong> <span>${{convertDollars(details.total)}} on <strong>{{convertDate(details.due_date)}}</strong> </span>
+            <div ng-show="!details.paid">
+              <strong class="text-primary">Total Due:</strong> ${{convertDollars(details.total)}}<br/>
+              <strong class="text-primary">Due Date:</strong> {{convertDate(details.due_date)}}
+            </div>
+            <div ng-show="details.paid">
+              <strong class="text-success">Total Due:</strong> ${{convertDollars(details.total)}}<br/>
+              <strong class="text-success">Due Date:</strong> {{convertDate(details.due_date)}}
+            </div>
           </div>
+
+          <div ng-show="details.forgiven">
+            <strong class="text-success">Total Due:</strong> ${{convertDollars(details.total)}}<br/>
+            <strong class="text-success">Due Date:</strong> {{convertDate(details.due_date)}}
+          </div>
+
         </div>
+        <hr/>
       </div>
-      <hr/>
-    </div>
   </div>
 </div>
