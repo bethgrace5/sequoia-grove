@@ -54,7 +54,7 @@ public class PositionController {
              "select id as pid, title, area from sequ_position " +
              ") pos " +
             "on pos.pid = shift.position_id " +
-            "full outer join " +
+            "left join " +
             "( " +
              "select * from sequ_location " +
              ") loc " +

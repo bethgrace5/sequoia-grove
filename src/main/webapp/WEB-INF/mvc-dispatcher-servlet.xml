@@ -66,6 +66,10 @@
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>
     <mvc:interceptor>
+      <mvc:mapping path="/billingDetails" />
+      <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
+    </mvc:interceptor>
+    <mvc:interceptor>
       <mvc:mapping path="/employees/*" />
       <bean class="com.sequoiagrove.controller.AuthenticationInterceptor" />
     </mvc:interceptor>

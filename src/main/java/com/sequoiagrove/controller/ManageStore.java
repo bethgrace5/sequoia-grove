@@ -149,7 +149,7 @@ public class ManageStore {
             sundayFormat,
             addHours(weekdayStart, weekdayEnd), 
             addHours(weekendStart, weekendEnd),
-            4
+            location
         };
 
         int id = jdbcTemplate.queryForObject( "insert into sequ_shift(id, position_id, task_name, start_date, end_date, weekday_id, weekend_id, index, location_id) " +
@@ -240,7 +240,7 @@ public class ManageStore {
             addHours(weekdayStart, weekdayEnd), 
             addHours(weekendStart, weekendEnd),
             index,
-            4 
+            location 
         };
 
         int id = jdbcTemplate.queryForObject( 

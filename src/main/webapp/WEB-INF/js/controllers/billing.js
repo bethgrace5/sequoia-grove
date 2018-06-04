@@ -12,15 +12,18 @@ angular.module('sequoiaGroveApp')
     $scope.billingDetails = {"billingDetails":"details"}
 
     $scope.getBillingDetails = function() {
+      var locationId = parseInt($rootScope.locations[0]);
+      if (locationId != null) {
         $http({
           url: $rootScope.urlPrefix + '/billingDetails',
-          method: "GET",
-          data: {"locationId": "4"}
+          method: "POST",
+          data: {"locationId": locationId}
         }).then(function(data, status) {
           var start = data.data.billingDetails.indexOf('{');
           var end = data.data.billingDetails.length;
           $scope.billingDetails = JSON.parse(data.data.billingDetails.substring(start, end));
         });
+      }
     }
 
     $scope.convertDate = function(unixSeconds) {
@@ -31,7 +34,7 @@ angular.module('sequoiaGroveApp')
       if (unixSeconds != null) {
         var endDate = moment.unix(unixSeconds);
         var today = moment();
-        return endDate.diff(today, 'days') 
+        return endDate.diff(today, 'days')
       }
       else {
         return "";

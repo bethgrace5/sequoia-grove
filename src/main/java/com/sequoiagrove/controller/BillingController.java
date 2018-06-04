@@ -2,23 +2,24 @@ package com.sequoiagrove.controller;
 
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken.Payload;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
-import javax.servlet.http.HttpServletResponse;
-import java.security.GeneralSecurityException;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.gson.GsonFactory;
 import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.gson.GsonFactory;
 import com.google.gson.Gson;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import java.util.Map;
+import java.math.BigInteger;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import java.security.SecureRandom;
-import java.math.BigInteger;
+import javax.servlet.http.HttpServletResponse;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Controller;
@@ -50,24 +51,53 @@ import com.stripe.exception.StripeException;
 @Controller
 public class BillingController {
 
-    @ModelAttribute("userID")
-    public Integer getId(HttpServletRequest request) {
-      return (Integer) request.getAttribute("userID");
+  // extract scope from request
+  @ModelAttribute("scope")
+    public List<String> getPermissions(HttpServletRequest request) {
+      //String csvPermissions = (String) request.getAttribute("scope");
+      //return Arrays.asList(csvPermissions.split(","));
+
+        //return Arrays.asList(csvPermissions.split(","));
+        List<String> permissions = new ArrayList<String>();
+        try {
+            permissions =  EmployeeController.parsePermissions(request.getAttribute("scope").toString());
+        } catch( NullPointerException e) {
+          System.out.println("caught null pointer exception get permissions billing controller");
+        };
+        return permissions;
     }
 
-    @RequestMapping(value = "/billingDetails", method = RequestMethod.GET)
-    protected String billingDetails(Model model, @RequestBody String postLoad) {
+    @RequestMapping(value = "/billingDetails", method = RequestMethod.POST)
+    public String billingDetails(@RequestBody String data, @ModelAttribute("scope") List<String> permissions, Model model) throws SQLException {
         JdbcTemplate jdbcTemplate = MainController.getJdbcTemplate();
-        JsonElement jelement = new JsonParser().parse(postLoad);
-        //JsonObject  jobject = jelement.getAsJsonObject();
 
-        //String location = jobject.get("locationId").getAsString();
+        // the token did not have the required permissions, return 403 status
+        if (!(permissions.contains("manage-employees") || permissions.contains("admin"))) {
+            model.addAttribute("status", HttpServletResponse.SC_FORBIDDEN);
+            return "jsonTemplate";
+        }
 
+        JsonElement jelement = new JsonParser().parse(data);
+        JsonObject  jobject = jelement.getAsJsonObject();
+
+        int locationId = jobject.get("locationId").getAsInt();
         String customerId = "";
 
-        //if (location == "4") {
-          //customerId = "";
-        //}
+        Object[] params = new Object[] { locationId };
+        try {
+          // search for token in database
+          customerId = jdbcTemplate.queryForObject(
+              "select b.customer_id from sequ_business b join sequ_location l on b.id = l.business_id where l.id = ?",
+              params,
+              String.class);
+
+        } catch (EmptyResultDataAccessException e) {
+          return "jdbcTemplate";
+        }
+
+        if (customerId == null) {
+          return "jsonTemplate";
+        }
 
         try {
           // Use Stripe's library to make requests...
