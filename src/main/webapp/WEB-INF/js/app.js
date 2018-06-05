@@ -232,6 +232,9 @@ var translationsES = {
 
   $rootScope.appFailure = false;
 
+  //development
   //$rootScope.urlPrefix = '/sequoiagrove';
+
+  //production
   $rootScope.urlPrefix = '';
 });

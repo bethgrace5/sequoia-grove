@@ -293,10 +293,11 @@ a:focus {
 }
 
 .schedule-times {
+  margin:0;
+  padding:0px 4px;
   color: #336699;
-  padding-left: 0;
-  padding-right: 1%;
   text-align: right;
+  font-size: 1em;
 }
 .week-nav-button {
   box-shadow: none;

@@ -338,6 +338,10 @@ angular.module('sequoiaGroveApp')
       $scope.weekList = scheduleFactory.getWeekList();
       $scope.dayCount = scheduleFactory.getDayCount();
       $scope.hourCount = scheduleFactory.getHourCount();
+
+      $scope.totalHourCount = _.reduce(_.values(_.omit($scope.hourCount,'0')),
+            function(memo, num){ return memo + num; }, 0);
+
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
     }

@@ -19,9 +19,11 @@ angular.module('sequoiaGroveApp')
           method: "POST",
           data: {"locationId": locationId}
         }).then(function(data, status) {
-          var start = data.data.billingDetails.indexOf('{');
-          var end = data.data.billingDetails.length;
-          $scope.billingDetails = JSON.parse(data.data.billingDetails.substring(start, end));
+          if (data.data.billingDetails != null) {
+            var start = data.data.billingDetails.indexOf('{');
+            var end = data.data.billingDetails.length;
+            $scope.billingDetails = JSON.parse(data.data.billingDetails.substring(start, end));
+          }
         });
       }
     }

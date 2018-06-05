@@ -204,12 +204,21 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       {disp:'3:00 PM',  val: '1500'},
       {disp:'3:30 PM',  val: '1530'},
       {disp:'4:00 PM',  val: '1600'},
-      {disp:'4:30 PM',  val: '1630'}
+      {disp:'4:30 PM',  val: '1630'},
+      {disp:'5:00 PM',  val: '1700'},
+      {disp:'5:30 PM',  val: '1730'},
+      {disp:'6:00 PM',  val: '1800'}
     ],
     // end times start at the earlist shift end and increment by half
     // hours until the end of the lastest ending shift
     // TODO have a smarter way to populate this list
     end:[
+      {disp:'10:00 AM', val: '1000'},
+      {disp:'10:30 AM', val: '1030'},
+      {disp:'11:00 AM', val: '1100'},
+      {disp:'11:30 AM', val: '1130'},
+      {disp:'12:00 PM', val: '1200'},
+      {disp:'12:30 PM', val: '1230'},
       {disp:'1:00 PM', val: '1300'},
       {disp:'1:30 PM', val: '1330'},
       {disp:'2:00 PM', val: '1400'},
@@ -226,7 +235,13 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       {disp:'7:30 PM', val: '1930'},
       {disp:'8:00 PM', val: '2000'},
       {disp:'8:30 PM', val: '2030'},
-      {disp:'9:00 PM', val: '2100'}
+      {disp:'9:00 PM', val: '2100'},
+      {disp:'9:30 PM', val: '2130'},
+      {disp:'10:00 PM', val: '2200'},
+      {disp:'10:30 PM', val: '2230'},
+      {disp:'11:00 PM', val: '2300'},
+      {disp:'11:30 PM', val: '2330'},
+      {disp:'12:00 AM', val: '2400'}
     ]
   };
 
@@ -498,6 +513,10 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
     if (loginFactory.getUser().isManager) {
       $scope.dayCount = scheduleFactory.getDayCount();
       $scope.hourCount = scheduleFactory.getHourCount();
+
+      $scope.totalHourCount = _.reduce(_.values(_.omit($scope.hourCount,'0')),
+            function(memo, num){ return memo + num; }, 0);
+
       $scope.changesMade = scheduleFactory.changesMade();
       $scope.requests = scheduleFactory.getRequests();
     }
@@ -511,6 +530,11 @@ angular.module('sequoiaGroveApp').controller('MainCtrl', function (
       if (loginFactory.getUser().isManager) {
         $scope.pendingRequests = requestFactory.getPending();
         $scope.employees = userFactory.getUsers();
+        if ($scope.employees == null) {
+            setTimeout(function () {
+              $scope.employees = userFactory.getUsers();
+            }, 2000);
+        }
         $scope.initPositionsSchedule();
         $scope.initAvailSchedule();
         $scope.initIsCurrentSchedule();
