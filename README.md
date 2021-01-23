@@ -1,6 +1,6 @@
-Sequoia Grove
+Sequoia Grove (READ ONLY - ARCHIVE)
 ==
-Simple Employee Scheduling.
+Simple Employee Scheduling. This was my senior project, which morphed into a usable application. It was used by a company for a few years. I shut it down due to maintenance and hosting costs, as well as the company wanting to use a more professional product. The code could use much improvment from it's origin, and I learned much from spending many frustrating hours building and fixing things during my college days.
 
 Sequoia Grove was designed for businesses following a scheduling system where work schedules
 with shifts are written and published weekly. The model for this product was
